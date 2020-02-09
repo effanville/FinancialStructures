@@ -140,6 +140,7 @@ namespace FinanceWindowsViewModels
                         reports.AddError("Was not able to edit security data.");
                     }
                 }
+                UpdateMainWindow();
             }
             if (reports.Any())
             {

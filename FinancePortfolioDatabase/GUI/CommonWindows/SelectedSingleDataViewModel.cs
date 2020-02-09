@@ -106,6 +106,8 @@ namespace FinanceCommonViewModels
                         reports.AddError("Was not able to edit sector data.");
                     }
                 }
+
+                UpdateMainWindow();
             }
             if (reports.Any())
             {

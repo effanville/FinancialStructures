@@ -102,6 +102,8 @@ namespace FinanceCommonViewModels
                     reports.AddError("Was not able to edit desired.");
                 }
             }
+
+            UpdateMainWindow();
             if (reports.Any())
             {
                 UpdateReports(reports);

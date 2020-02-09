@@ -79,6 +79,7 @@ namespace FinanceWindowsViewModels
                     reports.AddError("Was not able to edit desired security.");
                 }
             }
+            UpdateMainWindow();
 
             if (reports.Any())
             {
