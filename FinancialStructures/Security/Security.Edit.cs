@@ -172,18 +172,6 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         internal bool TryAddData(ErrorReports reports, DateTime date, double unitPrice, double shares = 0, double investment = 0)
         {
-            // here we don't care about investments
-            if (investment == 0)
-            {
-                if (DoesDateSharesDataExist(date, out int _) || DoesDateUnitPriceDataExist(date, out int _))
-                {
-                    reports.AddGeneralReport(ReportType.Error, $"Security `{fCompany}'-`{fName}' already has NumShares or UnitPrice data on {date.ToString("d")}.");
-                    return false;
-                }
-
-                return fShares.TryAddValue(date, shares) & fUnitPrice.TryAddValue(date, unitPrice) && ComputeInvestments(reports);
-            }
-
             if (DoesDateSharesDataExist(date, out int _) || DoesDateInvestmentDataExist(date, out int _) || DoesDateUnitPriceDataExist(date, out int _))
             {
                 reports.AddGeneralReport(ReportType.Error, $"Security `{fCompany}'-`{fName}' already has NumShares or UnitPrice or Investment data on {date.ToString("d")}.");
@@ -311,23 +299,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         internal bool TryDeleteData(ErrorReports reports, DateTime date, double shares, double unitPrice, double Investment = 0)
         {
-            bool units = false;
-            bool sharetrue = false;
-            bool invs = false;
-            if (shares > 0)
-            {
-                sharetrue = fShares.TryDeleteValue(date, reports);
-            }
-            if (unitPrice > 0)
-            {
-                units = fUnitPrice.TryDeleteValue(date, reports);
-            }
-            if (Investment > 0)
-            {
-                invs = fInvestments.TryDeleteValue(date, reports);
-            }
-
-            return units & sharetrue & invs && ComputeInvestments(reports);
+            return fUnitPrice.TryDeleteValue(date, reports) & fShares.TryDeleteValue(date, reports) & fInvestments.TryDeleteValue(date, reports) && ComputeInvestments(reports);
         }
 
         /// <summary>
@@ -351,6 +323,13 @@ namespace FinancialStructures.FinanceStructures
                     if (sharesCurrentValue != null)
                     {
                         fInvestments.TryEditData(investmentValue.Day, (sharesCurrentValue.Value - sharesPreviousValue.Value) * fUnitPrice.NearestEarlierValue(investmentValue.Day).Value, reports);
+                    }
+                }
+                if (investmentValue.Value == 0)
+                {
+                    if (fInvestments.TryDeleteValue(investmentValue.Day, reports))
+                    {
+                        index--;
                     }
                 }
             }
