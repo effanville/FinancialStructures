@@ -4,6 +4,12 @@ namespace FinancialStructures.ReportingStructures
 {
     public class ErrorReport : IComparable
     {
+        public override string ToString()
+        {
+            return ErrorType.ToString() + " - " + Message;
+
+        }
+
         /// <summary>
         /// Method of comparison
         /// </summary>
