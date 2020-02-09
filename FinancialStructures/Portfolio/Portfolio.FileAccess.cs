@@ -32,8 +32,9 @@ namespace FinancialStructures.Database
                 portfolio.CopyData(database.MyFunds);
                 return database.myBenchMarks;
             }
+
             reports.AddReport("Loaded Empty New Database.");
-            portfolio = new Portfolio();
+            portfolio.CopyData(new Portfolio());
             return new List<Sector>();
         }
 
