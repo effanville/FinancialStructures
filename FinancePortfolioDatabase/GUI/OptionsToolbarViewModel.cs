@@ -90,7 +90,7 @@ namespace FinanceWindowsViewModels
             {
                 Portfolio.SetFilePath(openFile.FileName);
                 Sectors = Portfolio.LoadPortfolio(openFile.FileName, reports);
-                reports.AddGeneralReport(ReportType.Report, $"Loaded new database from {openFile.FileName}");
+                reports.AddReport($"Loaded new database from {openFile.FileName}");
             }
             openFile.Dispose();
 

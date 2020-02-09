@@ -16,15 +16,6 @@ namespace PortfolioStatsCreatorHelper
 
     public static class PortfolioStatsCreators
     {
-
-        private static void WriteSpacing(StreamWriter writer, bool spacing)
-        {
-            if (spacing)
-            {
-                writer.WriteLine("");
-            }
-        }
-
         private static void WriteSectorAnalysis(StreamWriter writer, Portfolio portfolio, List<Sector> sectors, UserOptions options, int maxNameLength, int maxCompanyLength, int maxNumLength)
         {
             writer.WriteLine("<h2>Analysis By Sector</h2>");
@@ -189,9 +180,6 @@ namespace PortfolioStatsCreatorHelper
 
             htmlWriter.WriteLine("</tbody>");
             htmlWriter.WriteLine("</table>");
-            WriteSpacing(htmlWriter, options.Spacing);
-
-            WriteSpacing(htmlWriter, options.Spacing);
 
             WriteSectorAnalysis(htmlWriter, portfolio, sectors, options, maxNameLength, maxCompanyLength, maxNumLength);
 
@@ -213,7 +201,7 @@ namespace PortfolioStatsCreatorHelper
             writer.WriteLine("h1 { font-family: \"Arial\", cursive, sans-serif; font-size:7;margin-top: 1.5em; }");
             writer.WriteLine("h2 { font-family: \"Arial\", cursive, sans-serif; margin-top: 1.5em; }");
             writer.WriteLine("body{ font-family: \"Arial\", cursive, sans-serif; font-size:small }");
-            writer.WriteLine("table { Width: 90%; border-collapse: collapse; margin-left: 5%; margin-right: 5%;}");
+            writer.WriteLine("table { border-collapse: collapse;}");
             writer.WriteLine("table, th, td { border: 1px solid black; }");
             writer.WriteLine("caption { margin-bottom: 1.2em; font-family: \"Arial\", cursive, sans-serif; font-size:medium; }");
             writer.WriteLine("tr:nth-child(even) {background-color: #f0f8ff;}");

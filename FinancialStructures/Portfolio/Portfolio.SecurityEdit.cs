@@ -30,11 +30,11 @@ namespace FinancialStructures.Database
                 if (sec.GetCompany() == company && sec.GetName() == name)
                 {
                     portfolio.Funds.Remove(sec);
-                    reports.AddGeneralReport(ReportType.Report, $"Security `{company}'-`{name}' removed from the database.");
+                    reports.AddReport( $"Security `{company}'-`{name}' removed from the database.");
                     return true;
                 }
             }
-            reports.AddGeneralReport(ReportType.Error, $"Security `{company}'-`{name}' could not be found in the database.");
+            reports.AddError( $"Security `{company}'-`{name}' could not be found in the database.");
             return false;
         }
 
@@ -61,13 +61,13 @@ namespace FinancialStructures.Database
         {
             if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(company))
             {
-                reports.AddGeneralReport(ReportType.Error, $"Company `{company}' or name `{name}' is not suitable.");
+                reports.AddError( $"Company `{company}' or name `{name}' is not suitable.");
                 return false;
             }
 
             if (portfolio.DoesSecurityExist(company, name))
             {
-                reports.AddGeneralReport(ReportType.Error, $"Security `{company}'-`{name}' already exists.");
+                reports.AddError( $"Security `{company}'-`{name}' already exists.");
                 return false;
             }
 
@@ -85,7 +85,7 @@ namespace FinancialStructures.Database
 
             Security newSecurity = new Security(name, company, currency, url, sectorList);
             portfolio.Funds.Add(newSecurity);
-            reports.AddGeneralReport(ReportType.Report, $"Security `{company}'-`{name}' added to database.");
+            reports.AddReport($"Security `{company}'-`{name}' added to database.");
             return true;
         }
 

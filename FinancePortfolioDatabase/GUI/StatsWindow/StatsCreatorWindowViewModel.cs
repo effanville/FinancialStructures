@@ -93,7 +93,7 @@ namespace FinanceWindowsViewModels
             }
             else
             {
-                reports.AddGeneralReport(ReportType.Error, $"Was not able to create Investment list page at {saving.FileName}");
+                reports.AddError( $"Was not able to create Investment list page at {saving.FileName}");
             }
             saving.Dispose();
             if (reports.Any())
@@ -118,7 +118,7 @@ namespace FinanceWindowsViewModels
             }
             else
             {
-                reports.AddGeneralReport(ReportType.Error, $"Was not able to create Investment list page at {saving.FileName}");
+                reports.AddError($"Was not able to create Investment list page at {saving.FileName}");
             }
             saving.Dispose();
             if (reports.Any())

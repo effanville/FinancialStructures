@@ -6,7 +6,7 @@ namespace FinancialStructures.ReportingStructures
     {
         public override string ToString()
         {
-            return ErrorType.ToString() + " - " + Message;
+            return ErrorType.ToString() + " - " + ErrorLocation.ToString() + " - " + Message;
 
         }
 
@@ -36,6 +36,14 @@ namespace FinancialStructures.ReportingStructures
             set { fErrorType = value; }
         }
 
+        private Location fErrorLocation;
+
+        public Location ErrorLocation
+        {
+            get { return fErrorLocation; }
+            set { fErrorLocation = value; }
+        }
+
         private string fMessage;
         public string Message
         {
@@ -47,9 +55,10 @@ namespace FinancialStructures.ReportingStructures
         {
         }
 
-        public ErrorReport(ReportType type, string msg)
+        public ErrorReport(ReportType type, Location errorLocation, string msg)
         {
             ErrorType = type;
+            ErrorLocation = errorLocation;
             Message = msg;
         }
     }

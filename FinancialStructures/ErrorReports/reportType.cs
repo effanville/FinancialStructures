@@ -7,4 +7,13 @@ namespace FinancialStructures.ReportingStructures
         Warning = 1,
         Report = 2
     }
+
+    public enum Location
+    {
+        Unknown,
+        Downloading,
+        AddingData,
+        EditingData,
+        Parsing
+    }
 }
