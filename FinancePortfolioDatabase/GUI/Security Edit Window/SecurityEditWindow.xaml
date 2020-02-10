@@ -32,7 +32,7 @@
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Header}"/>
                         <Button Background="Transparent" BorderThickness="0" Visibility="{Binding Closable, Converter={StaticResource BoolToVis}}" Height="12" Width="12" Margin="2 2 0 0" Click="Button_Click">
-                            <Image Source="../../GuiSupport/close.png" />
+                            <Image Source="../GuiSupport/close.png" />
                         </Button>
                     </StackPanel>
                 </DataTemplate>

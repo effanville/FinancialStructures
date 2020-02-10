@@ -67,30 +67,6 @@
                     </DataGrid>
                 </Grid>
             </TabItem>
-            <TabItem Header="Dad's Statistics">
-                <Grid VerticalAlignment="Stretch"
-                      MinHeight="400"
-                      Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
-                    <DataGrid Name="DadStatsBox"
-                              Margin="5"
-                              SelectionUnit="FullRow"
-                              CanUserAddRows="False"
-                              CanUserDeleteRows="False"
-                              IsReadOnly="True"
-                              GridLinesVisibility="None"
-                              ScrollViewer.VerticalScrollBarVisibility="Visible"
-                              AutoGenerateColumns="False"
-                              ItemsSource="{Binding SecuritiesStats}">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Company" MaxWidth="200" MinWidth="70" Binding="{Binding Path=Company}"/>
-                            <DataGridTextColumn Header="Name" MaxWidth="200" MinWidth="70" Binding="{Binding Path=Name}"/>
-                            <DataGridTextColumn Header="Latest Value" MaxWidth="200" MinWidth="70" Binding="{Binding Path=LatestVal}"/>
-                            <DataGridTextColumn Header="Latest Change" MaxWidth="200" MinWidth="70" Binding="{Binding Path=RecentChange}"/>
-                            <DataGridTextColumn Header="Profit" MaxWidth="200" MinWidth="70" Binding="{Binding Path=Profit}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
             <TabItem Header="Security Investments">
                 <Grid VerticalAlignment="Stretch"
                       Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">

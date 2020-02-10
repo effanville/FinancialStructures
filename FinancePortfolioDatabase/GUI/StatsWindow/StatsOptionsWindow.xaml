@@ -3,69 +3,70 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cl="clr-namespace:GUISupport"
         mc:Ignorable="d"
-        Title="StatsOptionsWindow" Height="400" Width="400">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-        </Grid.RowDefinitions>
-
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
-            <ColumnDefinition Width="150"/>
-        </Grid.ColumnDefinitions>
-        <CheckBox IsChecked="{Binding displayValueFunds}"
-                  Grid.Row="0"
-                  Grid.Column="0">
+        Title="StatsOptionsWindow"
+        Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}" 
+        Height="300" 
+        Width="300"
+        MinHeight="200"
+        MinWidth="200">
+    <StackPanel>
+        <TextBlock Margin="5" Text="Choose the options desired for the HTML export." TextWrapping="Wrap">
+            
+        </TextBlock>
+        <CheckBox Margin="5" 
+                  IsChecked="{Binding displayValueFunds}">
             <TextBlock Text="Only Display Funds with current value" 
-                           TextWrapping="Wrap"/>
+                       TextWrapping="Wrap"/>
         </CheckBox>
-        <CheckBox IsChecked="{Binding colours}"
-                  Grid.Row="0"
-                  Grid.Column="1">
+        <CheckBox Margin="5" IsChecked="{Binding colours}">
             <TextBlock Text="Display with Colour" 
-                           TextWrapping="Wrap"/>
+                       TextWrapping="Wrap"/>
         </CheckBox>
-        <CheckBox IsChecked="{Binding spacing}"
-                  Grid.Row="1"
-                  Grid.Column="0">
+        <CheckBox Margin="5" IsChecked="{Binding spacing}">
             <TextBlock Text="Spacing Between Companies" 
-                           TextWrapping="Wrap"/>
+                       TextWrapping="Wrap"/>
         </CheckBox>
-
-        <ComboBox Grid.Row="2"
-            Grid.Column="0"
-            ItemsSource="{Binding ColumnNames}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <CheckBox Content="{Binding Path=Name}"
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="5" Grid.Column="0" Text="Securities Columns"/>
+            <ComboBox Grid.Column="1" Margin="5" ItemsSource="{Binding ColumnNames}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox Content="{Binding Path=Name}"
                   IsChecked="{Binding Path=Visible, Mode=TwoWay}"
                   Tag="{RelativeSource FindAncestor, 
                   AncestorType={x:Type ComboBox}}" />
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Grid>
 
-        <ComboBox Grid.Row="2"
-            Grid.Column="1"
-            ItemsSource="{Binding BankColumnNames}">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <CheckBox Content="{Binding Path=Name}"
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Margin="5" Grid.Column="0" Text="BankAccounts Columns"/>
+            <ComboBox Grid.Column="1" Margin="5" ItemsSource="{Binding BankColumnNames}" Text="BankAccount Columns">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox Content="{Binding Path=Name}"
                   IsChecked="{Binding Path=Visible, Mode=TwoWay}"
                   Tag="{RelativeSource FindAncestor, 
                   AncestorType={x:Type ComboBox}}" />
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
-        <Button Content="Export Statistics"
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Grid>
+        <Button Margin="5" 
+                Content="Export Statistics"
                 Style="{StaticResource ResourceKey=defaultButton}"
-                Grid.Row="3"
-                Grid.Column="0"
-                Grid.ColumnSpan="2"
                 Command="{Binding ExportCommand}"/>
-    </Grid>
+    </StackPanel>
 </Window>

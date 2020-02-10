@@ -181,6 +181,21 @@ namespace FinancialStructures.FinanceStructures
             return fShares.TryAddValue(date, shares) & fUnitPrice.TryAddValue(date, unitPrice) & fInvestments.TryAddValue(date, investment) && ComputeInvestments(reports);
         }
 
+        /// <summary>
+        /// Adds the value to the data with todays date and with the latest number of shares.
+        /// </summary>
+        internal void UpdateSecurityData( double value, ErrorReports reports)
+        {
+            // best approximation for number of units is last known number of units.
+            TryGetEarlierData(DateTime.Today, out DailyValuation _, out DailyValuation units, out DailyValuation _);
+            if (units == null)
+            {
+                units = new DailyValuation(DateTime.Today, 0);
+            }
+
+            TryAddData(reports, DateTime.Today, value, units.Value);
+        }
+
 
         /// <summary>
         /// Try to edit data. If any dont have any relevant values, then do not edit

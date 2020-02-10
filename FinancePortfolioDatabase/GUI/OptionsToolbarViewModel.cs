@@ -3,7 +3,6 @@ using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.ReportingStructures;
 using GUISupport;
-using PADGlobals;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -89,7 +88,7 @@ namespace FinanceWindowsViewModels
             if (openFile.ShowDialog() == DialogResult.OK)
             {
                 Portfolio.SetFilePath(openFile.FileName);
-                Sectors = Portfolio.LoadPortfolio(openFile.FileName, reports);
+                Sectors.AddRange(Portfolio.LoadPortfolio(openFile.FileName, reports));
                 reports.AddReport($"Loaded new database from {openFile.FileName}");
             }
             openFile.Dispose();

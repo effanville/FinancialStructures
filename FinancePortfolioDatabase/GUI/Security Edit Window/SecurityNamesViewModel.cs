@@ -2,7 +2,6 @@
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.ReportingStructures;
 using GUISupport;
-using PADGlobals;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;

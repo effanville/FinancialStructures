@@ -1,5 +1,5 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceStructures;
+﻿using FinancialStructures.FinanceStructures;
+using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.ReportingStructures;
 using System;
 using System.Collections.Generic;
@@ -19,8 +19,39 @@ namespace FinancialStructures.Database
         FT,
         NotImplemented
     }
-    public static class Download
+
+    public static class DataUpdater
     {
+        public async static Task Downloader(Portfolio portfolio, List<Sector> sectors, Action<ErrorReports> updateReports, ErrorReports reports)
+        {
+            await DownloadPortfolioLatest(portfolio, updateReports, reports).ConfigureAwait(false);
+            await DownloadBenchMarksLatest(sectors, updateReports, reports).ConfigureAwait(false);
+        }
+
+        public async static Task DownloadSecurity(Portfolio portfolio, string company, string name, Action<ErrorReports> updateReports, ErrorReports reports)
+        {
+            var sec = portfolio.GetSecurityFromName(name, company);
+            await DownloadLatestValue(sec.GetCompany(), sec.GetName(), sec.GetUrl(), value => sec.UpdateSecurityData(value, reports), updateReports, reports).ConfigureAwait(false);
+        }
+
+        public async static Task DownloadCurrency(Portfolio portfolio, NameData name, Action<ErrorReports> updateReports, ErrorReports reports)
+        {
+            var currency = portfolio.GetCurrencyFromName(name.Name);
+            await DownloadLatestValue(string.Empty, currency.GetName(), currency.GetUrl(), value => currency.TryAddData(DateTime.Today, value, reports), updateReports, reports).ConfigureAwait(false);
+        }
+
+        public async static Task DownloadBankAccount(Portfolio portfolio, NameData name, Action<ErrorReports> updateReports, ErrorReports reports)
+        {
+            var acc = portfolio.GetBankAccountFromName(name.Name, name.Company);
+            await DownloadLatestValue(acc.GetCompany(), acc.GetName(), acc.GetUrl(), value => acc.TryAddValue(DateTime.Today, value), updateReports, reports).ConfigureAwait(false);
+        }
+
+        public async static Task DownloadSector(List<Sector> sectors, NameData name, Action<ErrorReports> updateReports, ErrorReports reports)
+        {
+            Sector sector = sectors.Find(sec => sec.GetName() == name.Name);
+            await DownloadLatestValue(string.Empty, sector.GetName(), sector.GetUrl(), value => sector.TryAddData(DateTime.Today, value, reports), updateReports, reports).ConfigureAwait(false);
+        }
+
         private static string Pence = "GBX";
         private static string Pounds = "GBP";
         private static HttpClient client = new HttpClient();
@@ -68,97 +99,40 @@ namespace FinancialStructures.Database
         {
             foreach (var sec in portfo.GetSecurities())
             {
-                await DownloadSecurityLatest(sec, updateReports, reports).ConfigureAwait(false);
+                await DownloadLatestValue(sec.GetCompany(), sec.GetName(), sec.GetUrl(), value => sec.UpdateSecurityData(value, reports), updateReports, reports).ConfigureAwait(false);
             }
             foreach (var acc in portfo.GetBankAccounts())
             {
-                await DownloadBankAccountLatest(acc, updateReports, reports).ConfigureAwait(false);
+                await DownloadLatestValue(acc.GetCompany(), acc.GetName(), acc.GetUrl(), value => acc.TryAddValue(DateTime.Today, value), updateReports, reports).ConfigureAwait(false);
             }
             foreach (var currency in portfo.GetCurrencies())
             {
-                await DownloadCurrencyLatest(currency, updateReports, reports).ConfigureAwait(false);
+                await DownloadLatestValue( string.Empty, currency.GetName(), currency.GetUrl(), value => currency.TryAddData(DateTime.Today, value, reports), updateReports, reports).ConfigureAwait(false);
             }
-        }
-
-        public async static Task DownloadSecurityLatest(Security sec, Action<ErrorReports> updateReports, ErrorReports reports)
-        {
-            string data = await DownloadFromURL(sec.GetUrl(), reports).ConfigureAwait(false);
-            if (string.IsNullOrEmpty(data))
-            {
-                reports.AddError($"{sec.GetCompany()}-{sec.GetName()}: could not download data from {sec.GetUrl()}");
-                return;
-            }
-            if (!ProcessDownloadString(sec.GetUrl(), data, reports, out double value))
-            {
-                return;
-            }
-
-            // best approximation for number of units is last known number of units.
-            sec.TryGetEarlierData(DateTime.Today, out DailyValuation _, out DailyValuation units, out DailyValuation _);
-            if (units == null)
-            {
-                units = new DailyValuation(DateTime.Today, 0);
-            }
-
-            sec.TryAddData(reports, DateTime.Today, value, units.Value);
-            updateReports(reports);
-        }
-
-        public async static Task DownloadBankAccountLatest(CashAccount acc, Action<ErrorReports> updateReports, ErrorReports reports)
-        {
-            string data = await DownloadFromURL(acc.GetUrl(), reports).ConfigureAwait(false);
-            if (string.IsNullOrEmpty(data))
-            {
-                reports.AddError($"{acc.GetCompany()}-{acc.GetName()}: could not download data from {acc.GetUrl()}");
-                return;
-            }
-            if (!ProcessDownloadString(acc.GetUrl(), data, reports, out double value))
-            {
-                return;
-            }
-
-            acc.TryAddValue(DateTime.Today, value);
-            updateReports(reports);
-        }
-
-        public async static Task DownloadCurrencyLatest(Currency currency, Action<ErrorReports> updateReports, ErrorReports reports)
-        {
-            string data = await DownloadFromURL(currency.GetUrl(), reports).ConfigureAwait(false);
-            if (string.IsNullOrEmpty(data))
-            {
-                reports.AddError($"{currency.GetName()}: could not download data from {currency.GetUrl()}");
-                return;
-            }
-            if (!ProcessDownloadString(currency.GetUrl(), data, reports, out double value))
-            {
-                return;
-            }
-
-            currency.TryAddData(DateTime.Today, value, reports);
-            updateReports(reports);
         }
 
         public async static Task DownloadBenchMarksLatest(List<Sector> sectors, Action<ErrorReports> updateReports, ErrorReports reports)
         {
             foreach (var sector in sectors)
             {
-                await DownloadSectorLatest(sector, updateReports, reports).ConfigureAwait(false);
+                await DownloadLatestValue(string.Empty, sector.GetName(), sector.GetUrl(), value => sector.TryAddData(DateTime.Today, value, reports), updateReports, reports).ConfigureAwait(false);
             }
         }
 
-        public async static Task DownloadSectorLatest(Sector sector, Action<ErrorReports> updateReports, ErrorReports reports)
+        public async static Task DownloadLatestValue(string company, string name, string url, Action<double> updateValue, Action<ErrorReports> updateReports, ErrorReports reports)
         {
-            string data = await DownloadFromURL(sector.GetUrl(), reports).ConfigureAwait(false);
+            string data = await DownloadFromURL(url, reports).ConfigureAwait(false);
             if (string.IsNullOrEmpty(data))
             {
-                reports.AddError($"{sector.GetName()}: could not download data from {sector.GetUrl()}");
+                reports.AddError($"{company}-{name}: could not download data from {url}", Location.Downloading);
                 return;
             }
-            if (!ProcessDownloadString(sector.GetUrl(), data, reports, out double value))
+            if (!ProcessDownloadString(url, data, reports, out double value))
             {
                 return;
             }
-            sector.TryAddData(DateTime.Today, value, reports);
+
+            updateValue(value);
             updateReports(reports);
         }
 
@@ -185,7 +159,7 @@ namespace FinancialStructures.Database
                 }
                 catch (Exception ex)
                 {
-                    reports.AddError($"Failed to download from url {url}. Reason : {ex.Message}");
+                    reports.AddError($"Failed to download from url {url}. Reason : {ex.Message}", Location.Downloading);
                     return output;
                 }
             }
@@ -223,7 +197,7 @@ namespace FinancialStructures.Database
                 case WebsiteType.Google:
                 case WebsiteType.TrustNet:
                 case WebsiteType.Bloomberg:
-                    reports.AddError($"Url not of a currently implemented downloadable type: {url}");
+                    reports.AddError($"Url not of a currently implemented downloadable type: {url}", Location.Downloading);
                     return false;
             }
         }
@@ -336,11 +310,23 @@ namespace FinancialStructures.Database
                     return double.NaN;
                 }
                 double i = double.Parse(str);
-                if (data.Contains("GBp"))
-                {
-                    i = i / 100.0;
-                }
                 return i;
+            }
+
+            int penceValue = data.IndexOf("Price (GBX)");
+            if (penceValue != -1)
+            {
+                string containsNewValue = data.Substring(penceValue + searchString.Length, 200);
+
+                var digits = containsNewValue.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
+
+                var str = new string(digits);
+                if (string.IsNullOrEmpty(str))
+                {
+                    return double.NaN;
+                }
+                double i = double.Parse(str);
+                return i / 100.0;
             }
 
             return double.NaN;

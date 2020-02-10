@@ -4,7 +4,6 @@ using GUISupport;
 using System;
 using System.Linq;
 using FinanceCommonViewModels;
-using PADGlobals;
 using FinancialStructures.GUIFinanceStructures;
 using SectorHelperFunctions;
 using System.Collections.Generic;
