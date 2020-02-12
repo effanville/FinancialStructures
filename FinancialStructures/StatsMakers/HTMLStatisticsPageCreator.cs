@@ -16,12 +16,11 @@ namespace PortfolioStatsCreatorHelper
 
     public static class PortfolioStatsCreators
     {
-        private static void WriteSectorAnalysis(StreamWriter writer, Portfolio portfolio, List<Sector> sectors, UserOptions options, int maxNameLength, int maxCompanyLength, int maxNumLength)
+        private static void WriteSectorAnalysis(StreamWriter writer, Portfolio portfolio, List<Sector> sectors, UserOptions options)
         {
             writer.WriteLine("<h2>Analysis By Sector</h2>");
 
             writer.WriteLine("<table>");
-            //writer.WriteLine("<caption>Breakdown by sector of money in portfolio</caption>");
             writer.WriteLine("<thead><tr>");
 
             SecurityStatsHolder temp = new SecurityStatsHolder();
@@ -47,7 +46,7 @@ namespace PortfolioStatsCreatorHelper
                     }
                 }
 
-                if (linesWritten > 0)
+                if (options.Spacing && linesWritten > 0)
                 {
                     writer.WriteLine($"<tr><td><br/></td></tr>");
                 }
@@ -78,7 +77,6 @@ namespace PortfolioStatsCreatorHelper
             headersList.AddRange(options.BankAccDataToExport);
             headersList.Remove("Name");
             htmlWriter.WriteLine("<table width=\"Auto\">");
-            //htmlWriter.WriteLine("<caption>Total held in portfolio.</caption>");
             htmlWriter.WriteLine("<thead><tr>");
             htmlWriter.WriteLine(portfolioTotals.HTMLTableHeader(options, headersList));
             htmlWriter.WriteLine("</tr></thead>");
@@ -97,7 +95,6 @@ namespace PortfolioStatsCreatorHelper
 
             htmlWriter.WriteLine("<h2>Funds Data</h2>");
             htmlWriter.WriteLine("<table>");
-            //htmlWriter.WriteLine("<caption>Breakdown of securities held by company</caption>");
             htmlWriter.WriteLine("<thead><tr>");
             var totals = portfolio.GeneratePortfolioStatistics();
 
@@ -120,7 +117,7 @@ namespace PortfolioStatsCreatorHelper
                     }
                 }
 
-                if (linesWritten > 0)
+                if (options.Spacing && linesWritten > 0)
                 {
                     htmlWriter.WriteLine($"<tr><td><br/></td></tr>");
                 }
@@ -140,7 +137,6 @@ namespace PortfolioStatsCreatorHelper
             htmlWriter.WriteLine("<h2>Bank Accounts Data</h2>");
 
             htmlWriter.WriteLine("<table>");
-            //htmlWriter.WriteLine("<caption>Breakdown of bank accounts held by company</caption>");
             htmlWriter.WriteLine("<thead><tr>");
 
             htmlWriter.WriteLine(bankTotals.HTMLTableHeader(options, options.BankAccDataToExport));
@@ -164,7 +160,7 @@ namespace PortfolioStatsCreatorHelper
                     }
                 }
 
-                if (linesWritten > 0)
+                if (options.Spacing && linesWritten > 0)
                 {
                     htmlWriter.WriteLine($"<tr><td><br/></td></tr>");
                 }
@@ -181,7 +177,7 @@ namespace PortfolioStatsCreatorHelper
             htmlWriter.WriteLine("</tbody>");
             htmlWriter.WriteLine("</table>");
 
-            WriteSectorAnalysis(htmlWriter, portfolio, sectors, options, maxNameLength, maxCompanyLength, maxNumLength);
+            WriteSectorAnalysis(htmlWriter, portfolio, sectors, options);
 
             CreateHTMLFooter(htmlWriter, length);
             htmlWriter.Close();
