@@ -63,6 +63,7 @@ namespace FinanceCommonViewModels
         public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
         {
             Portfolio = portfolio;
+            Sectors = sectors;
             var reports = new ErrorReports();
             if (SelectedName != null)
             {

@@ -30,6 +30,27 @@ namespace FinanceWindowsViewModels
             set { fSpacing = value; OnPropertyChanged(); }
         }
 
+        private bool fSecurities = true;
+        public bool securities
+        {
+            get { return fSecurities; }
+            set { fSecurities = value; OnPropertyChanged(); }
+        }
+
+        private bool fSectors = true;
+        public bool sectors
+        {
+            get { return fSectors; }
+            set { fSectors = value; OnPropertyChanged(); }
+        }
+
+        private bool fBankAccs = true;
+        public bool bankAccs
+        {
+            get { return fBankAccs; }
+            set { fBankAccs = value; OnPropertyChanged(); }
+        }
+
         private bool fColours = true;
         public bool colours
         {
@@ -80,7 +101,7 @@ namespace FinanceWindowsViewModels
                         BankSelected.Add(column.Name);
                     }
                 }
-                var options = new UserOptions() { DisplayValueFunds = displayValueFunds, Spacing = spacing, Colours = colours, SecurityDataToExport = selected, BankAccDataToExport = BankSelected };
+                var options = new UserOptions() { DisplayValueFunds = displayValueFunds, Spacing = spacing, Colours = colours, SecurityDataToExport = selected, BankAccDataToExport = BankSelected, ShowSecurites = securities, ShowBankAccounts = bankAccs, ShowSectors = sectors };
                 PortfolioStatsCreators.CreateHTMLPageCustom(Portfolio, Sectors, saving.FileName, options);
                 reports.AddReport("Created statistics page");
             }

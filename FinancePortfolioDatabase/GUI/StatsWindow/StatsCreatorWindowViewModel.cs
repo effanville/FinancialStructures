@@ -139,7 +139,7 @@ namespace FinanceWindowsViewModels
         {
             StatsFilepath = filePath;
             window.Close();
-            SelectedIndex = 5;
+            SelectedIndex = 4;
         }
 
         private void ExecuteFileSelect(Object obj)

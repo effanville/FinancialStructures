@@ -13,5 +13,10 @@ namespace PortfolioStatsCreatorHelper
         public bool Spacing { get; set; }
 
         public bool Colours { get; set; }
+
+        public bool ShowSecurites { get; set; }
+        public bool ShowBankAccounts { get; set; }
+
+        public bool ShowSectors { get; set; }
     }
 }

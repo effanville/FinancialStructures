@@ -93,92 +93,101 @@ namespace PortfolioStatsCreatorHelper
             htmlWriter.WriteLine("</tbody>");
             htmlWriter.WriteLine("</table>");
 
-            htmlWriter.WriteLine("<h2>Funds Data</h2>");
-            htmlWriter.WriteLine("<table>");
-            htmlWriter.WriteLine("<thead><tr>");
-            var totals = portfolio.GeneratePortfolioStatistics();
-
-            htmlWriter.WriteLine(totals.HtmlTableHeader(options, options.SecurityDataToExport));
-            htmlWriter.WriteLine("</tr></thead>");
-            htmlWriter.WriteLine("<tbody>");
-            List<string> companies = portfolio.GetSecuritiesCompanyNames();
-            foreach (string compName in companies)
+            if (options.ShowSecurites)
             {
-                var securities = portfolio.GenerateCompanyFundsStatistics(compName);
-                int linesWritten = 0;
-                foreach (var sec in securities)
+
+                htmlWriter.WriteLine("<h2>Funds Data</h2>");
+                htmlWriter.WriteLine("<table>");
+                htmlWriter.WriteLine("<thead><tr>");
+                var totals = portfolio.GeneratePortfolioStatistics();
+
+                htmlWriter.WriteLine(totals.HtmlTableHeader(options, options.SecurityDataToExport));
+                htmlWriter.WriteLine("</tr></thead>");
+                htmlWriter.WriteLine("<tbody>");
+                List<string> companies = portfolio.GetSecuritiesCompanyNames();
+                foreach (string compName in companies)
                 {
-                    if ((options.DisplayValueFunds && sec.LatestVal > 0) || !options.DisplayValueFunds)
+                    var securities = portfolio.GenerateCompanyFundsStatistics(compName);
+                    int linesWritten = 0;
+                    foreach (var sec in securities)
                     {
-                        htmlWriter.WriteLine("<tr>");
-                        htmlWriter.WriteLine(sec.HtmlTableData(options, options.SecurityDataToExport));
-                        htmlWriter.WriteLine("</tr>");
-                        linesWritten += 1;
+                        if ((options.DisplayValueFunds && sec.LatestVal > 0) || !options.DisplayValueFunds)
+                        {
+                            htmlWriter.WriteLine("<tr>");
+                            htmlWriter.WriteLine(sec.HtmlTableData(options, options.SecurityDataToExport));
+                            htmlWriter.WriteLine("</tr>");
+                            linesWritten += 1;
+                        }
+                    }
+
+                    if (options.Spacing && linesWritten > 0)
+                    {
+                        htmlWriter.WriteLine($"<tr><td><br/></td></tr>");
                     }
                 }
 
-                if (options.Spacing && linesWritten > 0)
+                if ((options.DisplayValueFunds && totals.LatestVal > 0) || !options.DisplayValueFunds)
                 {
-                    htmlWriter.WriteLine($"<tr><td><br/></td></tr>");
+                    htmlWriter.WriteLine("");
+                    htmlWriter.WriteLine("<tr>");
+                    htmlWriter.WriteLine(totals.HtmlTableData(options, options.SecurityDataToExport));
+                    htmlWriter.WriteLine("</tr>");
                 }
+
+                htmlWriter.WriteLine("</tbody>");
+                htmlWriter.WriteLine("</table>");
             }
 
-            if ((options.DisplayValueFunds && totals.LatestVal > 0) || !options.DisplayValueFunds)
+            if (options.ShowBankAccounts)
             {
-                htmlWriter.WriteLine("");
-                htmlWriter.WriteLine("<tr>");
-                htmlWriter.WriteLine(totals.HtmlTableData(options, options.SecurityDataToExport));
-                htmlWriter.WriteLine("</tr>");
-            }
+                htmlWriter.WriteLine("<h2>Bank Accounts Data</h2>");
 
-            htmlWriter.WriteLine("</tbody>");
-            htmlWriter.WriteLine("</table>");
+                htmlWriter.WriteLine("<table>");
+                htmlWriter.WriteLine("<thead><tr>");
 
-            htmlWriter.WriteLine("<h2>Bank Accounts Data</h2>");
-
-            htmlWriter.WriteLine("<table>");
-            htmlWriter.WriteLine("<thead><tr>");
-
-            htmlWriter.WriteLine(bankTotals.HTMLTableHeader(options, options.BankAccDataToExport));
-            htmlWriter.WriteLine("</tr></thead>");
-            htmlWriter.WriteLine("<tbody>");
+                htmlWriter.WriteLine(bankTotals.HTMLTableHeader(options, options.BankAccDataToExport));
+                htmlWriter.WriteLine("</tr></thead>");
+                htmlWriter.WriteLine("<tbody>");
 
 
-            List<string> BankCompanies = portfolio.GetBankAccountCompanyNames();
-            foreach (string compName in BankCompanies)
-            {
-                var bankAccounts = portfolio.GenerateBankAccountStatistics(compName);
-                int linesWritten = 0;
-                foreach (var acc in bankAccounts)
+                List<string> BankCompanies = portfolio.GetBankAccountCompanyNames();
+                foreach (string compName in BankCompanies)
                 {
-                    if ((options.DisplayValueFunds && acc.Value > 0) || !options.DisplayValueFunds)
+                    var bankAccounts = portfolio.GenerateBankAccountStatistics(compName);
+                    int linesWritten = 0;
+                    foreach (var acc in bankAccounts)
                     {
-                        linesWritten++;
-                        htmlWriter.WriteLine("<tr>");
-                        htmlWriter.WriteLine(acc.HTMLTableData(options, options.BankAccDataToExport));
-                        htmlWriter.WriteLine("</tr>");
+                        if ((options.DisplayValueFunds && acc.Value > 0) || !options.DisplayValueFunds)
+                        {
+                            linesWritten++;
+                            htmlWriter.WriteLine("<tr>");
+                            htmlWriter.WriteLine(acc.HTMLTableData(options, options.BankAccDataToExport));
+                            htmlWriter.WriteLine("</tr>");
+                        }
+                    }
+
+                    if (options.Spacing && linesWritten > 0)
+                    {
+                        htmlWriter.WriteLine($"<tr><td><br/></td></tr>");
                     }
                 }
 
-                if (options.Spacing && linesWritten > 0)
+
+                if ((options.DisplayValueFunds && bankTotals.Value > 0) || !options.DisplayValueFunds)
                 {
-                    htmlWriter.WriteLine($"<tr><td><br/></td></tr>");
+                    htmlWriter.WriteLine("<tr>");
+                    htmlWriter.WriteLine(bankTotals.HTMLTableData(options, options.BankAccDataToExport));
+                    htmlWriter.WriteLine("</tr>");
                 }
+
+                htmlWriter.WriteLine("</tbody>");
+                htmlWriter.WriteLine("</table>");
+
             }
-
-
-            if ((options.DisplayValueFunds && bankTotals.Value > 0) || !options.DisplayValueFunds)
+            if (options.ShowSectors)
             {
-                htmlWriter.WriteLine("<tr>");
-                htmlWriter.WriteLine(bankTotals.HTMLTableData(options, options.BankAccDataToExport));
-                htmlWriter.WriteLine("</tr>");
+                WriteSectorAnalysis(htmlWriter, portfolio, sectors, options);
             }
-
-            htmlWriter.WriteLine("</tbody>");
-            htmlWriter.WriteLine("</table>");
-
-            WriteSectorAnalysis(htmlWriter, portfolio, sectors, options);
-
             CreateHTMLFooter(htmlWriter, length);
             htmlWriter.Close();
 

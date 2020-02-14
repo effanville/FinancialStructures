@@ -28,6 +28,18 @@
             <TextBlock Text="Spacing Between Companies" 
                        TextWrapping="Wrap"/>
         </CheckBox>
+        <CheckBox Margin="5" IsChecked="{Binding securites}">
+            <TextBlock Text="Display Securities" 
+                       TextWrapping="Wrap"/>
+        </CheckBox>
+        <CheckBox Margin="5" IsChecked="{Binding bankAccs}">
+            <TextBlock Text="Display Bank Accounts" 
+                       TextWrapping="Wrap"/>
+        </CheckBox>
+        <CheckBox Margin="5" IsChecked="{Binding sectors}">
+            <TextBlock Text="Display Sectors" 
+                       TextWrapping="Wrap"/>
+        </CheckBox>
         <Grid >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
