@@ -13,7 +13,7 @@ namespace FinancialStructures.DataStructures
         {
             var valuation = new DailyValuation(date, value);
             fValues.Add(valuation);
-            reports.AddReport($"Added value {value}");
+            reports.AddReport($"Added value {value}", Location.AddingData);
             Sort();
         }
 
@@ -77,7 +77,7 @@ namespace FinancialStructures.DataStructures
                 {
                     if (fValues[i].Day == date)
                     {
-                        reports.AddReport($"Editing Data: {date} value changed from {fValues[i].Value} to {value}");
+                        reports.AddReport($"Editing Data: {date} value changed from {fValues[i].Value} to {value}", Location.EditingData);
                         fValues[i].SetValue(value);
 
                         return true;
@@ -96,7 +96,7 @@ namespace FinancialStructures.DataStructures
                 {
                     if (fValues[i].Day == oldDate)
                     {
-                        reports.AddReport($"Editing Data: {oldDate} value changed from {fValues[i].Value} to {newDate} - {value}");
+                        reports.AddReport($"Editing Data: {oldDate} value changed from {fValues[i].Value} to {newDate} - {value}", Location.EditingData);
                         fValues[i].SetData(newDate, value);
                         return true;
                     }
@@ -128,14 +128,14 @@ namespace FinancialStructures.DataStructures
                 {
                     if (fValues[i].Day == date)
                     {
-                        reports.AddReport($"Deleted value: date - {date} and value - {fValues[i].Value}");
+                        reports.AddReport($"Deleted value: date - {date} and value - {fValues[i].Value}", Location.DeletingData);
                         fValues.RemoveAt(i);
                         return true;
                     }
                 }
             }
 
-            reports.AddError($"Deleting Value: Could not find data on date {date}.");
+            reports.AddError($"Deleting Value: Could not find data on date {date}.", Location.DeletingData);
             return false;
         }
 

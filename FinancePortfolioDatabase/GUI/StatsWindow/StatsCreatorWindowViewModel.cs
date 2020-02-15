@@ -88,12 +88,12 @@ namespace FinanceWindowsViewModels
                     string securitiesData = stats.Day.ToShortDateString() + ", " + stats.Company + ", " + stats.Name + ", " + stats.Value.ToString();
                     statsWriter.WriteLine(securitiesData);
                 }
-                reports.AddReport($"Created Investment list page at {saving.FileName}.");
+                reports.AddReport($"Created Investment list page at {saving.FileName}.", Location.Saving);
                 statsWriter.Close();
             }
             else
             {
-                reports.AddError( $"Was not able to create Investment list page at {saving.FileName}");
+                reports.AddError( $"Was not able to create Investment list page at {saving.FileName}", Location.StatisticsPage);
             }
             saving.Dispose();
             if (reports.Any())
@@ -118,7 +118,7 @@ namespace FinanceWindowsViewModels
             }
             else
             {
-                reports.AddError($"Was not able to create Investment list page at {saving.FileName}");
+                reports.AddError($"Was not able to create Investment list page at {saving.FileName}", Location.StatisticsPage);
             }
             saving.Dispose();
             if (reports.Any())

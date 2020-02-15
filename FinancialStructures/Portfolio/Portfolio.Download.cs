@@ -177,7 +177,7 @@ namespace FinancialStructures.Database
                         value = ProcessFromFT(data);
                         if (double.IsNaN(value))
                         {
-                            reports.AddError($"Could not download data from morningstar url: {url}");
+                            reports.AddError($"Could not download data from morningstar url: {url}", Location.Downloading);
                             return false;
                         }
                         return true;
@@ -187,7 +187,7 @@ namespace FinancialStructures.Database
                         value = ProcessFromYahoo(data);
                         if (double.IsNaN(value))
                         {
-                            reports.AddError($"Could not download data from Yahoo url: {url}");
+                            reports.AddError($"Could not download data from Yahoo url: {url}", Location.Downloading);
                             return false;
                         }
                         return true;

@@ -33,7 +33,7 @@ namespace FinancialStructures.Database
                 return database.myBenchMarks;
             }
 
-            reports.AddReport("Loaded Empty New Database.");
+            reports.AddReport("Loaded Empty New Database.", Location.Loading);
             portfolio.CopyData(new Portfolio());
             return new List<Sector>();
         }
@@ -44,7 +44,7 @@ namespace FinancialStructures.Database
             if (filePath != null)
             {
                 XmlFileAccess.WriteToXmlFile(filePath, toSave);
-                reports.AddReport("Saved Database.");
+                reports.AddReport("Saved Database.", Location.Saving);
             }
         }
     }

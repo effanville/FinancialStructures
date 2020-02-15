@@ -84,7 +84,7 @@ namespace FinancialStructures.Database
                     return acc.GetDataForDisplay();
                 }
             }
-            reports.AddReport($"Bank account {name.ToString()} does not exist.");
+            reports.AddReport($"Bank account {name.ToString()} does not exist.", Location.DatabaseAccess);
             return new List<AccountDayDataView>();
         }
 
@@ -160,7 +160,7 @@ namespace FinancialStructures.Database
         {
             if (name == null || company == null)
             {
-                reports.AddError("Name or Company provided were null.");
+                reports.AddError("Name or Company provided were null.", Location.AddingData);
                 return false;
             }
             if (portfolio.DoesBankAccountExistFromName(name, company))
@@ -190,11 +190,11 @@ namespace FinancialStructures.Database
                 if (acc.GetCompany() == company && acc.GetName() == name)
                 {
                     portfolio.BankAccounts.Remove(acc);
-                    reports.AddWarning($"Deleting Bank Account: Deleted `{company}'-`{name}'.");
+                    reports.AddWarning($"Deleting Bank Account: Deleted `{company}'-`{name}'.", Location.DeletingData);
                     return true;
                 }
             }
-            reports.AddError($"Deleting Bank Account: Could not find account `{company}'-`{name}'.");
+            reports.AddError($"Deleting Bank Account: Could not find account `{company}'-`{name}'.", Location.DeletingData);
             return false;
         }
 
@@ -233,7 +233,7 @@ namespace FinancialStructures.Database
                 }
             }
 
-            reports.AddError($"Editing BankAccount Data: Could not find bank account `{company}'-`{name}'.");
+            reports.AddError($"Editing BankAccount Data: Could not find bank account `{company}'-`{name}'.", Location.EditingData);
             return false;
         }
 
@@ -248,7 +248,7 @@ namespace FinancialStructures.Database
                 }
             }
 
-            reports.AddError($"Renaming BankAccount: Could not find bank account `{company}'-`{name}'.");
+            reports.AddError($"Renaming BankAccount: Could not find bank account `{company}'-`{name}'.", Location.EditingData);
             return false;
         }
 
@@ -268,7 +268,7 @@ namespace FinancialStructures.Database
                 }
             }
 
-            reports.AddError($"Deleting Bank Account Data: Could not find bank account `{company}'-`{name}'.");
+            reports.AddError($"Deleting Bank Account Data: Could not find bank account `{company}'-`{name}'.", Location.DeletingData);
             return false;
         }
     }

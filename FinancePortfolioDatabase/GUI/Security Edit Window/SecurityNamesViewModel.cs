@@ -55,7 +55,7 @@ namespace FinanceWindowsViewModels
                 }
                 if (!edited)
                 {
-                    reports.AddError("No Name provided to create a sector.");
+                    reports.AddError("No Name provided to create a sector.", Location.AddingData);
                 }
             }
             else
@@ -75,7 +75,7 @@ namespace FinanceWindowsViewModels
                 }
                 if (!edited)
                 {
-                    reports.AddError("Was not able to edit desired security.");
+                    reports.AddError("Was not able to edit desired security.", Location.EditingData);
                 }
             }
             UpdateMainWindow();
@@ -134,7 +134,7 @@ namespace FinanceWindowsViewModels
             }
             else
             {
-                reports.AddError("Something went wrong when trying to delete security.");
+                reports.AddError("Something went wrong when trying to delete security.", Location.DeletingData);
             }
 
             if (reports.Any())

@@ -17,7 +17,7 @@ namespace PortfolioStatsCreatorHelper
                 var historyStatistics = await portfolio.GenerateHistoryStats(daysGap).ConfigureAwait(false);
                 if (!historyStatistics.Any())
                 {
-                    reports.AddError("Not enough history points to export.");
+                    reports.AddError("Not enough history points to export.", Location.StatisticsPage);
                     return;
                 }
                 historyWriter.WriteLine(historyStatistics[0].Headers());
@@ -26,11 +26,11 @@ namespace PortfolioStatsCreatorHelper
                     historyWriter.WriteLine(statistic.ToString());
                 }
                 historyWriter.Close();
-                reports.AddReport($"Successfully exported history to {filePath}.");
+                reports.AddReport($"Successfully exported history to {filePath}.", Location.StatisticsPage);
             }
             catch (Exception exception)
             {
-                reports.AddError(exception.Message);
+                reports.AddError(exception.Message, Location.StatisticsPage);
 
             }
             finally

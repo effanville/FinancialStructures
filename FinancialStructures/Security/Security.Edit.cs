@@ -174,7 +174,7 @@ namespace FinancialStructures.FinanceStructures
         {
             if (DoesDateSharesDataExist(date, out int _) || DoesDateInvestmentDataExist(date, out int _) || DoesDateUnitPriceDataExist(date, out int _))
             {
-                reports.AddError( $"Security `{fCompany}'-`{fName}' already has NumShares or UnitPrice or Investment data on {date.ToString("d")}.");
+                reports.AddError( $"Security `{fCompany}'-`{fName}' already has NumShares or UnitPrice or Investment data on {date.ToString("d")}.", Location.AddingData);
                 return false;
             }
 
@@ -228,27 +228,27 @@ namespace FinancialStructures.FinanceStructures
         {
             if (name != fName)
             {
-                reports.AddReport($"Security `{fCompany}'-`{fName}' has name `{fName}' edited to `{name}'.");
+                reports.AddReport($"Security `{fCompany}'-`{fName}' has name `{fName}' edited to `{name}'.", Location.EditingData);
                 fName = name;
             }
             if (company != fCompany)
             {
-                reports.AddReport($"Security `{fCompany}'-`{fName}' has company `{fCompany}' edited to `{company}'.");
+                reports.AddReport($"Security `{fCompany}'-`{fName}' has company `{fCompany}' edited to `{company}'.", Location.EditingData);
                 fCompany = company;
             }
             if (url != fUrl)
             {
-                reports.AddReport($"Security `{fCompany}'-`{fName}' has url `{fUrl}' edited to `{url}'.");
+                reports.AddReport($"Security `{fCompany}'-`{fName}' has url `{fUrl}' edited to `{url}'.", Location.EditingData);
                 fUrl = url;
             }
             if (currency != fCurrency)
             {
-                reports.AddReport( $"Security `{fCompany}'-`{fName}' has url `{fCurrency}' edited to `{currency}'.");
+                reports.AddReport( $"Security `{fCompany}'-`{fName}' has url `{fCurrency}' edited to `{currency}'.", Location.EditingData);
                 fCurrency = currency;
             }
             if (sectors != fSectors)
             {
-                reports.AddReport($"Security `{fCompany}'-`{fName}' has sectors `{string.Join(", ", fSectors)}' edited to `{string.Join(", ", sectors)}'.");
+                reports.AddReport($"Security `{fCompany}'-`{fName}' has sectors `{string.Join(", ", fSectors)}' edited to `{string.Join(", ", sectors)}'.", Location.EditingData);
                 fSectors = sectors;
             }
 

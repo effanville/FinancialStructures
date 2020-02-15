@@ -96,7 +96,7 @@ namespace FinanceWindowsViewModels
                         }
                         else
                         {
-                            reports.AddError("Have the wrong type of thing");
+                            reports.AddError("Have the wrong type of thing", Location.StatisticsPage);
                         }
                     }
                     if (reports.Any())
@@ -137,7 +137,7 @@ namespace FinanceWindowsViewModels
                     }
                     if (!edited)
                     {
-                        reports.AddError("Was not able to edit security data.");
+                        reports.AddError("Was not able to edit security data.", Location.EditingData);
                     }
                 }
                 UpdateMainWindow();

@@ -79,7 +79,7 @@ namespace FinanceCommonViewModels
                 }
                 if (!edited)
                 {
-                    reports.AddError("No Name provided on creation.");
+                    reports.AddError("No Name provided on creation.", Location.AddingData);
                 }
             }
             else
@@ -99,7 +99,7 @@ namespace FinanceCommonViewModels
                 }
                 if (!edited)
                 {
-                    reports.AddError("Was not able to edit desired.");
+                    reports.AddError("Was not able to edit desired.", Location.EditingData);
                 }
             }
 
@@ -121,7 +121,7 @@ namespace FinanceCommonViewModels
             }
             else
             {
-                reports.AddError("Nothing was selected when trying to delete.");
+                reports.AddError("Nothing was selected when trying to delete.", Location.DeletingData);
             }
             if (reports.Any())
             {

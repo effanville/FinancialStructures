@@ -30,11 +30,11 @@ namespace FinancialStructures.Database
                 if (sec.GetCompany() == company && sec.GetName() == name)
                 {
                     portfolio.Funds.Remove(sec);
-                    reports.AddReport( $"Security `{company}'-`{name}' removed from the database.");
+                    reports.AddReport( $"Security `{company}'-`{name}' removed from the database.", Location.DeletingData);
                     return true;
                 }
             }
-            reports.AddError( $"Security `{company}'-`{name}' could not be found in the database.");
+            reports.AddError( $"Security `{company}'-`{name}' could not be found in the database.", Location.DeletingData);
             return false;
         }
 
@@ -50,7 +50,7 @@ namespace FinancialStructures.Database
                     return portfolio.Funds[fundIndex].TryAddData(reports, date, unitPrice, shares, Investment);
                 }
             }
-            reports.AddError($"Security `{company}'-`{name}' could not be found in the database.");
+            reports.AddError($"Security `{company}'-`{name}' could not be found in the database.", Location.AddingData);
             return false;
         }
 
@@ -61,13 +61,13 @@ namespace FinancialStructures.Database
         {
             if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(company))
             {
-                reports.AddError( $"Company `{company}' or name `{name}' is not suitable.");
+                reports.AddError( $"Company `{company}' or name `{name}' is not suitable.", Location.AddingData);
                 return false;
             }
 
             if (portfolio.DoesSecurityExist(company, name))
             {
-                reports.AddError( $"Security `{company}'-`{name}' already exists.");
+                reports.AddError( $"Security `{company}'-`{name}' already exists.", Location.AddingData);
                 return false;
             }
 
@@ -85,7 +85,7 @@ namespace FinancialStructures.Database
 
             Security newSecurity = new Security(name, company, currency, url, sectorList);
             portfolio.Funds.Add(newSecurity);
-            reports.AddReport($"Security `{company}'-`{name}' added to database.");
+            reports.AddReport($"Security `{company}'-`{name}' added to database.", Location.AddingData);
             return true;
         }
 

@@ -17,7 +17,7 @@ namespace FinanceWindows
             string helpPath = Path.GetFullPath("GUI\\GuiSupport\\help.html");
             if (!File.Exists(helpPath))
             {
-                reports.AddError("Could not find help documentation.");
+                reports.AddError("Could not find help documentation.", Location.Help);
                 return;
             }
             Uri path = new Uri(helpPath);

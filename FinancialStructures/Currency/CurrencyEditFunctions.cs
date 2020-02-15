@@ -64,7 +64,7 @@ namespace FinancialStructures.FinanceStructures
         {
             if (DoesDataExist(date, out int _))
             {
-                reports.AddError("Data already exists.");
+                reports.AddError("Data already exists.", Location.AddingData);
                 return false;
             }
 

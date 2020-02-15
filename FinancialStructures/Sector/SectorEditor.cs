@@ -37,12 +37,12 @@ namespace SectorHelperFunctions
             {
                 if (name == sector.GetName())
                 {
-                    reports.AddError($"Sector with name {name} already exists.");
+                    reports.AddError($"Sector with name {name} already exists.", Location.AddingData);
                     return false;
                 }
             }
             Sector newSector = new Sector(name, url);
-            reports.AddReport($"Added sector with name {name}.");
+            reports.AddReport($"Added sector with name {name}.", Location.AddingData);
             sectors.Add(newSector);
             return true;
         }
@@ -87,7 +87,7 @@ namespace SectorHelperFunctions
                     return sec.GetDataForDisplay();
                 }
             }
-            reports.AddError($"Sector {name.Name} does not exist.");
+            reports.AddError($"Sector {name.Name} does not exist.", Location.DatabaseAccess);
             return new List<AccountDayDataView>();
         }
 
@@ -108,7 +108,7 @@ namespace SectorHelperFunctions
                     return sector.TryAddData(date, value, reports);
                 }
             }
-            reports.AddError($"Could not find sector {name}");
+            reports.AddError($"Could not find sector {name}", Location.AddingData);
             return false;
         }
 
@@ -160,12 +160,12 @@ namespace SectorHelperFunctions
                 if (sector.GetName() == oldName)
                 {
                     sector.TryEditNameUrl(newName, url);
-                    reports.AddReport($"Renamed sector {oldName} with new name {newName}.");
+                    reports.AddReport($"Renamed sector {oldName} with new name {newName}.", Location.EditingData);
                     return true;
                 }
             }
 
-            reports.AddError($"Could not rename sector {oldName} with new name {newName}.");
+            reports.AddError($"Could not rename sector {oldName} with new name {newName}.", Location.EditingData);
             return false;
         }
 
@@ -199,7 +199,7 @@ namespace SectorHelperFunctions
             {
                 if (name == sector.GetName())
                 {
-                    reports.AddReport($"Removed sector {name}");
+                    reports.AddReport($"Removed sector {name}", Location.DeletingData);
                     sectors.Remove(sector);
                     return true;
                 }

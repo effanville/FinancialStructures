@@ -12,8 +12,14 @@ namespace FinancialStructures.ReportingStructures
     {
         Unknown,
         Downloading,
+        Saving,
+        Loading,
         AddingData,
         EditingData,
-        Parsing
+        DeletingData,
+        Parsing,
+        StatisticsPage,
+        DatabaseAccess,
+        Help
     }
 }

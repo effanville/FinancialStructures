@@ -44,7 +44,7 @@ namespace GUISupport
             }
             catch (Exception ex)
             {
-                reports.AddError(ex.Message);
+                reports.AddError(ex.Message, Location.Loading);
                 return new List<object>();
             }
             finally
@@ -62,7 +62,7 @@ namespace GUISupport
             {
                 if (dayValuation.Length != 4)
                 {
-                    reports.AddError("Line in Csv file has incomplete data.");
+                    reports.AddError("Line in Csv file has incomplete data.", Location.Loading);
                     break;
                 }
 
@@ -80,7 +80,7 @@ namespace GUISupport
             {
                 if (dayValuation.Length != 2)
                 {
-                    reports.AddError("Line in Csv file has incomplete data.");
+                    reports.AddError("Line in Csv file has incomplete data.", Location.Loading);
                     break;
                 }
 

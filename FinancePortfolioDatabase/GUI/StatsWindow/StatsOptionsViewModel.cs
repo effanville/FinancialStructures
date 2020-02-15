@@ -103,11 +103,11 @@ namespace FinanceWindowsViewModels
                 }
                 var options = new UserOptions() { DisplayValueFunds = displayValueFunds, Spacing = spacing, Colours = colours, SecurityDataToExport = selected, BankAccDataToExport = BankSelected, ShowSecurites = securities, ShowBankAccounts = bankAccs, ShowSectors = sectors };
                 PortfolioStatsCreators.CreateHTMLPageCustom(Portfolio, Sectors, saving.FileName, options);
-                reports.AddReport("Created statistics page");
+                reports.AddReport("Created statistics page", Location.StatisticsPage);
             }
             else
             {
-                reports.AddError("Was not able to create HTML page in place specified.");
+                reports.AddError("Was not able to create HTML page in place specified.", Location.StatisticsPage);
             }
             saving.Dispose();
             if (reports.Any())
@@ -145,11 +145,11 @@ namespace FinanceWindowsViewModels
                 }
                 var options = new UserOptions() { DisplayValueFunds = displayValueFunds, Spacing = spacing, Colours = colours, SecurityDataToExport = selected, BankAccDataToExport = BankSelected };
                 CSVStatsCreator.CreateCSVPageCustom(Portfolio, Sectors, saving.FileName, options);
-                reports.AddReport("Created statistics page");
+                reports.AddReport("Created statistics page", Location.StatisticsPage);
             }
             else
             {
-                reports.AddError("Was not able to create HTML page in place specified.");
+                reports.AddError("Was not able to create HTML page in place specified.", Location.StatisticsPage);
             }
             saving.Dispose();
             if (reports.Any())

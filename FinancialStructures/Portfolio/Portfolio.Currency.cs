@@ -35,12 +35,12 @@ namespace FinancialStructures.Database
             {
                 if (name == sector.GetName())
                 {
-                    reports.AddError($"Sector with name {name} already exists.");
+                    reports.AddError($"Sector with name {name} already exists.", Location.AddingData);
                     return false;
                 }
             }
             Currency newSector = new Currency(name, url);
-            reports.AddReport($"Added sector with name {name}.");
+            reports.AddReport($"Added sector with name {name}.", Location.AddingData);
             portfolio.Currencies.Add(newSector);
             return true;
         }
@@ -71,7 +71,7 @@ namespace FinancialStructures.Database
                 }
             }
 
-            reports.AddError($"Could not find currency {name.Name}");
+            reports.AddError($"Could not find currency {name.Name}", Location.DatabaseAccess);
             return new List<AccountDayDataView>();
         }
 
@@ -159,12 +159,12 @@ namespace FinancialStructures.Database
                 if (sector.GetName() == oldName)
                 {
                     sector.TryEditNameUrl(newName, url);
-                    reports.AddReport($"Renamed sector {oldName} with new name {newName}.");
+                    reports.AddReport($"Renamed sector {oldName} with new name {newName}.", Location.EditingData);
                     return true;
                 }
             }
 
-            reports.AddError($"Could not rename sector {oldName} with new name {newName}.");
+            reports.AddError($"Could not rename sector {oldName} with new name {newName}.", Location.EditingData);
             return false;
         }
 
@@ -212,7 +212,7 @@ namespace FinancialStructures.Database
             {
                 if (name == sector.GetName())
                 {
-                    reports.AddReport($"Deleted sector {sector.GetName()}");
+                    reports.AddReport($"Deleted sector {sector.GetName()}", Location.DeletingData);
                     portfolio.Currencies.Remove(sector);
                     return true;
                 }

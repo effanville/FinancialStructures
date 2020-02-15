@@ -104,7 +104,7 @@ namespace FinanceCommonViewModels
                     }
                     if (!edited)
                     {
-                        reports.AddError("Was not able to edit sector data.");
+                        reports.AddError("Was not able to edit data.", Location.EditingData);
                     }
                 }
 
@@ -127,7 +127,7 @@ namespace FinanceCommonViewModels
             }
             else
             {
-                reports.AddError("No Bank Account was selected when trying to delete data.");
+                reports.AddError("No Account was selected when trying to delete data.", Location.DeletingData);
             }
             if (reports.Any())
             {
