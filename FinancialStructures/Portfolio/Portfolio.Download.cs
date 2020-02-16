@@ -107,7 +107,7 @@ namespace FinancialStructures.Database
             }
             foreach (var currency in portfo.GetCurrencies())
             {
-                await DownloadLatestValue( string.Empty, currency.GetName(), currency.GetUrl(), value => currency.TryAddData(DateTime.Today, value, reports), updateReports, reports).ConfigureAwait(false);
+                await DownloadLatestValue(string.Empty, currency.GetName(), currency.GetUrl(), value => currency.TryAddData(DateTime.Today, value, reports), updateReports, reports).ConfigureAwait(false);
             }
         }
 

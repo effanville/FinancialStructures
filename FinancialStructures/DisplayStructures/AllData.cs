@@ -3,8 +3,8 @@ using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using SectorHelperFunctions;
 using System;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SavingClasses
 {
@@ -21,7 +21,7 @@ namespace SavingClasses
             EventHandler handler = portfolioChanged;
             if (handler != null)
             {
-                handler?.Invoke(this,e);
+                handler?.Invoke(this, e);
             }
         }
 

@@ -10,7 +10,7 @@ using System.Windows.Input;
 
 namespace FinanceCommonViewModels
 {
-    public class DataNamesViewModel : ViewModelBase
+    internal class DataNamesViewModel : ViewModelBase
     {
         private Portfolio Portfolio;
         private List<Sector> Sectors;
@@ -53,7 +53,7 @@ namespace FinanceCommonViewModels
             var reports = new ErrorReports();
             if (SelectedName != null)
             {
-               UpdateDataCallback(async alldata => await editMethods.ExecuteFunction(FunctionType.Download, alldata.MyFunds, alldata.myBenchMarks, SelectedName, UpdateReports, reports).ConfigureAwait(false));
+                UpdateDataCallback(async alldata => await editMethods.ExecuteFunction(FunctionType.Download, alldata.MyFunds, alldata.myBenchMarks, SelectedName, UpdateReports, reports).ConfigureAwait(false));
             }
             if (reports.Any())
             {

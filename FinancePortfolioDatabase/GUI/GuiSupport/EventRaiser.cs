@@ -2,7 +2,7 @@
 
 namespace GUISupport
 {
-    public static class EventRaiser
+    internal static class EventRaiser
     {
         public static void Raise(this EventHandler handler, object sender)
         {

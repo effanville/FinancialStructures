@@ -30,11 +30,11 @@ namespace FinancialStructures.Database
                 if (sec.GetCompany() == company && sec.GetName() == name)
                 {
                     portfolio.Funds.Remove(sec);
-                    reports.AddReport( $"Security `{company}'-`{name}' removed from the database.", Location.DeletingData);
+                    reports.AddReport($"Security `{company}'-`{name}' removed from the database.", Location.DeletingData);
                     return true;
                 }
             }
-            reports.AddError( $"Security `{company}'-`{name}' could not be found in the database.", Location.DeletingData);
+            reports.AddError($"Security `{company}'-`{name}' could not be found in the database.", Location.DeletingData);
             return false;
         }
 
@@ -61,13 +61,13 @@ namespace FinancialStructures.Database
         {
             if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(company))
             {
-                reports.AddError( $"Company `{company}' or name `{name}' is not suitable.", Location.AddingData);
+                reports.AddError($"Company `{company}' or name `{name}' is not suitable.", Location.AddingData);
                 return false;
             }
 
             if (portfolio.DoesSecurityExist(company, name))
             {
-                reports.AddError( $"Security `{company}'-`{name}' already exists.", Location.AddingData);
+                reports.AddError($"Security `{company}'-`{name}' already exists.", Location.AddingData);
                 return false;
             }
 

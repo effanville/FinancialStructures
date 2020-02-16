@@ -3,7 +3,7 @@ using GUISupport;
 
 namespace FinanceViewModels.StatsViewModels
 {
-    public class TabViewModelBase : PropertyChangedBase
+    internal class TabViewModelBase : PropertyChangedBase
     {
         protected readonly Portfolio fPortfolio;
 
@@ -11,9 +11,9 @@ namespace FinanceViewModels.StatsViewModels
         public bool DisplayValueFunds
         {
             get { return fDisplayValueFunds; }
-            set { fDisplayValueFunds = value;}
+            set { fDisplayValueFunds = value; }
         }
-        public string Header {get;set;}
+        public string Header { get; set; }
 
         public virtual bool Closable { get { return true; } }
 

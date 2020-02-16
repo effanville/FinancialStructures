@@ -174,7 +174,7 @@ namespace FinancialStructures.FinanceStructures
         {
             if (DoesDateSharesDataExist(date, out int _) || DoesDateInvestmentDataExist(date, out int _) || DoesDateUnitPriceDataExist(date, out int _))
             {
-                reports.AddError( $"Security `{fCompany}'-`{fName}' already has NumShares or UnitPrice or Investment data on {date.ToString("d")}.", Location.AddingData);
+                reports.AddError($"Security `{fCompany}'-`{fName}' already has NumShares or UnitPrice or Investment data on {date.ToString("d")}.", Location.AddingData);
                 return false;
             }
 
@@ -184,7 +184,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Adds the value to the data with todays date and with the latest number of shares.
         /// </summary>
-        internal void UpdateSecurityData( double value, ErrorReports reports)
+        internal void UpdateSecurityData(double value, ErrorReports reports)
         {
             // best approximation for number of units is last known number of units.
             TryGetEarlierData(DateTime.Today, out DailyValuation _, out DailyValuation units, out DailyValuation _);
@@ -243,7 +243,7 @@ namespace FinancialStructures.FinanceStructures
             }
             if (currency != fCurrency)
             {
-                reports.AddReport( $"Security `{fCompany}'-`{fName}' has url `{fCurrency}' edited to `{currency}'.", Location.EditingData);
+                reports.AddReport($"Security `{fCompany}'-`{fName}' has url `{fCurrency}' edited to `{currency}'.", Location.EditingData);
                 fCurrency = currency;
             }
             if (sectors != fSectors)

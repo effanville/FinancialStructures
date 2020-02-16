@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace GUISupport
 {
-    public class BasicCommand : ICommand
+    internal class BasicCommand : ICommand
     {
         private Action<object> execute;
 

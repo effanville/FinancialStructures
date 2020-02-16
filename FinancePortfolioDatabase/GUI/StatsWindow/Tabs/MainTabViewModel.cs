@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace FinanceViewModels.StatsViewModels
 {
-    public class MainTabViewModel : TabViewModelBase
+    internal class MainTabViewModel : TabViewModelBase
     {
         public override bool Closable { get { return false; } }
         Action<TabType, string> OpenTab;

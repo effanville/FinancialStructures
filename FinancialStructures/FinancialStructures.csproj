@@ -5,6 +5,10 @@
     <Deterministic>false</Deterministic>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>C:\Users\masdoc\source\repos\Portfolio Analysis Database\FinancialStructures\FinancialStructures.xml</DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Remove="Portfolio\Portfolio.StatisticsPageCreator.cs" />
   </ItemGroup>

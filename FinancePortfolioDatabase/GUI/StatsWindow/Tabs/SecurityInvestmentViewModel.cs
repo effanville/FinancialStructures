@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace FinanceViewModels.StatsViewModels
 {
-    public class SecurityInvestmentViewModel : TabViewModelBase
+    internal class SecurityInvestmentViewModel : TabViewModelBase
     {
         public string Header { get; set; } = "Security Investments";
 
@@ -23,7 +23,7 @@ namespace FinanceViewModels.StatsViewModels
             SecuritiesInvestments = fPortfolio.AllSecuritiesInvestments();
         }
         public SecurityInvestmentViewModel(Portfolio portfolio, bool displayValueFunds)
-            : base (portfolio, displayValueFunds)
+            : base(portfolio, displayValueFunds)
         {
             GenerateStatistics(displayValueFunds);
         }

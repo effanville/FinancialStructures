@@ -254,7 +254,7 @@ namespace FinancialStructures.Database
 
         public static bool TryDeleteBankAccountData(this Portfolio portfolio, NameData name, AccountDayDataView data, ErrorReports reports)
         {
-            return portfolio.TryDeleteBankAccountData( name.Name, name.Company, data.Date, reports);
+            return portfolio.TryDeleteBankAccountData(name.Name, name.Company, data.Date, reports);
         }
 
         public static bool TryDeleteBankAccountData(this Portfolio portfolio, string name, string company, DateTime date, ErrorReports reports)

@@ -6,7 +6,7 @@ using System.Windows.Input;
 
 namespace FinanceWindowsViewModels
 {
-    public class ReportingWindowViewModel : PropertyChangedBase
+    internal class ReportingWindowViewModel : PropertyChangedBase
     {
         public ICommand ClearReportsCommand { get; }
 

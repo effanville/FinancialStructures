@@ -24,7 +24,7 @@ namespace FinancialStructures.Database
         }
 
 
-        public static List<Sector> LoadPortfolio(this Portfolio portfolio, string filePath,  ErrorReports reports)
+        public static List<Sector> LoadPortfolio(this Portfolio portfolio, string filePath, ErrorReports reports)
         {
             if (File.Exists(filePath))
             {

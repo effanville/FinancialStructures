@@ -4,29 +4,29 @@ using System.Windows.Controls.DataVisualization.Charting;
 
 namespace GUISupport
 {
-    class BindableChart : Chart
+    internal class BindableChart : Chart
     {
-            public IEnumerable SeriesSource
+        public IEnumerable SeriesSource
+        {
+            get
             {
-                get
-                {
-                    return (IEnumerable)GetValue(SeriesSourceProperty);
-                }
-                set
-                {
-                    SetValue(SeriesSourceProperty, value);
-                }
+                return (IEnumerable)GetValue(SeriesSourceProperty);
             }
+            set
+            {
+                SetValue(SeriesSourceProperty, value);
+            }
+        }
 
-            public static readonly DependencyProperty SeriesSourceProperty = DependencyProperty.Register(
-                name: "SeriesSource",
-                propertyType: typeof(IEnumerable),
-                ownerType: typeof(BindableChart),
-                typeMetadata: new PropertyMetadata(
-                    defaultValue: default(IEnumerable),
-                    propertyChangedCallback: new PropertyChangedCallback(OnSeriesSourceChanged)
-                )
-            );
+        public static readonly DependencyProperty SeriesSourceProperty = DependencyProperty.Register(
+            name: "SeriesSource",
+            propertyType: typeof(IEnumerable),
+            ownerType: typeof(BindableChart),
+            typeMetadata: new PropertyMetadata(
+                defaultValue: default(IEnumerable),
+                propertyChangedCallback: new PropertyChangedCallback(OnSeriesSourceChanged)
+            )
+        );
 
         private static void OnSeriesSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

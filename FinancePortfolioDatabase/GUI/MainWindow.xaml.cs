@@ -1,10 +1,10 @@
 ﻿using FinanceWindowsViewModels;
-using FinancialStructures.ReportingStructures;
 using FinancialStructures.Database;
+using FinancialStructures.ReportingStructures;
 using Microsoft.Win32;
-using System.Windows;
-using System.Reflection;
 using System;
+using System.Reflection;
+using System.Windows;
 
 namespace FinanceWindows
 {
@@ -56,7 +56,7 @@ namespace FinanceWindows
                     var vm = DataContext as MainWindowViewModel;
                     vm.allData.MyFunds.SavePortfolio(vm.allData.myBenchMarks, saving.FileName, new ErrorReports());
                 }
-                
+
                 // saving.Dispose();
             }
             if (result == MessageBoxResult.Cancel)

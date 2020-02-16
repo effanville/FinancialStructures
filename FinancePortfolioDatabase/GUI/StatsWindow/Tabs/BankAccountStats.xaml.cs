@@ -1,11 +1,9 @@
-﻿using System.Windows.Controls;
-
-namespace FinanceWindows.StatsWindow
+﻿namespace FinanceWindows.StatsWindow
 {
     /// <summary>
     /// Interaction logic for BankAccountStats.xaml
     /// </summary>
-    public partial class BankAccountStats : AutoGenColumnControl
+    internal partial class BankAccountStats : AutoGenColumnControl
     {
         public BankAccountStats()
         {

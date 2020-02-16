@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 
 namespace FinanceCommonViewModels
 {
-    public class SingleValueEditWindowViewModel : PropertyChangedBase
+    internal class SingleValueEditWindowViewModel : PropertyChangedBase
     {
         private Portfolio Portfolio;
         private List<Sector> Sectors;

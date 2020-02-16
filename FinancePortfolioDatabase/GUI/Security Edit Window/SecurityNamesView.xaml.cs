@@ -1,7 +1,7 @@
-﻿using System.Windows.Controls;
-using System.Windows.Input;
-using FinanceWindowsViewModels;
+﻿using FinanceWindowsViewModels;
 using FinancialStructures.GUIFinanceStructures;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace FinanceWindows
 {

@@ -25,7 +25,7 @@ namespace SectorHelperFunctions
         }
 
         public static bool TryAddSector(List<Sector> sectors, NameData name, ErrorReports reports)
-        { 
+        {
             return TryAddSector(sectors, name.Name, name.Url, reports);
         }
         /// <summary>
@@ -149,8 +149,8 @@ namespace SectorHelperFunctions
         }
 
         public static bool TryEditSectorName(List<Sector> sectors, NameData oldName, NameData newName, ErrorReports reports)
-        { 
-            return TryEditSectorName(sectors, oldName.Name, newName.Name, newName.Url, reports); 
+        {
+            return TryEditSectorName(sectors, oldName.Name, newName.Name, newName.Url, reports);
         }
 
         public static bool TryEditSectorName(List<Sector> sectors, string oldName, string newName, string url, ErrorReports reports)
@@ -186,7 +186,7 @@ namespace SectorHelperFunctions
         }
 
         public static bool TryDeleteSector(List<Sector> sectors, NameData name, ErrorReports reports)
-        { 
+        {
             return TryDeleteSector(sectors, name.Name, reports);
         }
 

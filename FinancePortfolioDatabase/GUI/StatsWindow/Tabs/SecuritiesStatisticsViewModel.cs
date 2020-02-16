@@ -1,6 +1,5 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.GUIFinanceStructures;
-using GUISupport;
 using System.Collections.Generic;
 
 namespace FinanceViewModels.StatsViewModels
@@ -22,7 +21,7 @@ namespace FinanceViewModels.StatsViewModels
         }
 
         public SecuritiesStatisticsViewModel(Portfolio portfolio, bool displayValueFunds)
-            :base(portfolio,displayValueFunds)
+            : base(portfolio, displayValueFunds)
         {
             Header = "Security Statistics";
             GenerateStatistics(displayValueFunds);

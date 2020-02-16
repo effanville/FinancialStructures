@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace FinanceWindowsViewModels
 {
-    public class OptionsToolbarViewModel : PropertyChangedBase
+    internal class OptionsToolbarViewModel : PropertyChangedBase
     {
         private Portfolio Portfolio;
         Action<Action<AllData>> UpdateData;
@@ -39,7 +39,7 @@ namespace FinanceWindowsViewModels
 
         private void OpenHelpDocsCommand(Object obj)
         {
-            var helpwindow = new HelpWindow();
+            var helpwindow = new HelpWindow(UpdateReports);
             helpwindow.Show();
         }
         public void ExecuteNewDatabase(Object obj)
@@ -67,7 +67,7 @@ namespace FinanceWindowsViewModels
                 UpdateData(alldata => alldata.MyFunds.SavePortfolio(alldata.myBenchMarks, saving.FileName, reports));
             }
 
-            
+
             saving.Dispose();
             if (reports.Any())
             {

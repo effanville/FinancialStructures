@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 
 namespace FinanceWindowsViewModels
 {
-    public class SecurityEditWindowViewModel : PropertyChangedBase
+    internal class SecurityEditWindowViewModel : PropertyChangedBase
     {
         private Portfolio Portfolio;
         private List<Sector> Sectors;
@@ -47,7 +47,7 @@ namespace FinanceWindowsViewModels
             Tabs.Add(new SelectedSecurityViewModel(Portfolio, UpdateData, UpdateReports, name));
         }
 
-        public SecurityEditWindowViewModel(Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateData,  Action<ErrorReports> updateReports)
+        public SecurityEditWindowViewModel(Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateData, Action<ErrorReports> updateReports)
         {
             Portfolio = portfolio;
             Sectors = sectors;

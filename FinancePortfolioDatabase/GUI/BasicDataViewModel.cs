@@ -2,12 +2,12 @@
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using GUISupport;
-using System.Collections.Generic;
 using SectorHelperFunctions;
+using System.Collections.Generic;
 
 namespace FinanceWindowsViewModels
 {
-    public class BasicDataViewModel : PropertyChangedBase
+    internal class BasicDataViewModel : PropertyChangedBase
     {
         private Portfolio Portfolio;
         private List<Sector> Sectors;

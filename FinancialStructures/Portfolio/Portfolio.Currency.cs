@@ -92,7 +92,7 @@ namespace FinancialStructures.Database
 
         public static bool TryAddDataToCurrency(this Portfolio portfolio, NameData name, AccountDayDataView value, ErrorReports reports)
         {
-            return portfolio.TryAddDataToCurrency( name.Name, value.Date, value.Amount, reports);
+            return portfolio.TryAddDataToCurrency(name.Name, value.Date, value.Amount, reports);
         }
 
         /// <summary>
@@ -131,7 +131,7 @@ namespace FinancialStructures.Database
 
         public static bool TryDeleteCurrencyData(this Portfolio portfolio, NameData name, AccountDayDataView value, ErrorReports reports)
         {
-            return portfolio.TryDeleteCurrencyData( name.Name, value.Date, value.Amount,  reports);
+            return portfolio.TryDeleteCurrencyData(name.Name, value.Date, value.Amount, reports);
         }
 
         public static bool TryDeleteCurrencyData(this Portfolio portfolio, string name, DateTime date, double value, ErrorReports reports)

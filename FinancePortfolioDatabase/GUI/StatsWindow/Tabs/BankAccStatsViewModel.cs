@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace FinanceViewModels.StatsViewModels
 {
-    public class BankAccStatsViewModel : TabViewModelBase
+    internal class BankAccStatsViewModel : TabViewModelBase
     {
         private List<BankAccountStatsHolder> fBankAccountStats;
         public List<BankAccountStatsHolder> BankAccountStats
@@ -19,7 +19,7 @@ namespace FinanceViewModels.StatsViewModels
             BankAccountStats = fPortfolio.GenerateBankAccountStatistics(DisplayValueFunds);
         }
 
-        public BankAccStatsViewModel(Portfolio portfolio , bool displayValueFunds)
+        public BankAccStatsViewModel(Portfolio portfolio, bool displayValueFunds)
             : base(portfolio, displayValueFunds)
         {
             Header = "Bank Account Stats";

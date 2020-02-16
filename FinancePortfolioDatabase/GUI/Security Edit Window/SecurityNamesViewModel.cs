@@ -9,7 +9,7 @@ using System.Windows.Input;
 
 namespace FinanceWindowsViewModels
 {
-    public class SecurityNamesViewModel : PropertyChangedBase
+    internal class SecurityNamesViewModel : PropertyChangedBase
     {
         private Portfolio Portfolio;
         public string Header { get; } = "Listed Securities";

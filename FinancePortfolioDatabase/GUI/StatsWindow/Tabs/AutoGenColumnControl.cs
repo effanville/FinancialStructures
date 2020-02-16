@@ -2,7 +2,7 @@
 
 namespace FinanceWindows.StatsWindow
 {
-    public class AutoGenColumnControl : UserControl
+    internal class AutoGenColumnControl : UserControl
     {
         protected void OnAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {

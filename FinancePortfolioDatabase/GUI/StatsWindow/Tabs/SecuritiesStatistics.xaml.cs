@@ -1,11 +1,9 @@
-﻿using System.Windows.Controls;
-
-namespace FinanceWindows.StatsWindow
+﻿namespace FinanceWindows.StatsWindow
 {
     /// <summary>
     /// Interaction logic for SecuritiesStatistics.xaml
     /// </summary>
-    public partial class SecuritiesStatistics : AutoGenColumnControl
+    internal partial class SecuritiesStatistics : AutoGenColumnControl
     {
         public SecuritiesStatistics()
         {

@@ -36,25 +36,25 @@ namespace FinancialStructures.GUIFinanceStructures
             switch (functionType)
             {
                 case (FunctionType.Download):
-                {
-                    if (functionInputs.Length != 5)
                     {
+                        if (functionInputs.Length != 5)
+                        {
+                            break;
+                        }
+
+                        await DownloadMethod(portfolio, sectors, (NameData)functionInputs[2], (Action<ErrorReports>)functionInputs[3], (ErrorReports)functionInputs[4]).ConfigureAwait(false);
                         break;
                     }
-
-                    await DownloadMethod(portfolio, sectors, (NameData)functionInputs[2], (Action<ErrorReports>)functionInputs[3], (ErrorReports)functionInputs[4]).ConfigureAwait(false);
-                    break;
-                }
                 case (FunctionType.NameUpdate):
-                {
-                    if (functionInputs.Length != 2)
                     {
+                        if (functionInputs.Length != 2)
+                        {
+                            break;
+                        }
+
+                        output = UpdateNameMethod(portfolio, sectors);
                         break;
                     }
-
-                    output = UpdateNameMethod(portfolio, sectors);
-                    break;
-                }
                 case (FunctionType.Create):
                     {
                         if (functionInputs.Length != 4)
@@ -143,12 +143,12 @@ namespace FinancialStructures.GUIFinanceStructures
         private readonly Func<Portfolio, List<Sector>, NameData, AccountDayDataView, ErrorReports, bool> DeleteDataMethod;
 
         public EditMethods(
-            Func<Portfolio, List<Sector>, NameData, Action<ErrorReports>, ErrorReports, Task>  downloadMethod,
+            Func<Portfolio, List<Sector>, NameData, Action<ErrorReports>, ErrorReports, Task> downloadMethod,
             Func<Portfolio, List<Sector>, List<NameData>> updateNameMethod = null,
             Func<Portfolio, List<Sector>, NameData, ErrorReports, bool> createMethod = null,
-            Func<Portfolio, List<Sector>, NameData, NameData, ErrorReports, bool> editMethod = null, 
+            Func<Portfolio, List<Sector>, NameData, NameData, ErrorReports, bool> editMethod = null,
             Func<Portfolio, List<Sector>, NameData, ErrorReports, bool> deleteMethod = null,
-            Func<Portfolio, List<Sector>, NameData, ErrorReports, List<AccountDayDataView> >selectedDataMethod = null,
+            Func<Portfolio, List<Sector>, NameData, ErrorReports, List<AccountDayDataView>> selectedDataMethod = null,
             Func<Portfolio, List<Sector>, NameData, AccountDayDataView, ErrorReports, bool> addDataMethod = null,
             Func<Portfolio, List<Sector>, NameData, AccountDayDataView, AccountDayDataView, ErrorReports, bool> editDataMethod = null,
             Func<Portfolio, List<Sector>, NameData, AccountDayDataView, ErrorReports, bool> deleteDataMethod = null)

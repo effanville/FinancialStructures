@@ -13,7 +13,7 @@ using System.Windows.Input;
 
 namespace FinanceWindowsViewModels
 {
-    public class StatsOptionsViewModel : PropertyChangedBase
+    internal class StatsOptionsViewModel : PropertyChangedBase
     {
         private Portfolio Portfolio;
         private List<Sector> Sectors;
@@ -205,7 +205,7 @@ namespace FinanceWindowsViewModels
         }
     }
 
-    public class VisibleName
+    internal class VisibleName
     {
         public string Name { get; set; }
         public bool Visible { get; set; }

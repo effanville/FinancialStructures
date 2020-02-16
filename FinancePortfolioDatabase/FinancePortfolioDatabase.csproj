@@ -51,6 +51,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <DocumentationFile>..\bin\Release\FinancePortfolioDatabase.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>owl.ico</ApplicationIcon>
@@ -349,7 +350,7 @@
   <ItemGroup>
     <Resource Include="owl.ico" />
     <Resource Include="GUI\GuiSupport\close.png" />
-    <Content Include="GUI\GuiSupport\help.html">
+    <Content Include="Help\help.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="PAD.ico" />

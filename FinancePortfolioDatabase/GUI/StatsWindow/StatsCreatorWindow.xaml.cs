@@ -17,8 +17,8 @@ namespace FinanceWindows
         {
             var VM = this.DataContext as StatsCreatorWindowViewModel;
             if (TabMain.SelectedIndex != 0)
-            { 
-                VM.StatsTabs.RemoveAt(TabMain.SelectedIndex); 
+            {
+                VM.StatsTabs.RemoveAt(TabMain.SelectedIndex);
             }
         }
     }

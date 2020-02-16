@@ -11,7 +11,7 @@ using System.Windows.Input;
 
 namespace FinanceCommonViewModels
 {
-    public class SelectedSingleDataViewModel : ViewModelBase
+    internal class SelectedSingleDataViewModel : ViewModelBase
     {
         private Portfolio Portfolio;
         private List<Sector> Sectors;
@@ -68,7 +68,7 @@ namespace FinanceCommonViewModels
             var reports = new ErrorReports();
             if (SelectedName != null)
             {
-                SelectedData = (List<AccountDayDataView>)EditMethods.ExecuteFunction(FunctionType.SelectData,Portfolio, Sectors, SelectedName, reports).Result;
+                SelectedData = (List<AccountDayDataView>)EditMethods.ExecuteFunction(FunctionType.SelectData, Portfolio, Sectors, SelectedName, reports).Result;
                 SelectLatestValue();
             }
             else

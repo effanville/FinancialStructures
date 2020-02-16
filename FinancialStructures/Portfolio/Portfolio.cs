@@ -33,17 +33,17 @@ namespace FinancialStructures.Database
         public string Directory
         {
             get
-            { 
+            {
                 return Path.GetDirectoryName(fDatabaseFilePath);
             }
         }
 
-        public string DatabaseName 
-        { 
-            get 
-            { 
-                return Path.GetFileNameWithoutExtension(fDatabaseFilePath); 
-            } 
+        public string DatabaseName
+        {
+            get
+            {
+                return Path.GetFileNameWithoutExtension(fDatabaseFilePath);
+            }
         }
 
         private List<Security> fFunds;

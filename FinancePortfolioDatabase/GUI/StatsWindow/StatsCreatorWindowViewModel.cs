@@ -1,19 +1,19 @@
-﻿using FinanceWindows.StatsWindows;
-using FinanceViewModels.StatsViewModels;
+﻿using FinanceViewModels.StatsViewModels;
+using FinanceWindows.StatsWindows;
 using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.ReportingStructures;
+using FinancialStructures.StatsMakers;
 using GUISupport;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Forms;
 using System.Windows.Input;
-using FinancialStructures.StatsMakers;
 
 namespace FinanceWindowsViewModels
 {
-    public class StatsCreatorWindowViewModel : PropertyChangedBase
+    internal class StatsCreatorWindowViewModel : PropertyChangedBase
     {
         private Portfolio fPortfolio;
         private List<Sector> Sectors;
@@ -61,7 +61,7 @@ namespace FinanceWindowsViewModels
             }
             else
             {
-                reports.AddError( $"Was not able to create Investment list page at {saving.FileName}", Location.StatisticsPage);
+                reports.AddError($"Was not able to create Investment list page at {saving.FileName}", Location.StatisticsPage);
             }
             saving.Dispose();
             if (reports.Any())

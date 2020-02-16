@@ -4,16 +4,13 @@ using FinancialStructures.DisplayStructures;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls.DataVisualization.Charting;
 using System.Windows.Media;
-using System.Windows.Threading;
 
 namespace FinanceViewModels.StatsViewModels
 {
-    class StatisticsChartsViewModel : TabViewModelBase
+    internal class StatisticsChartsViewModel : TabViewModelBase
     {
         private Random rnd = new Random();
         private int fHistoryGapDays = 25;
@@ -53,8 +50,8 @@ namespace FinanceViewModels.StatsViewModels
             set { fDistributionValues3 = value; OnPropertyChanged(); }
         }
         private ObservableCollection<LineSeries> fIRRlines = new ObservableCollection<LineSeries>();
-        public ObservableCollection<LineSeries> IRRLines 
-        { 
+        public ObservableCollection<LineSeries> IRRLines
+        {
             get { return fIRRlines; }
             set { fIRRlines = value; OnPropertyChanged(); }
         }

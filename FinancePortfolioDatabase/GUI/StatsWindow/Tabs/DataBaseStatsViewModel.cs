@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace FinanceViewModels.StatsViewModels
 {
-    public class DataBaseStatsViewModel : TabViewModelBase
+    internal class DataBaseStatsViewModel : TabViewModelBase
     {
 
         private List<DatabaseStatistics> fDatabaseStats;

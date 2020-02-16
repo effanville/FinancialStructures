@@ -1,12 +1,12 @@
-﻿using FinancialStructures.ReportingStructures;
+﻿using FinanceCommonViewModels;
+using FinancialStructures.ReportingStructures;
 using GUISupport;
-using System;
-using FinanceCommonViewModels;
 using SavingClasses;
+using System;
 
 namespace FinanceWindowsViewModels
 {
-    public class MainWindowViewModel : PropertyChangedBase
+    internal class MainWindowViewModel : PropertyChangedBase
     {
         internal AllData allData = new AllData();
 
@@ -45,7 +45,7 @@ namespace FinanceWindowsViewModels
 
         public void UpdateData(object obj)
         {
-            if(obj is Action <AllData> updateAction)
+            if (obj is Action<AllData> updateAction)
             {
                 updateAction(allData);
                 AllData_portfolioChanged(obj, null);
