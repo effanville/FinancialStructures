@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace FinanceWindows
+namespace FinanceWindows.StatsWindows
 {
     /// <summary>
     /// Interaction logic for StatsOptionsWindow.xaml

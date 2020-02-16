@@ -2,6 +2,7 @@
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.ReportingStructures;
 using GUISupport;
+using SavingClasses;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
@@ -49,7 +50,7 @@ namespace FinanceWindowsViewModels
                     if (name.NewValue && (!string.IsNullOrEmpty(name.Name) || !string.IsNullOrEmpty(name.Company)))
                     {
                         edited = true;
-                        Portfolio.TryAddSecurity(reports, name.Company, name.Name, name.Currency, name.Url, name.Sectors);
+                        UpdateData(alldata => alldata.MyFunds.TryAddSecurity(reports, name.Company, name.Name, name.Currency, name.Url, name.Sectors));
                         name.NewValue = false;
                     }
                 }
@@ -69,7 +70,7 @@ namespace FinanceWindowsViewModels
                     if (name.NewValue && (!string.IsNullOrEmpty(name.Name) || !string.IsNullOrEmpty(name.Company)))
                     {
                         edited = true;
-                        Portfolio.TryEditSecurityName(reports, fPreEditFundNames[i].Company, fPreEditFundNames[i].Name, name.Company, name.Name, name.Currency, name.Url, name.Sectors);
+                        UpdateData(alldata => alldata.MyFunds.TryEditSecurityName(reports, fPreEditFundNames[i].Company, fPreEditFundNames[i].Name, name.Company, name.Name, name.Currency, name.Url, name.Sectors));
                         name.NewValue = false;
                     }
                 }
@@ -78,26 +79,24 @@ namespace FinanceWindowsViewModels
                     reports.AddError("Was not able to edit desired security.", Location.EditingData);
                 }
             }
-            UpdateMainWindow();
 
             if (reports.Any())
             {
                 UpdateReports(reports);
             }
 
-            UpdateMainWindow();
         }
 
         public ICommand DownloadCommand { get; }
 
-        private async void ExecuteDownloadCommand(Object obj)
+        private void ExecuteDownloadCommand(Object obj)
         {
             var reports = new ErrorReports();
             if (fSelectedName != null)
             {
-                await DataUpdater.DownloadSecurity(Portfolio, fSelectedName.Company, fSelectedName.Name, UpdateReports, reports).ConfigureAwait(false);
+                UpdateData(async alldata => await DataUpdater.DownloadSecurity(alldata.MyFunds, fSelectedName.Company, fSelectedName.Name, UpdateReports, reports).ConfigureAwait(false));
             }
-            UpdateMainWindow();
+
             if (reports.Any())
             {
                 UpdateReports(reports);
@@ -130,7 +129,7 @@ namespace FinanceWindowsViewModels
             var reports = new ErrorReports();
             if (fSelectedName != null)
             {
-                Portfolio.TryRemoveSecurity(reports, fSelectedName.Company, fSelectedName.Name);
+                UpdateData(alldata => alldata.MyFunds.TryRemoveSecurity(reports, fSelectedName.Company, fSelectedName.Name));
             }
             else
             {
@@ -141,16 +140,15 @@ namespace FinanceWindowsViewModels
             {
                 UpdateReports(reports);
             }
-            UpdateMainWindow();
         }
 
-        Action UpdateMainWindow;
+        Action<Action<AllData>> UpdateData;
         Action<ErrorReports> UpdateReports;
         public Action<NameData> LoadSelectedTab;
-        public SecurityNamesViewModel(Portfolio portfolio, Action updateWindow, Action<ErrorReports> updateReports, Action<NameData> loadSelectedData)
+        public SecurityNamesViewModel(Portfolio portfolio, Action<Action<AllData>> updateData, Action<ErrorReports> updateReports, Action<NameData> loadSelectedData)
         {
             Portfolio = portfolio;
-            UpdateMainWindow = updateWindow;
+            UpdateData = updateData;
             UpdateReports = updateReports;
             LoadSelectedTab = loadSelectedData;
             FundNames = portfolio.SecurityNamesAndCompanies();

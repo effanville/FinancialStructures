@@ -2,6 +2,7 @@
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.ReportingStructures;
 using GUISupport;
+using SavingClasses;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -61,15 +62,13 @@ namespace FinanceWindowsViewModels
             var reports = new ErrorReports();
             if (fSelectedName != null && fSelectedValues != null)
             {
-                Portfolio.TryRemoveSecurityData(reports, fSelectedName.Company, fSelectedName.Name, fSelectedValues.Date, fSelectedValues.ShareNo, fSelectedValues.UnitPrice, fSelectedValues.Investment);
+                UpdateDataCallback(alldata => alldata.MyFunds.TryRemoveSecurityData(reports, fSelectedName.Company, fSelectedName.Name, fSelectedValues.Date, fSelectedValues.ShareNo, fSelectedValues.UnitPrice, fSelectedValues.Investment));
             }
 
             if (reports.Any())
             {
                 UpdateReports(reports);
             }
-
-            UpdateMainWindow();
         }
 
         public ICommand AddCsvData { get; }
@@ -92,7 +91,7 @@ namespace FinanceWindowsViewModels
                     {
                         if (objec is DayDataView view)
                         {
-                            Portfolio.TryAddDataToSecurity(reports, fSelectedName.Company, fSelectedName.Name, view.Date, view.ShareNo, view.UnitPrice, view.Investment);
+                            UpdateDataCallback(alldata => alldata.MyFunds.TryAddDataToSecurity(reports, fSelectedName.Company, fSelectedName.Name, view.Date, view.ShareNo, view.UnitPrice, view.Investment));
                         }
                         else
                         {
@@ -103,8 +102,6 @@ namespace FinanceWindowsViewModels
                     {
                         UpdateReports(reports);
                     }
-
-                    UpdateMainWindow();
                 }
             }
         }
@@ -118,7 +115,7 @@ namespace FinanceWindowsViewModels
             {
                 if (Portfolio.GetSecurityFromName(fSelectedName.Name, fSelectedName.Company).Count() != SelectedSecurityData.Count)
                 {
-                    Portfolio.TryAddDataToSecurity(reports, fSelectedName.Company, fSelectedName.Name, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.Investment);
+                    UpdateDataCallback(alldata => alldata.MyFunds.TryAddDataToSecurity(reports, fSelectedName.Company, fSelectedName.Name, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.Investment));
                     fSelectedName.NewValue = false;
                 }
                 else
@@ -131,7 +128,7 @@ namespace FinanceWindowsViewModels
                         if (name.NewValue)
                         {
                             edited = true;
-                            Portfolio.TryEditSecurityData(reports, fSelectedName.Company, fSelectedName.Name, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.Investment);
+                            UpdateDataCallback(alldata => alldata.MyFunds.TryEditSecurityData(reports, fSelectedName.Company, fSelectedName.Name, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.Investment));
                             name.NewValue = false;
                         }
                     }
@@ -140,7 +137,6 @@ namespace FinanceWindowsViewModels
                         reports.AddError("Was not able to edit security data.", Location.EditingData);
                     }
                 }
-                UpdateMainWindow();
             }
             if (reports.Any())
             {
@@ -174,9 +170,9 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        Action UpdateMainWindow;
+        Action<Action<AllData>> UpdateDataCallback;
         Action<ErrorReports> UpdateReports;
-        public SelectedSecurityViewModel(Portfolio portfolio, Action updateWindow, Action<ErrorReports> updateReports, NameData selectedName)
+        public SelectedSecurityViewModel(Portfolio portfolio, Action<Action<AllData>> updateData, Action<ErrorReports> updateReports, NameData selectedName)
         {
             if (selectedName != null)
             {
@@ -191,7 +187,7 @@ namespace FinanceWindowsViewModels
             AddCsvData = new BasicCommand(ExecuteAddCsvData);
             AddEditSecurityDataCommand = new BasicCommand(ExecuteAddEditSecData);
             UpdateData(portfolio);
-            UpdateMainWindow = updateWindow;
+            UpdateDataCallback = updateData;
             UpdateReports = updateReports;
         }
     }

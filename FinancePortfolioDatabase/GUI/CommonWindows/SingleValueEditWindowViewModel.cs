@@ -3,6 +3,7 @@ using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.ReportingStructures;
 using GUISupport;
+using SavingClasses;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -35,22 +36,20 @@ namespace FinanceCommonViewModels
 
         private void LoadTabFunc(NameData name)
         {
-            Tabs.Add(new SelectedSingleDataViewModel(Portfolio, Sectors, UpdateMainWindow, UpdateReports, EditMethods, name));
+            Tabs.Add(new SelectedSingleDataViewModel(Portfolio, Sectors, UpdateDataCallback, UpdateReports, EditMethods, name));
         }
 
-
-        Action UpdateMainWindow;
+        Action<Action<AllData>> UpdateDataCallback;
         Action<ErrorReports> UpdateReports;
         EditMethods EditMethods;
 
-        public SingleValueEditWindowViewModel(Portfolio portfolio, List<Sector> sectors, Action updateWindow, Action<ErrorReports> updateReports, EditMethods editMethods)
+        public SingleValueEditWindowViewModel(Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateDataCallback, Action<ErrorReports> updateReports, EditMethods editMethods)
         {
-            UpdateMainWindow = updateWindow;
+            UpdateDataCallback = updateDataCallback;
             UpdateReports = updateReports;
             EditMethods = editMethods;
             UpdateListBoxes(portfolio, sectors);
-
-            Tabs.Add(new DataNamesViewModel(Portfolio, sectors, updateWindow, updateReports, loadTab, editMethods));
+            Tabs.Add(new DataNamesViewModel(Portfolio, sectors, updateDataCallback, updateReports, loadTab, editMethods));
         }
     }
 }

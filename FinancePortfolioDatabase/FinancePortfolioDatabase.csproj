@@ -53,7 +53,7 @@
     <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>PAD.ico</ApplicationIcon>
+    <ApplicationIcon>owl.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Expression.Interactions, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -92,7 +92,6 @@
       <DependentUpon>DataNamesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\CommonWindows\DataNamesViewModel.cs" />
-    <Compile Include="GUI\CommonWindows\EditMethods.cs" />
     <Compile Include="GUI\CommonWindows\SelectedSingleDataView.xaml.cs">
       <DependentUpon>SelectedSingleDataView.xaml</DependentUpon>
     </Compile>
@@ -104,6 +103,7 @@
     <Compile Include="GUI\CommonWindows\ViewModelBase.cs" />
     <Compile Include="GUI\BasicDataViewModel.cs" />
     <Compile Include="GUI\CsvDataRead.cs" />
+    <Compile Include="GUI\GuiSupport\BindableChart.cs" />
     <Compile Include="GUI\Security Edit Window\SecurityEditWindow.xaml.cs">
       <DependentUpon>SecurityEditWindow.xaml</DependentUpon>
     </Compile>
@@ -120,6 +120,41 @@
     <Compile Include="GUI\StatsWindow\StatsOptionsWindow.xaml.cs">
       <DependentUpon>StatsOptionsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GUI\StatsWindow\Tabs\AutoGenColumnControl.cs" />
+    <Compile Include="GUI\StatsWindow\Tabs\BankAccountStats.xaml.cs">
+      <DependentUpon>BankAccountStats.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\StatsWindow\Tabs\BankAccStatsViewModel.cs" />
+    <Compile Include="GUI\StatsWindow\Tabs\DataBaseStats.xaml.cs">
+      <DependentUpon>DataBaseStats.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\StatsWindow\Tabs\DataBaseStatsViewModel.cs" />
+    <Compile Include="GUI\StatsWindow\Tabs\HtmlStatsViewer.xaml.cs">
+      <DependentUpon>HtmlStatsViewer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\StatsWindow\Tabs\HtmlStatsViewerViewModel.cs" />
+    <Compile Include="GUI\StatsWindow\Tabs\MainTabViewModel.cs" />
+    <Compile Include="GUI\StatsWindow\Tabs\PortfolioHistory.xaml.cs">
+      <DependentUpon>PortfolioHistory.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\StatsWindow\Tabs\PortfolioHistoryViewModel.cs" />
+    <Compile Include="GUI\StatsWindow\Tabs\SecuritiesStatistics.xaml.cs">
+      <DependentUpon>SecuritiesStatistics.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\StatsWindow\Tabs\SecuritiesStatisticsViewModel.cs" />
+    <Compile Include="GUI\StatsWindow\Tabs\SecurityInvestments.xaml.cs">
+      <DependentUpon>SecurityInvestments.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\StatsWindow\Tabs\SecurityInvestmentViewModel.cs" />
+    <Compile Include="GUI\StatsWindow\Tabs\StatisticsCharts.xaml.cs">
+      <DependentUpon>StatisticsCharts.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\StatsWindow\Tabs\StatisticsChartsViewModel.cs" />
+    <Compile Include="GUI\StatsWindow\Tabs\MainTab.xaml.cs">
+      <DependentUpon>MainTab.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\StatsWindow\Tabs\TabViewModelBase.cs" />
+    <Compile Include="GUI\StatsWindow\TabType.cs" />
     <Compile Include="GUI\StatsWindow\WebBrowserBehaviour.cs" />
     <Compile Include="GUI\GuiSupport\ClosableItem.cs" />
     <Compile Include="GUI\GuiSupport\ClosableHeader.xaml.cs">
@@ -241,6 +276,42 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="GUI\StatsWindow\Tabs\BankAccountStats.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\StatsWindow\Tabs\DataBaseStats.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\StatsWindow\Tabs\HtmlStatsViewer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\StatsWindow\Tabs\PortfolioHistory.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\StatsWindow\Tabs\SecuritiesStatistics.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\StatsWindow\Tabs\SecurityInvestments.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\StatsWindow\Tabs\StatisticsCharts.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\StatsWindow\Tabs\StatsTabsDictionary.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GUI\StatsWindow\Tabs\MainTab.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -276,6 +347,7 @@
     <Resource Include="GUI\GuiSupport\helpicon.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="owl.ico" />
     <Resource Include="GUI\GuiSupport\close.png" />
     <Content Include="GUI\GuiSupport\help.html">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

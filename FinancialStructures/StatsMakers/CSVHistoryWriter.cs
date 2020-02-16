@@ -4,7 +4,7 @@ using System;
 using System.IO;
 using System.Linq;
 
-namespace PortfolioStatsCreatorHelper
+namespace FinancialStructures.StatsMakers
 {
     public static class CSVHistoryWriter
     {

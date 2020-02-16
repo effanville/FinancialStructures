@@ -3,6 +3,7 @@ using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.ReportingStructures;
 using GUISupport;
+using SavingClasses;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
@@ -13,7 +14,6 @@ namespace FinanceCommonViewModels
     {
         private Portfolio Portfolio;
         private List<Sector> Sectors;
-        Action UpdateMainWindow;
         Action<ErrorReports> UpdateReports;
 
         public string Header { get; set; } = "Accounts";
@@ -53,9 +53,8 @@ namespace FinanceCommonViewModels
             var reports = new ErrorReports();
             if (SelectedName != null)
             {
-                await editMethods.DownloadMethod(Portfolio, Sectors, SelectedName, UpdateReports, reports).ConfigureAwait(false);
+               UpdateDataCallback(async alldata => await editMethods.ExecuteFunction(FunctionType.Download, alldata.MyFunds, alldata.myBenchMarks, SelectedName, UpdateReports, reports).ConfigureAwait(false));
             }
-            UpdateMainWindow();
             if (reports.Any())
             {
                 UpdateReports(reports);
@@ -65,7 +64,7 @@ namespace FinanceCommonViewModels
         private void ExecuteCreateEdit(Object obj)
         {
             var reports = new ErrorReports();
-            if (editMethods.UpdateNameMethod(Portfolio, Sectors).Count != DataNames.Count)
+            if (((List<NameData>)editMethods.ExecuteFunction(FunctionType.NameUpdate, Portfolio, Sectors).Result).Count != DataNames.Count)
             {
                 bool edited = false;
                 foreach (var name in DataNames)
@@ -73,7 +72,7 @@ namespace FinanceCommonViewModels
                     if (name.NewValue && (!string.IsNullOrEmpty(name.Name) || !string.IsNullOrEmpty(name.Company)))
                     {
                         edited = true;
-                        editMethods.CreateMethod(Portfolio, Sectors, name, reports);
+                        UpdateDataCallback(alldata => editMethods.ExecuteFunction(FunctionType.Create, alldata.MyFunds, alldata.myBenchMarks, name, reports).Wait());
                         name.NewValue = false;
                     }
                 }
@@ -93,7 +92,7 @@ namespace FinanceCommonViewModels
                     if (name.NewValue && (!string.IsNullOrEmpty(name.Name) || !string.IsNullOrEmpty(name.Company)))
                     {
                         edited = true;
-                        editMethods.EditMethod(Portfolio, Sectors, fPreEditNames[i], name, reports);
+                        UpdateDataCallback(alldata => editMethods.ExecuteFunction(FunctionType.Edit, alldata.MyFunds, alldata.myBenchMarks, fPreEditNames[i], name, reports).Wait());
                         name.NewValue = false;
                     }
                 }
@@ -103,13 +102,10 @@ namespace FinanceCommonViewModels
                 }
             }
 
-            UpdateMainWindow();
             if (reports.Any())
             {
                 UpdateReports(reports);
             }
-
-            UpdateMainWindow();
         }
 
         private void ExecuteDelete(Object obj)
@@ -117,7 +113,7 @@ namespace FinanceCommonViewModels
             var reports = new ErrorReports();
             if (SelectedName.Name != null)
             {
-                editMethods.DeleteMethod(Portfolio, Sectors, SelectedName, reports);
+                UpdateDataCallback(alldata => editMethods.ExecuteFunction(FunctionType.Delete, alldata.MyFunds, alldata.myBenchMarks, SelectedName, reports).Wait());
             }
             else
             {
@@ -127,8 +123,6 @@ namespace FinanceCommonViewModels
             {
                 UpdateReports(reports);
             }
-
-            UpdateMainWindow();
         }
 
         public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
@@ -136,9 +130,9 @@ namespace FinanceCommonViewModels
             Portfolio = portfolio;
             Sectors = sectors;
             var currentSelectedName = SelectedName;
-            DataNames = editMethods.UpdateNameMethod(portfolio, sectors);
+            DataNames = (List<NameData>)editMethods.ExecuteFunction(FunctionType.NameUpdate, portfolio, sectors).Result;
             DataNames.Sort();
-            fPreEditNames = editMethods.UpdateNameMethod(portfolio, sectors);
+            fPreEditNames = (List<NameData>)editMethods.ExecuteFunction(FunctionType.NameUpdate, portfolio, sectors).Result;
             fPreEditNames.Sort();
 
             for (int i = 0; i < DataNames.Count; i++)
@@ -151,14 +145,15 @@ namespace FinanceCommonViewModels
             }
         }
 
+        Action<Action<AllData>> UpdateDataCallback;
         private EditMethods editMethods;
         public override Action<NameData> LoadSelectedTab { get; set; }
 
-        public DataNamesViewModel(Portfolio portfolio, List<Sector> sectors, Action updateWindow, Action<ErrorReports> updateReports, Action<NameData> loadSelectedData, EditMethods updateMethods)
+        public DataNamesViewModel(Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateDataCallback, Action<ErrorReports> updateReports, Action<NameData> loadSelectedData, EditMethods updateMethods)
         {
             Portfolio = portfolio;
             Sectors = sectors;
-            UpdateMainWindow = updateWindow;
+            UpdateDataCallback = updateDataCallback;
             UpdateReports = updateReports;
             LoadSelectedTab = loadSelectedData;
             editMethods = updateMethods;

@@ -3,6 +3,7 @@ using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.ReportingStructures;
+using FinancialStructures.StatsMakers;
 using GUISupport;
 using PortfolioStatsCreatorHelper;
 using System;

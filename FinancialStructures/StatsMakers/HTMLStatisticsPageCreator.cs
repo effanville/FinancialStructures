@@ -2,11 +2,12 @@
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
+using PortfolioStatsCreatorHelper;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace PortfolioStatsCreatorHelper
+namespace FinancialStructures.StatsMakers
 {
     public enum ExportType
     {

@@ -3,6 +3,7 @@ using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.ReportingStructures;
 using GUISupport;
+using SavingClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -67,7 +68,7 @@ namespace FinanceCommonViewModels
             var reports = new ErrorReports();
             if (SelectedName != null)
             {
-                SelectedData = EditMethods.SelectedDataMethod(Portfolio, Sectors, SelectedName, reports);
+                SelectedData = (List<AccountDayDataView>)EditMethods.ExecuteFunction(FunctionType.SelectData,Portfolio, Sectors, SelectedName, reports).Result;
                 SelectLatestValue();
             }
             else
@@ -83,9 +84,9 @@ namespace FinanceCommonViewModels
             var reports = new ErrorReports();
             if (SelectedName != null)
             {
-                if (EditMethods.SelectedDataMethod(Portfolio, Sectors, SelectedName, reports).Count() != SelectedData.Count)
+                if (((List<AccountDayDataView>)EditMethods.ExecuteFunction(FunctionType.SelectData, Portfolio, Sectors, SelectedName, reports).Result).Count() != SelectedData.Count)
                 {
-                    EditMethods.AddDataMethod(Portfolio, Sectors, SelectedName, SelectedValue, reports);
+                    UpdateDataCallback(alldata => EditMethods.ExecuteFunction(FunctionType.AddData, alldata.MyFunds, alldata.myBenchMarks, SelectedName, SelectedValue, reports).Wait());
                     SelectedName.NewValue = false;
                 }
                 else
@@ -98,7 +99,7 @@ namespace FinanceCommonViewModels
                         if (name.NewValue)
                         {
                             edited = true;
-                            EditMethods.EditDataMethod(Portfolio, Sectors, SelectedName, fOldSelectedValue, SelectedValue, reports);
+                            UpdateDataCallback(alldata => EditMethods.ExecuteFunction(FunctionType.EditData, alldata.MyFunds, alldata.myBenchMarks, SelectedName, fOldSelectedValue, SelectedValue, reports).Wait());
                             name.NewValue = false;
                         }
                     }
@@ -107,8 +108,6 @@ namespace FinanceCommonViewModels
                         reports.AddError("Was not able to edit data.", Location.EditingData);
                     }
                 }
-
-                UpdateMainWindow();
             }
             if (reports.Any())
             {
@@ -123,7 +122,7 @@ namespace FinanceCommonViewModels
             var reports = new ErrorReports();
             if (SelectedName != null)
             {
-                EditMethods.DeleteDataMethod(Portfolio, Sectors, SelectedName, SelectedValue, reports);
+                UpdateDataCallback(alldata => EditMethods.ExecuteFunction(FunctionType.DeleteData, alldata.MyFunds, alldata.myBenchMarks, SelectedName, SelectedValue, reports).Wait());
             }
             else
             {
@@ -133,7 +132,6 @@ namespace FinanceCommonViewModels
             {
                 UpdateReports(reports);
             }
-            UpdateMainWindow();
         }
 
         private void SelectLatestValue()
@@ -145,11 +143,11 @@ namespace FinanceCommonViewModels
         }
 
         public override Action<NameData> LoadSelectedTab { get; set; }
-        Action UpdateMainWindow;
+        Action<Action<AllData>> UpdateDataCallback;
         Action<ErrorReports> UpdateReports;
 
         private EditMethods EditMethods;
-        public SelectedSingleDataViewModel(Portfolio portfolio, List<Sector> sectors, Action updateWindow, Action<ErrorReports> updateReports, EditMethods editMethods, NameData selectedName)
+        public SelectedSingleDataViewModel(Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateDataCallback, Action<ErrorReports> updateReports, EditMethods editMethods, NameData selectedName)
         {
             if (selectedName != null)
             {
@@ -165,7 +163,7 @@ namespace FinanceCommonViewModels
 
             EditDataCommand = new BasicCommand(ExecuteEditDataCommand);
             DeleteValuationCommand = new BasicCommand(ExecuteDeleteValuation);
-            UpdateMainWindow = updateWindow;
+            UpdateDataCallback = updateDataCallback;
             UpdateReports = updateReports;
         }
     }

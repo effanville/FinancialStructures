@@ -48,13 +48,13 @@ namespace FinanceWindows
             var VM = DataContext as MainWindowViewModel;
             if (result == MessageBoxResult.Yes)
             {
-                SaveFileDialog saving = new SaveFileDialog() { DefaultExt = "xml", FileName = VM.portfolio.DatabaseName + VM.portfolio.Extension, InitialDirectory = VM.portfolio.Directory };
+                SaveFileDialog saving = new SaveFileDialog() { DefaultExt = "xml", FileName = VM.allData.MyFunds.DatabaseName + VM.allData.MyFunds.Extension, InitialDirectory = VM.allData.MyFunds.Directory };
                 saving.Filter = "XML Files|*.xml|All Files|*.*";
                 if (saving.ShowDialog() == true)
                 {
-                    VM.portfolio.SetFilePath(saving.FileName);
+                    VM.allData.MyFunds.SetFilePath(saving.FileName);
                     var vm = DataContext as MainWindowViewModel;
-                    vm.portfolio.SavePortfolio(vm.benchMarks, saving.FileName, new ErrorReports());
+                    vm.allData.MyFunds.SavePortfolio(vm.allData.myBenchMarks, saving.FileName, new ErrorReports());
                 }
                 
                 // saving.Dispose();

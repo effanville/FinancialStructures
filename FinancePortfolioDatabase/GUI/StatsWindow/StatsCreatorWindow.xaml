@@ -3,15 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:cht="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
-      xmlns:wb="clr-namespace:WebBrowserWindow"
       xmlns:cl="clr-namespace:GUISupport"
         mc:Ignorable="d"
       VerticalAlignment="Stretch"
-      Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}"
-      IsVisibleChanged="OnDataContextChanged">
+      Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
     <Grid.Resources>
-        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <ResourceDictionary>
+            <BooleanToVisibilityConverter x:Key="BoolToVis" />
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Tabs/StatsTabsDictionary.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Grid.Resources>
 
     <Grid Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}"
@@ -44,238 +46,20 @@
             </CheckBox>
         </StackPanel>
         <TabControl Grid.Row="1"
-                    SelectedIndex="{Binding SelectedIndex}"
+                    x:Name="TabMain"
                     Height="Auto"
-                    Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
-            <TabItem Header="Security Statistics"
-                     Height="Auto"
-                     >
-                <Grid VerticalAlignment="Stretch"
-                      Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
-                    <DataGrid Margin="5"
-                              SelectionUnit="FullRow"
-                              CanUserAddRows="False"
-                              Height="Auto"
-                              IsReadOnly="True"
-                              CanUserDeleteRows="False"
-                              AutoGenerateColumns="True"
-                              AutoGeneratingColumn="OnAutoGeneratingColumn"
-                              GridLinesVisibility="None"
-                              ScrollViewer.VerticalScrollBarVisibility="Visible"
-                              Name="SecStatsBox"
-                              ItemsSource="{Binding SecuritiesStats}">
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Security Investments">
-                <Grid VerticalAlignment="Stretch"
-                      Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
-                    <DataGrid Margin="5"
-                              SelectionUnit="FullRow"
-                              CanUserAddRows="False"
-                              CanUserDeleteRows="False"
-                              IsReadOnly="True"
-                              AutoGenerateColumns="True"
-                              AutoGeneratingColumn="OnAutoGeneratingColumn"
-                              GridLinesVisibility="None"
-                              ScrollViewer.VerticalScrollBarVisibility="Visible"
-                              Name="SecInvBox"
-                              ItemsSource="{Binding SecuritiesInvestments}">
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Bank Account Statistics" VerticalAlignment="Stretch">
-                <Grid VerticalAlignment="Stretch"
-                      Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
-                    <DataGrid Name="BankAccBox"
-                              Margin="5"
-                              VerticalAlignment="Stretch"
-                              SelectionUnit="FullRow"
-                              CanUserAddRows="False"
-                              CanUserDeleteRows="False"
-                              IsReadOnly="True"
-                              AutoGenerateColumns="True"
-                              AutoGeneratingColumn="OnAutoGeneratingColumn"
-                              GridLinesVisibility="None"
-                              ItemsSource="{Binding BankAccountStats}"
-                              ScrollViewer.VerticalScrollBarVisibility="Visible">
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Database Statistics"
-                     VerticalAlignment="Stretch">
-                <Grid VerticalAlignment="Stretch"
-                      Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
-                    <DataGrid Name="DatabaseStatsBox"
-                              Margin="5"
-                              SelectionUnit="FullRow"
-                              CanUserAddRows="False"
-                              CanUserDeleteRows="False"
-                              IsReadOnly="True"
-                              AutoGenerateColumns="False"
-                              GridLinesVisibility="None"
-                              ItemsSource="{Binding DatabaseStats}"
-                              ScrollViewer.VerticalScrollBarVisibility="Visible">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Company" MaxWidth="200" MinWidth="70" Binding="{Binding Path=Company}"/>
-                            <DataGridTextColumn Header="Name" MaxWidth="200" MinWidth="70" Binding="{Binding Path=Name}"/>
-                            <DataGridTextColumn Header="First Date" MaxWidth="200" MinWidth="70" Binding="{Binding Path=FirstDate, StringFormat=dd/MM/yyyy}"/>
-                            <DataGridTextColumn Header="Latest Date" MaxWidth="200" MinWidth="70" Binding="{Binding Path=Date, StringFormat=dd/MM/yyyy}"/>
-                            <DataGridTextColumn Header="Number Entries" MaxWidth="200" MinWidth="70" Binding="{Binding Path=NumEntries}"/>
-                            <DataGridTextColumn Header="Entry Year Density" MaxWidth="200" MinWidth="70" Binding="{Binding Path=EntryYearDensity}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-
-            <TabItem Header="Exported Stats">
-                <Grid Width="Auto"
-                      Height="Auto"
-                      MinHeight="400"
-                      VerticalAlignment="Stretch"
-                      Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0"
-                            Grid.Row="0"
-                            Margin="5 5 5 5"
-                            Content="HTML Stats to Display"
-                            Command="{Binding FileSelect}"></Button>
-                    <TextBox Grid.Row="0"
-                             Grid.Column="1"
-                             Margin="5 5 5 5"
-                             TextAlignment="Left"
-                             HorizontalAlignment="Stretch"
-                             VerticalAlignment="Stretch"
-                             VerticalContentAlignment="Center"
-                             Text="{Binding StatsFilepath}"></TextBox>
-                <WebBrowser Grid.Row="1"
-                            Grid.Column="0"
-                            Width="Auto"
-                            Height="Auto"
-                            Grid.ColumnSpan="2"
-                            x:Name="webBrowser"
-                            wb:WebBrowserBehaviours.BindableSource="{Binding DisplayStats}"/>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Portofio History" VerticalAlignment="Stretch">
-                <Grid VerticalAlignment="Stretch"
-                      Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
-                    <DataGrid Name="HistoryStatsBox"
-                              Margin="5"
-                              SelectionUnit="FullRow"
-                              CanUserAddRows="False"
-                              CanUserDeleteRows="False"
-                              IsReadOnly="True"
-                              AutoGenerateColumns="False"
-                              GridLinesVisibility="None"
-                              ItemsSource="{Binding HistoryStats}"
-                              ScrollViewer.VerticalScrollBarVisibility="Visible">
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Total Values" Binding="{Binding TotalValue.Day, StringFormat=\{0:dd.MM.yyyy\}}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Total Values" Binding="{Binding TotalValue.Value}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Securities" Binding="{Binding SecurityValue.Value}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="BankAccounts" Binding="{Binding BankAccValue.Value}"></DataGridTextColumn>
-                        </DataGrid.Columns>
-                    </DataGrid>
-                </Grid>
-            </TabItem>
-            <TabItem Header="Charts" Height="Auto">
-                <Grid Height="Auto"
-                      VerticalAlignment="Stretch"
-                      HorizontalAlignment="Stretch"
-                      ScrollViewer.VerticalScrollBarVisibility="Visible">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <cht:Chart Title="Total Invested Over Time"
-                               Style="{StaticResource ChartStyle1}"
-                               Height="Auto"
-                               Width="Auto"
-                               Grid.Row="0"
-                               Grid.Column="0">
-                        <cht:Chart.Series>
-                            <cht:LineSeries Title="Total"
-                                            ItemsSource="{Binding Path=HistoryStats}"
-                                            DataPointStyle="{StaticResource InvisibleDataPointBlue}"
-                                            IndependentValueBinding="{Binding Path=TotalValue.Day}"
-                                            DependentValueBinding="{Binding Path=TotalValue.Value}">
-                            </cht:LineSeries>
-                            <cht:LineSeries Title="Total Securities" 
-                                            ItemsSource="{Binding Path=HistoryStats}"
-                                            DataPointStyle="{StaticResource InvisibleDataPointRed}"
-                                            IndependentValueBinding="{Binding Path=SecurityValue.Day}"
-                                            DependentValueBinding="{Binding Path=SecurityValue.Value}">
-                            </cht:LineSeries>
-                            <cht:LineSeries Title="Total BankAccounts" 
-                                            ItemsSource="{Binding Path=HistoryStats}"
-                                            DataPointStyle="{StaticResource InvisibleDataPointGreen}"
-                                            IndependentValueBinding="{Binding Path=BankAccValue.Day}"
-                                            DependentValueBinding="{Binding Path=BankAccValue.Value}">
-                            </cht:LineSeries>
-                        </cht:Chart.Series>
-                    </cht:Chart>
-                    <cht:Chart x:Name="securityCarChart"
-                               Title="Total Invested Over Time"
-                               Style="{StaticResource ChartStyle1}"
-                               Height="Auto"
-                               Width="Auto"
-                               Grid.Row="0"
-                               Grid.Column="1">
-                    </cht:Chart>
-                    <Grid Grid.Row="1"
-                          Grid.Column="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>
-                    
-                        <cht:Chart Title="Security by company"
-                                   Height="Auto"
-                                   Width="Auto"
-                                   Grid.Column="0">
-                            <cht:PieSeries Title="Distribution"
-                                           ItemsSource="{Binding Path=DistributionValues}"
-                                           IndependentValueBinding="{Binding Path=Company}"
-                                           DependentValueBinding="{Binding Path=Value}">
-                            </cht:PieSeries>
-                        </cht:Chart>
-                        <cht:Chart Title="BankAccount By Company"
-                                   Height="Auto"
-                                   Width="Auto"
-                                   Grid.Column="1">
-                            <cht:PieSeries 
-                                       ItemsSource="{Binding Path=DistributionValues2}"
-                                       IndependentValueBinding="{Binding Path=Company}"
-                                       DependentValueBinding="{Binding Path=Value}">
-                            </cht:PieSeries>
-                        </cht:Chart>
-                    </Grid>
-                    <cht:Chart Title="Security By Sector"
-                               Height="Auto"
-                               Width="Auto"
-                               Grid.Row="1"
-                               Grid.Column="1">
-                        <cht:ColumnSeries  Title=""
-                                   ItemsSource="{Binding Path=DistributionValues3}"
-                                   IndependentValueBinding="{Binding Path=Company}"
-                                   DependentValueBinding="{Binding Path=Value}">
-                        </cht:ColumnSeries>
-                    </cht:Chart>
-                </Grid>
-            </TabItem>
+                    Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}"
+                    ItemsSource="{Binding StatsTabs}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Header}"/>
+                        <Button Background="Transparent" BorderThickness="0" Visibility="{Binding Closable, Converter={StaticResource BoolToVis}}" Height="12" Width="12" Margin="2 2 0 0" Click="CloseTabCommand">
+                            <Image Source="../GuiSupport/close.png"/>
+                        </Button>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
         </TabControl>
     </Grid>
-    
 </Grid>

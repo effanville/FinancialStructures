@@ -3,6 +3,7 @@ using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.ReportingStructures;
 using GUISupport;
+using SavingClasses;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -36,23 +37,23 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        Action UpdateMainWindow;
         Action<ErrorReports> UpdateReports;
+        Action<Action<AllData>> UpdateData;
 
         Action<NameData> loadTab => (name) => LoadTabFunc(name);
 
         private void LoadTabFunc(NameData name)
         {
-            Tabs.Add(new SelectedSecurityViewModel(Portfolio, UpdateMainWindow, UpdateReports, name));
+            Tabs.Add(new SelectedSecurityViewModel(Portfolio, UpdateData, UpdateReports, name));
         }
 
-        public SecurityEditWindowViewModel(Portfolio portfolio, List<Sector> sectors, Action updateWindow, Action<ErrorReports> updateReports)
+        public SecurityEditWindowViewModel(Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateData,  Action<ErrorReports> updateReports)
         {
             Portfolio = portfolio;
             Sectors = sectors;
-            UpdateMainWindow = updateWindow;
+            UpdateData = updateData;
             UpdateReports = updateReports;
-            Tabs.Add(new SecurityNamesViewModel(Portfolio, updateWindow, updateReports, loadTab));
+            Tabs.Add(new SecurityNamesViewModel(Portfolio, updateData, updateReports, loadTab));
         }
     }
 }
