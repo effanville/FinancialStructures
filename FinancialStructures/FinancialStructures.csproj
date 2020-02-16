@@ -6,7 +6,8 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>C:\Users\masdoc\source\repos\Portfolio Analysis Database\FinancialStructures\FinancialStructures.xml</DocumentationFile>
+    <DocumentationFile>bin\FinancialStructures.xml</DocumentationFile>
+    <OutputPath>bin\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>

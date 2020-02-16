@@ -21,12 +21,12 @@ namespace FinancialStructures.FinanceStructures
         {
             if (obj is CashAccount value)
             {
-                if (Company == value.Company)
+                if (fCompany == value.Company)
                 {
-                    return Name.CompareTo(value.Name);
+                    return fName.CompareTo(value.Name);
                 }
 
-                return Company.CompareTo(value.Company);
+                return fCompany.CompareTo(value.Company);
             }
 
             return 0;
@@ -104,6 +104,9 @@ namespace FinancialStructures.FinanceStructures
 
         private List<string> fSectors = new List<string>();
 
+        /// <summary>
+        /// The Sectors associated with this CashAccount
+        /// </summary>
         public List<string> Sectors
         {
             get { return fSectors; }

@@ -94,7 +94,7 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private async void ExecuteUpdateData(Object obj)
+        private void ExecuteUpdateData(Object obj)
         {
             var reports = new ErrorReports();
             UpdateData(async alldata => await DataUpdater.Downloader(alldata.MyFunds, alldata.myBenchMarks, UpdateReports, reports).ConfigureAwait(false));

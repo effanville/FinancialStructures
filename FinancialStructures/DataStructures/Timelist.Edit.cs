@@ -29,7 +29,7 @@ namespace FinancialStructures.DataStructures
         }
 
         /// <summary>
-        /// Checks if value on <param name="date"/> exists. If exists then index is output.
+        /// Checks if value on <param name="date"/> exists. If exists then <param name="index"/> is output.
         /// </summary>
         internal bool ValueExists(DateTime date, out int index)
         {

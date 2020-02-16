@@ -6,9 +6,6 @@ namespace FinanceViewModels.StatsViewModels
 {
     internal class SecurityInvestmentViewModel : TabViewModelBase
     {
-        public string Header { get; set; } = "Security Investments";
-
-
         private List<DailyValuation_Named> fSecuritiesInvestments;
 
         public List<DailyValuation_Named> SecuritiesInvestments
@@ -25,6 +22,7 @@ namespace FinanceViewModels.StatsViewModels
         public SecurityInvestmentViewModel(Portfolio portfolio, bool displayValueFunds)
             : base(portfolio, displayValueFunds)
         {
+            Header = "Security Investments";
             GenerateStatistics(displayValueFunds);
         }
     }

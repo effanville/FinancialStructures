@@ -34,7 +34,7 @@ namespace FinancialStructures.FinanceStructures
             return fAmounts.Count();
         }
         /// <summary>
-        /// Adds <param name="value"> to amounts on <paramref name="date"/> if data doesnt exist.
+        /// Adds <param name="value"/> to amounts on <param name="date"/> if data doesnt exist.
         /// </summary>
         internal bool TryAddValue(DateTime date, double value)
         {
@@ -109,6 +109,11 @@ namespace FinancialStructures.FinanceStructures
             return fAmounts.TryDeleteValue(date, reports);
         }
 
+        /// <summary>
+        /// Removes a sector associated to this CashAccount.
+        /// </summary>
+        /// <param name="sectorName"></param>
+        /// <returns></returns>
         public bool TryRemoveSector(string sectorName)
         {
             if (IsSectorLinked(sectorName))

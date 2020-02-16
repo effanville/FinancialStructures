@@ -48,7 +48,7 @@ namespace FinanceCommonViewModels
             set { fSelectedName = value; OnPropertyChanged(); }
         }
 
-        private async void ExecuteDownloadCommand(Object obj)
+        private void ExecuteDownloadCommand(Object obj)
         {
             var reports = new ErrorReports();
             if (SelectedName != null)
