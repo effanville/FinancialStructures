@@ -1,13 +1,13 @@
 ﻿using FinancialStructures.Database;
-using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.DataStructures;
 using System.Collections.Generic;
 
 namespace FinanceViewModels.StatsViewModels
 {
     internal class BankAccStatsViewModel : TabViewModelBase
     {
-        private List<BankAccountStatsHolder> fBankAccountStats;
-        public List<BankAccountStatsHolder> BankAccountStats
+        private List<DayValue_Named> fBankAccountStats;
+        public List<DayValue_Named> BankAccountStats
         {
             get { return fBankAccountStats; }
             set { fBankAccountStats = value; OnPropertyChanged(); }

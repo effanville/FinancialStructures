@@ -9,7 +9,17 @@ namespace FinancialStructures.DataStructures
     {
         public override int CompareTo(object obj)
         {
-            return base.CompareTo(obj);
+            if (obj is DayValue_Named value)
+            {
+                if (Company == value.Company)
+                {
+                    return Name.CompareTo(value.Name);
+                }
+
+                return Company.CompareTo(value.Company);
+            }
+
+            return 0;
         }
 
         public string HTMLTableHeader(UserOptions options, List<string> names)

@@ -1,4 +1,5 @@
-﻿using FinancialStructures.FinanceStructures;
+﻿using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using System;
 using System.Collections.Generic;
@@ -243,26 +244,29 @@ namespace FinancialStructures.Database
             return companies.Select(c => c.Length).Max();
         }
 
-        public static List<BankAccountStatsHolder> GenerateBankAccountStatistics(this Portfolio portfolio, bool DisplayValueFunds)
+        public static List<DayValue_Named> GenerateBankAccountStatistics(this Portfolio portfolio, bool DisplayValueFunds)
         {
             if (portfolio != null)
             {
                 var accs = portfolio.GetBankAccounts();
-                var namesAndCompanies = new List<BankAccountStatsHolder>();
+                var namesAndCompanies = new List<DayValue_Named>();
 
                 foreach (var acc in accs)
                 {
-                    var latest = new BankAccountStatsHolder(acc.GetName(), acc.GetCompany(), acc.LatestValue().Value);
-                    namesAndCompanies.Add(latest);
+                    if ((DisplayValueFunds && acc.LatestValue().Value != 0) || !DisplayValueFunds)
+                    {
+                        var latest = new DayValue_Named(acc.GetName(), acc.GetCompany(), acc.LatestValue());
+                        namesAndCompanies.Add(latest);
+                    }
                 }
 
                 namesAndCompanies.Sort();
-                var totals = new BankAccountStatsHolder("Totals", "", portfolio.BankAccountTotal());
+                var totals = new DayValue_Named("Totals", "", DateTime.Today, portfolio.BankAccountTotal());
                 namesAndCompanies.Add(totals);
                 return namesAndCompanies;
             }
 
-            return new List<BankAccountStatsHolder>();
+            return new List<DayValue_Named>();
         }
     }
 }
