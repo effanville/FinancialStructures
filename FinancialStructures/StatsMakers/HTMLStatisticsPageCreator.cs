@@ -71,9 +71,9 @@ namespace FinancialStructures.StatsMakers
             StreamWriter htmlWriter = new StreamWriter(filepath);
             CreateHTMLHeader(htmlWriter, portfolio.DatabaseName, options);
 
-            DailyValuation_Named securityTotals = new DailyValuation_Named(string.Empty, "Securities", DateTime.Today, portfolio.AllSecuritiesValue(DateTime.Today));
-            DailyValuation_Named bankTotals = new DailyValuation_Named(string.Empty, "Totals", DateTime.Today, portfolio.AllBankAccountsValue(DateTime.Today));
-            DailyValuation_Named portfolioTotals = new DailyValuation_Named(string.Empty, "Portfolio", DateTime.Today, portfolio.Value(DateTime.Today));
+            DayValue_Named securityTotals = new DayValue_Named(string.Empty, "Securities", DateTime.Today, portfolio.AllSecuritiesValue(DateTime.Today));
+            DayValue_Named bankTotals = new DayValue_Named(string.Empty, "Totals", DateTime.Today, portfolio.AllBankAccountsValue(DateTime.Today));
+            DayValue_Named portfolioTotals = new DayValue_Named(string.Empty, "Portfolio", DateTime.Today, portfolio.Value(DateTime.Today));
             List<string> headersList = new List<string>();
             headersList.AddRange(options.BankAccDataToExport);
             headersList.Remove("Name");

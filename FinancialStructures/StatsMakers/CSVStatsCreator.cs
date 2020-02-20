@@ -189,7 +189,7 @@ namespace FinancialStructures.StatsMakers
                 WriteSpacing(htmlWriter, options.Spacing);
             }
 
-            DailyValuation_Named bankTotals = new DailyValuation_Named("Totals,", string.Empty, DateTime.Today, portfolio.AllBankAccountsValue(DateTime.Today));
+            DayValue_Named bankTotals = new DayValue_Named("Totals,", string.Empty, DateTime.Today, portfolio.AllBankAccountsValue(DateTime.Today));
             var bankProperties = bankTotals.GetType().GetProperties();
 
             WriteHeader(htmlWriter, bankProperties, options.BankAccDataToExport, maxNameLength, maxCompanyLength, maxNumLength);
@@ -274,7 +274,7 @@ namespace FinancialStructures.StatsMakers
 
             WriteSpacing(htmlWriter, options.Spacing);
 
-            DailyValuation_Named portfolioTotals = new DailyValuation_Named("Total", "Portfolio", DateTime.Today, portfolio.Value(DateTime.Today));
+            DayValue_Named portfolioTotals = new DayValue_Named("Total", "Portfolio", DateTime.Today, portfolio.Value(DateTime.Today));
             var portfolioProperties = bankTotals.GetType().GetProperties();
 
             string totalLine = string.Empty;

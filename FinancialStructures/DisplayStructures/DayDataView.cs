@@ -15,7 +15,7 @@ namespace FinancialStructures.GUIFinanceStructures
 
         public DayDataView Copy()
         {
-            return new DayDataView(Date, UnitPrice, ShareNo, Investment, NewValue);
+            return new DayDataView(Date, UnitPrice, ShareNo, NewInvestment, NewValue);
         }
 
         public DayDataView()
@@ -24,13 +24,13 @@ namespace FinancialStructures.GUIFinanceStructures
             Date = DateTime.Today;
         }
 
-        public DayDataView(DateTime date, double unitPrice, double shareNo, double investment, bool newValue = true)
+        public DayDataView(DateTime date, double unitPrice, double shareNo, double newInvestment, bool newValue = true)
         {
             Date = date;
             UnitPrice = unitPrice;
             ShareNo = shareNo;
             Value = UnitPrice * ShareNo;
-            Investment = investment;
+            NewInvestment = newInvestment;
             NewValue = newValue;
         }
 
@@ -43,6 +43,6 @@ namespace FinancialStructures.GUIFinanceStructures
 
         public double Value { get; set; }
 
-        public double Investment { get; set; }
+        public double NewInvestment { get; set; }
     }
 }

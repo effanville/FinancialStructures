@@ -360,12 +360,6 @@
     <Resource Include="PAD.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FinancialStructures\FinancialStructures.csproj">
-      <Project>{0738a1ca-623a-4f3e-96fa-8a9439f74446}</Project>
-      <Name>FinancialStructures</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
@@ -379,6 +373,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FinancialStructures\FinancialStructures.csproj">
+      <Project>{b86eadb1-3561-470b-9421-2e6992a25346}</Project>
+      <Name>FinancialStructures</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

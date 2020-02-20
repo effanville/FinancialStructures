@@ -61,7 +61,7 @@ namespace FinancialStructures.Database
             return false;
         }
 
-        public static List<AccountDayDataView> CurrencyData(this Portfolio portfolio, NameData name, ErrorReports reports)
+        public static List<DayValue_ChangeLogged> CurrencyData(this Portfolio portfolio, NameData name, ErrorReports reports)
         {
             foreach (Currency sec in portfolio.Currencies)
             {
@@ -72,12 +72,12 @@ namespace FinancialStructures.Database
             }
 
             reports.AddError($"Could not find currency {name.Name}", Location.DatabaseAccess);
-            return new List<AccountDayDataView>();
+            return new List<DayValue_ChangeLogged>();
         }
 
-        public static bool TryGetCurrencyData(this Portfolio portfolio, string name, out List<AccountDayDataView> data)
+        public static bool TryGetCurrencyData(this Portfolio portfolio, string name, out List<DayValue_ChangeLogged> data)
         {
-            data = new List<AccountDayDataView>();
+            data = new List<DayValue_ChangeLogged>();
             foreach (Currency sec in portfolio.Currencies)
             {
                 if (sec.GetName() == name)
@@ -90,9 +90,9 @@ namespace FinancialStructures.Database
             return false;
         }
 
-        public static bool TryAddDataToCurrency(this Portfolio portfolio, NameData name, AccountDayDataView value, ErrorReports reports)
+        public static bool TryAddDataToCurrency(this Portfolio portfolio, NameData name, DayValue_ChangeLogged value, ErrorReports reports)
         {
-            return portfolio.TryAddDataToCurrency(name.Name, value.Date, value.Amount, reports);
+            return portfolio.TryAddDataToCurrency(name.Name, value.Day, value.Value, reports);
         }
 
         /// <summary>
@@ -111,9 +111,9 @@ namespace FinancialStructures.Database
             return false;
         }
 
-        public static bool TryEditCurrency(this Portfolio portfolio, NameData name, AccountDayDataView oldDate, AccountDayDataView value, ErrorReports reports)
+        public static bool TryEditCurrency(this Portfolio portfolio, NameData name, DayValue_ChangeLogged oldDate, DayValue_ChangeLogged value, ErrorReports reports)
         {
-            return portfolio.TryEditCurrency(name.Name, oldDate.Date, value.Date, value.Amount, reports);
+            return portfolio.TryEditCurrency(name.Name, oldDate.Day, value.Day, value.Value, reports);
         }
 
         public static bool TryEditCurrency(this Portfolio portfolio, string name, DateTime oldDate, DateTime date, double value, ErrorReports reports)
@@ -129,9 +129,9 @@ namespace FinancialStructures.Database
             return false;
         }
 
-        public static bool TryDeleteCurrencyData(this Portfolio portfolio, NameData name, AccountDayDataView value, ErrorReports reports)
+        public static bool TryDeleteCurrencyData(this Portfolio portfolio, NameData name, DayValue_ChangeLogged value, ErrorReports reports)
         {
-            return portfolio.TryDeleteCurrencyData(name.Name, value.Date, value.Amount, reports);
+            return portfolio.TryDeleteCurrencyData(name.Name, value.Day, value.Value, reports);
         }
 
         public static bool TryDeleteCurrencyData(this Portfolio portfolio, string name, DateTime date, double value, ErrorReports reports)

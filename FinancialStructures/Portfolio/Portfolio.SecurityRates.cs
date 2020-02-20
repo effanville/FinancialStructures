@@ -105,7 +105,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Returns the investments in the security.
         /// </summary>
-        private static List<DailyValuation_Named> SecurityInvestments(this Portfolio portfolio, string company, string name)
+        private static List<DayValue_Named> SecurityInvestments(this Portfolio portfolio, string company, string name)
         {
             if (portfolio.TryGetSecurity(company, name, out Security desired))
             {

@@ -59,9 +59,9 @@ namespace FinancialStructures.Database
             return false;
         }
 
-        public static bool TryGetAccountData(this Portfolio portfolio, string name, string company, out List<AccountDayDataView> data)
+        public static bool TryGetAccountData(this Portfolio portfolio, string name, string company, out List<DayValue_ChangeLogged> data)
         {
-            data = new List<AccountDayDataView>();
+            data = new List<DayValue_ChangeLogged>();
             foreach (CashAccount acc in portfolio.BankAccounts)
             {
                 if (acc.GetName() == name && acc.GetCompany() == company)
@@ -75,7 +75,7 @@ namespace FinancialStructures.Database
         }
 
 
-        public static List<AccountDayDataView> BankAccountData(this Portfolio portfolio, NameData name, ErrorReports reports)
+        public static List<DayValue_ChangeLogged> BankAccountData(this Portfolio portfolio, NameData name, ErrorReports reports)
         {
             foreach (CashAccount acc in portfolio.BankAccounts)
             {
@@ -85,7 +85,7 @@ namespace FinancialStructures.Database
                 }
             }
             reports.AddReport($"Bank account {name.ToString()} does not exist.", Location.DatabaseAccess);
-            return new List<AccountDayDataView>();
+            return new List<DayValue_ChangeLogged>();
         }
 
         /// <summary>
@@ -198,9 +198,9 @@ namespace FinancialStructures.Database
             return false;
         }
 
-        public static bool TryAddDataToBankAccount(this Portfolio portfolio, NameData name, AccountDayDataView data, ErrorReports reports)
+        public static bool TryAddDataToBankAccount(this Portfolio portfolio, NameData name, DayValue_ChangeLogged data, ErrorReports reports)
         {
-            return portfolio.TryAddDataToBankAccount(name.Name, name.Company, data.Date, data.Amount);
+            return portfolio.TryAddDataToBankAccount(name.Name, name.Company, data.Day, data.Value);
         }
 
         public static bool TryAddDataToBankAccount(this Portfolio portfolio, string name, string company, DateTime date, double value)
@@ -217,9 +217,9 @@ namespace FinancialStructures.Database
             return false;
         }
 
-        public static bool TryEditBankAccount(this Portfolio portfolio, NameData name, AccountDayDataView oldData, AccountDayDataView newData, ErrorReports reports)
+        public static bool TryEditBankAccount(this Portfolio portfolio, NameData name, DayValue_ChangeLogged oldData, DayValue_ChangeLogged newData, ErrorReports reports)
         {
-            return portfolio.TryEditBankAccount(name.Name, name.Company, oldData.Date, newData.Date, newData.Amount, reports);
+            return portfolio.TryEditBankAccount(name.Name, name.Company, oldData.Day, newData.Day, newData.Value, reports);
         }
 
         public static bool TryEditBankAccount(this Portfolio portfolio, string name, string company, DateTime oldDate, DateTime date, double value, ErrorReports reports)
@@ -252,9 +252,9 @@ namespace FinancialStructures.Database
             return false;
         }
 
-        public static bool TryDeleteBankAccountData(this Portfolio portfolio, NameData name, AccountDayDataView data, ErrorReports reports)
+        public static bool TryDeleteBankAccountData(this Portfolio portfolio, NameData name, DayValue_ChangeLogged data, ErrorReports reports)
         {
-            return portfolio.TryDeleteBankAccountData(name.Name, name.Company, data.Date, reports);
+            return portfolio.TryDeleteBankAccountData(name.Name, name.Company, data.Day, reports);
         }
 
         public static bool TryDeleteBankAccountData(this Portfolio portfolio, string name, string company, DateTime date, ErrorReports reports)

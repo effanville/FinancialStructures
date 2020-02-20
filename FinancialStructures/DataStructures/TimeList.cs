@@ -13,12 +13,12 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Collection of data within the TimeList.
         /// </summary>
-        private List<DailyValuation> fValues;
+        private List<DayValue> fValues;
 
         /// <summary>
         /// This should only be used for serialisation.
         /// </summary>
-        public List<DailyValuation> Values
+        public List<DayValue> Values
         {
             get { return fValues; }
             set { fValues = value; }
@@ -27,16 +27,16 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Obtains a copy of the data.
         /// </summary>
-        public DailyValuation this[int index]
+        public DayValue this[int index]
         {
-            get { return new DailyValuation(fValues[index]); }
+            get { return new DayValue(fValues[index]); }
         }
 
         /// <summary>
         /// Constructor adding values.
         /// </summary>
         /// <remarks>For testing only.</remarks>
-        public TimeList(List<DailyValuation> values)
+        public TimeList(List<DayValue> values)
         {
             fValues = values;
         }
@@ -46,7 +46,7 @@ namespace FinancialStructures.DataStructures
         /// </summary>
         public TimeList()
         {
-            fValues = new List<DailyValuation>();
+            fValues = new List<DayValue>();
         }
 
         /// <summary>

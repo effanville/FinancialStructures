@@ -6,9 +6,9 @@ namespace FinanceViewModels.StatsViewModels
 {
     internal class SecurityInvestmentViewModel : TabViewModelBase
     {
-        private List<DailyValuation_Named> fSecuritiesInvestments;
+        private List<DayValue_Named> fSecuritiesInvestments;
 
-        public List<DailyValuation_Named> SecuritiesInvestments
+        public List<DayValue_Named> SecuritiesInvestments
         {
             get { return fSecuritiesInvestments; }
             set { fSecuritiesInvestments = value; OnPropertyChanged(); }

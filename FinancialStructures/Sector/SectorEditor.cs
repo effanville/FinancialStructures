@@ -63,9 +63,9 @@ namespace SectorHelperFunctions
             return false;
         }
 
-        public static bool TryGetSectorData(List<Sector> sectors, string name, out List<AccountDayDataView> data)
+        public static bool TryGetSectorData(List<Sector> sectors, string name, out List<DayValue_ChangeLogged> data)
         {
-            data = new List<AccountDayDataView>();
+            data = new List<DayValue_ChangeLogged>();
             foreach (Sector sec in sectors)
             {
                 if (sec.GetName() == name)
@@ -78,7 +78,7 @@ namespace SectorHelperFunctions
             return false;
         }
 
-        public static List<AccountDayDataView> SectorData(List<Sector> sectors, NameData name, ErrorReports reports)
+        public static List<DayValue_ChangeLogged> SectorData(List<Sector> sectors, NameData name, ErrorReports reports)
         {
             foreach (Sector sec in sectors)
             {
@@ -88,12 +88,12 @@ namespace SectorHelperFunctions
                 }
             }
             reports.AddError($"Sector {name.Name} does not exist.", Location.DatabaseAccess);
-            return new List<AccountDayDataView>();
+            return new List<DayValue_ChangeLogged>();
         }
 
-        public static bool TryAddDataToSector(List<Sector> sectors, NameData name, AccountDayDataView value, ErrorReports reports)
+        public static bool TryAddDataToSector(List<Sector> sectors, NameData name, DayValue_ChangeLogged value, ErrorReports reports)
         {
-            return TryAddDataToSector(sectors, name.Name, value.Date, value.Amount, reports);
+            return TryAddDataToSector(sectors, name.Name, value.Day, value.Value, reports);
         }
 
         /// <summary>
@@ -112,9 +112,9 @@ namespace SectorHelperFunctions
             return false;
         }
 
-        public static bool TryEditSector(List<Sector> sectors, NameData name, AccountDayDataView oldData, AccountDayDataView newData, ErrorReports reports)
+        public static bool TryEditSector(List<Sector> sectors, NameData name, DayValue_ChangeLogged oldData, DayValue_ChangeLogged newData, ErrorReports reports)
         {
-            return TryEditSector(sectors, name.Name, oldData.Date, newData.Date, newData.Amount, reports);
+            return TryEditSector(sectors, name.Name, oldData.Day, newData.Day, newData.Value, reports);
         }
 
         public static bool TryEditSector(List<Sector> sectors, string name, DateTime oldDate, DateTime date, double value, ErrorReports reports)
@@ -130,9 +130,9 @@ namespace SectorHelperFunctions
             return false;
         }
 
-        public static bool TryDeleteSectorData(List<Sector> sectors, NameData name, AccountDayDataView value, ErrorReports reports)
+        public static bool TryDeleteSectorData(List<Sector> sectors, NameData name, DayValue_ChangeLogged value, ErrorReports reports)
         {
-            return TryDeleteSectorData(sectors, name.Name, value.Date, value.Amount, reports);
+            return TryDeleteSectorData(sectors, name.Name, value.Day, value.Value, reports);
         }
 
         public static bool TryDeleteSectorData(List<Sector> sectors, string name, DateTime date, double value, ErrorReports reports)

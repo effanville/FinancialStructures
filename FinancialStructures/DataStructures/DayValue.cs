@@ -5,7 +5,7 @@ namespace FinancialStructures.DataStructures
     /// <summary>
     /// Holds a date and a value to act as the value on that day.
     /// </summary>
-    public class DailyValuation : IComparable
+    public class DayValue : IComparable
     {
         /// <summary>
         /// Appends date in UK format with value, separated by a comma.
@@ -18,9 +18,9 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Method of comparison. Compares dates.
         /// </summary>
-        public int CompareTo(object obj)
+        public virtual int CompareTo(object obj)
         {
-            DailyValuation a = (DailyValuation)obj;
+            DayValue a = (DayValue)obj;
             return DateTime.Compare(Day, a.Day);
         }
 
@@ -28,9 +28,9 @@ namespace FinancialStructures.DataStructures
         /// Returns a copy of the specified valuation
         /// </summary>
         /// <returns></returns>
-        public DailyValuation Copy()
+        public DayValue Copy()
         {
-            return new DailyValuation(Day, Value);
+            return new DayValue(Day, Value);
         }
 
         public void SetData(DateTime date, double value)
@@ -49,33 +49,45 @@ namespace FinancialStructures.DataStructures
             Value = value;
         }
 
+        protected DateTime fDate;
+
         /// <summary>
         /// The date for the valuation
         /// </summary>
-        public DateTime Day { get; set; }
+        public virtual DateTime Day
+        {
+            get { return fDate; }
+            set { fDate = value; }
+        }
+
+        protected double fValue;
 
         /// <summary>
         /// The specific valuation
         /// </summary>
-        public double Value { get; set; }
+        public virtual double Value 
+        {
+            get { return fValue; }
+            set { fValue = value; } 
+        }
 
         /// <summary>
         /// empty constructor.
         /// </summary>
-        protected DailyValuation()
+        protected DayValue()
         {
         }
 
         /// <summary>
         /// Standard constructor.
         /// </summary>
-        public DailyValuation(DateTime idealDate, double idealValue)
+        public DayValue(DateTime idealDate, double idealValue)
         {
             Day = idealDate;
             Value = idealValue;
         }
 
-        public DailyValuation(DailyValuation dailyValue)
+        public DayValue(DayValue dailyValue)
             : this(dailyValue.Day, dailyValue.Value)
         { }
     }

@@ -25,15 +25,15 @@ namespace FinancialStructures.FinanceStructures
             return fUrl;
         }
 
-        public List<AccountDayDataView> GetDataForDisplay()
+        public List<DayValue_ChangeLogged> GetDataForDisplay()
         {
-            var output = new List<AccountDayDataView>();
+            var output = new List<DayValue_ChangeLogged>();
             if (fValues.Any())
             {
                 foreach (var datevalue in fValues.GetValuesBetween(fValues.FirstDate(), fValues.LatestDate()))
                 {
                     fValues.TryGetValue(datevalue.Day, out double UnitPrice);
-                    var thisday = new AccountDayDataView(datevalue.Day, UnitPrice, false);
+                    var thisday = new DayValue_ChangeLogged(datevalue.Day, UnitPrice, false);
                     output.Add(thisday);
                 }
             }

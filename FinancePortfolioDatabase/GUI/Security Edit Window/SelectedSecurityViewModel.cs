@@ -62,7 +62,7 @@ namespace FinanceWindowsViewModels
             var reports = new ErrorReports();
             if (fSelectedName != null && fSelectedValues != null)
             {
-                UpdateDataCallback(alldata => alldata.MyFunds.TryRemoveSecurityData(reports, fSelectedName.Company, fSelectedName.Name, fSelectedValues.Date, fSelectedValues.ShareNo, fSelectedValues.UnitPrice, fSelectedValues.Investment));
+                UpdateDataCallback(alldata => alldata.MyFunds.TryRemoveSecurityData(reports, fSelectedName.Company, fSelectedName.Name, fSelectedValues.Date, fSelectedValues.ShareNo, fSelectedValues.UnitPrice, fSelectedValues.NewInvestment));
             }
 
             if (reports.Any())
@@ -91,7 +91,7 @@ namespace FinanceWindowsViewModels
                     {
                         if (objec is DayDataView view)
                         {
-                            UpdateDataCallback(alldata => alldata.MyFunds.TryAddDataToSecurity(reports, fSelectedName.Company, fSelectedName.Name, view.Date, view.ShareNo, view.UnitPrice, view.Investment));
+                            UpdateDataCallback(alldata => alldata.MyFunds.TryAddDataToSecurity(reports, fSelectedName.Company, fSelectedName.Name, view.Date, view.ShareNo, view.UnitPrice, view.NewInvestment));
                         }
                         else
                         {
@@ -115,7 +115,7 @@ namespace FinanceWindowsViewModels
             {
                 if (Portfolio.GetSecurityFromName(fSelectedName.Name, fSelectedName.Company).Count() != SelectedSecurityData.Count)
                 {
-                    UpdateDataCallback(alldata => alldata.MyFunds.TryAddDataToSecurity(reports, fSelectedName.Company, fSelectedName.Name, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.Investment));
+                    UpdateDataCallback(alldata => alldata.MyFunds.TryAddDataToSecurity(reports, fSelectedName.Company, fSelectedName.Name, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment));
                     fSelectedName.NewValue = false;
                 }
                 else
@@ -128,7 +128,7 @@ namespace FinanceWindowsViewModels
                         if (name.NewValue)
                         {
                             edited = true;
-                            UpdateDataCallback(alldata => alldata.MyFunds.TryEditSecurityData(reports, fSelectedName.Company, fSelectedName.Name, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.Investment));
+                            UpdateDataCallback(alldata => alldata.MyFunds.TryEditSecurityData(reports, fSelectedName.Company, fSelectedName.Name, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment));
                             name.NewValue = false;
                         }
                     }

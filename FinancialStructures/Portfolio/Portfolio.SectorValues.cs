@@ -52,9 +52,9 @@ namespace FinancialStructures.Database
             return securities;
         }
 
-        public static List<DailyValuation_Named> SectorInvestments(this Portfolio portfolio, string company)
+        public static List<DayValue_Named> SectorInvestments(this Portfolio portfolio, string company)
         {
-            var output = new List<DailyValuation_Named>();
+            var output = new List<DayValue_Named>();
             foreach (var sec in portfolio.SectorSecurities(company))
             {
                 output.AddRange(sec.AllInvestmentsNamed());
@@ -95,7 +95,7 @@ namespace FinancialStructures.Database
             }
             double earlierValue = 0;
             double laterValue = 0;
-            var Investments = new List<DailyValuation>();
+            var Investments = new List<DayValue>();
 
             foreach (var security in securities)
             {
@@ -107,7 +107,7 @@ namespace FinancialStructures.Database
                 }
             }
 
-            return FinancialFunctions.IRRTime(new DailyValuation(earlierTime, earlierValue), Investments, new DailyValuation(laterTime, laterValue));
+            return FinancialFunctions.IRRTime(new DayValue(earlierTime, earlierValue), Investments, new DayValue(laterTime, laterValue));
         }
     }
 }

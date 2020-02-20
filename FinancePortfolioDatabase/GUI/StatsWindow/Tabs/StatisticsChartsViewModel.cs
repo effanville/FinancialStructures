@@ -27,24 +27,24 @@ namespace FinanceViewModels.StatsViewModels
             set { fHistoryStats = value; OnPropertyChanged(); }
         }
 
-        private List<DailyValuation_Named> fDistributionValues;
-        public List<DailyValuation_Named> DistributionValues
+        private List<DayValue_Named> fDistributionValues;
+        public List<DayValue_Named> DistributionValues
         {
             get { return fDistributionValues; }
             set { fDistributionValues = value; OnPropertyChanged(); }
         }
 
 
-        private List<DailyValuation_Named> fDistributionValues2;
-        public List<DailyValuation_Named> DistributionValues2
+        private List<DayValue_Named> fDistributionValues2;
+        public List<DayValue_Named> DistributionValues2
         {
             get { return fDistributionValues2; }
             set { fDistributionValues2 = value; OnPropertyChanged(); }
         }
 
-        private List<DailyValuation_Named> fDistributionValues3;
+        private List<DayValue_Named> fDistributionValues3;
 
-        public List<DailyValuation_Named> DistributionValues3
+        public List<DayValue_Named> DistributionValues3
         {
             get { return fDistributionValues3; }
             set { fDistributionValues3 = value; OnPropertyChanged(); }

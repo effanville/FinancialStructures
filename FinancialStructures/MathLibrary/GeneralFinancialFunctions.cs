@@ -34,7 +34,7 @@ namespace FinancialStructures.FinanceFunctionsList
         /// <summary>
         /// Returns the compound annual rate from the <paramref name="firstValue"/> to the <paramref name="lastValue"/> in the time last-first
         /// </summary>
-        public static double CAR(DailyValuation firstValue, DailyValuation lastValue)
+        public static double CAR(DayValue firstValue, DayValue lastValue)
         {
             if (firstValue == null || lastValue == null)
             {
@@ -49,7 +49,7 @@ namespace FinancialStructures.FinanceFunctionsList
         /// This evaluates
         /// f(x) = <paramref name="latest.Value"/> -sum(<paramref name="investments"/>[i].Value x (1+<paramref name="expectedReturnRate"/>)^{<paramref name="latest.Date"/>-investments[i].Date})
         /// </summary>
-        private static double Evaluator(List<DailyValuation> investments, DailyValuation latest, double expectedReturnRate)
+        private static double Evaluator(List<DayValue> investments, DayValue latest, double expectedReturnRate)
         {
             double sum = 0;
             for (int i = 0; i < investments.Count(); ++i)
@@ -64,7 +64,7 @@ namespace FinancialStructures.FinanceFunctionsList
         /// <summary>
         /// Returns the internal rate of return of the collection of <paramref name="investments"/>, having achieved the value <paramref name="latestValue"/>, via the bisection method.
         /// </summary>
-        public static double IRR(List<DailyValuation> investments, DailyValuation latestValue)
+        public static double IRR(List<DayValue> investments, DayValue latestValue)
         {
             if (investments == null || !investments.Any())
             {
@@ -115,7 +115,7 @@ namespace FinancialStructures.FinanceFunctionsList
         /// <summary>
         /// Calculates Internal rate of return of a collection of investments over the last timelength number of months
         /// </summary>
-        public static double IRRTime(DailyValuation startValue, List<DailyValuation> investments, DailyValuation latestValue)
+        public static double IRRTime(DayValue startValue, List<DayValue> investments, DayValue latestValue)
         {
             if (latestValue == null || startValue == null || investments == null)
             {
@@ -127,10 +127,10 @@ namespace FinancialStructures.FinanceFunctionsList
                 return 0.0;
             }
             // reduce number of investments to recent only
-            var recentInvestments = new List<DailyValuation>();
+            var recentInvestments = new List<DayValue>();
             recentInvestments.Add(startValue);
 
-            foreach (DailyValuation value in investments)
+            foreach (DayValue value in investments)
             {
                 if (value == null)
                 {

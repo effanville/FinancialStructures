@@ -11,7 +11,7 @@ namespace FinancialStructures.DataStructures
         /// </summary>
         private void AddData(DateTime date, double value, ErrorReports reports)
         {
-            var valuation = new DailyValuation(date, value);
+            var valuation = new DayValue(date, value);
             fValues.Add(valuation);
             reports.AddReport($"Added value {value}", Location.AddingData);
             Sort();

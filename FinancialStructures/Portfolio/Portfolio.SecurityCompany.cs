@@ -86,9 +86,9 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Returns a named list of all investments in the company.
         /// </summary>
-        public static List<DailyValuation_Named> CompanyInvestments(this Portfolio portfolio, string company)
+        public static List<DayValue_Named> CompanyInvestments(this Portfolio portfolio, string company)
         {
-            var output = new List<DailyValuation_Named>();
+            var output = new List<DayValue_Named>();
             foreach (var sec in portfolio.CompanySecurities(company))
             {
                 var currency = SecurityCurrency(portfolio, sec);
@@ -187,7 +187,7 @@ namespace FinancialStructures.Database
             }
             double earlierValue = 0;
             double laterValue = 0;
-            var Investments = new List<DailyValuation>();
+            var Investments = new List<DayValue>();
 
             foreach (var security in securities)
             {
@@ -201,7 +201,7 @@ namespace FinancialStructures.Database
                 }
             }
 
-            return FinancialFunctions.IRRTime(new DailyValuation(earlierTime, earlierValue), Investments, new DailyValuation(laterTime, laterValue));
+            return FinancialFunctions.IRRTime(new DayValue(earlierTime, earlierValue), Investments, new DayValue(laterTime, laterValue));
         }
     }
 }

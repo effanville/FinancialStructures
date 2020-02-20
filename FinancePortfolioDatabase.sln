@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialStructures", "FinancialStructures\FinancialStructures.csproj", "{0738A1CA-623A-4F3E-96FA-8A9439F74446}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialStructures_UnitTests", "PAD_UnitTests\FinancialStructures_UnitTests.csproj", "{709294DA-0BBE-4ACD-9C5E-29773FD18735}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancePortfolioDatabase", "FinancePortfolioDatabase\FinancePortfolioDatabase.csproj", "{7531F889-34E2-4D3D-994D-38EBF4FA9249}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPDconsole", "FPDconsole\FPDconsole.csproj", "{7FA607A1-AF11-48A7-B410-07E9875685D2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialStructures", "FinancialStructures\FinancialStructures.csproj", "{B86EADB1-3561-470B-9421-2E6992A25346}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0738A1CA-623A-4F3E-96FA-8A9439F74446}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0738A1CA-623A-4F3E-96FA-8A9439F74446}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0738A1CA-623A-4F3E-96FA-8A9439F74446}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0738A1CA-623A-4F3E-96FA-8A9439F74446}.Release|Any CPU.Build.0 = Release|Any CPU
 		{709294DA-0BBE-4ACD-9C5E-29773FD18735}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{709294DA-0BBE-4ACD-9C5E-29773FD18735}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{709294DA-0BBE-4ACD-9C5E-29773FD18735}.Release|Any CPU.Build.0 = Release|Any CPU
@@ -32,6 +28,10 @@ Global
 		{7FA607A1-AF11-48A7-B410-07E9875685D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7FA607A1-AF11-48A7-B410-07E9875685D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7FA607A1-AF11-48A7-B410-07E9875685D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B86EADB1-3561-470B-9421-2E6992A25346}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B86EADB1-3561-470B-9421-2E6992A25346}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B86EADB1-3561-470B-9421-2E6992A25346}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B86EADB1-3561-470B-9421-2E6992A25346}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

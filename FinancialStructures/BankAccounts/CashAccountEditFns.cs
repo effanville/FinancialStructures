@@ -49,7 +49,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Trys to get latest data earlier than date requested. Only returns true if all data present.
         /// </summary>
-        public bool TryGetEarlierData(DateTime date, out DailyValuation Value)
+        public bool TryGetEarlierData(DateTime date, out DayValue Value)
         {
             return fAmounts.TryGetNearestEarlierValue(date, out Value);
         }
@@ -57,13 +57,13 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Produces a list of data for GUI visualisation.
         /// </summary>
-        internal List<AccountDayDataView> GetDataForDisplay()
+        internal List<DayValue_ChangeLogged> GetDataForDisplay()
         {
-            var output = new List<AccountDayDataView>();
+            var output = new List<DayValue_ChangeLogged>();
             foreach (var datevalue in fAmounts.GetValuesBetween(fAmounts.FirstDate(), fAmounts.LatestDate()))
             {
                 fAmounts.TryGetValue(datevalue.Day, out double UnitPrice);
-                var thisday = new AccountDayDataView(datevalue.Day, UnitPrice, false);
+                var thisday = new DayValue_ChangeLogged(datevalue.Day, UnitPrice, false);
                 output.Add(thisday);
             }
 

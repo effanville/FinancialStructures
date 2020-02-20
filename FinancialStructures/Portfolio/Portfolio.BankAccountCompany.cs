@@ -22,9 +22,9 @@ namespace FinancialStructures.Database
             return accounts;
         }
 
-        public List<DailyValuation_Named> GenerateBankAccountStatistics(string company)
+        public List<DayValue_Named> GenerateBankAccountStatistics(string company)
         {
-            var namesAndCompanies = new List<DailyValuation_Named>();
+            var namesAndCompanies = new List<DayValue_Named>();
 
             foreach (var account in BankAccounts)
             {
@@ -32,14 +32,14 @@ namespace FinancialStructures.Database
                 {
                     var currencyName = account.GetCurrency();
                     var currency = Currencies.Find(cur => cur.Name == currencyName);
-                    namesAndCompanies.Add(new DailyValuation_Named(account.GetName(), account.GetCompany(), account.LatestValue(currency).Day, account.LatestValue(currency).Value));
+                    namesAndCompanies.Add(new DayValue_Named(account.GetName(), account.GetCompany(), account.LatestValue(currency).Day, account.LatestValue(currency).Value));
                 }
             }
 
             namesAndCompanies.Sort();
             if (namesAndCompanies.Count > 1)
             {
-                namesAndCompanies.Add(new DailyValuation_Named("Totals", company, DateTime.Today, BankAccountCompanyValue(company, DateTime.Today)));
+                namesAndCompanies.Add(new DayValue_Named("Totals", company, DateTime.Today, BankAccountCompanyValue(company, DateTime.Today)));
             }
             return namesAndCompanies;
         }

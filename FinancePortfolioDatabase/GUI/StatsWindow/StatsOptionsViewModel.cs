@@ -188,7 +188,7 @@ namespace FinanceWindowsViewModels
                 ColumnNames.Add(new VisibleName(info.Name, true));
             }
 
-            var BankNames = new DailyValuation_Named();
+            var BankNames = new DayValue_Named();
             var props = BankNames.GetType().GetProperties();
             BankColumnNames = new List<VisibleName>();
             foreach (var info in props)

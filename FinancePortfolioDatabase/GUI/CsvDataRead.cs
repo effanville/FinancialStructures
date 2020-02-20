@@ -84,7 +84,7 @@ namespace GUISupport
                     break;
                 }
 
-                var line = new AccountDayDataView(DateTime.Parse(dayValuation[0]), double.Parse(dayValuation[1]));
+                var line = new DayValue_ChangeLogged(DateTime.Parse(dayValuation[0]), double.Parse(dayValuation[1]));
                 dailyValuations.Add(line);
             }
 

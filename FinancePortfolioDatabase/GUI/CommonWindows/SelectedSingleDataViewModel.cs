@@ -29,17 +29,17 @@ namespace FinanceCommonViewModels
             set { fSelectedName = value; OnPropertyChanged(); }
         }
 
-        private List<AccountDayDataView> fSelectedData;
-        public List<AccountDayDataView> SelectedData
+        private List<DayValue_ChangeLogged> fSelectedData;
+        public List<DayValue_ChangeLogged> SelectedData
         {
             get { return fSelectedData; }
             set { fSelectedData = value; OnPropertyChanged(); }
         }
 
-        private AccountDayDataView fSelectedValues;
-        private AccountDayDataView fOldSelectedValue;
+        private DayValue_ChangeLogged fSelectedValues;
+        private DayValue_ChangeLogged fOldSelectedValue;
         private int SelectedIndex;
-        public AccountDayDataView SelectedValue
+        public DayValue_ChangeLogged SelectedValue
         {
             get
             {
@@ -68,7 +68,7 @@ namespace FinanceCommonViewModels
             var reports = new ErrorReports();
             if (SelectedName != null)
             {
-                SelectedData = (List<AccountDayDataView>)EditMethods.ExecuteFunction(FunctionType.SelectData, Portfolio, Sectors, SelectedName, reports).Result;
+                SelectedData = (List<DayValue_ChangeLogged>)EditMethods.ExecuteFunction(FunctionType.SelectData, Portfolio, Sectors, SelectedName, reports).Result;
                 SelectLatestValue();
             }
             else
@@ -84,7 +84,7 @@ namespace FinanceCommonViewModels
             var reports = new ErrorReports();
             if (SelectedName != null)
             {
-                if (((List<AccountDayDataView>)EditMethods.ExecuteFunction(FunctionType.SelectData, Portfolio, Sectors, SelectedName, reports).Result).Count() != SelectedData.Count)
+                if (((List<DayValue_ChangeLogged>)EditMethods.ExecuteFunction(FunctionType.SelectData, Portfolio, Sectors, SelectedName, reports).Result).Count() != SelectedData.Count)
                 {
                     UpdateDataCallback(alldata => EditMethods.ExecuteFunction(FunctionType.AddData, alldata.MyFunds, alldata.myBenchMarks, SelectedName, SelectedValue, reports).Wait());
                     SelectedName.NewValue = false;
