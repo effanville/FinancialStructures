@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialStructures_UnitTes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancePortfolioDatabase", "FinancePortfolioDatabase\FinancePortfolioDatabase.csproj", "{7531F889-34E2-4D3D-994D-38EBF4FA9249}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FPDconsole", "FPDconsole\FPDconsole.csproj", "{7FA607A1-AF11-48A7-B410-07E9875685D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPDconsole", "FPDconsole\FPDconsole.csproj", "{7FA607A1-AF11-48A7-B410-07E9875685D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
