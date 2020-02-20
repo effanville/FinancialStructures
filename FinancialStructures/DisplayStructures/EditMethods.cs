@@ -76,7 +76,7 @@ namespace FinancialStructures.GUIFinanceStructures
                     }
                 case (FunctionType.Delete):
                     {
-                        if (functionInputs.Length != 5)
+                        if (functionInputs.Length != 4)
                         {
                             break;
                         }
@@ -85,7 +85,7 @@ namespace FinancialStructures.GUIFinanceStructures
                     }
                 case (FunctionType.SelectData):
                     {
-                        if (functionInputs.Length != 5)
+                        if (functionInputs.Length != 4)
                         {
                             break;
                         }
