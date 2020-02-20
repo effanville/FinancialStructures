@@ -9,29 +9,29 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Returns the latest valuation of the CashAccount.
         /// </summary>
-        public DayValue LatestValue()
+        public DailyValuation LatestValue()
         {
             DateTime latestDate = fValues.LatestDate();
             double latestValue = fValues.LatestValue();
 
-            return new DayValue(latestDate, latestValue);
+            return new DailyValuation(latestDate, latestValue);
         }
 
         /// <summary>
         /// Returns the first valuation of the CashAccount.
         /// </summary>
-        internal DayValue FirstValue()
+        internal DailyValuation FirstValue()
         {
             DateTime firstDate = fValues.FirstDate();
             double latestValue = fValues.FirstValue();
 
-            return new DayValue(firstDate, latestValue);
+            return new DailyValuation(firstDate, latestValue);
         }
 
         /// <summary>
         /// Returns the latest earlier valuation of the CashAccount to <paramref name="date"/>.
         /// </summary>
-        internal DayValue GetNearestEarlierValuation(DateTime date)
+        internal DailyValuation GetNearestEarlierValuation(DateTime date)
         {
             return fValues.NearestEarlierValue(date);
         }
@@ -39,7 +39,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Returns earliest valuation after the date specified. 
         /// </summary>
-        internal DayValue GetNearestLaterValuation(DateTime date)
+        internal DailyValuation GetNearestLaterValuation(DateTime date)
         {
             return fValues.NearestLaterValue(date);
         }

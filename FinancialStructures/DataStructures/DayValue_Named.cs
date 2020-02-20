@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace FinancialStructures.DataStructures
 {
-    public class DayValue_Named : DayValue
+    public class DayValue_Named : DailyValuation
     {
         public override int CompareTo(object obj)
         {
@@ -113,7 +113,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Constructor to create an instance from a base class instance.
         /// </summary>
-        public DayValue_Named(string name, string company, DayValue toAddOnto) 
+        public DayValue_Named(string name, string company, DailyValuation toAddOnto) 
             : this(name, company, toAddOnto.Day, toAddOnto.Value)
         {
         }

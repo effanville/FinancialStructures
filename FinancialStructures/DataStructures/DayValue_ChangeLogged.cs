@@ -3,7 +3,7 @@ using System;
 
 namespace FinancialStructures.GUIFinanceStructures
 {
-    public class DayValue_ChangeLogged : DayValue
+    public class DayValue_ChangeLogged : DailyValuation
     {
         public DayValue_ChangeLogged()
             : base(DateTime.Today, 0.0)

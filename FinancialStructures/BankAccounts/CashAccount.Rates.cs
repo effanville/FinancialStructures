@@ -11,52 +11,52 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Returns the latest valuation of the CashAccount.
         /// </summary>
-        public DayValue LatestValue(Currency currency = null)
+        public DailyValuation LatestValue(Currency currency = null)
         {
-            DayValue latestDate = fAmounts.LatestValuation();
+            DailyValuation latestDate = fAmounts.LatestValuation();
             if (latestDate == null)
             {
-                return new DayValue(DateTime.Today, 0.0); ;
+                return new DailyValuation(DateTime.Today, 0.0); ;
             }
 
             double currencyValue = currency == null ? 1.0 : currency.Value(latestDate.Day).Value;
             double latestValue = latestDate.Value * currencyValue;
 
-            return new DayValue(latestDate.Day, latestValue);
+            return new DailyValuation(latestDate.Day, latestValue);
         }
 
         /// <summary>
         /// Returns the interpolated value of the security on the date provided.
         /// </summary>
-        internal DayValue Value(DateTime date, Currency currency = null)
+        internal DailyValuation Value(DateTime date, Currency currency = null)
         {
-            DayValue perSharePrice = fAmounts.ValueZeroBefore(date);
+            DailyValuation perSharePrice = fAmounts.ValueZeroBefore(date);
             double currencyValue = currency == null ? 1.0 : currency.Value(date).Value;
             double value = perSharePrice.Value * currencyValue;
-            return new DayValue(date, value);
+            return new DailyValuation(date, value);
         }
 
         /// <summary>
         /// Returns the first valuation of the CashAccount.
         /// </summary>
-        internal DayValue FirstValue(Currency currency = null)
+        internal DailyValuation FirstValue(Currency currency = null)
         {
-            DayValue firstDate = fAmounts.FirstValuation();
+            DailyValuation firstDate = fAmounts.FirstValuation();
             if (firstDate == null)
             {
-                return new DayValue(DateTime.Today, 0.0); ;
+                return new DailyValuation(DateTime.Today, 0.0); ;
             }
 
             double currencyValue = currency == null ? 1.0 : currency.Value(firstDate.Day).Value;
             double latestValue = firstDate.Value * currencyValue;
 
-            return new DayValue(firstDate.Day, latestValue);
+            return new DailyValuation(firstDate.Day, latestValue);
         }
 
         /// <summary>
         /// Returns the latest earlier valuation of the CashAccount to <paramref name="date"/>.
         /// </summary>
-        internal DayValue NearestEarlierValuation(DateTime date, Currency currency = null)
+        internal DailyValuation NearestEarlierValuation(DateTime date, Currency currency = null)
         {
             var value = fAmounts.NearestEarlierValue(date);
             double currencyValue = currency == null ? 1.0 : currency.Value(value.Day).Value;
@@ -67,7 +67,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Returns earliest valuation after the date specified. 
         /// </summary>
-        internal DayValue NearestLaterValuation(DateTime date, Currency currency = null)
+        internal DailyValuation NearestLaterValuation(DateTime date, Currency currency = null)
         {
             var value = fAmounts.NearestLaterValue(date);
             double currencyValue = currency == null ? 1.0 : currency.Value(value.Day).Value;

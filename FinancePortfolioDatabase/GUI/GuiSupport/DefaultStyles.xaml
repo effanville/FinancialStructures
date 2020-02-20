@@ -18,7 +18,7 @@
         <Setter Property="Height" Value="30"/>
         <Setter Property="Width" Value="90"/>
     </Style>
-    <DataTemplate x:Key="DVView" DataType="{x:Type fs:DayValue}">
+    <DataTemplate x:Key="DVView" DataType="{x:Type fs:DailyValuation}">
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="{Binding Path=Day}" />
             <TextBlock Text="{Binding Path=Value}" />

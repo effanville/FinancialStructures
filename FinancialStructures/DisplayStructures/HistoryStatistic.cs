@@ -54,11 +54,11 @@ namespace FinancialStructures.DisplayStructures
 
             return outputCSVStyle;
         }
-        public DayValue TotalValue { get; set; }
+        public DailyValuation TotalValue { get; set; }
 
-        public DayValue BankAccValue { get; set; }
+        public DailyValuation BankAccValue { get; set; }
 
-        public DayValue SecurityValue { get; set; }
+        public DailyValuation SecurityValue { get; set; }
 
         public List<DayValue_Named> SecurityValues { get; set; } = new List<DayValue_Named>();
 
@@ -112,7 +112,7 @@ namespace FinancialStructures.DisplayStructures
         public HistoryStatistic()
         { }
 
-        public HistoryStatistic(DayValue value, List<DayValue_Named> securityValues, List<DayValue_Named> bankValues)
+        public HistoryStatistic(DailyValuation value, List<DayValue_Named> securityValues, List<DayValue_Named> bankValues)
         {
             TotalValue = value;
             SecurityValues = securityValues;
@@ -121,9 +121,9 @@ namespace FinancialStructures.DisplayStructures
 
         public HistoryStatistic(Portfolio portfolio, DateTime date)
         {
-            TotalValue = new DayValue(date, MathSupport.Truncate(portfolio.Value(date)));
-            BankAccValue = new DayValue(date, MathSupport.Truncate(portfolio.AllBankAccountsValue(date)));
-            SecurityValue = new DayValue(date, MathSupport.Truncate(portfolio.AllSecuritiesValue(date)));
+            TotalValue = new DailyValuation(date, MathSupport.Truncate(portfolio.Value(date)));
+            BankAccValue = new DailyValuation(date, MathSupport.Truncate(portfolio.AllBankAccountsValue(date)));
+            SecurityValue = new DailyValuation(date, MathSupport.Truncate(portfolio.AllSecuritiesValue(date)));
             var companyNames = portfolio.GetSecuritiesCompanyNames();
             foreach (var companyName in companyNames)
             {

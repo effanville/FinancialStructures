@@ -41,7 +41,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Returns internal rate of return of the values in the TimeList
         /// </summary>
-        internal double IRR(DayValue latestValue)
+        internal double IRR(DailyValuation latestValue)
         {
             // if have only one investment easy to return the CAR.
             if (Count() == 1)
@@ -55,7 +55,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Returns the internal rate of return between <param name="latestValue"/> and <param name="startValue"/>
         /// </summary>
-        internal double IRRTime(DayValue startValue, DayValue latestValue)
+        internal double IRRTime(DailyValuation startValue, DailyValuation latestValue)
         {
             if (startValue == null || latestValue == null)
             {

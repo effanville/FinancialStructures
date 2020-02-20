@@ -9,11 +9,11 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Returns linearly interpolated value of the List on the date provided.
         /// </summary>
-        internal DayValue Value(DateTime date)
+        internal DailyValuation Value(DateTime date)
         {
             if (fValues == null)
             {
-                return new DayValue(DateTime.Today, 1.0);
+                return new DailyValuation(DateTime.Today, 1.0);
             }
             if (Count() == 1)
             {
@@ -32,22 +32,22 @@ namespace FinancialStructures.DataStructures
             var later = NearestLaterValue(date);
 
             double value = earlier.Value + (later.Value - earlier.Value) / (later.Day - earlier.Day).Days * (date - earlier.Day).Days;
-            return new DayValue(date, value);
+            return new DailyValuation(date, value);
         }
 
         /// <summary>
         /// Returns linearly interpolated value of the List on the date provided.
         /// </summary>
-        internal DayValue ValueZeroBefore(DateTime date)
+        internal DailyValuation ValueZeroBefore(DateTime date)
         {
             if (fValues == null)
             {
-                return new DayValue(DateTime.Today, 1.0);
+                return new DailyValuation(DateTime.Today, 1.0);
             }
 
             if (date < FirstDate())
             {
-                return new DayValue(date, 0.0);
+                return new DailyValuation(date, 0.0);
             }
             if (date >= LatestDate())
             {
@@ -62,19 +62,19 @@ namespace FinancialStructures.DataStructures
             var later = NearestLaterValue(date);
 
             double value = earlier.Value + (later.Value - earlier.Value) / (later.Day - earlier.Day).Days * (date - earlier.Day).Days;
-            return new DayValue(date, value);
+            return new DailyValuation(date, value);
         }
 
         /// <summary>
         /// Returns the DailyValuation on or before the date specified.
         /// </summary>
-        internal DayValue NearestEarlierValue(DateTime date)
+        internal DailyValuation NearestEarlierValue(DateTime date)
         {
             if (fValues != null && fValues.Any())
             {
                 if (date < FirstDate())
                 {
-                    return new DayValue(date, 0.0);
+                    return new DailyValuation(date, 0.0);
                 }
 
                 if (Count() == 1)
@@ -102,21 +102,21 @@ namespace FinancialStructures.DataStructures
                 }
             }
 
-            return new DayValue(date, 0.0);
+            return new DailyValuation(date, 0.0);
         }
 
         /// <summary>
         /// Returns DailyValuation closest to the date but earlier to it. 
         /// If a strictly earlier one cannot be found then return null.
         /// </summary>
-        internal DayValue RecentPreviousValue(DateTime date)
+        internal DailyValuation RecentPreviousValue(DateTime date)
         {
             if (fValues != null && fValues.Any())
             {
                 // Some cases can return early.
                 if (Count() == 1 || date <= FirstDate())
                 {
-                    return new DayValue(date, 0.0);
+                    return new DailyValuation(date, 0.0);
                 }
 
                 if (date > LatestDate())
@@ -139,13 +139,13 @@ namespace FinancialStructures.DataStructures
                 }
             }
 
-            return new DayValue(date, 0.0);
+            return new DailyValuation(date, 0.0);
         }
 
         /// <summary>
         /// returns nearest valuation in the timelist to the date provided.
         /// </summary>
-        internal bool TryGetNearestEarlierValue(DateTime date, out DayValue value)
+        internal bool TryGetNearestEarlierValue(DateTime date, out DailyValuation value)
         {
             value = NearestEarlierValue(date);
             if (value == null)
@@ -159,7 +159,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// returns nearest valuation in the timelist to the date provided.
         /// </summary>
-        internal DayValue NearestLaterValue(DateTime date)
+        internal DailyValuation NearestLaterValue(DateTime date)
         {
             if (fValues != null && fValues.Any())
             {
@@ -195,7 +195,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// returns nearest valuation in the timelist to the date provided.
         /// </summary>
-        internal DayValue NearestValue(DateTime date)
+        internal DailyValuation NearestValue(DateTime date)
         {
             if (fValues != null && fValues.Any())
             {
@@ -262,7 +262,7 @@ namespace FinancialStructures.DataStructures
         /// Returns first pair of date and value, or null if this doesn't exist.
         /// </summary>
         /// <returns></returns>
-        internal DayValue FirstValuation()
+        internal DailyValuation FirstValuation()
         {
             if (fValues != null && fValues.Any())
             {
@@ -300,7 +300,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Returns a pair of date and value of the most recently held data, or null if no data held.
         /// </summary>
-        internal DayValue LatestValuation()
+        internal DailyValuation LatestValuation()
         {
             if (fValues != null && fValues.Any())
             {
@@ -313,11 +313,11 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// returns all valuations on or between the two dates specified, or empty list if none held.
         /// </summary>
-        internal List<DayValue> GetValuesBetween(DateTime earlierTime, DateTime laterTime)
+        internal List<DailyValuation> GetValuesBetween(DateTime earlierTime, DateTime laterTime)
         {
-            var valuesBetween = new List<DayValue>();
+            var valuesBetween = new List<DailyValuation>();
 
-            foreach (DayValue value in fValues)
+            foreach (DailyValuation value in fValues)
             {
                 if (value.Day >= earlierTime && value.Day <= laterTime)
                 {

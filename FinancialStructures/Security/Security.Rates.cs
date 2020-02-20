@@ -21,101 +21,101 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// The date and latest value of the security
         /// </summary>
-        internal DayValue LatestValue(Currency currency = null)
+        internal DailyValuation LatestValue(Currency currency = null)
         {
-            DayValue latestDate = fUnitPrice.LatestValuation();
+            DailyValuation latestDate = fUnitPrice.LatestValuation();
             if (latestDate == null)
             {
-                return new DayValue(DateTime.Today, 0.0); ;
+                return new DailyValuation(DateTime.Today, 0.0); ;
             }
 
             double currencyValue = currency == null ? 1.0 : currency.Value(latestDate.Day).Value;
             double latestValue = latestDate.Value * fShares.LatestValue() * currencyValue;
 
-            return new DayValue(latestDate.Day, latestValue);
+            return new DailyValuation(latestDate.Day, latestValue);
         }
 
         /// <summary>
         /// The date and first value of the security
         /// </summary>
-        internal DayValue FirstValue(Currency currency = null)
+        internal DailyValuation FirstValue(Currency currency = null)
         {
-            DayValue firstDate = fUnitPrice.FirstValuation();
+            DailyValuation firstDate = fUnitPrice.FirstValuation();
             if (firstDate == null)
             {
-                return new DayValue(DateTime.MinValue, 0.0); ;
+                return new DailyValuation(DateTime.MinValue, 0.0); ;
             }
             double currencyValue = currency == null ? 1.0 : currency.Value(firstDate.Day).Value;
             double latestValue = firstDate.Value * fShares.FirstValue() * currencyValue;
 
-            return new DayValue(firstDate.Day, latestValue);
+            return new DailyValuation(firstDate.Day, latestValue);
         }
 
         /// <summary>
         /// Returns the interpolated value of the security on the date provided.
         /// </summary>
-        internal DayValue Value(DateTime date, Currency currency = null)
+        internal DailyValuation Value(DateTime date, Currency currency = null)
         {
-            DayValue perSharePrice = fUnitPrice.Value(date);
+            DailyValuation perSharePrice = fUnitPrice.Value(date);
             double currencyValue = currency == null ? 1.0 : currency.Value(date).Value;
             double value = perSharePrice.Value * fShares.NearestEarlierValue(date).Value * currencyValue;
-            return new DayValue(date, value);
+            return new DailyValuation(date, value);
         }
 
         /// <summary>
         /// Returns most recent valuation on or before the date specified. 
         /// </summary>
-        internal DayValue LastEarlierValuation(DateTime date, Currency currency = null)
+        internal DailyValuation LastEarlierValuation(DateTime date, Currency currency = null)
         {
-            DayValue val = fUnitPrice.RecentPreviousValue(date);
+            DailyValuation val = fUnitPrice.RecentPreviousValue(date);
             if (val == null)
             {
-                return new DayValue(date, 0.0);
+                return new DailyValuation(date, 0.0);
             }
 
             double currencyValue = currency == null ? 1.0 : currency.Value(val.Day).Value;
             double latestValue = fShares.RecentPreviousValue(date).Value * val.Value * currencyValue;
-            return new DayValue(date, latestValue);
+            return new DailyValuation(date, latestValue);
         }
 
         /// <summary>
         /// Returns most recent valuation on or before the date specified. 
         /// </summary>
-        internal DayValue NearestEarlierValuation(DateTime date, Currency currency = null)
+        internal DailyValuation NearestEarlierValuation(DateTime date, Currency currency = null)
         {
-            DayValue val = fUnitPrice.NearestEarlierValue(date);
+            DailyValuation val = fUnitPrice.NearestEarlierValue(date);
             if (val == null)
             {
-                return new DayValue(date, 0.0);
+                return new DailyValuation(date, 0.0);
             }
 
             double currencyValue = currency == null ? 1.0 : currency.Value(val.Day).Value;
             double latestValue = fShares.NearestEarlierValue(date).Value * val.Value * currencyValue;
-            return new DayValue(date, latestValue);
+            return new DailyValuation(date, latestValue);
         }
 
         /// <summary>
         /// Returns earliest valuation after the date specified. 
         /// </summary>
-        private DayValue NearestLaterValuation(DateTime date, Currency currency = null)
+        private DailyValuation NearestLaterValuation(DateTime date, Currency currency = null)
         {
-            DayValue val = fUnitPrice.NearestLaterValue(date);
+            DailyValuation val = fUnitPrice.NearestLaterValue(date);
             if (val == null)
             {
-                return new DayValue(date, 0.0);
+                return new DailyValuation(date, 0.0);
             }
             double currencyValue = currency == null ? 1.0 : currency.Value(val.Day).Value;
             double latestValue = fShares.NearestLaterValue(date).Value * val.Value * currencyValue;
 
-            return new DayValue(date, latestValue);
+            return new DailyValuation(date, latestValue);
         }
 
         /// <summary>
         /// Returns earliest valuation after the date specified. 
         /// </summary>
-        internal List<DayValue> InvestmentsBetween(DateTime earlierDate, DateTime laterDate, Currency currency = null)
+        internal List<DailyValuation> InvestmentsBetween(DateTime earlierDate, DateTime laterDate, Currency currency = null)
         {
-            List<DayValue> values = fInvestments.GetValuesBetween(earlierDate, laterDate);
+            List<DailyValuation> values = fInvestments.GetValuesBetween(earlierDate, laterDate);
             foreach (var value in values)
             {
                 double currencyValue = currency == null ? 1.0 : currency.Value(value.Day).Value;
@@ -130,7 +130,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         internal List<DayValue_Named> AllInvestmentsNamed(Currency currency = null)
         {
-            List<DayValue> values = fInvestments.GetValuesBetween(fInvestments.FirstDate(), fInvestments.LatestDate());
+            List<DailyValuation> values = fInvestments.GetValuesBetween(fInvestments.FirstDate(), fInvestments.LatestDate());
             List<DayValue_Named> namedValues = new List<DayValue_Named>();
             foreach (var value in values)
             {

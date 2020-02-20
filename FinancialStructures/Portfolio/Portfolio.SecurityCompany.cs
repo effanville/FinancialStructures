@@ -187,7 +187,7 @@ namespace FinancialStructures.Database
             }
             double earlierValue = 0;
             double laterValue = 0;
-            var Investments = new List<DayValue>();
+            var Investments = new List<DailyValuation>();
 
             foreach (var security in securities)
             {
@@ -201,7 +201,7 @@ namespace FinancialStructures.Database
                 }
             }
 
-            return FinancialFunctions.IRRTime(new DayValue(earlierTime, earlierValue), Investments, new DayValue(laterTime, laterValue));
+            return FinancialFunctions.IRRTime(new DailyValuation(earlierTime, earlierValue), Investments, new DailyValuation(laterTime, laterValue));
         }
     }
 }

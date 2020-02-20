@@ -49,7 +49,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Trys to get latest data earlier than date requested. Only returns true if all data present.
         /// </summary>
-        public bool TryGetEarlierData(DateTime date, out DayValue Value)
+        public bool TryGetEarlierData(DateTime date, out DailyValuation Value)
         {
             return fAmounts.TryGetNearestEarlierValue(date, out Value);
         }

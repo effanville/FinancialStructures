@@ -187,10 +187,10 @@ namespace FinancialStructures.FinanceStructures
         internal void UpdateSecurityData(double value, ErrorReports reports)
         {
             // best approximation for number of units is last known number of units.
-            TryGetEarlierData(DateTime.Today, out DayValue _, out DayValue units, out DayValue _);
+            TryGetEarlierData(DateTime.Today, out DailyValuation _, out DailyValuation units, out DailyValuation _);
             if (units == null)
             {
-                units = new DayValue(DateTime.Today, 0);
+                units = new DailyValuation(DateTime.Today, 0);
             }
 
             TryAddData(reports, DateTime.Today, value, units.Value);
@@ -304,7 +304,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Trys to get latest data earlier than date requested. Only returns true if all data present.
         /// </summary>
-        internal bool TryGetEarlierData(DateTime date, out DayValue price, out DayValue units, out DayValue investment)
+        internal bool TryGetEarlierData(DateTime date, out DailyValuation price, out DailyValuation units, out DailyValuation investment)
         {
             return fUnitPrice.TryGetNearestEarlierValue(date, out price) & fShares.TryGetNearestEarlierValue(date, out units) & fInvestments.TryGetNearestEarlierValue(date, out investment);
         }
@@ -333,8 +333,8 @@ namespace FinancialStructures.FinanceStructures
                 var investmentValue = fInvestments[index];
                 if (investmentValue.Value != 0)
                 {
-                    DayValue sharesCurrentValue = fShares.NearestEarlierValue(investmentValue.Day);
-                    DayValue sharesPreviousValue = fShares.RecentPreviousValue(investmentValue.Day) ?? new DayValue(DateTime.Today, 0);
+                    DailyValuation sharesCurrentValue = fShares.NearestEarlierValue(investmentValue.Day);
+                    DailyValuation sharesPreviousValue = fShares.RecentPreviousValue(investmentValue.Day) ?? new DailyValuation(DateTime.Today, 0);
                     if (sharesCurrentValue != null)
                     {
                         fInvestments.TryEditData(investmentValue.Day, (sharesCurrentValue.Value - sharesPreviousValue.Value) * fUnitPrice.NearestEarlierValue(investmentValue.Day).Value, reports);
