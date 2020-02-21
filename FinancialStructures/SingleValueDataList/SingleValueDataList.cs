@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.DataStructures;
+using System;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -8,8 +9,26 @@ namespace FinancialStructures.FinanceStructures
     /// <example>
     /// e.g. FTSE100 or MSCI-Asia
     /// </example>
-    public partial class SingleValueDataList
+    public partial class SingleValueDataList : IComparable
     {
+        /// <summary>
+        /// Method of comparison
+        /// </summary>
+        public int CompareTo(object obj)
+        {
+            if (obj is CashAccount value)
+            {
+                if (fCompany == value.Company)
+                {
+                    return fName.CompareTo(value.Name);
+                }
+
+                return fCompany.CompareTo(value.Company);
+            }
+
+            return 0;
+        }
+
         /// <summary>
         /// The name of the sector. 
         /// </summary>
@@ -21,10 +40,24 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// This should only be used for serialisation.
         /// </summary>
-        public string Name
+        public virtual string Name
         {
             get => fName;
             set => fName = value;
+        }
+
+        /// <summary>
+        /// The company name associated to the account.
+        /// </summary>
+        private string fCompany;
+
+        /// <summary>
+        /// This should only be used for serialisation.
+        /// </summary>
+        public string Company
+        {
+            get => fCompany; 
+            set => fCompany = value; 
         }
 
         private string fUrl;
@@ -38,7 +71,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// The values of the sector.
         /// </summary>
-        private TimeList fValues;
+        private TimeList fValues = new TimeList();
 
         /// <summary>
         /// This should only be used for serialisation.
@@ -91,7 +124,7 @@ namespace FinancialStructures.FinanceStructures
 
         public bool Any()
         {
-            return fValues.Any();
+            return fValues != null && fValues.Any();
         }
     }
 }

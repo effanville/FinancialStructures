@@ -200,17 +200,17 @@ namespace FinancialStructures.Database
 
         public static bool TryAddDataToBankAccount(this Portfolio portfolio, NameData name, DayValue_ChangeLogged data, ErrorReports reports)
         {
-            return portfolio.TryAddDataToBankAccount(name.Name, name.Company, data.Day, data.Value);
+            return portfolio.TryAddDataToBankAccount(name.Name, name.Company, data.Day, data.Value, reports);
         }
 
-        public static bool TryAddDataToBankAccount(this Portfolio portfolio, string name, string company, DateTime date, double value)
+        public static bool TryAddDataToBankAccount(this Portfolio portfolio, string name, string company, DateTime date, double value, ErrorReports reports)
         {
             for (int accountIndex = 0; accountIndex < portfolio.BankAccounts.Count; accountIndex++)
             {
                 if (portfolio.BankAccounts[accountIndex].GetCompany() == company && portfolio.BankAccounts[accountIndex].GetName() == name)
                 {
                     // now edit data
-                    return portfolio.BankAccounts[accountIndex].TryAddValue(date, value);
+                    return portfolio.BankAccounts[accountIndex].TryAddData(date, value, reports);
                 }
             }
 
@@ -229,7 +229,7 @@ namespace FinancialStructures.Database
                 if (portfolio.BankAccounts[AccountIndex].GetCompany() == company && portfolio.BankAccounts[AccountIndex].GetName() == name)
                 {
                     // now edit data
-                    return portfolio.BankAccounts[AccountIndex].TryEditValue(oldDate, date, value, reports);
+                    return portfolio.BankAccounts[AccountIndex].TryEditData(oldDate, date, value, reports);
                 }
             }
 
@@ -244,7 +244,7 @@ namespace FinancialStructures.Database
                 if (portfolio.BankAccounts[AccountIndex].GetCompany() == company && portfolio.BankAccounts[AccountIndex].GetName() == name)
                 {
                     // now edit data
-                    return portfolio.BankAccounts[AccountIndex].EditNameCompany(newName, newCompany, currency, newSectors);
+                    return portfolio.BankAccounts[AccountIndex].EditNameData(newCompany, newName, string.Empty, currency, newSectors);
                 }
             }
 

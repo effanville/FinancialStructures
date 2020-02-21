@@ -43,7 +43,7 @@ namespace FinancialStructures.Database
         public async static Task DownloadBankAccount(Portfolio portfolio, NameData name, Action<ErrorReports> updateReports, ErrorReports reports)
         {
             var acc = portfolio.GetBankAccountFromName(name.Name, name.Company);
-            await DownloadLatestValue(acc.GetCompany(), acc.GetName(), acc.GetUrl(), value => acc.TryAddValue(DateTime.Today, value), updateReports, reports).ConfigureAwait(false);
+            await DownloadLatestValue(acc.GetCompany(), acc.GetName(), acc.GetUrl(), value => acc.TryAddData(DateTime.Today, value, reports), updateReports, reports).ConfigureAwait(false);
         }
 
         public async static Task DownloadSector(List<Sector> sectors, NameData name, Action<ErrorReports> updateReports, ErrorReports reports)
@@ -103,7 +103,7 @@ namespace FinancialStructures.Database
             }
             foreach (var acc in portfo.GetBankAccounts())
             {
-                await DownloadLatestValue(acc.GetCompany(), acc.GetName(), acc.GetUrl(), value => acc.TryAddValue(DateTime.Today, value), updateReports, reports).ConfigureAwait(false);
+                await DownloadLatestValue(acc.GetCompany(), acc.GetName(), acc.GetUrl(), value => acc.TryAddData(DateTime.Today, value, reports), updateReports, reports).ConfigureAwait(false);
             }
             foreach (var currency in portfo.GetCurrencies())
             {

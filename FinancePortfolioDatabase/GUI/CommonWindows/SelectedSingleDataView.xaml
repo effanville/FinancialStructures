@@ -52,10 +52,10 @@
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Date" 
                                         MinWidth="50"
-                                        Binding="{Binding Path=Date,StringFormat=\{0:dd.MM.yyyy\}, UpdateSourceTrigger=LostFocus}" />
+                                        Binding="{Binding Path=Day,StringFormat=\{0:dd.MM.yyyy\}, UpdateSourceTrigger=LostFocus}" />
                     <DataGridTextColumn Header="Value"
                                         MinWidth="50"
-                                        Binding="{Binding Path=Amount, UpdateSourceTrigger=LostFocus}"/>
+                                        Binding="{Binding Path=Value, UpdateSourceTrigger=LostFocus}"/>
                 </DataGrid.Columns>
             </DataGrid>
         </Grid>

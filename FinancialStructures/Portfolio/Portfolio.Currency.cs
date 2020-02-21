@@ -136,11 +136,11 @@ namespace FinancialStructures.Database
 
         public static bool TryDeleteCurrencyData(this Portfolio portfolio, string name, DateTime date, double value, ErrorReports reports)
         {
-            foreach (var sector in portfolio.Currencies)
+            foreach (var currency in portfolio.Currencies)
             {
-                if (name == sector.GetName())
+                if (name == currency.GetName())
                 {
-                    return sector.TryDeleteData(date, value, reports);
+                    return currency.TryDeleteData(date, reports);
                 }
             }
 
@@ -158,7 +158,7 @@ namespace FinancialStructures.Database
             {
                 if (sector.GetName() == oldName)
                 {
-                    sector.TryEditNameUrl(newName, url);
+                    sector.EditNameData("", newName, url);
                     reports.AddReport($"Renamed sector {oldName} with new name {newName}.", Location.EditingData);
                     return true;
                 }

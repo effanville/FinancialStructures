@@ -10,9 +10,32 @@ namespace FinancialStructures.FinanceStructures
     /// </summary>
     public partial class SingleValueDataList
     {
+        /// <summary>
+        /// Compares another security and determines if has same name and company.
+        /// </summary>
+        internal bool IsEqualTo(SingleValueDataList otherAccount)
+        {
+            if (otherAccount.GetName() != fName)
+            {
+                return false;
+            }
+
+            if (otherAccount.GetCompany() != fCompany)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public int Count()
         {
             return fValues.Count();
+        }
+
+        public string GetCompany()
+        {
+            return fCompany;
         }
 
         public string GetName()
@@ -41,8 +64,12 @@ namespace FinancialStructures.FinanceStructures
             return output;
         }
 
-        public bool TryEditNameUrl(string name, string url)
+        public virtual bool EditNameData(string company, string name, string url)
         {
+            if (company != fCompany)
+            {
+                fCompany = company;
+            }
             if (name != fName)
             {
                 fName = name;
@@ -55,14 +82,12 @@ namespace FinancialStructures.FinanceStructures
             return true;
         }
 
-        public bool DoesDataExist(DateTime date, out int index)
+        /// <summary>
+        /// Adds <param name="value"/> to amounts on <param name="date"/> if data doesnt exist.
+        /// </summary>
+        internal bool TryAddData(DateTime date, double value, ErrorReports reports)
         {
-            return fValues.ValueExists(date, out index);
-        }
-
-        public bool TryAddData(DateTime date, double value, ErrorReports reports)
-        {
-            if (DoesDataExist(date, out int _))
+            if (fValues.ValueExists(date, out _))
             {
                 reports.AddError("Data already exists.", Location.AddingData);
                 return false;
@@ -71,23 +96,20 @@ namespace FinancialStructures.FinanceStructures
             return fValues.TryAddValue(date, value);
         }
 
+        /// <summary>
+        /// Edits value if value exists. Does nothing if it doesn't exist.
+        /// </summary>
         public bool TryEditData(DateTime oldDate, DateTime date, double value, ErrorReports reports)
         {
-            if (DoesDataExist(oldDate, out int i))
-            {
-                return fValues.TryEditData(oldDate, date, value, reports);
-            }
-
-            return false;
+            return fValues.TryEditData(oldDate, date, value, reports);
         }
 
-        public bool TryDeleteData(DateTime date, double value, ErrorReports reports)
+        /// <summary>
+        /// Removes data on <paramref name="date"/> if it exists.
+        /// </summary>
+        public bool TryDeleteData(DateTime date, ErrorReports reports)
         {
-            if (value > 0)
-            {
-                return fValues.TryDeleteValue(date, reports);
-            }
-            return false;
+            return fValues.TryDeleteValue(date, reports);
         }
     }
 }

@@ -2,12 +2,13 @@
 
 namespace FinancialStructures.FinanceStructures
 {
-    internal class Currency : SingleValueDataList
+    public class Currency : SingleValueDataList
     {
         public new Currency Copy()
         {
             return new Currency(Name, Values);
         }
+
         internal Currency(string name, string url)
             : base(name, url)
         { }

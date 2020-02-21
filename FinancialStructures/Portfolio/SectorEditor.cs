@@ -141,7 +141,7 @@ namespace SectorHelperFunctions
             {
                 if (name == sector.GetName())
                 {
-                    return sector.TryDeleteData(date, value, reports);
+                    return sector.TryDeleteData(date, reports);
                 }
             }
 
@@ -159,7 +159,7 @@ namespace SectorHelperFunctions
             {
                 if (sector.GetName() == oldName)
                 {
-                    sector.TryEditNameUrl(newName, url);
+                    sector.EditNameData(string.Empty, newName, url);
                     reports.AddReport($"Renamed sector {oldName} with new name {newName}.", Location.EditingData);
                     return true;
                 }

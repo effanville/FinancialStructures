@@ -9,7 +9,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Returns the latest valuation of the CashAccount.
         /// </summary>
-        internal DailyValuation LatestValue()
+        internal virtual DailyValuation LatestValue()
         {
             DateTime latestDate = fValues.LatestDate();
             double latestValue = fValues.LatestValue();
@@ -22,10 +22,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         internal DailyValuation FirstValue()
         {
-            DateTime firstDate = fValues.FirstDate();
-            double latestValue = fValues.FirstValue();
-
-            return new DailyValuation(firstDate, latestValue);
+            return fValues.FirstValuation();
         }
 
         /// <summary>
@@ -43,6 +40,22 @@ namespace FinancialStructures.FinanceStructures
         public double CAR(DateTime earlierTime, DateTime laterTime)
         {
             return FinancialFunctions.CAR(Value(earlierTime), Value(laterTime));
+        }
+
+        /// <summary>
+        /// Returns the latest earlier valuation of the OldCashAccount to <paramref name="date"/>.
+        /// </summary>
+        internal virtual DailyValuation NearestEarlierValuation(DateTime date)
+        {
+            return fValues.NearestEarlierValue(date);
+        }
+
+        /// <summary>
+        /// Returns earliest valuation after the date specified. 
+        /// </summary>
+        internal DailyValuation NearestLaterValuation(DateTime date)
+        {
+            return fValues.NearestLaterValue(date);
         }
     }
 }
