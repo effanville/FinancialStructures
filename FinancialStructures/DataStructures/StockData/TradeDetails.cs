@@ -27,5 +27,18 @@ namespace FinancialStructures.StockData
         {
             fTradeType = type;
         }
+
+        public TradeDetails(TradeType type, string ticker, string company, string name, DateTime day, double value, double numShares, double price, double costs)
+        {
+            fTradeType = type;
+            fTicker = ticker;
+            fCompany = company;
+            fName = name;
+            fDay = day;
+            fTransactionValue = value;
+            fNumberSharesTraded = numShares;
+            fPricePerShare = price;
+            fTradeCosts = costs;
+        }
     }
 }

@@ -45,15 +45,14 @@ namespace FinanceWindowsViewModels
             if (Portfolio.Funds.Count != FundNames.Count)
             {
                 bool edited = false;
-                foreach (var name in FundNames)
+                if (selectedName.NewValue)
                 {
-                    if (name.NewValue && (!string.IsNullOrEmpty(name.Name) || !string.IsNullOrEmpty(name.Company)))
-                    {
-                        edited = true;
-                        UpdateData(alldata => alldata.MyFunds.TryAddSecurity(reports, name.Company, name.Name, name.Currency, name.Url, name.Sectors));
-                        name.NewValue = false;
-                    }
+                    edited = true;
+                    UpdateData(alldata => alldata.MyFunds.TryAddSecurity(reports, selectedName.Company, selectedName.Name, selectedName.Currency, selectedName.Url, selectedName.Sectors));
+                    selectedName.NewValue = false;
                 }
+                
+
                 if (!edited)
                 {
                     reports.AddError("No Name provided to create a sector.", Location.AddingData);

@@ -46,7 +46,7 @@ namespace FinancialStructures.FinanceStructures
         /// Default constructor where no data is known.
         /// </summary>
         internal CashAccount(string name, string company, string currency)
-            : base(name, company)
+            : base(company, name, string.Empty)
         {
             fCurrency = currency;
         }
@@ -55,7 +55,7 @@ namespace FinancialStructures.FinanceStructures
         /// Constructor used when data is known.
         /// </summary>
         private CashAccount(string name, string company, string currency, TimeList amounts)
-            : base(name, company, amounts)
+            : base(company, name, string.Empty, amounts)
         {
             fCurrency = currency;
         }

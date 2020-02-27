@@ -3,6 +3,7 @@ using FinancialStructures.ReportingStructures;
 using GUISupport;
 using SavingClasses;
 using System;
+using System.Collections.ObjectModel;
 
 namespace FinanceWindowsViewModels
 {
@@ -10,15 +11,23 @@ namespace FinanceWindowsViewModels
     {
         internal AllData allData = new AllData();
 
+        public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
+
         public MainWindowViewModel()
         {
             OptionsToolbarCommands = new OptionsToolbarViewModel(allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports);
             DataView = new BasicDataViewModel(allData.MyFunds, allData.myBenchMarks);
             SecurityEditViewModel = new SecurityEditWindowViewModel(allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports);
-            BankAccEditViewModel = new SingleValueEditWindowViewModel(allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports, allData.bankAccEditMethods);
-            SectorEditViewModel = new SingleValueEditWindowViewModel(allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports, allData.sectorEditMethods);
-            CurrencyEditViewModel = new SingleValueEditWindowViewModel(allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports, allData.currencyEditMethods);
+            BankAccEditViewModel = new SingleValueEditWindowViewModel("Bank Account Edit", allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports, allData.bankAccEditMethods);
+            SectorEditViewModel = new SingleValueEditWindowViewModel("Sector Edit", allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports, allData.sectorEditMethods);
+            CurrencyEditViewModel = new SingleValueEditWindowViewModel("Currency Edit", allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports, allData.currencyEditMethods);
             StatsEditViewModel = new StatsCreatorWindowViewModel(allData.MyFunds, allData.myBenchMarks, UpdateReports);
+            Tabs.Add(DataView);
+            Tabs.Add(SecurityEditViewModel);
+            Tabs.Add(BankAccEditViewModel);
+            Tabs.Add(SectorEditViewModel);
+            Tabs.Add(CurrencyEditViewModel);
+            Tabs.Add(StatsEditViewModel);
             ReportsViewModel = new ReportingWindowViewModel();
 
             AllData.portfolioChanged += AllData_portfolioChanged;

@@ -94,14 +94,19 @@ namespace FinancialStructures.FinanceStructures
         public SingleValueDataList(string name)
         {
             fName = name;
-            fValues = new TimeList();
         }
 
         public SingleValueDataList(string name, string url)
         {
             fName = name;
             fUrl = url;
-            fValues = new TimeList();
+        }
+
+        public SingleValueDataList(string company, string name, string url)
+        {
+            fCompany = company;
+            fName = name;
+            fUrl = url;
         }
 
         protected SingleValueDataList(string name, TimeList values)
@@ -115,6 +120,14 @@ namespace FinancialStructures.FinanceStructures
             fName = name;
             fUrl = url;
             fValues = values;
+        }
+
+        public SingleValueDataList(string company, string name, string url, TimeList values)
+        {
+            fCompany = company;
+            fName = name;
+            fValues = values;
+            fUrl = url;
         }
 
         public SingleValueDataList Copy()

@@ -12,6 +12,8 @@ namespace FinanceWindowsViewModels
 {
     internal class SecurityEditWindowViewModel : PropertyChangedBase
     {
+        public string TitleText { get; set; } = "Security Edit";
+
         private Portfolio Portfolio;
         private List<Sector> Sectors;
 

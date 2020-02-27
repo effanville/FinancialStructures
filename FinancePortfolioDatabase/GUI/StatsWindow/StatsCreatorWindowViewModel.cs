@@ -15,6 +15,7 @@ namespace FinanceWindowsViewModels
 {
     internal class StatsCreatorWindowViewModel : PropertyChangedBase
     {
+        public string TitleText { get; set; } = "Stats Creator";
         private Portfolio fPortfolio;
         private List<Sector> Sectors;
 

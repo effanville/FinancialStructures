@@ -12,6 +12,13 @@ namespace FinanceCommonViewModels
 {
     internal class SingleValueEditWindowViewModel : PropertyChangedBase
     {
+        private string fTitleText;
+        public string TitleText 
+        {
+            get { return fTitleText; }
+            set {fTitleText = value; OnPropertyChanged(); }
+        }
+
         private Portfolio Portfolio;
         private List<Sector> Sectors;
         public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
@@ -43,8 +50,9 @@ namespace FinanceCommonViewModels
         Action<ErrorReports> UpdateReports;
         EditMethods EditMethods;
 
-        public SingleValueEditWindowViewModel(Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateDataCallback, Action<ErrorReports> updateReports, EditMethods editMethods)
+        public SingleValueEditWindowViewModel(string title, Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateDataCallback, Action<ErrorReports> updateReports, EditMethods editMethods)
         {
+            TitleText = title;
             UpdateDataCallback = updateDataCallback;
             UpdateReports = updateReports;
             EditMethods = editMethods;

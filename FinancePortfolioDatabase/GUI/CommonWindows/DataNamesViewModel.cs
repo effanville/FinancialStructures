@@ -67,14 +67,10 @@ namespace FinanceCommonViewModels
             if (((List<NameData>)editMethods.ExecuteFunction(FunctionType.NameUpdate, Portfolio, Sectors).Result).Count != DataNames.Count)
             {
                 bool edited = false;
-                foreach (var name in DataNames)
+                if (SelectedName.NewValue)
                 {
-                    if (name.NewValue && (!string.IsNullOrEmpty(name.Name) || !string.IsNullOrEmpty(name.Company)))
-                    {
-                        edited = true;
-                        UpdateDataCallback(alldata => editMethods.ExecuteFunction(FunctionType.Create, alldata.MyFunds, alldata.myBenchMarks, name, reports).Wait());
-                        name.NewValue = false;
-                    }
+                    UpdateDataCallback(alldata => editMethods.ExecuteFunction(FunctionType.Create, alldata.MyFunds, alldata.myBenchMarks, SelectedName, reports).Wait());
+                    SelectedName.NewValue = false;
                 }
                 if (!edited)
                 {

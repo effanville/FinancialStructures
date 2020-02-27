@@ -30,7 +30,16 @@
         
         <TabControl Grid.Row="0"
                     TabStripPlacement="Left"
-                    Margin="0">
+                    Margin="0"
+                    ItemsSource="{Binding Tabs}"
+                    >
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding TitleText}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
             <TabItem Header="Database Overview"
                      Style="{StaticResource ResourceKey=SideTab}">
                 <local:BasicDataView DataContext="{Binding DataView}"

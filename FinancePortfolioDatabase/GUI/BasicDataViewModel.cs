@@ -9,6 +9,7 @@ namespace FinanceWindowsViewModels
 {
     internal class BasicDataViewModel : PropertyChangedBase
     {
+        public string TitleText {get;set;} = "Database Overview"; 
         private Portfolio Portfolio;
         private List<Sector> Sectors;
 
