@@ -11,10 +11,11 @@
     
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
-
     </UserControl.Resources>
+    
     <Grid VerticalAlignment="Stretch"
           Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="150"></RowDefinition>
@@ -26,7 +27,8 @@
         <TabControl Grid.Row="0"
                     TabStripPlacement="Left"
                     Margin="0"
-                    ItemsSource="{Binding Tabs}">
+                    ItemsSource="{Binding Tabs}"
+                    SelectedIndex="0">
             <TabControl.ItemContainerStyle>
                 <Style TargetType="TabItem">
                     <Setter Property="Height" Value="50"/>

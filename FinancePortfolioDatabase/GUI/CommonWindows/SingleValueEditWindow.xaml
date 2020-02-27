@@ -25,7 +25,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <TabControl x:Name="TabMain"  Grid.Row="0" Grid.Column="0" ItemsSource="{Binding Tabs}" Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
+        <TabControl x:Name="TabMain"  Grid.Row="0" Grid.Column="0" ItemsSource="{Binding Tabs}" Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}"
+                    SelectedIndex="0">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">

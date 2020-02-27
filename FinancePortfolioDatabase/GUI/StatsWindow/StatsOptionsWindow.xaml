@@ -12,7 +12,7 @@
         MinHeight="200"
         MinWidth="200">
     <StackPanel>
-        <TextBlock Margin="5" Text="Choose the options desired for the HTML export." TextWrapping="Wrap">
+        <TextBlock Margin="5" Text="Choose the options desired for the export." TextWrapping="Wrap">
             
         </TextBlock>
         <CheckBox Margin="5" 

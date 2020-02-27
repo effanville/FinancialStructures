@@ -77,11 +77,11 @@ namespace FinanceWindowsViewModels
 
         public ICommand ExportCommand { get; }
 
-        private void ExecuteExportHTMLCommand(Object obj)
+        private void ExecuteExportCommand(Object obj)
         {
             var reports = new ErrorReports();
-            SaveFileDialog saving = new SaveFileDialog() { DefaultExt = ".html", FileName = Portfolio.DatabaseName + "-HTMLStats.html", InitialDirectory = Portfolio.Directory };
-            saving.Filter = "Html file|*.html|All files|*.*";
+            SaveFileDialog saving = new SaveFileDialog() { DefaultExt = fFileExtension, FileName = Portfolio.DatabaseName + "-" + fExtension + "HTMLStats" + fFileExtension, InitialDirectory = Portfolio.Directory };
+            saving.Filter = fExtension + " file|*" + fFileExtension + "|All files|*.*";
             string path = null;
             if (saving.ShowDialog() == DialogResult.OK)
             {
@@ -103,12 +103,19 @@ namespace FinanceWindowsViewModels
                     }
                 }
                 var options = new UserOptions() { DisplayValueFunds = displayValueFunds, Spacing = spacing, Colours = colours, SecurityDataToExport = selected, BankAccDataToExport = BankSelected, ShowSecurites = securities, ShowBankAccounts = bankAccs, ShowSectors = sectors };
-                PortfolioStatsCreators.CreateHTMLPageCustom(Portfolio, Sectors, saving.FileName, options);
+                if (windowType == ExportType.HTML)
+                {
+                    PortfolioStatsCreators.CreateHTMLPageCustom(Portfolio, Sectors, saving.FileName, options);
+                }
+                else 
+                {
+                    CSVStatsCreator.CreateCSVPageCustom(Portfolio, Sectors, saving.FileName, options);
+                }
                 reports.AddReport("Created statistics page", Location.StatisticsPage);
             }
             else
             {
-                reports.AddError("Was not able to create HTML page in place specified.", Location.StatisticsPage);
+                reports.AddError("Was not able to create " + fExtension + " page in place specified.", Location.StatisticsPage);
             }
             saving.Dispose();
             if (reports.Any())
@@ -118,67 +125,27 @@ namespace FinanceWindowsViewModels
 
             CloseWindowAction(path);
         }
-
-        private void ExecuteExportCSVCommand(Object obj)
-        {
-            var reports = new ErrorReports();
-            SaveFileDialog saving = new SaveFileDialog() { DefaultExt = ".csv", FileName = Portfolio.DatabaseName + "-CSVStats.csv", InitialDirectory = Portfolio.Directory };
-            saving.Filter = "Csv file|*.csv|All files|*.*";
-            string path = null;
-            if (saving.ShowDialog() == DialogResult.OK)
-            {
-                path = saving.FileName;
-                var selected = new List<string>();
-                foreach (var column in ColumnNames)
-                {
-                    if (column.Visible || column.Name == "Name" || column.Name == "Company")
-                    {
-                        selected.Add(column.Name);
-                    }
-                }
-                var BankSelected = new List<string>();
-                foreach (var column in BankColumnNames)
-                {
-                    if (column.Visible || column.Name == "Name" || column.Name == "Company")
-                    {
-                        BankSelected.Add(column.Name);
-                    }
-                }
-                var options = new UserOptions() { DisplayValueFunds = displayValueFunds, Spacing = spacing, Colours = colours, SecurityDataToExport = selected, BankAccDataToExport = BankSelected };
-                CSVStatsCreator.CreateCSVPageCustom(Portfolio, Sectors, saving.FileName, options);
-                reports.AddReport("Created statistics page", Location.StatisticsPage);
-            }
-            else
-            {
-                reports.AddError("Was not able to create HTML page in place specified.", Location.StatisticsPage);
-            }
-            saving.Dispose();
-            if (reports.Any())
-            {
-                UpdateReports(reports);
-            }
-
-            CloseWindowAction(path);
-        }
-
-
+       
         Action<ErrorReports> UpdateReports;
         private Action<string> CloseWindowAction;
-
+        private ExportType windowType;
+        private string fExtension
+        {
+            get { return windowType == ExportType.HTML ? "html" : "csv"; }
+        }
+        private string fFileExtension
+        {
+            get { return "." + fExtension; }
+        }
         public StatsOptionsViewModel(Portfolio portfolio, List<Sector> sectors, ExportType exportType, Action<ErrorReports> updateReports, Action<string> CloseWindow)
         {
+            windowType = exportType;
             Portfolio = portfolio;
             Sectors = sectors;
             UpdateReports = updateReports;
             CloseWindowAction = CloseWindow;
-            if (exportType == ExportType.HTML)
-            {
-                ExportCommand = new BasicCommand(ExecuteExportHTMLCommand);
-            }
-            if (exportType == ExportType.CSV)
-            {
-                ExportCommand = new BasicCommand(ExecuteExportCSVCommand);
-            }
+            
+            ExportCommand = new BasicCommand(ExecuteExportCommand);
 
             var totals = new SecurityStatsHolder();
             var properties = totals.GetType().GetProperties();

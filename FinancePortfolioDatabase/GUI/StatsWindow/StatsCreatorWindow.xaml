@@ -49,7 +49,8 @@
                     x:Name="TabMain"
                     Height="Auto"
                     Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}"
-                    ItemsSource="{Binding StatsTabs}">
+                    ItemsSource="{Binding StatsTabs}"
+                    SelectedIndex="0">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
