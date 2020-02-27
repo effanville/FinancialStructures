@@ -2,7 +2,6 @@
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.ReportingStructures;
-using GUISupport;
 using SavingClasses;
 using System;
 using System.Collections.Generic;
@@ -10,20 +9,13 @@ using System.Collections.ObjectModel;
 
 namespace FinanceCommonViewModels
 {
-    internal class SingleValueEditWindowViewModel : PropertyChangedBase
+    internal class SingleValueEditWindowViewModel : ViewModelBase
     {
-        private string fTitleText;
-        public string TitleText 
-        {
-            get { return fTitleText; }
-            set {fTitleText = value; OnPropertyChanged(); }
-        }
-
         private Portfolio Portfolio;
         private List<Sector> Sectors;
         public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
 
-        public void UpdateListBoxes(Portfolio portfolio, List<Sector> sectors)
+        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
         {
             Portfolio = portfolio;
             Sectors = sectors;
@@ -51,12 +43,12 @@ namespace FinanceCommonViewModels
         EditMethods EditMethods;
 
         public SingleValueEditWindowViewModel(string title, Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateDataCallback, Action<ErrorReports> updateReports, EditMethods editMethods)
+            : base(title)
         {
-            TitleText = title;
             UpdateDataCallback = updateDataCallback;
             UpdateReports = updateReports;
             EditMethods = editMethods;
-            UpdateListBoxes(portfolio, sectors);
+            UpdateData(portfolio, sectors);
             Tabs.Add(new DataNamesViewModel(Portfolio, sectors, updateDataCallback, updateReports, loadTab, editMethods));
         }
     }

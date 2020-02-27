@@ -1,4 +1,5 @@
-﻿using FinanceViewModels.StatsViewModels;
+﻿using FinanceCommonViewModels;
+using FinanceViewModels.StatsViewModels;
 using FinanceWindows.StatsWindows;
 using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
@@ -13,9 +14,8 @@ using System.Windows.Input;
 
 namespace FinanceWindowsViewModels
 {
-    internal class StatsCreatorWindowViewModel : PropertyChangedBase
+    internal class StatsCreatorWindowViewModel : ViewModelBase
     {
-        public string TitleText { get; set; } = "Stats Creator";
         private Portfolio fPortfolio;
         private List<Sector> Sectors;
 
@@ -25,7 +25,7 @@ namespace FinanceWindowsViewModels
         public bool DisplayValueFunds
         {
             get { return fDisplayValueFunds; }
-            set { fDisplayValueFunds = value; OnPropertyChanged(); GenerateStatistics(); }
+            set { fDisplayValueFunds = value; OnPropertyChanged(); UpdateData(); }
         }
 
         public int HistoryGapDays { get; set; }
@@ -114,7 +114,7 @@ namespace FinanceWindowsViewModels
         Action<ErrorReports> UpdateReports;
 
 
-        public void GenerateStatistics(Portfolio portfolio = null, List<Sector> sectors = null)
+        public override void UpdateData(Portfolio portfolio = null, List<Sector> sectors = null)
         {
             foreach (var tab in StatsTabs)
             {
@@ -159,6 +159,7 @@ namespace FinanceWindowsViewModels
         }
 
         public StatsCreatorWindowViewModel(Portfolio portfolio, List<Sector> sectors, Action<ErrorReports> updateReports)
+            : base("Stats Creator")
         {
             StatsTabs.Add(new MainTabViewModel(openTab));
             StatsTabs.Add(new SecuritiesStatisticsViewModel(portfolio, DisplayValueFunds));

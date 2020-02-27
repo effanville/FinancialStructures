@@ -1,15 +1,14 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
-using GUISupport;
+using FinanceCommonViewModels;
 using SectorHelperFunctions;
 using System.Collections.Generic;
 
 namespace FinanceWindowsViewModels
 {
-    internal class BasicDataViewModel : PropertyChangedBase
+    internal class BasicDataViewModel : ViewModelBase
     {
-        public string TitleText {get;set;} = "Database Overview"; 
         private Portfolio Portfolio;
         private List<Sector> Sectors;
 
@@ -41,7 +40,7 @@ namespace FinanceWindowsViewModels
             set { fCurrencyNames = value; OnPropertyChanged(); }
         }
 
-        public void DataUpdate(Portfolio portfolio, List<Sector> sectors)
+        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
         {
             Portfolio = portfolio;
             Sectors = sectors;
@@ -56,8 +55,9 @@ namespace FinanceWindowsViewModels
         }
 
         public BasicDataViewModel(Portfolio portfolio, List<Sector> sectors)
+            : base("Database Overview")
         {
-            DataUpdate(portfolio, sectors);
+            UpdateData(portfolio, sectors);
         }
     }
 }

@@ -15,8 +15,8 @@ namespace FinanceCommonViewModels
     {
         private Portfolio Portfolio;
         private List<Sector> Sectors;
-        public string Header { get; }
-        public bool Closable { get { return true; } }
+
+        public override bool Closable { get { return true; } }
 
         private NameData fSelectedName;
 
@@ -142,21 +142,13 @@ namespace FinanceCommonViewModels
             }
         }
 
-        public override Action<NameData> LoadSelectedTab { get; set; }
         Action<Action<AllData>> UpdateDataCallback;
         Action<ErrorReports> UpdateReports;
 
         private EditMethods EditMethods;
         public SelectedSingleDataViewModel(Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateDataCallback, Action<ErrorReports> updateReports, EditMethods editMethods, NameData selectedName)
+            : base(selectedName !=null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
         {
-            if (selectedName != null)
-            {
-                Header = selectedName.Company + "-" + selectedName.Name;
-            }
-            else
-            {
-                Header = "No-Name";
-            }
             SelectedName = selectedName;
             EditMethods = editMethods;
             UpdateData(portfolio, sectors);

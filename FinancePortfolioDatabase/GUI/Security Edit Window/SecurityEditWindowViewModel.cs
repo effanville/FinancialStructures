@@ -1,8 +1,8 @@
-﻿using FinancialStructures.Database;
+﻿using FinanceCommonViewModels;
+using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.ReportingStructures;
-using GUISupport;
 using SavingClasses;
 using System;
 using System.Collections.Generic;
@@ -10,16 +10,14 @@ using System.Collections.ObjectModel;
 
 namespace FinanceWindowsViewModels
 {
-    internal class SecurityEditWindowViewModel : PropertyChangedBase
+    internal class SecurityEditWindowViewModel : ViewModelBase
     {
-        public string TitleText { get; set; } = "Security Edit";
-
         private Portfolio Portfolio;
         private List<Sector> Sectors;
 
         public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
 
-        public void UpdateListBoxes(Portfolio portfolio, List<Sector> sectors)
+        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
         {
             Portfolio = portfolio;
             Sectors = sectors;
@@ -40,20 +38,21 @@ namespace FinanceWindowsViewModels
         }
 
         Action<ErrorReports> UpdateReports;
-        Action<Action<AllData>> UpdateData;
+        Action<Action<AllData>> UpdateDataAction;
 
         Action<NameData> loadTab => (name) => LoadTabFunc(name);
 
         private void LoadTabFunc(NameData name)
         {
-            Tabs.Add(new SelectedSecurityViewModel(Portfolio, UpdateData, UpdateReports, name));
+            Tabs.Add(new SelectedSecurityViewModel(Portfolio, UpdateDataAction, UpdateReports, name));
         }
 
         public SecurityEditWindowViewModel(Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateData, Action<ErrorReports> updateReports)
+            : base("Security Edit")
         {
             Portfolio = portfolio;
             Sectors = sectors;
-            UpdateData = updateData;
+            UpdateDataAction = updateData;
             UpdateReports = updateReports;
             Tabs.Add(new SecurityNamesViewModel(Portfolio, updateData, updateReports, loadTab));
         }

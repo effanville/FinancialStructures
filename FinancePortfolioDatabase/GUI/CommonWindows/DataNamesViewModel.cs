@@ -15,10 +15,7 @@ namespace FinanceCommonViewModels
         private Portfolio Portfolio;
         private List<Sector> Sectors;
         Action<ErrorReports> UpdateReports;
-
-        public string Header { get; set; } = "Accounts";
-        public bool Closable { get { return false; } }
-
+        
         public ICommand DownloadCommand { get; }
 
         public ICommand CreateCommand { get; set; }
@@ -143,15 +140,14 @@ namespace FinanceCommonViewModels
 
         Action<Action<AllData>> UpdateDataCallback;
         private EditMethods editMethods;
-        public override Action<NameData> LoadSelectedTab { get; set; }
 
         public DataNamesViewModel(Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateDataCallback, Action<ErrorReports> updateReports, Action<NameData> loadSelectedData, EditMethods updateMethods)
+            : base ("Accounts", loadSelectedData)
         {
             Portfolio = portfolio;
             Sectors = sectors;
             UpdateDataCallback = updateDataCallback;
             UpdateReports = updateReports;
-            LoadSelectedTab = loadSelectedData;
             editMethods = updateMethods;
 
             CreateCommand = new BasicCommand(ExecuteCreateEdit);

@@ -16,18 +16,14 @@ namespace FinanceWindowsViewModels
         public MainWindowViewModel()
         {
             OptionsToolbarCommands = new OptionsToolbarViewModel(allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports);
-            DataView = new BasicDataViewModel(allData.MyFunds, allData.myBenchMarks);
-            SecurityEditViewModel = new SecurityEditWindowViewModel(allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports);
-            BankAccEditViewModel = new SingleValueEditWindowViewModel("Bank Account Edit", allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports, allData.bankAccEditMethods);
-            SectorEditViewModel = new SingleValueEditWindowViewModel("Sector Edit", allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports, allData.sectorEditMethods);
-            CurrencyEditViewModel = new SingleValueEditWindowViewModel("Currency Edit", allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports, allData.currencyEditMethods);
-            StatsEditViewModel = new StatsCreatorWindowViewModel(allData.MyFunds, allData.myBenchMarks, UpdateReports);
-            Tabs.Add(DataView);
-            Tabs.Add(SecurityEditViewModel);
-            Tabs.Add(BankAccEditViewModel);
-            Tabs.Add(SectorEditViewModel);
-            Tabs.Add(CurrencyEditViewModel);
-            Tabs.Add(StatsEditViewModel);
+
+            Tabs.Add(new BasicDataViewModel(allData.MyFunds, allData.myBenchMarks));
+            Tabs.Add(new SecurityEditWindowViewModel(allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports));
+            Tabs.Add(new SingleValueEditWindowViewModel("Bank Account Edit", allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports, allData.bankAccEditMethods));
+            Tabs.Add(new SingleValueEditWindowViewModel("Sector Edit", allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports, allData.sectorEditMethods));
+            Tabs.Add(new SingleValueEditWindowViewModel("Currency Edit", allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports, allData.currencyEditMethods));
+            Tabs.Add(new StatsCreatorWindowViewModel(allData.MyFunds, allData.myBenchMarks, UpdateReports));
+
             ReportsViewModel = new ReportingWindowViewModel();
 
             AllData.portfolioChanged += AllData_portfolioChanged;
@@ -35,12 +31,13 @@ namespace FinanceWindowsViewModels
 
         private void AllData_portfolioChanged(object sender, EventArgs e)
         {
-            DataView.DataUpdate(allData.MyFunds, allData.myBenchMarks);
-            SecurityEditViewModel.UpdateListBoxes(allData.MyFunds, allData.myBenchMarks);
-            BankAccEditViewModel.UpdateListBoxes(allData.MyFunds, allData.myBenchMarks);
-            SectorEditViewModel.UpdateListBoxes(allData.MyFunds, allData.myBenchMarks);
-            CurrencyEditViewModel.UpdateListBoxes(allData.MyFunds, allData.myBenchMarks);
-            StatsEditViewModel.GenerateStatistics(allData.MyFunds, allData.myBenchMarks);
+            foreach (var tab in Tabs)
+            {
+                if (tab is ViewModelBase vm)
+                {
+                    vm.UpdateData(allData.MyFunds, allData.myBenchMarks);
+                }
+            }
         }
 
         Action<ErrorReports> UpdateReports => (val) => AddReports(val);
@@ -67,54 +64,6 @@ namespace FinanceWindowsViewModels
         {
             get { return fOptionsToolbarCommands; }
             set { fOptionsToolbarCommands = value; OnPropertyChanged(); }
-        }
-
-        private BasicDataViewModel fDataView;
-
-        public BasicDataViewModel DataView
-        {
-            get { return fDataView; }
-            set { fDataView = value; OnPropertyChanged(); }
-        }
-
-        private SecurityEditWindowViewModel fSecurityEditViewModel;
-        public SecurityEditWindowViewModel SecurityEditViewModel
-        {
-            get { return fSecurityEditViewModel; }
-            set { fSecurityEditViewModel = value; OnPropertyChanged(); }
-        }
-
-
-        private SingleValueEditWindowViewModel fSectorEditViewModel;
-
-        public SingleValueEditWindowViewModel SectorEditViewModel
-        {
-            get { return fSectorEditViewModel; }
-            set { fSectorEditViewModel = value; OnPropertyChanged(); }
-        }
-
-        private SingleValueEditWindowViewModel fCurrencyEditViewModel;
-
-        public SingleValueEditWindowViewModel CurrencyEditViewModel
-        {
-            get { return fCurrencyEditViewModel; }
-            set { fCurrencyEditViewModel = value; OnPropertyChanged(); }
-        }
-
-        private SingleValueEditWindowViewModel fBankAccEditViewModel;
-
-        public SingleValueEditWindowViewModel BankAccEditViewModel
-        {
-            get { return fBankAccEditViewModel; }
-            set { fBankAccEditViewModel = value; OnPropertyChanged(); }
-        }
-
-        private StatsCreatorWindowViewModel fStatsViewModel;
-
-        public StatsCreatorWindowViewModel StatsEditViewModel
-        {
-            get { return fStatsViewModel; }
-            set { fStatsViewModel = value; OnPropertyChanged(); }
         }
 
         private ReportingWindowViewModel fReports;
