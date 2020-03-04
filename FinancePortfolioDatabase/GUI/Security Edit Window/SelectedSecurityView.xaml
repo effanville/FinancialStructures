@@ -56,7 +56,7 @@
                                             Binding="{Binding Path=Value, UpdateSourceTrigger=LostFocus}"/>
                 <DataGridTextColumn Header="New Investment"
                                             MinWidth="50"
-                                            Binding="{Binding Path=Investment, UpdateSourceTrigger=LostFocus}"/>
+                                            Binding="{Binding Path=NewInvestment, UpdateSourceTrigger=LostFocus}"/>
             </DataGrid.Columns>
         </DataGrid>
     </Grid>
