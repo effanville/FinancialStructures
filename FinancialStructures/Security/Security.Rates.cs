@@ -1,12 +1,13 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceFunctionsList;
+using FinancialStructures.GUIFinanceStructures;
 using System;
 using System.Collections.Generic;
 
 namespace FinancialStructures.FinanceStructures
 {
     public partial class Security
-    {
+    { 
         internal double TotalInvestment(Currency currency = null)
         {
             var investments = InvestmentsBetween(FirstValue().Day, LatestValue().Day, currency);
@@ -54,7 +55,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Returns the interpolated value of the security on the date provided.
         /// </summary>
-        internal DailyValuation Value(DateTime date, Currency currency = null)
+        public DailyValuation Value(DateTime date, Currency currency = null)
         {
             DailyValuation perSharePrice = fUnitPrice.Value(date);
             double currencyValue = currency == null ? 1.0 : currency.Value(date).Value;

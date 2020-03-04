@@ -124,5 +124,18 @@ namespace FinancialStructures.Database
 
             return false;
         }
+
+        public static double SecurityShares(this Portfolio portfolio, string company, string name, DateTime date)
+        {
+            foreach (Security sec in portfolio.Funds)
+            {
+                if (sec.GetName() == name && sec.GetCompany() == company)
+                {
+                    return sec.Shares.NearestEarlierValue(date).Value;
+                }
+            }
+
+            return 0.0;
+        }
     }
 }

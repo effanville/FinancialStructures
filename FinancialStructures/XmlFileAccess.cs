@@ -26,7 +26,7 @@ namespace FileSupport
                 writer = new StreamWriter(filePath, append);
                 serializer.Serialize(writer, objectToWrite);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return;
             }
@@ -53,7 +53,7 @@ namespace FileSupport
                 reader = new StreamReader(filePath);
                 return (T)serializer.Deserialize(reader);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return default(T);
             }

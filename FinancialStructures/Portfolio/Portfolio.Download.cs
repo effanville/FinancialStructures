@@ -31,7 +31,7 @@ namespace FinancialStructures.Database
         public async static Task DownloadSecurity(Portfolio portfolio, string company, string name, Action<ErrorReports> updateReports, ErrorReports reports)
         {
             var sec = portfolio.GetSecurityFromName(name, company);
-            await DownloadLatestValue(sec.GetCompany(), sec.GetName(), sec.GetUrl(), value => sec.UpdateSecurityData(value, reports), updateReports, reports).ConfigureAwait(false);
+            await DownloadLatestValue(sec.GetCompany(), sec.GetName(), sec.GetUrl(), value => sec.UpdateSecurityData(value, reports, DateTime.Today), updateReports, reports).ConfigureAwait(false);
         }
 
         public async static Task DownloadCurrency(Portfolio portfolio, NameData name, Action<ErrorReports> updateReports, ErrorReports reports)
@@ -99,7 +99,7 @@ namespace FinancialStructures.Database
         {
             foreach (var sec in portfo.GetSecurities())
             {
-                await DownloadLatestValue(sec.GetCompany(), sec.GetName(), sec.GetUrl(), value => sec.UpdateSecurityData(value, reports), updateReports, reports).ConfigureAwait(false);
+                await DownloadLatestValue(sec.GetCompany(), sec.GetName(), sec.GetUrl(), value => sec.UpdateSecurityData(value, reports, DateTime.Today), updateReports, reports).ConfigureAwait(false);
             }
             foreach (var acc in portfo.GetBankAccounts())
             {

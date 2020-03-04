@@ -57,7 +57,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Returns the name of the security.
         /// </summary>
-        internal string GetName()
+        public string GetName()
         {
             return fName;
         }
@@ -93,6 +93,14 @@ namespace FinancialStructures.FinanceStructures
         public List<string> GetSectors()
         {
             return fSectors;
+        }
+
+        public DayDataView DayData(DateTime day)
+        {
+            fUnitPrice.TryGetValue(day, out double UnitPrice);
+            fShares.TryGetValue(day, out double shares);
+            fInvestments.TryGetValue(day, out double invest);
+            return new DayDataView(day, UnitPrice, shares, invest);
         }
 
         /// <summary>
@@ -184,16 +192,16 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Adds the value to the data with todays date and with the latest number of shares.
         /// </summary>
-        internal void UpdateSecurityData(double value, ErrorReports reports)
+        public void UpdateSecurityData(double value, ErrorReports reports, DateTime day)
         {
             // best approximation for number of units is last known number of units.
-            TryGetEarlierData(DateTime.Today, out DailyValuation _, out DailyValuation units, out DailyValuation _);
+            TryGetEarlierData(day, out DailyValuation _, out DailyValuation units, out DailyValuation _);
             if (units == null)
             {
-                units = new DailyValuation(DateTime.Today, 0);
+                units = new DailyValuation(day, 0);
             }
 
-            TryAddData(reports, DateTime.Today, value, units.Value);
+            TryAddData(reports, day, value, units.Value);
         }
 
 

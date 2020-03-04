@@ -28,6 +28,22 @@ namespace FinancialStructures.GUIFinanceStructures
             return 0;
         }
 
+        public bool IsEqualTo(object obj)
+        {
+            if (obj is NameData value)
+            {
+                if (Company == value.Company)
+                {
+                    if (Name == value.Name)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
         public bool NewValue { get; set; }
 
         public NameData()
