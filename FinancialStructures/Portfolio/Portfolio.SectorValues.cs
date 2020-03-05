@@ -38,6 +38,11 @@ namespace FinancialStructures.Database
             return sum;
         }
 
+        public static int NumberSecuritiesInSector(this Portfolio portfolio, string sectorName)
+        {
+            return portfolio.SectorSecurities(sectorName).Count;
+        }
+
         public static List<Security> SectorSecurities(this Portfolio portfolio, string sectorName)
         {
             var securities = new List<Security>();

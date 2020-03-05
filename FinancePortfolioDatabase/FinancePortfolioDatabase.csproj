@@ -191,7 +191,7 @@
     <Compile Include="GUI\GuiSupport\Colours.cs" />
     <Compile Include="GUI\GuiSupport\OutputHelper.cs" />
     <Compile Include="GUI\GuiSupport\PropertyChangedBase.cs" />
-    <Compile Include="GUI\HelpWindow.xaml.cs">
+    <Compile Include="Help\HelpWindow.xaml.cs">
       <DependentUpon>HelpWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\MainUserControl.xaml.cs">
@@ -268,7 +268,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="GUI\HelpWindow.xaml">
+    <Page Include="Help\HelpWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -44,7 +44,7 @@ namespace FinancialStructures.Database
             if (filePath != null)
             {
                 XmlFileAccess.WriteToXmlFile(filePath, toSave);
-                reports.AddReport("Saved Database.", Location.Saving);
+                reports.AddReport($"Saved Database at {filePath}", Location.Saving);
             }
         }
     }

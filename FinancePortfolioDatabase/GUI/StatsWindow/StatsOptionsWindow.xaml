@@ -13,33 +13,35 @@
         MinWidth="200">
     <StackPanel>
         <TextBlock Margin="5" Text="Choose the options desired for the export." TextWrapping="Wrap">
-            
+
         </TextBlock>
+    <StackPanel>
         <CheckBox Margin="5" 
-                  IsChecked="{Binding displayValueFunds}">
-            <TextBlock Text="Only Display Funds with current value" 
-                       TextWrapping="Wrap"/>
-        </CheckBox>
-        <CheckBox Margin="5" IsChecked="{Binding colours}">
-            <TextBlock Text="Display with Colour" 
-                       TextWrapping="Wrap"/>
-        </CheckBox>
-        <CheckBox Margin="5" IsChecked="{Binding spacing}">
-            <TextBlock Text="Spacing Between Companies" 
-                       TextWrapping="Wrap"/>
-        </CheckBox>
-        <CheckBox Margin="5" IsChecked="{Binding securities}">
-            <TextBlock Text="Display Securities" 
-                       TextWrapping="Wrap"/>
-        </CheckBox>
-        <CheckBox Margin="5" IsChecked="{Binding bankAccs}">
-            <TextBlock Text="Display Bank Accounts" 
-                       TextWrapping="Wrap"/>
-        </CheckBox>
-        <CheckBox Margin="5" IsChecked="{Binding sectors}">
-            <TextBlock Text="Display Sectors" 
-                       TextWrapping="Wrap"/>
-        </CheckBox>
+                      IsChecked="{Binding displayValueFunds}">
+                <TextBlock Text="Only Display Funds with current value" 
+                           TextWrapping="Wrap"/>
+            </CheckBox>
+            <CheckBox Margin="5" IsChecked="{Binding colours}">
+                <TextBlock Text="Display with Colour" 
+                           TextWrapping="Wrap"/>
+            </CheckBox>
+            <CheckBox Margin="5" IsChecked="{Binding spacing}">
+                <TextBlock Text="Spacing Between Companies" 
+                           TextWrapping="Wrap"/>
+            </CheckBox>
+            <CheckBox Margin="5" IsChecked="{Binding securities}">
+                <TextBlock Text="Display Securities" 
+                           TextWrapping="Wrap"/>
+            </CheckBox>
+            <CheckBox Margin="5" IsChecked="{Binding bankAccs}">
+                <TextBlock Text="Display Bank Accounts" 
+                           TextWrapping="Wrap"/>
+            </CheckBox>
+            <CheckBox Margin="5" IsChecked="{Binding sectors}">
+                <TextBlock Text="Display Sectors" 
+                           TextWrapping="Wrap"/>
+            </CheckBox> 
+        </StackPanel>
         <Grid >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>

@@ -72,6 +72,7 @@ namespace FinancialStructures.GUIFinanceStructures
                     a.LatestVal = MathSupport.Truncate(chosenSector.LatestValue().Value);
                     a.FundsFraction = 0.0;
                     a.Profit = 0.0;
+                    a.Number = portfolio.NumberSecuritiesInSector(chosenSector.GetName());
                     a.CAR3M = MathSupport.Truncate(100 * chosenSector.CAR(date.AddMonths(-3), date));
                     a.CAR6M = MathSupport.Truncate(100 * chosenSector.CAR(date.AddMonths(-6), date));
                     a.CAR1Y = MathSupport.Truncate(100 * chosenSector.CAR(date.AddMonths(-12), date));
@@ -235,6 +236,7 @@ namespace FinancialStructures.GUIFinanceStructures
         public double LatestVal { get; set; }
         public double RecentChange { get; set; }
         public double FundsFraction { get; set; }
+        public int Number { get; set; }
         public double Profit { get; set; }
         public double CAR3M { get; set; }
         public double CAR6M { get; set; }
