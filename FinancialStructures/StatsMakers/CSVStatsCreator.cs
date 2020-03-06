@@ -2,7 +2,7 @@
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
-using PortfolioStatsCreatorHelper;
+using FinancialStructures.PortfolioStatsCreatorHelper;
 using System;
 using System.Collections.Generic;
 using System.IO;

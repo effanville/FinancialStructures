@@ -1,7 +1,7 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.Mathematics;
-using PortfolioStatsCreatorHelper;
+using FinancialStructures.PortfolioStatsCreatorHelper;
 using StringFunctions;
 using System;
 using System.Collections.Generic;

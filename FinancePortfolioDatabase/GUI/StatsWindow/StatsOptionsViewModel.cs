@@ -5,7 +5,7 @@ using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.ReportingStructures;
 using FinancialStructures.StatsMakers;
 using GUISupport;
-using PortfolioStatsCreatorHelper;
+using FinancialStructures.PortfolioStatsCreatorHelper;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -23,43 +23,23 @@ namespace FinanceWindowsViewModels
             get { return fDisplayValueFunds; }
             set { fDisplayValueFunds = value; OnPropertyChanged(); }
         }
+        private UserOptions fSelectOptions;
 
-        private bool fSpacing = true;
-        public bool spacing
+        public UserOptions SelectOptions
         {
-            get { return fSpacing; }
-            set { fSpacing = value; OnPropertyChanged(); }
+            get { return fSelectOptions; }
+            set { fSelectOptions = value; OnPropertyChanged(); }
         }
 
-        private bool fSecurities = true;
-        public bool securities
+        private List<VisibleName> fDisplayConditions = new List<VisibleName>();
+
+        public List<VisibleName> DisplayConditions
         {
-            get { return fSecurities; }
-            set { fSecurities = value; OnPropertyChanged(); }
+            get { return fDisplayConditions; }
+            set { fDisplayConditions = value; OnPropertyChanged(); }
         }
 
-        private bool fSectors = true;
-        public bool sectors
-        {
-            get { return fSectors; }
-            set { fSectors = value; OnPropertyChanged(); }
-        }
-
-        private bool fBankAccs = true;
-        public bool bankAccs
-        {
-            get { return fBankAccs; }
-            set { fBankAccs = value; OnPropertyChanged(); }
-        }
-
-        private bool fColours = true;
-        public bool colours
-        {
-            get { return fColours; }
-            set { fColours = value; OnPropertyChanged(); }
-        }
-
-        private List<VisibleName> fColumnNames;
+        private List<VisibleName> fColumnNames = new List<VisibleName>();
 
         public List<VisibleName> ColumnNames
         {
@@ -67,7 +47,7 @@ namespace FinanceWindowsViewModels
             set { fColumnNames = value; OnPropertyChanged(); }
         }
 
-        private List<VisibleName> fBankColumnNames;
+        private List<VisibleName> fBankColumnNames = new List<VisibleName>();
 
         public List<VisibleName> BankColumnNames
         {
@@ -102,7 +82,7 @@ namespace FinanceWindowsViewModels
                         BankSelected.Add(column.Name);
                     }
                 }
-                var options = new UserOptions() { DisplayValueFunds = displayValueFunds, Spacing = spacing, Colours = colours, SecurityDataToExport = selected, BankAccDataToExport = BankSelected, ShowSecurites = securities, ShowBankAccounts = bankAccs, ShowSectors = sectors };
+                var options = new UserOptions(selected, BankSelected, selected, DisplayConditions);
                 if (windowType == ExportType.HTML)
                 {
                     PortfolioStatsCreators.CreateHTMLPageCustom(Portfolio, Sectors, saving.FileName, options);
@@ -149,7 +129,6 @@ namespace FinanceWindowsViewModels
 
             var totals = new SecurityStatsHolder();
             var properties = totals.GetType().GetProperties();
-            ColumnNames = new List<VisibleName>();
             foreach (var info in properties)
             {
                 ColumnNames.Add(new VisibleName(info.Name, true));
@@ -157,7 +136,6 @@ namespace FinanceWindowsViewModels
 
             var BankNames = new DayValue_Named();
             var props = BankNames.GetType().GetProperties();
-            BankColumnNames = new List<VisibleName>();
             foreach (var info in props)
             {
                 if (info.Name == "Day")
@@ -169,20 +147,16 @@ namespace FinanceWindowsViewModels
                     BankColumnNames.Add(new VisibleName(info.Name, true));
                 }
             }
-        }
-    }
 
-    internal class VisibleName
-    {
-        public string Name { get; set; }
-        public bool Visible { get; set; }
-        public VisibleName()
-        { }
-
-        public VisibleName(string name, bool vis)
-        {
-            Visible = vis;
-            Name = name;
+            var fish = new UserOptions();
+            var optionsInfo = fish.GetType().GetProperties();
+            foreach (var info in optionsInfo)
+            {
+                if (info.PropertyType == typeof(bool))
+                {
+                    DisplayConditions.Add(new VisibleName(info.Name, true));
+                }
+            }
         }
     }
 }

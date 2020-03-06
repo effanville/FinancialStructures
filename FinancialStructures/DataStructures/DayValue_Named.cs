@@ -1,5 +1,5 @@
 ﻿using FinancialStructures.Mathematics;
-using PortfolioStatsCreatorHelper;
+using FinancialStructures.PortfolioStatsCreatorHelper;
 using System;
 using System.Collections.Generic;
 

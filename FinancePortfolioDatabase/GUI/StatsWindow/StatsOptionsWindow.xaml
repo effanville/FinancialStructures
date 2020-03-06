@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:cl="clr-namespace:GUISupport"
+        xmlns:vm="clr-namespace:FinancialStructures.PortfolioStatsCreatorHelper;assembly=FinancialStructures"
         mc:Ignorable="d"
         Title="StatsOptionsWindow"
         Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}" 
@@ -12,36 +13,21 @@
         MinHeight="200"
         MinWidth="200">
     <StackPanel>
-        <TextBlock Margin="5" Text="Choose the options desired for the export." TextWrapping="Wrap">
+        <TextBlock Margin="5" Text="Choose the options desired for the export." TextWrapping="Wrap"/>
 
-        </TextBlock>
-    <StackPanel>
-        <CheckBox Margin="5" 
-                      IsChecked="{Binding displayValueFunds}">
-                <TextBlock Text="Only Display Funds with current value" 
+        <ItemsControl ItemsSource="{Binding DisplayConditions}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="{x:Type vm:VisibleName}">
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox Margin="5" IsChecked="{Binding Visible}">
+                            <TextBlock Text="{Binding Name}" 
                            TextWrapping="Wrap"/>
-            </CheckBox>
-            <CheckBox Margin="5" IsChecked="{Binding colours}">
-                <TextBlock Text="Display with Colour" 
-                           TextWrapping="Wrap"/>
-            </CheckBox>
-            <CheckBox Margin="5" IsChecked="{Binding spacing}">
-                <TextBlock Text="Spacing Between Companies" 
-                           TextWrapping="Wrap"/>
-            </CheckBox>
-            <CheckBox Margin="5" IsChecked="{Binding securities}">
-                <TextBlock Text="Display Securities" 
-                           TextWrapping="Wrap"/>
-            </CheckBox>
-            <CheckBox Margin="5" IsChecked="{Binding bankAccs}">
-                <TextBlock Text="Display Bank Accounts" 
-                           TextWrapping="Wrap"/>
-            </CheckBox>
-            <CheckBox Margin="5" IsChecked="{Binding sectors}">
-                <TextBlock Text="Display Sectors" 
-                           TextWrapping="Wrap"/>
-            </CheckBox> 
-        </StackPanel>
+                        </CheckBox>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
         <Grid >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
