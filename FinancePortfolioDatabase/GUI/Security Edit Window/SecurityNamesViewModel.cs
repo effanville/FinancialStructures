@@ -49,7 +49,10 @@ namespace FinanceWindowsViewModels
                 {
                     edited = true;
                     UpdateData(alldata => alldata.MyFunds.TryAddSecurity(reports, selectedName.Company, selectedName.Name, selectedName.Currency, selectedName.Url, selectedName.Sectors));
-                    selectedName.NewValue = false;
+                    if (selectedName != null)
+                    {
+                        selectedName.NewValue = false;
+                    }
                 }
                 
 

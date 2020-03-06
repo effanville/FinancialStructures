@@ -158,7 +158,7 @@ namespace FinancialStructures.Database
 
         public static bool TryAddBankAccountFromName(this Portfolio portfolio, string name, string company, string currency, List<string> sectors, ErrorReports reports)
         {
-            if (name == null || company == null)
+            if (name == null && company == null)
             {
                 reports.AddError("Name or Company provided were null.", Location.AddingData);
                 return false;

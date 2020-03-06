@@ -66,8 +66,16 @@ namespace FinanceCommonViewModels
                 bool edited = false;
                 if (SelectedName.NewValue)
                 {
-                    UpdateDataCallback(alldata => editMethods.ExecuteFunction(FunctionType.Create, alldata.MyFunds, alldata.myBenchMarks, SelectedName, reports).Wait());
-                    SelectedName.NewValue = false;
+                    try
+                    {
+                        UpdateDataCallback(alldata => editMethods.ExecuteFunction(FunctionType.Create, alldata.MyFunds, alldata.myBenchMarks, SelectedName, reports).Wait());
+                        if (SelectedName != null)
+                        {
+                            SelectedName.NewValue = false;
+                        }
+                    }
+                    catch (Exception)
+                    { }
                 }
                 if (!edited)
                 {
