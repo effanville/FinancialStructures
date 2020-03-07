@@ -1,5 +1,6 @@
 ﻿using FinanceCommonViewModels;
 using FinancialStructures.Database;
+using FinancialStructures.DataReader;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using GUISupport;

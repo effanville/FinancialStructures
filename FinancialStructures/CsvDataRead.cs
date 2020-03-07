@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace GUISupport
+namespace FinancialStructures.DataReader
 {
     public enum ElementType
     {
@@ -51,7 +51,6 @@ namespace GUISupport
                 if (reader != null)
                     reader.Close();
             }
-
         }
 
         public static List<object> CreateSecurityData(List<string[]> valuationsToRead, Action<string, string, string> reportLogger)
