@@ -41,7 +41,7 @@ namespace FinanceWindowsViewModels
             SyncReports();
         }
 
-        private void SyncReports()
+        internal void SyncReports()
         {
             ReportsToView = null;
             ReportsToView = new ObservableCollection<ErrorReport>(Reports.GetReports());
