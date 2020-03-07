@@ -1,7 +1,6 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
-using FinancialStructures.ReportingStructures;
 using GUISupport;
 using SavingClasses;
 using System;
@@ -14,7 +13,6 @@ namespace FinanceCommonViewModels
     {
         private Portfolio Portfolio;
         private List<Sector> Sectors;
-        Action<ErrorReports> UpdateReports;
         
         public ICommand DownloadCommand { get; }
 
@@ -47,20 +45,14 @@ namespace FinanceCommonViewModels
 
         private void ExecuteDownloadCommand(Object obj)
         {
-            var reports = new ErrorReports();
             if (SelectedName != null)
             {
-                UpdateDataCallback(async alldata => await editMethods.ExecuteFunction(FunctionType.Download, alldata.MyFunds, alldata.myBenchMarks, SelectedName, UpdateReports, reports).ConfigureAwait(false));
-            }
-            if (reports.Any())
-            {
-                UpdateReports(reports);
+                UpdateDataCallback(async alldata => await editMethods.ExecuteFunction(FunctionType.Download, alldata.MyFunds, alldata.myBenchMarks, SelectedName, ReportLogger).ConfigureAwait(false));
             }
         }
 
         private void ExecuteCreateEdit(Object obj)
         {
-            var reports = new ErrorReports();
             if (((List<NameData>)editMethods.ExecuteFunction(FunctionType.NameUpdate, Portfolio, Sectors).Result).Count != DataNames.Count)
             {
                 bool edited = false;
@@ -68,7 +60,7 @@ namespace FinanceCommonViewModels
                 {
                     try
                     {
-                        UpdateDataCallback(alldata => editMethods.ExecuteFunction(FunctionType.Create, alldata.MyFunds, alldata.myBenchMarks, SelectedName, reports).Wait());
+                        UpdateDataCallback(alldata => editMethods.ExecuteFunction(FunctionType.Create, alldata.MyFunds, alldata.myBenchMarks, SelectedName, ReportLogger).Wait());
                         if (SelectedName != null)
                         {
                             SelectedName.NewValue = false;
@@ -79,7 +71,7 @@ namespace FinanceCommonViewModels
                 }
                 if (!edited)
                 {
-                    reports.AddError("No Name provided on creation.", Location.AddingData);
+                    ReportLogger("Error", "AddingData", "No Name provided on creation.");
                 }
             }
             else
@@ -93,36 +85,26 @@ namespace FinanceCommonViewModels
                     if (name.NewValue && (!string.IsNullOrEmpty(name.Name) || !string.IsNullOrEmpty(name.Company)))
                     {
                         edited = true;
-                        UpdateDataCallback(alldata => editMethods.ExecuteFunction(FunctionType.Edit, alldata.MyFunds, alldata.myBenchMarks, fPreEditNames[i], name, reports).Wait());
+                        UpdateDataCallback(alldata => editMethods.ExecuteFunction(FunctionType.Edit, alldata.MyFunds, alldata.myBenchMarks, fPreEditNames[i], name, ReportLogger).Wait());
                         name.NewValue = false;
                     }
                 }
                 if (!edited)
                 {
-                    reports.AddError("Was not able to edit desired.", Location.EditingData);
+                    ReportLogger("Error", "EditingData", "Was not able to edit desired.");
                 }
-            }
-
-            if (reports.Any())
-            {
-                UpdateReports(reports);
             }
         }
 
         private void ExecuteDelete(Object obj)
         {
-            var reports = new ErrorReports();
             if (SelectedName.Name != null)
             {
-                UpdateDataCallback(alldata => editMethods.ExecuteFunction(FunctionType.Delete, alldata.MyFunds, alldata.myBenchMarks, SelectedName, reports).Wait());
+                UpdateDataCallback(alldata => editMethods.ExecuteFunction(FunctionType.Delete, alldata.MyFunds, alldata.myBenchMarks, SelectedName, ReportLogger).Wait());
             }
             else
             {
-                reports.AddError("Nothing was selected when trying to delete.", Location.DeletingData);
-            }
-            if (reports.Any())
-            {
-                UpdateReports(reports);
+                ReportLogger("Error", "DeletingData", "Nothing was selected when trying to delete.");
             }
         }
 
@@ -147,15 +129,16 @@ namespace FinanceCommonViewModels
         }
 
         Action<Action<AllData>> UpdateDataCallback;
+        Action<string, string, string> ReportLogger;
         private EditMethods editMethods;
 
-        public DataNamesViewModel(Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateDataCallback, Action<ErrorReports> updateReports, Action<NameData> loadSelectedData, EditMethods updateMethods)
+        public DataNamesViewModel(Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateDataCallback, Action<string, string, string> reportLogger, Action<NameData> loadSelectedData, EditMethods updateMethods)
             : base ("Accounts", loadSelectedData)
         {
             Portfolio = portfolio;
             Sectors = sectors;
             UpdateDataCallback = updateDataCallback;
-            UpdateReports = updateReports;
+            ReportLogger = reportLogger;
             editMethods = updateMethods;
 
             CreateCommand = new BasicCommand(ExecuteCreateEdit);

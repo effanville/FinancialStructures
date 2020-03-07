@@ -2,7 +2,6 @@
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
-using FinancialStructures.ReportingStructures;
 using FinancialStructures.StatsMakers;
 using GUISupport;
 using FinancialStructures.PortfolioStatsCreatorHelper;
@@ -59,7 +58,6 @@ namespace FinanceWindowsViewModels
 
         private void ExecuteExportCommand(Object obj)
         {
-            var reports = new ErrorReports();
             SaveFileDialog saving = new SaveFileDialog() { DefaultExt = fFileExtension, FileName = Portfolio.DatabaseName + "-" + fExtension + "HTMLStats" + fFileExtension, InitialDirectory = Portfolio.Directory };
             saving.Filter = fExtension + " file|*" + fFileExtension + "|All files|*.*";
             string path = null;
@@ -91,22 +89,18 @@ namespace FinanceWindowsViewModels
                 {
                     CSVStatsCreator.CreateCSVPageCustom(Portfolio, Sectors, saving.FileName, options);
                 }
-                reports.AddReport("Created statistics page", Location.StatisticsPage);
+                ReportLogger("Report", "StatisticsPage", "Created statistics page");
             }
             else
             {
-                reports.AddError("Was not able to create " + fExtension + " page in place specified.", Location.StatisticsPage);
-            }
-            saving.Dispose();
-            if (reports.Any())
-            {
-                UpdateReports(reports);
+                ReportLogger("Error", "StatisticsPage", "Was not able to create " + fExtension + " page in place specified.");
             }
 
+            saving.Dispose();
             CloseWindowAction(path);
         }
        
-        Action<ErrorReports> UpdateReports;
+        Action<string, string, string> ReportLogger;
         private Action<string> CloseWindowAction;
         private ExportType windowType;
         private string fExtension
@@ -117,12 +111,12 @@ namespace FinanceWindowsViewModels
         {
             get { return "." + fExtension; }
         }
-        public StatsOptionsViewModel(Portfolio portfolio, List<Sector> sectors, ExportType exportType, Action<ErrorReports> updateReports, Action<string> CloseWindow)
+        public StatsOptionsViewModel(Portfolio portfolio, List<Sector> sectors, ExportType exportType, Action<string, string, string> reportLogger, Action<string> CloseWindow)
         {
             windowType = exportType;
             Portfolio = portfolio;
             Sectors = sectors;
-            UpdateReports = updateReports;
+            ReportLogger = reportLogger;
             CloseWindowAction = CloseWindow;
             
             ExportCommand = new BasicCommand(ExecuteExportCommand);

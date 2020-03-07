@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FinancialStructures.ReportingStructures
+namespace FinancialStructures.Reporting
 {
     public class ErrorReport : IComparable
     {

@@ -1,5 +1,4 @@
 ﻿using FinancialStructures.GUIFinanceStructures;
-using FinancialStructures.ReportingStructures;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,7 +15,7 @@ namespace GUISupport
 
     public static class CsvDataRead
     {
-        public static List<object> ReadFromCsv(string filePath, ElementType type, ErrorReports reports)
+        public static List<object> ReadFromCsv(string filePath, ElementType type, Action<string, string, string> reportLogger)
         {
             TextReader reader = null;
             try
@@ -33,18 +32,18 @@ namespace GUISupport
                 switch (type)
                 {
                     case ElementType.Security:
-                        return CreateSecurityData(valuationsToRead, reports);
+                        return CreateSecurityData(valuationsToRead, reportLogger);
                     case ElementType.BankAccount:
                     case ElementType.CurrencyExchange:
                     case ElementType.Sector:
-                        return CreateAccountData(valuationsToRead, reports);
+                        return CreateAccountData(valuationsToRead, reportLogger);
                     default:
                         return new List<object>();
                 }
             }
             catch (Exception ex)
             {
-                reports.AddError(ex.Message, Location.Loading);
+                reportLogger("Error", "Loading", ex.Message);
                 return new List<object>();
             }
             finally
@@ -55,14 +54,14 @@ namespace GUISupport
 
         }
 
-        public static List<object> CreateSecurityData(List<string[]> valuationsToRead, ErrorReports reports)
+        public static List<object> CreateSecurityData(List<string[]> valuationsToRead, Action<string, string, string> reportLogger)
         {
             var dailyValuations = new List<object>();
             foreach (var dayValuation in valuationsToRead)
             {
                 if (dayValuation.Length != 4)
                 {
-                    reports.AddError("Line in Csv file has incomplete data.", Location.Loading);
+                    reportLogger("Error", "Loading", "Line in Csv file has incomplete data.");
                     break;
                 }
 
@@ -73,14 +72,14 @@ namespace GUISupport
             return dailyValuations;
         }
 
-        public static List<object> CreateAccountData(List<string[]> valuationsToRead, ErrorReports reports)
+        public static List<object> CreateAccountData(List<string[]> valuationsToRead, Action<string, string, string> reportLogger)
         {
             var dailyValuations = new List<object>();
             foreach (var dayValuation in valuationsToRead)
             {
                 if (dayValuation.Length != 2)
                 {
-                    reports.AddError("Line in Csv file has incomplete data.", Location.Loading);
+                    reportLogger("Error", "Loading", "Line in Csv file has incomplete data.");
                     break;
                 }
 

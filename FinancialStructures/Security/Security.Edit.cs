@@ -1,6 +1,5 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.GUIFinanceStructures;
-using FinancialStructures.ReportingStructures;
 using System;
 using System.Collections.Generic;
 
@@ -178,21 +177,21 @@ namespace FinancialStructures.FinanceStructures
         /// Attempts to add data for the date specified.
         /// If cannot add any value that one wants to, then doesn't add all the values chosen.
         /// </summary>
-        internal bool TryAddData(ErrorReports reports, DateTime date, double unitPrice, double shares = 0, double investment = 0)
+        internal bool TryAddData(Action<string, string, string> reportLogger, DateTime date, double unitPrice, double shares = 0, double investment = 0)
         {
             if (DoesDateSharesDataExist(date, out int _) || DoesDateInvestmentDataExist(date, out int _) || DoesDateUnitPriceDataExist(date, out int _))
             {
-                reports.AddError($"Security `{fCompany}'-`{fName}' already has NumShares or UnitPrice or Investment data on {date.ToString("d")}.", Location.AddingData);
+                reportLogger("Error", "AddingData", $"Security `{fCompany}'-`{fName}' already has NumShares or UnitPrice or Investment data on {date.ToString("d")}.");
                 return false;
             }
 
-            return fShares.TryAddValue(date, shares) & fUnitPrice.TryAddValue(date, unitPrice) & fInvestments.TryAddValue(date, investment) && ComputeInvestments(reports);
+            return fShares.TryAddValue(date, shares) & fUnitPrice.TryAddValue(date, unitPrice) & fInvestments.TryAddValue(date, investment) && ComputeInvestments(reportLogger);
         }
 
         /// <summary>
         /// Adds the value to the data with todays date and with the latest number of shares.
         /// </summary>
-        public void UpdateSecurityData(double value, ErrorReports reports, DateTime day)
+        public void UpdateSecurityData(double value, Action<string, string, string> reportLogger, DateTime day)
         {
             // best approximation for number of units is last known number of units.
             TryGetEarlierData(day, out DailyValuation _, out DailyValuation units, out DailyValuation _);
@@ -201,7 +200,7 @@ namespace FinancialStructures.FinanceStructures
                 units = new DailyValuation(day, 0);
             }
 
-            TryAddData(reports, day, value, units.Value);
+            TryAddData(reportLogger, day, value, units.Value);
         }
 
 
@@ -210,53 +209,53 @@ namespace FinancialStructures.FinanceStructures
         /// If do have relevant values, then edit that value
         /// If investment value doesnt exist, then add that value.
         /// </summary>
-        internal bool TryEditData(ErrorReports reports, DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment)
+        internal bool TryEditData(Action<string, string, string> reportLogger, DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment)
         {
             bool editShares = false;
             bool editUnitPrice = false;
             if (DoesDateSharesDataExist(oldDate, out int _))
             {
-                editShares = fShares.TryEditData(oldDate, newDate, shares, reports);
+                editShares = fShares.TryEditData(oldDate, newDate, shares, reportLogger);
             }
 
             if (DoesDateUnitPriceDataExist(oldDate, out int _))
             {
-                editUnitPrice = fUnitPrice.TryEditData(oldDate, newDate, unitPrice, reports);
+                editUnitPrice = fUnitPrice.TryEditData(oldDate, newDate, unitPrice, reportLogger);
             }
 
-            fInvestments.TryEditDataOtherwiseAdd(oldDate, newDate, Investment, reports);
+            fInvestments.TryEditDataOtherwiseAdd(oldDate, newDate, Investment, reportLogger);
 
-            return editShares & editUnitPrice && ComputeInvestments(reports);
+            return editShares & editUnitPrice && ComputeInvestments(reportLogger);
         }
 
         /// <summary>
         /// Edits name and company data of security.
         /// </summary>
-        internal bool TryEditNameCompany(string name, string company, string currency, string url, List<string> sectors, ErrorReports reports)
+        internal bool TryEditNameCompany(string name, string company, string currency, string url, List<string> sectors, Action<string, string, string> reportLogger)
         {
             if (name != fName)
             {
-                reports.AddReport($"Security `{fCompany}'-`{fName}' has name `{fName}' edited to `{name}'.", Location.EditingData);
+                reportLogger("Report", "EditingData", $"Security `{fCompany}'-`{fName}' has name `{fName}' edited to `{name}'.");
                 fName = name;
             }
             if (company != fCompany)
             {
-                reports.AddReport($"Security `{fCompany}'-`{fName}' has company `{fCompany}' edited to `{company}'.", Location.EditingData);
+                reportLogger("Report", "EditingData", $"Security `{fCompany}'-`{fName}' has company `{fCompany}' edited to `{company}'.");
                 fCompany = company;
             }
             if (url != fUrl)
             {
-                reports.AddReport($"Security `{fCompany}'-`{fName}' has url `{fUrl}' edited to `{url}'.", Location.EditingData);
+                reportLogger("Report", "EditingData", $"Security `{fCompany}'-`{fName}' has url `{fUrl}' edited to `{url}'.");
                 fUrl = url;
             }
             if (currency != fCurrency)
             {
-                reports.AddReport($"Security `{fCompany}'-`{fName}' has url `{fCurrency}' edited to `{currency}'.", Location.EditingData);
+                reportLogger("Report", "EditingData", $"Security `{fCompany}'-`{fName}' has url `{fCurrency}' edited to `{currency}'.");
                 fCurrency = currency;
             }
             if (sectors != fSectors)
             {
-                reports.AddReport($"Security `{fCompany}'-`{fName}' has sectors `{string.Join(", ", fSectors)}' edited to `{string.Join(", ", sectors)}'.", Location.EditingData);
+                reportLogger("Report", "EditingData", $"Security `{fCompany}'-`{fName}' has sectors `{string.Join(", ", fSectors)}' edited to `{string.Join(", ", sectors)}'.");
                 fSectors = sectors;
             }
 
@@ -320,9 +319,9 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Tries to delete the data. If it can, it deletes all data specified, then returns true only if all data has been successfully deleted.
         /// </summary>
-        internal bool TryDeleteData(ErrorReports reports, DateTime date, double shares, double unitPrice, double Investment = 0)
+        internal bool TryDeleteData(Action<string, string, string> reportLogger, DateTime date, double shares, double unitPrice, double Investment = 0)
         {
-            return fUnitPrice.TryDeleteValue(date, reports) & fShares.TryDeleteValue(date, reports) & fInvestments.TryDeleteValue(date, reports) && ComputeInvestments(reports);
+            return fUnitPrice.TryDeleteValue(date, reportLogger) & fShares.TryDeleteValue(date, reportLogger) & fInvestments.TryDeleteValue(date, reportLogger) && ComputeInvestments(reportLogger);
         }
 
         /// <summary>
@@ -333,7 +332,7 @@ namespace FinancialStructures.FinanceStructures
         /// <remarks>
         /// This should be called throughout, whenever one updates the data stored in the Security.
         /// </remarks>
-        private bool ComputeInvestments(ErrorReports reports)
+        private bool ComputeInvestments(Action<string, string, string> reportLogger)
         {
             // return true;
             for (int index = 0; index < fInvestments.Count(); index++)
@@ -345,12 +344,12 @@ namespace FinancialStructures.FinanceStructures
                     DailyValuation sharesPreviousValue = fShares.RecentPreviousValue(investmentValue.Day) ?? new DailyValuation(DateTime.Today, 0);
                     if (sharesCurrentValue != null)
                     {
-                        fInvestments.TryEditData(investmentValue.Day, (sharesCurrentValue.Value - sharesPreviousValue.Value) * fUnitPrice.NearestEarlierValue(investmentValue.Day).Value, reports);
+                        fInvestments.TryEditData(investmentValue.Day, (sharesCurrentValue.Value - sharesPreviousValue.Value) * fUnitPrice.NearestEarlierValue(investmentValue.Day).Value, reportLogger);
                     }
                 }
                 if (investmentValue.Value == 0)
                 {
-                    if (fInvestments.TryDeleteValue(investmentValue.Day, reports))
+                    if (fInvestments.TryDeleteValue(investmentValue.Day, reportLogger))
                     {
                         index--;
                     }

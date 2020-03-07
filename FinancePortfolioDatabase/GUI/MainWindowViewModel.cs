@@ -1,5 +1,4 @@
 ﻿using FinanceCommonViewModels;
-using FinancialStructures.ReportingStructures;
 using GUISupport;
 using SavingClasses;
 using System;
@@ -15,14 +14,13 @@ namespace FinanceWindowsViewModels
 
         public MainWindowViewModel()
         {
-            OptionsToolbarCommands = new OptionsToolbarViewModel(allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports);
-
+            OptionsToolbarCommands = new OptionsToolbarViewModel(allData.MyFunds, allData.myBenchMarks, updateDataCallback, ReportLogger);
             Tabs.Add(new BasicDataViewModel(allData.MyFunds, allData.myBenchMarks));
-            Tabs.Add(new SecurityEditWindowViewModel(allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports));
-            Tabs.Add(new SingleValueEditWindowViewModel("Bank Account Edit", allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports, allData.bankAccEditMethods));
-            Tabs.Add(new SingleValueEditWindowViewModel("Sector Edit", allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports, allData.sectorEditMethods));
-            Tabs.Add(new SingleValueEditWindowViewModel("Currency Edit", allData.MyFunds, allData.myBenchMarks, updateDataCallback, UpdateReports, allData.currencyEditMethods));
-            Tabs.Add(new StatsCreatorWindowViewModel(allData.MyFunds, allData.myBenchMarks, UpdateReports));
+            Tabs.Add(new SecurityEditWindowViewModel(allData.MyFunds, allData.myBenchMarks, updateDataCallback, ReportLogger));
+            Tabs.Add(new SingleValueEditWindowViewModel("Bank Account Edit", allData.MyFunds, allData.myBenchMarks, updateDataCallback, ReportLogger, allData.bankAccEditMethods));
+            Tabs.Add(new SingleValueEditWindowViewModel("Sector Edit", allData.MyFunds, allData.myBenchMarks, updateDataCallback, ReportLogger, allData.sectorEditMethods));
+            Tabs.Add(new SingleValueEditWindowViewModel("Currency Edit", allData.MyFunds, allData.myBenchMarks, updateDataCallback, ReportLogger, allData.currencyEditMethods));
+            Tabs.Add(new StatsCreatorWindowViewModel(allData.MyFunds, allData.myBenchMarks, ReportLogger));
 
             ReportsViewModel = new ReportingWindowViewModel();
 
@@ -40,13 +38,19 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        Action<ErrorReports> UpdateReports => (val) => AddReports(val);
+        /// <summary>
+        /// The callback to report an error into the reporting window.
+        /// </summary>
+        public Action<string, string, string> ReportLogger => (type, location, message) => AddReport(type, location, message);
 
-        public void AddReports(ErrorReports reports)
+        public void AddReport(string type, string location, string message)
         {
-            ReportsViewModel.UpdateReports(reports);
+            ReportsViewModel.UpdateReport(type, location, message);
         }
 
+        /// <summary>
+        /// The mechanism by which the data in <see cref="AllData"/> is updated. This includes a GUI update action.
+        /// </summary>
         Action<Action<AllData>> updateDataCallback => action => UpdateData(action);
 
         public void UpdateData(object obj)

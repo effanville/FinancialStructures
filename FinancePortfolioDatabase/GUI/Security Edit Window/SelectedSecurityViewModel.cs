@@ -1,6 +1,5 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.GUIFinanceStructures;
-using FinancialStructures.ReportingStructures;
 using GUISupport;
 using SavingClasses;
 using System;
@@ -59,15 +58,9 @@ namespace FinanceWindowsViewModels
 
         private void ExecuteDeleteValuation(Object obj)
         {
-            var reports = new ErrorReports();
             if (fSelectedName != null && fSelectedValues != null)
             {
-                UpdateDataCallback(alldata => alldata.MyFunds.TryRemoveSecurityData(reports, fSelectedName.Company, fSelectedName.Name, fSelectedValues.Date, fSelectedValues.ShareNo, fSelectedValues.UnitPrice, fSelectedValues.NewInvestment));
-            }
-
-            if (reports.Any())
-            {
-                UpdateReports(reports);
+                UpdateDataCallback(alldata => alldata.MyFunds.TryRemoveSecurityData(ReportLogger, fSelectedName.Company, fSelectedName.Name, fSelectedValues.Date, fSelectedValues.ShareNo, fSelectedValues.UnitPrice, fSelectedValues.NewInvestment));
             }
         }
 
@@ -77,13 +70,12 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null)
             {
-                var reports = new ErrorReports();
                 OpenFileDialog openFile = new OpenFileDialog() { DefaultExt = "xml" };
                 openFile.Filter = "Csv Files|*.csv|All Files|*.*";
                 List<object> outputs = null;
                 if (openFile.ShowDialog() == DialogResult.OK)
                 {
-                    outputs = CsvDataRead.ReadFromCsv(openFile.FileName, ElementType.Security, reports);
+                    outputs = CsvDataRead.ReadFromCsv(openFile.FileName, ElementType.Security, ReportLogger);
                 }
                 if (outputs != null)
                 {
@@ -91,16 +83,12 @@ namespace FinanceWindowsViewModels
                     {
                         if (objec is DayDataView view)
                         {
-                            UpdateDataCallback(alldata => alldata.MyFunds.TryAddDataToSecurity(reports, fSelectedName.Company, fSelectedName.Name, view.Date, view.ShareNo, view.UnitPrice, view.NewInvestment));
+                            UpdateDataCallback(alldata => alldata.MyFunds.TryAddDataToSecurity(ReportLogger, fSelectedName.Company, fSelectedName.Name, view.Date, view.ShareNo, view.UnitPrice, view.NewInvestment));
                         }
                         else
                         {
-                            reports.AddError("Have the wrong type of thing", Location.StatisticsPage);
+                            ReportLogger("Error", "StatisticsPage", "Have the wrong type of thing");
                         }
-                    }
-                    if (reports.Any())
-                    {
-                        UpdateReports(reports);
                     }
                 }
             }
@@ -110,12 +98,11 @@ namespace FinanceWindowsViewModels
 
         private void ExecuteAddEditSecData(Object obj)
         {
-            var reports = new ErrorReports();
             if (fSelectedName != null)
             {
                 if (Portfolio.GetSecurityFromName(fSelectedName.Name, fSelectedName.Company).Count() != SelectedSecurityData.Count)
                 {
-                    UpdateDataCallback(alldata => alldata.MyFunds.TryAddDataToSecurity(reports, fSelectedName.Company, fSelectedName.Name, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment));
+                    UpdateDataCallback(alldata => alldata.MyFunds.TryAddDataToSecurity(ReportLogger, fSelectedName.Company, fSelectedName.Name, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment));
                     fSelectedName.NewValue = false;
                 }
                 else
@@ -128,19 +115,15 @@ namespace FinanceWindowsViewModels
                         if (name.NewValue)
                         {
                             edited = true;
-                            UpdateDataCallback(alldata => alldata.MyFunds.TryEditSecurityData(reports, fSelectedName.Company, fSelectedName.Name, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment));
+                            UpdateDataCallback(alldata => alldata.MyFunds.TryEditSecurityData(ReportLogger, fSelectedName.Company, fSelectedName.Name, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment));
                             name.NewValue = false;
                         }
                     }
                     if (!edited)
                     {
-                        reports.AddError("Was not able to edit security data.", Location.EditingData);
+                        ReportLogger("Error", "EditingData", "Was not able to edit security data.");
                     }
                 }
-            }
-            if (reports.Any())
-            {
-                UpdateReports(reports);
             }
         }
 
@@ -171,8 +154,8 @@ namespace FinanceWindowsViewModels
         }
 
         Action<Action<AllData>> UpdateDataCallback;
-        Action<ErrorReports> UpdateReports;
-        public SelectedSecurityViewModel(Portfolio portfolio, Action<Action<AllData>> updateData, Action<ErrorReports> updateReports, NameData selectedName)
+        Action<string, string, string> ReportLogger;
+        public SelectedSecurityViewModel(Portfolio portfolio, Action<Action<AllData>> updateData, Action<string, string, string> reportLogger, NameData selectedName)
         {
             if (selectedName != null)
             {
@@ -188,7 +171,7 @@ namespace FinanceWindowsViewModels
             AddEditSecurityDataCommand = new BasicCommand(ExecuteAddEditSecData);
             UpdateData(portfolio);
             UpdateDataCallback = updateData;
-            UpdateReports = updateReports;
+            ReportLogger = reportLogger;
         }
     }
 }

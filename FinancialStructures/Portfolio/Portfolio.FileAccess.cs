@@ -1,8 +1,8 @@
 ﻿using FileSupport;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
-using FinancialStructures.ReportingStructures;
 using SavingClasses;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -24,7 +24,7 @@ namespace FinancialStructures.Database
         }
 
 
-        public static List<Sector> LoadPortfolio(this Portfolio portfolio, string filePath, ErrorReports reports)
+        public static List<Sector> LoadPortfolio(this Portfolio portfolio, string filePath, Action<string, string, string> reportLogger)
         {
             if (File.Exists(filePath))
             {
@@ -33,18 +33,18 @@ namespace FinancialStructures.Database
                 return database.myBenchMarks;
             }
 
-            reports.AddReport("Loaded Empty New Database.", Location.Loading);
+            reportLogger("Report", "Loading", "Loaded Empty New Database.");
             portfolio.CopyData(new Portfolio());
             return new List<Sector>();
         }
 
-        public static void SavePortfolio(this Portfolio portfolio, List<Sector> benchMarks, string filePath, ErrorReports reports)
+        public static void SavePortfolio(this Portfolio portfolio, List<Sector> benchMarks, string filePath, Action<string, string, string> reportLogger)
         {
             var toSave = new AllData(portfolio, benchMarks);
             if (filePath != null)
             {
                 XmlFileAccess.WriteToXmlFile(filePath, toSave);
-                reports.AddReport($"Saved Database at {filePath}", Location.Saving);
+                reportLogger("Report", "Saving", $"Saved Database at {filePath}");
             }
         }
     }

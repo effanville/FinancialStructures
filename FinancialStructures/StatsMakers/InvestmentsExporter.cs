@@ -1,13 +1,13 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
-using FinancialStructures.ReportingStructures;
+using System;
 using System.IO;
 
 namespace FinancialStructures.StatsMakers
 {
     public static class InvestmentsExporter
     {
-        public static void Export(Portfolio portfolio, string filePath, ErrorReports reports)
+        public static void Export(Portfolio portfolio, string filePath, Action<string, string, string> reportLogger)
         {
             StreamWriter statsWriter = new StreamWriter(filePath);
             // write in column headers
@@ -18,7 +18,8 @@ namespace FinancialStructures.StatsMakers
                 string securitiesData = stats.Day.ToShortDateString() + ", " + stats.Company + ", " + stats.Name + ", " + stats.Value.ToString();
                 statsWriter.WriteLine(securitiesData);
             }
-            reports.AddReport($"Created Investment list page at {filePath}.", Location.Saving);
+
+            reportLogger("Report", "Saving", $"Created Investment list page at {filePath}.");
             statsWriter.Close();
         }
     }

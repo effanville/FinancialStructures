@@ -1,4 +1,4 @@
-﻿using FinancialStructures.ReportingStructures;
+﻿using FinancialStructures.Reporting;
 using GUISupport;
 using System;
 using System.Collections.ObjectModel;
@@ -60,6 +60,12 @@ namespace FinanceWindowsViewModels
             Reports.AddReports(reports);
             SyncReports();
             reports.Clear();
+        }
+
+        public void UpdateReport(string type, string location, string message)
+        {
+            Reports.AddReport(type, location, message);
+            SyncReports();
         }
 
         public ReportingWindowViewModel()

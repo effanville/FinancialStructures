@@ -1,6 +1,5 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
-using FinancialStructures.ReportingStructures;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -37,12 +36,12 @@ namespace FinancialStructures.GUIFinanceStructures
             {
                 case (FunctionType.Download):
                     {
-                        if (functionInputs.Length != 5)
+                        if (functionInputs.Length != 4)
                         {
                             break;
                         }
 
-                        await DownloadMethod(portfolio, sectors, (NameData)functionInputs[2], (Action<ErrorReports>)functionInputs[3], (ErrorReports)functionInputs[4]).ConfigureAwait(false);
+                        await DownloadMethod(portfolio, sectors, (NameData)functionInputs[2], (Action<string, string, string>)functionInputs[3]).ConfigureAwait(false);
                         break;
                     }
                 case (FunctionType.NameUpdate):
@@ -61,7 +60,7 @@ namespace FinancialStructures.GUIFinanceStructures
                         {
                             break;
                         }
-                        output = CreateMethod(portfolio, sectors, name, (ErrorReports)functionInputs[3]);
+                        output = CreateMethod(portfolio, sectors, name, (Action<string, string, string>)functionInputs[3]);
                         break;
                     }
                 case (FunctionType.Edit):
@@ -71,7 +70,7 @@ namespace FinancialStructures.GUIFinanceStructures
                             break;
 
                         }
-                        output = EditMethod(portfolio, sectors, name, (NameData)functionInputs[3], (ErrorReports)functionInputs[4]);
+                        output = EditMethod(portfolio, sectors, name, (NameData)functionInputs[3], (Action<string, string, string>)functionInputs[4]);
                         break;
                     }
                 case (FunctionType.Delete):
@@ -80,7 +79,7 @@ namespace FinancialStructures.GUIFinanceStructures
                         {
                             break;
                         }
-                        output = DeleteMethod(portfolio, sectors, name, (ErrorReports)functionInputs[3]);
+                        output = DeleteMethod(portfolio, sectors, name, (Action<string, string, string>)functionInputs[3]);
                         break;
                     }
                 case (FunctionType.SelectData):
@@ -89,7 +88,7 @@ namespace FinancialStructures.GUIFinanceStructures
                         {
                             break;
                         }
-                        output = SelectedDataMethod(portfolio, sectors, name, (ErrorReports)functionInputs[3]);
+                        output = SelectedDataMethod(portfolio, sectors, name, (Action<string, string, string>)functionInputs[3]);
                         break;
                     }
                 case (FunctionType.AddData):
@@ -98,7 +97,7 @@ namespace FinancialStructures.GUIFinanceStructures
                         {
                             break;
                         }
-                        output = AddDataMethod(portfolio, sectors, name, (DayValue_ChangeLogged)functionInputs[3], (ErrorReports)functionInputs[4]);
+                        output = AddDataMethod(portfolio, sectors, name, (DayValue_ChangeLogged)functionInputs[3], (Action<string, string, string>)functionInputs[4]);
                         break;
                     }
                 case (FunctionType.EditData):
@@ -107,7 +106,7 @@ namespace FinancialStructures.GUIFinanceStructures
                         {
                             break;
                         }
-                        output = EditDataMethod(portfolio, sectors, name, (DayValue_ChangeLogged)functionInputs[3], (DayValue_ChangeLogged)functionInputs[4], (ErrorReports)functionInputs[5]);
+                        output = EditDataMethod(portfolio, sectors, name, (DayValue_ChangeLogged)functionInputs[3], (DayValue_ChangeLogged)functionInputs[4], (Action<string, string, string>)functionInputs[5]);
                         break;
                     }
                 case (FunctionType.DeleteData):
@@ -116,7 +115,7 @@ namespace FinancialStructures.GUIFinanceStructures
                         {
                             break;
                         }
-                        output = DeleteDataMethod(portfolio, sectors, name, (DayValue_ChangeLogged)functionInputs[3], (ErrorReports)functionInputs[4]);
+                        output = DeleteDataMethod(portfolio, sectors, name, (DayValue_ChangeLogged)functionInputs[3], (Action<string, string, string>)functionInputs[4]);
                         break;
                     }
                 default:
@@ -125,33 +124,33 @@ namespace FinancialStructures.GUIFinanceStructures
             return output;
         }
 
-        private readonly Func<Portfolio, List<Sector>, NameData, Action<ErrorReports>, ErrorReports, Task> DownloadMethod;
+        private readonly Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, Task> DownloadMethod;
         private readonly Func<Portfolio, List<Sector>, List<NameData>> UpdateNameMethod;
 
-        private readonly Func<Portfolio, List<Sector>, NameData, ErrorReports, bool> CreateMethod;
+        private readonly Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, bool> CreateMethod;
 
-        private readonly Func<Portfolio, List<Sector>, NameData, NameData, ErrorReports, bool> EditMethod;
+        private readonly Func<Portfolio, List<Sector>, NameData, NameData, Action<string, string, string>, bool> EditMethod;
 
-        private readonly Func<Portfolio, List<Sector>, NameData, ErrorReports, bool> DeleteMethod;
+        private readonly Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, bool> DeleteMethod;
 
-        private readonly Func<Portfolio, List<Sector>, NameData, ErrorReports, List<DayValue_ChangeLogged>> SelectedDataMethod;
+        private readonly Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, List<DayValue_ChangeLogged>> SelectedDataMethod;
 
-        private readonly Func<Portfolio, List<Sector>, NameData, DayValue_ChangeLogged, ErrorReports, bool> AddDataMethod;
+        private readonly Func<Portfolio, List<Sector>, NameData, DayValue_ChangeLogged, Action<string, string, string>, bool> AddDataMethod;
 
-        private readonly Func<Portfolio, List<Sector>, NameData, DayValue_ChangeLogged, DayValue_ChangeLogged, ErrorReports, bool> EditDataMethod;
+        private readonly Func<Portfolio, List<Sector>, NameData, DayValue_ChangeLogged, DayValue_ChangeLogged, Action<string, string, string>, bool> EditDataMethod;
 
-        private readonly Func<Portfolio, List<Sector>, NameData, DayValue_ChangeLogged, ErrorReports, bool> DeleteDataMethod;
+        private readonly Func<Portfolio, List<Sector>, NameData, DayValue_ChangeLogged, Action<string, string, string>, bool> DeleteDataMethod;
 
         public EditMethods(
-            Func<Portfolio, List<Sector>, NameData, Action<ErrorReports>, ErrorReports, Task> downloadMethod,
+            Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, Task> downloadMethod,
             Func<Portfolio, List<Sector>, List<NameData>> updateNameMethod = null,
-            Func<Portfolio, List<Sector>, NameData, ErrorReports, bool> createMethod = null,
-            Func<Portfolio, List<Sector>, NameData, NameData, ErrorReports, bool> editMethod = null,
-            Func<Portfolio, List<Sector>, NameData, ErrorReports, bool> deleteMethod = null,
-            Func<Portfolio, List<Sector>, NameData, ErrorReports, List<DayValue_ChangeLogged>> selectedDataMethod = null,
-            Func<Portfolio, List<Sector>, NameData, DayValue_ChangeLogged, ErrorReports, bool> addDataMethod = null,
-            Func<Portfolio, List<Sector>, NameData, DayValue_ChangeLogged, DayValue_ChangeLogged, ErrorReports, bool> editDataMethod = null,
-            Func<Portfolio, List<Sector>, NameData, DayValue_ChangeLogged, ErrorReports, bool> deleteDataMethod = null)
+            Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, bool> createMethod = null,
+            Func<Portfolio, List<Sector>, NameData, NameData, Action<string, string, string>, bool> editMethod = null,
+            Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, bool> deleteMethod = null,
+            Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, List<DayValue_ChangeLogged>> selectedDataMethod = null,
+            Func<Portfolio, List<Sector>, NameData, DayValue_ChangeLogged, Action<string, string, string>, bool> addDataMethod = null,
+            Func<Portfolio, List<Sector>, NameData, DayValue_ChangeLogged, DayValue_ChangeLogged, Action<string, string, string>, bool> editDataMethod = null,
+            Func<Portfolio, List<Sector>, NameData, DayValue_ChangeLogged, Action<string, string, string>, bool> deleteDataMethod = null)
         {
             DownloadMethod = downloadMethod;
             UpdateNameMethod = updateNameMethod;

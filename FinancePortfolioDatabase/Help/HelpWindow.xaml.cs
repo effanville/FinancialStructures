@@ -1,4 +1,4 @@
-﻿using FinancialStructures.ReportingStructures;
+﻿using FinancialStructures.Reporting;
 using System;
 using System.IO;
 using System.Windows;
@@ -10,17 +10,15 @@ namespace FinanceWindows
     /// </summary>
     public partial class HelpWindow : Window
     {
-        public HelpWindow(Action<ErrorReports> reportUpdate)
+        public HelpWindow(Action<string, string, string> reportLogger)
         {
-            var reports = new ErrorReports();
             InitializeComponent();
             string helpPath = Path.GetFullPath("Help\\help.html");
             if (!File.Exists(helpPath))
             {
-                reports.AddError("Could not find help documentation.", Location.Help);
+                reportLogger("Error", "Help","Could not find help documentation.");
                 return;
             }
-            reportUpdate(reports);
             Uri path = new Uri(helpPath);
             webBrowser.Source = path;
         }

@@ -1,6 +1,5 @@
 ﻿using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
-using FinancialStructures.ReportingStructures;
 using System;
 using System.Collections.Generic;
 
@@ -21,26 +20,26 @@ namespace FinancialStructures.Database
             return 1.0;
         }
 
-        public static bool TryAddCurrency(this Portfolio portfolio, NameData name, ErrorReports reports)
+        public static bool TryAddCurrency(this Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
         {
-            return portfolio.TryAddCurrency(name.Name, name.Url, reports);
+            return portfolio.TryAddCurrency(name.Name, name.Url, reportLogger);
         }
 
         /// <summary>
         /// Tries to add a sector to the underlying global database
         /// </summary>
-        public static bool TryAddCurrency(this Portfolio portfolio, string name, string url, ErrorReports reports)
+        public static bool TryAddCurrency(this Portfolio portfolio, string name, string url, Action<string, string, string> reportLogger)
         {
             foreach (var sector in portfolio.Currencies)
             {
                 if (name == sector.GetName())
                 {
-                    reports.AddError($"Sector with name {name} already exists.", Location.AddingData);
+                    reportLogger("Error", "AddingData", $"Sector with name {name} already exists.");
                     return false;
                 }
             }
             Currency newSector = new Currency(name, url);
-            reports.AddReport($"Added sector with name {name}.", Location.AddingData);
+            reportLogger("Report", "AddingData", $"Added sector with name {name}.");
             portfolio.Currencies.Add(newSector);
             return true;
         }
@@ -61,7 +60,7 @@ namespace FinancialStructures.Database
             return false;
         }
 
-        public static List<DayValue_ChangeLogged> CurrencyData(this Portfolio portfolio, NameData name, ErrorReports reports)
+        public static List<DayValue_ChangeLogged> CurrencyData(this Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
         {
             foreach (Currency sec in portfolio.Currencies)
             {
@@ -71,7 +70,7 @@ namespace FinancialStructures.Database
                 }
             }
 
-            reports.AddError($"Could not find currency {name.Name}", Location.DatabaseAccess);
+            reportLogger("Error", "DatabaseAccess", $"Could not find currency {name.Name}");
             return new List<DayValue_ChangeLogged>();
         }
 
@@ -90,81 +89,81 @@ namespace FinancialStructures.Database
             return false;
         }
 
-        public static bool TryAddDataToCurrency(this Portfolio portfolio, NameData name, DayValue_ChangeLogged value, ErrorReports reports)
+        public static bool TryAddDataToCurrency(this Portfolio portfolio, NameData name, DayValue_ChangeLogged value, Action<string, string, string> reportLogger)
         {
-            return portfolio.TryAddDataToCurrency(name.Name, value.Day, value.Value, reports);
+            return portfolio.TryAddDataToCurrency(name.Name, value.Day, value.Value, reportLogger);
         }
 
         /// <summary>
         /// Attempts to add data to the sector. Fails if data already exists
         /// </summary>
-        public static bool TryAddDataToCurrency(this Portfolio portfolio, string name, DateTime date, double value, ErrorReports reports)
+        public static bool TryAddDataToCurrency(this Portfolio portfolio, string name, DateTime date, double value, Action<string, string, string> reportLogger)
         {
             foreach (var sector in portfolio.Currencies)
             {
                 if (name == sector.GetName())
                 {
-                    return sector.TryAddData(date, value, reports);
+                    return sector.TryAddData(date, value, reportLogger);
                 }
             }
 
             return false;
         }
 
-        public static bool TryEditCurrency(this Portfolio portfolio, NameData name, DayValue_ChangeLogged oldDate, DayValue_ChangeLogged value, ErrorReports reports)
+        public static bool TryEditCurrency(this Portfolio portfolio, NameData name, DayValue_ChangeLogged oldDate, DayValue_ChangeLogged value, Action<string, string, string> reportLogger)
         {
-            return portfolio.TryEditCurrency(name.Name, oldDate.Day, value.Day, value.Value, reports);
+            return portfolio.TryEditCurrency(name.Name, oldDate.Day, value.Day, value.Value, reportLogger);
         }
 
-        public static bool TryEditCurrency(this Portfolio portfolio, string name, DateTime oldDate, DateTime date, double value, ErrorReports reports)
+        public static bool TryEditCurrency(this Portfolio portfolio, string name, DateTime oldDate, DateTime date, double value, Action<string, string, string> reportLogger)
         {
             foreach (var sector in portfolio.Currencies)
             {
                 if (name == sector.GetName())
                 {
-                    return sector.TryEditData(oldDate, date, value, reports);
+                    return sector.TryEditData(oldDate, date, value, reportLogger);
                 }
             }
 
             return false;
         }
 
-        public static bool TryDeleteCurrencyData(this Portfolio portfolio, NameData name, DayValue_ChangeLogged value, ErrorReports reports)
+        public static bool TryDeleteCurrencyData(this Portfolio portfolio, NameData name, DayValue_ChangeLogged value, Action<string, string, string> reportLogger)
         {
-            return portfolio.TryDeleteCurrencyData(name.Name, value.Day, value.Value, reports);
+            return portfolio.TryDeleteCurrencyData(name.Name, value.Day, value.Value, reportLogger);
         }
 
-        public static bool TryDeleteCurrencyData(this Portfolio portfolio, string name, DateTime date, double value, ErrorReports reports)
+        public static bool TryDeleteCurrencyData(this Portfolio portfolio, string name, DateTime date, double value, Action<string, string, string> reportLogger)
         {
             foreach (var currency in portfolio.Currencies)
             {
                 if (name == currency.GetName())
                 {
-                    return currency.TryDeleteData(date, reports);
+                    return currency.TryDeleteData(date, reportLogger);
                 }
             }
 
             return false;
         }
 
-        public static bool TryEditCurrencyName(this Portfolio portfolio, NameData oldName, NameData newName, ErrorReports reports)
+        public static bool TryEditCurrencyName(this Portfolio portfolio, NameData oldName, NameData newName, Action<string, string, string> reportLogger)
         {
-            return portfolio.TryEditCurrencyName(oldName.Name, newName.Name, newName.Url, reports);
+            return portfolio.TryEditCurrencyName(oldName.Name, newName.Name, newName.Url, reportLogger);
         }
 
-        public static bool TryEditCurrencyName(this Portfolio portfolio, string oldName, string newName, string url, ErrorReports reports)
+        public static bool TryEditCurrencyName(this Portfolio portfolio, string oldName, string newName, string url, Action<string, string, string> reportLogger)
         {
             foreach (var sector in portfolio.Currencies)
             {
                 if (sector.GetName() == oldName)
                 {
                     sector.EditNameData("", newName, url);
-                    reports.AddReport($"Renamed sector {oldName} with new name {newName}.", Location.EditingData);
+                    reportLogger("Report", "EditingData", $"Renamed sector {oldName} with new name {newName}.");
                     return true;
                 }
             }
 
-            reports.AddError($"Could not rename sector {oldName} with new name {newName}.", Location.EditingData);
+            reportLogger("Error", "EditingData", $"Could not rename sector {oldName} with new name {newName}.");
             return false;
         }
 
@@ -198,21 +197,21 @@ namespace FinancialStructures.Database
             return false;
         }
 
-        public static bool TryDeleteCurrency(this Portfolio portfolio, NameData name, ErrorReports reports)
+        public static bool TryDeleteCurrency(this Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
         {
-            return portfolio.TryDeleteCurrency(name.Name, reports);
+            return portfolio.TryDeleteCurrency(name.Name, reportLogger);
         }
 
         /// <summary>
         /// Deletes sector if sector exists. Does nothing otherwise.
         /// </summary>
-        public static bool TryDeleteCurrency(this Portfolio portfolio, string name, ErrorReports reports)
+        public static bool TryDeleteCurrency(this Portfolio portfolio, string name, Action<string, string, string> reportLogger)
         {
             foreach (var sector in portfolio.Currencies)
             {
                 if (name == sector.GetName())
                 {
-                    reports.AddReport($"Deleted sector {sector.GetName()}", Location.DeletingData);
+                    reportLogger("Report", "DeletingData", $"Deleted sector {sector.GetName()}");
                     portfolio.Currencies.Remove(sector);
                     return true;
                 }

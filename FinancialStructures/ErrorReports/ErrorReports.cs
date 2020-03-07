@@ -1,7 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
-namespace FinancialStructures.ReportingStructures
+namespace FinancialStructures.Reporting
 {
     /// <summary>
     /// Structure of reports to tell the user what is happening
@@ -12,6 +13,7 @@ namespace FinancialStructures.ReportingStructures
         {
             fReports = new List<ErrorReport>();
         }
+
         public int Count()
         {
             return fReports.Count();
@@ -21,21 +23,27 @@ namespace FinancialStructures.ReportingStructures
         {
             return fReports.Any();
         }
-        /// <summary>
-        /// Instantiates the 
-        /// </summary>
-        public bool Configure()
-        {
-            fReports = new List<ErrorReport>();
-            return true;
-        }
 
         private List<ErrorReport> fReports;
 
         public void AddReports(ErrorReports reports)
         {
             fReports.AddRange(reports.GetReports());
-            //fReports.Sort();
+        }
+
+        /// <summary>
+        /// Adds a report to the existing list 
+        /// </summary>
+        public void AddReport(string type, string location, string message)
+        {
+            if (!ReportType.TryParse(type, out ReportType typeOfReport))
+            {
+            }
+            if (!Location.TryParse(location, out Location locationType))
+            {
+            }
+
+            AddGeneralReport(typeOfReport, locationType, message);
         }
 
         /// <summary>

@@ -1,6 +1,5 @@
 ﻿using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
-using FinancialStructures.ReportingStructures;
 using System;
 using System.Collections.Generic;
 
@@ -24,25 +23,25 @@ namespace SectorHelperFunctions
             return outputs;
         }
 
-        public static bool TryAddSector(List<Sector> sectors, NameData name, ErrorReports reports)
+        public static bool TryAddSector(List<Sector> sectors, NameData name, Action<string, string, string> reportLogger)
         {
-            return TryAddSector(sectors, name.Name, name.Url, reports);
+            return TryAddSector(sectors, name.Name, name.Url, reportLogger);
         }
         /// <summary>
         /// Tries to add a sector to the underlying global database
         /// </summary>
-        public static bool TryAddSector(List<Sector> sectors, string name, string url, ErrorReports reports)
+        public static bool TryAddSector(List<Sector> sectors, string name, string url, Action<string, string, string> reportLogger)
         {
             foreach (var sector in sectors)
             {
                 if (name == sector.GetName())
                 {
-                    reports.AddError($"Sector with name {name} already exists.", Location.AddingData);
+                    reportLogger("Error", "AddingData", $"Sector with name {name} already exists.");
                     return false;
                 }
             }
             Sector newSector = new Sector(name, url);
-            reports.AddReport($"Added sector with name {name}.", Location.AddingData);
+            reportLogger("Report", "AddingData", $"Added sector with name {name}.");
             sectors.Add(newSector);
             return true;
         }
@@ -78,7 +77,7 @@ namespace SectorHelperFunctions
             return false;
         }
 
-        public static List<DayValue_ChangeLogged> SectorData(List<Sector> sectors, NameData name, ErrorReports reports)
+        public static List<DayValue_ChangeLogged> SectorData(List<Sector> sectors, NameData name, Action<string, string, string> reportLogger)
         {
             foreach (Sector sec in sectors)
             {
@@ -87,85 +86,85 @@ namespace SectorHelperFunctions
                     return sec.GetDataForDisplay();
                 }
             }
-            reports.AddError($"Sector {name.Name} does not exist.", Location.DatabaseAccess);
+            reportLogger("Error", "DatabaseAccess", $"Sector {name.Name} does not exist.");
             return new List<DayValue_ChangeLogged>();
         }
 
-        public static bool TryAddDataToSector(List<Sector> sectors, NameData name, DayValue_ChangeLogged value, ErrorReports reports)
+        public static bool TryAddDataToSector(List<Sector> sectors, NameData name, DayValue_ChangeLogged value, Action<string, string, string> reportLogger)
         {
-            return TryAddDataToSector(sectors, name.Name, value.Day, value.Value, reports);
+            return TryAddDataToSector(sectors, name.Name, value.Day, value.Value, reportLogger);
         }
 
         /// <summary>
         /// Attempts to add data to the sector. Fails if data already exists
         /// </summary>
-        public static bool TryAddDataToSector(List<Sector> sectors, string name, DateTime date, double value, ErrorReports reports)
+        public static bool TryAddDataToSector(List<Sector> sectors, string name, DateTime date, double value, Action<string, string, string> reportLogger)
         {
             foreach (var sector in sectors)
             {
                 if (name == sector.GetName())
                 {
-                    return sector.TryAddData(date, value, reports);
+                    return sector.TryAddData(date, value, reportLogger);
                 }
             }
-            reports.AddError($"Could not find sector {name}", Location.AddingData);
+            reportLogger("Error", "AddingData", $"Could not find sector {name}");
             return false;
         }
 
-        public static bool TryEditSector(List<Sector> sectors, NameData name, DayValue_ChangeLogged oldData, DayValue_ChangeLogged newData, ErrorReports reports)
+        public static bool TryEditSector(List<Sector> sectors, NameData name, DayValue_ChangeLogged oldData, DayValue_ChangeLogged newData, Action<string, string, string> reportLogger)
         {
-            return TryEditSector(sectors, name.Name, oldData.Day, newData.Day, newData.Value, reports);
+            return TryEditSector(sectors, name.Name, oldData.Day, newData.Day, newData.Value, reportLogger);
         }
 
-        public static bool TryEditSector(List<Sector> sectors, string name, DateTime oldDate, DateTime date, double value, ErrorReports reports)
+        public static bool TryEditSector(List<Sector> sectors, string name, DateTime oldDate, DateTime date, double value, Action<string, string, string> reportLogger)
         {
             foreach (var sector in sectors)
             {
                 if (name == sector.GetName())
                 {
-                    return sector.TryEditData(oldDate, date, value, reports);
-                }
-            }
-
-            return false;
-        }
-
-        public static bool TryDeleteSectorData(List<Sector> sectors, NameData name, DayValue_ChangeLogged value, ErrorReports reports)
-        {
-            return TryDeleteSectorData(sectors, name.Name, value.Day, value.Value, reports);
-        }
-
-        public static bool TryDeleteSectorData(List<Sector> sectors, string name, DateTime date, double value, ErrorReports reports)
-        {
-            foreach (var sector in sectors)
-            {
-                if (name == sector.GetName())
-                {
-                    return sector.TryDeleteData(date, reports);
+                    return sector.TryEditData(oldDate, date, value, reportLogger);
                 }
             }
 
             return false;
         }
 
-        public static bool TryEditSectorName(List<Sector> sectors, NameData oldName, NameData newName, ErrorReports reports)
+        public static bool TryDeleteSectorData(List<Sector> sectors, NameData name, DayValue_ChangeLogged value, Action<string, string, string> reportLogger)
         {
-            return TryEditSectorName(sectors, oldName.Name, newName.Name, newName.Url, reports);
+            return TryDeleteSectorData(sectors, name.Name, value.Day, value.Value, reportLogger);
         }
 
-        public static bool TryEditSectorName(List<Sector> sectors, string oldName, string newName, string url, ErrorReports reports)
+        public static bool TryDeleteSectorData(List<Sector> sectors, string name, DateTime date, double value, Action<string, string, string> reportLogger)
+        {
+            foreach (var sector in sectors)
+            {
+                if (name == sector.GetName())
+                {
+                    return sector.TryDeleteData(date, reportLogger);
+                }
+            }
+
+            return false;
+        }
+
+        public static bool TryEditSectorName(List<Sector> sectors, NameData oldName, NameData newName, Action<string, string, string> reportLogger)
+        {
+            return TryEditSectorName(sectors, oldName.Name, newName.Name, newName.Url, reportLogger);
+        }
+
+        public static bool TryEditSectorName(List<Sector> sectors, string oldName, string newName, string url, Action<string, string, string> reportLogger)
         {
             foreach (var sector in sectors)
             {
                 if (sector.GetName() == oldName)
                 {
                     sector.EditNameData(string.Empty, newName, url);
-                    reports.AddReport($"Renamed sector {oldName} with new name {newName}.", Location.EditingData);
+                    reportLogger("Report", "EditingData", $"Renamed sector {oldName} with new name {newName}.");
                     return true;
                 }
             }
 
-            reports.AddError($"Could not rename sector {oldName} with new name {newName}.", Location.EditingData);
+            reportLogger("Error", "EditingData", $"Could not rename sector {oldName} with new name {newName}.");
             return false;
         }
 
@@ -185,21 +184,21 @@ namespace SectorHelperFunctions
             return false;
         }
 
-        public static bool TryDeleteSector(List<Sector> sectors, NameData name, ErrorReports reports)
+        public static bool TryDeleteSector(List<Sector> sectors, NameData name, Action<string, string, string> reportLogger)
         {
-            return TryDeleteSector(sectors, name.Name, reports);
+            return TryDeleteSector(sectors, name.Name, reportLogger);
         }
 
         /// <summary>
         /// Deletes sector if sector exists. Does nothing otherwise.
         /// </summary>
-        public static bool TryDeleteSector(List<Sector> sectors, string name, ErrorReports reports)
+        public static bool TryDeleteSector(List<Sector> sectors, string name, Action<string, string, string> reportLogger)
         {
             foreach (var sector in sectors)
             {
                 if (name == sector.GetName())
                 {
-                    reports.AddReport($"Removed sector {name}", Location.DeletingData);
+                    reportLogger("Report", "DeletingData", $"Removed sector {name}");
                     sectors.Remove(sector);
                     return true;
                 }

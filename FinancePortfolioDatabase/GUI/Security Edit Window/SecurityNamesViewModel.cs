@@ -1,6 +1,5 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.GUIFinanceStructures;
-using FinancialStructures.ReportingStructures;
 using GUISupport;
 using SavingClasses;
 using System;
@@ -41,14 +40,13 @@ namespace FinanceWindowsViewModels
 
         private void ExecuteCreateEditCommand(Object obj)
         {
-            var reports = new ErrorReports();
             if (Portfolio.Funds.Count != FundNames.Count)
             {
                 bool edited = false;
                 if (selectedName.NewValue)
                 {
                     edited = true;
-                    UpdateData(alldata => alldata.MyFunds.TryAddSecurity(reports, selectedName.Company, selectedName.Name, selectedName.Currency, selectedName.Url, selectedName.Sectors));
+                    DataUpdateCallback(alldata => alldata.MyFunds.TryAddSecurity(ReportLogger, selectedName.Company, selectedName.Name, selectedName.Currency, selectedName.Url, selectedName.Sectors));
                     if (selectedName != null)
                     {
                         selectedName.NewValue = false;
@@ -58,7 +56,7 @@ namespace FinanceWindowsViewModels
 
                 if (!edited)
                 {
-                    reports.AddError("No Name provided to create a sector.", Location.AddingData);
+                    ReportLogger("Error", "AddingData", "No Name provided to create a sector.");
                 }
             }
             else
@@ -72,36 +70,24 @@ namespace FinanceWindowsViewModels
                     if (name.NewValue && (!string.IsNullOrEmpty(name.Name) || !string.IsNullOrEmpty(name.Company)))
                     {
                         edited = true;
-                        UpdateData(alldata => alldata.MyFunds.TryEditSecurityName(reports, fPreEditFundNames[i].Company, fPreEditFundNames[i].Name, name.Company, name.Name, name.Currency, name.Url, name.Sectors));
+                        DataUpdateCallback(alldata => alldata.MyFunds.TryEditSecurityName(ReportLogger, fPreEditFundNames[i].Company, fPreEditFundNames[i].Name, name.Company, name.Name, name.Currency, name.Url, name.Sectors));
                         name.NewValue = false;
                     }
                 }
                 if (!edited)
                 {
-                    reports.AddError("Was not able to edit desired security.", Location.EditingData);
+                    ReportLogger("Error", "EditingData", "Was not able to edit desired security.");
                 }
             }
-
-            if (reports.Any())
-            {
-                UpdateReports(reports);
-            }
-
         }
 
         public ICommand DownloadCommand { get; }
 
         private void ExecuteDownloadCommand(Object obj)
         {
-            var reports = new ErrorReports();
             if (fSelectedName != null)
             {
-                UpdateData(async alldata => await DataUpdater.DownloadSecurity(alldata.MyFunds, fSelectedName.Company, fSelectedName.Name, UpdateReports, reports).ConfigureAwait(false));
-            }
-
-            if (reports.Any())
-            {
-                UpdateReports(reports);
+                DataUpdateCallback(async alldata => await DataUpdater.DownloadSecurity(alldata.MyFunds, fSelectedName.Company, fSelectedName.Name, ReportLogger).ConfigureAwait(false));
             }
         }
 
@@ -128,30 +114,25 @@ namespace FinanceWindowsViewModels
 
         private void ExecuteDeleteSecurity(Object obj)
         {
-            var reports = new ErrorReports();
             if (fSelectedName != null)
             {
-                UpdateData(alldata => alldata.MyFunds.TryRemoveSecurity(reports, fSelectedName.Company, fSelectedName.Name));
+                DataUpdateCallback(alldata => alldata.MyFunds.TryRemoveSecurity(ReportLogger, fSelectedName.Company, fSelectedName.Name));
             }
             else
             {
-                reports.AddError("Something went wrong when trying to delete security.", Location.DeletingData);
-            }
-
-            if (reports.Any())
-            {
-                UpdateReports(reports);
+                ReportLogger("Error", "DeletingData", "Something went wrong when trying to delete security.");
             }
         }
 
-        Action<Action<AllData>> UpdateData;
-        Action<ErrorReports> UpdateReports;
+        Action<Action<AllData>> DataUpdateCallback;
+        Action<string, string, string> ReportLogger;
         public Action<NameData> LoadSelectedTab;
-        public SecurityNamesViewModel(Portfolio portfolio, Action<Action<AllData>> updateData, Action<ErrorReports> updateReports, Action<NameData> loadSelectedData)
+
+        public SecurityNamesViewModel(Portfolio portfolio, Action<Action<AllData>> updateData, Action<string, string, string> reportLogger, Action<NameData> loadSelectedData)
         {
             Portfolio = portfolio;
-            UpdateData = updateData;
-            UpdateReports = updateReports;
+            DataUpdateCallback = updateData;
+            ReportLogger = reportLogger;
             LoadSelectedTab = loadSelectedData;
             FundNames = portfolio.SecurityNamesAndCompanies();
             fPreEditFundNames = portfolio.SecurityNamesAndCompanies();

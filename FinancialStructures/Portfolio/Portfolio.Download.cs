@@ -1,6 +1,5 @@
 ﻿using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
-using FinancialStructures.ReportingStructures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,34 +21,34 @@ namespace FinancialStructures.Database
 
     public static class DataUpdater
     {
-        public async static Task Downloader(Portfolio portfolio, List<Sector> sectors, Action<ErrorReports> updateReports, ErrorReports reports)
+        public async static Task Downloader(Portfolio portfolio, List<Sector> sectors, Action<string, string, string> reportLogger)
         {
-            await DownloadPortfolioLatest(portfolio, updateReports, reports).ConfigureAwait(false);
-            await DownloadBenchMarksLatest(sectors, updateReports, reports).ConfigureAwait(false);
+            await DownloadPortfolioLatest(portfolio, reportLogger).ConfigureAwait(false);
+            await DownloadBenchMarksLatest(sectors, reportLogger).ConfigureAwait(false);
         }
 
-        public async static Task DownloadSecurity(Portfolio portfolio, string company, string name, Action<ErrorReports> updateReports, ErrorReports reports)
+        public async static Task DownloadSecurity(Portfolio portfolio, string company, string name, Action<string, string, string> reportLogger)
         {
             var sec = portfolio.GetSecurityFromName(name, company);
-            await DownloadLatestValue(sec.GetCompany(), sec.GetName(), sec.GetUrl(), value => sec.UpdateSecurityData(value, reports, DateTime.Today), updateReports, reports).ConfigureAwait(false);
+            await DownloadLatestValue(sec.GetCompany(), sec.GetName(), sec.GetUrl(), value => sec.UpdateSecurityData(value, reportLogger, DateTime.Today), reportLogger).ConfigureAwait(false);
         }
 
-        public async static Task DownloadCurrency(Portfolio portfolio, NameData name, Action<ErrorReports> updateReports, ErrorReports reports)
+        public async static Task DownloadCurrency(Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
         {
             var currency = portfolio.GetCurrencyFromName(name.Name);
-            await DownloadLatestValue(string.Empty, currency.GetName(), currency.GetUrl(), value => currency.TryAddData(DateTime.Today, value, reports), updateReports, reports).ConfigureAwait(false);
+            await DownloadLatestValue(string.Empty, currency.GetName(), currency.GetUrl(), value => currency.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
         }
 
-        public async static Task DownloadBankAccount(Portfolio portfolio, NameData name, Action<ErrorReports> updateReports, ErrorReports reports)
+        public async static Task DownloadBankAccount(Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
         {
             var acc = portfolio.GetBankAccountFromName(name.Name, name.Company);
-            await DownloadLatestValue(acc.GetCompany(), acc.GetName(), acc.GetUrl(), value => acc.TryAddData(DateTime.Today, value, reports), updateReports, reports).ConfigureAwait(false);
+            await DownloadLatestValue(acc.GetCompany(), acc.GetName(), acc.GetUrl(), value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
         }
 
-        public async static Task DownloadSector(List<Sector> sectors, NameData name, Action<ErrorReports> updateReports, ErrorReports reports)
+        public async static Task DownloadSector(List<Sector> sectors, NameData name, Action<string, string, string> reportLogger)
         {
             Sector sector = sectors.Find(sec => sec.GetName() == name.Name);
-            await DownloadLatestValue(string.Empty, sector.GetName(), sector.GetUrl(), value => sector.TryAddData(DateTime.Today, value, reports), updateReports, reports).ConfigureAwait(false);
+            await DownloadLatestValue(string.Empty, sector.GetName(), sector.GetUrl(), value => sector.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
         }
 
         private static string Pence = "GBX";
@@ -95,48 +94,47 @@ namespace FinancialStructures.Database
             return WebsiteType.NotImplemented;
         }
 
-        public async static Task DownloadPortfolioLatest(Portfolio portfo, Action<ErrorReports> updateReports, ErrorReports reports)
+        public async static Task DownloadPortfolioLatest(Portfolio portfo, Action<string, string, string> reportLogger)
         {
             foreach (var sec in portfo.GetSecurities())
             {
-                await DownloadLatestValue(sec.GetCompany(), sec.GetName(), sec.GetUrl(), value => sec.UpdateSecurityData(value, reports, DateTime.Today), updateReports, reports).ConfigureAwait(false);
+                await DownloadLatestValue(sec.GetCompany(), sec.GetName(), sec.GetUrl(), value => sec.UpdateSecurityData(value, reportLogger, DateTime.Today), reportLogger).ConfigureAwait(false);
             }
             foreach (var acc in portfo.GetBankAccounts())
             {
-                await DownloadLatestValue(acc.GetCompany(), acc.GetName(), acc.GetUrl(), value => acc.TryAddData(DateTime.Today, value, reports), updateReports, reports).ConfigureAwait(false);
+                await DownloadLatestValue(acc.GetCompany(), acc.GetName(), acc.GetUrl(), value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
             }
             foreach (var currency in portfo.GetCurrencies())
             {
-                await DownloadLatestValue(string.Empty, currency.GetName(), currency.GetUrl(), value => currency.TryAddData(DateTime.Today, value, reports), updateReports, reports).ConfigureAwait(false);
+                await DownloadLatestValue(string.Empty, currency.GetName(), currency.GetUrl(), value => currency.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
             }
         }
 
-        public async static Task DownloadBenchMarksLatest(List<Sector> sectors, Action<ErrorReports> updateReports, ErrorReports reports)
+        public async static Task DownloadBenchMarksLatest(List<Sector> sectors, Action<string, string, string> reportLogger)
         {
             foreach (var sector in sectors)
             {
-                await DownloadLatestValue(string.Empty, sector.GetName(), sector.GetUrl(), value => sector.TryAddData(DateTime.Today, value, reports), updateReports, reports).ConfigureAwait(false);
+                await DownloadLatestValue(string.Empty, sector.GetName(), sector.GetUrl(), value => sector.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
             }
         }
 
-        public async static Task DownloadLatestValue(string company, string name, string url, Action<double> updateValue, Action<ErrorReports> updateReports, ErrorReports reports)
+        public async static Task DownloadLatestValue(string company, string name, string url, Action<double> updateValue, Action<string, string, string> reportLogger)
         {
-            string data = await DownloadFromURL(url, reports).ConfigureAwait(false);
+            string data = await DownloadFromURL(url, reportLogger).ConfigureAwait(false);
             if (string.IsNullOrEmpty(data))
             {
-                reports.AddError($"{company}-{name}: could not download data from {url}", Location.Downloading);
+                reportLogger("Error", "Downloading", $"{company}-{name}: could not download data from {url}");
                 return;
             }
-            if (!ProcessDownloadString(url, data, reports, out double value))
+            if (!ProcessDownloadString(url, data, reportLogger, out double value))
             {
                 return;
             }
 
             updateValue(value);
-            updateReports(reports);
         }
 
-        public static async Task<string> DownloadFromURL(string url, ErrorReports reports)
+        public static async Task<string> DownloadFromURL(string url, Action<string, string, string> reportLogger)
         {
             if (string.IsNullOrEmpty(url))
             {
@@ -159,7 +157,7 @@ namespace FinancialStructures.Database
                 }
                 catch (Exception ex)
                 {
-                    reports.AddError($"Failed to download from url {url}. Reason : {ex.Message}", Location.Downloading);
+                    reportLogger("Error", "Downloading", $"Failed to download from url {url}. Reason : {ex.Message}");
                     return output;
                 }
             }
@@ -167,7 +165,7 @@ namespace FinancialStructures.Database
             return output;
         }
 
-        private static bool ProcessDownloadString(string url, string data, ErrorReports reports, out double value)
+        private static bool ProcessDownloadString(string url, string data, Action<string, string, string> reportLogger, out double value)
         {
             value = double.NaN;
             switch (AddressType(url))
@@ -177,7 +175,7 @@ namespace FinancialStructures.Database
                         value = ProcessFromFT(data);
                         if (double.IsNaN(value))
                         {
-                            reports.AddError($"Could not download data from morningstar url: {url}", Location.Downloading);
+                            reportLogger("Error", "Downloading", $"Could not download data from morningstar url: {url}");
                             return false;
                         }
                         return true;
@@ -187,7 +185,7 @@ namespace FinancialStructures.Database
                         value = ProcessFromYahoo(data);
                         if (double.IsNaN(value))
                         {
-                            reports.AddError($"Could not download data from Yahoo url: {url}", Location.Downloading);
+                            reportLogger("Error", "Downloading", $"Could not download data from Yahoo url: {url}");
                             return false;
                         }
                         return true;
@@ -197,7 +195,7 @@ namespace FinancialStructures.Database
                 case WebsiteType.Google:
                 case WebsiteType.TrustNet:
                 case WebsiteType.Bloomberg:
-                    reports.AddError($"Url not of a currently implemented downloadable type: {url}", Location.Downloading);
+                    reportLogger("Error", "Downloading", $"Url not of a currently implemented downloadable type: {url}");
                     return false;
             }
         }

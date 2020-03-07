@@ -3,7 +3,6 @@ using FinanceViewModels.StatsViewModels;
 using FinanceWindows.StatsWindows;
 using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
-using FinancialStructures.ReportingStructures;
 using FinancialStructures.StatsMakers;
 using GUISupport;
 using System;
@@ -41,14 +40,13 @@ namespace FinanceWindowsViewModels
         {
             var optionWindow = new StatsOptionsWindow();
             Action<string> StatsOptionFeedback = (filePath) => StatsFeedback(optionWindow, filePath);
-            var context = new StatsOptionsViewModel(fPortfolio, Sectors, ExportType.CSV, UpdateReports, StatsOptionFeedback);
+            var context = new StatsOptionsViewModel(fPortfolio, Sectors, ExportType.CSV, ReportLogger, StatsOptionFeedback);
             optionWindow.DataContext = context;
             optionWindow.ShowDialog();
         }
 
         private void ExecuteInvestmentListCommand(Object obj)
         {
-            var reports = new ErrorReports();
             SaveFileDialog saving = new SaveFileDialog() { DefaultExt = ".csv", FileName = fPortfolio.DatabaseName + "-CSVStats.csv", InitialDirectory = fPortfolio.Directory };
             saving.Filter = "CSV file|*.csv|All files|*.*";
             if (saving.ShowDialog() == DialogResult.OK)
@@ -58,22 +56,17 @@ namespace FinanceWindowsViewModels
                     saving.FileName += ".csv";
                 }
 
-                InvestmentsExporter.Export(fPortfolio, saving.FileName, reports);
+                InvestmentsExporter.Export(fPortfolio, saving.FileName, ReportLogger);
             }
             else
             {
-                reports.AddError($"Was not able to create Investment list page at {saving.FileName}", Location.StatisticsPage);
+                ReportLogger("Error", "StatisticsPage", $"Was not able to create Investment list page at {saving.FileName}");
             }
             saving.Dispose();
-            if (reports.Any())
-            {
-                UpdateReports(reports);
-            }
         }
 
         private void ExecuteCreateHistory(Object obj)
         {
-            var reports = new ErrorReports();
             SaveFileDialog saving = new SaveFileDialog() { DefaultExt = ".csv", FileName = DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + fPortfolio.DatabaseName + "-History.csv", InitialDirectory = fPortfolio.Directory };
             saving.Filter = "CSV file|*.csv|All files|*.*";
             if (saving.ShowDialog() == DialogResult.OK)
@@ -83,24 +76,20 @@ namespace FinanceWindowsViewModels
                     saving.FileName += ".csv";
                 }
 
-                CSVHistoryWriter.WriteHistoryToCSV(fPortfolio, UpdateReports, saving.FileName, HistoryGapDays);
+                CSVHistoryWriter.WriteHistoryToCSV(fPortfolio, ReportLogger, saving.FileName, HistoryGapDays);
             }
             else
             {
-                reports.AddError($"Was not able to create Investment list page at {saving.FileName}", Location.StatisticsPage);
+                ReportLogger("Error", "StatisticsPage", $"Was not able to create Investment list page at {saving.FileName}");
             }
             saving.Dispose();
-            if (reports.Any())
-            {
-                UpdateReports(reports);
-            }
         }
 
         private void ExecuteCreateHTMLCommand(Object obj)
         {
             var optionWindow = new StatsOptionsWindow();
             Action<string> StatsOptionFeedback = (filePath) => StatsFeedback(optionWindow, filePath);
-            var context = new StatsOptionsViewModel(fPortfolio, Sectors, ExportType.HTML, UpdateReports, StatsOptionFeedback);
+            var context = new StatsOptionsViewModel(fPortfolio, Sectors, ExportType.HTML, ReportLogger, StatsOptionFeedback);
             optionWindow.DataContext = context;
             optionWindow.ShowDialog();
         }
@@ -111,7 +100,7 @@ namespace FinanceWindowsViewModels
             LoadTab(TabType.StatsViewer, filePath);
         }
 
-        Action<ErrorReports> UpdateReports;
+        Action<string, string, string> ReportLogger;
 
 
         public override void UpdateData(Portfolio portfolio = null, List<Sector> sectors = null)
@@ -158,7 +147,7 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public StatsCreatorWindowViewModel(Portfolio portfolio, List<Sector> sectors, Action<ErrorReports> updateReports)
+        public StatsCreatorWindowViewModel(Portfolio portfolio, List<Sector> sectors, Action<string, string, string> reportLogger)
             : base("Stats Creator")
         {
             StatsTabs.Add(new MainTabViewModel(openTab));
@@ -173,7 +162,7 @@ namespace FinanceWindowsViewModels
                 Sectors = sectors;
             }
 
-            UpdateReports = updateReports;
+            ReportLogger = reportLogger;
             CreateCSVStatsCommand = new BasicCommand(ExecuteExportToCSVCommand);
             CreateInvestmentListCommand = new BasicCommand(ExecuteInvestmentListCommand);
             CreateHTMLCommand = new BasicCommand(ExecuteCreateHTMLCommand);

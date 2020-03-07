@@ -1,5 +1,5 @@
 ﻿
-namespace FinancialStructures.ReportingStructures
+namespace FinancialStructures.Reporting
 {
     public enum ReportType
     {

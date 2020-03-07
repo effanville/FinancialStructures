@@ -1,6 +1,6 @@
 ﻿using FinanceWindowsViewModels;
 using FinancialStructures.Database;
-using FinancialStructures.ReportingStructures;
+using FinancialStructures.Reporting;
 using Microsoft.Win32;
 using System;
 using System.Reflection;
@@ -54,7 +54,7 @@ namespace FinanceWindows
                 {
                     VM.allData.MyFunds.SetFilePath(saving.FileName);
                     var vm = DataContext as MainWindowViewModel;
-                    vm.allData.MyFunds.SavePortfolio(vm.allData.myBenchMarks, saving.FileName, new ErrorReports());
+                    vm.allData.MyFunds.SavePortfolio(vm.allData.myBenchMarks, saving.FileName, vm.ReportLogger);
                 }
 
                 // saving.Dispose();
