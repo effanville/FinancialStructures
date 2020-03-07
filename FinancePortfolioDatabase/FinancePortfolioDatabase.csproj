@@ -130,7 +130,6 @@
     <Compile Include="GUI\CommonWindows\SingleValueEditWindowViewModel.cs" />
     <Compile Include="GUI\CommonWindows\ViewModelBase.cs" />
     <Compile Include="GUI\BasicDataViewModel.cs" />
-    <Compile Include="GUI\CsvDataRead.cs" />
     <Compile Include="GUI\GuiSupport\BindableChart.cs" />
     <Compile Include="GUI\Security Edit Window\SecurityEditWindow.xaml.cs">
       <DependentUpon>SecurityEditWindow.xaml</DependentUpon>

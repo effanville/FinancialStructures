@@ -32,18 +32,17 @@ namespace FinanceWindowsViewModels
         /// <summary>
         /// The collection of tabs to hold the data and interactions for the various subwindows.
         /// </summary>
-        public List<object> Tabs { get; set; } = new List<object>(6);
+        public List<object> Tabs { get;} = new List<object>(6);
 
         public MainWindowViewModel()
         {
             OptionsToolbarCommands = new OptionsToolbarViewModel(allData.MyFunds, UpdateDataCallback, ReportLogger);
-
-            Tabs[0] = new BasicDataViewModel(allData.MyFunds, allData.myBenchMarks);
-            Tabs[1] = new SecurityEditWindowViewModel(allData.MyFunds, UpdateDataCallback, ReportLogger);
-            Tabs[2] = new SingleValueEditWindowViewModel("Bank Account Edit", allData.MyFunds, allData.myBenchMarks, UpdateDataCallback, ReportLogger, allData.bankAccEditMethods);
-            Tabs[3] = new SingleValueEditWindowViewModel("Sector Edit", allData.MyFunds, allData.myBenchMarks, UpdateDataCallback, ReportLogger, allData.sectorEditMethods);
-            Tabs[4] = new SingleValueEditWindowViewModel("Currency Edit", allData.MyFunds, allData.myBenchMarks, UpdateDataCallback, ReportLogger, allData.currencyEditMethods);
-            Tabs[5] = new StatsCreatorWindowViewModel(allData.MyFunds, allData.myBenchMarks, ReportLogger);
+            Tabs.Add( new BasicDataViewModel(allData.MyFunds, allData.myBenchMarks));
+            Tabs.Add(new SecurityEditWindowViewModel(allData.MyFunds, UpdateDataCallback, ReportLogger));
+            Tabs.Add(new SingleValueEditWindowViewModel("Bank Account Edit", allData.MyFunds, allData.myBenchMarks, UpdateDataCallback, ReportLogger, allData.bankAccEditMethods));
+            Tabs.Add(new SingleValueEditWindowViewModel("Sector Edit", allData.MyFunds, allData.myBenchMarks, UpdateDataCallback, ReportLogger, allData.sectorEditMethods));
+            Tabs.Add(new SingleValueEditWindowViewModel("Currency Edit", allData.MyFunds, allData.myBenchMarks, UpdateDataCallback, ReportLogger, allData.currencyEditMethods));
+            Tabs.Add(new StatsCreatorWindowViewModel(allData.MyFunds, allData.myBenchMarks, ReportLogger));
 
             ReportsViewModel = new ReportingWindowViewModel();
 
