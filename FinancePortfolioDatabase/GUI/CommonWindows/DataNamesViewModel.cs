@@ -12,17 +12,13 @@ namespace FinanceCommonViewModels
     internal class DataNamesViewModel : ViewModelBase
     {
         private Portfolio Portfolio;
+
         private List<Sector> Sectors;
-        
-        public ICommand DownloadCommand { get; }
-
-        public ICommand CreateCommand { get; set; }
-
-        public ICommand DeleteCommand { get; }
 
         private List<NameData> fPreEditNames = new List<NameData>();
 
         private List<NameData> fDataNames = new List<NameData>();
+
         /// <summary>
         /// Name and Company data of Funds in database for view.
         /// </summary>
@@ -43,6 +39,45 @@ namespace FinanceCommonViewModels
             set { fSelectedName = value; OnPropertyChanged(); }
         }
 
+        private readonly Action<Action<AllData>> UpdateDataCallback;
+        private readonly Action<string, string, string> ReportLogger;
+        private readonly EditMethods editMethods;
+
+        public DataNamesViewModel(Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateDataCallback, Action<string, string, string> reportLogger, Action<NameData> loadSelectedData, EditMethods updateMethods)
+            : base("Accounts", loadSelectedData)
+        {
+            Portfolio = portfolio;
+            Sectors = sectors;
+            UpdateDataCallback = updateDataCallback;
+            ReportLogger = reportLogger;
+            editMethods = updateMethods;
+
+            CreateCommand = new BasicCommand(ExecuteCreateEdit);
+            DeleteCommand = new BasicCommand(ExecuteDelete);
+            DownloadCommand = new BasicCommand(ExecuteDownloadCommand);
+        }
+
+        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
+        {
+            Portfolio = portfolio;
+            Sectors = sectors;
+            var currentSelectedName = SelectedName;
+            DataNames = (List<NameData>)editMethods.ExecuteFunction(FunctionType.NameUpdate, portfolio, sectors).Result;
+            DataNames.Sort();
+            fPreEditNames = (List<NameData>)editMethods.ExecuteFunction(FunctionType.NameUpdate, portfolio, sectors).Result;
+            fPreEditNames.Sort();
+
+            for (int i = 0; i < DataNames.Count; i++)
+            {
+                if (DataNames[i].CompareTo(currentSelectedName) == 0)
+                {
+                    SelectedName = DataNames[i];
+                    return;
+                }
+            }
+        }
+
+        public ICommand DownloadCommand { get; }
         private void ExecuteDownloadCommand(Object obj)
         {
             if (SelectedName != null)
@@ -51,6 +86,7 @@ namespace FinanceCommonViewModels
             }
         }
 
+        public ICommand CreateCommand { get; set; }
         private void ExecuteCreateEdit(Object obj)
         {
             if (((List<NameData>)editMethods.ExecuteFunction(FunctionType.NameUpdate, Portfolio, Sectors).Result).Count != DataNames.Count)
@@ -58,16 +94,11 @@ namespace FinanceCommonViewModels
                 bool edited = false;
                 if (SelectedName.NewValue)
                 {
-                    try
+                    UpdateDataCallback(alldata => editMethods.ExecuteFunction(FunctionType.Create, alldata.MyFunds, alldata.myBenchMarks, SelectedName, ReportLogger).Wait());
+                    if (SelectedName != null)
                     {
-                        UpdateDataCallback(alldata => editMethods.ExecuteFunction(FunctionType.Create, alldata.MyFunds, alldata.myBenchMarks, SelectedName, ReportLogger).Wait());
-                        if (SelectedName != null)
-                        {
-                            SelectedName.NewValue = false;
-                        }
+                        SelectedName.NewValue = false;
                     }
-                    catch (Exception)
-                    { }
                 }
                 if (!edited)
                 {
@@ -96,6 +127,7 @@ namespace FinanceCommonViewModels
             }
         }
 
+        public ICommand DeleteCommand { get; }
         private void ExecuteDelete(Object obj)
         {
             if (SelectedName.Name != null)
@@ -106,44 +138,6 @@ namespace FinanceCommonViewModels
             {
                 ReportLogger("Error", "DeletingData", "Nothing was selected when trying to delete.");
             }
-        }
-
-        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
-        {
-            Portfolio = portfolio;
-            Sectors = sectors;
-            var currentSelectedName = SelectedName;
-            DataNames = (List<NameData>)editMethods.ExecuteFunction(FunctionType.NameUpdate, portfolio, sectors).Result;
-            DataNames.Sort();
-            fPreEditNames = (List<NameData>)editMethods.ExecuteFunction(FunctionType.NameUpdate, portfolio, sectors).Result;
-            fPreEditNames.Sort();
-
-            for (int i = 0; i < DataNames.Count; i++)
-            {
-                if (DataNames[i].CompareTo(currentSelectedName) == 0)
-                {
-                    SelectedName = DataNames[i];
-                    return;
-                }
-            }
-        }
-
-        Action<Action<AllData>> UpdateDataCallback;
-        Action<string, string, string> ReportLogger;
-        private EditMethods editMethods;
-
-        public DataNamesViewModel(Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateDataCallback, Action<string, string, string> reportLogger, Action<NameData> loadSelectedData, EditMethods updateMethods)
-            : base ("Accounts", loadSelectedData)
-        {
-            Portfolio = portfolio;
-            Sectors = sectors;
-            UpdateDataCallback = updateDataCallback;
-            ReportLogger = reportLogger;
-            editMethods = updateMethods;
-
-            CreateCommand = new BasicCommand(ExecuteCreateEdit);
-            DeleteCommand = new BasicCommand(ExecuteDelete);
-            DownloadCommand = new BasicCommand(ExecuteDownloadCommand);
         }
     }
 }

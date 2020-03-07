@@ -7,8 +7,16 @@ using System.Collections.Generic;
 
 namespace FinanceCommonViewModels
 {
+    /// <summary>
+    /// Base for ViewModels containing display purpose objects.
+    /// </summary>
     internal abstract class ViewModelBase : PropertyChangedBase
     {
+        public virtual string Header { get; }
+        public virtual bool Closable { get { return false; } }
+
+        public virtual Action<NameData> LoadSelectedTab { get; set; }
+
         public ViewModelBase(string header)
         {
             Header = header;
@@ -20,11 +28,6 @@ namespace FinanceCommonViewModels
             LoadSelectedTab = loadTab;
         }
 
-        public virtual string Header { get; }
-        public virtual bool Closable { get; }
-
         public abstract void UpdateData(Portfolio portfolio, List<Sector> sectors);
-
-        public virtual Action<NameData> LoadSelectedTab { get; set; }
     }
 }

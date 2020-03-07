@@ -8,10 +8,6 @@ namespace FinanceWindowsViewModels
 {
     internal class ReportingWindowViewModel : PropertyChangedBase
     {
-        public ICommand ClearReportsCommand { get; }
-
-        public ICommand ClearSingleReportCommand { get; }
-
         private ObservableCollection<ErrorReport> fReportsToView;
 
         public ObservableCollection<ErrorReport> ReportsToView
@@ -36,38 +32,6 @@ namespace FinanceWindowsViewModels
             set { fIndexToDelete = value; OnPropertyChanged(); }
         }
 
-        private void SyncReports()
-        {
-            ReportsToView = null;
-            ReportsToView = new ObservableCollection<ErrorReport>(Reports.GetReports());
-            OnPropertyChanged(nameof(ReportsToView));
-        }
-
-        void ExecuteClearReports(Object obj)
-        {
-            Reports = new ErrorReports();
-            SyncReports();
-        }
-
-        void ExecuteClearSelectedReport(Object obj)
-        {
-            Reports.RemoveReport(IndexToDelete);
-            SyncReports();
-        }
-
-        public void UpdateReports(ErrorReports reports)
-        {
-            Reports.AddReports(reports);
-            SyncReports();
-            reports.Clear();
-        }
-
-        public void UpdateReport(string type, string location, string message)
-        {
-            Reports.AddReport(type, location, message);
-            SyncReports();
-        }
-
         public ReportingWindowViewModel()
         {
             Reports = new ErrorReports();
@@ -77,5 +41,33 @@ namespace FinanceWindowsViewModels
             SyncReports();
         }
 
+        private void SyncReports()
+        {
+            ReportsToView = null;
+            ReportsToView = new ObservableCollection<ErrorReport>(Reports.GetReports());
+            OnPropertyChanged(nameof(ReportsToView));
+        }
+
+        public ICommand ClearReportsCommand { get; }
+        
+        private void ExecuteClearReports(Object obj)
+        {
+            Reports = new ErrorReports();
+            SyncReports();
+        }
+
+        public ICommand ClearSingleReportCommand { get; }
+
+        private void ExecuteClearSelectedReport(Object obj)
+        {
+            Reports.RemoveReport(IndexToDelete);
+            SyncReports();
+        }
+
+        public void UpdateReport(string type, string location, string message)
+        {
+            Reports.AddReport(type, location, message);
+            SyncReports();
+        }
     }
 }

@@ -1,4 +1,6 @@
-﻿using FinancialStructures.Database;
+﻿using FinanceCommonViewModels;
+using FinancialStructures.Database;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using GUISupport;
 using SavingClasses;
@@ -9,12 +11,11 @@ using System.Windows.Input;
 
 namespace FinanceWindowsViewModels
 {
-    internal class SelectedSecurityViewModel : PropertyChangedBase
+    internal class SelectedSecurityViewModel : ViewModelBase
     {
         private Portfolio Portfolio;
-        public string Header { get; }
 
-        public bool Closable { get { return true; } }
+        public override bool Closable { get { return true; } }
 
         private readonly NameData fSelectedName;
 
@@ -53,6 +54,21 @@ namespace FinanceWindowsViewModels
             }
         }
 
+        private readonly Action<Action<AllData>> UpdateDataCallback;
+
+        private readonly Action<string, string, string> ReportLogger;
+
+        public SelectedSecurityViewModel(Portfolio portfolio, Action<Action<AllData>> updateData, Action<string, string, string> reportLogger, NameData selectedName)
+            : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
+        {
+            fSelectedName = selectedName;
+            DeleteValuationCommand = new BasicCommand(ExecuteDeleteValuation);
+            AddCsvData = new BasicCommand(ExecuteAddCsvData);
+            AddEditSecurityDataCommand = new BasicCommand(ExecuteAddEditSecData);
+            UpdateData(portfolio, null);
+            UpdateDataCallback = updateData;
+            ReportLogger = reportLogger;
+        }
 
         public ICommand DeleteValuationCommand { get; }
 
@@ -127,7 +143,7 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public void UpdateData(Portfolio portfolio)
+        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
         {
             Portfolio = portfolio;
             if (fSelectedName != null)
@@ -151,27 +167,6 @@ namespace FinanceWindowsViewModels
             {
                 selectedValues = SelectedSecurityData[SelectedSecurityData.Count - 1];
             }
-        }
-
-        Action<Action<AllData>> UpdateDataCallback;
-        Action<string, string, string> ReportLogger;
-        public SelectedSecurityViewModel(Portfolio portfolio, Action<Action<AllData>> updateData, Action<string, string, string> reportLogger, NameData selectedName)
-        {
-            if (selectedName != null)
-            {
-                Header = selectedName.Company + "-" + selectedName.Name;
-            }
-            else
-            {
-                Header = "No-Name";
-            }
-            fSelectedName = selectedName;
-            DeleteValuationCommand = new BasicCommand(ExecuteDeleteValuation);
-            AddCsvData = new BasicCommand(ExecuteAddCsvData);
-            AddEditSecurityDataCommand = new BasicCommand(ExecuteAddEditSecData);
-            UpdateData(portfolio);
-            UpdateDataCallback = updateData;
-            ReportLogger = reportLogger;
         }
     }
 }

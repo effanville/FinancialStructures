@@ -60,6 +60,25 @@ namespace FinanceCommonViewModels
             }
         }
 
+        private readonly Action<Action<AllData>> UpdateDataCallback;
+
+        private readonly Action<string, string, string> ReportLogger;
+
+        private readonly EditMethods EditMethods;
+
+        public SelectedSingleDataViewModel(Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateDataCallback, Action<string, string, string> reportLogger, EditMethods editMethods, NameData selectedName)
+            : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
+        {
+            SelectedName = selectedName;
+            EditMethods = editMethods;
+            UpdateData(portfolio, sectors);
+
+            EditDataCommand = new BasicCommand(ExecuteEditDataCommand);
+            DeleteValuationCommand = new BasicCommand(ExecuteDeleteValuation);
+            UpdateDataCallback = updateDataCallback;
+            ReportLogger = reportLogger;
+        }
+
         public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
         {
             Portfolio = portfolio;
@@ -128,23 +147,6 @@ namespace FinanceCommonViewModels
             {
                 SelectedValue = SelectedData[SelectedData.Count - 1];
             }
-        }
-
-        Action<Action<AllData>> UpdateDataCallback;
-        Action<string, string, string> ReportLogger;
-
-        private EditMethods EditMethods;
-        public SelectedSingleDataViewModel(Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateDataCallback, Action<string, string, string> reportLogger, EditMethods editMethods, NameData selectedName)
-            : base(selectedName !=null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
-        {
-            SelectedName = selectedName;
-            EditMethods = editMethods;
-            UpdateData(portfolio, sectors);
-
-            EditDataCommand = new BasicCommand(ExecuteEditDataCommand);
-            DeleteValuationCommand = new BasicCommand(ExecuteDeleteValuation);
-            UpdateDataCallback = updateDataCallback;
-            ReportLogger = reportLogger;
         }
     }
 }

@@ -9,9 +9,6 @@ namespace FinanceWindowsViewModels
 {
     internal class BasicDataViewModel : ViewModelBase
     {
-        private Portfolio Portfolio;
-        private List<Sector> Sectors;
-
         private List<NameCompDate> fFundNames;
         public List<NameCompDate> FundNames
         {
@@ -40,24 +37,22 @@ namespace FinanceWindowsViewModels
             set { fCurrencyNames = value; OnPropertyChanged(); }
         }
 
-        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
-        {
-            Portfolio = portfolio;
-            Sectors = sectors;
-            FundNames = Portfolio.SecurityNamesAndCompanies();
-            FundNames.Sort();
-            AccountNames = Portfolio.GetBankAccountNamesAndCompanies();
-            AccountNames.Sort();
-            SectorNames = SectorEditor.GetSectorNames(sectors);
-            SectorNames.Sort();
-            CurrencyNames = Portfolio.GetCurrencyNames();
-            CurrencyNames.Sort();
-        }
-
         public BasicDataViewModel(Portfolio portfolio, List<Sector> sectors)
             : base("Database Overview")
         {
             UpdateData(portfolio, sectors);
+        }
+
+        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
+        {
+            FundNames = portfolio.SecurityNamesAndCompanies();
+            FundNames.Sort();
+            AccountNames = portfolio.GetBankAccountNamesAndCompanies();
+            AccountNames.Sort();
+            SectorNames = SectorEditor.GetSectorNames(sectors);
+            SectorNames.Sort();
+            CurrencyNames = portfolio.GetCurrencyNames();
+            CurrencyNames.Sort();
         }
     }
 }

@@ -14,6 +14,20 @@ namespace FinanceCommonViewModels
         private List<Sector> Sectors;
         public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
 
+        private readonly Action<Action<AllData>> UpdateDataCallback;
+        private readonly Action<string, string, string> ReportLogger;
+        private readonly EditMethods EditMethods;
+
+        public SingleValueEditWindowViewModel(string title, Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateDataCallback, Action<string, string, string> reportLogger, EditMethods editMethods)
+            : base(title)
+        {
+            UpdateDataCallback = updateDataCallback;
+            ReportLogger = reportLogger;
+            EditMethods = editMethods;
+            UpdateData(portfolio, sectors);
+            Tabs.Add(new DataNamesViewModel(Portfolio, sectors, updateDataCallback, reportLogger, LoadTab, editMethods));
+        }
+
         public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
         {
             Portfolio = portfolio;
@@ -30,25 +44,11 @@ namespace FinanceCommonViewModels
             }
         }
 
-        Action<NameData> loadTab => (name) => LoadTabFunc(name);
+        private Action<NameData> LoadTab => (name) => LoadTabFunc(name);
 
         private void LoadTabFunc(NameData name)
         {
             Tabs.Add(new SelectedSingleDataViewModel(Portfolio, Sectors, UpdateDataCallback, ReportLogger, EditMethods, name));
-        }
-
-        Action<Action<AllData>> UpdateDataCallback;
-        Action<string, string, string> ReportLogger;
-        EditMethods EditMethods;
-
-        public SingleValueEditWindowViewModel(string title, Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateDataCallback, Action<string, string, string> reportLogger, EditMethods editMethods)
-            : base(title)
-        {
-            UpdateDataCallback = updateDataCallback;
-            ReportLogger = reportLogger;
-            EditMethods = editMethods;
-            UpdateData(portfolio, sectors);
-            Tabs.Add(new DataNamesViewModel(Portfolio, sectors, updateDataCallback, reportLogger, loadTab, editMethods));
         }
     }
 }

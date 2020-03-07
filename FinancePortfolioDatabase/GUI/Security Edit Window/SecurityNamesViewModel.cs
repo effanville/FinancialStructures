@@ -1,4 +1,6 @@
-﻿using FinancialStructures.Database;
+﻿using FinanceCommonViewModels;
+using FinancialStructures.Database;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using GUISupport;
 using SavingClasses;
@@ -8,11 +10,10 @@ using System.Windows.Input;
 
 namespace FinanceWindowsViewModels
 {
-    internal class SecurityNamesViewModel : PropertyChangedBase
+    internal class SecurityNamesViewModel : ViewModelBase
     {
         private Portfolio Portfolio;
-        public string Header { get; } = "Listed Securities";
-        public bool Closable { get { return false; } }
+
         private List<NameCompDate> fPreEditFundNames = new List<NameCompDate>();
 
         private List<NameCompDate> fFundNames = new List<NameCompDate>();
@@ -34,6 +35,43 @@ namespace FinanceWindowsViewModels
         {
             get { return fSelectedName; }
             set { fSelectedName = value; OnPropertyChanged(); }
+        }
+
+        private readonly Action<Action<AllData>> DataUpdateCallback;
+
+        private readonly Action<string, string, string> ReportLogger;
+
+        public SecurityNamesViewModel(Portfolio portfolio, Action<Action<AllData>> updateData, Action<string, string, string> reportLogger, Action<NameData> loadSelectedData)
+            : base("Listed Securities", loadSelectedData)
+        {
+            Portfolio = portfolio;
+            DataUpdateCallback = updateData;
+            ReportLogger = reportLogger;
+            FundNames = portfolio.SecurityNamesAndCompanies();
+            fPreEditFundNames = portfolio.SecurityNamesAndCompanies();
+
+            CreateSecurityCommand = new BasicCommand(ExecuteCreateEditCommand);
+            DownloadCommand = new BasicCommand(ExecuteDownloadCommand);
+            DeleteSecurityCommand = new BasicCommand(ExecuteDeleteSecurity);
+        }
+
+        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
+        {
+            Portfolio = portfolio;
+            var currentSelectedName = selectedName;
+            FundNames = portfolio.SecurityNamesAndCompanies();
+            FundNames.Sort();
+            fPreEditFundNames = portfolio.SecurityNamesAndCompanies();
+            fPreEditFundNames.Sort();
+
+            for (int i = 0; i < FundNames.Count; i++)
+            {
+                if (FundNames[i].CompareTo(currentSelectedName) == 0)
+                {
+                    selectedName = FundNames[i];
+                    return;
+                }
+            }
         }
 
         public ICommand CreateSecurityCommand { get; set; }
@@ -91,25 +129,6 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public void UpdateFundListBox(Portfolio portfolio)
-        {
-            Portfolio = portfolio;
-            var currentSelectedName = selectedName;
-            FundNames = Portfolio.SecurityNamesAndCompanies();
-            FundNames.Sort();
-            fPreEditFundNames = Portfolio.SecurityNamesAndCompanies();
-            fPreEditFundNames.Sort();
-
-            for (int i = 0; i < FundNames.Count; i++)
-            {
-                if (FundNames[i].CompareTo(currentSelectedName) == 0)
-                {
-                    selectedName = FundNames[i];
-                    return;
-                }
-            }
-        }
-
         public ICommand DeleteSecurityCommand { get; }
 
         private void ExecuteDeleteSecurity(Object obj)
@@ -122,24 +141,6 @@ namespace FinanceWindowsViewModels
             {
                 ReportLogger("Error", "DeletingData", "Something went wrong when trying to delete security.");
             }
-        }
-
-        Action<Action<AllData>> DataUpdateCallback;
-        Action<string, string, string> ReportLogger;
-        public Action<NameData> LoadSelectedTab;
-
-        public SecurityNamesViewModel(Portfolio portfolio, Action<Action<AllData>> updateData, Action<string, string, string> reportLogger, Action<NameData> loadSelectedData)
-        {
-            Portfolio = portfolio;
-            DataUpdateCallback = updateData;
-            ReportLogger = reportLogger;
-            LoadSelectedTab = loadSelectedData;
-            FundNames = portfolio.SecurityNamesAndCompanies();
-            fPreEditFundNames = portfolio.SecurityNamesAndCompanies();
-
-            CreateSecurityCommand = new BasicCommand(ExecuteCreateEditCommand);
-            DownloadCommand = new BasicCommand(ExecuteDownloadCommand);
-            DeleteSecurityCommand = new BasicCommand(ExecuteDeleteSecurity);
         }
     }
 }

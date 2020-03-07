@@ -29,6 +29,30 @@ namespace FinanceWindowsViewModels
 
         public int HistoryGapDays { get; set; }
 
+        Action<string, string, string> ReportLogger;
+
+        public StatsCreatorWindowViewModel(Portfolio portfolio, List<Sector> sectors, Action<string, string, string> reportLogger)
+            : base("Stats Creator")
+        {
+            StatsTabs.Add(new MainTabViewModel(openTab));
+            StatsTabs.Add(new SecuritiesStatisticsViewModel(portfolio, DisplayValueFunds));
+
+            if (portfolio != null)
+            {
+                fPortfolio = portfolio;
+            }
+            if (sectors != null)
+            {
+                Sectors = sectors;
+            }
+
+            ReportLogger = reportLogger;
+            CreateCSVStatsCommand = new BasicCommand(ExecuteExportToCSVCommand);
+            CreateInvestmentListCommand = new BasicCommand(ExecuteInvestmentListCommand);
+            CreateHTMLCommand = new BasicCommand(ExecuteCreateHTMLCommand);
+            ExportHistoryCommand = new BasicCommand(ExecuteCreateHistory);
+        }
+
         public ICommand CreateCSVStatsCommand { get; }
 
         public ICommand CreateInvestmentListCommand { get; }
@@ -100,9 +124,6 @@ namespace FinanceWindowsViewModels
             LoadTab(TabType.StatsViewer, filePath);
         }
 
-        Action<string, string, string> ReportLogger;
-
-
         public override void UpdateData(Portfolio portfolio = null, List<Sector> sectors = null)
         {
             foreach (var tab in StatsTabs)
@@ -145,28 +166,6 @@ namespace FinanceWindowsViewModels
                     StatsTabs.Add(new HtmlStatsViewerViewModel(fPortfolio, DisplayValueFunds, filepath));
                     return;
             }
-        }
-
-        public StatsCreatorWindowViewModel(Portfolio portfolio, List<Sector> sectors, Action<string, string, string> reportLogger)
-            : base("Stats Creator")
-        {
-            StatsTabs.Add(new MainTabViewModel(openTab));
-            StatsTabs.Add(new SecuritiesStatisticsViewModel(portfolio, DisplayValueFunds));
-
-            if (portfolio != null)
-            {
-                fPortfolio = portfolio;
-            }
-            if (sectors != null)
-            {
-                Sectors = sectors;
-            }
-
-            ReportLogger = reportLogger;
-            CreateCSVStatsCommand = new BasicCommand(ExecuteExportToCSVCommand);
-            CreateInvestmentListCommand = new BasicCommand(ExecuteInvestmentListCommand);
-            CreateHTMLCommand = new BasicCommand(ExecuteCreateHTMLCommand);
-            ExportHistoryCommand = new BasicCommand(ExecuteCreateHistory);
         }
     }
 }
