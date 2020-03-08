@@ -4,6 +4,7 @@
     <TargetFramework>netstandard2</TargetFramework>
     <Deterministic>false</Deterministic>
     <Platforms>AnyCPU;x64</Platforms>
+    <Configurations>Debug;Release;Debug(Tests)</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
