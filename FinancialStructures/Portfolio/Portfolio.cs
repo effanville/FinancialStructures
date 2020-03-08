@@ -6,8 +6,6 @@ namespace FinancialStructures.Database
 {
     public partial class Portfolio
     {
-
-
         private string fDatabaseFilePath;
 
         public void SetFilePath(string path)
@@ -30,6 +28,7 @@ namespace FinancialStructures.Database
                 return Path.GetExtension(fDatabaseFilePath);
             }
         }
+
         public string Directory
         {
             get

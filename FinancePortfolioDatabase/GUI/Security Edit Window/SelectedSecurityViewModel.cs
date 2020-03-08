@@ -1,6 +1,7 @@
 ﻿using FinanceCommonViewModels;
 using FinancialStructures.Database;
 using FinancialStructures.DataReader;
+using FinancialStructures.PortfolioAPI;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using GUISupport;
@@ -92,7 +93,7 @@ namespace FinanceWindowsViewModels
                 List<object> outputs = null;
                 if (openFile.ShowDialog() == DialogResult.OK)
                 {
-                    outputs = CsvDataRead.ReadFromCsv(openFile.FileName, ElementType.Security, ReportLogger);
+                    outputs = CsvDataRead.ReadFromCsv(openFile.FileName, PortfolioElementType.Security, ReportLogger);
                 }
                 if (outputs != null)
                 {

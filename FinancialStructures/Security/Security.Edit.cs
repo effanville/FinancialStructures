@@ -231,31 +231,26 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Edits name and company data of security.
         /// </summary>
-        internal bool TryEditNameCompany(string name, string company, string currency, string url, List<string> sectors, Action<string, string, string> reportLogger)
+        internal bool EditNameData(string name, string company, string currency, string url, List<string> sectors, Action<string, string, string> reportLogger)
         {
             if (name != fName)
             {
-                reportLogger("Report", "EditingData", $"Security `{fCompany}'-`{fName}' has name `{fName}' edited to `{name}'.");
                 fName = name;
             }
             if (company != fCompany)
             {
-                reportLogger("Report", "EditingData", $"Security `{fCompany}'-`{fName}' has company `{fCompany}' edited to `{company}'.");
                 fCompany = company;
             }
             if (url != fUrl)
             {
-                reportLogger("Report", "EditingData", $"Security `{fCompany}'-`{fName}' has url `{fUrl}' edited to `{url}'.");
                 fUrl = url;
             }
             if (currency != fCurrency)
             {
-                reportLogger("Report", "EditingData", $"Security `{fCompany}'-`{fName}' has url `{fCurrency}' edited to `{currency}'.");
                 fCurrency = currency;
             }
             if (sectors != fSectors)
             {
-                reportLogger("Report", "EditingData", $"Security `{fCompany}'-`{fName}' has sectors `{string.Join(", ", fSectors)}' edited to `{string.Join(", ", sectors)}'.");
                 fSectors = sectors;
             }
 

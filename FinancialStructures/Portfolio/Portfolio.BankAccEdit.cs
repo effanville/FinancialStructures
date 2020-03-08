@@ -58,22 +58,6 @@ namespace FinancialStructures.Database
             return false;
         }
 
-        public static bool TryGetAccountData(this Portfolio portfolio, string name, string company, out List<DayValue_ChangeLogged> data)
-        {
-            data = new List<DayValue_ChangeLogged>();
-            foreach (CashAccount acc in portfolio.BankAccounts)
-            {
-                if (acc.GetName() == name && acc.GetCompany() == company)
-                {
-                    data = acc.GetDataForDisplay();
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-
         public static List<DayValue_ChangeLogged> BankAccountData(this Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
         {
             foreach (CashAccount acc in portfolio.BankAccounts)
@@ -103,78 +87,6 @@ namespace FinancialStructures.Database
 
             desired = null;
             return false;
-        }
-
-        public static bool TryAddBankAccount(this Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
-        {
-            return portfolio.TryAddBankAccount(name.Name, name.Company, name.Currency, name.Sectors, reportLogger);
-        }
-
-        /// <summary>
-        /// Tries to add a CashAccount to the underlying global database
-        /// </summary>
-        public static bool TryAddBankAccount(this Portfolio portfolio, string name, string company, string currency, string sectors, Action<string, string, string> reportLogger)
-        {
-            List<string> sectorList = new List<string>();
-            if (!string.IsNullOrEmpty(sectors))
-            {
-                var sectorsSplit = sectors.Split(',');
-
-                sectorList.AddRange(sectorsSplit);
-                for (int i = 0; i < sectorList.Count; i++)
-                {
-                    sectorList[i] = sectorList[i].Trim(' ');
-                }
-            }
-            return portfolio.TryAddBankAccountFromName(name, company, currency, sectorList, reportLogger);
-        }
-
-        public static bool TryEditBankAccountName(this Portfolio portfolio, NameData oldNames, NameData newName, Action<string, string, string> reportLogger)
-        {
-            return portfolio.TryEditBankAccountName(oldNames.Name, oldNames.Company, newName.Name, newName.Company, newName.Currency, newName.Sectors, reportLogger);
-        }
-
-
-        /// <summary>
-        /// Renames the BankAccount if this exists.
-        /// </summary>
-        public static bool TryEditBankAccountName(this Portfolio portfolio, string name, string company, string newName, string newCompany, string currency, string newSectors, Action<string, string, string> reportLogger)
-        {
-            List<string> sectorList = new List<string>();
-            if (!string.IsNullOrEmpty(newSectors))
-            {
-                var sectorsSplit = newSectors.Split(',');
-
-                sectorList.AddRange(sectorsSplit);
-                for (int i = 0; i < sectorList.Count; i++)
-                {
-                    sectorList[i] = sectorList[i].Trim(' ');
-                }
-            }
-
-            return portfolio.TryEditCashAcountNameCompany(name, company, newName, newCompany, currency, sectorList, reportLogger);
-        }
-
-        public static bool TryAddBankAccountFromName(this Portfolio portfolio, string name, string company, string currency, List<string> sectors, Action<string, string, string> reportLogger)
-        {
-            if (name == null && company == null)
-            {
-                reportLogger("Error", "AddingData", "Name or Company provided were null.");
-                return false;
-            }
-            if (portfolio.DoesBankAccountExistFromName(name, company))
-            {
-                return false;
-            }
-
-            var NewAccount = new CashAccount(name, company, currency);
-            foreach (var sector in sectors)
-            {
-                NewAccount.TryAddSector(sector);
-            }
-
-            portfolio.BankAccounts.Add(NewAccount);
-            return true;
         }
 
         public static bool TryRemoveBankAccount(this Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
@@ -233,21 +145,6 @@ namespace FinancialStructures.Database
             }
 
             reportLogger("Error", "EditingData", $"Editing BankAccount Data: Could not find bank account `{company}'-`{name}'.");
-            return false;
-        }
-
-        public static bool TryEditCashAcountNameCompany(this Portfolio portfolio, string name, string company, string newName, string newCompany, string currency, List<string> newSectors, Action<string, string, string> reportLogger)
-        {
-            for (int AccountIndex = 0; AccountIndex < portfolio.Funds.Count; AccountIndex++)
-            {
-                if (portfolio.BankAccounts[AccountIndex].GetCompany() == company && portfolio.BankAccounts[AccountIndex].GetName() == name)
-                {
-                    // now edit data
-                    return portfolio.BankAccounts[AccountIndex].EditNameData(newCompany, newName, string.Empty, currency, newSectors);
-                }
-            }
-
-            reportLogger("Error", "EditingData", $"Renaming BankAccount: Could not find bank account `{company}'-`{name}'.");
             return false;
         }
 

@@ -2,6 +2,7 @@
 using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.PortfolioAPI;
 using GUISupport;
 using SavingClasses;
 using System;
@@ -84,13 +85,12 @@ namespace FinanceWindowsViewModels
                 if (selectedName.NewValue)
                 {
                     edited = true;
-                    DataUpdateCallback(alldata => alldata.MyFunds.TryAddSecurity(ReportLogger, selectedName.Company, selectedName.Name, selectedName.Currency, selectedName.Url, selectedName.Sectors));
+                    DataUpdateCallback(alldata => alldata.MyFunds.TryAdd(PortfolioElementType.Security, selectedName, ReportLogger));
                     if (selectedName != null)
                     {
                         selectedName.NewValue = false;
                     }
                 }
-                
 
                 if (!edited)
                 {
@@ -108,7 +108,7 @@ namespace FinanceWindowsViewModels
                     if (name.NewValue && (!string.IsNullOrEmpty(name.Name) || !string.IsNullOrEmpty(name.Company)))
                     {
                         edited = true;
-                        DataUpdateCallback(alldata => alldata.MyFunds.TryEditSecurityName(ReportLogger, fPreEditFundNames[i].Company, fPreEditFundNames[i].Name, name.Company, name.Name, name.Currency, name.Url, name.Sectors));
+                        DataUpdateCallback(alldata => alldata.MyFunds.TryEditName(PortfolioElementType.Security, fPreEditFundNames[i], name, ReportLogger));
                         name.NewValue = false;
                     }
                 }

@@ -4,6 +4,7 @@ using FinanceWindowsViewModels;
 using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.PortfolioAPI;
 using SavingClasses;
 
 namespace FPD_UI_UnitTests.TestConstruction
@@ -39,9 +40,9 @@ namespace FPD_UI_UnitTests.TestConstruction
         public static Tuple<Portfolio, List<Sector>> CreateBasicDataBase()
         {
             var portfolio = new Portfolio();
-            portfolio.TryAddSecurity(TestingGUICode.DummyReportLogger, "Fidelity", "China", "GBP", "http://www.fidelity.co.uk", "Bonds, UK");
-            portfolio.TryAddBankAccount("currentAccount", "Barclays", string.Empty, string.Empty, TestingGUICode.DummyReportLogger);
-            portfolio.TryAddCurrency("GBP", string.Empty, TestingGUICode.DummyReportLogger);
+            portfolio.TryAdd(PortfolioElementType.Security, new NameData("Fidelity", "China", "GBP", "http://www.fidelity.co.uk", new List<string>() { "Bonds", "UK" }), TestingGUICode.DummyReportLogger);
+            portfolio.TryAdd(PortfolioElementType.BankAccount, new NameData("currentAccount", "Barclays"), TestingGUICode.DummyReportLogger);
+            portfolio.TryAdd(PortfolioElementType.Currency, new NameData("GBP", string.Empty), TestingGUICode.DummyReportLogger);
 
             var sectors = new List<Sector>();
             sectors.Add(new Sector("UK", "http://www.hi.com"));

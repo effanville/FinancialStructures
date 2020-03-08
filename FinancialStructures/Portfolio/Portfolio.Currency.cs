@@ -20,30 +20,6 @@ namespace FinancialStructures.Database
             return 1.0;
         }
 
-        public static bool TryAddCurrency(this Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
-        {
-            return portfolio.TryAddCurrency(name.Name, name.Url, reportLogger);
-        }
-
-        /// <summary>
-        /// Tries to add a sector to the underlying global database
-        /// </summary>
-        public static bool TryAddCurrency(this Portfolio portfolio, string name, string url, Action<string, string, string> reportLogger)
-        {
-            foreach (var sector in portfolio.Currencies)
-            {
-                if (name == sector.GetName())
-                {
-                    reportLogger("Error", "AddingData", $"Sector with name {name} already exists.");
-                    return false;
-                }
-            }
-            Currency newSector = new Currency(name, url);
-            reportLogger("Report", "AddingData", $"Added sector with name {name}.");
-            portfolio.Currencies.Add(newSector);
-            return true;
-        }
-
         /// <summary>
         /// Returns a sector from the database with specified name.
         /// </summary>
@@ -143,27 +119,6 @@ namespace FinancialStructures.Database
                 }
             }
 
-            return false;
-        }
-
-        public static bool TryEditCurrencyName(this Portfolio portfolio, NameData oldName, NameData newName, Action<string, string, string> reportLogger)
-        {
-            return portfolio.TryEditCurrencyName(oldName.Name, newName.Name, newName.Url, reportLogger);
-        }
-
-        public static bool TryEditCurrencyName(this Portfolio portfolio, string oldName, string newName, string url, Action<string, string, string> reportLogger)
-        {
-            foreach (var sector in portfolio.Currencies)
-            {
-                if (sector.GetName() == oldName)
-                {
-                    sector.EditNameData("", newName, url);
-                    reportLogger("Report", "EditingData", $"Renamed sector {oldName} with new name {newName}.");
-                    return true;
-                }
-            }
-
-            reportLogger("Error", "EditingData", $"Could not rename sector {oldName} with new name {newName}.");
             return false;
         }
 

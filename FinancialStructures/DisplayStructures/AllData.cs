@@ -1,6 +1,7 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.PortfolioAPI;
 using SectorHelperFunctions;
 using System;
 using System.Collections.Generic;
@@ -30,8 +31,8 @@ namespace SavingClasses
             bankAccEditMethods = new EditMethods(
                (portfolio, sectors, name, reportUpdate) => DataUpdater.DownloadBankAccount(portfolio, name, reportUpdate),
                (portfolio, sectors) => portfolio.GetBankAccountNamesAndCompanies(),
-               (portfolio, sectors, name, reports) => portfolio.TryAddBankAccount(name, reports),
-               (portfolio, sectors, oldName, newName, reports) => portfolio.TryEditBankAccountName(oldName, newName, reports),
+               (portfolio, sectors, name, reports) => portfolio.TryAdd(PortfolioElementType.BankAccount, name, reports),
+               (portfolio, sectors, oldName, newName, reports) => portfolio.TryEditName(PortfolioElementType.BankAccount, oldName, newName, reports),
                (portfolio, sectors, name, reports) => portfolio.TryRemoveBankAccount(name, reports),
                (portfolio, sectors, name, reports) => portfolio.BankAccountData(name, reports),
                (portfolio, sectors, name, data, reports) => portfolio.TryAddDataToBankAccount(name, data, reports),
@@ -50,8 +51,8 @@ namespace SavingClasses
             currencyEditMethods = new EditMethods(
     (portfolio, sectors, name, reportUpdate) => DataUpdater.DownloadCurrency(portfolio, name, reportUpdate),
     (portfolio, sectors) => portfolio.GetCurrencyNames(),
-    (portfolio, sectors, name, reports) => portfolio.TryAddCurrency(name, reports),
-    (portfolio, sectors, oldName, newName, reports) => portfolio.TryEditCurrencyName(oldName, newName, reports),
+    (portfolio, sectors, name, reports) => portfolio.TryAdd(PortfolioElementType.Currency, name, reports),
+    (portfolio, sectors, oldName, newName, reports) => portfolio.TryEditName(PortfolioElementType.Currency, oldName, newName, reports),
     (portfolio, sectors, name, reports) => portfolio.TryDeleteCurrency(name, reports),
     (portfolio, sectors, name, reports) => portfolio.CurrencyData(name, reports),
     (portfolio, sectors, name, data, reports) => portfolio.TryAddDataToCurrency(name, data, reports),
@@ -67,8 +68,8 @@ namespace SavingClasses
             bankAccEditMethods = new EditMethods(
                 (portfolio, sectors, name, reportUpdate) => DataUpdater.DownloadBankAccount(portfolio, name, reportUpdate),
                 (portfolio, sectors) => portfolio.GetBankAccountNamesAndCompanies(),
-                (portfolio, sectors, name, reports) => portfolio.TryAddBankAccount(name, reports),
-                (portfolio, sectors, oldName, newName, reports) => portfolio.TryEditBankAccountName(oldName, newName, reports),
+                (portfolio, sectors, name, reports) => portfolio.TryAdd(PortfolioElementType.BankAccount, name, reports),
+                (portfolio, sectors, oldName, newName, reports) => portfolio.TryEditName(PortfolioElementType.BankAccount, oldName, newName, reports),
                 (portfolio, sectors, name, reports) => portfolio.TryRemoveBankAccount(name, reports),
                 (portfolio, sectors, name, reports) => portfolio.BankAccountData(name, reports),
                 (portfolio, sectors, name, data, reports) => portfolio.TryAddDataToBankAccount(name, data, reports),
@@ -89,8 +90,8 @@ namespace SavingClasses
             currencyEditMethods = new EditMethods(
                 (portfolio, sectors, name, reportUpdate) => DataUpdater.DownloadCurrency(portfolio, name, reportUpdate),
                 (portfolio, sectors) => portfolio.GetCurrencyNames(),
-                (portfolio, sectors, name, reports) => portfolio.TryAddCurrency(name, reports),
-                (portfolio, sectors, oldName, newName, reports) => portfolio.TryEditCurrencyName(oldName, newName, reports),
+                (portfolio, sectors, name, reports) => portfolio.TryAdd(PortfolioElementType.Currency, name, reports),
+                (portfolio, sectors, oldName, newName, reports) => portfolio.TryEditName(PortfolioElementType.Currency, oldName, newName, reports),
                 (portfolio, sectors, name, reports) => portfolio.TryDeleteCurrency(name, reports),
                 (portfolio, sectors, name, reports) => portfolio.CurrencyData(name, reports),
                 (portfolio, sectors, name, data, reports) => portfolio.TryAddDataToCurrency(name, data, reports),

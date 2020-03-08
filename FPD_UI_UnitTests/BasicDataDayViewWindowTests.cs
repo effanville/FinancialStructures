@@ -2,9 +2,11 @@
 using FinanceWindowsViewModels;
 using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
+using FinancialStructures.GUIFinanceStructures;
 using System.Linq;
 using System.Collections.Generic;
 using FPD_UI_UnitTests.TestConstruction;
+using FinancialStructures.PortfolioAPI;
 
 namespace FPD_UI_UnitTests
 {
@@ -36,9 +38,9 @@ namespace FPD_UI_UnitTests
             var sectors = new List<Sector>();
             var viewModel = new BasicDataViewModel(portfolio, sectors);
 
-            portfolio.TryAddSecurity(TestingGUICode.DummyReportLogger, "Fidelity", "China", "GBP", "http://www.fidelity.co.uk", "Bonds, UK");
-            portfolio.TryAddBankAccount("currentAccount", "Barclays", string.Empty, string.Empty, TestingGUICode.DummyReportLogger);
-            portfolio.TryAddCurrency("GBP", string.Empty, TestingGUICode.DummyReportLogger);
+            portfolio.TryAdd(PortfolioElementType.Security, new NameData("Fidelity", "China", "GBP", "http://www.fidelity.co.uk", new List<string>() { "Bonds", "UK" }), TestingGUICode.DummyReportLogger);
+            portfolio.TryAdd(PortfolioElementType.BankAccount, new NameData("currentAccount", "Barclays"), TestingGUICode.DummyReportLogger);
+            portfolio.TryAdd(PortfolioElementType.Currency, new NameData("GBP", string.Empty), TestingGUICode.DummyReportLogger);
             sectors.Add(new Sector("UK", "http://www.hi.com"));
 
             viewModel.UpdateData(portfolio, sectors);

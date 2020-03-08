@@ -1,21 +1,14 @@
 ﻿using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.PortfolioAPI;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
 namespace FinancialStructures.DataReader
 {
-    public enum ElementType
-    {
-        Security,
-        Sector,
-        BankAccount,
-        CurrencyExchange
-    }
-
     public static class CsvDataRead
     {
-        public static List<object> ReadFromCsv(string filePath, ElementType type, Action<string, string, string> reportLogger)
+        public static List<object> ReadFromCsv(string filePath, PortfolioElementType type, Action<string, string, string> reportLogger)
         {
             TextReader reader = null;
             try
@@ -31,11 +24,11 @@ namespace FinancialStructures.DataReader
 
                 switch (type)
                 {
-                    case ElementType.Security:
+                    case PortfolioElementType.Security:
                         return CreateSecurityData(valuationsToRead, reportLogger);
-                    case ElementType.BankAccount:
-                    case ElementType.CurrencyExchange:
-                    case ElementType.Sector:
+                    case PortfolioElementType.BankAccount:
+                    case PortfolioElementType.Currency:
+                    case PortfolioElementType.Sector:
                         return CreateAccountData(valuationsToRead, reportLogger);
                     default:
                         return new List<object>();

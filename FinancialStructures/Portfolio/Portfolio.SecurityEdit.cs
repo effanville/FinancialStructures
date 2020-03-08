@@ -1,6 +1,5 @@
 ﻿using FinancialStructures.FinanceStructures;
 using System;
-using System.Collections.Generic;
 
 namespace FinancialStructures.Database
 {
@@ -50,69 +49,6 @@ namespace FinancialStructures.Database
                 }
             }
             reportLogger("Error", "AddingData", $"Security `{company}'-`{name}' could not be found in the database.");
-            return false;
-        }
-
-        /// <summary>
-        /// Tries to add a security to the underlying global database
-        /// </summary>
-        public static bool TryAddSecurity(this Portfolio portfolio, Action<string, string, string> reportLogger, string company, string name, string currency, string url, string sectors)
-        {
-            if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(company))
-            {
-                reportLogger("Error", "AddingData", $"Company `{company}' or name `{name}' is not suitable.");
-                return false;
-            }
-
-            if (portfolio.DoesSecurityExist(company, name))
-            {
-                reportLogger("Error", "AddingData", $"Security `{company}'-`{name}' already exists.");
-                return false;
-            }
-
-            List<string> sectorList = new List<string>();
-            if (!string.IsNullOrEmpty(sectors))
-            {
-                var sectorsSplit = sectors.Split(',');
-
-                sectorList.AddRange(sectorsSplit);
-                for (int i = 0; i < sectorList.Count; i++)
-                {
-                    sectorList[i] = sectorList[i].Trim(' ');
-                }
-            }
-
-            Security newSecurity = new Security(name, company, currency, url, sectorList);
-            portfolio.Funds.Add(newSecurity);
-            reportLogger("Error", "AddingData", $"Security `{company}'-`{name}' added to database.");
-            return true;
-        }
-
-        /// <summary>
-        /// Renames the security if this exists.
-        /// </summary>
-        public static bool TryEditSecurityName(this Portfolio portfolio, Action<string, string, string> reportLogger, string company, string name, string newCompany, string newName, string currency, string url, string sectors)
-        {
-            List<string> sectorList = new List<string>();
-            if (!string.IsNullOrEmpty(sectors))
-            {
-                var sectorsSplit = sectors.Split(',');
-                sectorList.AddRange(sectorsSplit);
-                for (int i = 0; i < sectorList.Count; i++)
-                {
-                    sectorList[i] = sectorList[i].Trim(' ');
-                }
-            }
-
-            for (int fundIndex = 0; fundIndex < portfolio.Funds.Count; fundIndex++)
-            {
-                if (portfolio.Funds[fundIndex].GetCompany() == company && portfolio.Funds[fundIndex].GetName() == name)
-                {
-                    // now edit data
-                    return portfolio.Funds[fundIndex].TryEditNameCompany(newName, newCompany, currency, url, sectorList, reportLogger);
-                }
-            }
-
             return false;
         }
 
