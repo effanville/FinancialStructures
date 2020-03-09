@@ -20,6 +20,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPD_UI_UnitTests", "FPD_UI_
 		{B86EADB1-3561-470B-9421-2E6992A25346} = {B86EADB1-3561-470B-9421-2E6992A25346}
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{89F98A9D-5FE5-4238-A7FA-AA2C4ABC5077}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug(Tests)|Any CPU = Debug(Tests)|Any CPU
