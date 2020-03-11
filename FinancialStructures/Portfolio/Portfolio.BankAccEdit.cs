@@ -89,26 +89,6 @@ namespace FinancialStructures.Database
             return false;
         }
 
-        public static bool TryRemoveBankAccount(this Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
-        {
-            return portfolio.TryRemoveBankAccount(name.Name, name.Company, reportLogger);
-        }
-
-        public static bool TryRemoveBankAccount(this Portfolio portfolio, string name, string company, Action<string, string, string> reportLogger)
-        {
-            foreach (CashAccount acc in portfolio.BankAccounts)
-            {
-                if (acc.GetCompany() == company && acc.GetName() == name)
-                {
-                    portfolio.BankAccounts.Remove(acc);
-                    reportLogger("Warning", "DeletingData", $"Deleting Bank Account: Deleted `{company}'-`{name}'.");
-                    return true;
-                }
-            }
-            reportLogger("Error", "DeletingData", $"Deleting Bank Account: Could not find account `{company}'-`{name}'.");
-            return false;
-        }
-
         public static bool TryAddDataToBankAccount(this Portfolio portfolio, NameData name, DayValue_ChangeLogged data, Action<string, string, string> reportLogger)
         {
             return portfolio.TryAddDataToBankAccount(name.Name, name.Company, data.Day, data.Value, reportLogger);

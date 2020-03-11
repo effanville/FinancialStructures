@@ -137,42 +137,5 @@ namespace FinancialStructures.Database
 
             return false;
         }
-
-        public static bool TryDeleteCurrency(this Portfolio portfolio, string name)
-        {
-            foreach (var sector in portfolio.Currencies)
-            {
-                if (name == sector.GetName())
-                {
-                    portfolio.Currencies.Remove(sector);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public static bool TryDeleteCurrency(this Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
-        {
-            return portfolio.TryDeleteCurrency(name.Name, reportLogger);
-        }
-
-        /// <summary>
-        /// Deletes sector if sector exists. Does nothing otherwise.
-        /// </summary>
-        public static bool TryDeleteCurrency(this Portfolio portfolio, string name, Action<string, string, string> reportLogger)
-        {
-            foreach (var sector in portfolio.Currencies)
-            {
-                if (name == sector.GetName())
-                {
-                    reportLogger("Report", "DeletingData", $"Deleted sector {sector.GetName()}");
-                    portfolio.Currencies.Remove(sector);
-                    return true;
-                }
-            }
-
-            return false;
-        }
     }
 }

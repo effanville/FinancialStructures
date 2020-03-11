@@ -43,6 +43,8 @@ namespace FinancialStructures.GUIFinanceStructures
             {
                 var c = a.Company;
                 var n = a.Name;
+                portfolio.TryGetSecurity(c, n, out Security des);
+                a.Number = des.NumberSectors();
                 a.LatestVal = MathSupport.Truncate(portfolio.SecurityLatestValue(c, n));
                 a.RecentChange = MathSupport.Truncate(portfolio.RecentChange(c, n));
                 a.FundsFraction = MathSupport.Truncate(portfolio.SecurityFraction(c, n, date), 4);

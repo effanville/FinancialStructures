@@ -135,7 +135,7 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null)
             {
-                DataUpdateCallback(alldata => alldata.MyFunds.TryRemoveSecurity(ReportLogger, fSelectedName.Company, fSelectedName.Name));
+                DataUpdateCallback(alldata => alldata.MyFunds.TryRemove(PortfolioElementType.Security, fSelectedName, ReportLogger));
             }
             else
             {

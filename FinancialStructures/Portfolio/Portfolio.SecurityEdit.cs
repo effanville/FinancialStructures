@@ -21,21 +21,6 @@ namespace FinancialStructures.Database
             return false;
         }
 
-        public static bool TryRemoveSecurity(this Portfolio portfolio, Action<string, string, string> reportLogger, string company, string name)
-        {
-            foreach (Security sec in portfolio.Funds)
-            {
-                if (sec.GetCompany() == company && sec.GetName() == name)
-                {
-                    portfolio.Funds.Remove(sec);
-                    reportLogger("Report", "AddingData", $"Security `{company}'-`{name}' removed from the database.");
-                    return true;
-                }
-            }
-            reportLogger("Error", "AddingData", $"Security `{company}'-`{name}' could not be found in the database.");
-            return false;
-        }
-
         /// <summary>
         /// Adds the desired data to the security if it can.
         /// </summary>

@@ -295,6 +295,11 @@ namespace FinancialStructures.FinanceStructures
             return false;
         }
 
+        internal int NumberSectors()
+        {
+            return Sectors.Count;
+        }
+
         /// <summary>
         /// Trys to get data on specific date. Only returns true if all data present.
         /// </summary>
