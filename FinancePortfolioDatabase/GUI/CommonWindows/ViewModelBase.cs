@@ -28,6 +28,10 @@ namespace FinanceCommonViewModels
             LoadSelectedTab = loadTab;
         }
 
+        public virtual void UpdateData(Portfolio portfolio, List<Sector> sectors, Action<object> removeTab)
+        {
+        }
+
         public abstract void UpdateData(Portfolio portfolio, List<Sector> sectors);
     }
 }

@@ -145,11 +145,17 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
+        public override void UpdateData(Portfolio portfolio, List<Sector> sectors, Action<object> removeTab)
         {
             Portfolio = portfolio;
             if (fSelectedName != null)
             {
+                if (!portfolio.TryGetSecurity(fSelectedName.Company, fSelectedName.Name, out _))
+                {
+                    removeTab(this);
+                    return;
+                }
+
                 if (Portfolio.TryGetSecurityData(fSelectedName.Company, fSelectedName.Name, out List<DayDataView> values))
                 {
                     SelectedSecurityData = values;
@@ -161,6 +167,11 @@ namespace FinanceWindowsViewModels
             {
                 SelectedSecurityData = null;
             }
+        }
+
+        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
+        {
+            UpdateData(portfolio, sectors, null);
         }
 
         private void SelectLatestValue()

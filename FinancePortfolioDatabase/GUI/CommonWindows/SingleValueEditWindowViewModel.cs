@@ -5,6 +5,7 @@ using SavingClasses;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace FinanceCommonViewModels
 {
@@ -38,11 +39,25 @@ namespace FinanceCommonViewModels
                 {
                     if (item is ViewModelBase viewModel)
                     {
-                        viewModel.UpdateData(portfolio, sectors);
+                        viewModel.UpdateData(portfolio, sectors, removeTab);
                     }
+                }
+
+                if (removableTabs.Any())
+                {
+                    foreach (var tab in removableTabs)
+                    {
+                        Tabs.Remove(tab);
+                    }
+
+                    removableTabs.Clear();
                 }
             }
         }
+
+        private List<object> removableTabs = new List<object>();
+
+        private Action<object> removeTab => tabItem => removableTabs.Add(tabItem);
 
         private Action<NameData> LoadTab => (name) => LoadTabFunc(name);
 

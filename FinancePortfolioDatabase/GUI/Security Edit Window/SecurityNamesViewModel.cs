@@ -56,7 +56,7 @@ namespace FinanceWindowsViewModels
             DeleteSecurityCommand = new BasicCommand(ExecuteDeleteSecurity);
         }
 
-        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
+        public override void UpdateData(Portfolio portfolio, List<Sector> sectors, Action<object> removeTab)
         {
             Portfolio = portfolio;
             var currentSelectedName = selectedName;
@@ -73,6 +73,12 @@ namespace FinanceWindowsViewModels
                     return;
                 }
             }
+        }
+
+
+        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
+        {
+            UpdateData(portfolio, sectors, null);
         }
 
         public ICommand CreateSecurityCommand { get; set; }

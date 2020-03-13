@@ -6,6 +6,7 @@ using SavingClasses;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace FinanceWindowsViewModels
 {
@@ -32,15 +33,28 @@ namespace FinanceWindowsViewModels
             Portfolio = portfolio;
             if (Tabs != null)
             {
-                foreach (var item in Tabs)
+                for (int tabIndex = 0; tabIndex < Tabs.Count; tabIndex++)
                 {
-                    if (item is ViewModelBase viewModel)
+                    if (Tabs[tabIndex] is ViewModelBase viewModel)
                     {
-                        viewModel.UpdateData(portfolio, sectors);
+                        viewModel.UpdateData(portfolio, sectors, removeTab);
                     }
+                }
+                if (removableTabs.Any())
+                {
+                    foreach (var tab in removableTabs)
+                    {
+                        Tabs.Remove(tab);
+                    }
+
+                    removableTabs.Clear();
                 }
             }
         }
+
+        private List<object> removableTabs = new List<object>();
+
+        private Action<object> removeTab => tabItem => removableTabs.Add(tabItem);
 
         private Action<NameData> LoadTab => (name) => LoadTabFunc(name);
 

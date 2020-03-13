@@ -57,7 +57,7 @@ namespace FinanceCommonViewModels
             DownloadCommand = new BasicCommand(ExecuteDownloadCommand);
         }
 
-        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
+        public override void UpdateData(Portfolio portfolio, List<Sector> sectors, Action<object> removeTab)
         {
             Portfolio = portfolio;
             Sectors = sectors;
@@ -75,6 +75,11 @@ namespace FinanceCommonViewModels
                     return;
                 }
             }
+        }
+
+        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
+        {
+            UpdateData(portfolio, sectors, null);
         }
 
         public ICommand DownloadCommand { get; }

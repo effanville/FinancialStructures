@@ -79,12 +79,18 @@ namespace FinanceCommonViewModels
             ReportLogger = reportLogger;
         }
 
-        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
+        public override void UpdateData(Portfolio portfolio, List<Sector> sectors, Action<object> removeTab)
         {
             Portfolio = portfolio;
             Sectors = sectors;
             if (SelectedName != null)
             {
+                if (!((List<NameData>)EditMethods.ExecuteFunction(FunctionType.NameUpdate, Portfolio, Sectors).Result).Exists(name => name.IsEqualTo(SelectedName)))
+                {
+                    removeTab(this);
+                    return;
+                }
+
                 SelectedData = (List<DayValue_ChangeLogged>)EditMethods.ExecuteFunction(FunctionType.SelectData, Portfolio, Sectors, SelectedName, ReportLogger).Result;
                 SelectLatestValue();
             }
@@ -93,6 +99,11 @@ namespace FinanceCommonViewModels
                 SelectedData = null;
             }
         }
+        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
+        {
+            UpdateData(portfolio, sectors, null);
+        }
+
 
         public ICommand EditDataCommand { get; set; }
 
