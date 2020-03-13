@@ -17,7 +17,7 @@ namespace FinancialStructures.GUIFinanceStructures
             if (a.Name == "Totals" && string.IsNullOrEmpty(a.Company))
             {
                 a.LatestVal = MathSupport.Truncate(portfolio.AllSecuritiesValue(date));
-                a.RecentChange = 0.0;
+                a.RecentChange = MathSupport.Truncate(portfolio.RecentChange());
                 a.FundsFraction = 1.0;
                 a.Profit = MathSupport.Truncate(portfolio.TotalProfit());
                 a.CAR3M = MathSupport.Truncate(100 * portfolio.IRRPortfolio(date.AddMonths(-3), date));

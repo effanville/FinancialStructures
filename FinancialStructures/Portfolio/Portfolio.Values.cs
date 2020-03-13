@@ -66,6 +66,23 @@ namespace FinancialStructures.Database
         }
 
         /// <summary>
+        /// returns the total profit in the portfolio.
+        /// </summary>
+        public static double RecentChange(this Portfolio portfolio)
+        {
+            double total = 0;
+            foreach (var desired in portfolio.Funds)
+            {
+                if (desired.Any())
+                {
+                    total += portfolio.RecentChange(desired.GetCompany(), desired.GetName());
+                }
+            }
+
+            return total;
+        }
+
+        /// <summary>
         /// If possible, returns the IRR of all securities over the time period.
         /// </summary>
         public static double IRRPortfolio(this Portfolio portfolio, DateTime earlierTime, DateTime laterTime)

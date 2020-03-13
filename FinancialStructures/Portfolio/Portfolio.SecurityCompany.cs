@@ -31,19 +31,12 @@ namespace FinancialStructures.Database
             {
                 return double.NaN;
             }
-            DateTime recentDate = securities[0].LastEarlierValuation(securities[0].LatestValue().Day).Day;
+
             foreach (var desired in securities)
             {
                 if (desired.Any())
                 {
-                    var currency = SecurityCurrency(portfolio, desired);
-                    var needed = desired.LatestValue(currency);
-                    if (needed.Day != recentDate)
-                    {
-                        return 0.0;
-                    }
-
-                    total += (needed.Value - desired.LastEarlierValuation(needed.Day, currency).Value);
+                    total += portfolio.RecentChange(desired.GetCompany(), desired.GetName());
                 }
             }
 
