@@ -51,7 +51,7 @@ namespace FinancialStructures.GUIFinanceStructures
             NewValue = true;
         }
 
-        public NameData(string n, string c, string currency, string u, List<string> s, bool newValue = true)
+        public NameData(string c, string n, string currency, string u, List<string> s, bool newValue = true)
         {
             Name = n;
             Company = c;
@@ -61,7 +61,7 @@ namespace FinancialStructures.GUIFinanceStructures
             NewValue = newValue;
         }
 
-        public NameData(string n, string c, string currency, string u, bool newValue = true)
+        public NameData(string c, string n, string currency, string u, bool newValue = true)
         {
             Name = n;
             Company = c;
@@ -70,7 +70,7 @@ namespace FinancialStructures.GUIFinanceStructures
             NewValue = newValue;
         }
 
-        public NameData(string n, string c, bool newValue = true)
+        public NameData(string c, string n, bool newValue = true)
         {
             Name = n;
             Company = c;

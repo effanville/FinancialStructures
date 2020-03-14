@@ -1,6 +1,7 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.Mathematics;
+using FinancialStructures.PortfolioAPI;
 using FinancialStructures.PortfolioStatsCreatorHelper;
 using StringFunctions;
 using System;
@@ -16,7 +17,7 @@ namespace FinancialStructures.GUIFinanceStructures
 
             if (a.Name == "Totals" && string.IsNullOrEmpty(a.Company))
             {
-                a.LatestVal = MathSupport.Truncate(portfolio.AllSecuritiesValue(date));
+                a.LatestVal = MathSupport.Truncate(portfolio.TotalValue(PortfolioElementType.Security, date));
                 a.RecentChange = MathSupport.Truncate(portfolio.RecentChange());
                 a.FundsFraction = 1.0;
                 a.Profit = MathSupport.Truncate(portfolio.TotalProfit());
@@ -29,7 +30,7 @@ namespace FinancialStructures.GUIFinanceStructures
             else if (a.Name == "Totals" && !string.IsNullOrEmpty(a.Company))
             {
                 var c = a.Company;
-                a.LatestVal = MathSupport.Truncate(portfolio.SecurityCompanyValue(c, date));
+                a.LatestVal = MathSupport.Truncate(portfolio.CompanyValue(PortfolioElementType.Security, c, date));
                 a.RecentChange = MathSupport.Truncate(portfolio.CompanyRecentChange(c));
                 a.FundsFraction = MathSupport.Truncate(portfolio.CompanyFraction(c, date), 4);
                 a.Profit = MathSupport.Truncate(portfolio.CompanyProfit(c));
@@ -45,7 +46,7 @@ namespace FinancialStructures.GUIFinanceStructures
                 var n = a.Name;
                 portfolio.TryGetSecurity(c, n, out Security des);
                 a.Number = des.NumberSectors();
-                a.LatestVal = MathSupport.Truncate(portfolio.SecurityLatestValue(c, n));
+                a.LatestVal = MathSupport.Truncate(portfolio.LatestValue(PortfolioElementType.Security, new NameData(c, n)));
                 a.RecentChange = MathSupport.Truncate(portfolio.RecentChange(c, n));
                 a.FundsFraction = MathSupport.Truncate(portfolio.SecurityFraction(c, n, date), 4);
                 a.Profit = MathSupport.Truncate(portfolio.Profit(c, n));

@@ -1,6 +1,7 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceFunctionsList;
 using FinancialStructures.FinanceStructures;
+using FinancialStructures.PortfolioAPI;
 using System;
 using System.Collections.Generic;
 
@@ -44,39 +45,6 @@ namespace FinancialStructures.Database
         }
 
         /// <summary>
-        /// Returns whether there is a security with this company name.
-        /// </summary>
-        public static bool DoesCompanyExist(this Portfolio portfolio, string company)
-        {
-            foreach (Security sec in portfolio.Funds)
-            {
-                if (sec.GetCompany() == company)
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Returns a copy of all securities with the company as specified.
-        /// </summary>
-        public static List<Security> CompanySecurities(this Portfolio portfolio, string company)
-        {
-            var securities = new List<Security>();
-            foreach (var sec in portfolio.Funds)
-            {
-                if (sec.GetCompany() == company)
-                {
-                    securities.Add(sec.Copy());
-                }
-            }
-            securities.Sort();
-            return securities;
-        }
-
-        /// <summary>
         /// Returns a named list of all investments in the company.
         /// </summary>
         public static List<DayValue_Named> CompanyInvestments(this Portfolio portfolio, string company)
@@ -84,30 +52,11 @@ namespace FinancialStructures.Database
             var output = new List<DayValue_Named>();
             foreach (var sec in portfolio.CompanySecurities(company))
             {
-                var currency = SecurityCurrency(portfolio, sec);
+                var currency = PortfolioValues.Currency(portfolio, PortfolioElementType.Security, sec);
                 output.AddRange(sec.AllInvestmentsNamed(currency));
             }
 
             return output;
-        }
-
-        /// <summary>
-        /// returns the value of security holdings in the company on the date specified. 
-        /// </summary>
-        public static double SecurityCompanyValue(this Portfolio portfolio, string company, DateTime date)
-        {
-            var securities = portfolio.CompanySecurities(company);
-            double value = 0;
-            foreach (var security in securities)
-            {
-                if (security.Any())
-                {
-                    var currency = SecurityCurrency(portfolio, security);
-                    value += security.Value(date, currency).Value;
-                }
-            }
-
-            return value;
         }
 
         /// <summary>
@@ -121,7 +70,7 @@ namespace FinancialStructures.Database
             {
                 if (security.Any())
                 {
-                    var currency = SecurityCurrency(portfolio, security);
+                    var currency = PortfolioValues.Currency(portfolio, PortfolioElementType.Security, security);
                     value += security.LatestValue(currency).Value - security.TotalInvestment(currency);
                 }
             }
@@ -134,7 +83,7 @@ namespace FinancialStructures.Database
         /// </summary>
         public static double CompanyFraction(this Portfolio portfolio, string company, DateTime date)
         {
-            return portfolio.SecurityCompanyValue(company, date) / portfolio.AllSecuritiesValue(date);
+            return portfolio.CompanyValue(PortfolioElementType.Security, company, date) / portfolio.TotalValue(PortfolioElementType.Security, date);
         }
 
         /// <summary>

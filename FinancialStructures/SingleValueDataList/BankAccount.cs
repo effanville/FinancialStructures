@@ -8,7 +8,7 @@ namespace FinancialStructures.FinanceStructures
     {
         public new CashAccount Copy()
         {
-            return new CashAccount(Name, Company, fCurrency, Values);
+            return new CashAccount(Company, Name, fCurrency, Values);
         }
 
         private List<string> fSectors = new List<string>();
@@ -45,7 +45,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Default constructor where no data is known.
         /// </summary>
-        internal CashAccount(string name, string company, string currency)
+        internal CashAccount(string company, string name, string currency)
             : base(company, name, string.Empty)
         {
             fCurrency = currency;
@@ -54,7 +54,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Constructor used when data is known.
         /// </summary>
-        private CashAccount(string name, string company, string currency, TimeList amounts)
+        private CashAccount(string company, string name, string currency, TimeList amounts)
             : base(company, name, string.Empty, amounts)
         {
             fCurrency = currency;

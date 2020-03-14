@@ -17,7 +17,7 @@ namespace SectorHelperFunctions
             {
                 foreach (Sector thing in sectors)
                 {
-                    outputs.Add(new NameData(thing.GetName(), string.Empty, string.Empty, thing.GetUrl(), false));
+                    outputs.Add(new NameData(string.Empty, thing.GetName(), string.Empty, thing.GetUrl(), false));
                 }
             }
             return outputs;

@@ -2,6 +2,7 @@
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.PortfolioAPI;
 using FinancialStructures.PortfolioStatsCreatorHelper;
 using System;
 using System.Collections.Generic;
@@ -71,8 +72,8 @@ namespace FinancialStructures.StatsMakers
             StreamWriter htmlWriter = new StreamWriter(filepath);
             CreateHTMLHeader(htmlWriter, portfolio.DatabaseName, options);
 
-            DayValue_Named securityTotals = new DayValue_Named(string.Empty, "Securities", DateTime.Today, portfolio.AllSecuritiesValue(DateTime.Today));
-            DayValue_Named bankTotals = new DayValue_Named(string.Empty, "Totals", DateTime.Today, portfolio.AllBankAccountsValue(DateTime.Today));
+            DayValue_Named securityTotals = new DayValue_Named(string.Empty, "Securities", DateTime.Today, portfolio.TotalValue(PortfolioElementType.Security));
+            DayValue_Named bankTotals = new DayValue_Named(string.Empty, "Totals", DateTime.Today, portfolio.TotalValue(PortfolioElementType.BankAccount));
             DayValue_Named portfolioTotals = new DayValue_Named(string.Empty, "Portfolio", DateTime.Today, portfolio.Value(DateTime.Today));
             List<string> headersList = new List<string>();
             headersList.AddRange(options.BankAccDataToExport);
@@ -105,7 +106,8 @@ namespace FinancialStructures.StatsMakers
                 htmlWriter.WriteLine(totals.HtmlTableHeader(options, options.SecurityDataToExport));
                 htmlWriter.WriteLine("</tr></thead>");
                 htmlWriter.WriteLine("<tbody>");
-                List<string> companies = portfolio.GetSecuritiesCompanyNames();
+                List<string> companies = portfolio.Companies(PortfolioElementType.Security, null);
+                companies.Sort();
                 foreach (string compName in companies)
                 {
                     var securities = portfolio.GenerateCompanyFundsStatistics(compName);
@@ -151,10 +153,11 @@ namespace FinancialStructures.StatsMakers
                 htmlWriter.WriteLine("<tbody>");
 
 
-                List<string> BankCompanies = portfolio.GetBankAccountCompanyNames();
+                List<string> BankCompanies = portfolio.Companies(PortfolioElementType.BankAccount, null);
+                BankCompanies.Sort();
                 foreach (string compName in BankCompanies)
                 {
-                    var bankAccounts = portfolio.GenerateBankAccountStatistics(compName);
+                    var bankAccounts = portfolio.GenerateCompanyBankAccountStatistics(compName, options.DisplayValueFunds);
                     int linesWritten = 0;
                     foreach (var acc in bankAccounts)
                     {

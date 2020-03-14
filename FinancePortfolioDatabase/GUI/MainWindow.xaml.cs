@@ -1,6 +1,5 @@
 ﻿using FinanceWindowsViewModels;
-using FinancialStructures.Database;
-using FinancialStructures.Reporting;
+using FinancialStructures.PortfolioAPI;
 using Microsoft.Win32;
 using System;
 using System.Reflection;

@@ -38,9 +38,9 @@ namespace FPD_UI_UnitTests
             var sectors = new List<Sector>();
             var viewModel = new BasicDataViewModel(portfolio, sectors);
 
-            portfolio.TryAdd(PortfolioElementType.Security, new NameData("Fidelity", "China", "GBP", "http://www.fidelity.co.uk", new List<string>() { "Bonds", "UK" }), TestingGUICode.DummyReportLogger);
-            portfolio.TryAdd(PortfolioElementType.BankAccount, new NameData("currentAccount", "Barclays"), TestingGUICode.DummyReportLogger);
-            portfolio.TryAdd(PortfolioElementType.Currency, new NameData("GBP", string.Empty), TestingGUICode.DummyReportLogger);
+            portfolio.TryAdd(PortfolioElementType.Security, new NameData("China", "Fidelity", "GBP", "http://www.fidelity.co.uk", new List<string>() { "Bonds", "UK" }), TestingGUICode.DummyReportLogger);
+            portfolio.TryAdd(PortfolioElementType.BankAccount, new NameData("Barclays", "currentAccount"), TestingGUICode.DummyReportLogger);
+            portfolio.TryAdd(PortfolioElementType.Currency, new NameData(string.Empty, "GBP"), TestingGUICode.DummyReportLogger);
             sectors.Add(new Sector("UK", "http://www.hi.com"));
 
             viewModel.UpdateData(portfolio, sectors);

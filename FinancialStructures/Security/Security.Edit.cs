@@ -50,7 +50,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         internal Security Copy()
         {
-            return new Security(fName, fCompany, fCurrency, fUrl, fShares, fUnitPrice, fInvestments);
+            return new Security(fCompany, fName, fCurrency, fUrl, fShares, fUnitPrice, fInvestments);
         }
 
         /// <summary>
@@ -231,7 +231,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Edits name and company data of security.
         /// </summary>
-        internal bool EditNameData(string name, string company, string currency, string url, List<string> sectors, Action<string, string, string> reportLogger)
+        internal bool EditNameData(string company, string name, string currency, string url, List<string> sectors, Action<string, string, string> reportLogger)
         {
             if (name != fName)
             {
@@ -319,7 +319,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Tries to delete the data. If it can, it deletes all data specified, then returns true only if all data has been successfully deleted.
         /// </summary>
-        internal bool TryDeleteData(Action<string, string, string> reportLogger, DateTime date, double shares, double unitPrice, double Investment = 0)
+        internal bool TryDeleteData(Action<string, string, string> reportLogger, DateTime date)
         {
             return fUnitPrice.TryDeleteValue(date, reportLogger) & fShares.TryDeleteValue(date, reportLogger) & fInvestments.TryDeleteValue(date, reportLogger) && ComputeInvestments(reportLogger);
         }

@@ -1,4 +1,5 @@
-﻿using FinancialStructures.FinanceStructures;
+﻿using FinancialStructures.Database;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using System;
 using System.Collections.Generic;
@@ -6,21 +7,20 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace FinancialStructures.Database
+namespace FinancialStructures.PortfolioAPI
 {
-    public enum WebsiteType
+    public static class PortfolioDataUpdater
     {
-        Morningstar,
-        Yahoo,
-        Google,
-        Bloomberg,
-        TrustNet,
-        FT,
-        NotImplemented
-    }
-
-    public static class DataUpdater
-    {
+        private enum WebsiteType
+        {
+            Morningstar,
+            Yahoo,
+            Google,
+            Bloomberg,
+            TrustNet,
+            FT,
+            NotImplemented
+        }
         public async static Task Downloader(Portfolio portfolio, List<Sector> sectors, Action<string, string, string> reportLogger)
         {
             await DownloadPortfolioLatest(portfolio, reportLogger).ConfigureAwait(false);
@@ -29,19 +29,19 @@ namespace FinancialStructures.Database
 
         public async static Task DownloadSecurity(Portfolio portfolio, string company, string name, Action<string, string, string> reportLogger)
         {
-            var sec = portfolio.GetSecurityFromName(name, company);
+            portfolio.TryGetSecurity(company, name, out var sec);
             await DownloadLatestValue(sec.GetCompany(), sec.GetName(), sec.GetUrl(), value => sec.UpdateSecurityData(value, reportLogger, DateTime.Today), reportLogger).ConfigureAwait(false);
         }
 
         public async static Task DownloadCurrency(Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
         {
-            var currency = portfolio.GetCurrencyFromName(name.Name);
+            portfolio.TryGetCurrency(name.Name, out var currency);
             await DownloadLatestValue(string.Empty, currency.GetName(), currency.GetUrl(), value => currency.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
         }
 
         public async static Task DownloadBankAccount(Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
         {
-            var acc = portfolio.GetBankAccountFromName(name.Name, name.Company);
+            portfolio.TryGetBankAccount(name.Company, name.Name, out var acc);
             await DownloadLatestValue(acc.GetCompany(), acc.GetName(), acc.GetUrl(), value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
         }
 
@@ -94,7 +94,7 @@ namespace FinancialStructures.Database
             return WebsiteType.NotImplemented;
         }
 
-        public async static Task DownloadPortfolioLatest(Portfolio portfo, Action<string, string, string> reportLogger)
+        private async static Task DownloadPortfolioLatest(Portfolio portfo, Action<string, string, string> reportLogger)
         {
             foreach (var sec in portfo.GetSecurities())
             {
@@ -110,7 +110,7 @@ namespace FinancialStructures.Database
             }
         }
 
-        public async static Task DownloadBenchMarksLatest(List<Sector> sectors, Action<string, string, string> reportLogger)
+        private async static Task DownloadBenchMarksLatest(List<Sector> sectors, Action<string, string, string> reportLogger)
         {
             foreach (var sector in sectors)
             {

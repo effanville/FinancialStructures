@@ -1,6 +1,7 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
 using FinancialStructures.DisplayStructures;
+using FinancialStructures.PortfolioAPI;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

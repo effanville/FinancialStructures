@@ -1,29 +1,22 @@
 ﻿using FileSupport;
 using FinancialStructures.FinanceStructures;
-using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.Database;
 using SavingClasses;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace FinancialStructures.Database
+namespace FinancialStructures.PortfolioAPI
 {
     public static class DatabaseAccess
     {
-        public static List<NameData> GetSectorNames(List<Sector> sectors)
-        {
-            var outputs = new List<NameData>();
-            if (sectors != null)
-            {
-                foreach (Sector thing in sectors)
-                {
-                    outputs.Add(new NameData(thing.GetName(), string.Empty, string.Empty, thing.GetUrl(), false));
-                }
-            }
-            return outputs;
-        }
-
-
+        /// <summary>
+        /// Load database from xml file.
+        /// </summary>
+        /// <param name="portfolio">The database to load into..</param>
+        /// <param name="benchMarks">The associated sectors to load into.</param>
+        /// <param name="filePath">The path to load from.</param>
+        /// <param name="reportLogger">Callback to report information.</param>
         public static List<Sector> LoadPortfolio(this Portfolio portfolio, string filePath, Action<string, string, string> reportLogger)
         {
             if (File.Exists(filePath))
@@ -38,6 +31,13 @@ namespace FinancialStructures.Database
             return new List<Sector>();
         }
 
+        /// <summary>
+        /// Save database to xml file.
+        /// </summary>
+        /// <param name="portfolio">The database to save.</param>
+        /// <param name="benchMarks">The associated sectors to save.</param>
+        /// <param name="filePath">The path to save to.</param>
+        /// <param name="reportLogger">Callback to report information.</param>
         public static void SavePortfolio(this Portfolio portfolio, List<Sector> benchMarks, string filePath, Action<string, string, string> reportLogger)
         {
             var toSave = new AllData(portfolio, benchMarks);

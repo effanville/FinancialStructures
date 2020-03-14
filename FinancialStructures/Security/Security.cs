@@ -124,7 +124,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Constructor creating a new security.
         /// </summary>
-        internal Security(string name, string company, string currency = "GBP", string url = null, List<string> sectors = null)
+        internal Security(string company, string name, string currency = "GBP", string url = null, List<string> sectors = null)
         {
             fName = name;
             fCompany = company;
@@ -136,7 +136,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Constructor to make a new security from known data.
         /// </summary>
-        private Security(string name, string company, string currency, string url, TimeList shares, TimeList prices, TimeList investments)
+        private Security(string company, string name, string currency, string url, TimeList shares, TimeList prices, TimeList investments)
         {
             fName = name;
             fCompany = company;

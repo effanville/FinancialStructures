@@ -1,12 +1,13 @@
-﻿using FinancialStructures.DataStructures;
+﻿using FinancialStructures.Database;
+using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceFunctionsList;
 using FinancialStructures.FinanceStructures;
 using System;
 using System.Collections.Generic;
 
-namespace FinancialStructures.Database
+namespace FinancialStructures.PortfolioAPI
 {
-    public static partial class PortfolioSector
+    public static partial class PortfolioStatistics
     {
         public static DateTime SectorFirstDate(this Portfolio portfolio, string sector)
         {

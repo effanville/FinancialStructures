@@ -2,6 +2,7 @@
 using FinanceWindows;
 using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
+using FinancialStructures.PortfolioAPI;
 using GUISupport;
 using SavingClasses;
 using System;
@@ -88,7 +89,7 @@ namespace FinanceWindowsViewModels
         public ICommand UpdateDataCommand { get; }
         private void ExecuteUpdateData(Object obj)
         {
-            DataUpdateCallback(async alldata => await DataUpdater.Downloader(alldata.MyFunds, alldata.myBenchMarks, ReportLogger).ConfigureAwait(false));
+            DataUpdateCallback(async alldata => await PortfolioDataUpdater.Downloader(alldata.MyFunds, alldata.myBenchMarks, ReportLogger).ConfigureAwait(false));
         }
 
         public ICommand RefreshCommand { get; }

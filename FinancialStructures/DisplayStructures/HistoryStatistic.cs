@@ -1,6 +1,7 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
 using FinancialStructures.Mathematics;
+using FinancialStructures.PortfolioAPI;
 using System;
 using System.Collections.Generic;
 
@@ -122,12 +123,13 @@ namespace FinancialStructures.DisplayStructures
         public HistoryStatistic(Portfolio portfolio, DateTime date)
         {
             TotalValue = new DailyValuation(date, MathSupport.Truncate(portfolio.Value(date)));
-            BankAccValue = new DailyValuation(date, MathSupport.Truncate(portfolio.AllBankAccountsValue(date)));
-            SecurityValue = new DailyValuation(date, MathSupport.Truncate(portfolio.AllSecuritiesValue(date)));
-            var companyNames = portfolio.GetSecuritiesCompanyNames();
+            BankAccValue = new DailyValuation(date, MathSupport.Truncate(portfolio.TotalValue(PortfolioElementType.BankAccount, date)));
+            SecurityValue = new DailyValuation(date, MathSupport.Truncate(portfolio.TotalValue(PortfolioElementType.Security, date)));
+            var companyNames = portfolio.Companies(PortfolioElementType.Security, null);
+            companyNames.Sort();
             foreach (var companyName in companyNames)
             {
-                var companyValue = new DayValue_Named(null, companyName, date, MathSupport.Truncate(portfolio.SecurityCompanyValue(companyName, date)));
+                var companyValue = new DayValue_Named(null, companyName, date, MathSupport.Truncate(portfolio.CompanyValue(PortfolioElementType.Security, companyName, date)));
                 SecurityValues.Add(companyValue);
                 var yearCar = new DayValue_Named(null, companyName, date, MathSupport.Truncate(portfolio.IRRCompany(companyName, date.AddDays(-365), date)));
                 Security1YrCar.Add(yearCar);
@@ -143,10 +145,11 @@ namespace FinancialStructures.DisplayStructures
                 SecurityTotalCar.Add(totalCar);
             }
 
-            var companyBankNames = portfolio.GetBankAccountCompanyNames();
+            var companyBankNames = portfolio.Companies(PortfolioElementType.BankAccount, null);
+            companyBankNames.Sort();
             foreach (var companyName in companyBankNames)
             {
-                var companyValue = new DayValue_Named(null, companyName, date, MathSupport.Truncate(portfolio.BankAccountCompanyValue(companyName, date)));
+                var companyValue = new DayValue_Named(null, companyName, date, MathSupport.Truncate(portfolio.CompanyValue(PortfolioElementType.BankAccount, companyName, date)));
                 BankAccValues.Add(companyValue);
             }
 

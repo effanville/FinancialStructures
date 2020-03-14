@@ -2,3 +2,6 @@
 
 # IDE0055: Fix formatting
 dotnet_diagnostic.IDE0055.severity = error
+
+# CS1591: Missing XML comment for publicly visible type or member
+dotnet_diagnostic.CS1591.severity = warning

@@ -8,6 +8,9 @@ namespace FinancialStructures.DataStructures
     /// </summary>
     public partial class TimeList
     {
+        /// <summary>
+        /// Adds all values in the list.
+        /// </summary>
         public double Sum()
         {
             if (fValues != null && fValues.Count > 0)

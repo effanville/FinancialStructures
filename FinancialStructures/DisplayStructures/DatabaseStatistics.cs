@@ -35,7 +35,7 @@ namespace FinancialStructures.GUIFinanceStructures
         }
 
 
-        public DatabaseStatistics(string company, string name, DateTime firstDate, DateTime latestDate, int numEntries, double density) : base(name, company)
+        public DatabaseStatistics(string company, string name, DateTime firstDate, DateTime latestDate, int numEntries, double density) : base(company, name)
         {
             FirstDate = firstDate;
             Date = latestDate;
@@ -43,7 +43,7 @@ namespace FinancialStructures.GUIFinanceStructures
             EntryYearDensity = density;
         }
 
-        public DatabaseStatistics(string company, string name) : base(name, company)
+        public DatabaseStatistics(string company, string name) : base(company, name)
         {
         }
     }

@@ -78,7 +78,7 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null && fSelectedValues != null)
             {
-                UpdateDataCallback(alldata => alldata.MyFunds.TryRemoveSecurityData(ReportLogger, fSelectedName.Company, fSelectedName.Name, fSelectedValues.Date, fSelectedValues.ShareNo, fSelectedValues.UnitPrice, fSelectedValues.NewInvestment));
+                UpdateDataCallback(alldata => alldata.MyFunds.TryDeleteData(PortfolioElementType.Security, fSelectedName, new DayValue_ChangeLogged(fSelectedValues.Date, 0.0), ReportLogger));
             }
         }
 
@@ -118,7 +118,8 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null)
             {
-                if (Portfolio.GetSecurityFromName(fSelectedName.Name, fSelectedName.Company).Count() != SelectedSecurityData.Count)
+                Portfolio.TryGetSecurity(fSelectedName.Company, fSelectedName.Name, out var desired);
+                if (desired.Count() != SelectedSecurityData.Count)
                 {
                     UpdateDataCallback(alldata => alldata.MyFunds.TryAddDataToSecurity(ReportLogger, fSelectedName.Company, fSelectedName.Name, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment));
                     fSelectedName.NewValue = false;
@@ -156,11 +157,7 @@ namespace FinanceWindowsViewModels
                     return;
                 }
 
-                if (Portfolio.TryGetSecurityData(fSelectedName.Company, fSelectedName.Name, out List<DayDataView> values))
-                {
-                    SelectedSecurityData = values;
-                }
-
+                SelectedSecurityData = Portfolio.SecurityData(fSelectedName.Company, fSelectedName.Name);
                 SelectLatestValue();
             }
             else

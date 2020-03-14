@@ -125,7 +125,7 @@ namespace FinancialStructures.GUIFinanceStructures
         }
 
         private readonly Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, Task> DownloadMethod;
-        private readonly Func<Portfolio, List<Sector>, List<NameData>> UpdateNameMethod;
+        private readonly Func<Portfolio, List<Sector>, List<NameCompDate>> UpdateNameMethod;
 
         private readonly Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, bool> CreateMethod;
 
@@ -143,7 +143,7 @@ namespace FinancialStructures.GUIFinanceStructures
 
         public EditMethods(
             Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, Task> downloadMethod,
-            Func<Portfolio, List<Sector>, List<NameData>> updateNameMethod = null,
+            Func<Portfolio, List<Sector>, List<NameCompDate>> updateNameMethod = null,
             Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, bool> createMethod = null,
             Func<Portfolio, List<Sector>, NameData, NameData, Action<string, string, string>, bool> editMethod = null,
             Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, bool> deleteMethod = null,

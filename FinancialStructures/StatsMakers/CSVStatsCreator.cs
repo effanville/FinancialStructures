@@ -2,6 +2,7 @@
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.PortfolioAPI;
 using FinancialStructures.PortfolioStatsCreatorHelper;
 using System;
 using System.Collections.Generic;
@@ -116,7 +117,8 @@ namespace FinancialStructures.StatsMakers
 
             WriteHeader(htmlWriter, properties, options.SecurityDataToExport, maxNameLength, maxCompanyLength, maxNumLength);
 
-            List<string> companies = portfolio.GetSecuritiesCompanyNames();
+            List<string> companies = portfolio.Companies(PortfolioElementType.Security, null);
+            companies.Sort();
             foreach (string compName in companies)
             {
                 var securities = portfolio.GenerateCompanyFundsStatistics(compName);
@@ -189,15 +191,16 @@ namespace FinancialStructures.StatsMakers
                 WriteSpacing(htmlWriter, options.Spacing);
             }
 
-            DayValue_Named bankTotals = new DayValue_Named("Totals,", string.Empty, DateTime.Today, portfolio.AllBankAccountsValue(DateTime.Today));
+            DayValue_Named bankTotals = new DayValue_Named("Totals,", string.Empty, DateTime.Today, portfolio.TotalValue(PortfolioElementType.BankAccount));
             var bankProperties = bankTotals.GetType().GetProperties();
 
             WriteHeader(htmlWriter, bankProperties, options.BankAccDataToExport, maxNameLength, maxCompanyLength, maxNumLength);
 
-            List<string> BankCompanies = portfolio.GetBankAccountCompanyNames();
+            List<string> BankCompanies = portfolio.Companies(PortfolioElementType.BankAccount, null);
+            BankCompanies.Sort();
             foreach (string compName in BankCompanies)
             {
-                var bankAccounts = portfolio.GenerateBankAccountStatistics(compName);
+                var bankAccounts = portfolio.GenerateCompanyBankAccountStatistics(compName, options.DisplayValueFunds);
                 int linesWritten = 0;
                 foreach (var acc in bankAccounts)
                 {

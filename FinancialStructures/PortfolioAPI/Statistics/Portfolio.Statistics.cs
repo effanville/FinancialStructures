@@ -2,14 +2,28 @@
 using FinancialStructures.DisplayStructures;
 using FinancialStructures.FinanceFunctionsList;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.Database;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
-namespace FinancialStructures.Database
+namespace FinancialStructures.PortfolioAPI
 {
-    public static class PortfolioValues
+    public static partial class PortfolioStatistics
     {
+        public static int LongestName(this Portfolio portfolio)
+        {
+            return portfolio.Names(PortfolioElementType.Security, null).Max().Length;
+        }
+
+        public static int LongestCompany(this Portfolio portfolio)
+        {
+            var companies = portfolio.Companies(PortfolioElementType.Security, null);
+            companies.Sort();
+            return companies.Select(c => c.Length).Max();
+        }
+
         /// <summary>
         /// Returns the earliest date held in the portfolio.
         /// </summary>
@@ -29,20 +43,6 @@ namespace FinancialStructures.Database
                     }
                 }
             }
-            return output;
-        }
-
-        /// <summary>
-        /// Returns a list of all investments in the portfolio securities.
-        /// </summary>
-        public static List<DayValue_Named> AllSecuritiesInvestments(this Portfolio portfolio)
-        {
-            var output = new List<DayValue_Named>();
-            foreach (var comp in portfolio.GetSecuritiesCompanyNames())
-            {
-                output.AddRange(portfolio.CompanyInvestments(comp));
-            }
-            output.Sort();
             return output;
         }
 
@@ -87,7 +87,7 @@ namespace FinancialStructures.Database
         /// </summary>
         public static double IRRPortfolio(this Portfolio portfolio, DateTime earlierTime, DateTime laterTime)
         {
-            if (portfolio.Funds.Count == 0)
+            if (portfolio.NumberOf(PortfolioElementType.Security) == 0)
             {
                 return double.NaN;
             }
@@ -111,49 +111,11 @@ namespace FinancialStructures.Database
         }
 
         /// <summary>
-        /// The total value of all securities on the date specified.
-        /// </summary>
-        public static double AllSecuritiesValue(this Portfolio portfolio, DateTime date)
-        {
-            double total = 0;
-            foreach (var sec in portfolio.Funds)
-            {
-                if (sec.Any())
-                {
-                    var currencyName = sec.GetCurrency();
-                    var currency = portfolio.Currencies.Find(cur => cur.Name == currencyName);
-                    total += sec.Value(date, currency).Value;
-                }
-            }
-
-            return total;
-        }
-
-        /// <summary>
-        /// The total value of all bank accounts on the date specified
-        /// </summary>
-        public static double AllBankAccountsValue(this Portfolio portfolio, DateTime date)
-        {
-            double total = 0;
-            foreach (var acc in portfolio.BankAccounts)
-            {
-                if (acc.Any())
-                {
-                    var currencyName = acc.GetCurrency();
-                    var currency = portfolio.Currencies.Find(cur => cur.Name == currencyName);
-                    total += acc.Value(date, currency).Value;
-                }
-            }
-
-            return total;
-        }
-
-        /// <summary>
         /// The total value of all securities and bank accounts on the date specified
         /// </summary>
         public static double Value(this Portfolio portfolio, DateTime date)
         {
-            return portfolio.AllSecuritiesValue(date) + portfolio.AllBankAccountsValue(date);
+            return portfolio.TotalValue(PortfolioElementType.Security, date) + portfolio.TotalValue(PortfolioElementType.BankAccount, date);
         }
 
         public static List<DatabaseStatistics> GenerateDatabaseStatistics(this Portfolio portfolio)

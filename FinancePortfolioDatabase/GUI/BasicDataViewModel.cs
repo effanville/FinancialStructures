@@ -4,6 +4,7 @@ using FinancialStructures.GUIFinanceStructures;
 using FinanceCommonViewModels;
 using SectorHelperFunctions;
 using System.Collections.Generic;
+using FinancialStructures.PortfolioAPI;
 
 namespace FinanceWindowsViewModels
 {
@@ -16,8 +17,8 @@ namespace FinanceWindowsViewModels
             set { fFundNames = value; OnPropertyChanged(); }
         }
 
-        private List<NameData> fAccountNames;
-        public List<NameData> AccountNames
+        private List<NameCompDate> fAccountNames;
+        public List<NameCompDate> AccountNames
         {
             get { return fAccountNames; }
             set { fAccountNames = value; OnPropertyChanged(); }
@@ -30,8 +31,8 @@ namespace FinanceWindowsViewModels
             set { fSectorNames = value; OnPropertyChanged(); }
         }
 
-        private List<NameData> fCurrencyNames;
-        public List<NameData> CurrencyNames
+        private List<NameCompDate> fCurrencyNames;
+        public List<NameCompDate> CurrencyNames
         {
             get { return fCurrencyNames; }
             set { fCurrencyNames = value; OnPropertyChanged(); }
@@ -45,13 +46,13 @@ namespace FinanceWindowsViewModels
 
         public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
         {
-            FundNames = portfolio.SecurityNamesAndCompanies();
+            FundNames = portfolio.NameData(PortfolioElementType.Security, null);
             FundNames.Sort();
-            AccountNames = portfolio.GetBankAccountNamesAndCompanies();
+            AccountNames = portfolio.NameData(PortfolioElementType.BankAccount, null);
             AccountNames.Sort();
             SectorNames = SectorEditor.GetSectorNames(sectors);
             SectorNames.Sort();
-            CurrencyNames = portfolio.GetCurrencyNames();
+            CurrencyNames = portfolio.NameData(PortfolioElementType.Currency, null);
             CurrencyNames.Sort();
         }
     }

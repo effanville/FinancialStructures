@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.Database;
+using FinancialStructures.PortfolioAPI;
 using System;
 using System.IO;
 using System.Linq;

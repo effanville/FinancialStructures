@@ -6,8 +6,18 @@ using System.IO;
 
 namespace FinancialStructures.DataReader
 {
+    /// <summary>
+    /// Contains routines to extract data from csv files.
+    /// </summary>
     public static class CsvDataRead
     {
+        /// <summary>
+        /// Reads data from a csv file.
+        /// </summary>
+        /// <param name="filePath">The path of file to read from.</param>
+        /// <param name="type">The type of data to import.</param>
+        /// <param name="reportLogger">Reporting Callback.</param>
+        /// <returns></returns>
         public static List<object> ReadFromCsv(string filePath, PortfolioElementType type, Action<string, string, string> reportLogger)
         {
             TextReader reader = null;
@@ -46,7 +56,7 @@ namespace FinancialStructures.DataReader
             }
         }
 
-        public static List<object> CreateSecurityData(List<string[]> valuationsToRead, Action<string, string, string> reportLogger)
+        private static List<object> CreateSecurityData(List<string[]> valuationsToRead, Action<string, string, string> reportLogger)
         {
             var dailyValuations = new List<object>();
             foreach (var dayValuation in valuationsToRead)
@@ -64,7 +74,7 @@ namespace FinancialStructures.DataReader
             return dailyValuations;
         }
 
-        public static List<object> CreateAccountData(List<string[]> valuationsToRead, Action<string, string, string> reportLogger)
+        private static List<object> CreateAccountData(List<string[]> valuationsToRead, Action<string, string, string> reportLogger)
         {
             var dailyValuations = new List<object>();
             foreach (var dayValuation in valuationsToRead)

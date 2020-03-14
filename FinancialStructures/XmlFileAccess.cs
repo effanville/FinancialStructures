@@ -4,6 +4,9 @@ using System.Xml.Serialization;
 
 namespace FileSupport
 {
+    /// <summary>
+    /// Contains generic type routines for writing and reading from xml file.
+    /// </summary>
     public static class XmlFileAccess
     {
 

@@ -48,8 +48,8 @@ namespace FinanceWindowsViewModels
             Portfolio = portfolio;
             DataUpdateCallback = updateData;
             ReportLogger = reportLogger;
-            FundNames = portfolio.SecurityNamesAndCompanies();
-            fPreEditFundNames = portfolio.SecurityNamesAndCompanies();
+            FundNames = portfolio.NameData(PortfolioElementType.Security, null);
+            fPreEditFundNames = portfolio.NameData(PortfolioElementType.Security, null);
 
             CreateSecurityCommand = new BasicCommand(ExecuteCreateEditCommand);
             DownloadCommand = new BasicCommand(ExecuteDownloadCommand);
@@ -60,9 +60,9 @@ namespace FinanceWindowsViewModels
         {
             Portfolio = portfolio;
             var currentSelectedName = selectedName;
-            FundNames = portfolio.SecurityNamesAndCompanies();
+            FundNames = portfolio.NameData(PortfolioElementType.Security, null);
             FundNames.Sort();
-            fPreEditFundNames = portfolio.SecurityNamesAndCompanies();
+            fPreEditFundNames = portfolio.NameData(PortfolioElementType.Security, null);
             fPreEditFundNames.Sort();
 
             for (int i = 0; i < FundNames.Count; i++)
@@ -85,7 +85,7 @@ namespace FinanceWindowsViewModels
 
         private void ExecuteCreateEditCommand(Object obj)
         {
-            if (Portfolio.Funds.Count != FundNames.Count)
+            if (Portfolio.NumberOf(PortfolioElementType.Security) != FundNames.Count)
             {
                 bool edited = false;
                 if (selectedName.NewValue)
@@ -131,7 +131,7 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null)
             {
-                DataUpdateCallback(async alldata => await DataUpdater.DownloadSecurity(alldata.MyFunds, fSelectedName.Company, fSelectedName.Name, ReportLogger).ConfigureAwait(false));
+                DataUpdateCallback(async alldata => await PortfolioDataUpdater.DownloadSecurity(alldata.MyFunds, fSelectedName.Company, fSelectedName.Name, ReportLogger).ConfigureAwait(false));
             }
         }
 
