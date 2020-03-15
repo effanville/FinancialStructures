@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.ReportLogging;
 using System;
 
 namespace FinancialStructures.PortfolioAPI
@@ -15,7 +16,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="data">The data to remove.</param>
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
-        public static bool TryDeleteData(this Portfolio portfolio, AccountType elementType, NameData name, DayValue_ChangeLogged data, Action<string, string, string> reportLogger)
+        public static bool TryDeleteData(this Portfolio portfolio, AccountType elementType, NameData name, DayValue_ChangeLogged data, LogReporter reportLogger)
         {
             switch (elementType)
             {
@@ -26,12 +27,11 @@ namespace FinancialStructures.PortfolioAPI
                             if (portfolio.Funds[fundIndex].GetCompany() == name.Company && portfolio.Funds[fundIndex].GetName() == name.Name)
                             {
                                 // now edit data
-                                return portfolio.Funds[fundIndex].TryDeleteData(reportLogger, data.Day);
+                                return portfolio.Funds[fundIndex].TryDeleteData(data.Day, reportLogger);
                             }
                         }
 
-                        reportLogger("Error", "DeletingData", $"Deleting Security Data: Could not find security `{name.Company}'-`{name.Name}'.");
-                        return false;
+                        break;
                     }
                 case (AccountType.Currency):
                     {
@@ -43,8 +43,7 @@ namespace FinancialStructures.PortfolioAPI
                             }
                         }
 
-                        reportLogger("Error", "DeletingData", $"Deleting Currency Data: Could not find Currency  `{name.Company}'-`{name.Name}'.");
-                        return false;
+                        break;
                     }
                 case (AccountType.BankAccount):
                     {
@@ -57,8 +56,7 @@ namespace FinancialStructures.PortfolioAPI
                             }
                         }
 
-                        reportLogger("Error", "DeletingData", $"Deleting Bank Account Data: Could not find bank account `{name.Company}'-`{name.Name}'.");
-                        return false;
+                        break;
                     }
                 case (AccountType.Sector):
                     {
@@ -70,13 +68,16 @@ namespace FinancialStructures.PortfolioAPI
                             }
                         }
 
-                        reportLogger("Error", "DeletingData", $"Deleting Sector Data: Could not find Currency  `{name.Company}'-`{name.Name}'.");
-                        return false;
+                        break;
                     }
                 default:
-                    reportLogger("Error", "EditingData", $"Editing an Unknown type.");
+                    reportLogger.Log("Error", "EditingData", $"Editing an Unknown type.");
                     return false;
             }
+
+
+            reportLogger.LogDetailed("Critical", "Error", "DeletingData", $"Could not find {elementType.ToString()} - {name.ToString()}.");
+            return false;
         }
     }
 }

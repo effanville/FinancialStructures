@@ -2,6 +2,7 @@
 using FinancialStructures.Database;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.PortfolioAPI;
+using FinancialStructures.ReportLogging;
 using GUISupport;
 using System;
 using System.Collections.Generic;
@@ -68,6 +69,9 @@ namespace FinanceWindowsViewModels
 
         public MainWindowViewModel()
         {
+            ReportsViewModel = new ReportingWindowViewModel();
+            ReportLogger = new LogReporter(ReportsViewModel.UpdateReport);
+
             OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger);
             Tabs.Add(new BasicDataViewModel(ProgramPortfolio));
             Tabs.Add(new SecurityEditWindowViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger));
@@ -76,7 +80,7 @@ namespace FinanceWindowsViewModels
             Tabs.Add(new SingleValueEditWindowViewModel("Currency Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, currencyEditMethods));
             Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger));
 
-            ReportsViewModel = new ReportingWindowViewModel();
+
         }
 
         private void AllData_portfolioChanged(object sender, EventArgs e)
@@ -93,14 +97,9 @@ namespace FinanceWindowsViewModels
         }
 
         /// <summary>
-        /// The callback to report an error into the reporting window.
+        /// 
         /// </summary>
-        public Action<string, string, string> ReportLogger => (type, location, message) => AddReport(type, location, message);
-
-        private void AddReport(string type, string location, string message)
-        {
-            ReportsViewModel.UpdateReport(type, location, message);
-        }
+        internal readonly LogReporter ReportLogger;
 
         /// <summary>
         /// The mechanism by which the data in <see cref="Portfolio"/> is updated. This includes a GUI update action.

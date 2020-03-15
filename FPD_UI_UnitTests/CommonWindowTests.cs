@@ -12,7 +12,7 @@ namespace FPD_UI_UnitTests
         {
             var output = TestingGUICode.CreateBasicDataBase();
 
-            var viewModel = new SingleValueEditWindowViewModel("Dummy", output.Item1, output.Item2, TestingGUICode.DummyDataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyEditMethods);
+            var viewModel = new SingleValueEditWindowViewModel("Dummy", output, TestingGUICode.DummyDataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyEditMethods);
         }
 
         public class SecurityNamesTests
@@ -22,7 +22,7 @@ namespace FPD_UI_UnitTests
             {
                 var output = TestingGUICode.CreateBasicDataBase();
 
-                var viewModel = new DataNamesViewModel(output.Item1, output.Item2, TestingGUICode.DummyDataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, TestingGUICode.DummyEditMethods);
+                var viewModel = new DataNamesViewModel(output, TestingGUICode.DummyDataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, TestingGUICode.DummyEditMethods);
             }
         }
 
@@ -33,7 +33,7 @@ namespace FPD_UI_UnitTests
             {
                 var output = TestingGUICode.CreateBasicDataBase();
 
-                var viewModel = new SelectedSingleDataViewModel(output.Item1, output.Item2, TestingGUICode.DummyDataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyEditMethods, null);
+                var viewModel = new SelectedSingleDataViewModel(output, TestingGUICode.DummyDataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyEditMethods, null);
             }
         }
     }

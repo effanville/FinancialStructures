@@ -2,8 +2,8 @@
 using FinancialStructures.Database;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.PortfolioAPI;
+using FinancialStructures.ReportLogging;
 using GUISupport;
-using SavingClasses;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
@@ -39,9 +39,9 @@ namespace FinanceWindowsViewModels
 
         private readonly Action<Action<Portfolio>> DataUpdateCallback;
 
-        private readonly Action<string, string, string> ReportLogger;
+        private readonly LogReporter ReportLogger;
 
-        public SecurityNamesViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateData, Action<string, string, string> reportLogger, Action<NameData> loadSelectedData)
+        public SecurityNamesViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateData, LogReporter reportLogger, Action<NameData> loadSelectedData)
             : base("Listed Securities", loadSelectedData)
         {
             Portfolio = portfolio;
@@ -99,7 +99,7 @@ namespace FinanceWindowsViewModels
 
                 if (!edited)
                 {
-                    ReportLogger("Error", "AddingData", "No Name provided to create a sector.");
+                    ReportLogger.Log("Error", "AddingData", "No Name provided to create a sector.");
                 }
             }
             else
@@ -119,7 +119,7 @@ namespace FinanceWindowsViewModels
                 }
                 if (!edited)
                 {
-                    ReportLogger("Error", "EditingData", "Was not able to edit desired security.");
+                    ReportLogger.Log("Error", "EditingData", "Was not able to edit desired security.");
                 }
             }
         }
@@ -144,7 +144,7 @@ namespace FinanceWindowsViewModels
             }
             else
             {
-                ReportLogger("Error", "DeletingData", "Something went wrong when trying to delete security.");
+                ReportLogger.Log("Error", "DeletingData", "Something went wrong when trying to delete security.");
             }
         }
     }

@@ -5,6 +5,10 @@ namespace FinancialStructures.GUIFinanceStructures
 {
     public class NameData : IComparable
     {
+        public override string ToString()
+        {
+            return "'" + Company + "' - '" + Name + "'";
+        }
         public int CompareTo(object obj)
         {
             if (obj is NameData value)

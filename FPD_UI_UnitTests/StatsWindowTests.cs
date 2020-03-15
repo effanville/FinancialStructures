@@ -11,7 +11,7 @@ namespace FPD_UI_UnitTests
         {
             var output = TestingGUICode.CreateBasicDataBase();
 
-            var viewModel = new StatsCreatorWindowViewModel(output.Item1, output.Item2, TestingGUICode.DummyReportLogger);
+            var viewModel = new StatsCreatorWindowViewModel(output, TestingGUICode.DummyReportLogger);
         }
     }
 }

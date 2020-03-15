@@ -12,7 +12,7 @@ namespace FPD_UI_UnitTests
         {
             var output = TestingGUICode.CreateBasicDataBase();
 
-            var viewModel = new OptionsToolbarViewModel(output.Item1, TestingGUICode.DummyDataUpdater, TestingGUICode.DummyReportLogger);
+            var viewModel = new OptionsToolbarViewModel(output, TestingGUICode.DummyDataUpdater, TestingGUICode.DummyReportLogger);
             //viewModel.NewDatabaseCommand.Execute(1);
             //Check that data held is an empty database
         }
@@ -23,7 +23,7 @@ namespace FPD_UI_UnitTests
         {
             var output = TestingGUICode.CreateBasicDataBase();
 
-            var viewModel = new OptionsToolbarViewModel(output.Item1, TestingGUICode.DummyDataUpdater, TestingGUICode.DummyReportLogger);
+            var viewModel = new OptionsToolbarViewModel(output, TestingGUICode.DummyDataUpdater, TestingGUICode.DummyReportLogger);
             //viewModel.NewDatabaseCommand.Execute(1);
             //Input prespecified example database
             //Check that data held is the expected database.

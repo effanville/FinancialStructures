@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using FinanceWindowsViewModels;
 using FinancialStructures.Database;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.PortfolioAPI;
-using SavingClasses;
+using FinancialStructures.ReportLogging;
 
 namespace FPD_UI_UnitTests.TestConstruction
 {
@@ -14,14 +13,14 @@ namespace FPD_UI_UnitTests.TestConstruction
         public static void GenerateDummyActions()
         { }
 
-        internal static Action<string, string, string> DummyReportLogger => (a, b, c) => dummyFunction(a, b, c);
+        internal static LogReporter DummyReportLogger = new LogReporter(dummyFunction);
 
-        private static void dummyFunction(string a, string b, string c)
+        private static void dummyFunction(string a, string b, string c, string d)
         {
             return;
         }
 
-        internal static Action<Action<AllData>> DummyDataUpdater => action => UpdateData(action);
+        internal static Action<Action<Portfolio>> DummyDataUpdater => action => UpdateData(action);
 
         private static void UpdateData(object obj)
         {
@@ -37,31 +36,31 @@ namespace FPD_UI_UnitTests.TestConstruction
 
         internal static EditMethods DummyEditMethods;
 
-        public static Tuple<Portfolio, List<Sector>> CreateBasicDataBase()
+        public static Portfolio CreateBasicDataBase()
         {
             var portfolio = new Portfolio();
-            portfolio.TryAdd(AccountType.Security, new NameData("China", "Fidelity", "GBP", "http://www.fidelity.co.uk", new List<string>() { "Bonds", "UK" }), TestingGUICode.DummyReportLogger);
+            UpdatePortfolio(portfolio);
+            return portfolio;
+        }
+
+        public static void UpdatePortfolio(Portfolio portfolio)
+        {
+            portfolio.TryAdd(AccountType.Security, new NameData("Fidelity","China",  "GBP", "http://www.fidelity.co.uk", new List<string>() { "Bonds", "UK" }), TestingGUICode.DummyReportLogger);
             portfolio.TryAdd(AccountType.BankAccount, new NameData("Barclays", "currentAccount"), TestingGUICode.DummyReportLogger);
             portfolio.TryAdd(AccountType.Currency, new NameData(string.Empty, "GBP"), TestingGUICode.DummyReportLogger);
 
-            var sectors = new List<Sector>();
-            sectors.Add(new Sector("UK", "http://www.hi.com"));
-
-            return new Tuple<Portfolio, List<Sector>>(portfolio, sectors);
+            portfolio.TryAdd(AccountType.Sector, new NameData(string.Empty, "UK", string.Empty, "http://www.hi.com"), TestingGUICode.DummyReportLogger);
         }
 
-        public static Tuple<Portfolio, List<Sector>> CreateEmptyDataBase()
+        public static Portfolio CreateEmptyDataBase()
         {
-            var portfolio = new Portfolio();
-            var sectors = new List<Sector>();
-            return new Tuple<Portfolio, List<Sector>>(portfolio, sectors);
+            return new Portfolio();
         }
 
-        internal static MainWindowViewModel SetupWindow(Portfolio portfolio, List<Sector> sectors)
+        internal static MainWindowViewModel SetupWindow(Portfolio portfolio)
         {
             var viewModel = new MainWindowViewModel();
-            var allData = new AllData(portfolio, sectors);
-            viewModel.allData = allData;
+            viewModel.ProgramPortfolio = portfolio;
             return viewModel;
         }
     }

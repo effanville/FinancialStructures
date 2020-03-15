@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.ReportLogging;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -13,10 +14,10 @@ namespace FinanceCommonViewModels
         public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
 
         private readonly Action<Action<Portfolio>> UpdateDataCallback;
-        private readonly Action<string, string, string> ReportLogger;
+        private readonly LogReporter ReportLogger;
         private readonly EditMethods EditMethods;
 
-        public SingleValueEditWindowViewModel(string title, Portfolio portfolio, Action<Action<Portfolio>> updateDataCallback, Action<string, string, string> reportLogger, EditMethods editMethods)
+        public SingleValueEditWindowViewModel(string title, Portfolio portfolio, Action<Action<Portfolio>> updateDataCallback, LogReporter reportLogger, EditMethods editMethods)
             : base(title)
         {
             UpdateDataCallback = updateDataCallback;

@@ -22,4 +22,11 @@ namespace FinancialStructures.Reporting
         DatabaseAccess,
         Help
     }
+
+    public enum Severity
+    {
+        Critical,
+        Useful,
+        Detailed
+    }
 }

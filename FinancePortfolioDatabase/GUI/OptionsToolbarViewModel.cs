@@ -2,6 +2,7 @@
 using FinanceWindows;
 using FinancialStructures.Database;
 using FinancialStructures.PortfolioAPI;
+using FinancialStructures.ReportLogging;
 using GUISupport;
 using System;
 using System.Windows.Forms;
@@ -14,9 +15,9 @@ namespace FinanceWindowsViewModels
         private string fFileName;
         private string fDirectory;
         private readonly Action<Action<Portfolio>> DataUpdateCallback;
-        private readonly Action<string, string, string> ReportLogger;
+        private readonly LogReporter ReportLogger;
 
-        public OptionsToolbarViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateData, Action<string, string, string> reportLogger)
+        public OptionsToolbarViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateData, LogReporter reportLogger)
             : base("Options")
         {
             ReportLogger = reportLogger;
@@ -78,7 +79,7 @@ namespace FinanceWindowsViewModels
             {
                 DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(openFile.FileName));
                 DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio(openFile.FileName, ReportLogger));
-                ReportLogger("Report", "Loading", $"Loaded new database from {openFile.FileName}");
+
             }
             openFile.Dispose();
         }

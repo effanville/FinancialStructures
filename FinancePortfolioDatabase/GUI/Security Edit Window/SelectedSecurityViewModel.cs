@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Windows.Input;
+using FinancialStructures.ReportLogging;
 
 namespace FinanceWindowsViewModels
 {
@@ -56,9 +57,9 @@ namespace FinanceWindowsViewModels
 
         private readonly Action<Action<Portfolio>> UpdateDataCallback;
 
-        private readonly Action<string, string, string> ReportLogger;
+        private readonly LogReporter ReportLogger;
 
-        public SelectedSecurityViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateData, Action<string, string, string> reportLogger, NameData selectedName)
+        public SelectedSecurityViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateData, LogReporter reportLogger, NameData selectedName)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
         {
             fSelectedName = selectedName;
@@ -91,7 +92,7 @@ namespace FinanceWindowsViewModels
                 List<object> outputs = null;
                 if (openFile.ShowDialog() == DialogResult.OK)
                 {
-                    outputs = CsvDataRead.ReadFromCsv(openFile.FileName, AccountType.Security, ReportLogger);
+                    outputs = CsvDataRead.ReadFromCsv(openFile.FileName, AccountType.Security, ReportLogger.Log);
                 }
                 if (outputs != null)
                 {
@@ -103,7 +104,7 @@ namespace FinanceWindowsViewModels
                         }
                         else
                         {
-                            ReportLogger("Error", "StatisticsPage", "Have the wrong type of thing");
+                            ReportLogger.Log("Error", "StatisticsPage", "Have the wrong type of thing");
                         }
                     }
                 }
@@ -138,7 +139,7 @@ namespace FinanceWindowsViewModels
                     }
                     if (!edited)
                     {
-                        ReportLogger("Error", "EditingData", "Was not able to edit security data.");
+                        ReportLogger.Log("Error", "EditingData", "Was not able to edit security data.");
                     }
                 }
             }

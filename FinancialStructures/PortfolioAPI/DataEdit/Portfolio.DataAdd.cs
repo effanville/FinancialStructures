@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.ReportLogging;
 using System;
 
 namespace FinancialStructures.PortfolioAPI
@@ -9,7 +10,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// Adds the desired data to the security if it can.
         /// </summary>
-        public static bool TryAddDataToSecurity(this Portfolio portfolio, Action<string, string, string> reportLogger, string company, string name, DateTime date, double shares, double unitPrice, double Investment = 0)
+        public static bool TryAddDataToSecurity(this Portfolio portfolio, LogReporter reportLogger, string company, string name, DateTime date, double shares, double unitPrice, double Investment = 0)
         {
             for (int fundIndex = 0; fundIndex < portfolio.NumberOf(AccountType.Security); fundIndex++)
             {
@@ -18,7 +19,7 @@ namespace FinancialStructures.PortfolioAPI
                     return portfolio.Funds[fundIndex].TryAddData(reportLogger, date, unitPrice, shares, Investment);
                 }
             }
-            reportLogger("Error", "AddingData", $"Security `{company}'-`{name}' could not be found in the database.");
+            reportLogger.LogDetailed("Critical", "Error", "AddingData", $"Security `{company}'-`{name}' could not be found in the database.");
             return false;
         }
 
@@ -32,7 +33,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
         /// <remarks> This cannot currently be used to add to securities due to different type of data.</remarks>
-        public static bool TryAddData(this Portfolio portfolio, AccountType elementType, NameData name, DayValue_ChangeLogged data, Action<string, string, string> reportLogger)
+        public static bool TryAddData(this Portfolio portfolio, AccountType elementType, NameData name, DayValue_ChangeLogged data, LogReporter reportLogger)
         {
             switch (elementType)
             {
@@ -79,7 +80,7 @@ namespace FinancialStructures.PortfolioAPI
                         return false;
                     }
                 default:
-                    reportLogger("Error", "EditingData", $"Editing an Unknown type.");
+                    reportLogger.Log("Error", "EditingData", $"Editing an Unknown type.");
                     return false;
             }
         }

@@ -1,12 +1,8 @@
 ﻿using NUnit.Framework;
 using FinanceWindowsViewModels;
 using FinancialStructures.Database;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.GUIFinanceStructures;
 using System.Linq;
-using System.Collections.Generic;
 using FPD_UI_UnitTests.TestConstruction;
-using FinancialStructures.PortfolioAPI;
 
 namespace FPD_UI_UnitTests
 {
@@ -15,9 +11,7 @@ namespace FPD_UI_UnitTests
         [Test]
         public void CanViewData()
         {
-            var output = TestingGUICode.CreateBasicDataBase();
-
-            var viewModel = new BasicDataViewModel(output.Item1, output.Item2);
+            var viewModel = new BasicDataViewModel(TestingGUICode.CreateBasicDataBase());
 
             Assert.AreEqual(1, viewModel.FundNames.Count);
             Assert.AreEqual("China", viewModel.FundNames.Single().Name);
@@ -35,15 +29,11 @@ namespace FPD_UI_UnitTests
         public void CanUpdateData()
         {
             var portfolio = new Portfolio();
-            var sectors = new List<Sector>();
-            var viewModel = new BasicDataViewModel(portfolio, sectors);
+            var viewModel = new BasicDataViewModel(portfolio);
 
-            portfolio.TryAdd(AccountType.Security, new NameData("China", "Fidelity", "GBP", "http://www.fidelity.co.uk", new List<string>() { "Bonds", "UK" }), TestingGUICode.DummyReportLogger);
-            portfolio.TryAdd(AccountType.BankAccount, new NameData("Barclays", "currentAccount"), TestingGUICode.DummyReportLogger);
-            portfolio.TryAdd(AccountType.Currency, new NameData(string.Empty, "GBP"), TestingGUICode.DummyReportLogger);
-            sectors.Add(new Sector("UK", "http://www.hi.com"));
+            TestingGUICode.UpdatePortfolio(portfolio);
 
-            viewModel.UpdateData(portfolio, sectors);
+            viewModel.UpdateData(portfolio);
             Assert.AreEqual(1, viewModel.FundNames.Count);
             Assert.AreEqual("China", viewModel.FundNames.Single().Name);
             Assert.AreEqual("Fidelity", viewModel.FundNames.Single().Company);

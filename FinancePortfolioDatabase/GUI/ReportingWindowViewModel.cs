@@ -1,7 +1,9 @@
 ﻿using FinancialStructures.Reporting;
 using GUISupport;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace FinanceWindowsViewModels
@@ -13,7 +15,7 @@ namespace FinanceWindowsViewModels
         public ObservableCollection<ErrorReport> ReportsToView
         {
             get { return fReportsToView; }
-            set { fReportsToView = value; OnPropertyChanged(); }
+            set { fReportsToView = value; OnPropertyChanged(nameof(ReportsToView)); }
         }
 
         private ErrorReports fReports;
@@ -21,7 +23,7 @@ namespace FinanceWindowsViewModels
         public ErrorReports Reports
         {
             get { return fReports; }
-            set { fReports = value; OnPropertyChanged(); }
+            set { fReports = value; OnPropertyChanged(nameof(Reports)); }
         }
 
         private int fIndexToDelete;
@@ -29,7 +31,20 @@ namespace FinanceWindowsViewModels
         public int IndexToDelete
         {
             get { return fIndexToDelete; }
-            set { fIndexToDelete = value; OnPropertyChanged(); }
+            set { fIndexToDelete = value; OnPropertyChanged(nameof(IndexToDelete)); }
+        }
+
+        private Severity fReportingSeverity;
+
+        public Severity ReportingSeverity
+        {
+            get { return fReportingSeverity; }
+            set { fReportingSeverity = value; OnPropertyChanged(nameof(ReportingSeverity)); SyncReports(); }
+        }
+
+        public List<Severity> EnumValues
+        {
+            get { return Enum.GetValues(typeof(Severity)).Cast<Severity>().ToList(); }
         }
 
         public ReportingWindowViewModel()
@@ -44,12 +59,12 @@ namespace FinanceWindowsViewModels
         internal void SyncReports()
         {
             ReportsToView = null;
-            ReportsToView = new ObservableCollection<ErrorReport>(Reports.GetReports());
+            ReportsToView = new ObservableCollection<ErrorReport>(Reports.GetReports(ReportingSeverity));
             OnPropertyChanged(nameof(ReportsToView));
         }
 
         public ICommand ClearReportsCommand { get; }
-        
+
         private void ExecuteClearReports(Object obj)
         {
             Reports = new ErrorReports();
@@ -66,7 +81,13 @@ namespace FinanceWindowsViewModels
 
         public void UpdateReport(string type, string location, string message)
         {
-            Reports.AddReport(type, location, message);
+            Reports.AddReport(Severity.Useful.ToString(), type, location, message);
+            SyncReports();
+        }
+
+        public void UpdateReport(string severity, string type, string location, string message)
+        {
+            Reports.AddReport(severity, type, location, message);
             SyncReports();
         }
     }

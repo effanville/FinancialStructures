@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.ReportLogging;
 using System;
 using System.Linq;
 using System.Net.Http;
@@ -20,30 +21,30 @@ namespace FinancialStructures.PortfolioAPI
             NotImplemented
         }
 
-        public async static Task Downloader(Portfolio portfolio, Action<string, string, string> reportLogger)
+        public async static Task Downloader(Portfolio portfolio, LogReporter reportLogger)
         {
             await DownloadPortfolioLatest(portfolio, reportLogger).ConfigureAwait(false);
         }
 
-        public async static Task DownloadSecurity(Portfolio portfolio, string company, string name, Action<string, string, string> reportLogger)
+        public async static Task DownloadSecurity(Portfolio portfolio, string company, string name, LogReporter reportLogger)
         {
             portfolio.TryGetSecurity(company, name, out var sec);
             await DownloadLatestValue(sec.GetCompany(), sec.GetName(), sec.GetUrl(), value => sec.UpdateSecurityData(value, reportLogger, DateTime.Today), reportLogger).ConfigureAwait(false);
         }
 
-        public async static Task DownloadCurrency(Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
+        public async static Task DownloadCurrency(Portfolio portfolio, NameData name, LogReporter reportLogger)
         {
             portfolio.TryGetCurrency(name.Name, out var currency);
             await DownloadLatestValue(string.Empty, currency.GetName(), currency.GetUrl(), value => currency.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
         }
 
-        public async static Task DownloadBankAccount(Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
+        public async static Task DownloadBankAccount(Portfolio portfolio, NameData name, LogReporter reportLogger)
         {
             portfolio.TryGetBankAccount(name.Company, name.Name, out var acc);
             await DownloadLatestValue(acc.GetCompany(), acc.GetName(), acc.GetUrl(), value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
         }
 
-        public async static Task DownloadSector(Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
+        public async static Task DownloadSector(Portfolio portfolio, NameData name, LogReporter reportLogger)
         {
             portfolio.TryGetSector(name.Name, out var sector);
             await DownloadLatestValue(string.Empty, sector.GetName(), sector.GetUrl(), value => sector.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
@@ -92,7 +93,7 @@ namespace FinancialStructures.PortfolioAPI
             return WebsiteType.NotImplemented;
         }
 
-        private async static Task DownloadPortfolioLatest(Portfolio portfo, Action<string, string, string> reportLogger)
+        private async static Task DownloadPortfolioLatest(Portfolio portfo, LogReporter reportLogger)
         {
             foreach (var sec in portfo.GetSecurities())
             {
@@ -112,12 +113,12 @@ namespace FinancialStructures.PortfolioAPI
             }
         }
 
-        public async static Task DownloadLatestValue(string company, string name, string url, Action<double> updateValue, Action<string, string, string> reportLogger)
+        public async static Task DownloadLatestValue(string company, string name, string url, Action<double> updateValue, LogReporter reportLogger)
         {
             string data = await DownloadFromURL(url, reportLogger).ConfigureAwait(false);
             if (string.IsNullOrEmpty(data))
             {
-                reportLogger("Error", "Downloading", $"{company}-{name}: could not download data from {url}");
+                reportLogger.Log("Error", "Downloading", $"{company}-{name}: could not download data from {url}");
                 return;
             }
             if (!ProcessDownloadString(url, data, reportLogger, out double value))
@@ -128,7 +129,7 @@ namespace FinancialStructures.PortfolioAPI
             updateValue(value);
         }
 
-        public static async Task<string> DownloadFromURL(string url, Action<string, string, string> reportLogger)
+        public static async Task<string> DownloadFromURL(string url, LogReporter reportLogger)
         {
             if (string.IsNullOrEmpty(url))
             {
@@ -151,7 +152,7 @@ namespace FinancialStructures.PortfolioAPI
                 }
                 catch (Exception ex)
                 {
-                    reportLogger("Error", "Downloading", $"Failed to download from url {url}. Reason : {ex.Message}");
+                    reportLogger.LogDetailed("Critical", "Error", "Downloading", $"Failed to download from url {url}. Reason : {ex.Message}");
                     return output;
                 }
             }
@@ -159,7 +160,7 @@ namespace FinancialStructures.PortfolioAPI
             return output;
         }
 
-        private static bool ProcessDownloadString(string url, string data, Action<string, string, string> reportLogger, out double value)
+        private static bool ProcessDownloadString(string url, string data, LogReporter reportLogger, out double value)
         {
             value = double.NaN;
             switch (AddressType(url))
@@ -169,7 +170,7 @@ namespace FinancialStructures.PortfolioAPI
                         value = ProcessFromFT(data);
                         if (double.IsNaN(value))
                         {
-                            reportLogger("Error", "Downloading", $"Could not download data from morningstar url: {url}");
+                            reportLogger.LogDetailed("Critical", "Error", "Downloading", $"Could not download data from FT url: {url}");
                             return false;
                         }
                         return true;
@@ -179,7 +180,7 @@ namespace FinancialStructures.PortfolioAPI
                         value = ProcessFromYahoo(data);
                         if (double.IsNaN(value))
                         {
-                            reportLogger("Error", "Downloading", $"Could not download data from Yahoo url: {url}");
+                            reportLogger.LogDetailed("Critical", "Error", "Downloading", $"Could not download data from Yahoo url: {url}");
                             return false;
                         }
                         return true;
@@ -189,7 +190,7 @@ namespace FinancialStructures.PortfolioAPI
                 case WebsiteType.Google:
                 case WebsiteType.TrustNet:
                 case WebsiteType.Bloomberg:
-                    reportLogger("Error", "Downloading", $"Url not of a currently implemented downloadable type: {url}");
+                    reportLogger.LogDetailed("Critical", "Error", "Downloading", $"Url not of a currently implemented downloadable type: {url}");
                     return false;
             }
         }

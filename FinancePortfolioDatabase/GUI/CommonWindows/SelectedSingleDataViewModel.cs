@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.ReportLogging;
 using GUISupport;
 using System;
 using System.Collections.Generic;
@@ -59,11 +60,11 @@ namespace FinanceCommonViewModels
 
         private readonly Action<Action<Portfolio>> UpdateDataCallback;
 
-        private readonly Action<string, string, string> ReportLogger;
+        private readonly LogReporter ReportLogger;
 
         private readonly EditMethods EditMethods;
 
-        public SelectedSingleDataViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateDataCallback, Action<string, string, string> reportLogger, EditMethods editMethods, NameData selectedName)
+        public SelectedSingleDataViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateDataCallback, LogReporter reportLogger, EditMethods editMethods, NameData selectedName)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
         {
             SelectedName = selectedName;
@@ -132,7 +133,7 @@ namespace FinanceCommonViewModels
                     }
                     if (!edited)
                     {
-                        ReportLogger("Error", "EditingData", "Was not able to edit data.");
+                        ReportLogger.LogDetailed("Critical", "Error", "EditingData", "Was not able to edit data.");
                     }
                 }
             }
@@ -148,7 +149,7 @@ namespace FinanceCommonViewModels
             }
             else
             {
-                ReportLogger("Error", "DeletingData", "No Account was selected when trying to delete data.");
+                ReportLogger.LogDetailed("Critical", "Error", "DeletingData", "No Account was selected when trying to delete data.");
             }
         }
 

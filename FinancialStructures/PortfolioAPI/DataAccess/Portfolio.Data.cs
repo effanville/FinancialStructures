@@ -1,6 +1,6 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.GUIFinanceStructures;
-using System;
+using FinancialStructures.ReportLogging;
 using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
@@ -31,7 +31,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="name"></param>
         /// <param name="reportLogger"></param>
         /// <returns></returns>
-        public static List<DayValue_ChangeLogged> NumberData(this Portfolio portfolio, AccountType elementType, NameData name, Action<string, string, string> reportLogger)
+        public static List<DayValue_ChangeLogged> NumberData(this Portfolio portfolio, AccountType elementType, NameData name, LogReporter reportLogger)
         {
             switch (elementType)
             {
@@ -49,8 +49,7 @@ namespace FinancialStructures.PortfolioAPI
                             }
                         }
 
-                        reportLogger("Error", "DatabaseAccess", $"Could not find currency {name.Name}");
-                        return new List<DayValue_ChangeLogged>();
+                        break;
                     }
                 case (AccountType.BankAccount):
                     {
@@ -61,8 +60,8 @@ namespace FinancialStructures.PortfolioAPI
                                 return bankAccount.GetDataForDisplay();
                             }
                         }
-                        reportLogger("Report", "DatabaseAccess", $"Bank account {name.ToString()} does not exist.");
-                        return new List<DayValue_ChangeLogged>();
+
+                        break;
                     }
                 case (AccountType.Sector):
                     {
@@ -73,12 +72,15 @@ namespace FinancialStructures.PortfolioAPI
                                 return sector.GetDataForDisplay();
                             }
                         }
-                        reportLogger("Report", "DatabaseAccess", $"Sector {name.ToString()} does not exist.");
-                        return new List<DayValue_ChangeLogged>();
+
+                        break;
                     }
                 default:
                     return new List<DayValue_ChangeLogged>();
             }
+
+            reportLogger.Log("Error", "DatabaseAccess", $"Could not find {elementType.ToString()} - {name.ToString()}");
+            return new List<DayValue_ChangeLogged>();
         }
     }
 }

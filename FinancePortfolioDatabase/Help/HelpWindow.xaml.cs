@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Reporting;
+﻿using FinancialStructures.ReportLogging;
 using System;
 using System.IO;
 using System.Windows;
@@ -10,13 +10,13 @@ namespace FinanceWindows
     /// </summary>
     public partial class HelpWindow : Window
     {
-        public HelpWindow(Action<string, string, string> reportLogger)
+        public HelpWindow(LogReporter reportLogger)
         {
             InitializeComponent();
             string helpPath = Path.GetFullPath("Help\\help.html");
             if (!File.Exists(helpPath))
             {
-                reportLogger("Error", "Help","Could not find help documentation.");
+                reportLogger.Log("Error", "Help","Could not find help documentation.");
                 return;
             }
             Uri path = new Uri(helpPath);

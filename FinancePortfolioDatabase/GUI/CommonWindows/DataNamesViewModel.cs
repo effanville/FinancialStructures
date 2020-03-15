@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.ReportLogging;
 using GUISupport;
 using System;
 using System.Collections.Generic;
@@ -36,10 +37,10 @@ namespace FinanceCommonViewModels
         }
 
         private readonly Action<Action<Portfolio>> UpdateDataCallback;
-        private readonly Action<string, string, string> ReportLogger;
+        private readonly LogReporter ReportLogger;
         private readonly EditMethods editMethods;
 
-        public DataNamesViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateDataCallback, Action<string, string, string> reportLogger, Action<NameData> loadSelectedData, EditMethods updateMethods)
+        public DataNamesViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateDataCallback, LogReporter reportLogger, Action<NameData> loadSelectedData, EditMethods updateMethods)
             : base("Accounts", loadSelectedData)
         {
             Portfolio = portfolio;
@@ -101,7 +102,7 @@ namespace FinanceCommonViewModels
                 }
                 if (!edited)
                 {
-                    ReportLogger("Error", "AddingData", "No Name provided on creation.");
+                    ReportLogger.LogDetailed("Critical", "Error", "AddingData", "No Name provided on creation.");
                 }
             }
             else
@@ -121,7 +122,7 @@ namespace FinanceCommonViewModels
                 }
                 if (!edited)
                 {
-                    ReportLogger("Error", "EditingData", "Was not able to edit desired.");
+                    ReportLogger.LogDetailed("Critical", "Error", "EditingData", "Was not able to edit desired.");
                 }
             }
         }
@@ -135,7 +136,7 @@ namespace FinanceCommonViewModels
             }
             else
             {
-                ReportLogger("Error", "DeletingData", "Nothing was selected when trying to delete.");
+                ReportLogger.LogDetailed("Critical", "Error", "DeletingData", "Nothing was selected when trying to delete.");
             }
         }
     }

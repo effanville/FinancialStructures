@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Windows.Input;
+using FinancialStructures.ReportLogging;
 
 namespace FinanceWindowsViewModels
 {
@@ -87,18 +88,18 @@ namespace FinanceWindowsViewModels
                 {
                     CSVStatsCreator.CreateCSVPageCustom(Portfolio, saving.FileName, options);
                 }
-                ReportLogger("Report", "StatisticsPage", "Created statistics page");
+                ReportLogger.Log("Report", "StatisticsPage", "Created statistics page");
             }
             else
             {
-                ReportLogger("Error", "StatisticsPage", "Was not able to create " + fExtension + " page in place specified.");
+                ReportLogger.LogDetailed("Critical", "Error", "StatisticsPage", "Was not able to create " + fExtension + " page in place specified.");
             }
 
             saving.Dispose();
             CloseWindowAction(path);
         }
 
-        Action<string, string, string> ReportLogger;
+        private readonly LogReporter ReportLogger;
         private Action<string> CloseWindowAction;
         private ExportType windowType;
         private string fExtension
@@ -109,7 +110,7 @@ namespace FinanceWindowsViewModels
         {
             get { return "." + fExtension; }
         }
-        public StatsOptionsViewModel(Portfolio portfolio, ExportType exportType, Action<string, string, string> reportLogger, Action<string> CloseWindow)
+        public StatsOptionsViewModel(Portfolio portfolio, ExportType exportType, LogReporter reportLogger, Action<string> CloseWindow)
         {
             windowType = exportType;
             Portfolio = portfolio;

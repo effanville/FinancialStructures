@@ -1,6 +1,6 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.GUIFinanceStructures;
-using System;
+using FinancialStructures.ReportLogging;
 using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
@@ -16,7 +16,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="newName">The new name of the data.</param>
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure of editing.</returns>
-        public static bool TryEditName(this Portfolio portfolio, AccountType elementType, NameData oldName, NameData newName, Action<string, string, string> reportLogger)
+        public static bool TryEditName(this Portfolio portfolio, AccountType elementType, NameData oldName, NameData newName, LogReporter reportLogger)
         {
             List<string> sectorList = new List<string>();
             if (!string.IsNullOrEmpty(newName.Sectors))
@@ -38,11 +38,10 @@ namespace FinancialStructures.PortfolioAPI
                             if (portfolio.Funds[fundIndex].GetCompany() == oldName.Company && portfolio.Funds[fundIndex].GetName() == oldName.Name)
                             {
                                 // now edit data
-                                return portfolio.Funds[fundIndex].EditNameData(newName.Company, newName.Name, newName.Currency, newName.Url, sectorList, reportLogger);
+                                return portfolio.Funds[fundIndex].EditNameData(newName.Company, newName.Name, newName.Currency, newName.Url, sectorList);
                             }
                         }
-
-                        return false;
+                        break;
                     }
                 case (AccountType.Currency):
                     {
@@ -55,8 +54,7 @@ namespace FinancialStructures.PortfolioAPI
                             }
                         }
 
-                        reportLogger("Error", "EditingData", $"Could not rename sector {oldName} with new name {newName}.");
-                        return false;
+                        break;
                     }
                 case (AccountType.BankAccount):
                     {
@@ -69,8 +67,7 @@ namespace FinancialStructures.PortfolioAPI
                             }
                         }
 
-                        reportLogger("Error", "EditingData", $"Renaming BankAccount: Could not find bank account `{oldName.Company}'-`{oldName.Name}'.");
-                        return false;
+                        break;
                     }
                 case (AccountType.Sector):
                     {
@@ -83,13 +80,17 @@ namespace FinancialStructures.PortfolioAPI
                             }
                         }
 
-                        reportLogger("Error", "EditingData", $"Renaming Sector: Could not find sector `{oldName.Company}'-`{oldName.Name}'.");
-                        return false;
+                        break;
                     }
                 default:
-                    reportLogger("Error", "EditingData", $"Editing an Unknown type.");
-                    return false;
+                    {
+                        reportLogger.Log("Error", "EditingData", $"Editing an Unknown type.");
+                        return false;
+                    }
             }
+
+            reportLogger.Log("Error", "EditingData", $"Renaming {elementType.ToString()}: Could not find {elementType.ToString()} with name {oldName.ToString()}.");
+            return false;
         }
     }
 }

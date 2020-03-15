@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.ReportLogging;
 using System;
 using System.Collections.Generic;
 
@@ -177,11 +178,11 @@ namespace FinancialStructures.FinanceStructures
         /// Attempts to add data for the date specified.
         /// If cannot add any value that one wants to, then doesn't add all the values chosen.
         /// </summary>
-        internal bool TryAddData(Action<string, string, string> reportLogger, DateTime date, double unitPrice, double shares = 0, double investment = 0)
+        internal bool TryAddData(LogReporter reportLogger, DateTime date, double unitPrice, double shares = 0, double investment = 0)
         {
             if (DoesDateSharesDataExist(date, out int _) || DoesDateInvestmentDataExist(date, out int _) || DoesDateUnitPriceDataExist(date, out int _))
             {
-                reportLogger("Error", "AddingData", $"Security `{fCompany}'-`{fName}' already has NumShares or UnitPrice or Investment data on {date.ToString("d")}.");
+                reportLogger.Log("Error", "AddingData", $"Security `{fCompany}'-`{fName}' already has NumShares or UnitPrice or Investment data on {date.ToString("d")}.");
                 return false;
             }
 
@@ -191,7 +192,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Adds the value to the data with todays date and with the latest number of shares.
         /// </summary>
-        public void UpdateSecurityData(double value, Action<string, string, string> reportLogger, DateTime day)
+        public void UpdateSecurityData(double value, LogReporter reportLogger, DateTime day)
         {
             // best approximation for number of units is last known number of units.
             TryGetEarlierData(day, out DailyValuation _, out DailyValuation units, out DailyValuation _);
@@ -209,7 +210,7 @@ namespace FinancialStructures.FinanceStructures
         /// If do have relevant values, then edit that value
         /// If investment value doesnt exist, then add that value.
         /// </summary>
-        internal bool TryEditData(Action<string, string, string> reportLogger, DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment)
+        internal bool TryEditData(LogReporter reportLogger, DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment)
         {
             bool editShares = false;
             bool editUnitPrice = false;
@@ -231,7 +232,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Edits name and company data of security.
         /// </summary>
-        internal bool EditNameData(string company, string name, string currency, string url, List<string> sectors, Action<string, string, string> reportLogger)
+        internal bool EditNameData(string company, string name, string currency, string url, List<string> sectors)
         {
             if (name != fName)
             {
@@ -319,7 +320,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Tries to delete the data. If it can, it deletes all data specified, then returns true only if all data has been successfully deleted.
         /// </summary>
-        internal bool TryDeleteData(Action<string, string, string> reportLogger, DateTime date)
+        internal bool TryDeleteData(DateTime date, LogReporter reportLogger)
         {
             return fUnitPrice.TryDeleteValue(date, reportLogger) & fShares.TryDeleteValue(date, reportLogger) & fInvestments.TryDeleteValue(date, reportLogger) && ComputeInvestments(reportLogger);
         }
@@ -332,7 +333,7 @@ namespace FinancialStructures.FinanceStructures
         /// <remarks>
         /// This should be called throughout, whenever one updates the data stored in the Security.
         /// </remarks>
-        private bool ComputeInvestments(Action<string, string, string> reportLogger)
+        private bool ComputeInvestments(LogReporter reportLogger)
         {
             // return true;
             for (int index = 0; index < fInvestments.Count(); index++)

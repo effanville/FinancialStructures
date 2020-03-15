@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace FinancialStructures.Reporting
@@ -34,16 +33,21 @@ namespace FinancialStructures.Reporting
         /// <summary>
         /// Adds a report to the existing list 
         /// </summary>
-        public void AddReport(string type, string location, string message)
+        public void AddReport(string severity, string type, string location, string message)
         {
-            if (!ReportType.TryParse(type, out ReportType typeOfReport))
-            {
-            }
-            if (!Location.TryParse(location, out Location locationType))
-            {
-            }
+            Severity.TryParse(severity, out Severity ReportSeverity);
+            ReportType.TryParse(type, out ReportType typeOfReport);
+            Location.TryParse(location, out Location locationType);
 
-            AddGeneralReport(typeOfReport, locationType, message);
+            AddGeneralReport(ReportSeverity, typeOfReport, locationType, message);
+        }
+
+        /// <summary>
+        /// Adds a report of any type to the existing list 
+        /// </summary>
+        private void AddGeneralReport(Severity severity, ReportType type, Location location, string newReport)
+        {
+            fReports.Add(new ErrorReport(severity, type, location, newReport));
         }
 
         /// <summary>
@@ -79,11 +83,27 @@ namespace FinancialStructures.Reporting
         }
 
         /// <summary>
-        /// Function to obtain 
+        /// Returns all reports held in the system.
         /// </summary>
-        /// <returns>Currently held reports</returns>
         public List<ErrorReport> GetReports()
         {
+            return fReports;
+        }
+
+        /// <summary>
+        /// Returns all reports of a certain severity from the system.
+        /// </summary>
+        public List<ErrorReport> GetReports(Severity severity = Severity.Useful)
+        {
+            if (severity.Equals(Severity.Critical))
+            {
+                return fReports.Where(report => report.ErrorSeverity == severity).ToList();
+            }
+            if (severity.Equals(Severity.Useful))
+            {
+                return fReports.Where(report => report.ErrorSeverity == severity || report.ErrorSeverity == Severity.Critical).ToList();
+            }
+
             return fReports;
         }
 

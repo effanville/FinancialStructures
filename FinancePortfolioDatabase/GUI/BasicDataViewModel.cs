@@ -37,7 +37,7 @@ namespace FinanceWindowsViewModels
         }
 
         public BasicDataViewModel(Portfolio portfolio)
-            : base("Database Overview")
+            : base("Overview")
         {
             UpdateData(portfolio);
         }

@@ -17,15 +17,28 @@ namespace FinancialStructures.Reporting
         {
             if (obj is ErrorReport value)
             {
-                if (value.ErrorType == ErrorType)
+                if (value.ErrorType.Equals(ErrorType))
                 {
-                    return Message.CompareTo(value.Message);
+                    if (value.ErrorLocation.Equals(ErrorLocation))
+                    {
+                        return Message.CompareTo(value.Message);
+                    }
+
+                    return value.ErrorLocation.CompareTo(ErrorLocation);
                 }
 
                 return ErrorType.CompareTo(value.ErrorType);
             }
 
             return 0;
+        }
+
+        private Severity fErrorSeverity;
+
+        public Severity ErrorSeverity
+        {
+            get { return fErrorSeverity; }
+            set { fErrorSeverity = value; }
         }
 
         private ReportType fErrorType;
@@ -57,6 +70,14 @@ namespace FinancialStructures.Reporting
 
         public ErrorReport(ReportType type, Location errorLocation, string msg)
         {
+            ErrorType = type;
+            ErrorLocation = errorLocation;
+            Message = msg;
+        }
+
+        public ErrorReport(Severity severity, ReportType type, Location errorLocation, string msg)
+        {
+            ErrorSeverity = severity;
             ErrorType = type;
             ErrorLocation = errorLocation;
             Message = msg;

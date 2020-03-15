@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.ReportLogging;
 using System;
 
 namespace FinancialStructures.PortfolioAPI
@@ -9,7 +10,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// Edits the data of the security, if possible.
         /// </summary>
-        public static bool TryEditSecurityData(this Portfolio portfolio, Action<string, string, string> reportLogger, string company, string name, DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment = 0)
+        public static bool TryEditSecurityData(this Portfolio portfolio, LogReporter reportLogger, string company, string name, DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment = 0)
         {
             for (int fundIndex = 0; fundIndex < portfolio.NumberOf(AccountType.Security); fundIndex++)
             {
@@ -34,7 +35,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
         /// <remarks> This cannot currently be used to add to securities due to different type of data.</remarks>
-        public static bool TryEditData(this Portfolio portfolio, AccountType elementType, NameData name, DayValue_ChangeLogged oldData, DayValue_ChangeLogged newData, Action<string, string, string> reportLogger)
+        public static bool TryEditData(this Portfolio portfolio, AccountType elementType, NameData name, DayValue_ChangeLogged oldData, DayValue_ChangeLogged newData, LogReporter reportLogger)
         {
             switch (elementType)
             {
@@ -52,7 +53,7 @@ namespace FinancialStructures.PortfolioAPI
                             }
                         }
 
-                        return false;
+                        break;
                     }
                 case (AccountType.BankAccount):
                     {
@@ -65,8 +66,7 @@ namespace FinancialStructures.PortfolioAPI
                             }
                         }
 
-                        reportLogger("Error", "EditingData", $"Editing BankAccount Data: Could not find bank account `{name.Company}'-`{name.Name}'.");
-                        return false;
+                        break;
                     }
                 case (AccountType.Sector):
                     {
@@ -79,13 +79,15 @@ namespace FinancialStructures.PortfolioAPI
                             }
                         }
 
-                        reportLogger("Error", "EditingData", $"Editing BenchMark Data: Could not find benchMark `{name.Company}'-`{name.Name}'.");
-                        return false;
+                        break;
                     }
                 default:
-                    reportLogger("Error", "EditingData", $"Editing an Unknown type.");
+                    reportLogger.Log("Error", "EditingData", $"Editing an Unknown type.");
                     return false;
             }
+
+            reportLogger.LogDetailed("Critical", "Error", "EditingData", $"Could not find {elementType.ToString()} with name {name.ToString()}.");
+            return false;
         }
     }
 }

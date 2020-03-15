@@ -11,9 +11,10 @@ namespace FPD_UI_UnitTests
         public void ReportsSync()
         {
             var viewModel = new ReportingWindowViewModel();
-            viewModel.Reports.AddReport("Error", "Unknown", "Is this added?");
+            viewModel.ReportingSeverity = Severity.Detailed;
+            viewModel.Reports.AddReport("Critical", "Error", "Unknown", "Is this added?");
             viewModel.SyncReports();
-            
+
             Assert.AreEqual(1, viewModel.ReportsToView.Count, "Viewable reports should have one report added.");
             Assert.AreEqual(ReportType.Error, viewModel.ReportsToView.Single().ErrorType);
             Assert.AreEqual(Location.Unknown, viewModel.ReportsToView.Single().ErrorLocation);
@@ -24,6 +25,7 @@ namespace FPD_UI_UnitTests
         public void CanAddReport()
         {
             var viewModel = new ReportingWindowViewModel();
+            viewModel.ReportingSeverity = Severity.Detailed;
             viewModel.UpdateReport("Error", "Unknown", "Is this added?");
 
             Assert.AreEqual(1, viewModel.Reports.GetReports().Count, "Reports should have a report added.");
@@ -37,6 +39,7 @@ namespace FPD_UI_UnitTests
         public void CanClearReports()
         {
             var viewModel = new ReportingWindowViewModel();
+            viewModel.ReportingSeverity = Severity.Detailed;
             viewModel.UpdateReport("Error", "Unknown", "Is this added?");
             viewModel.UpdateReport("Error", "Unknown", "Is this also added?");
 
@@ -52,6 +55,7 @@ namespace FPD_UI_UnitTests
         public void CanClearSingleReport()
         {
             var viewModel = new ReportingWindowViewModel();
+            viewModel.ReportingSeverity = Severity.Detailed;
             viewModel.UpdateReport("Error", "Unknown", "Is this added?");
             viewModel.UpdateReport("Error", "Unknown", "Is this also added?");
 

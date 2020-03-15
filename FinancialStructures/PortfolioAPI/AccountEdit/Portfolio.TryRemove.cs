@@ -1,7 +1,7 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
-using System;
+using FinancialStructures.ReportLogging;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -15,87 +15,78 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="name">The name of the account to remove.</param>
         /// <param name="reportLogger">A report callback.</param>
         /// <returns>Success or failure.</returns>
-        public static bool TryRemove(this Portfolio portfolio, AccountType elementType, NameData name, Action<string, string, string> reportLogger)
+        public static bool TryRemove(this Portfolio portfolio, AccountType elementType, NameData name, LogReporter reportLogger)
         {
             if (string.IsNullOrEmpty(name.Name) && string.IsNullOrEmpty(name.Company))
             {
-                reportLogger("Error", "RemovingData", $"Adding {elementType}: Company `{name.Company}' or name `{name.Name}' cannot both be empty.");
+                reportLogger.LogDetailed("Critical", "Error", "RemovingData", $"Adding {elementType}: Company `{name.Company}' or name `{name.Name}' cannot both be empty.");
                 return false;
             }
 
             switch (elementType)
             {
                 case (AccountType.Security):
-                    return portfolio.TryRemoveSecurity(name.Company, name.Name, reportLogger);
+                    {
+                        foreach (Security sec in portfolio.Funds)
+                        {
+                            if (sec.GetCompany().Equals(name.Company) && sec.GetName().Equals(name.Name))
+                            {
+                                portfolio.Funds.Remove(sec);
+                                reportLogger.LogDetailed("Detailed", "Report", "DeletingData", $"Security `{name.Company}'-`{name}' removed from the database.");
+                                return true;
+                            }
+                        }
+
+                        break;
+                    }
                 case (AccountType.Currency):
-                    return portfolio.TryRemoveCurrency(name, reportLogger);
+                    {
+                        foreach (var currency in portfolio.Currencies)
+                        {
+                            if (name.Name == currency.GetName())
+                            {
+                                reportLogger.LogDetailed("Detailed", "Report", "DeletingData", $"Deleted sector {currency.GetName()}");
+                                portfolio.Currencies.Remove(currency);
+                                return true;
+                            }
+                        }
+
+                        break;
+                    }
                 case (AccountType.BankAccount):
-                    return portfolio.TryRemoveBankAccount(name, reportLogger);
+                    {
+                        foreach (CashAccount acc in portfolio.BankAccounts)
+                        {
+                            if (acc.GetCompany() == name.Company && acc.GetName() == name.Name)
+                            {
+                                portfolio.BankAccounts.Remove(acc);
+                                reportLogger.LogDetailed("Detailed", "Report", "DeletingData", $"Deleting Bank Account: Deleted `{name.Company}'-`{name.Name}'.");
+                                return true;
+                            }
+                        }
+
+                        break;
+                    }
                 case (AccountType.Sector):
-                    return portfolio.TryRemoveSector(name, reportLogger);
+                    {
+                        foreach (var sector in portfolio.BenchMarks)
+                        {
+                            if (name.Name.Equals(sector.GetName()))
+                            {
+                                reportLogger.LogDetailed("Detailed", "Report", "DeletingData", $"Deleted sector {sector.GetName()}");
+                                portfolio.BenchMarks.Remove(sector);
+                                return true;
+                            }
+                        }
+
+                        break;
+                    }
                 default:
-                    reportLogger("Error", "DeletingData", $"Editing an Unknown type.");
+                    reportLogger.Log("Error", "DeletingData", $"Editing an Unknown type.");
                     return false;
             }
-        }
 
-        private static bool TryRemoveSecurity(this Portfolio portfolio, string company, string name, Action<string, string, string> reportLogger)
-        {
-            foreach (Security sec in portfolio.Funds)
-            {
-                if (sec.GetCompany() == company && sec.GetName() == name)
-                {
-                    portfolio.Funds.Remove(sec);
-                    reportLogger("Report", "AddingData", $"Security `{company}'-`{name}' removed from the database.");
-                    return true;
-                }
-            }
-            reportLogger("Error", "AddingData", $"Security `{company}'-`{name}' could not be found in the database.");
-            return false;
-        }
-
-        private static bool TryRemoveCurrency(this Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
-        {
-            foreach (var sector in portfolio.Currencies)
-            {
-                if (name.Name == sector.GetName())
-                {
-                    reportLogger("Report", "DeletingData", $"Deleted sector {sector.GetName()}");
-                    portfolio.Currencies.Remove(sector);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private static bool TryRemoveBankAccount(this Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
-        {
-            foreach (CashAccount acc in portfolio.BankAccounts)
-            {
-                if (acc.GetCompany() == name.Company && acc.GetName() == name.Name)
-                {
-                    portfolio.BankAccounts.Remove(acc);
-                    reportLogger("Warning", "DeletingData", $"Deleting Bank Account: Deleted `{name.Company}'-`{name.Name}'.");
-                    return true;
-                }
-            }
-            reportLogger("Error", "DeletingData", $"Deleting Bank Account: Could not find account `{name.Company}'-`{name.Name}'.");
-            return false;
-        }
-
-        private static bool TryRemoveSector(this Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
-        {
-            foreach (var sector in portfolio.BenchMarks)
-            {
-                if (name.Name == sector.GetName())
-                {
-                    reportLogger("Report", "DeletingData", $"Deleted sector {sector.GetName()}");
-                    portfolio.BenchMarks.Remove(sector);
-                    return true;
-                }
-            }
-
+            reportLogger.Log("Error", "AddingData", $"{elementType.ToString()} - {name.ToString()} could not be found in the database.");
             return false;
         }
     }

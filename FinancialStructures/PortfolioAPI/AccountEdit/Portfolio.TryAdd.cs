@@ -1,7 +1,7 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
-using System;
+using FinancialStructures.ReportLogging;
 using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
@@ -16,7 +16,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="name">The name data to add.</param>
         /// <param name="reportLogger">Report callback action.</param>
         /// <returns>Success or failure of adding.</returns>
-        public static bool TryAdd(this Portfolio portfolio, AccountType elementType, NameData name, Action<string, string, string> reportLogger)
+        public static bool TryAdd(this Portfolio portfolio, AccountType elementType, NameData name, LogReporter reportLogger)
         {
             List<string> sectorList = new List<string>();
             if (!string.IsNullOrEmpty(name.Sectors))
@@ -32,13 +32,13 @@ namespace FinancialStructures.PortfolioAPI
 
             if (string.IsNullOrEmpty(name.Name) && string.IsNullOrEmpty(name.Company))
             {
-                reportLogger("Error", "AddingData", $"Adding {elementType}: Company `{name.Company}' or name `{name.Name}' cannot both be empty.");
+                reportLogger.LogDetailed("Critical", "Error", "AddingData", $"Adding {elementType}: Company `{name.Company}' or name `{name.Name}' cannot both be empty.");
                 return false;
             }
 
-            if (portfolio.Exists(elementType, name, reportLogger))
+            if (portfolio.Exists(elementType, name, reportLogger.Log))
             {
-                reportLogger("Error", "AddingData", $"{elementType.ToString()} `{name.Company}'-`{name.Name}' already exists.");
+                reportLogger.LogDetailed("Critical", "Error", "AddingData", $"{elementType.ToString()} `{name.Company}'-`{name.Name}' already exists.");
                 return false;
             }
 
@@ -48,15 +48,13 @@ namespace FinancialStructures.PortfolioAPI
                     {
                         Security newSecurity = new Security(name.Company, name.Name, name.Currency, name.Url, sectorList);
                         portfolio.Funds.Add(newSecurity);
-                        reportLogger("Report", "AddingData", $"Security `{name.Company}'-`{name.Name}' added to database.");
-                        return true;
+                        break;
                     }
                 case (AccountType.Currency):
                     {
                         Currency newSector = new Currency(name.Name, name.Url);
-                        reportLogger("Report", "AddingData", $"Currency '{name}' added to database.");
                         portfolio.Currencies.Add(newSector);
-                        return true;
+                        break;
                     }
                 case (AccountType.BankAccount):
                     {
@@ -67,20 +65,21 @@ namespace FinancialStructures.PortfolioAPI
                         }
 
                         portfolio.BankAccounts.Add(NewAccount);
-                        reportLogger("Report", "AddingData", $"BankAccount `{name.Company}'-`{name.Name}' added to database.");
-                        return true;
+                        break;
                     }
                 case (AccountType.Sector):
                     {
                         Sector newSector = new Sector(name.Name, name.Url);
-                        reportLogger("Report", "AddingData", $"Currency '{name}' added to database.");
                         portfolio.BenchMarks.Add(newSector);
-                        return true;
+                        break;
                     }
                 default:
-                    reportLogger("Error", "EditingData", $"Editing an Unknown type.");
+                    reportLogger.Log("Error", "EditingData", $"Editing an Unknown type.");
                     return false;
             }
+
+            reportLogger.LogDetailed("Detailed", "Report", "AddingData", $"{elementType.ToString()} `{name.Company}'-`{name.Name}' added to database.");
+            return true;
         }
     }
 }

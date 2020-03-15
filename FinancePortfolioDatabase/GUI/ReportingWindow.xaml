@@ -19,14 +19,18 @@
               Grid.Column="0">
         <StackPanel 
                     VerticalAlignment="Top">
-            <TextBlock Margin="10 10 10 10" Text="Error Reports"/>
+            <TextBlock Margin="5 5 5 5" Text="Error Reports"/>
             <Button Style="{StaticResource ResourceKey=defaultButton}"
                     Content="Clear Reports"
                     Command="{Binding ClearReportsCommand}"/>
             <Button Content="Clear Selected"
                     Style="{StaticResource ResourceKey=defaultButton}"
                     Command="{Binding ClearSingleReportCommand}"/>
-        </StackPanel>
+                <TextBlock Margin="5 5 5 5" Text="Display Reports:"/>
+                <ComboBox Margin="5 5 5 5"
+                          ItemsSource="{Binding EnumValues}"
+                          SelectedValue="{Binding Path=ReportingSeverity}"/>
+            </StackPanel>
         </Grid>
         <DataGrid Name="SecBox"
                   SelectionUnit="FullRow"
