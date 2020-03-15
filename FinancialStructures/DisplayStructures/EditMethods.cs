@@ -29,7 +29,7 @@ namespace FinancialStructures.GUIFinanceStructures
             }
             object output = null;
             var portfolio = (Portfolio)functionInputs[0];
-            NameData name = functionInputs.Length > 2 ? (NameData)functionInputs[2] : null;
+            NameData name = functionInputs.Length > 1 ? (NameData)functionInputs[1] : null;
 
             switch (functionType)
             {
@@ -40,7 +40,7 @@ namespace FinancialStructures.GUIFinanceStructures
                             break;
                         }
 
-                        await DownloadMethod(portfolio, (NameData)functionInputs[2], (LogReporter)functionInputs[3]).ConfigureAwait(false);
+                        await DownloadMethod(portfolio, (NameData)functionInputs[1], (LogReporter)functionInputs[2]).ConfigureAwait(false);
                         break;
                     }
                 case (FunctionType.NameUpdate):
@@ -59,7 +59,7 @@ namespace FinancialStructures.GUIFinanceStructures
                         {
                             break;
                         }
-                        output = CreateMethod(portfolio, name, (LogReporter)functionInputs[3]);
+                        output = CreateMethod(portfolio, name, (LogReporter)functionInputs[2]);
                         break;
                     }
                 case (FunctionType.Edit):
@@ -69,7 +69,7 @@ namespace FinancialStructures.GUIFinanceStructures
                             break;
 
                         }
-                        output = EditMethod(portfolio, name, (NameData)functionInputs[3], (LogReporter)functionInputs[4]);
+                        output = EditMethod(portfolio, name, (NameData)functionInputs[2], (LogReporter)functionInputs[3]);
                         break;
                     }
                 case (FunctionType.Delete):
@@ -78,7 +78,7 @@ namespace FinancialStructures.GUIFinanceStructures
                         {
                             break;
                         }
-                        output = DeleteMethod(portfolio, name, (LogReporter)functionInputs[3]);
+                        output = DeleteMethod(portfolio, name, (LogReporter)functionInputs[2]);
                         break;
                     }
                 case (FunctionType.SelectData):
@@ -87,7 +87,7 @@ namespace FinancialStructures.GUIFinanceStructures
                         {
                             break;
                         }
-                        output = SelectedDataMethod(portfolio, name, (LogReporter)functionInputs[3]);
+                        output = SelectedDataMethod(portfolio, name, (LogReporter)functionInputs[2]);
                         break;
                     }
                 case (FunctionType.AddData):
@@ -96,7 +96,7 @@ namespace FinancialStructures.GUIFinanceStructures
                         {
                             break;
                         }
-                        output = AddDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[3], (LogReporter)functionInputs[4]);
+                        output = AddDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[2], (LogReporter)functionInputs[3]);
                         break;
                     }
                 case (FunctionType.EditData):
@@ -105,7 +105,7 @@ namespace FinancialStructures.GUIFinanceStructures
                         {
                             break;
                         }
-                        output = EditDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[3], (DayValue_ChangeLogged)functionInputs[4], (LogReporter)functionInputs[5]);
+                        output = EditDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[2], (DayValue_ChangeLogged)functionInputs[3], (LogReporter)functionInputs[4]);
                         break;
                     }
                 case (FunctionType.DeleteData):
@@ -114,7 +114,7 @@ namespace FinancialStructures.GUIFinanceStructures
                         {
                             break;
                         }
-                        output = DeleteDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[3], (LogReporter)functionInputs[4]);
+                        output = DeleteDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[2], (LogReporter)functionInputs[3]);
                         break;
                     }
                 default:

@@ -52,7 +52,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Adds value to the data only if value of the date doesn't currently exist.
         /// </summary>
-        internal bool TryAddValue(DateTime date, double value, LogReporter reportLogger = null)
+        internal bool TryAddValue(DateTime date, double value, LogReporter reportLogger)
         {
             for (int i = 0; i < fValues.Count; i++)
             {

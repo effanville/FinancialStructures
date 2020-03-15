@@ -94,7 +94,7 @@ namespace FinancialStructures.FinanceStructures
                 return false;
             }
 
-            return fValues.TryAddValue(date, value);
+            return fValues.TryAddValue(date, value, reportLogger);
         }
 
         /// <summary>
