@@ -1,12 +1,9 @@
 ﻿using FinanceCommonViewModels;
 using FinanceWindows;
 using FinancialStructures.Database;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.PortfolioAPI;
 using GUISupport;
-using SavingClasses;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -16,10 +13,10 @@ namespace FinanceWindowsViewModels
     {
         private string fFileName;
         private string fDirectory;
-        private readonly Action<Action<AllData>> DataUpdateCallback;
+        private readonly Action<Action<Portfolio>> DataUpdateCallback;
         private readonly Action<string, string, string> ReportLogger;
 
-        public OptionsToolbarViewModel(Portfolio portfolio, Action<Action<AllData>> updateData, Action<string, string, string> reportLogger)
+        public OptionsToolbarViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateData, Action<string, string, string> reportLogger)
             : base("Options")
         {
             ReportLogger = reportLogger;
@@ -34,7 +31,7 @@ namespace FinanceWindowsViewModels
             RefreshCommand = new BasicCommand(ExecuteRefresh);
         }
 
-        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
+        public override void UpdateData(Portfolio portfolio)
         {
             fFileName = portfolio.DatabaseName + portfolio.Extension;
             fDirectory = portfolio.Directory;
@@ -53,8 +50,8 @@ namespace FinanceWindowsViewModels
             DialogResult result = MessageBox.Show("Do you want to load a new database?", "New Database?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
             if (result == DialogResult.Yes)
             {
-                DataUpdateCallback(alldata => alldata.MyFunds.SetFilePath(""));
-                DataUpdateCallback(alldata => alldata.myBenchMarks.AddRange(alldata.MyFunds.LoadPortfolio("", ReportLogger)));
+                DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(""));
+                DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio("", ReportLogger));
             }
         }
 
@@ -65,8 +62,8 @@ namespace FinanceWindowsViewModels
             saving.Filter = "XML Files|*.xml|All Files|*.*";
             if (saving.ShowDialog() == DialogResult.OK)
             {
-                DataUpdateCallback(alldata => alldata.MyFunds.SetFilePath(saving.FileName));
-                DataUpdateCallback(alldata => alldata.MyFunds.SavePortfolio(alldata.myBenchMarks, saving.FileName, ReportLogger));
+                DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(saving.FileName));
+                DataUpdateCallback(programPortfolio => programPortfolio.SavePortfolio(saving.FileName, ReportLogger));
             }
 
             saving.Dispose();
@@ -79,8 +76,8 @@ namespace FinanceWindowsViewModels
             openFile.Filter = "XML Files|*.xml|All Files|*.*";
             if (openFile.ShowDialog() == DialogResult.OK)
             {
-                DataUpdateCallback(alldata => alldata.MyFunds.SetFilePath(openFile.FileName));
-                DataUpdateCallback(alldata => alldata.myBenchMarks.AddRange(alldata.MyFunds.LoadPortfolio(openFile.FileName, ReportLogger)));
+                DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(openFile.FileName));
+                DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio(openFile.FileName, ReportLogger));
                 ReportLogger("Report", "Loading", $"Loaded new database from {openFile.FileName}");
             }
             openFile.Dispose();
@@ -89,13 +86,13 @@ namespace FinanceWindowsViewModels
         public ICommand UpdateDataCommand { get; }
         private void ExecuteUpdateData(Object obj)
         {
-            DataUpdateCallback(async alldata => await PortfolioDataUpdater.Downloader(alldata.MyFunds, alldata.myBenchMarks, ReportLogger).ConfigureAwait(false));
+            DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.Downloader(programPortfolio, ReportLogger).ConfigureAwait(false));
         }
 
         public ICommand RefreshCommand { get; }
         private void ExecuteRefresh(Object obj)
         {
-            DataUpdateCallback(alldata => alldata.MyFunds.SetFilePath(fFileName));
+            DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(fFileName));
         }
     }
 }

@@ -15,7 +15,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="elementType">Type of object to search for.</param>
         /// <param name="reportLogger">Report callback. (not used)</param>
         /// <returns>List of names of the desired type.</returns>
-        public static List<string> Companies(this Portfolio portfolio, PortfolioElementType elementType, Action<string, string, string> reportLogger)
+        public static List<string> Companies(this Portfolio portfolio, AccountType elementType, Action<string, string, string> reportLogger)
         {
             return portfolio.NameData(elementType, reportLogger).Select(NameData => NameData.Company).Distinct().ToList();
         }
@@ -27,7 +27,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="elementType">Type of object to search for.</param>
         /// <param name="reportLogger">Report callback. (not used)</param>
         /// <returns>List of names of the desired type.</returns>
-        public static List<string> Names(this Portfolio portfolio, PortfolioElementType elementType, Action<string, string, string> reportLogger)
+        public static List<string> Names(this Portfolio portfolio, AccountType elementType, Action<string, string, string> reportLogger)
         {
             return portfolio.NameData(elementType, reportLogger).Select(NameData => NameData.Name).ToList();
         }
@@ -39,12 +39,12 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="elementType">Type of object to search for.</param>
         /// <param name="reportLogger">Report callback. (not used)</param>
         /// <returns>List of names of the desired type.</returns>
-        public static List<NameCompDate> NameData(this Portfolio portfolio, PortfolioElementType elementType, Action<string, string, string> reportLogger)
+        public static List<NameCompDate> NameData(this Portfolio portfolio, AccountType elementType, Action<string, string, string> reportLogger)
         {
             var namesAndCompanies = new List<NameCompDate>();
             switch (elementType)
             {
-                case (PortfolioElementType.Security):
+                case (AccountType.Security):
                     {
                         foreach (var security in portfolio.Funds)
                         {
@@ -58,7 +58,7 @@ namespace FinancialStructures.PortfolioAPI
                         }
                         break;
                     }
-                case (PortfolioElementType.Currency):
+                case (AccountType.Currency):
                     {
                         if (portfolio.Currencies != null)
                         {
@@ -75,7 +75,7 @@ namespace FinancialStructures.PortfolioAPI
                         }
                         break;
                     }
-                case (PortfolioElementType.BankAccount):
+                case (AccountType.BankAccount):
                     {
                         foreach (var bankAcc in portfolio.BankAccounts)
                         {
@@ -89,8 +89,18 @@ namespace FinancialStructures.PortfolioAPI
                         }
                         break;
                     }
-                case (PortfolioElementType.Sector):
+                case (AccountType.Sector):
                     {
+                        foreach (var benchMark in portfolio.BenchMarks)
+                        {
+                            DateTime date = DateTime.MinValue;
+                            if (benchMark.Any())
+                            {
+                                date = benchMark.LatestValue().Day;
+                            }
+
+                            namesAndCompanies.Add(new NameCompDate(benchMark.GetCompany(), benchMark.GetName(), string.Empty, string.Empty, new List<string>(), date, false));
+                        }
                         break;
                     }
                 default:

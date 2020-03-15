@@ -1,8 +1,6 @@
 ﻿using FinancialStructures.Database;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using GUISupport;
-using SavingClasses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +11,6 @@ namespace FinanceCommonViewModels
     internal class SelectedSingleDataViewModel : ViewModelBase
     {
         private Portfolio Portfolio;
-        private List<Sector> Sectors;
 
         public override bool Closable { get { return true; } }
 
@@ -60,18 +57,18 @@ namespace FinanceCommonViewModels
             }
         }
 
-        private readonly Action<Action<AllData>> UpdateDataCallback;
+        private readonly Action<Action<Portfolio>> UpdateDataCallback;
 
         private readonly Action<string, string, string> ReportLogger;
 
         private readonly EditMethods EditMethods;
 
-        public SelectedSingleDataViewModel(Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateDataCallback, Action<string, string, string> reportLogger, EditMethods editMethods, NameData selectedName)
+        public SelectedSingleDataViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateDataCallback, Action<string, string, string> reportLogger, EditMethods editMethods, NameData selectedName)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
         {
             SelectedName = selectedName;
             EditMethods = editMethods;
-            UpdateData(portfolio, sectors);
+            UpdateData(portfolio);
 
             EditDataCommand = new BasicCommand(ExecuteEditDataCommand);
             DeleteValuationCommand = new BasicCommand(ExecuteDeleteValuation);
@@ -79,19 +76,22 @@ namespace FinanceCommonViewModels
             ReportLogger = reportLogger;
         }
 
-        public override void UpdateData(Portfolio portfolio, List<Sector> sectors, Action<object> removeTab)
+        public override void UpdateData(Portfolio portfolio, Action<object> removeTab)
         {
             Portfolio = portfolio;
-            Sectors = sectors;
             if (SelectedName != null)
             {
-                if (!((List<NameData>)EditMethods.ExecuteFunction(FunctionType.NameUpdate, Portfolio, Sectors).Result).Exists(name => name.IsEqualTo(SelectedName)))
+                if (!((List<NameCompDate>)EditMethods.ExecuteFunction(FunctionType.NameUpdate, Portfolio).Result).Exists(name => name.IsEqualTo(SelectedName)))
                 {
-                    removeTab(this);
+                    if (removeTab != null)
+                    {
+                        removeTab(this);
+
+                    }
                     return;
                 }
 
-                SelectedData = (List<DayValue_ChangeLogged>)EditMethods.ExecuteFunction(FunctionType.SelectData, Portfolio, Sectors, SelectedName, ReportLogger).Result;
+                SelectedData = (List<DayValue_ChangeLogged>)EditMethods.ExecuteFunction(FunctionType.SelectData, Portfolio, SelectedName, ReportLogger).Result;
                 SelectLatestValue();
             }
             else
@@ -99,9 +99,9 @@ namespace FinanceCommonViewModels
                 SelectedData = null;
             }
         }
-        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
+        public override void UpdateData(Portfolio portfolio)
         {
-            UpdateData(portfolio, sectors, null);
+            UpdateData(portfolio, null);
         }
 
 
@@ -111,9 +111,9 @@ namespace FinanceCommonViewModels
         {
             if (SelectedName != null)
             {
-                if (((List<DayValue_ChangeLogged>)EditMethods.ExecuteFunction(FunctionType.SelectData, Portfolio, Sectors, SelectedName, ReportLogger).Result).Count() != SelectedData.Count)
+                if (((List<DayValue_ChangeLogged>)EditMethods.ExecuteFunction(FunctionType.SelectData, Portfolio, SelectedName, ReportLogger).Result).Count() != SelectedData.Count)
                 {
-                    UpdateDataCallback(alldata => EditMethods.ExecuteFunction(FunctionType.AddData, alldata.MyFunds, alldata.myBenchMarks, SelectedName, SelectedValue, ReportLogger).Wait());
+                    UpdateDataCallback(programPortfolio => EditMethods.ExecuteFunction(FunctionType.AddData, programPortfolio, SelectedName, SelectedValue, ReportLogger).Wait());
                     SelectedName.NewValue = false;
                 }
                 else
@@ -126,7 +126,7 @@ namespace FinanceCommonViewModels
                         if (name.NewValue)
                         {
                             edited = true;
-                            UpdateDataCallback(alldata => EditMethods.ExecuteFunction(FunctionType.EditData, alldata.MyFunds, alldata.myBenchMarks, SelectedName, fOldSelectedValue, SelectedValue, ReportLogger).Wait());
+                            UpdateDataCallback(programPortfolio => EditMethods.ExecuteFunction(FunctionType.EditData, programPortfolio, SelectedName, fOldSelectedValue, SelectedValue, ReportLogger).Wait());
                             name.NewValue = false;
                         }
                     }
@@ -144,7 +144,7 @@ namespace FinanceCommonViewModels
         {
             if (SelectedName != null)
             {
-                UpdateDataCallback(alldata => EditMethods.ExecuteFunction(FunctionType.DeleteData, alldata.MyFunds, alldata.myBenchMarks, SelectedName, SelectedValue, ReportLogger).Wait());
+                UpdateDataCallback(programPortfolio => EditMethods.ExecuteFunction(FunctionType.DeleteData, programPortfolio, SelectedName, SelectedValue, ReportLogger).Wait());
             }
             else
             {

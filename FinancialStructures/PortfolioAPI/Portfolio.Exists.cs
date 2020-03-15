@@ -14,7 +14,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="company">The company of the item to find.</param>
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Whether exists or not.</returns>
-        public static bool CompanyExists(this Portfolio portfolio, PortfolioElementType elementType, string company, Action<string, string, string> reportLogger)
+        public static bool CompanyExists(this Portfolio portfolio, AccountType elementType, string company, Action<string, string, string> reportLogger)
         {
             foreach (string comp in portfolio.Companies(elementType, reportLogger))
             {
@@ -35,7 +35,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="name">The name of the item to find.</param>
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Whether exists or not.</returns>
-        public static bool Exists(this Portfolio portfolio, PortfolioElementType elementType, NameData name, Action<string, string, string> reportLogger)
+        public static bool Exists(this Portfolio portfolio, AccountType elementType, NameData name, Action<string, string, string> reportLogger)
         {
             foreach (NameData sec in portfolio.NameData(elementType, reportLogger))
             {

@@ -2,10 +2,8 @@
 using FinancialStructures.Database;
 using FinancialStructures.DataReader;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using GUISupport;
-using SavingClasses;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
@@ -56,11 +54,11 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private readonly Action<Action<AllData>> UpdateDataCallback;
+        private readonly Action<Action<Portfolio>> UpdateDataCallback;
 
         private readonly Action<string, string, string> ReportLogger;
 
-        public SelectedSecurityViewModel(Portfolio portfolio, Action<Action<AllData>> updateData, Action<string, string, string> reportLogger, NameData selectedName)
+        public SelectedSecurityViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateData, Action<string, string, string> reportLogger, NameData selectedName)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
         {
             fSelectedName = selectedName;
@@ -78,7 +76,7 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null && fSelectedValues != null)
             {
-                UpdateDataCallback(alldata => alldata.MyFunds.TryDeleteData(PortfolioElementType.Security, fSelectedName, new DayValue_ChangeLogged(fSelectedValues.Date, 0.0), ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(AccountType.Security, fSelectedName, new DayValue_ChangeLogged(fSelectedValues.Date, 0.0), ReportLogger));
             }
         }
 
@@ -93,7 +91,7 @@ namespace FinanceWindowsViewModels
                 List<object> outputs = null;
                 if (openFile.ShowDialog() == DialogResult.OK)
                 {
-                    outputs = CsvDataRead.ReadFromCsv(openFile.FileName, PortfolioElementType.Security, ReportLogger);
+                    outputs = CsvDataRead.ReadFromCsv(openFile.FileName, AccountType.Security, ReportLogger);
                 }
                 if (outputs != null)
                 {
@@ -101,7 +99,7 @@ namespace FinanceWindowsViewModels
                     {
                         if (objec is DayDataView view)
                         {
-                            UpdateDataCallback(alldata => alldata.MyFunds.TryAddDataToSecurity(ReportLogger, fSelectedName.Company, fSelectedName.Name, view.Date, view.ShareNo, view.UnitPrice, view.NewInvestment));
+                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(ReportLogger, fSelectedName.Company, fSelectedName.Name, view.Date, view.ShareNo, view.UnitPrice, view.NewInvestment));
                         }
                         else
                         {
@@ -121,7 +119,7 @@ namespace FinanceWindowsViewModels
                 Portfolio.TryGetSecurity(fSelectedName.Company, fSelectedName.Name, out var desired);
                 if (desired.Count() != SelectedSecurityData.Count)
                 {
-                    UpdateDataCallback(alldata => alldata.MyFunds.TryAddDataToSecurity(ReportLogger, fSelectedName.Company, fSelectedName.Name, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment));
+                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(ReportLogger, fSelectedName.Company, fSelectedName.Name, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment));
                     fSelectedName.NewValue = false;
                 }
                 else
@@ -134,7 +132,7 @@ namespace FinanceWindowsViewModels
                         if (name.NewValue)
                         {
                             edited = true;
-                            UpdateDataCallback(alldata => alldata.MyFunds.TryEditSecurityData(ReportLogger, fSelectedName.Company, fSelectedName.Name, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment));
+                            UpdateDataCallback(programPortfolio => programPortfolio.TryEditSecurityData(ReportLogger, fSelectedName.Company, fSelectedName.Name, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment));
                             name.NewValue = false;
                         }
                     }
@@ -146,7 +144,7 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public override void UpdateData(Portfolio portfolio, List<Sector> sectors, Action<object> removeTab)
+        public override void UpdateData(Portfolio portfolio, Action<object> removeTab)
         {
             Portfolio = portfolio;
             if (fSelectedName != null)
@@ -166,9 +164,9 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
+        public override void UpdateData(Portfolio portfolio)
         {
-            UpdateData(portfolio, sectors, null);
+            UpdateData(portfolio, null);
         }
 
         private void SelectLatestValue()

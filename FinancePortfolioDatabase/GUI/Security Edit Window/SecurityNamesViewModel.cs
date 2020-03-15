@@ -1,6 +1,5 @@
 ﻿using FinanceCommonViewModels;
 using FinancialStructures.Database;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.PortfolioAPI;
 using GUISupport;
@@ -38,31 +37,31 @@ namespace FinanceWindowsViewModels
             set { fSelectedName = value; OnPropertyChanged(); }
         }
 
-        private readonly Action<Action<AllData>> DataUpdateCallback;
+        private readonly Action<Action<Portfolio>> DataUpdateCallback;
 
         private readonly Action<string, string, string> ReportLogger;
 
-        public SecurityNamesViewModel(Portfolio portfolio, Action<Action<AllData>> updateData, Action<string, string, string> reportLogger, Action<NameData> loadSelectedData)
+        public SecurityNamesViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateData, Action<string, string, string> reportLogger, Action<NameData> loadSelectedData)
             : base("Listed Securities", loadSelectedData)
         {
             Portfolio = portfolio;
             DataUpdateCallback = updateData;
             ReportLogger = reportLogger;
-            FundNames = portfolio.NameData(PortfolioElementType.Security, null);
-            fPreEditFundNames = portfolio.NameData(PortfolioElementType.Security, null);
+            FundNames = portfolio.NameData(AccountType.Security, null);
+            fPreEditFundNames = portfolio.NameData(AccountType.Security, null);
 
             CreateSecurityCommand = new BasicCommand(ExecuteCreateEditCommand);
             DownloadCommand = new BasicCommand(ExecuteDownloadCommand);
             DeleteSecurityCommand = new BasicCommand(ExecuteDeleteSecurity);
         }
 
-        public override void UpdateData(Portfolio portfolio, List<Sector> sectors, Action<object> removeTab)
+        public override void UpdateData(Portfolio portfolio, Action<object> removeTab)
         {
             Portfolio = portfolio;
             var currentSelectedName = selectedName;
-            FundNames = portfolio.NameData(PortfolioElementType.Security, null);
+            FundNames = portfolio.NameData(AccountType.Security, null);
             FundNames.Sort();
-            fPreEditFundNames = portfolio.NameData(PortfolioElementType.Security, null);
+            fPreEditFundNames = portfolio.NameData(AccountType.Security, null);
             fPreEditFundNames.Sort();
 
             for (int i = 0; i < FundNames.Count; i++)
@@ -76,22 +75,22 @@ namespace FinanceWindowsViewModels
         }
 
 
-        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
+        public override void UpdateData(Portfolio portfolio)
         {
-            UpdateData(portfolio, sectors, null);
+            UpdateData(portfolio, null);
         }
 
         public ICommand CreateSecurityCommand { get; set; }
 
         private void ExecuteCreateEditCommand(Object obj)
         {
-            if (Portfolio.NumberOf(PortfolioElementType.Security) != FundNames.Count)
+            if (Portfolio.NumberOf(AccountType.Security) != FundNames.Count)
             {
                 bool edited = false;
                 if (selectedName.NewValue)
                 {
                     edited = true;
-                    DataUpdateCallback(alldata => alldata.MyFunds.TryAdd(PortfolioElementType.Security, selectedName, ReportLogger));
+                    DataUpdateCallback(programPortfolio => programPortfolio.TryAdd(AccountType.Security, selectedName, ReportLogger));
                     if (selectedName != null)
                     {
                         selectedName.NewValue = false;
@@ -114,7 +113,7 @@ namespace FinanceWindowsViewModels
                     if (name.NewValue && (!string.IsNullOrEmpty(name.Name) || !string.IsNullOrEmpty(name.Company)))
                     {
                         edited = true;
-                        DataUpdateCallback(alldata => alldata.MyFunds.TryEditName(PortfolioElementType.Security, fPreEditFundNames[i], name, ReportLogger));
+                        DataUpdateCallback(programPortfolio => programPortfolio.TryEditName(AccountType.Security, fPreEditFundNames[i], name, ReportLogger));
                         name.NewValue = false;
                     }
                 }
@@ -131,7 +130,7 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null)
             {
-                DataUpdateCallback(async alldata => await PortfolioDataUpdater.DownloadSecurity(alldata.MyFunds, fSelectedName.Company, fSelectedName.Name, ReportLogger).ConfigureAwait(false));
+                DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.DownloadSecurity(programPortfolio, fSelectedName.Company, fSelectedName.Name, ReportLogger).ConfigureAwait(false));
             }
         }
 
@@ -141,7 +140,7 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null)
             {
-                DataUpdateCallback(alldata => alldata.MyFunds.TryRemove(PortfolioElementType.Security, fSelectedName, ReportLogger));
+                DataUpdateCallback(programPortfolio => programPortfolio.TryRemove(AccountType.Security, fSelectedName, ReportLogger));
             }
             else
             {

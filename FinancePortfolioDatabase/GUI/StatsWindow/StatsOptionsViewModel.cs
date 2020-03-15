@@ -1,6 +1,5 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.StatsMakers;
 using GUISupport;
@@ -15,7 +14,6 @@ namespace FinanceWindowsViewModels
     internal class StatsOptionsViewModel : PropertyChangedBase
     {
         private Portfolio Portfolio;
-        private List<Sector> Sectors;
         private bool fDisplayValueFunds = true;
         public bool displayValueFunds
         {
@@ -83,11 +81,11 @@ namespace FinanceWindowsViewModels
                 var options = new UserOptions(selected, BankSelected, selected, DisplayConditions);
                 if (windowType == ExportType.HTML)
                 {
-                    PortfolioStatsCreators.CreateHTMLPageCustom(Portfolio, Sectors, saving.FileName, options);
+                    PortfolioStatsCreators.CreateHTMLPageCustom(Portfolio, saving.FileName, options);
                 }
-                else 
+                else
                 {
-                    CSVStatsCreator.CreateCSVPageCustom(Portfolio, Sectors, saving.FileName, options);
+                    CSVStatsCreator.CreateCSVPageCustom(Portfolio, saving.FileName, options);
                 }
                 ReportLogger("Report", "StatisticsPage", "Created statistics page");
             }
@@ -99,7 +97,7 @@ namespace FinanceWindowsViewModels
             saving.Dispose();
             CloseWindowAction(path);
         }
-       
+
         Action<string, string, string> ReportLogger;
         private Action<string> CloseWindowAction;
         private ExportType windowType;
@@ -111,14 +109,12 @@ namespace FinanceWindowsViewModels
         {
             get { return "." + fExtension; }
         }
-        public StatsOptionsViewModel(Portfolio portfolio, List<Sector> sectors, ExportType exportType, Action<string, string, string> reportLogger, Action<string> CloseWindow)
+        public StatsOptionsViewModel(Portfolio portfolio, ExportType exportType, Action<string, string, string> reportLogger, Action<string> CloseWindow)
         {
             windowType = exportType;
             Portfolio = portfolio;
-            Sectors = sectors;
             ReportLogger = reportLogger;
             CloseWindowAction = CloseWindow;
-            
             ExportCommand = new BasicCommand(ExecuteExportCommand);
 
             var totals = new SecurityStatsHolder();

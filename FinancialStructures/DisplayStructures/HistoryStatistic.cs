@@ -123,13 +123,13 @@ namespace FinancialStructures.DisplayStructures
         public HistoryStatistic(Portfolio portfolio, DateTime date)
         {
             TotalValue = new DailyValuation(date, MathSupport.Truncate(portfolio.Value(date)));
-            BankAccValue = new DailyValuation(date, MathSupport.Truncate(portfolio.TotalValue(PortfolioElementType.BankAccount, date)));
-            SecurityValue = new DailyValuation(date, MathSupport.Truncate(portfolio.TotalValue(PortfolioElementType.Security, date)));
-            var companyNames = portfolio.Companies(PortfolioElementType.Security, null);
+            BankAccValue = new DailyValuation(date, MathSupport.Truncate(portfolio.TotalValue(AccountType.BankAccount, date)));
+            SecurityValue = new DailyValuation(date, MathSupport.Truncate(portfolio.TotalValue(AccountType.Security, date)));
+            var companyNames = portfolio.Companies(AccountType.Security, null);
             companyNames.Sort();
             foreach (var companyName in companyNames)
             {
-                var companyValue = new DayValue_Named(null, companyName, date, MathSupport.Truncate(portfolio.CompanyValue(PortfolioElementType.Security, companyName, date)));
+                var companyValue = new DayValue_Named(null, companyName, date, MathSupport.Truncate(portfolio.CompanyValue(AccountType.Security, companyName, date)));
                 SecurityValues.Add(companyValue);
                 var yearCar = new DayValue_Named(null, companyName, date, MathSupport.Truncate(portfolio.IRRCompany(companyName, date.AddDays(-365), date)));
                 Security1YrCar.Add(yearCar);
@@ -145,11 +145,11 @@ namespace FinancialStructures.DisplayStructures
                 SecurityTotalCar.Add(totalCar);
             }
 
-            var companyBankNames = portfolio.Companies(PortfolioElementType.BankAccount, null);
+            var companyBankNames = portfolio.Companies(AccountType.BankAccount, null);
             companyBankNames.Sort();
             foreach (var companyName in companyBankNames)
             {
-                var companyValue = new DayValue_Named(null, companyName, date, MathSupport.Truncate(portfolio.CompanyValue(PortfolioElementType.BankAccount, companyName, date)));
+                var companyValue = new DayValue_Named(null, companyName, date, MathSupport.Truncate(portfolio.CompanyValue(AccountType.BankAccount, companyName, date)));
                 BankAccValues.Add(companyValue);
             }
 

@@ -1,6 +1,5 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.PortfolioStatsCreatorHelper;
@@ -18,7 +17,7 @@ namespace FinancialStructures.StatsMakers
 
     public static class PortfolioStatsCreators
     {
-        private static void WriteSectorAnalysis(StreamWriter writer, Portfolio portfolio, List<Sector> sectors, UserOptions options)
+        private static void WriteSectorAnalysis(StreamWriter writer, Portfolio portfolio, UserOptions options)
         {
             writer.WriteLine("<h2>Analysis By Sector</h2>");
 
@@ -34,8 +33,8 @@ namespace FinancialStructures.StatsMakers
             foreach (string sectorName in sectorNames)
             {
                 List<SecurityStatsHolder> valuesToWrite = new List<SecurityStatsHolder>();
-                valuesToWrite.Add(portfolio.GenerateSectorFundsStatistics(sectors, sectorName));
-                valuesToWrite.Add(portfolio.GenerateBenchMarkStatistics(sectors, sectorName));
+                valuesToWrite.Add(portfolio.GenerateSectorFundsStatistics(portfolio.BenchMarks, sectorName));
+                valuesToWrite.Add(portfolio.GenerateBenchMarkStatistics(portfolio.BenchMarks, sectorName));
                 int linesWritten = 0;
                 foreach (var value in valuesToWrite)
                 {
@@ -58,13 +57,8 @@ namespace FinancialStructures.StatsMakers
             writer.WriteLine("</table>");
         }
 
-        public static bool CreateHTMLPageCustom(Portfolio portfolio, List<Sector> sectors, string filepath, UserOptions options)
+        public static bool CreateHTMLPageCustom(Portfolio portfolio, string filepath, UserOptions options)
         {
-            return CreateNewHTMLPage(portfolio, sectors, filepath, options);
-        }
-        private static bool CreateNewHTMLPage(Portfolio portfolio, List<Sector> sectors, string filepath, UserOptions options)
-        {
-
             int maxNameLength = Math.Min(25, portfolio.LongestName() + 2);
             int maxCompanyLength = Math.Min(25, portfolio.LongestCompany() + 2);
             int maxNumLength = 10;
@@ -72,8 +66,8 @@ namespace FinancialStructures.StatsMakers
             StreamWriter htmlWriter = new StreamWriter(filepath);
             CreateHTMLHeader(htmlWriter, portfolio.DatabaseName, options);
 
-            DayValue_Named securityTotals = new DayValue_Named(string.Empty, "Securities", DateTime.Today, portfolio.TotalValue(PortfolioElementType.Security));
-            DayValue_Named bankTotals = new DayValue_Named(string.Empty, "Totals", DateTime.Today, portfolio.TotalValue(PortfolioElementType.BankAccount));
+            DayValue_Named securityTotals = new DayValue_Named(string.Empty, "Securities", DateTime.Today, portfolio.TotalValue(AccountType.Security));
+            DayValue_Named bankTotals = new DayValue_Named(string.Empty, "Totals", DateTime.Today, portfolio.TotalValue(AccountType.BankAccount));
             DayValue_Named portfolioTotals = new DayValue_Named(string.Empty, "Portfolio", DateTime.Today, portfolio.Value(DateTime.Today));
             List<string> headersList = new List<string>();
             headersList.AddRange(options.BankAccDataToExport);
@@ -106,7 +100,7 @@ namespace FinancialStructures.StatsMakers
                 htmlWriter.WriteLine(totals.HtmlTableHeader(options, options.SecurityDataToExport));
                 htmlWriter.WriteLine("</tr></thead>");
                 htmlWriter.WriteLine("<tbody>");
-                List<string> companies = portfolio.Companies(PortfolioElementType.Security, null);
+                List<string> companies = portfolio.Companies(AccountType.Security, null);
                 companies.Sort();
                 foreach (string compName in companies)
                 {
@@ -153,7 +147,7 @@ namespace FinancialStructures.StatsMakers
                 htmlWriter.WriteLine("<tbody>");
 
 
-                List<string> BankCompanies = portfolio.Companies(PortfolioElementType.BankAccount, null);
+                List<string> BankCompanies = portfolio.Companies(AccountType.BankAccount, null);
                 BankCompanies.Sort();
                 foreach (string compName in BankCompanies)
                 {
@@ -190,7 +184,7 @@ namespace FinancialStructures.StatsMakers
             }
             if (options.ShowSectors)
             {
-                WriteSectorAnalysis(htmlWriter, portfolio, sectors, options);
+                WriteSectorAnalysis(htmlWriter, portfolio, options);
             }
             CreateHTMLFooter(htmlWriter, length);
             htmlWriter.Close();

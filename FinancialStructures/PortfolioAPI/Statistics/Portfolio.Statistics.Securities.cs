@@ -128,7 +128,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 if (desired.Any())
                 {
-                    var currency = PortfolioValues.Currency(portfolio, PortfolioElementType.Security, desired);
+                    var currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
                     var needed = desired.LatestValue(currency);
                     return needed.Value - desired.LastEarlierValuation(needed.Day, currency).Value;
                 }
@@ -146,7 +146,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 if (desired.Any())
                 {
-                    var currency = PortfolioValues.Currency(portfolio, PortfolioElementType.Security, desired);
+                    var currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
                     return desired.LatestValue(currency).Value - desired.TotalInvestment(currency);
                 }
             }
@@ -163,8 +163,8 @@ namespace FinancialStructures.PortfolioAPI
             {
                 if (desired.Any())
                 {
-                    var currency = PortfolioValues.Currency(portfolio, PortfolioElementType.Security, desired);
-                    return desired.Value(date, currency).Value / portfolio.TotalValue(PortfolioElementType.Security, date);
+                    var currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
+                    return desired.Value(date, currency).Value / portfolio.TotalValue(AccountType.Security, date);
                 }
             }
 
@@ -188,7 +188,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 if (desired.Any())
                 {
-                    var currency = PortfolioValues.Currency(portfolio, PortfolioElementType.Security, desired);
+                    var currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
                     return desired.AllInvestmentsNamed(currency);
                 }
             }
@@ -205,7 +205,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 if (desired.Any())
                 {
-                    var currency = PortfolioValues.Currency(portfolio, PortfolioElementType.Security, desired);
+                    var currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
                     return desired.CAR(earlierTime, laterTime, currency);
                 }
             }
@@ -222,7 +222,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 if (desired.Any())
                 {
-                    var currency = PortfolioValues.Currency(portfolio, PortfolioElementType.Security, desired);
+                    var currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
                     return desired.IRR(currency);
                 }
             }
@@ -239,7 +239,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 if (desired.Any())
                 {
-                    var currency = PortfolioValues.Currency(portfolio, PortfolioElementType.Security, desired);
+                    var currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
                     return desired.IRRTime(earlierTime, laterTime, currency);
                 }
             }
@@ -253,7 +253,7 @@ namespace FinancialStructures.PortfolioAPI
         public static List<DayValue_Named> AllSecuritiesInvestments(this Portfolio portfolio)
         {
             var output = new List<DayValue_Named>();
-            var companies = portfolio.Companies(PortfolioElementType.Security, null);
+            var companies = portfolio.Companies(AccountType.Security, null);
             companies.Sort();
             foreach (var comp in companies)
             {

@@ -15,7 +15,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="name">The name of the account to remove.</param>
         /// <param name="reportLogger">A report callback.</param>
         /// <returns>Success or failure.</returns>
-        public static bool TryRemove(this Portfolio portfolio, PortfolioElementType elementType, NameData name, Action<string, string, string> reportLogger)
+        public static bool TryRemove(this Portfolio portfolio, AccountType elementType, NameData name, Action<string, string, string> reportLogger)
         {
             if (string.IsNullOrEmpty(name.Name) && string.IsNullOrEmpty(name.Company))
             {
@@ -25,15 +25,16 @@ namespace FinancialStructures.PortfolioAPI
 
             switch (elementType)
             {
-                case (PortfolioElementType.Security):
+                case (AccountType.Security):
                     return portfolio.TryRemoveSecurity(name.Company, name.Name, reportLogger);
-                case (PortfolioElementType.Currency):
+                case (AccountType.Currency):
                     return portfolio.TryRemoveCurrency(name, reportLogger);
-                case (PortfolioElementType.BankAccount):
+                case (AccountType.BankAccount):
                     return portfolio.TryRemoveBankAccount(name, reportLogger);
-                case (PortfolioElementType.Sector):
+                case (AccountType.Sector):
+                    return portfolio.TryRemoveSector(name, reportLogger);
                 default:
-                    reportLogger("Error", "EditingData", $"Editing an Unknown type.");
+                    reportLogger("Error", "DeletingData", $"Editing an Unknown type.");
                     return false;
             }
         }
@@ -80,6 +81,21 @@ namespace FinancialStructures.PortfolioAPI
                 }
             }
             reportLogger("Error", "DeletingData", $"Deleting Bank Account: Could not find account `{name.Company}'-`{name.Name}'.");
+            return false;
+        }
+
+        private static bool TryRemoveSector(this Portfolio portfolio, NameData name, Action<string, string, string> reportLogger)
+        {
+            foreach (var sector in portfolio.BenchMarks)
+            {
+                if (name.Name == sector.GetName())
+                {
+                    reportLogger("Report", "DeletingData", $"Deleted sector {sector.GetName()}");
+                    portfolio.BenchMarks.Remove(sector);
+                    return true;
+                }
+            }
+
             return false;
         }
     }

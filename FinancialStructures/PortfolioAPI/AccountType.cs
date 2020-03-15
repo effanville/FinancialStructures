@@ -1,6 +1,6 @@
 ﻿namespace FinancialStructures.PortfolioAPI
 {
-    public enum PortfolioElementType
+    public enum AccountType
     {
         Security,
         Sector,

@@ -52,7 +52,7 @@ namespace FinancialStructures.Database
             var output = new List<DayValue_Named>();
             foreach (var sec in portfolio.CompanySecurities(company))
             {
-                var currency = PortfolioValues.Currency(portfolio, PortfolioElementType.Security, sec);
+                var currency = PortfolioValues.Currency(portfolio, AccountType.Security, sec);
                 output.AddRange(sec.AllInvestmentsNamed(currency));
             }
 
@@ -70,7 +70,7 @@ namespace FinancialStructures.Database
             {
                 if (security.Any())
                 {
-                    var currency = PortfolioValues.Currency(portfolio, PortfolioElementType.Security, security);
+                    var currency = PortfolioValues.Currency(portfolio, AccountType.Security, security);
                     value += security.LatestValue(currency).Value - security.TotalInvestment(currency);
                 }
             }
@@ -83,7 +83,7 @@ namespace FinancialStructures.Database
         /// </summary>
         public static double CompanyFraction(this Portfolio portfolio, string company, DateTime date)
         {
-            return portfolio.CompanyValue(PortfolioElementType.Security, company, date) / portfolio.TotalValue(PortfolioElementType.Security, date);
+            return portfolio.CompanyValue(AccountType.Security, company, date) / portfolio.TotalValue(AccountType.Security, date);
         }
 
         /// <summary>

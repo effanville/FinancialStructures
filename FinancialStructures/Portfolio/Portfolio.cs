@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.FinanceStructures;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -25,7 +26,7 @@ namespace FinancialStructures.Database
         {
             get
             {
-                return Path.GetExtension(fDatabaseFilePath);
+                return string.IsNullOrEmpty(fDatabaseFilePath) ? string.Empty : Path.GetExtension(fDatabaseFilePath);
             }
         }
 
@@ -33,7 +34,7 @@ namespace FinancialStructures.Database
         {
             get
             {
-                return Path.GetDirectoryName(fDatabaseFilePath);
+                return string.IsNullOrEmpty(fDatabaseFilePath) ? string.Empty : Path.GetDirectoryName(fDatabaseFilePath);
             }
         }
 
@@ -45,7 +46,7 @@ namespace FinancialStructures.Database
             }
         }
 
-        private List<Security> fFunds;
+        private List<Security> fFunds = new List<Security>();
 
         public List<Security> Funds
         {
@@ -53,7 +54,7 @@ namespace FinancialStructures.Database
             private set { fFunds = value; }
         }
 
-        private List<CashAccount> fBankAccounts;
+        private List<CashAccount> fBankAccounts = new List<CashAccount>();
 
         public List<CashAccount> BankAccounts
         {
@@ -61,7 +62,7 @@ namespace FinancialStructures.Database
             private set { fBankAccounts = value; }
         }
 
-        private List<Currency> fCurrencies;
+        private List<Currency> fCurrencies = new List<Currency>();
 
         public List<Currency> Currencies
         {
@@ -69,11 +70,16 @@ namespace FinancialStructures.Database
             private set { fCurrencies = value; }
         }
 
+        private List<Sector> fBenchMarks = new List<Sector>();
+
+        internal List<Sector> BenchMarks
+        {
+            get => fBenchMarks;
+            set => fBenchMarks = value;
+        }
+
         public Portfolio()
         {
-            fFunds = new List<Security>();
-            fBankAccounts = new List<CashAccount>();
-            fCurrencies = new List<Currency>();
         }
 
         public void CopyData(Portfolio portfolio)
@@ -81,6 +87,24 @@ namespace FinancialStructures.Database
             this.Funds = portfolio.Funds;
             this.BankAccounts = portfolio.BankAccounts;
             this.Currencies = portfolio.Currencies;
+            this.BenchMarks = portfolio.BenchMarks;
+        }
+
+        public void SetBenchMarks(List<Sector> sectors)
+        {
+            fBenchMarks.Clear();
+            fBenchMarks.AddRange(sectors);
+        }
+
+        public static event EventHandler portfolioChanged;
+
+        protected void OnPortfolioChanged(EventArgs e)
+        {
+            EventHandler handler = portfolioChanged;
+            if (handler != null)
+            {
+                handler?.Invoke(this, e);
+            }
         }
     }
 }

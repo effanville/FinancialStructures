@@ -16,11 +16,11 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="company">The company name to search for.</param>
         /// <param name="date">The date to calculate value on.</param>
         /// <returns>The value held in the company.</returns>
-        public static double CompanyValue(this Portfolio portfolio, PortfolioElementType elementType, string company, DateTime date)
+        public static double CompanyValue(this Portfolio portfolio, AccountType elementType, string company, DateTime date)
         {
             switch (elementType)
             {
-                case (PortfolioElementType.Security):
+                case (AccountType.Security):
                     {
                         var securities = portfolio.CompanySecurities(company);
                         double value = 0;
@@ -28,18 +28,18 @@ namespace FinancialStructures.PortfolioAPI
                         {
                             if (security.Any())
                             {
-                                var currency = Currency(portfolio, PortfolioElementType.Security, security);
+                                var currency = Currency(portfolio, AccountType.Security, security);
                                 value += security.Value(date, currency).Value;
                             }
                         }
 
                         return value;
                     }
-                case (PortfolioElementType.Currency):
+                case (AccountType.Currency):
                     {
                         return 0.0;
                     }
-                case (PortfolioElementType.BankAccount):
+                case (AccountType.BankAccount):
                     {
                         var bankAccounts = portfolio.CompanyBankAccounts(company);
                         if (bankAccounts.Count() == 0)
@@ -51,14 +51,14 @@ namespace FinancialStructures.PortfolioAPI
                         {
                             if (account != null && account.Any())
                             {
-                                var currency = Currency(portfolio, PortfolioElementType.BankAccount, account);
+                                var currency = Currency(portfolio, AccountType.BankAccount, account);
                                 value += account.NearestEarlierValuation(date, currency).Value;
                             }
                         }
 
                         return value;
                     }
-                case (PortfolioElementType.Sector):
+                case (AccountType.Sector):
                     {
                         break;
                     }

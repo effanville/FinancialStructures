@@ -14,7 +14,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="elementType">The type of element to find.</param>
         /// <param name="name">The name of the element to find.</param>
         /// <returns>The latest value if it exists.</returns>
-        public static double LatestValue(this Portfolio portfolio, PortfolioElementType elementType, NameData name)
+        public static double LatestValue(this Portfolio portfolio, AccountType elementType, NameData name)
         {
             return portfolio.Value(elementType, name, DateTime.Today);
         }
@@ -27,23 +27,23 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="name">The name of the element to find.</param>
         /// <param name="date">The date on which to find the value.</param>
         /// <returns>The  value if it exists.</returns>
-        public static double Value(this Portfolio portfolio, PortfolioElementType elementType, NameData name, DateTime date)
+        public static double Value(this Portfolio portfolio, AccountType elementType, NameData name, DateTime date)
         {
             switch (elementType)
             {
-                case (PortfolioElementType.Security):
+                case (AccountType.Security):
                     {
                         return portfolio.SecurityValue(name.Company, name.Name, date);
                     }
-                case (PortfolioElementType.Currency):
+                case (AccountType.Currency):
                     {
                         return portfolio.CurrencyValue(name.Name, date);
                     }
-                case (PortfolioElementType.BankAccount):
+                case (AccountType.BankAccount):
                     {
                         return portfolio.BankAccountLatestValue(name.Company, name.Name);
                     }
-                case (PortfolioElementType.Sector):
+                case (AccountType.Sector):
                     {
                         break;
                     }
@@ -60,7 +60,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 return double.NaN;
             }
-            var currency = Currency(portfolio, PortfolioElementType.Security, desired);
+            var currency = Currency(portfolio, AccountType.Security, desired);
             return desired.Value(date, currency).Value;
         }
 

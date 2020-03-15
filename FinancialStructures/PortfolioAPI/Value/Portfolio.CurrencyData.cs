@@ -8,25 +8,25 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// returns the currency associated to the account.
         /// </summary>
-        internal static Currency Currency(Portfolio portfolio, PortfolioElementType elementType, object security)
+        internal static Currency Currency(Portfolio portfolio, AccountType elementType, object security)
         {
             switch (elementType)
             {
-                case (PortfolioElementType.Security):
+                case (AccountType.Security):
                     {
                         var currencyName = ((Security)security).GetCurrency();
                         return portfolio.Currencies.Find(cur => cur.Name == currencyName);
                     }
-                case (PortfolioElementType.Currency):
+                case (AccountType.Currency):
                     {
                         return (Currency)security;
                     }
-                case (PortfolioElementType.BankAccount):
+                case (AccountType.BankAccount):
                     {
                         var currencyName = ((CashAccount)security).GetCurrency();
                         return portfolio.Currencies.Find(cur => cur.Name == currencyName);
                     }
-                case (PortfolioElementType.Sector):
+                case (AccountType.Sector):
                     {
                         return new Currency("Error", "");
                     }

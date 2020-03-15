@@ -15,13 +15,13 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="data">The data to remove.</param>
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
-        public static bool TryDeleteData(this Portfolio portfolio, PortfolioElementType elementType, NameData name, DayValue_ChangeLogged data, Action<string, string, string> reportLogger)
+        public static bool TryDeleteData(this Portfolio portfolio, AccountType elementType, NameData name, DayValue_ChangeLogged data, Action<string, string, string> reportLogger)
         {
             switch (elementType)
             {
-                case (PortfolioElementType.Security):
+                case (AccountType.Security):
                     {
-                        for (int fundIndex = 0; fundIndex < portfolio.NumberOf(PortfolioElementType.Security); fundIndex++)
+                        for (int fundIndex = 0; fundIndex < portfolio.NumberOf(AccountType.Security); fundIndex++)
                         {
                             if (portfolio.Funds[fundIndex].GetCompany() == name.Company && portfolio.Funds[fundIndex].GetName() == name.Name)
                             {
@@ -33,7 +33,7 @@ namespace FinancialStructures.PortfolioAPI
                         reportLogger("Error", "DeletingData", $"Deleting Security Data: Could not find security `{name.Company}'-`{name.Name}'.");
                         return false;
                     }
-                case (PortfolioElementType.Currency):
+                case (AccountType.Currency):
                     {
                         foreach (var currency in portfolio.Currencies)
                         {
@@ -46,9 +46,9 @@ namespace FinancialStructures.PortfolioAPI
                         reportLogger("Error", "DeletingData", $"Deleting Currency Data: Could not find Currency  `{name.Company}'-`{name.Name}'.");
                         return false;
                     }
-                case (PortfolioElementType.BankAccount):
+                case (AccountType.BankAccount):
                     {
-                        for (int AccountIndex = 0; AccountIndex < portfolio.NumberOf(PortfolioElementType.BankAccount); AccountIndex++)
+                        for (int AccountIndex = 0; AccountIndex < portfolio.NumberOf(AccountType.BankAccount); AccountIndex++)
                         {
                             if (portfolio.BankAccounts[AccountIndex].GetCompany() == name.Company && portfolio.BankAccounts[AccountIndex].GetName() == name.Name)
                             {
@@ -60,7 +60,19 @@ namespace FinancialStructures.PortfolioAPI
                         reportLogger("Error", "DeletingData", $"Deleting Bank Account Data: Could not find bank account `{name.Company}'-`{name.Name}'.");
                         return false;
                     }
-                case (PortfolioElementType.Sector):
+                case (AccountType.Sector):
+                    {
+                        foreach (var sector in portfolio.BenchMarks)
+                        {
+                            if (name.Name == sector.GetName())
+                            {
+                                return sector.TryDeleteData(data.Day, reportLogger);
+                            }
+                        }
+
+                        reportLogger("Error", "DeletingData", $"Deleting Sector Data: Could not find Currency  `{name.Company}'-`{name.Name}'.");
+                        return false;
+                    }
                 default:
                     reportLogger("Error", "EditingData", $"Editing an Unknown type.");
                     return false;

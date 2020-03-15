@@ -1,8 +1,6 @@
 ﻿using FinanceCommonViewModels;
 using FinancialStructures.Database;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
-using SavingClasses;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,9 +15,9 @@ namespace FinanceWindowsViewModels
         public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
 
         private readonly Action<string, string, string> ReportLogger;
-        private readonly Action<Action<AllData>> UpdateDataAction;
+        private readonly Action<Action<Portfolio>> UpdateDataAction;
 
-        public SecurityEditWindowViewModel(Portfolio portfolio, Action<Action<AllData>> updateData, Action<string, string, string> reportLogger)
+        public SecurityEditWindowViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateData, Action<string, string, string> reportLogger)
     : base("Security Edit")
         {
             Portfolio = portfolio;
@@ -28,7 +26,7 @@ namespace FinanceWindowsViewModels
             Tabs.Add(new SecurityNamesViewModel(Portfolio, updateData, ReportLogger, LoadTab));
         }
 
-        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
+        public override void UpdateData(Portfolio portfolio)
         {
             Portfolio = portfolio;
             if (Tabs != null)
@@ -37,7 +35,7 @@ namespace FinanceWindowsViewModels
                 {
                     if (Tabs[tabIndex] is ViewModelBase viewModel)
                     {
-                        viewModel.UpdateData(portfolio, sectors, removeTab);
+                        viewModel.UpdateData(portfolio, removeTab);
                     }
                 }
                 if (removableTabs.Any())

@@ -1,8 +1,6 @@
 ﻿using FinancialStructures.Database;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using GUISupport;
-using SavingClasses;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
@@ -13,41 +11,38 @@ namespace FinanceCommonViewModels
     {
         private Portfolio Portfolio;
 
-        private List<Sector> Sectors;
+        private List<NameCompDate> fPreEditNames = new List<NameCompDate>();
 
-        private List<NameData> fPreEditNames = new List<NameData>();
-
-        private List<NameData> fDataNames = new List<NameData>();
+        private List<NameCompDate> fDataNames = new List<NameCompDate>();
 
         /// <summary>
         /// Name and Company data of Funds in database for view.
         /// </summary>
-        public List<NameData> DataNames
+        public List<NameCompDate> DataNames
         {
             get { return fDataNames; }
             set { fDataNames = value; OnPropertyChanged(); }
         }
 
-        private NameData fSelectedName;
+        private NameCompDate fSelectedName;
 
         /// <summary>
         /// Name and Company data of the selected security in the list <see cref="DataNames"/>
         /// </summary>
-        public NameData SelectedName
+        public NameCompDate SelectedName
         {
             get { return fSelectedName; }
             set { fSelectedName = value; OnPropertyChanged(); }
         }
 
-        private readonly Action<Action<AllData>> UpdateDataCallback;
+        private readonly Action<Action<Portfolio>> UpdateDataCallback;
         private readonly Action<string, string, string> ReportLogger;
         private readonly EditMethods editMethods;
 
-        public DataNamesViewModel(Portfolio portfolio, List<Sector> sectors, Action<Action<AllData>> updateDataCallback, Action<string, string, string> reportLogger, Action<NameData> loadSelectedData, EditMethods updateMethods)
+        public DataNamesViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateDataCallback, Action<string, string, string> reportLogger, Action<NameData> loadSelectedData, EditMethods updateMethods)
             : base("Accounts", loadSelectedData)
         {
             Portfolio = portfolio;
-            Sectors = sectors;
             UpdateDataCallback = updateDataCallback;
             ReportLogger = reportLogger;
             editMethods = updateMethods;
@@ -57,14 +52,13 @@ namespace FinanceCommonViewModels
             DownloadCommand = new BasicCommand(ExecuteDownloadCommand);
         }
 
-        public override void UpdateData(Portfolio portfolio, List<Sector> sectors, Action<object> removeTab)
+        public override void UpdateData(Portfolio portfolio, Action<object> removeTab)
         {
             Portfolio = portfolio;
-            Sectors = sectors;
             var currentSelectedName = SelectedName;
-            DataNames = (List<NameData>)editMethods.ExecuteFunction(FunctionType.NameUpdate, portfolio, sectors).Result;
+            DataNames = (List<NameCompDate>)editMethods.ExecuteFunction(FunctionType.NameUpdate, portfolio).Result;
             DataNames.Sort();
-            fPreEditNames = (List<NameData>)editMethods.ExecuteFunction(FunctionType.NameUpdate, portfolio, sectors).Result;
+            fPreEditNames = (List<NameCompDate>)editMethods.ExecuteFunction(FunctionType.NameUpdate, portfolio).Result;
             fPreEditNames.Sort();
 
             for (int i = 0; i < DataNames.Count; i++)
@@ -77,9 +71,9 @@ namespace FinanceCommonViewModels
             }
         }
 
-        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
+        public override void UpdateData(Portfolio portfolio)
         {
-            UpdateData(portfolio, sectors, null);
+            UpdateData(portfolio, null);
         }
 
         public ICommand DownloadCommand { get; }
@@ -87,19 +81,19 @@ namespace FinanceCommonViewModels
         {
             if (SelectedName != null)
             {
-                UpdateDataCallback(async alldata => await editMethods.ExecuteFunction(FunctionType.Download, alldata.MyFunds, alldata.myBenchMarks, SelectedName, ReportLogger).ConfigureAwait(false));
+                UpdateDataCallback(async programPortfolio => await editMethods.ExecuteFunction(FunctionType.Download, programPortfolio, SelectedName, ReportLogger).ConfigureAwait(false));
             }
         }
 
         public ICommand CreateCommand { get; set; }
         private void ExecuteCreateEdit(Object obj)
         {
-            if (((List<NameData>)editMethods.ExecuteFunction(FunctionType.NameUpdate, Portfolio, Sectors).Result).Count != DataNames.Count)
+            if (((List<NameCompDate>)editMethods.ExecuteFunction(FunctionType.NameUpdate, Portfolio).Result).Count != DataNames.Count)
             {
                 bool edited = false;
                 if (SelectedName.NewValue)
                 {
-                    UpdateDataCallback(alldata => editMethods.ExecuteFunction(FunctionType.Create, alldata.MyFunds, alldata.myBenchMarks, SelectedName, ReportLogger).Wait());
+                    UpdateDataCallback(programPortfolio => editMethods.ExecuteFunction(FunctionType.Create, programPortfolio, SelectedName, ReportLogger).Wait());
                     if (SelectedName != null)
                     {
                         SelectedName.NewValue = false;
@@ -121,7 +115,7 @@ namespace FinanceCommonViewModels
                     if (name.NewValue && (!string.IsNullOrEmpty(name.Name) || !string.IsNullOrEmpty(name.Company)))
                     {
                         edited = true;
-                        UpdateDataCallback(alldata => editMethods.ExecuteFunction(FunctionType.Edit, alldata.MyFunds, alldata.myBenchMarks, fPreEditNames[i], name, ReportLogger).Wait());
+                        UpdateDataCallback(programPortfolio => editMethods.ExecuteFunction(FunctionType.Edit, programPortfolio, fPreEditNames[i], name, ReportLogger).Wait());
                         name.NewValue = false;
                     }
                 }
@@ -137,7 +131,7 @@ namespace FinanceCommonViewModels
         {
             if (SelectedName.Name != null)
             {
-                UpdateDataCallback(alldata => editMethods.ExecuteFunction(FunctionType.Delete, alldata.MyFunds, alldata.myBenchMarks, SelectedName, ReportLogger).Wait());
+                UpdateDataCallback(programPortfolio => editMethods.ExecuteFunction(FunctionType.Delete, programPortfolio, SelectedName, ReportLogger).Wait());
             }
             else
             {

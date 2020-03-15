@@ -1,8 +1,6 @@
 ﻿using FinancialStructures.Database;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinanceCommonViewModels;
-using SectorHelperFunctions;
 using System.Collections.Generic;
 using FinancialStructures.PortfolioAPI;
 
@@ -24,8 +22,8 @@ namespace FinanceWindowsViewModels
             set { fAccountNames = value; OnPropertyChanged(); }
         }
 
-        private List<NameData> fSectorNames;
-        public List<NameData> SectorNames
+        private List<NameCompDate> fSectorNames;
+        public List<NameCompDate> SectorNames
         {
             get { return fSectorNames; }
             set { fSectorNames = value; OnPropertyChanged(); }
@@ -38,21 +36,21 @@ namespace FinanceWindowsViewModels
             set { fCurrencyNames = value; OnPropertyChanged(); }
         }
 
-        public BasicDataViewModel(Portfolio portfolio, List<Sector> sectors)
+        public BasicDataViewModel(Portfolio portfolio)
             : base("Database Overview")
         {
-            UpdateData(portfolio, sectors);
+            UpdateData(portfolio);
         }
 
-        public override void UpdateData(Portfolio portfolio, List<Sector> sectors)
+        public override void UpdateData(Portfolio portfolio)
         {
-            FundNames = portfolio.NameData(PortfolioElementType.Security, null);
+            FundNames = portfolio.NameData(AccountType.Security, null);
             FundNames.Sort();
-            AccountNames = portfolio.NameData(PortfolioElementType.BankAccount, null);
+            AccountNames = portfolio.NameData(AccountType.BankAccount, null);
             AccountNames.Sort();
-            SectorNames = SectorEditor.GetSectorNames(sectors);
+            SectorNames = portfolio.NameData(AccountType.Sector, null);
             SectorNames.Sort();
-            CurrencyNames = portfolio.NameData(PortfolioElementType.Currency, null);
+            CurrencyNames = portfolio.NameData(AccountType.Currency, null);
             CurrencyNames.Sort();
         }
     }

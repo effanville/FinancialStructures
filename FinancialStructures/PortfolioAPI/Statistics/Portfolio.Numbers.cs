@@ -10,23 +10,23 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="portfolio">The database to query.</param>
         /// <param name="elementType">The type to search for.</param>
         /// <returns>The number of type in the database.</returns>
-        public static int NumberOf(this Portfolio portfolio, PortfolioElementType elementType)
+        public static int NumberOf(this Portfolio portfolio, AccountType elementType)
         {
             switch (elementType)
             {
-                case (PortfolioElementType.Security):
+                case (AccountType.Security):
                     {
                         return portfolio.Funds.Count;
                     }
-                case (PortfolioElementType.Currency):
+                case (AccountType.Currency):
                     {
                         return portfolio.Currencies.Count;
                     }
-                case (PortfolioElementType.BankAccount):
+                case (AccountType.BankAccount):
                     {
                         return portfolio.BankAccounts.Count;
                     }
-                case (PortfolioElementType.Sector):
+                case (AccountType.Sector):
                     {
                         break;
                     }

@@ -12,11 +12,11 @@ namespace FinancialStructures.PortfolioAPI
         /// </summary>
         public static List<DayDataView> SecurityData(this Portfolio portfolio, string company, string name)
         {
-            foreach (Security sec in portfolio.Funds)
+            foreach (var security in portfolio.Funds)
             {
-                if (sec.GetName() == name && sec.GetCompany() == company)
+                if (security.GetName() == name && security.GetCompany() == company)
                 {
-                    return sec.GetDataForDisplay();
+                    return security.GetDataForDisplay();
                 }
             }
 
@@ -31,15 +31,15 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="name"></param>
         /// <param name="reportLogger"></param>
         /// <returns></returns>
-        public static List<DayValue_ChangeLogged> NumberData(this Portfolio portfolio, PortfolioElementType elementType, NameData name, Action<string, string, string> reportLogger)
+        public static List<DayValue_ChangeLogged> NumberData(this Portfolio portfolio, AccountType elementType, NameData name, Action<string, string, string> reportLogger)
         {
             switch (elementType)
             {
-                case (PortfolioElementType.Security):
+                case (AccountType.Security):
                     {
                         return new List<DayValue_ChangeLogged>();
                     }
-                case (PortfolioElementType.Currency):
+                case (AccountType.Currency):
                     {
                         foreach (var currency in portfolio.Currencies)
                         {
@@ -52,20 +52,28 @@ namespace FinancialStructures.PortfolioAPI
                         reportLogger("Error", "DatabaseAccess", $"Could not find currency {name.Name}");
                         return new List<DayValue_ChangeLogged>();
                     }
-                case (PortfolioElementType.BankAccount):
+                case (AccountType.BankAccount):
                     {
-                        foreach (var acc in portfolio.BankAccounts)
+                        foreach (var bankAccount in portfolio.BankAccounts)
                         {
-                            if (acc.GetName() == name.Name && acc.GetCompany() == name.Company)
+                            if (bankAccount.GetName() == name.Name && bankAccount.GetCompany() == name.Company)
                             {
-                                return acc.GetDataForDisplay();
+                                return bankAccount.GetDataForDisplay();
                             }
                         }
                         reportLogger("Report", "DatabaseAccess", $"Bank account {name.ToString()} does not exist.");
                         return new List<DayValue_ChangeLogged>();
                     }
-                case (PortfolioElementType.Sector):
+                case (AccountType.Sector):
                     {
+                        foreach (var sector in portfolio.GetBenchMarks())
+                        {
+                            if (sector.GetName() == name.Name)
+                            {
+                                return sector.GetDataForDisplay();
+                            }
+                        }
+                        reportLogger("Report", "DatabaseAccess", $"Sector {name.ToString()} does not exist.");
                         return new List<DayValue_ChangeLogged>();
                     }
                 default:

@@ -17,7 +17,7 @@ namespace FinancialStructures.PortfolioAPI
                 {
                     if ((DisplayValueFunds && account.LatestValue().Value != 0) || !DisplayValueFunds)
                     {
-                        var currency = PortfolioValues.Currency(portfolio, PortfolioElementType.BankAccount, account);
+                        var currency = PortfolioValues.Currency(portfolio, AccountType.BankAccount, account);
                         namesAndCompanies.Add(new DayValue_Named(account.GetName(), account.GetCompany(), account.LatestValue(currency).Day, account.LatestValue(currency).Value));
                     }
                 }
@@ -26,7 +26,7 @@ namespace FinancialStructures.PortfolioAPI
             namesAndCompanies.Sort();
             if (namesAndCompanies.Count > 1)
             {
-                namesAndCompanies.Add(new DayValue_Named("Totals", company, DateTime.Today, portfolio.CompanyValue(PortfolioElementType.BankAccount, company, DateTime.Today)));
+                namesAndCompanies.Add(new DayValue_Named("Totals", company, DateTime.Today, portfolio.CompanyValue(AccountType.BankAccount, company, DateTime.Today)));
             }
             return namesAndCompanies;
         }
@@ -49,7 +49,7 @@ namespace FinancialStructures.PortfolioAPI
                 namesAndCompanies.Sort();
                 if (namesAndCompanies.Count > 1)
                 {
-                    namesAndCompanies.Add(new DayValue_Named("Totals", "", DateTime.Today, portfolio.TotalValue(PortfolioElementType.BankAccount)));
+                    namesAndCompanies.Add(new DayValue_Named("Totals", "", DateTime.Today, portfolio.TotalValue(AccountType.BankAccount)));
                 }
                 return namesAndCompanies;
             }

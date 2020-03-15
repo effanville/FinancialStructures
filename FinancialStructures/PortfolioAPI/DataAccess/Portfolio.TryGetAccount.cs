@@ -10,7 +10,7 @@ namespace FinancialStructures.PortfolioAPI
         /// </summary>
         public static bool TryGetSecurity(this Portfolio portfolio, string company, string name, out Security desired)
         {
-            foreach (Security sec in portfolio.GetSecurities())
+            foreach (Security sec in portfolio.Funds)
             {
                 if (sec.GetName() == name && sec.GetCompany() == company)
                 {
@@ -27,7 +27,7 @@ namespace FinancialStructures.PortfolioAPI
         /// </summary>
         public static bool TryGetBankAccount(this Portfolio portfolio, string company, string name, out CashAccount desired)
         {
-            foreach (CashAccount sec in portfolio.GetBankAccounts())
+            foreach (CashAccount sec in portfolio.BankAccounts)
             {
                 if (sec.GetName() == name && sec.GetCompany() == company)
                 {
@@ -37,6 +37,24 @@ namespace FinancialStructures.PortfolioAPI
             }
 
             desired = null;
+            return false;
+        }
+
+        /// <summary>
+        /// Returns a sector from the database with specified name.
+        /// </summary>
+        public static bool TryGetSector(this Portfolio portfolio, string name, out Sector Desired)
+        {
+            foreach (Sector sector in portfolio.BenchMarks)
+            {
+                if (sector.GetName() == name)
+                {
+                    Desired = sector.Copy();
+                    return true;
+                }
+            }
+
+            Desired = null;
             return false;
         }
 

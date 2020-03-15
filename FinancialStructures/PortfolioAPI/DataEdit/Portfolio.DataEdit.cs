@@ -11,7 +11,7 @@ namespace FinancialStructures.PortfolioAPI
         /// </summary>
         public static bool TryEditSecurityData(this Portfolio portfolio, Action<string, string, string> reportLogger, string company, string name, DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment = 0)
         {
-            for (int fundIndex = 0; fundIndex < portfolio.NumberOf(PortfolioElementType.Security); fundIndex++)
+            for (int fundIndex = 0; fundIndex < portfolio.NumberOf(AccountType.Security); fundIndex++)
             {
                 if (portfolio.Funds[fundIndex].GetCompany() == company && portfolio.Funds[fundIndex].GetName() == name)
                 {
@@ -34,29 +34,29 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
         /// <remarks> This cannot currently be used to add to securities due to different type of data.</remarks>
-        public static bool TryEditData(this Portfolio portfolio, PortfolioElementType elementType, NameData name, DayValue_ChangeLogged oldData, DayValue_ChangeLogged newData, Action<string, string, string> reportLogger)
+        public static bool TryEditData(this Portfolio portfolio, AccountType elementType, NameData name, DayValue_ChangeLogged oldData, DayValue_ChangeLogged newData, Action<string, string, string> reportLogger)
         {
             switch (elementType)
             {
-                case (PortfolioElementType.Security):
+                case (AccountType.Security):
                     {
                         return false;
                     }
-                case (PortfolioElementType.Currency):
+                case (AccountType.Currency):
                     {
-                        foreach (var sector in portfolio.Currencies)
+                        foreach (var currency in portfolio.Currencies)
                         {
-                            if (name.Name == sector.GetName())
+                            if (name.Name == currency.GetName())
                             {
-                                return sector.TryEditData(oldData.Day, newData.Day, newData.Value, reportLogger);
+                                return currency.TryEditData(oldData.Day, newData.Day, newData.Value, reportLogger);
                             }
                         }
 
                         return false;
                     }
-                case (PortfolioElementType.BankAccount):
+                case (AccountType.BankAccount):
                     {
-                        for (int AccountIndex = 0; AccountIndex < portfolio.NumberOf(PortfolioElementType.BankAccount); AccountIndex++)
+                        for (int AccountIndex = 0; AccountIndex < portfolio.NumberOf(AccountType.BankAccount); AccountIndex++)
                         {
                             if (portfolio.BankAccounts[AccountIndex].GetCompany() == name.Company && portfolio.BankAccounts[AccountIndex].GetName() == name.Name)
                             {
@@ -68,7 +68,20 @@ namespace FinancialStructures.PortfolioAPI
                         reportLogger("Error", "EditingData", $"Editing BankAccount Data: Could not find bank account `{name.Company}'-`{name.Name}'.");
                         return false;
                     }
-                case (PortfolioElementType.Sector):
+                case (AccountType.Sector):
+                    {
+                        for (int AccountIndex = 0; AccountIndex < portfolio.NumberOf(AccountType.Sector); AccountIndex++)
+                        {
+                            if (portfolio.BenchMarks[AccountIndex].GetName() == name.Name)
+                            {
+                                // now edit data
+                                return portfolio.BenchMarks[AccountIndex].TryEditData(oldData.Day, newData.Day, newData.Value, reportLogger);
+                            }
+                        }
+
+                        reportLogger("Error", "EditingData", $"Editing BenchMark Data: Could not find benchMark `{name.Company}'-`{name.Name}'.");
+                        return false;
+                    }
                 default:
                     reportLogger("Error", "EditingData", $"Editing an Unknown type.");
                     return false;

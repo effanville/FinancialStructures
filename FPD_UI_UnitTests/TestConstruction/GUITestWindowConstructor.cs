@@ -40,9 +40,9 @@ namespace FPD_UI_UnitTests.TestConstruction
         public static Tuple<Portfolio, List<Sector>> CreateBasicDataBase()
         {
             var portfolio = new Portfolio();
-            portfolio.TryAdd(PortfolioElementType.Security, new NameData("China", "Fidelity", "GBP", "http://www.fidelity.co.uk", new List<string>() { "Bonds", "UK" }), TestingGUICode.DummyReportLogger);
-            portfolio.TryAdd(PortfolioElementType.BankAccount, new NameData("Barclays", "currentAccount"), TestingGUICode.DummyReportLogger);
-            portfolio.TryAdd(PortfolioElementType.Currency, new NameData(string.Empty, "GBP"), TestingGUICode.DummyReportLogger);
+            portfolio.TryAdd(AccountType.Security, new NameData("China", "Fidelity", "GBP", "http://www.fidelity.co.uk", new List<string>() { "Bonds", "UK" }), TestingGUICode.DummyReportLogger);
+            portfolio.TryAdd(AccountType.BankAccount, new NameData("Barclays", "currentAccount"), TestingGUICode.DummyReportLogger);
+            portfolio.TryAdd(AccountType.Currency, new NameData(string.Empty, "GBP"), TestingGUICode.DummyReportLogger);
 
             var sectors = new List<Sector>();
             sectors.Add(new Sector("UK", "http://www.hi.com"));

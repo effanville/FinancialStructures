@@ -18,7 +18,7 @@ namespace FinancialStructures.DataReader
         /// <param name="type">The type of data to import.</param>
         /// <param name="reportLogger">Reporting Callback.</param>
         /// <returns></returns>
-        public static List<object> ReadFromCsv(string filePath, PortfolioElementType type, Action<string, string, string> reportLogger)
+        public static List<object> ReadFromCsv(string filePath, AccountType type, Action<string, string, string> reportLogger)
         {
             TextReader reader = null;
             try
@@ -34,11 +34,11 @@ namespace FinancialStructures.DataReader
 
                 switch (type)
                 {
-                    case PortfolioElementType.Security:
+                    case AccountType.Security:
                         return CreateSecurityData(valuationsToRead, reportLogger);
-                    case PortfolioElementType.BankAccount:
-                    case PortfolioElementType.Currency:
-                    case PortfolioElementType.Sector:
+                    case AccountType.BankAccount:
+                    case AccountType.Currency:
+                    case AccountType.Sector:
                         return CreateAccountData(valuationsToRead, reportLogger);
                     default:
                         return new List<object>();

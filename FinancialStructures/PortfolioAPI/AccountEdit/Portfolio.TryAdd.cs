@@ -16,7 +16,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="name">The name data to add.</param>
         /// <param name="reportLogger">Report callback action.</param>
         /// <returns>Success or failure of adding.</returns>
-        public static bool TryAdd(this Portfolio portfolio, PortfolioElementType elementType, NameData name, Action<string, string, string> reportLogger)
+        public static bool TryAdd(this Portfolio portfolio, AccountType elementType, NameData name, Action<string, string, string> reportLogger)
         {
             List<string> sectorList = new List<string>();
             if (!string.IsNullOrEmpty(name.Sectors))
@@ -44,21 +44,21 @@ namespace FinancialStructures.PortfolioAPI
 
             switch (elementType)
             {
-                case (PortfolioElementType.Security):
+                case (AccountType.Security):
                     {
                         Security newSecurity = new Security(name.Company, name.Name, name.Currency, name.Url, sectorList);
                         portfolio.Funds.Add(newSecurity);
                         reportLogger("Report", "AddingData", $"Security `{name.Company}'-`{name.Name}' added to database.");
                         return true;
                     }
-                case (PortfolioElementType.Currency):
+                case (AccountType.Currency):
                     {
                         Currency newSector = new Currency(name.Name, name.Url);
                         reportLogger("Report", "AddingData", $"Currency '{name}' added to database.");
                         portfolio.Currencies.Add(newSector);
                         return true;
                     }
-                case (PortfolioElementType.BankAccount):
+                case (AccountType.BankAccount):
                     {
                         var NewAccount = new CashAccount(name.Company, name.Name, name.Currency);
                         foreach (var sector in sectorList)
@@ -70,7 +70,13 @@ namespace FinancialStructures.PortfolioAPI
                         reportLogger("Report", "AddingData", $"BankAccount `{name.Company}'-`{name.Name}' added to database.");
                         return true;
                     }
-                case (PortfolioElementType.Sector):
+                case (AccountType.Sector):
+                    {
+                        Sector newSector = new Sector(name.Name, name.Url);
+                        reportLogger("Report", "AddingData", $"Currency '{name}' added to database.");
+                        portfolio.BenchMarks.Add(newSector);
+                        return true;
+                    }
                 default:
                     reportLogger("Error", "EditingData", $"Editing an Unknown type.");
                     return false;

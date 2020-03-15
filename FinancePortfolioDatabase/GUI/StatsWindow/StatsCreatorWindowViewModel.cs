@@ -2,11 +2,9 @@
 using FinanceViewModels.StatsViewModels;
 using FinanceWindows.StatsWindows;
 using FinancialStructures.Database;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.StatsMakers;
 using GUISupport;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -16,7 +14,6 @@ namespace FinanceWindowsViewModels
     internal class StatsCreatorWindowViewModel : ViewModelBase
     {
         private Portfolio fPortfolio;
-        private List<Sector> Sectors;
 
         public ObservableCollection<object> StatsTabs { get; set; } = new ObservableCollection<object>();
 
@@ -31,7 +28,7 @@ namespace FinanceWindowsViewModels
 
         Action<string, string, string> ReportLogger;
 
-        public StatsCreatorWindowViewModel(Portfolio portfolio, List<Sector> sectors, Action<string, string, string> reportLogger)
+        public StatsCreatorWindowViewModel(Portfolio portfolio, Action<string, string, string> reportLogger)
             : base("Stats Creator")
         {
             StatsTabs.Add(new MainTabViewModel(openTab));
@@ -40,10 +37,6 @@ namespace FinanceWindowsViewModels
             if (portfolio != null)
             {
                 fPortfolio = portfolio;
-            }
-            if (sectors != null)
-            {
-                Sectors = sectors;
             }
 
             ReportLogger = reportLogger;
@@ -64,7 +57,7 @@ namespace FinanceWindowsViewModels
         {
             var optionWindow = new StatsOptionsWindow();
             Action<string> StatsOptionFeedback = (filePath) => StatsFeedback(optionWindow, filePath);
-            var context = new StatsOptionsViewModel(fPortfolio, Sectors, ExportType.CSV, ReportLogger, StatsOptionFeedback);
+            var context = new StatsOptionsViewModel(fPortfolio, ExportType.CSV, ReportLogger, StatsOptionFeedback);
             optionWindow.DataContext = context;
             optionWindow.ShowDialog();
         }
@@ -113,7 +106,7 @@ namespace FinanceWindowsViewModels
         {
             var optionWindow = new StatsOptionsWindow();
             Action<string> StatsOptionFeedback = (filePath) => StatsFeedback(optionWindow, filePath);
-            var context = new StatsOptionsViewModel(fPortfolio, Sectors, ExportType.HTML, ReportLogger, StatsOptionFeedback);
+            var context = new StatsOptionsViewModel(fPortfolio, ExportType.HTML, ReportLogger, StatsOptionFeedback);
             optionWindow.DataContext = context;
             optionWindow.ShowDialog();
         }
@@ -124,7 +117,7 @@ namespace FinanceWindowsViewModels
             LoadTab(TabType.StatsViewer, filePath);
         }
 
-        public override void UpdateData(Portfolio portfolio = null, List<Sector> sectors = null)
+        public override void UpdateData(Portfolio portfolio = null)
         {
             foreach (var tab in StatsTabs)
             {

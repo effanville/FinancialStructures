@@ -11,7 +11,7 @@ namespace FinancialStructures.PortfolioAPI
         /// </summary>
         public static bool TryAddDataToSecurity(this Portfolio portfolio, Action<string, string, string> reportLogger, string company, string name, DateTime date, double shares, double unitPrice, double Investment = 0)
         {
-            for (int fundIndex = 0; fundIndex < portfolio.NumberOf(PortfolioElementType.Security); fundIndex++)
+            for (int fundIndex = 0; fundIndex < portfolio.NumberOf(AccountType.Security); fundIndex++)
             {
                 if (portfolio.Funds[fundIndex].GetCompany() == company && portfolio.Funds[fundIndex].GetName() == name)
                 {
@@ -32,15 +32,15 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
         /// <remarks> This cannot currently be used to add to securities due to different type of data.</remarks>
-        public static bool TryAddData(this Portfolio portfolio, PortfolioElementType elementType, NameData name, DayValue_ChangeLogged data, Action<string, string, string> reportLogger)
+        public static bool TryAddData(this Portfolio portfolio, AccountType elementType, NameData name, DayValue_ChangeLogged data, Action<string, string, string> reportLogger)
         {
             switch (elementType)
             {
-                case (PortfolioElementType.Security):
+                case (AccountType.Security):
                     {
                         return false;
                     }
-                case (PortfolioElementType.Currency):
+                case (AccountType.Currency):
                     {
                         foreach (var sector in portfolio.GetCurrencies())
                         {
@@ -52,9 +52,9 @@ namespace FinancialStructures.PortfolioAPI
 
                         return false;
                     }
-                case (PortfolioElementType.BankAccount):
+                case (AccountType.BankAccount):
                     {
-                        for (int accountIndex = 0; accountIndex < portfolio.NumberOf(PortfolioElementType.BankAccount); accountIndex++)
+                        for (int accountIndex = 0; accountIndex < portfolio.NumberOf(AccountType.BankAccount); accountIndex++)
                         {
                             if (portfolio.BankAccounts[accountIndex].GetCompany() == name.Company && portfolio.BankAccounts[accountIndex].GetName() == name.Name)
                             {
@@ -65,7 +65,19 @@ namespace FinancialStructures.PortfolioAPI
 
                         return false;
                     }
-                case (PortfolioElementType.Sector):
+                case (AccountType.Sector):
+                    {
+                        for (int accountIndex = 0; accountIndex < portfolio.NumberOf(AccountType.Sector); accountIndex++)
+                        {
+                            if (portfolio.BenchMarks[accountIndex].GetName() == name.Name)
+                            {
+                                // now edit data
+                                return portfolio.BenchMarks[accountIndex].TryAddData(data.Day, data.Value, reportLogger);
+                            }
+                        }
+
+                        return false;
+                    }
                 default:
                     reportLogger("Error", "EditingData", $"Editing an Unknown type.");
                     return false;

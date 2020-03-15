@@ -1,9 +1,7 @@
 ﻿using FinancialStructures.Database;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using GUISupport;
 using System;
-using System.Collections.Generic;
 
 namespace FinanceCommonViewModels
 {
@@ -28,10 +26,10 @@ namespace FinanceCommonViewModels
             LoadSelectedTab = loadTab;
         }
 
-        public virtual void UpdateData(Portfolio portfolio, List<Sector> sectors, Action<object> removeTab)
+        public virtual void UpdateData(Portfolio portfolio, Action<object> removeTab)
         {
         }
 
-        public abstract void UpdateData(Portfolio portfolio, List<Sector> sectors);
+        public abstract void UpdateData(Portfolio portfolio);
     }
 }

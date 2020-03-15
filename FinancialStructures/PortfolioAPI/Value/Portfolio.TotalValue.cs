@@ -11,7 +11,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="portfolio">The database to query.</param>
         /// <param name="elementType">The type to find the total of.</param>
         /// <returns>The total value held on today.</returns>
-        public static double TotalValue(this Portfolio portfolio, PortfolioElementType elementType)
+        public static double TotalValue(this Portfolio portfolio, AccountType elementType)
         {
             return portfolio.TotalValue(elementType, DateTime.Today);
         }
@@ -23,11 +23,11 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="elementType">The type to find the total of.</param>
         /// <param name="date">The date to find the total on.</param>
         /// <returns>The total value held.</returns>
-        public static double TotalValue(this Portfolio portfolio, PortfolioElementType elementType, DateTime date)
+        public static double TotalValue(this Portfolio portfolio, AccountType elementType, DateTime date)
         {
             switch (elementType)
             {
-                case (PortfolioElementType.Security):
+                case (AccountType.Security):
                     {
                         double total = 0;
                         foreach (var sec in portfolio.GetSecurities())
@@ -41,11 +41,11 @@ namespace FinancialStructures.PortfolioAPI
 
                         return total;
                     }
-                case (PortfolioElementType.Currency):
+                case (AccountType.Currency):
                     {
                         return 0.0;
                     }
-                case (PortfolioElementType.BankAccount):
+                case (AccountType.BankAccount):
                     {
                         double sum = 0;
                         foreach (var acc in portfolio.GetBankAccounts())
@@ -56,7 +56,7 @@ namespace FinancialStructures.PortfolioAPI
 
                         return sum;
                     }
-                case (PortfolioElementType.Sector):
+                case (AccountType.Sector):
                     {
                         break;
                     }

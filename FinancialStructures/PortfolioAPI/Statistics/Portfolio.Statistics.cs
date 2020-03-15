@@ -14,12 +14,12 @@ namespace FinancialStructures.PortfolioAPI
     {
         public static int LongestName(this Portfolio portfolio)
         {
-            return portfolio.Names(PortfolioElementType.Security, null).Max().Length;
+            return portfolio.Names(AccountType.Security, null).Max().Length;
         }
 
         public static int LongestCompany(this Portfolio portfolio)
         {
-            var companies = portfolio.Companies(PortfolioElementType.Security, null);
+            var companies = portfolio.Companies(AccountType.Security, null);
             companies.Sort();
             return companies.Select(c => c.Length).Max();
         }
@@ -87,7 +87,7 @@ namespace FinancialStructures.PortfolioAPI
         /// </summary>
         public static double IRRPortfolio(this Portfolio portfolio, DateTime earlierTime, DateTime laterTime)
         {
-            if (portfolio.NumberOf(PortfolioElementType.Security) == 0)
+            if (portfolio.NumberOf(AccountType.Security) == 0)
             {
                 return double.NaN;
             }
@@ -115,7 +115,7 @@ namespace FinancialStructures.PortfolioAPI
         /// </summary>
         public static double Value(this Portfolio portfolio, DateTime date)
         {
-            return portfolio.TotalValue(PortfolioElementType.Security, date) + portfolio.TotalValue(PortfolioElementType.BankAccount, date);
+            return portfolio.TotalValue(AccountType.Security, date) + portfolio.TotalValue(AccountType.BankAccount, date);
         }
 
         public static List<DatabaseStatistics> GenerateDatabaseStatistics(this Portfolio portfolio)

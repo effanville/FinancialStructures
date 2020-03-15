@@ -1,6 +1,5 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.PortfolioStatsCreatorHelper;
@@ -12,33 +11,6 @@ namespace FinancialStructures.StatsMakers
 {
     public static class CSVStatsCreator
     {
-        /* private static void OldWriter()
-         {
-             StreamWriter statsWriter = new StreamWriter(saving.FileName);
-             // write in column headers
-             statsWriter.WriteLine("Securities Data");
-             statsWriter.WriteLine("Company, Name, Latest Value, CAR total");
-             foreach (SecurityStatsHolder stats in SecuritiesStats)
-             {
-                 if (stats.LatestVal > 0)
-                 {
-                     string securitiesData = stats.Company + ", " + stats.Name + ", " + stats.LatestVal.ToString() + ", " + stats.CARTotal.ToString();
-                     statsWriter.WriteLine(securitiesData);
-                 }
-             }
-             statsWriter.WriteLine("");
-             statsWriter.WriteLine("Bank Account Data");
-             statsWriter.WriteLine("Company, Name, Latest Value");
-             foreach (BankAccountStatsHolder stats in BankAccountStats)
-             {
-                 string BankAccData = stats.Company + ", " + stats.Name + ", " + stats.LatestVal.ToString();
-                 statsWriter.WriteLine(BankAccData);
-             }
-
-             reports.AddReport($"Created csv statistics at ${saving.FileName}");
-             statsWriter.Close();
-         }*/
-
         private static void WriteSpacing(StreamWriter writer, bool spacing)
         {
             if (spacing)
@@ -46,18 +18,18 @@ namespace FinancialStructures.StatsMakers
                 writer.WriteLine("");
             }
         }
-        private static void WriteSectorAnalysis(StreamWriter writer, Portfolio funds, List<Sector> sectors, System.Reflection.PropertyInfo[] info, UserOptions options, int maxNameLength, int maxCompanyLength, int maxNumLength)
+        private static void WriteSectorAnalysis(StreamWriter writer, Portfolio portfolio, System.Reflection.PropertyInfo[] info, UserOptions options, int maxNameLength, int maxCompanyLength, int maxNumLength)
         {
             writer.WriteLine("Analysis By Sector");
 
             WriteHeader(writer, info, options.SecurityDataToExport, maxNameLength, maxCompanyLength, maxNumLength);
 
-            List<string> sectorNames = funds.GetSecuritiesSectors();
+            List<string> sectorNames = portfolio.GetSecuritiesSectors();
             foreach (string sectorName in sectorNames)
             {
                 List<SecurityStatsHolder> valuesToWrite = new List<SecurityStatsHolder>();
-                valuesToWrite.Add(funds.GenerateSectorFundsStatistics(sectors, sectorName));
-                valuesToWrite.Add(funds.GenerateBenchMarkStatistics(sectors, sectorName));
+                valuesToWrite.Add(portfolio.GenerateSectorFundsStatistics(portfolio.BenchMarks, sectorName));
+                valuesToWrite.Add(portfolio.GenerateBenchMarkStatistics(portfolio.BenchMarks, sectorName));
                 int linesWritten = 0;
                 foreach (var value in valuesToWrite)
                 {
@@ -97,12 +69,7 @@ namespace FinancialStructures.StatsMakers
             }
         }
 
-        public static bool CreateCSVPageCustom(Portfolio portfolio, List<Sector> sectors, string filepath, UserOptions options)
-        {
-            return CreateCSVPage(portfolio, sectors, filepath, options);
-        }
-
-        private static bool CreateCSVPage(Portfolio portfolio, List<Sector> sectors, string filepath, UserOptions options)
+        public static bool CreateCSVPageCustom(Portfolio portfolio, string filepath, UserOptions options)
         {
             int maxNameLength = Math.Min(25, portfolio.LongestName() + 2);
             int maxCompanyLength = Math.Min(25, portfolio.LongestCompany() + 2);
@@ -117,7 +84,7 @@ namespace FinancialStructures.StatsMakers
 
             WriteHeader(htmlWriter, properties, options.SecurityDataToExport, maxNameLength, maxCompanyLength, maxNumLength);
 
-            List<string> companies = portfolio.Companies(PortfolioElementType.Security, null);
+            List<string> companies = portfolio.Companies(AccountType.Security, null);
             companies.Sort();
             foreach (string compName in companies)
             {
@@ -191,12 +158,12 @@ namespace FinancialStructures.StatsMakers
                 WriteSpacing(htmlWriter, options.Spacing);
             }
 
-            DayValue_Named bankTotals = new DayValue_Named("Totals,", string.Empty, DateTime.Today, portfolio.TotalValue(PortfolioElementType.BankAccount));
+            DayValue_Named bankTotals = new DayValue_Named("Totals,", string.Empty, DateTime.Today, portfolio.TotalValue(AccountType.BankAccount));
             var bankProperties = bankTotals.GetType().GetProperties();
 
             WriteHeader(htmlWriter, bankProperties, options.BankAccDataToExport, maxNameLength, maxCompanyLength, maxNumLength);
 
-            List<string> BankCompanies = portfolio.Companies(PortfolioElementType.BankAccount, null);
+            List<string> BankCompanies = portfolio.Companies(AccountType.BankAccount, null);
             BankCompanies.Sort();
             foreach (string compName in BankCompanies)
             {
@@ -307,7 +274,7 @@ namespace FinancialStructures.StatsMakers
 
             WriteSpacing(htmlWriter, options.Spacing);
 
-            WriteSectorAnalysis(htmlWriter, portfolio, sectors, properties, options, maxNameLength, maxCompanyLength, maxNumLength);
+            WriteSectorAnalysis(htmlWriter, portfolio, properties, options, maxNameLength, maxCompanyLength, maxNumLength);
             htmlWriter.Close();
             return true;
         }

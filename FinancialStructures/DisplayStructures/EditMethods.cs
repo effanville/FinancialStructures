@@ -23,99 +23,98 @@ namespace FinancialStructures.GUIFinanceStructures
     {
         public async Task<object> ExecuteFunction(FunctionType functionType, params object[] functionInputs)
         {
-            if (functionInputs.Length < 2)
+            if (functionInputs.Length < 1)
             {
                 return null;
             }
             object output = null;
             var portfolio = (Portfolio)functionInputs[0];
-            var sectors = (List<Sector>)functionInputs[1];
             NameData name = functionInputs.Length > 2 ? (NameData)functionInputs[2] : null;
 
             switch (functionType)
             {
                 case (FunctionType.Download):
                     {
-                        if (functionInputs.Length != 4)
+                        if (functionInputs.Length != 3)
                         {
                             break;
                         }
 
-                        await DownloadMethod(portfolio, sectors, (NameData)functionInputs[2], (Action<string, string, string>)functionInputs[3]).ConfigureAwait(false);
+                        await DownloadMethod(portfolio, (NameData)functionInputs[2], (Action<string, string, string>)functionInputs[3]).ConfigureAwait(false);
                         break;
                     }
                 case (FunctionType.NameUpdate):
                     {
-                        if (functionInputs.Length != 2)
+                        if (functionInputs.Length != 1)
                         {
                             break;
                         }
 
-                        output = UpdateNameMethod(portfolio, sectors);
+                        output = UpdateNameMethod(portfolio);
                         break;
                     }
                 case (FunctionType.Create):
                     {
-                        if (functionInputs.Length != 4)
+                        if (functionInputs.Length != 3)
                         {
                             break;
                         }
-                        output = CreateMethod(portfolio, sectors, name, (Action<string, string, string>)functionInputs[3]);
+                        output = CreateMethod(portfolio, name, (Action<string, string, string>)functionInputs[3]);
                         break;
                     }
                 case (FunctionType.Edit):
                     {
-                        if (functionInputs.Length != 5)
+                        if (functionInputs.Length != 4)
                         {
                             break;
 
                         }
-                        output = EditMethod(portfolio, sectors, name, (NameData)functionInputs[3], (Action<string, string, string>)functionInputs[4]);
+                        output = EditMethod(portfolio, name, (NameData)functionInputs[3], (Action<string, string, string>)functionInputs[4]);
                         break;
                     }
                 case (FunctionType.Delete):
                     {
-                        if (functionInputs.Length != 4)
+                        if (functionInputs.Length != 3)
                         {
                             break;
                         }
-                        output = DeleteMethod(portfolio, sectors, name, (Action<string, string, string>)functionInputs[3]);
+                        output = DeleteMethod(portfolio, name, (Action<string, string, string>)functionInputs[3]);
                         break;
                     }
                 case (FunctionType.SelectData):
                     {
-                        if (functionInputs.Length != 4)
+                        if (functionInputs.Length != 3)
                         {
                             break;
                         }
-                        output = SelectedDataMethod(portfolio, sectors, name, (Action<string, string, string>)functionInputs[3]);
+                        output = SelectedDataMethod(portfolio, name, (Action<string, string, string>)functionInputs[3]);
                         break;
                     }
                 case (FunctionType.AddData):
                     {
-                        if (functionInputs.Length != 5)
+                        if (functionInputs.Length != 4)
                         {
                             break;
                         }
-                        output = AddDataMethod(portfolio, sectors, name, (DayValue_ChangeLogged)functionInputs[3], (Action<string, string, string>)functionInputs[4]);
+                        output = AddDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[3], (Action<string, string, string>)functionInputs[4]);
                         break;
                     }
                 case (FunctionType.EditData):
                     {
-                        if (functionInputs.Length != 6)
-                        {
-                            break;
-                        }
-                        output = EditDataMethod(portfolio, sectors, name, (DayValue_ChangeLogged)functionInputs[3], (DayValue_ChangeLogged)functionInputs[4], (Action<string, string, string>)functionInputs[5]);
-                        break;
-                    }
-                case (FunctionType.DeleteData):
-                    {
                         if (functionInputs.Length != 5)
                         {
                             break;
                         }
-                        output = DeleteDataMethod(portfolio, sectors, name, (DayValue_ChangeLogged)functionInputs[3], (Action<string, string, string>)functionInputs[4]);
+                        output = EditDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[3], (DayValue_ChangeLogged)functionInputs[4], (Action<string, string, string>)functionInputs[5]);
+                        break;
+                    }
+                case (FunctionType.DeleteData):
+                    {
+                        if (functionInputs.Length != 4)
+                        {
+                            break;
+                        }
+                        output = DeleteDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[3], (Action<string, string, string>)functionInputs[4]);
                         break;
                     }
                 default:
@@ -124,33 +123,33 @@ namespace FinancialStructures.GUIFinanceStructures
             return output;
         }
 
-        private readonly Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, Task> DownloadMethod;
-        private readonly Func<Portfolio, List<Sector>, List<NameCompDate>> UpdateNameMethod;
+        private readonly Func<Portfolio, NameData, Action<string, string, string>, Task> DownloadMethod;
+        private readonly Func<Portfolio, List<NameCompDate>> UpdateNameMethod;
 
-        private readonly Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, bool> CreateMethod;
+        private readonly Func<Portfolio, NameData, Action<string, string, string>, bool> CreateMethod;
 
-        private readonly Func<Portfolio, List<Sector>, NameData, NameData, Action<string, string, string>, bool> EditMethod;
+        private readonly Func<Portfolio, NameData, NameData, Action<string, string, string>, bool> EditMethod;
 
-        private readonly Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, bool> DeleteMethod;
+        private readonly Func<Portfolio, NameData, Action<string, string, string>, bool> DeleteMethod;
 
-        private readonly Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, List<DayValue_ChangeLogged>> SelectedDataMethod;
+        private readonly Func<Portfolio, NameData, Action<string, string, string>, List<DayValue_ChangeLogged>> SelectedDataMethod;
 
-        private readonly Func<Portfolio, List<Sector>, NameData, DayValue_ChangeLogged, Action<string, string, string>, bool> AddDataMethod;
+        private readonly Func<Portfolio, NameData, DayValue_ChangeLogged, Action<string, string, string>, bool> AddDataMethod;
 
-        private readonly Func<Portfolio, List<Sector>, NameData, DayValue_ChangeLogged, DayValue_ChangeLogged, Action<string, string, string>, bool> EditDataMethod;
+        private readonly Func<Portfolio, NameData, DayValue_ChangeLogged, DayValue_ChangeLogged, Action<string, string, string>, bool> EditDataMethod;
 
-        private readonly Func<Portfolio, List<Sector>, NameData, DayValue_ChangeLogged, Action<string, string, string>, bool> DeleteDataMethod;
+        private readonly Func<Portfolio, NameData, DayValue_ChangeLogged, Action<string, string, string>, bool> DeleteDataMethod;
 
         public EditMethods(
-            Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, Task> downloadMethod,
-            Func<Portfolio, List<Sector>, List<NameCompDate>> updateNameMethod = null,
-            Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, bool> createMethod = null,
-            Func<Portfolio, List<Sector>, NameData, NameData, Action<string, string, string>, bool> editMethod = null,
-            Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, bool> deleteMethod = null,
-            Func<Portfolio, List<Sector>, NameData, Action<string, string, string>, List<DayValue_ChangeLogged>> selectedDataMethod = null,
-            Func<Portfolio, List<Sector>, NameData, DayValue_ChangeLogged, Action<string, string, string>, bool> addDataMethod = null,
-            Func<Portfolio, List<Sector>, NameData, DayValue_ChangeLogged, DayValue_ChangeLogged, Action<string, string, string>, bool> editDataMethod = null,
-            Func<Portfolio, List<Sector>, NameData, DayValue_ChangeLogged, Action<string, string, string>, bool> deleteDataMethod = null)
+            Func<Portfolio, NameData, Action<string, string, string>, Task> downloadMethod,
+            Func<Portfolio, List<NameCompDate>> updateNameMethod = null,
+            Func<Portfolio, NameData, Action<string, string, string>, bool> createMethod = null,
+            Func<Portfolio, NameData, NameData, Action<string, string, string>, bool> editMethod = null,
+            Func<Portfolio, NameData, Action<string, string, string>, bool> deleteMethod = null,
+            Func<Portfolio, NameData, Action<string, string, string>, List<DayValue_ChangeLogged>> selectedDataMethod = null,
+            Func<Portfolio, NameData, DayValue_ChangeLogged, Action<string, string, string>, bool> addDataMethod = null,
+            Func<Portfolio, NameData, DayValue_ChangeLogged, DayValue_ChangeLogged, Action<string, string, string>, bool> editDataMethod = null,
+            Func<Portfolio, NameData, DayValue_ChangeLogged, Action<string, string, string>, bool> deleteDataMethod = null)
         {
             DownloadMethod = downloadMethod;
             UpdateNameMethod = updateNameMethod;

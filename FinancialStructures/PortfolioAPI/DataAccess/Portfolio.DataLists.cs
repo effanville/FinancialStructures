@@ -87,5 +87,18 @@ namespace FinancialStructures.PortfolioAPI
             }
             return output;
         }
+
+        /// <summary>
+        /// A copy of all bank accounts in the database.
+        /// </summary>
+        public static List<Sector> GetBenchMarks(this Portfolio portfolio)
+        {
+            var output = new List<Sector>();
+            foreach (var acc in portfolio.BenchMarks)
+            {
+                output.Add(acc.Copy());
+            }
+            return output;
+        }
     }
 }
