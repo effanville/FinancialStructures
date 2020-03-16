@@ -1,0 +1,29 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace FinancialStructures.NamingStructures
+{
+    public class NameCompDate : NameData_ChangeLogged
+    {
+        private DateTime fDateToRecord;
+        public DateTime DateToRecord
+        {
+            get { return fDateToRecord; }
+            set { fDateToRecord = value; }
+        }
+
+        public NameCompDate() : base()
+        {
+        }
+
+        public NameCompDate(string company, string name, string currency, string url, List<string> sectors, DateTime date) : base(company, name, currency, url, sectors)
+        {
+            fDateToRecord = date;
+        }
+
+        public NameCompDate(string company, string name, string currency, string url) : base(company, name, currency, url)
+        {
+            fDateToRecord = DateTime.MinValue;
+        }
+    }
+}

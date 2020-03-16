@@ -49,7 +49,7 @@
                 <DataGridTextColumn Header="Name" MaxWidth="200" MinWidth="70" Binding="{Binding Path=Name, UpdateSourceTrigger=LostFocus}"/>
                 <DataGridTextColumn Header="Currency" MaxWidth="400" MinWidth="30" Binding="{Binding Path=Currency, UpdateSourceTrigger=LostFocus}"/>
                 <DataGridTextColumn Header="Url" MaxWidth="400" MinWidth="70" Binding="{Binding Path=Url, UpdateSourceTrigger=LostFocus}"/>
-                <DataGridTextColumn Header="Sectors" MaxWidth="400" MinWidth="70" Binding="{Binding Path=Sectors, UpdateSourceTrigger=LostFocus}"/>
+                <DataGridTextColumn Header="Sectors" MaxWidth="400" MinWidth="70" Binding="{Binding Path=SectorsFlat, UpdateSourceTrigger=LostFocus}"/>
                 <DataGridTextColumn Header="Last Date" MaxWidth="200" MinWidth="50" Binding="{Binding Path=DateToRecord, StringFormat=\{0:dd.MM.yyyy\}}"/>
             </DataGrid.Columns>
         </DataGrid>

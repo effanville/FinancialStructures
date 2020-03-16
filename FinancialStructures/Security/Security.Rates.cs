@@ -139,7 +139,7 @@ namespace FinancialStructures.FinanceStructures
                 {
                     double currencyValue = currency == null ? 1.0 : currency.Value(value.Day).Value;
                     value.SetValue(value.Value * currencyValue);
-                    namedValues.Add(new DayValue_Named(this.fName, this.fCompany, value));
+                    namedValues.Add(new DayValue_Named(this.Names.Name, this.Names.Company, value));
                 }
             }
             return namedValues;

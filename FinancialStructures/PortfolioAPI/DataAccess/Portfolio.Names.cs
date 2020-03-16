@@ -1,5 +1,5 @@
 ﻿using FinancialStructures.Database;
-using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.NamingStructures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,7 +54,7 @@ namespace FinancialStructures.PortfolioAPI
                                 date = security.LatestValue().Day;
                             }
 
-                            namesAndCompanies.Add(new NameCompDate(security.GetCompany(), security.GetName(), security.GetCurrency(), security.GetUrl(), security.GetSectors(), date, false));
+                            namesAndCompanies.Add(new NameCompDate(security.GetCompany(), security.GetName(), security.GetCurrency(), security.GetUrl(), security.GetSectors(), date));
                         }
                         break;
                     }
@@ -70,7 +70,7 @@ namespace FinancialStructures.PortfolioAPI
                                     date = currency.LatestValue().Day;
                                 }
 
-                                namesAndCompanies.Add(new NameCompDate(string.Empty, currency.GetName(), string.Empty, currency.GetUrl(), new List<string>(), date, false));
+                                namesAndCompanies.Add(new NameCompDate(string.Empty, currency.GetName(), string.Empty, currency.GetUrl(), new List<string>(), date));
                             }
                         }
                         break;
@@ -85,7 +85,7 @@ namespace FinancialStructures.PortfolioAPI
                                 date = bankAcc.LatestValue().Day;
                             }
 
-                            namesAndCompanies.Add(new NameCompDate(bankAcc.GetCompany(), bankAcc.GetName(), bankAcc.GetCurrency(), string.Empty, bankAcc.GetSectors(), date, false));
+                            namesAndCompanies.Add(new NameCompDate(bankAcc.GetCompany(), bankAcc.GetName(), bankAcc.GetCurrency(), string.Empty, bankAcc.GetSectors(), date));
                         }
                         break;
                     }
@@ -99,7 +99,7 @@ namespace FinancialStructures.PortfolioAPI
                                 date = benchMark.LatestValue().Day;
                             }
 
-                            namesAndCompanies.Add(new NameCompDate(benchMark.GetCompany(), benchMark.GetName(), string.Empty, string.Empty, new List<string>(), date, false));
+                            namesAndCompanies.Add(new NameCompDate(benchMark.GetCompany(), benchMark.GetName(), string.Empty, string.Empty, new List<string>(), date));
                         }
                         break;
                     }

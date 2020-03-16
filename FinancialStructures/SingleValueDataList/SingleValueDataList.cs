@@ -1,5 +1,7 @@
 ﻿using FinancialStructures.DataStructures;
+using FinancialStructures.NamingStructures;
 using System;
+using System.Collections.Generic;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -18,54 +20,51 @@ namespace FinancialStructures.FinanceStructures
         {
             if (obj is CashAccount value)
             {
-                if (fCompany == value.Company)
-                {
-                    return fName.CompareTo(value.Name);
-                }
-
-                return fCompany.CompareTo(value.Company);
+                return Names.CompareTo(value.Names);
             }
 
             return 0;
         }
 
+        private NameData fNames;
+
         /// <summary>
-        /// The name of the sector. 
+        /// Any name type data associated to this security.
         /// </summary>
-        /// <remarks>
-        /// These names must be unique
-        /// </remarks>
-        private string fName;
+        public NameData Names
+        {
+            get { return fNames; }
+            set { fNames = value; }
+        }
 
         /// <summary>
         /// This should only be used for serialisation.
         /// </summary>
         public virtual string Name
         {
-            get => fName;
-            set => fName = value;
+            get => Names.Name;
+            set => Names.Name = value;
         }
-
-        /// <summary>
-        /// The company name associated to the account.
-        /// </summary>
-        private string fCompany;
 
         /// <summary>
         /// This should only be used for serialisation.
         /// </summary>
         public string Company
         {
-            get => fCompany; 
-            set => fCompany = value; 
+            get => Names.Company;
+            set => Names.Company = value;
         }
-
-        private string fUrl;
 
         public string Url
         {
-            get => fUrl;
-            set => fUrl = value;
+            get => Names.Url;
+            set => Names.Url = value;
+        }
+
+        public string Currency
+        {
+            get { return Names.Currency; }
+            set { Names.Currency = value; }
         }
 
         /// <summary>
@@ -86,53 +85,60 @@ namespace FinancialStructures.FinanceStructures
         /// default constructor.
         /// </summary>
         public SingleValueDataList()
-        { }
+        {
+            Names = new NameData();
+        }
+
+        /// <summary>
+        /// default constructor.
+        /// </summary>
+        public SingleValueDataList(NameData names)
+        {
+            Names = names;
+        }
+
+        /// <summary>
+        /// default constructor.
+        /// </summary>
+        public SingleValueDataList(NameData names, TimeList values)
+        {
+            Names = names;
+            fValues = values;
+        }
 
         /// <summary>
         /// Creates a new instance of a sector.
         /// </summary>
         public SingleValueDataList(string name)
         {
-            fName = name;
+            Names = new NameData("", name);
         }
 
         public SingleValueDataList(string name, string url)
         {
-            fName = name;
-            fUrl = url;
+            Names = new NameData("", name, "GBP", url);
         }
 
-        public SingleValueDataList(string company, string name, string url)
+        public SingleValueDataList(string company, string name, string currency, string url, List<string> sectors)
         {
-            fCompany = company;
-            fName = name;
-            fUrl = url;
+            Names = new NameData(company, name, currency, url, sectors);
         }
 
         protected SingleValueDataList(string name, TimeList values)
         {
-            fName = name;
+            Names = new NameData("", name);
             fValues = values;
         }
 
         protected SingleValueDataList(string name, string url, TimeList values)
         {
-            fName = name;
-            fUrl = url;
+            Names = new NameData("", name, "GBP", url);
             fValues = values;
-        }
-
-        public SingleValueDataList(string company, string name, string url, TimeList values)
-        {
-            fCompany = company;
-            fName = name;
-            fValues = values;
-            fUrl = url;
         }
 
         public SingleValueDataList Copy()
         {
-            return new SingleValueDataList(fName, fValues);
+            return new SingleValueDataList(Names, fValues);
         }
 
         public bool Any()

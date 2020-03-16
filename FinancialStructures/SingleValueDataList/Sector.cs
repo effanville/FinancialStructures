@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.DataStructures;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -16,28 +17,23 @@ namespace FinancialStructures.FinanceStructures
         /// Creates a new instance of a sector.
         /// </summary>
         public Sector(string name)
-            : base(name)
+            : base(new NameData("", name))
         {
         }
 
-        public Sector(string name, string url)
-            : base(name, url)
+        public Sector(NameData names)
+            : base(names)
         {
         }
 
-        private Sector(string name, TimeList values)
-            : base(name, values)
-        {
-        }
-
-        private Sector(string name, string url, TimeList values)
-            : base(name, url,values)
+        private Sector(NameData names, TimeList values)
+            : base(names, values)
         {
         }
 
         public new Sector Copy()
         {
-            return new Sector(Name, Values);
+            return new Sector(Names, Values);
         }
     }
 }

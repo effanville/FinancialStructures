@@ -28,10 +28,10 @@ namespace FinancialStructures.PortfolioAPI
                     }
                 case (AccountType.Sector):
                     {
-                        return new Currency("Error", "");
+                        return new Currency();
                     }
                 default:
-                    return new Currency("Error", "");
+                    return new Currency();
             }
         }
     }

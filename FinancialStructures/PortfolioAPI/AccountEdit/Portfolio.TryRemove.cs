@@ -1,6 +1,6 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
-using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 
 namespace FinancialStructures.PortfolioAPI

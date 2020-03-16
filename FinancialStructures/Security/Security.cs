@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.DataStructures;
+using FinancialStructures.NamingStructures;
 using System;
 using System.Collections.Generic;
 
@@ -11,50 +12,48 @@ namespace FinancialStructures.FinanceStructures
     {
         public override string ToString()
         {
-            return fCompany + " - " + fName;
+            return Names.Company + " - " + Names.Name;
         }
+
+        private NameData fNames;
+
         /// <summary>
-        /// The name of the security in question.
+        /// Any name type data associated to this security.
         /// </summary>
-        private string fName;
+        public NameData Names
+        {
+            get { return fNames; }
+            set { fNames = value; }
+        }
 
         /// <summary>
         /// This should only be used for serialisation.
         /// </summary>
         public string Name
         {
-            get { return fName; }
-            set { fName = value; }
+            get { return Names.Name; }
+            set { Names.Name = value; }
         }
-
-        /// <summary>
-        /// The company the security belongs with.
-        /// </summary>
-        private string fCompany;
 
         /// <summary>
         /// This should only be used for serialisation.
         /// </summary>
         public string Company
         {
-            get { return fCompany; }
-            set { fCompany = value; }
+            get { return Names.Company; }
+            set { Names.Company = value; }
         }
-
-        private string fUrl;
 
         public string Url
         {
-            get { return fUrl; }
-            set { fUrl = value; }
+            get { return Names.Url; }
+            set { Names.Url = value; }
         }
-
-        private string fCurrency;
 
         public string Currency
         {
-            get { return fCurrency; }
-            set { fCurrency = value; }
+            get { return Names.Currency; }
+            set { Names.Currency = value; }
         }
 
         /// <summary>
@@ -100,17 +99,12 @@ namespace FinancialStructures.FinanceStructures
         }
 
         /// <summary>
-        /// The collection of sectors that this security is part of.
-        /// </summary>
-        private List<string> fSectors = new List<string>();
-
-        /// <summary>
         /// For serialisation only.
         /// </summary>
         public List<string> Sectors
         {
-            get { return fSectors; }
-            set { fSectors = value; }
+            get { return Names.Sectors; }
+            set { Names.Sectors = value; }
         }
 
         /// <summary>
@@ -118,6 +112,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         private Security()
         {
+            Names = new NameData();
         }
 
 
@@ -126,11 +121,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         internal Security(string company, string name, string currency = "GBP", string url = null, List<string> sectors = null)
         {
-            fName = name;
-            fCompany = company;
-            fCurrency = currency;
-            fUrl = url;
-            fSectors = sectors;
+            Names = new NameData(company, name, currency, url, sectors);
         }
 
         /// <summary>
@@ -138,10 +129,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         private Security(string company, string name, string currency, string url, TimeList shares, TimeList prices, TimeList investments)
         {
-            fName = name;
-            fCompany = company;
-            fCurrency = currency;
-            fUrl = url;
+            Names = new NameData(company, name, currency, url);
             fShares = shares;
             fUnitPrice = prices;
             fInvestments = investments;
@@ -154,12 +142,7 @@ namespace FinancialStructures.FinanceStructures
         {
             if (obj is Security value)
             {
-                if (fCompany == value.fCompany)
-                {
-                    return fName.CompareTo(value.fName);
-                }
-
-                return fCompany.CompareTo(value.fCompany);
+                return Names.CompareTo(value.Names);
             }
 
             return 0;

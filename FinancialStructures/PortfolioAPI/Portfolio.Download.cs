@@ -1,5 +1,5 @@
 ﻿using FinancialStructures.Database;
-using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using System;
 using System.Linq;
@@ -220,7 +220,7 @@ namespace FinancialStructures.PortfolioAPI
                     return double.NaN;
                 }
                 double i = double.Parse(str);
-                i = i / 100;
+                i /= 100;
                 return i;
             }
             string searchName = "<td class=\"line text\">" + Pounds;
@@ -270,7 +270,7 @@ namespace FinancialStructures.PortfolioAPI
                 double i = double.Parse(str);
                 if (data.Contains("GBp"))
                 {
-                    i = i / 100.0;
+                    i /= 100.0;
                 }
                 return i;
             }

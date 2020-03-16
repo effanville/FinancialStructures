@@ -1,6 +1,8 @@
 ﻿using FinancialStructures.DataStructures;
+using FinancialStructures.NamingStructures;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -8,32 +10,7 @@ namespace FinancialStructures.FinanceStructures
     {
         public new CashAccount Copy()
         {
-            return new CashAccount(Company, Name, fCurrency, Values);
-        }
-
-        private List<string> fSectors = new List<string>();
-
-        /// <summary>
-        /// The Sectors associated with this CashAccount
-        /// </summary>
-        public List<string> Sectors
-        {
-            get { return fSectors; }
-            set { fSectors = value; }
-        }
-
-        /// <summary>
-        /// The company name associated to the account.
-        /// </summary>
-        private string fCurrency;
-
-        /// <summary>
-        /// This should only be used for serialisation.
-        /// </summary>
-        public string Currency
-        {
-            get { return fCurrency; }
-            set { fCurrency = value; }
+            return new CashAccount(Names, Values);
         }
 
         public TimeList Amounts
@@ -45,19 +22,17 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Default constructor where no data is known.
         /// </summary>
-        internal CashAccount(string company, string name, string currency)
-            : base(company, name, string.Empty)
+        internal CashAccount(NameData names)
+            : base(names)
         {
-            fCurrency = currency;
         }
 
         /// <summary>
         /// Constructor used when data is known.
         /// </summary>
-        private CashAccount(string company, string name, string currency, TimeList amounts)
-            : base(company, name, string.Empty, amounts)
+        private CashAccount(NameData names, TimeList amounts)
+            : base(names, amounts)
         {
-            fCurrency = currency;
         }
 
         /// <summary>
@@ -84,7 +59,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public string GetCurrency()
         {
-            return fCurrency;
+            return Names.Currency;
         }
 
         /// <summary>
@@ -93,17 +68,17 @@ namespace FinancialStructures.FinanceStructures
         /// <returns></returns>
         public List<string> GetSectors()
         {
-            return fSectors;
+            return Names.Sectors;
         }
 
         public bool EditNameData(string company, string name, string url, string currency, List<string> sectors)
         {
-            if (fCurrency != currency)
+            if (Names.Currency != currency)
             {
-                fCurrency = currency;
+                Names.Currency = currency;
             }
 
-            fSectors = sectors;
+            Names.Sectors = sectors;
 
             return base.EditNameData(company, name, url);
         }
@@ -173,7 +148,7 @@ namespace FinancialStructures.FinanceStructures
         {
             if (IsSectorLinked(sectorName))
             {
-                fSectors.Remove(sectorName);
+                Names.Sectors.Remove(sectorName);
                 return true;
             }
 
@@ -184,7 +159,7 @@ namespace FinancialStructures.FinanceStructures
         {
             if (!IsSectorLinked(sectorName))
             {
-                fSectors.Add(sectorName);
+                Names.Sectors.Add(sectorName);
                 return true;
             }
 
@@ -193,9 +168,9 @@ namespace FinancialStructures.FinanceStructures
 
         internal bool IsSectorLinked(string sectorName)
         {
-            if (fSectors != null && fSectors.Count > 0)
+            if (Names.Sectors != null && Names.Sectors.Any())
             {
-                foreach (var name in fSectors)
+                foreach (var name in Names.Sectors)
                 {
                     if (name == sectorName)
                     {

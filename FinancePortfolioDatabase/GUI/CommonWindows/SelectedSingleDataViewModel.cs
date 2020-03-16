@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using GUISupport;
 using System;
@@ -15,12 +16,12 @@ namespace FinanceCommonViewModels
 
         public override bool Closable { get { return true; } }
 
-        private NameData fSelectedName;
+        private NameData_ChangeLogged fSelectedName;
 
         /// <summary>
         /// Name and Company data of the selected security in the list <see cref="AccountNames"/>
         /// </summary>
-        public NameData SelectedName
+        public NameData_ChangeLogged SelectedName
         {
             get { return fSelectedName; }
             set { fSelectedName = value; OnPropertyChanged(); }
@@ -64,7 +65,7 @@ namespace FinanceCommonViewModels
 
         private readonly EditMethods EditMethods;
 
-        public SelectedSingleDataViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateDataCallback, LogReporter reportLogger, EditMethods editMethods, NameData selectedName)
+        public SelectedSingleDataViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateDataCallback, LogReporter reportLogger, EditMethods editMethods, NameData_ChangeLogged selectedName)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
         {
             SelectedName = selectedName;

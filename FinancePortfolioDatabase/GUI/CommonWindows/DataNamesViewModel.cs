@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using GUISupport;
 using System;
@@ -25,12 +26,12 @@ namespace FinanceCommonViewModels
             set { fDataNames = value; OnPropertyChanged(); }
         }
 
-        private NameCompDate fSelectedName;
+        private NameData_ChangeLogged fSelectedName;
 
         /// <summary>
         /// Name and Company data of the selected security in the list <see cref="DataNames"/>
         /// </summary>
-        public NameCompDate SelectedName
+        public NameData_ChangeLogged SelectedName
         {
             get { return fSelectedName; }
             set { fSelectedName = value; OnPropertyChanged(); }
@@ -40,7 +41,7 @@ namespace FinanceCommonViewModels
         private readonly LogReporter ReportLogger;
         private readonly EditMethods editMethods;
 
-        public DataNamesViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateDataCallback, LogReporter reportLogger, Action<NameData> loadSelectedData, EditMethods updateMethods)
+        public DataNamesViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateDataCallback, LogReporter reportLogger, Action<NameData_ChangeLogged> loadSelectedData, EditMethods updateMethods)
             : base("Accounts", loadSelectedData)
         {
             Portfolio = portfolio;

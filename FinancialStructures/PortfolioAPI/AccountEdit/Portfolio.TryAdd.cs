@@ -1,8 +1,7 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
-using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
-using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -18,18 +17,6 @@ namespace FinancialStructures.PortfolioAPI
         /// <returns>Success or failure of adding.</returns>
         public static bool TryAdd(this Portfolio portfolio, AccountType elementType, NameData name, LogReporter reportLogger)
         {
-            List<string> sectorList = new List<string>();
-            if (!string.IsNullOrEmpty(name.Sectors))
-            {
-                var sectorsSplit = name.Sectors.Split(',');
-
-                sectorList.AddRange(sectorsSplit);
-                for (int i = 0; i < sectorList.Count; i++)
-                {
-                    sectorList[i] = sectorList[i].Trim(' ');
-                }
-            }
-
             if (string.IsNullOrEmpty(name.Name) && string.IsNullOrEmpty(name.Company))
             {
                 reportLogger.LogDetailed("Critical", "Error", "AddingData", $"Adding {elementType}: Company `{name.Company}' or name `{name.Name}' cannot both be empty.");
@@ -46,20 +33,20 @@ namespace FinancialStructures.PortfolioAPI
             {
                 case (AccountType.Security):
                     {
-                        Security newSecurity = new Security(name.Company, name.Name, name.Currency, name.Url, sectorList);
+                        Security newSecurity = new Security(name.Company, name.Name, name.Currency, name.Url, name.Sectors);
                         portfolio.Funds.Add(newSecurity);
                         break;
                     }
                 case (AccountType.Currency):
                     {
-                        Currency newSector = new Currency(name.Name, name.Url);
+                        Currency newSector = new Currency(name);
                         portfolio.Currencies.Add(newSector);
                         break;
                     }
                 case (AccountType.BankAccount):
                     {
-                        var NewAccount = new CashAccount(name.Company, name.Name, name.Currency);
-                        foreach (var sector in sectorList)
+                        var NewAccount = new CashAccount(name);
+                        foreach (var sector in name.Sectors)
                         {
                             NewAccount.TryAddSector(sector);
                         }
@@ -69,7 +56,7 @@ namespace FinancialStructures.PortfolioAPI
                     }
                 case (AccountType.Sector):
                     {
-                        Sector newSector = new Sector(name.Name, name.Url);
+                        Sector newSector = new Sector(name);
                         portfolio.BenchMarks.Add(newSector);
                         break;
                     }

@@ -5,15 +5,25 @@ using System.IO;
 
 namespace FinancialStructures.Database
 {
+    /// <summary>
+    /// Data structure holding information about finances.
+    /// </summary>
     public partial class Portfolio
     {
         private string fDatabaseFilePath;
 
+        /// <summary>
+        /// Set the path where the database will be stored.
+        /// </summary>
+        /// <param name="path"></param>
         public void SetFilePath(string path)
         {
             fDatabaseFilePath = path;
         }
 
+        /// <summary>
+        /// Access of the databse path.
+        /// </summary>
         public string FilePath
         {
             get
@@ -22,6 +32,9 @@ namespace FinancialStructures.Database
             }
         }
 
+        /// <summary>
+        /// The file extension of the path.
+        /// </summary>
         public string Extension
         {
             get
@@ -30,6 +43,9 @@ namespace FinancialStructures.Database
             }
         }
 
+        /// <summary>
+        /// The directory where the database is stored.
+        /// </summary>
         public string Directory
         {
             get
@@ -38,6 +54,9 @@ namespace FinancialStructures.Database
             }
         }
 
+        /// <summary>
+        /// The non-extension part of the filename, considered to be the databse name.
+        /// </summary>
         public string DatabaseName
         {
             get
@@ -48,6 +67,9 @@ namespace FinancialStructures.Database
 
         private List<Security> fFunds = new List<Security>();
 
+        /// <summary>
+        /// Securities stored in this database.
+        /// </summary>
         public List<Security> Funds
         {
             get { return fFunds; }
@@ -56,6 +78,9 @@ namespace FinancialStructures.Database
 
         private List<CashAccount> fBankAccounts = new List<CashAccount>();
 
+        /// <summary>
+        /// Bank accounts stored in this database.
+        /// </summary>
         public List<CashAccount> BankAccounts
         {
             get { return fBankAccounts; }
@@ -64,6 +89,9 @@ namespace FinancialStructures.Database
 
         private List<Currency> fCurrencies = new List<Currency>();
 
+        /// <summary>
+        /// The currencies other objects are held in.
+        /// </summary>
         public List<Currency> Currencies
         {
             get { return fCurrencies; }
@@ -72,6 +100,9 @@ namespace FinancialStructures.Database
 
         private List<Sector> fBenchMarks = new List<Sector>();
 
+        /// <summary>
+        /// Sector benchmarks for comparison of held data.
+        /// </summary>
         internal List<Sector> BenchMarks
         {
             get => fBenchMarks;
@@ -82,6 +113,9 @@ namespace FinancialStructures.Database
         {
         }
 
+        /// <summary>
+        /// Copies references of other portfolio to this portfolio.
+        /// </summary>
         public void CopyData(Portfolio portfolio)
         {
             this.Funds = portfolio.Funds;
@@ -90,14 +124,24 @@ namespace FinancialStructures.Database
             this.BenchMarks = portfolio.BenchMarks;
         }
 
+        /// <summary>
+        /// Sets the benchmark parts of this portfolio.
+        /// </summary>
+        /// <param name="sectors"></param>
         public void SetBenchMarks(List<Sector> sectors)
         {
             fBenchMarks.Clear();
             fBenchMarks.AddRange(sectors);
         }
 
+        /// <summary>
+        /// Event to be raised when elements are changed.
+        /// </summary>
         public static event EventHandler portfolioChanged;
 
+        /// <summary>
+        /// handle the events raised in the above.
+        /// </summary>
         protected void OnPortfolioChanged(EventArgs e)
         {
             EventHandler handler = portfolioChanged;

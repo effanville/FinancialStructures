@@ -51,7 +51,7 @@
                 <DataGridTextColumn Header="Company" MinWidth="70" Binding="{Binding Path=Company, UpdateSourceTrigger=LostFocus}"/>
                 <DataGridTextColumn Header="Name" MinWidth="70" Binding="{Binding Path=Name, UpdateSourceTrigger=LostFocus}"/>
                 <DataGridTextColumn Header="Currency" MinWidth="30" Binding="{Binding Path=Currency, UpdateSourceTrigger=LostFocus}"/>
-                <DataGridTextColumn Header="Sectors" MinWidth="70" Binding="{Binding Path=Sectors, UpdateSourceTrigger=LostFocus}"/>
+                <DataGridTextColumn Header="Sectors" MinWidth="70" Binding="{Binding Path=SectorsFlat, UpdateSourceTrigger=LostFocus}"/>
                 <DataGridTextColumn Header="Url" MinWidth="70" Binding="{Binding Path=Url, UpdateSourceTrigger=LostFocus}"/>
             </DataGrid.Columns>
         </DataGrid>

@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.Database;
+using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using System;
 using System.Collections.Generic;

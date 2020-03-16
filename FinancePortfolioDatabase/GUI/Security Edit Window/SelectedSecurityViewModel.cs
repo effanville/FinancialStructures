@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Windows.Input;
 using FinancialStructures.ReportLogging;
+using FinancialStructures.NamingStructures;
 
 namespace FinanceWindowsViewModels
 {
@@ -18,7 +19,7 @@ namespace FinanceWindowsViewModels
 
         public override bool Closable { get { return true; } }
 
-        private readonly NameData fSelectedName;
+        private readonly NameData_ChangeLogged fSelectedName;
 
         /// <summary>
         /// The pricing data of the selected security.
@@ -59,7 +60,7 @@ namespace FinanceWindowsViewModels
 
         private readonly LogReporter ReportLogger;
 
-        public SelectedSecurityViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateData, LogReporter reportLogger, NameData selectedName)
+        public SelectedSecurityViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateData, LogReporter reportLogger, NameData_ChangeLogged selectedName)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
         {
             fSelectedName = selectedName;

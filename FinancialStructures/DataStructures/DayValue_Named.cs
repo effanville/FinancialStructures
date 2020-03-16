@@ -68,6 +68,7 @@ namespace FinancialStructures.DataStructures
             return htmlData;
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
             //both name and company cannot be null so this is all cases.
@@ -103,7 +104,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public DayValue_Named(string name, string company, DateTime day, double value) 
+        public DayValue_Named(string name, string company, DateTime day, double value)
             : base(day, value)
         {
             Name = name;
@@ -113,7 +114,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Constructor to create an instance from a base class instance.
         /// </summary>
-        public DayValue_Named(string name, string company, DailyValuation toAddOnto) 
+        public DayValue_Named(string name, string company, DailyValuation toAddOnto)
             : this(name, company, toAddOnto.Day, toAddOnto.Value)
         {
         }

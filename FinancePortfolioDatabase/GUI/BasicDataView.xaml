@@ -64,6 +64,9 @@
                             <GridViewColumn Width="Auto"
                                             Header="Name" 
                                             DisplayMemberBinding="{Binding Name}" />
+                            <GridViewColumn Width="Auto" 
+                                            Header="Last Recorded" 
+                                            DisplayMemberBinding="{Binding DateToRecord, StringFormat=\{0:dd.MM.yyyy\}}" />
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -79,6 +82,9 @@
                             <GridViewColumn Width="100" 
                                             Header="Name" 
                                             DisplayMemberBinding="{Binding Name}" />
+                            <GridViewColumn Width="Auto" 
+                                            Header="Last Recorded" 
+                                            DisplayMemberBinding="{Binding DateToRecord, StringFormat=\{0:dd.MM.yyyy\}}" />
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -94,6 +100,9 @@
                             <GridViewColumn Width="Auto" 
                                             Header="Name" 
                                             DisplayMemberBinding="{Binding Name}" />
+                            <GridViewColumn Width="Auto" 
+                                            Header="Last Recorded" 
+                                            DisplayMemberBinding="{Binding DateToRecord, StringFormat=\{0:dd.MM.yyyy\}}" />
                         </GridView>
                     </ListView.View>
                 </ListView>

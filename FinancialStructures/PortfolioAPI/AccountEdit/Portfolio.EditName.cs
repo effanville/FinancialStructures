@@ -1,7 +1,6 @@
 ﻿using FinancialStructures.Database;
-using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
-using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -18,17 +17,6 @@ namespace FinancialStructures.PortfolioAPI
         /// <returns>Success or failure of editing.</returns>
         public static bool TryEditName(this Portfolio portfolio, AccountType elementType, NameData oldName, NameData newName, LogReporter reportLogger)
         {
-            List<string> sectorList = new List<string>();
-            if (!string.IsNullOrEmpty(newName.Sectors))
-            {
-                var sectorsSplit = newName.Sectors.Split(',');
-                sectorList.AddRange(sectorsSplit);
-                for (int i = 0; i < sectorList.Count; i++)
-                {
-                    sectorList[i] = sectorList[i].Trim(' ');
-                }
-            }
-
             switch (elementType)
             {
                 case (AccountType.Security):
@@ -38,7 +26,7 @@ namespace FinancialStructures.PortfolioAPI
                             if (portfolio.Funds[fundIndex].GetCompany() == oldName.Company && portfolio.Funds[fundIndex].GetName() == oldName.Name)
                             {
                                 // now edit data
-                                return portfolio.Funds[fundIndex].EditNameData(newName.Company, newName.Name, newName.Currency, newName.Url, sectorList);
+                                return portfolio.Funds[fundIndex].EditNameData(newName.Company, newName.Name, newName.Currency, newName.Url, newName.Sectors);
                             }
                         }
                         break;
@@ -63,7 +51,7 @@ namespace FinancialStructures.PortfolioAPI
                             if (portfolio.BankAccounts[AccountIndex].GetCompany() == oldName.Company && portfolio.BankAccounts[AccountIndex].GetName() == oldName.Name)
                             {
                                 // now edit data
-                                return portfolio.BankAccounts[AccountIndex].EditNameData(newName.Company, newName.Name, string.Empty, newName.Currency, sectorList);
+                                return portfolio.BankAccounts[AccountIndex].EditNameData(newName.Company, newName.Name, string.Empty, newName.Currency, newName.Sectors);
                             }
                         }
 

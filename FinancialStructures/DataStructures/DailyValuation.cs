@@ -33,17 +33,26 @@ namespace FinancialStructures.DataStructures
             return new DailyValuation(Day, Value);
         }
 
+        /// <summary>
+        /// Sets the data in the daily valuation.
+        /// </summary>
         public void SetData(DateTime date, double value)
         {
             Day = date;
             Value = value;
         }
 
+        /// <summary>
+        /// Sets the day field only.
+        /// </summary>
         public void SetDay(DateTime date)
         {
             Day = date;
         }
 
+        /// <summary>
+        /// Sets the value field.
+        /// </summary>
         public void SetValue(double value)
         {
             Value = value;
@@ -65,10 +74,10 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// The specific valuation
         /// </summary>
-        public virtual double Value 
+        public virtual double Value
         {
             get { return fValue; }
-            set { fValue = value; } 
+            set { fValue = value; }
         }
 
         /// <summary>

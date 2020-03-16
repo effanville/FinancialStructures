@@ -1,8 +1,8 @@
 ﻿using FinancialStructures.Database;
-using FinancialStructures.GUIFinanceStructures;
 using FinanceCommonViewModels;
 using System.Collections.Generic;
 using FinancialStructures.PortfolioAPI;
+using FinancialStructures.NamingStructures;
 
 namespace FinanceWindowsViewModels
 {

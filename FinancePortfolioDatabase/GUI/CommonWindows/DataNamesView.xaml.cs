@@ -1,5 +1,5 @@
 ﻿using FinanceCommonViewModels;
-using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.NamingStructures;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -20,7 +20,7 @@ namespace FinanceCommonWindows
             if (sender is DataGrid namesGrid)
             {
                 var current = namesGrid.CurrentItem;
-                if (current is NameData data)
+                if (current is NameData_ChangeLogged data)
                 {
                     var VM = this.DataContext as ViewModelBase;
                     VM.LoadSelectedTab(data);

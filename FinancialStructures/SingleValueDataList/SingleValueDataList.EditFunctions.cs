@@ -1,5 +1,4 @@
 ﻿using FinancialStructures.GUIFinanceStructures;
-using FinancialStructures.Reporting;
 using FinancialStructures.ReportLogging;
 using System;
 using System.Collections.Generic;
@@ -16,17 +15,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         internal bool IsEqualTo(SingleValueDataList otherAccount)
         {
-            if (otherAccount.GetName() != fName)
-            {
-                return false;
-            }
-
-            if (otherAccount.GetCompany() != fCompany)
-            {
-                return false;
-            }
-
-            return true;
+            return Names.IsEqualTo(otherAccount.Names);
         }
 
         public int Count()
@@ -36,17 +25,17 @@ namespace FinancialStructures.FinanceStructures
 
         public string GetCompany()
         {
-            return fCompany;
+            return Names.Company;
         }
 
         public string GetName()
         {
-            return fName;
+            return Names.Name;
         }
 
         public string GetUrl()
         {
-            return fUrl;
+            return Names.Url;
         }
 
         public List<DayValue_ChangeLogged> GetDataForDisplay()
@@ -67,17 +56,17 @@ namespace FinancialStructures.FinanceStructures
 
         public virtual bool EditNameData(string company, string name, string url)
         {
-            if (company != fCompany)
+            if (company != Names.Company)
             {
-                fCompany = company;
+                Names.Company = company;
             }
-            if (name != fName)
+            if (name != Names.Name)
             {
-                fName = name;
+                Names.Name = name;
             }
-            if (url != fUrl)
+            if (url != Names.Url)
             {
-                fUrl = url;
+                Names.Url = url;
             }
 
             return true;

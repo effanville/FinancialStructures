@@ -3,6 +3,7 @@ using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.ReportLogging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -16,12 +17,12 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         internal bool IsEqualTo(Security otherSecurity)
         {
-            if (otherSecurity.GetName() != fName)
+            if (otherSecurity.GetName() != Names.Name)
             {
                 return false;
             }
 
-            if (otherSecurity.GetCompany() != fCompany)
+            if (otherSecurity.GetCompany() != Names.Company)
             {
                 return false;
             }
@@ -51,7 +52,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         internal Security Copy()
         {
-            return new Security(fCompany, fName, fCurrency, fUrl, fShares, fUnitPrice, fInvestments);
+            return new Security(Names.Company, Names.Name, Names.Currency, Names.Url, fShares, fUnitPrice, fInvestments);
         }
 
         /// <summary>
@@ -59,7 +60,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public string GetName()
         {
-            return fName;
+            return Names.Name;
         }
 
         /// <summary>
@@ -67,7 +68,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public string GetCompany()
         {
-            return fCompany;
+            return Names.Company;
         }
 
         /// <summary>
@@ -75,7 +76,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public string GetCurrency()
         {
-            return fCurrency;
+            return Names.Currency;
         }
 
         /// <summary>
@@ -83,7 +84,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public string GetUrl()
         {
-            return fUrl;
+            return Names.Url;
         }
 
         /// <summary>
@@ -92,7 +93,7 @@ namespace FinancialStructures.FinanceStructures
         /// <returns></returns>
         public List<string> GetSectors()
         {
-            return fSectors;
+            return Names.Sectors;
         }
 
         public DayDataView DayData(DateTime day)
@@ -182,7 +183,7 @@ namespace FinancialStructures.FinanceStructures
         {
             if (DoesDateSharesDataExist(date, out int _) || DoesDateInvestmentDataExist(date, out int _) || DoesDateUnitPriceDataExist(date, out int _))
             {
-                reportLogger.Log("Error", "AddingData", $"Security `{fCompany}'-`{fName}' already has NumShares or UnitPrice or Investment data on {date.ToString("d")}.");
+                reportLogger.Log("Error", "AddingData", $"Security {Names.ToString()} already has NumShares or UnitPrice or Investment data on {date.ToString("d")}.");
                 return false;
             }
 
@@ -234,25 +235,25 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         internal bool EditNameData(string company, string name, string currency, string url, List<string> sectors)
         {
-            if (name != fName)
+            if (name != Names.Name)
             {
-                fName = name;
+                Names.Name = name;
             }
-            if (company != fCompany)
+            if (company != Names.Company)
             {
-                fCompany = company;
+                Names.Company = company;
             }
-            if (url != fUrl)
+            if (url != Names.Url)
             {
-                fUrl = url;
+                Names.Url = url;
             }
-            if (currency != fCurrency)
+            if (currency != Names.Currency)
             {
-                fCurrency = currency;
+                Names.Currency = currency;
             }
-            if (sectors != fSectors)
+            if (sectors != Names.Sectors)
             {
-                fSectors = sectors;
+                Names.Sectors = sectors;
             }
 
             return true;
@@ -262,7 +263,7 @@ namespace FinancialStructures.FinanceStructures
         {
             if (IsSectorLinked(sectorName))
             {
-                fSectors.Remove(sectorName);
+                Names.Sectors.Remove(sectorName);
                 return true;
             }
 
@@ -273,7 +274,7 @@ namespace FinancialStructures.FinanceStructures
         {
             if (!IsSectorLinked(sectorName))
             {
-                fSectors.Add(sectorName);
+                Names.Sectors.Add(sectorName);
                 return true;
             }
 
@@ -282,9 +283,9 @@ namespace FinancialStructures.FinanceStructures
 
         internal bool IsSectorLinked(string sectorName)
         {
-            if (fSectors != null && fSectors.Count > 0)
+            if (Names.Sectors != null && Names.Sectors.Any())
             {
-                foreach (var name in fSectors)
+                foreach (var name in Names.Sectors)
                 {
                     if (name == sectorName)
                     {

@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace SavingClasses
 {
+    /// <summary>
+    /// Saves into a file only. For legacy reasons really.
+    /// </summary>
     public class AllData
     {
         public Portfolio MyFunds { get; set; } = new Portfolio();

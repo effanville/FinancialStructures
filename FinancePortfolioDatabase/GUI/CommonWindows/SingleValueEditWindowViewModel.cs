@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using System;
 using System.Collections.Generic;
@@ -56,9 +57,9 @@ namespace FinanceCommonViewModels
 
         private Action<object> removeTab => tabItem => removableTabs.Add(tabItem);
 
-        private Action<NameData> LoadTab => (name) => LoadTabFunc(name);
+        private Action<NameData_ChangeLogged> LoadTab => (name) => LoadTabFunc(name);
 
-        private void LoadTabFunc(NameData name)
+        private void LoadTabFunc(NameData_ChangeLogged name)
         {
             Tabs.Add(new SelectedSingleDataViewModel(Portfolio, UpdateDataCallback, ReportLogger, EditMethods, name));
         }
