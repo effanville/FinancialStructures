@@ -33,7 +33,16 @@
                     <Button Content="Refresh Display"
                             Style="{StaticResource ResourceKey=defaultButtonNoMargin}"
                             Command="{Binding RefreshCommand}"/>
+                    <Label Content="Portfolio Base Currency"></Label>
+                    <TextBox Text="{Binding BaseCurrency}"
+                             MinWidth ="100"
+                             Height="30">
+                    </TextBox>
+                    <Button Content="Set Currency"
+                            Style="{StaticResource ResourceKey=defaultButtonNoMargin}"
+                            Command="{Binding SetCurrencyCommand}"/>
                 </StackPanel>
+               
             </TabItem>
             <TabItem Header="Help"
                      Width="107"

@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.FinanceFunctionsList;
 using System;
+using System.Collections.Generic;
 
 namespace FinancialStructures.DataStructures
 {
@@ -8,6 +9,20 @@ namespace FinancialStructures.DataStructures
     /// </summary>
     public partial class TimeList
     {
+        public TimeList Inverted()
+        {
+            var invertedValues = new List<DailyValuation>();
+            if (fValues != null && fValues.Count > 0)
+            {
+                foreach (var value in fValues)
+                {
+                    invertedValues.Add(new DailyValuation(value.Day, 1 / value.Value));
+                }
+            }
+
+            return new TimeList(invertedValues);
+        }
+
         /// <summary>
         /// Adds all values in the list.
         /// </summary>

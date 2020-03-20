@@ -5,6 +5,7 @@ using FinancialStructures.PortfolioAPI;
 using FinancialStructures.ReportLogging;
 using GUISupport;
 using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -16,13 +17,24 @@ namespace FinanceWindowsViewModels
         private string fDirectory;
         private readonly Action<Action<Portfolio>> DataUpdateCallback;
         private readonly LogReporter ReportLogger;
+        private string fBaseCurrency;
+
+        public string BaseCurrency
+        {
+            get { return fBaseCurrency; }
+            set { fBaseCurrency = value; OnPropertyChanged(); }
+        }
+
+        private List<string> fCurrencies;
+
+        public List<string> Currencies;
 
         public OptionsToolbarViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateData, LogReporter reportLogger)
             : base("Options")
         {
             ReportLogger = reportLogger;
             DataUpdateCallback = updateData;
-            UpdateData(portfolio, null);
+            UpdateData(portfolio);
 
             OpenHelpCommand = new BasicCommand(OpenHelpDocsCommand);
             NewDatabaseCommand = new BasicCommand(ExecuteNewDatabase);
@@ -30,12 +42,20 @@ namespace FinanceWindowsViewModels
             LoadDatabaseCommand = new BasicCommand(ExecuteLoadDatabase);
             UpdateDataCommand = new BasicCommand(ExecuteUpdateData);
             RefreshCommand = new BasicCommand(ExecuteRefresh);
+            SetCurrencyCommand = new BasicCommand(ExecuteSetCurrency);
+        }
+
+        private void ExecuteSetCurrency(object obj)
+        {
+            DataUpdateCallback(portfolio => portfolio.BaseCurrency = BaseCurrency);
         }
 
         public override void UpdateData(Portfolio portfolio)
         {
             fFileName = portfolio.DatabaseName + portfolio.Extension;
             fDirectory = portfolio.Directory;
+            BaseCurrency = portfolio.BaseCurrency;
+            Currencies = portfolio.Names(AccountType.Currency);
         }
 
         public ICommand OpenHelpCommand { get; }
@@ -91,6 +111,8 @@ namespace FinanceWindowsViewModels
         }
 
         public ICommand RefreshCommand { get; }
+        public BasicCommand SetCurrencyCommand { get; }
+
         private void ExecuteRefresh(Object obj)
         {
             DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(fFileName));

@@ -14,11 +14,10 @@ namespace FinancialStructures.PortfolioAPI
         /// </summary>
         /// <param name="portfolio">Database to query.</param>
         /// <param name="elementType">Type of object to search for.</param>
-        /// <param name="reportLogger">Report callback. (not used)</param>
         /// <returns>List of names of the desired type.</returns>
-        public static List<string> Companies(this Portfolio portfolio, AccountType elementType, Action<string, string, string> reportLogger)
+        public static List<string> Companies(this Portfolio portfolio, AccountType elementType)
         {
-            return portfolio.NameData(elementType, reportLogger).Select(NameData => NameData.Company).Distinct().ToList();
+            return portfolio.NameData(elementType).Select(NameData => NameData.Company).Distinct().ToList();
         }
 
         /// <summary>
@@ -26,11 +25,10 @@ namespace FinancialStructures.PortfolioAPI
         /// </summary>
         /// <param name="portfolio">Database to query.</param>
         /// <param name="elementType">Type of object to search for.</param>
-        /// <param name="reportLogger">Report callback. (not used)</param>
         /// <returns>List of names of the desired type.</returns>
-        public static List<string> Names(this Portfolio portfolio, AccountType elementType, Action<string, string, string> reportLogger)
+        public static List<string> Names(this Portfolio portfolio, AccountType elementType)
         {
-            return portfolio.NameData(elementType, reportLogger).Select(NameData => NameData.Name).ToList();
+            return portfolio.NameData(elementType).Select(NameData => NameData.Name).ToList();
         }
 
         /// <summary>
@@ -38,9 +36,8 @@ namespace FinancialStructures.PortfolioAPI
         /// </summary>
         /// <param name="portfolio">Database to query.</param>
         /// <param name="elementType">Type of object to search for.</param>
-        /// <param name="reportLogger">Report callback. (not used)</param>
         /// <returns>List of names of the desired type.</returns>
-        public static List<NameCompDate> NameData(this Portfolio portfolio, AccountType elementType, Action<string, string, string> reportLogger)
+        public static List<NameCompDate> NameData(this Portfolio portfolio, AccountType elementType)
         {
             var namesAndCompanies = new List<NameCompDate>();
             switch (elementType)

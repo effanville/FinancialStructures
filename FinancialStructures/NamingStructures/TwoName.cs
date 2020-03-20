@@ -35,7 +35,10 @@ namespace FinancialStructures.NamingStructures
                     }
                     return Name.CompareTo(value.Name);
                 }
-
+                if (Company == null && value.Company != null)
+                {
+                    return -1;
+                }
                 return Company.CompareTo(value.Company);
             }
 

@@ -13,7 +13,7 @@ namespace FinanceWindowsViewModels
     {
         public EditMethods bankAccEditMethods = new EditMethods(
               (portfolio, name, reportUpdate) => PortfolioDataUpdater.DownloadBankAccount(portfolio, name, reportUpdate),
-              (portfolio) => portfolio.NameData(AccountType.BankAccount, null),
+              (portfolio) => portfolio.NameData(AccountType.BankAccount),
               (portfolio, name, reports) => portfolio.TryAdd(AccountType.BankAccount, name, reports),
               (portfolio, oldName, newName, reports) => portfolio.TryEditName(AccountType.BankAccount, oldName, newName, reports),
               (portfolio, name, reports) => portfolio.TryRemove(AccountType.BankAccount, name, reports),
@@ -24,7 +24,7 @@ namespace FinanceWindowsViewModels
 
         public EditMethods sectorEditMethods = new EditMethods(
                 (portfolio, name, reportUpdate) => PortfolioDataUpdater.DownloadSector(portfolio, name, reportUpdate),
-                (portfolio) => portfolio.NameData(AccountType.Sector, null),
+                (portfolio) => portfolio.NameData(AccountType.Sector),
                 (portfolio, name, reports) => portfolio.TryAdd(AccountType.Sector, name, reports),
                 (portfolio, oldName, newName, reports) => portfolio.TryEditName(AccountType.Sector, oldName, newName, reports),
                 (portfolio, name, reports) => portfolio.TryRemove(AccountType.Sector, name, reports),
@@ -35,7 +35,7 @@ namespace FinanceWindowsViewModels
 
         public EditMethods currencyEditMethods = new EditMethods(
                 (portfolio, name, reportUpdate) => PortfolioDataUpdater.DownloadCurrency(portfolio, name, reportUpdate),
-                (portfolio) => portfolio.NameData(AccountType.Currency, null),
+                (portfolio) => portfolio.NameData(AccountType.Currency),
                 (portfolio, name, reports) => portfolio.TryAdd(AccountType.Currency, name, reports),
                 (portfolio, oldName, newName, reports) => portfolio.TryEditName(AccountType.Currency, oldName, newName, reports),
                 (portfolio, name, reports) => portfolio.TryRemove(AccountType.Currency, name, reports),

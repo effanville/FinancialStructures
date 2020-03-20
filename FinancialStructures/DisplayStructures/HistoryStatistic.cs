@@ -125,7 +125,7 @@ namespace FinancialStructures.DisplayStructures
             TotalValue = new DailyValuation(date, MathSupport.Truncate(portfolio.Value(date)));
             BankAccValue = new DailyValuation(date, MathSupport.Truncate(portfolio.TotalValue(AccountType.BankAccount, date)));
             SecurityValue = new DailyValuation(date, MathSupport.Truncate(portfolio.TotalValue(AccountType.Security, date)));
-            var companyNames = portfolio.Companies(AccountType.Security, null);
+            var companyNames = portfolio.Companies(AccountType.Security);
             companyNames.Sort();
             foreach (var companyName in companyNames)
             {
@@ -145,7 +145,7 @@ namespace FinancialStructures.DisplayStructures
                 SecurityTotalCar.Add(totalCar);
             }
 
-            var companyBankNames = portfolio.Companies(AccountType.BankAccount, null);
+            var companyBankNames = portfolio.Companies(AccountType.BankAccount);
             companyBankNames.Sort();
             foreach (var companyName in companyBankNames)
             {

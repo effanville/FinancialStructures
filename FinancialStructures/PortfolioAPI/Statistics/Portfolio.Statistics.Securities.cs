@@ -253,7 +253,7 @@ namespace FinancialStructures.PortfolioAPI
         public static List<DayValue_Named> AllSecuritiesInvestments(this Portfolio portfolio)
         {
             var output = new List<DayValue_Named>();
-            var companies = portfolio.Companies(AccountType.Security, null);
+            var companies = portfolio.Companies(AccountType.Security);
             companies.Sort();
             foreach (var comp in companies)
             {

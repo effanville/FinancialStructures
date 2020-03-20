@@ -65,7 +65,7 @@ namespace FinanceCommonViewModels
 
             for (int i = 0; i < DataNames.Count; i++)
             {
-                if (DataNames[i].CompareTo(currentSelectedName) == 0)
+                if (DataNames[i].IsEqualTo(currentSelectedName))
                 {
                     SelectedName = DataNames[i];
                     return;

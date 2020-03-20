@@ -47,8 +47,8 @@ namespace FinanceWindowsViewModels
             Portfolio = portfolio;
             DataUpdateCallback = updateData;
             ReportLogger = reportLogger;
-            FundNames = portfolio.NameData(AccountType.Security, null);
-            fPreEditFundNames = portfolio.NameData(AccountType.Security, null);
+            FundNames = portfolio.NameData(AccountType.Security);
+            fPreEditFundNames = portfolio.NameData(AccountType.Security);
 
             CreateSecurityCommand = new BasicCommand(ExecuteCreateEditCommand);
             DownloadCommand = new BasicCommand(ExecuteDownloadCommand);
@@ -59,9 +59,9 @@ namespace FinanceWindowsViewModels
         {
             Portfolio = portfolio;
             var currentSelectedName = selectedName;
-            FundNames = portfolio.NameData(AccountType.Security, null);
+            FundNames = portfolio.NameData(AccountType.Security);
             FundNames.Sort();
-            fPreEditFundNames = portfolio.NameData(AccountType.Security, null);
+            fPreEditFundNames = portfolio.NameData(AccountType.Security);
             fPreEditFundNames.Sort();
 
             for (int i = 0; i < FundNames.Count; i++)

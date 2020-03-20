@@ -23,7 +23,7 @@ namespace FinancialStructures.PortfolioAPI
                 return false;
             }
 
-            if (portfolio.Exists(elementType, name, reportLogger.Log))
+            if (portfolio.Exists(elementType, name))
             {
                 reportLogger.LogDetailed("Critical", "Error", "AddingData", $"{elementType.ToString()} `{name.Company}'-`{name.Name}' already exists.");
                 return false;

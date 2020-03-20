@@ -1,5 +1,4 @@
 ﻿using FinancialStructures.Database;
-using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.NamingStructures;
 using System;
 
@@ -17,7 +16,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <returns>Whether exists or not.</returns>
         public static bool CompanyExists(this Portfolio portfolio, AccountType elementType, string company, Action<string, string, string> reportLogger)
         {
-            foreach (string comp in portfolio.Companies(elementType, reportLogger))
+            foreach (string comp in portfolio.Companies(elementType))
             {
                 if (comp.Equals(company))
                 {
@@ -36,9 +35,9 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="name">The name of the item to find.</param>
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Whether exists or not.</returns>
-        public static bool Exists(this Portfolio portfolio, AccountType elementType, NameData name, Action<string, string, string> reportLogger)
+        public static bool Exists(this Portfolio portfolio, AccountType elementType, NameData name)
         {
-            foreach (NameData sec in portfolio.NameData(elementType, reportLogger))
+            foreach (NameData sec in portfolio.NameData(elementType))
             {
                 if (sec.IsEqualTo(name))
                 {

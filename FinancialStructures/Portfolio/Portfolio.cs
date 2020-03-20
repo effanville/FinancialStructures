@@ -65,6 +65,14 @@ namespace FinancialStructures.Database
             }
         }
 
+        private string fBaseCurrency;
+
+        public string BaseCurrency
+        {
+            get { return fBaseCurrency; }
+            set { fBaseCurrency = value; }
+        }
+
         private List<Security> fFunds = new List<Security>();
 
         /// <summary>

@@ -3,8 +3,15 @@ using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.FinanceStructures
 {
+    /// <summary>
+    /// A wrapper class of a single list to desribe a currency pair.
+    /// </summary>
     public class Currency : SingleValueDataList
     {
+        /// <summary>
+        /// The base currency the currency is derived from.
+        /// E.g. in the pair GBP.HKD this is the GBP.
+        /// </summary>
         public string BaseCurrency
         {
             get
@@ -13,6 +20,10 @@ namespace FinancialStructures.FinanceStructures
             }
         }
 
+        /// <summary>
+        /// The currency of the valuation.       
+        /// E.g. in the pair GBP.HKD this is the HKD.
+        /// </summary>
         public string QuoteCurrency
         {
             get
@@ -24,6 +35,11 @@ namespace FinancialStructures.FinanceStructures
         public new Currency Copy()
         {
             return new Currency(Names, Values);
+        }
+
+        public Currency Inverted()
+        {
+            return new Currency(Names, Values.Inverted());
         }
 
         internal Currency(NameData names)

@@ -8,23 +8,35 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// returns the currency associated to the account.
         /// </summary>
-        internal static Currency Currency(Portfolio portfolio, AccountType elementType, object security)
+        internal static Currency Currency(Portfolio portfolio, AccountType elementType, object account)
         {
             switch (elementType)
             {
                 case (AccountType.Security):
                     {
-                        var currencyName = ((Security)security).GetCurrency();
-                        return portfolio.Currencies.Find(cur => cur.Name == currencyName);
+                        var currencyName = ((Security)account).GetCurrency();
+                        Currency currency = portfolio.Currencies.Find(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == portfolio.BaseCurrency);
+                        if (currency != null)
+                        {
+                            return currency;
+                        }
+
+                        return portfolio.Currencies.Find(cur => cur.BaseCurrency == portfolio.BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted();
                     }
                 case (AccountType.Currency):
                     {
-                        return (Currency)security;
+                        return (Currency)account;
                     }
                 case (AccountType.BankAccount):
                     {
-                        var currencyName = ((CashAccount)security).GetCurrency();
-                        return portfolio.Currencies.Find(cur => cur.Name == currencyName);
+                        var currencyName = ((CashAccount)account).GetCurrency();
+                        Currency currency = portfolio.Currencies.Find(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == portfolio.BaseCurrency);
+                        if (currency != null)
+                        {
+                            return currency;
+                        }
+
+                        return portfolio.Currencies.Find(cur => cur.BaseCurrency == portfolio.BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted();
                     }
                 case (AccountType.Sector):
                     {

@@ -84,7 +84,7 @@ namespace FinancialStructures.StatsMakers
 
             WriteHeader(htmlWriter, properties, options.SecurityDataToExport, maxNameLength, maxCompanyLength, maxNumLength);
 
-            List<string> companies = portfolio.Companies(AccountType.Security, null);
+            List<string> companies = portfolio.Companies(AccountType.Security);
             companies.Sort();
             foreach (string compName in companies)
             {
@@ -163,7 +163,7 @@ namespace FinancialStructures.StatsMakers
 
             WriteHeader(htmlWriter, bankProperties, options.BankAccDataToExport, maxNameLength, maxCompanyLength, maxNumLength);
 
-            List<string> BankCompanies = portfolio.Companies(AccountType.BankAccount, null);
+            List<string> BankCompanies = portfolio.Companies(AccountType.BankAccount);
             BankCompanies.Sort();
             foreach (string compName in BankCompanies)
             {
