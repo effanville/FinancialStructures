@@ -96,6 +96,7 @@ namespace FinanceCommonViewModels
                 if (SelectedName.NewValue)
                 {
                     UpdateDataCallback(programPortfolio => editMethods.ExecuteFunction(FunctionType.Create, programPortfolio, SelectedName, ReportLogger).Wait());
+                    edited = true;
                     if (SelectedName != null)
                     {
                         SelectedName.NewValue = false;

@@ -13,14 +13,6 @@ namespace FinancialStructures.FinanceStructures
             : base()
         { }
 
-        /// <summary>
-        /// Creates a new instance of a sector.
-        /// </summary>
-        public Sector(string name)
-            : base(new NameData("", name))
-        {
-        }
-
         public Sector(NameData names)
             : base(names)
         {

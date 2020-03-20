@@ -1,6 +1,8 @@
 ﻿using FinancialStructures.Database;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
+using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -26,55 +28,41 @@ namespace FinancialStructures.PortfolioAPI
                             if (portfolio.Funds[fundIndex].GetCompany() == oldName.Company && portfolio.Funds[fundIndex].GetName() == oldName.Name)
                             {
                                 // now edit data
-                                return portfolio.Funds[fundIndex].EditNameData(newName.Company, newName.Name, newName.Currency, newName.Url, newName.Sectors);
+                                return portfolio.Funds[fundIndex].EditNameData(newName);
                             }
                         }
-                        break;
+                        reportLogger.Log("Error", "EditingData", $"Renaming {elementType.ToString()}: Could not find {elementType.ToString()} with name {oldName.ToString()}.");
+                        return false;
                     }
                 case (AccountType.Currency):
                     {
-                        foreach (var currency in portfolio.Currencies)
-                        {
-                            if (currency.GetName() == oldName.Name)
-                            {
-                                currency.EditNameData(string.Empty, newName.Name, newName.Url);
-                                return true;
-                            }
-                        }
-
-                        break;
+                        return TryEditNameSingleList(portfolio.Currencies, elementType, oldName, newName, reportLogger);
                     }
                 case (AccountType.BankAccount):
                     {
-                        for (int AccountIndex = 0; AccountIndex < portfolio.NumberOf(AccountType.BankAccount); AccountIndex++)
-                        {
-                            if (portfolio.BankAccounts[AccountIndex].GetCompany() == oldName.Company && portfolio.BankAccounts[AccountIndex].GetName() == oldName.Name)
-                            {
-                                // now edit data
-                                return portfolio.BankAccounts[AccountIndex].EditNameData(newName.Company, newName.Name, string.Empty, newName.Currency, newName.Sectors);
-                            }
-                        }
-
-                        break;
+                        return TryEditNameSingleList(portfolio.BankAccounts, elementType, oldName, newName, reportLogger);
                     }
                 case (AccountType.Sector):
                     {
-                        for (int AccountIndex = 0; AccountIndex < portfolio.NumberOf(AccountType.Sector); AccountIndex++)
-                        {
-                            if (portfolio.BankAccounts[AccountIndex].GetCompany() == oldName.Company && portfolio.BankAccounts[AccountIndex].GetName() == oldName.Name)
-                            {
-                                // now edit data
-                                return portfolio.BenchMarks[AccountIndex].EditNameData(string.Empty, newName.Name, newName.Url);
-                            }
-                        }
-
-                        break;
+                        return TryEditNameSingleList(portfolio.BenchMarks, elementType, oldName, newName, reportLogger);
                     }
                 default:
                     {
                         reportLogger.Log("Error", "EditingData", $"Editing an Unknown type.");
                         return false;
                     }
+            }
+        }
+
+        private static bool TryEditNameSingleList<T>(List<T> values, AccountType elementType, NameData oldName, NameData newName, LogReporter reportLogger) where T : SingleValueDataList
+        {
+            for (int AccountIndex = 0; AccountIndex < values.Count; AccountIndex++)
+            {
+                if (values[AccountIndex].GetNameData().IsEqualTo(oldName))
+                {
+                    // now edit data
+                    return values[AccountIndex].EditNameData(newName);
+                }
             }
 
             reportLogger.Log("Error", "EditingData", $"Renaming {elementType.ToString()}: Could not find {elementType.ToString()} with name {oldName.ToString()}.");

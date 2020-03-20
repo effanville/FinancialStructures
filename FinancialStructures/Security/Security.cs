@@ -8,7 +8,7 @@ namespace FinancialStructures.FinanceStructures
     /// <summary>
     /// Class to model a stock, or a unit trust.
     /// </summary>
-    public partial class Security : IComparable
+    public partial class Security : IComparable, INameDataObtainer
     {
         public override string ToString()
         {

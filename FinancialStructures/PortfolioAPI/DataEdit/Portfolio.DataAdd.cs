@@ -1,8 +1,10 @@
 ﻿using FinancialStructures.Database;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using System;
+using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -44,46 +46,34 @@ namespace FinancialStructures.PortfolioAPI
                     }
                 case (AccountType.Currency):
                     {
-                        foreach (var sector in portfolio.GetCurrencies())
-                        {
-                            if (name.Name == sector.GetName())
-                            {
-                                return sector.TryAddData(data.Day, data.Value, reportLogger);
-                            }
-                        }
-
-                        return false;
+                        return SingleListAdd(portfolio.Currencies, name, data, reportLogger);
                     }
                 case (AccountType.BankAccount):
                     {
-                        for (int accountIndex = 0; accountIndex < portfolio.NumberOf(AccountType.BankAccount); accountIndex++)
-                        {
-                            if (portfolio.BankAccounts[accountIndex].GetCompany() == name.Company && portfolio.BankAccounts[accountIndex].GetName() == name.Name)
-                            {
-                                // now edit data
-                                return portfolio.BankAccounts[accountIndex].TryAddData(data.Day, data.Value, reportLogger);
-                            }
-                        }
-
-                        return false;
+                        return SingleListAdd(portfolio.BankAccounts, name, data, reportLogger);
                     }
                 case (AccountType.Sector):
                     {
-                        for (int accountIndex = 0; accountIndex < portfolio.NumberOf(AccountType.Sector); accountIndex++)
-                        {
-                            if (portfolio.BenchMarks[accountIndex].GetName() == name.Name)
-                            {
-                                // now edit data
-                                return portfolio.BenchMarks[accountIndex].TryAddData(data.Day, data.Value, reportLogger);
-                            }
-                        }
-
-                        return false;
+                        return SingleListAdd(portfolio.BenchMarks, name, data, reportLogger);
                     }
                 default:
                     reportLogger.Log("Error", "EditingData", $"Editing an Unknown type.");
                     return false;
             }
+        }
+
+        private static bool SingleListAdd<T>(List<T> listToEdit, NameData name, DayValue_ChangeLogged data, LogReporter reportLogger) where T : SingleValueDataList
+        {
+            for (int accountIndex = 0; accountIndex < listToEdit.Count; accountIndex++)
+            {
+                if (listToEdit[accountIndex].GetNameData().IsEqualTo(name))
+                {
+                    // now edit data
+                    return listToEdit[accountIndex].TryAddData(data.Day, data.Value, reportLogger);
+                }
+            }
+
+            return false;
         }
     }
 }

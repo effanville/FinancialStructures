@@ -39,6 +39,10 @@ namespace FinancialStructures.PortfolioAPI
                     }
                 case (AccountType.Currency):
                     {
+                        if (string.IsNullOrEmpty(name.Company))
+                        {
+                            name.Company = "GBP";
+                        }
                         Currency newSector = new Currency(name);
                         portfolio.Currencies.Add(newSector);
                         break;

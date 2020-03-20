@@ -1,7 +1,9 @@
 ﻿using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -38,6 +40,21 @@ namespace FinancialStructures.FinanceStructures
             return Names.Url;
         }
 
+        public List<string> GetSectors()
+        {
+            return Names.Sectors;
+        }
+
+        public string GetCurrency()
+        {
+            return Names.Currency;
+        }
+
+        public NameData GetNameData()
+        {
+            return Names.Copy();
+        }
+
         public List<DayValue_ChangeLogged> GetDataForDisplay()
         {
             var output = new List<DayValue_ChangeLogged>();
@@ -54,21 +71,14 @@ namespace FinancialStructures.FinanceStructures
             return output;
         }
 
-        public virtual bool EditNameData(string company, string name, string url)
+        /// <summary>
+        /// Edits the associated nameData to the account.
+        /// </summary>
+        /// <param name="newNames"></param>
+        /// <returns></returns>
+        internal virtual bool EditNameData(NameData newNames)
         {
-            if (company != Names.Company)
-            {
-                Names.Company = company;
-            }
-            if (name != Names.Name)
-            {
-                Names.Name = name;
-            }
-            if (url != Names.Url)
-            {
-                Names.Url = url;
-            }
-
+            Names = newNames;
             return true;
         }
 
@@ -100,6 +110,49 @@ namespace FinancialStructures.FinanceStructures
         public bool TryDeleteData(DateTime date, LogReporter reportLogger)
         {
             return fValues.TryDeleteValue(date, reportLogger);
+        }
+
+        /// <summary>
+        /// Removes a sector associated to this OldCashAccount.
+        /// </summary>
+        /// <param name="sectorName"></param>
+        /// <returns></returns>
+        public bool TryRemoveSector(string sectorName)
+        {
+            if (IsSectorLinked(sectorName))
+            {
+                Names.Sectors.Remove(sectorName);
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool TryAddSector(string sectorName)
+        {
+            if (!IsSectorLinked(sectorName))
+            {
+                Names.Sectors.Add(sectorName);
+                return true;
+            }
+
+            return false;
+        }
+
+        internal bool IsSectorLinked(string sectorName)
+        {
+            if (Names.Sectors != null && Names.Sectors.Any())
+            {
+                foreach (var name in Names.Sectors)
+                {
+                    if (name == sectorName)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }

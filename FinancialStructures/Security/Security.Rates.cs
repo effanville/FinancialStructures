@@ -22,7 +22,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// The date and latest value of the security
         /// </summary>
-        internal DailyValuation LatestValue(Currency currency = null)
+        public DailyValuation LatestValue(Currency currency = null)
         {
             DailyValuation latestDate = fUnitPrice.LatestValuation();
             if (latestDate == null)

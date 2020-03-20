@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.Database;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using System;
 using System.Collections.Generic;
@@ -60,53 +61,39 @@ namespace FinancialStructures.PortfolioAPI
                     }
                 case (AccountType.Currency):
                     {
-                        if (portfolio.Currencies != null)
-                        {
-                            foreach (var currency in portfolio.Currencies)
-                            {
-                                DateTime date = DateTime.MinValue;
-                                if (currency.Any())
-                                {
-                                    date = currency.LatestValue().Day;
-                                }
-
-                                namesAndCompanies.Add(new NameCompDate(string.Empty, currency.GetName(), string.Empty, currency.GetUrl(), new List<string>(), date));
-                            }
-                        }
-                        break;
+                        return SingleDataNameObtainer(portfolio.Currencies);
                     }
                 case (AccountType.BankAccount):
                     {
-                        foreach (var bankAcc in portfolio.BankAccounts)
-                        {
-                            DateTime date = DateTime.MinValue;
-                            if (bankAcc.Any())
-                            {
-                                date = bankAcc.LatestValue().Day;
-                            }
-
-                            namesAndCompanies.Add(new NameCompDate(bankAcc.GetCompany(), bankAcc.GetName(), bankAcc.GetCurrency(), string.Empty, bankAcc.GetSectors(), date));
-                        }
-                        break;
+                        return SingleDataNameObtainer(portfolio.BankAccounts);
                     }
                 case (AccountType.Sector):
                     {
-                        foreach (var benchMark in portfolio.BenchMarks)
-                        {
-                            DateTime date = DateTime.MinValue;
-                            if (benchMark.Any())
-                            {
-                                date = benchMark.LatestValue().Day;
-                            }
-
-                            namesAndCompanies.Add(new NameCompDate(benchMark.GetCompany(), benchMark.GetName(), string.Empty, string.Empty, new List<string>(), date));
-                        }
-                        break;
+                        return SingleDataNameObtainer(portfolio.BenchMarks);
                     }
                 default:
                     break;
             }
 
+            return namesAndCompanies;
+        }
+
+        private static List<NameCompDate> SingleDataNameObtainer<T>(List<T> objects) where T : SingleValueDataList
+        {
+            var namesAndCompanies = new List<NameCompDate>();
+            if (objects != null)
+            {
+                foreach (var dataList in objects)
+                {
+                    DateTime date = DateTime.MinValue;
+                    if (dataList.Any())
+                    {
+                        date = dataList.LatestValue().Day;
+                    }
+
+                    namesAndCompanies.Add(new NameCompDate(dataList.GetCompany(), dataList.GetName(), dataList.GetCurrency(), dataList.GetUrl(), dataList.GetSectors(), date));
+                }
+            }
             return namesAndCompanies;
         }
     }

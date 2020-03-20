@@ -17,12 +17,21 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="reportLogger">Callback to report information.</param>
         public static void LoadPortfolio(this Portfolio portfolio, string filePath, LogReporter reportLogger)
         {
+            string error = null;
             if (File.Exists(filePath))
             {
-                var database = XmlFileAccess.ReadFromXmlFile<AllData>(filePath);
-                portfolio.CopyData(database.MyFunds);
-                portfolio.SetBenchMarks(database.myBenchMarks);
-                reportLogger.Log("Report", "Loading", $"Loaded new database from {filePath}");
+                var database = XmlFileAccess.ReadFromXmlFile<AllData>(filePath, out error);
+                if (database != null)
+                {
+                    portfolio.CopyData(database.MyFunds);
+                    portfolio.SetBenchMarks(database.myBenchMarks);
+                    reportLogger.Log("Report", "Loading", $"Loaded new database from {filePath}");
+                }
+                else
+                {
+                    reportLogger.LogDetailed("Critical", "Error", "Loading", $" Failed to load new database from {filePath}. {error}.");
+                }
+
                 return;
             }
 

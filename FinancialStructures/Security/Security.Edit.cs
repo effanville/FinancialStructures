@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Returns true if shares and unit prices have an item or are not null.
         /// </summary>
-        internal bool Any()
+        public bool Any()
         {
             if (fUnitPrice.Any() && fShares.Any())
             {
@@ -233,29 +234,9 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Edits name and company data of security.
         /// </summary>
-        internal bool EditNameData(string company, string name, string currency, string url, List<string> sectors)
+        internal bool EditNameData(NameData name)
         {
-            if (name != Names.Name)
-            {
-                Names.Name = name;
-            }
-            if (company != Names.Company)
-            {
-                Names.Company = company;
-            }
-            if (url != Names.Url)
-            {
-                Names.Url = url;
-            }
-            if (currency != Names.Currency)
-            {
-                Names.Currency = currency;
-            }
-            if (sectors != Names.Sectors)
-            {
-                Names.Sectors = sectors;
-            }
-
+            Names = name;
             return true;
         }
 

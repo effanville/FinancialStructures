@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures
 {
@@ -13,7 +14,7 @@ namespace FinancialStructures
         }
 
         public DoubleValueDataList(string company, string name)
-           : base(company, name)
+           : base(new NameData(company, name))
         {
         }
     }

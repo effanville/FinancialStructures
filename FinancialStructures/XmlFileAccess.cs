@@ -47,8 +47,9 @@ namespace FileSupport
         /// <typeparam name="T">The type of object to read from the file.</typeparam>
         /// <param name="filePath">The file path to read the object instance from.</param>
         /// <returns>Returns a new instance of the object read from the XML file.</returns>
-        public static T ReadFromXmlFile<T>(string filePath) where T : new()
+        public static T ReadFromXmlFile<T>(string filePath, out string error) where T : new()
         {
+            error = null;
             TextReader reader = null;
             try
             {
@@ -56,8 +57,9 @@ namespace FileSupport
                 reader = new StreamReader(filePath);
                 return (T)serializer.Deserialize(reader);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                error = ex.Message;
                 return default(T);
             }
             finally

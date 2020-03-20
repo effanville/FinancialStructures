@@ -7,6 +7,11 @@ namespace FinancialStructures.NamingStructures
     /// </summary>
     public class NameData : TwoName
     {
+        public NameData Copy()
+        {
+            return new NameData(Company, Name, Currency, Url, Sectors);
+        }
+
         /// <summary>
         /// Empty constructor.
         /// </summary>

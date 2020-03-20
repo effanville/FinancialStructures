@@ -1,8 +1,6 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.NamingStructures;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -55,35 +53,6 @@ namespace FinancialStructures.FinanceStructures
         }
 
         /// <summary>
-        /// Returns the currency of the OldCashAccount.
-        /// </summary>
-        public string GetCurrency()
-        {
-            return Names.Currency;
-        }
-
-        /// <summary>
-        /// Returns the sectors associated to this OldCashAccount.
-        /// </summary>
-        /// <returns></returns>
-        public List<string> GetSectors()
-        {
-            return Names.Sectors;
-        }
-
-        public bool EditNameData(string company, string name, string url, string currency, List<string> sectors)
-        {
-            if (Names.Currency != currency)
-            {
-                Names.Currency = currency;
-            }
-
-            Names.Sectors = sectors;
-
-            return base.EditNameData(company, name, url);
-        }
-
-        /// <summary>
         /// Returns the latest valuation of the OldCashAccount.
         /// </summary>
         internal DailyValuation LatestValue(SingleValueDataList currency = null)
@@ -126,60 +95,6 @@ namespace FinancialStructures.FinanceStructures
             double currencyValue = currency == null ? 1.0 : currency.Value(value.Day).Value;
             value.SetValue(value.Value * currencyValue);
             return value;
-        }
-
-        /// <summary>
-        /// Returns earliest valuation after the date specified. 
-        /// </summary>
-        internal DailyValuation NearestLaterValuation(DateTime date, SingleValueDataList currency = null)
-        {
-            var value = Values.NearestLaterValue(date);
-            double currencyValue = currency == null ? 1.0 : currency.Value(value.Day).Value;
-            value.SetValue(value.Value * currencyValue);
-            return value;
-        }
-
-        /// <summary>
-        /// Removes a sector associated to this OldCashAccount.
-        /// </summary>
-        /// <param name="sectorName"></param>
-        /// <returns></returns>
-        public bool TryRemoveSector(string sectorName)
-        {
-            if (IsSectorLinked(sectorName))
-            {
-                Names.Sectors.Remove(sectorName);
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool TryAddSector(string sectorName)
-        {
-            if (!IsSectorLinked(sectorName))
-            {
-                Names.Sectors.Add(sectorName);
-                return true;
-            }
-
-            return false;
-        }
-
-        internal bool IsSectorLinked(string sectorName)
-        {
-            if (Names.Sectors != null && Names.Sectors.Any())
-            {
-                foreach (var name in Names.Sectors)
-                {
-                    if (name == sectorName)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
         }
     }
 }

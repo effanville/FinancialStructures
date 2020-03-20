@@ -1,7 +1,6 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.NamingStructures;
 using System;
-using System.Collections.Generic;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -103,36 +102,6 @@ namespace FinancialStructures.FinanceStructures
         public SingleValueDataList(NameData names, TimeList values)
         {
             Names = names;
-            fValues = values;
-        }
-
-        /// <summary>
-        /// Creates a new instance of a sector.
-        /// </summary>
-        public SingleValueDataList(string name)
-        {
-            Names = new NameData("", name);
-        }
-
-        public SingleValueDataList(string name, string url)
-        {
-            Names = new NameData("", name, "GBP", url);
-        }
-
-        public SingleValueDataList(string company, string name, string currency, string url, List<string> sectors)
-        {
-            Names = new NameData(company, name, currency, url, sectors);
-        }
-
-        protected SingleValueDataList(string name, TimeList values)
-        {
-            Names = new NameData("", name);
-            fValues = values;
-        }
-
-        protected SingleValueDataList(string name, string url, TimeList values)
-        {
-            Names = new NameData("", name, "GBP", url);
             fValues = values;
         }
 

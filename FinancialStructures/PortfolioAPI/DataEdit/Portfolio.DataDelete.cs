@@ -1,7 +1,9 @@
 ﻿using FinancialStructures.Database;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
+using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -35,46 +37,35 @@ namespace FinancialStructures.PortfolioAPI
                     }
                 case (AccountType.Currency):
                     {
-                        foreach (var currency in portfolio.Currencies)
-                        {
-                            if (name.Name == currency.GetName())
-                            {
-                                return currency.TryDeleteData(data.Day, reportLogger);
-                            }
-                        }
-
-                        break;
+                        return TryDeleteSingleListData(portfolio.Currencies, elementType, name, data, reportLogger);
                     }
                 case (AccountType.BankAccount):
                     {
-                        for (int AccountIndex = 0; AccountIndex < portfolio.NumberOf(AccountType.BankAccount); AccountIndex++)
-                        {
-                            if (portfolio.BankAccounts[AccountIndex].GetCompany() == name.Company && portfolio.BankAccounts[AccountIndex].GetName() == name.Name)
-                            {
-                                // now edit data
-                                return portfolio.BankAccounts[AccountIndex].TryDeleteData(data.Day, reportLogger);
-                            }
-                        }
-
-                        break;
+                        return TryDeleteSingleListData(portfolio.BankAccounts, elementType, name, data, reportLogger);
                     }
                 case (AccountType.Sector):
                     {
-                        foreach (var sector in portfolio.BenchMarks)
-                        {
-                            if (name.Name == sector.GetName())
-                            {
-                                return sector.TryDeleteData(data.Day, reportLogger);
-                            }
-                        }
-
-                        break;
+                        return TryDeleteSingleListData(portfolio.BenchMarks, elementType, name, data, reportLogger);
                     }
                 default:
                     reportLogger.Log("Error", "EditingData", $"Editing an Unknown type.");
                     return false;
             }
 
+
+            reportLogger.LogDetailed("Critical", "Error", "DeletingData", $"Could not find {elementType.ToString()} - {name.ToString()}.");
+            return false;
+        }
+
+        private static bool TryDeleteSingleListData<T>(List<T> values, AccountType elementType, NameData name, DayValue_ChangeLogged data, LogReporter reportLogger) where T : SingleValueDataList
+        {
+            foreach (var account in values)
+            {
+                if (name.IsEqualTo(account.GetNameData()))
+                {
+                    return account.TryDeleteData(data.Day, reportLogger);
+                }
+            }
 
             reportLogger.LogDetailed("Critical", "Error", "DeletingData", $"Could not find {elementType.ToString()} - {name.ToString()}.");
             return false;

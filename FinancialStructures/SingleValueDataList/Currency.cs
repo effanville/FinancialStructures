@@ -5,14 +5,25 @@ namespace FinancialStructures.FinanceStructures
 {
     public class Currency : SingleValueDataList
     {
+        public string BaseCurrency
+        {
+            get
+            {
+                return Names.Company;
+            }
+        }
+
+        public string QuoteCurrency
+        {
+            get
+            {
+                return Names.Name;
+            }
+        }
+
         public new Currency Copy()
         {
             return new Currency(Names, Values);
-        }
-
-        private Currency(string name)
-            : this(new NameData("", name))
-        {
         }
 
         internal Currency(NameData names)
@@ -30,10 +41,5 @@ namespace FinancialStructures.FinanceStructures
         internal Currency()
             : base()
         { }
-
-        private Currency(string name, string url, TimeList values)
-            : base(name, url, values)
-        {
-        }
     }
 }

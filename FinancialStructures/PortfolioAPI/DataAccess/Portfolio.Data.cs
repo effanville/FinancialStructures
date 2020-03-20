@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.Database;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
@@ -42,42 +43,29 @@ namespace FinancialStructures.PortfolioAPI
                     }
                 case (AccountType.Currency):
                     {
-                        foreach (var currency in portfolio.Currencies)
-                        {
-                            if (currency.GetName() == name.Name)
-                            {
-                                return currency.GetDataForDisplay();
-                            }
-                        }
-
-                        break;
+                        return SingleDataListDataObtainer(portfolio.Currencies, elementType, name, reportLogger);
                     }
                 case (AccountType.BankAccount):
                     {
-                        foreach (var bankAccount in portfolio.BankAccounts)
-                        {
-                            if (bankAccount.GetName() == name.Name && bankAccount.GetCompany() == name.Company)
-                            {
-                                return bankAccount.GetDataForDisplay();
-                            }
-                        }
-
-                        break;
+                        return SingleDataListDataObtainer(portfolio.BankAccounts, elementType, name, reportLogger);
                     }
                 case (AccountType.Sector):
                     {
-                        foreach (var sector in portfolio.GetBenchMarks())
-                        {
-                            if (sector.GetName() == name.Name)
-                            {
-                                return sector.GetDataForDisplay();
-                            }
-                        }
-
-                        break;
+                        return SingleDataListDataObtainer(portfolio.BenchMarks, elementType, name, reportLogger);
                     }
                 default:
                     return new List<DayValue_ChangeLogged>();
+            }
+        }
+
+        private static List<DayValue_ChangeLogged> SingleDataListDataObtainer<T>(List<T> objects, AccountType elementType, NameData name, LogReporter reportLogger) where T : SingleValueDataList
+        {
+            foreach (var account in objects)
+            {
+                if (account.GetName() == name.Name && account.GetCompany() == name.Company)
+                {
+                    return account.GetDataForDisplay();
+                }
             }
 
             reportLogger.Log("Error", "DatabaseAccess", $"Could not find {elementType.ToString()} - {name.ToString()}");
