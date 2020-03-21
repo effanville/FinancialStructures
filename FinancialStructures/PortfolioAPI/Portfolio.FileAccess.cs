@@ -52,7 +52,13 @@ namespace FinancialStructures.PortfolioAPI
 
             if (filePath != null)
             {
-                XmlFileAccess.WriteToXmlFile(filePath, toSave);
+                XmlFileAccess.WriteToXmlFile(filePath, toSave, out string error);
+                if (error != null)
+                {
+                    reportLogger.LogDetailed("Critical", "Error", "Saving", $"Failed to save database: {error}");
+                    return;
+                }
+
                 reportLogger.LogDetailed("Critical", "Report", "Saving", $"Saved Database at {filePath}");
             }
         }

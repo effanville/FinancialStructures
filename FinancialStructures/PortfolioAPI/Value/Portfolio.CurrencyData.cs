@@ -21,7 +21,7 @@ namespace FinancialStructures.PortfolioAPI
                             return currency;
                         }
 
-                        return portfolio.Currencies.Find(cur => cur.BaseCurrency == portfolio.BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted();
+                        return portfolio.Currencies.Find(cur => cur.Company == portfolio.BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted();
                     }
                 case (AccountType.Currency):
                     {

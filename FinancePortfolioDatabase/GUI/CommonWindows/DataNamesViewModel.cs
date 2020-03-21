@@ -83,7 +83,8 @@ namespace FinanceCommonViewModels
         {
             if (SelectedName != null)
             {
-                UpdateDataCallback(async programPortfolio => await editMethods.ExecuteFunction(FunctionType.Download, programPortfolio, SelectedName, ReportLogger).ConfigureAwait(false));
+                NameData names = SelectedName as NameData;
+                UpdateDataCallback(async programPortfolio => await editMethods.ExecuteFunction(FunctionType.Download, programPortfolio, names, ReportLogger).ConfigureAwait(false));
             }
         }
 
@@ -95,7 +96,8 @@ namespace FinanceCommonViewModels
                 bool edited = false;
                 if (SelectedName.NewValue)
                 {
-                    UpdateDataCallback(programPortfolio => editMethods.ExecuteFunction(FunctionType.Create, programPortfolio, SelectedName, ReportLogger).Wait());
+                    NameData name_add = new NameData(SelectedName.Company, SelectedName.Name, SelectedName.Currency, SelectedName.Url, SelectedName.Sectors);
+                    UpdateDataCallback(programPortfolio => editMethods.ExecuteFunction(FunctionType.Create, programPortfolio, name_add, ReportLogger).Wait());
                     edited = true;
                     if (SelectedName != null)
                     {
@@ -118,7 +120,8 @@ namespace FinanceCommonViewModels
                     if (name.NewValue && (!string.IsNullOrEmpty(name.Name) || !string.IsNullOrEmpty(name.Company)))
                     {
                         edited = true;
-                        UpdateDataCallback(programPortfolio => editMethods.ExecuteFunction(FunctionType.Edit, programPortfolio, fPreEditNames[i], name, ReportLogger).Wait());
+                        NameData name_add = new NameData(name.Company, name.Name, name.Currency, name.Url, name.Sectors);
+                        UpdateDataCallback(programPortfolio => editMethods.ExecuteFunction(FunctionType.Edit, programPortfolio, fPreEditNames[i], name_add, ReportLogger).Wait());
                         name.NewValue = false;
                     }
                 }

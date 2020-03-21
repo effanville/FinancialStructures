@@ -126,6 +126,7 @@ namespace FinancialStructures.Database
         /// </summary>
         public void CopyData(Portfolio portfolio)
         {
+            this.BaseCurrency = portfolio.BaseCurrency;
             this.Funds = portfolio.Funds;
             this.BankAccounts = portfolio.BankAccounts;
             this.Currencies = portfolio.Currencies;

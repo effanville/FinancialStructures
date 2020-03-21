@@ -18,7 +18,7 @@ namespace FinancialStructures.PortfolioAPI
                     if ((DisplayValueFunds && account.LatestValue().Value != 0) || !DisplayValueFunds)
                     {
                         var currency = PortfolioValues.Currency(portfolio, AccountType.BankAccount, account);
-                        namesAndCompanies.Add(new DayValue_Named(account.GetName(), account.GetCompany(), account.LatestValue(currency).Day, account.LatestValue(currency).Value));
+                        namesAndCompanies.Add(new DayValue_Named(account.GetCompany(), account.GetName(), account.LatestValue(currency).Day, account.LatestValue(currency).Value));
                     }
                 }
             }
@@ -26,7 +26,7 @@ namespace FinancialStructures.PortfolioAPI
             namesAndCompanies.Sort();
             if (namesAndCompanies.Count > 1)
             {
-                namesAndCompanies.Add(new DayValue_Named("Totals", company, DateTime.Today, portfolio.CompanyValue(AccountType.BankAccount, company, DateTime.Today)));
+                namesAndCompanies.Add(new DayValue_Named(company, "Totals", DateTime.Today, portfolio.CompanyValue(AccountType.BankAccount, company, DateTime.Today)));
             }
             return namesAndCompanies;
         }
@@ -41,7 +41,8 @@ namespace FinancialStructures.PortfolioAPI
                 {
                     if ((DisplayValueFunds && acc.LatestValue().Value != 0) || !DisplayValueFunds)
                     {
-                        var latest = new DayValue_Named(acc.GetName(), acc.GetCompany(), acc.LatestValue());
+                        var currency = PortfolioValues.Currency(portfolio, AccountType.BankAccount, acc);
+                        var latest = new DayValue_Named(acc.GetCompany(), acc.GetName(), acc.LatestValue(currency));
                         namesAndCompanies.Add(latest);
                     }
                 }
@@ -49,7 +50,7 @@ namespace FinancialStructures.PortfolioAPI
                 namesAndCompanies.Sort();
                 if (namesAndCompanies.Count > 1)
                 {
-                    namesAndCompanies.Add(new DayValue_Named("Totals", "", DateTime.Today, portfolio.TotalValue(AccountType.BankAccount)));
+                    namesAndCompanies.Add(new DayValue_Named("", "Totals", DateTime.Today, portfolio.TotalValue(AccountType.BankAccount)));
                 }
                 return namesAndCompanies;
             }

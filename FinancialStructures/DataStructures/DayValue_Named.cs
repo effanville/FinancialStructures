@@ -104,7 +104,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public DayValue_Named(string name, string company, DateTime day, double value)
+        public DayValue_Named(string company, string name, DateTime day, double value)
             : base(day, value)
         {
             Name = name;
@@ -114,8 +114,8 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Constructor to create an instance from a base class instance.
         /// </summary>
-        public DayValue_Named(string name, string company, DailyValuation toAddOnto)
-            : this(name, company, toAddOnto.Day, toAddOnto.Value)
+        public DayValue_Named(string company, string name, DailyValuation toAddOnto)
+            : this(company, name, toAddOnto.Day, toAddOnto.Value)
         {
         }
     }

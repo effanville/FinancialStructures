@@ -153,7 +153,10 @@ namespace FinanceWindowsViewModels
             {
                 if (!portfolio.TryGetSecurity(fSelectedName.Company, fSelectedName.Name, out _))
                 {
-                    removeTab(this);
+                    if (removeTab != null)
+                    {
+                        removeTab(this);
+                    }
                     return;
                 }
 

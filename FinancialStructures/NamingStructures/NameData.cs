@@ -54,7 +54,7 @@ namespace FinancialStructures.NamingStructures
         /// <summary>
         /// Website associated to account.
         /// </summary>
-        public string Url
+        public virtual string Url
         {
             get { return fUrl; }
             set { fUrl = value; }
@@ -65,7 +65,7 @@ namespace FinancialStructures.NamingStructures
         /// <summary>
         /// Any currency name.
         /// </summary>
-        public string Currency
+        public virtual string Currency
         {
             get { return fCurrency; }
             set { fCurrency = value; }
@@ -82,7 +82,7 @@ namespace FinancialStructures.NamingStructures
             set { fSectors = value; }
         }
 
-        public string SectorsFlat
+        public virtual string SectorsFlat
         {
             get { return string.Join(",", fSectors); }
             set

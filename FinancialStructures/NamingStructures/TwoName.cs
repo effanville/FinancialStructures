@@ -69,7 +69,7 @@ namespace FinancialStructures.NamingStructures
         /// <summary>
         /// The primary name (the company name)
         /// </summary>
-        public string Company
+        public virtual string Company
         {
             get { return fCompany; }
             set { fCompany = value; }
@@ -80,7 +80,7 @@ namespace FinancialStructures.NamingStructures
         /// <summary>
         /// The secondary name.
         /// </summary>
-        public string Name
+        public virtual string Name
         {
             get { return fName; }
             set { fName = value; }

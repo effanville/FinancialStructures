@@ -90,7 +90,8 @@ namespace FinanceWindowsViewModels
                 if (selectedName.NewValue)
                 {
                     edited = true;
-                    DataUpdateCallback(programPortfolio => programPortfolio.TryAdd(AccountType.Security, selectedName, ReportLogger));
+                    NameData name_new = new NameData(selectedName.Company, selectedName.Name, selectedName.Currency, selectedName.Url, selectedName.Sectors);
+                    DataUpdateCallback(programPortfolio => programPortfolio.TryAdd(AccountType.Security, name_new, ReportLogger));
                     if (selectedName != null)
                     {
                         selectedName.NewValue = false;
@@ -113,7 +114,8 @@ namespace FinanceWindowsViewModels
                     if (name.NewValue && (!string.IsNullOrEmpty(name.Name) || !string.IsNullOrEmpty(name.Company)))
                     {
                         edited = true;
-                        DataUpdateCallback(programPortfolio => programPortfolio.TryEditName(AccountType.Security, fPreEditFundNames[i], name, ReportLogger));
+                        NameData name_new = new NameData(name.Company, name.Name, name.Currency, name.Url, name.Sectors);
+                        DataUpdateCallback(programPortfolio => programPortfolio.TryEditName(AccountType.Security, fPreEditFundNames[i], name_new, ReportLogger));
                         name.NewValue = false;
                     }
                 }

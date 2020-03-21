@@ -20,8 +20,9 @@ namespace FileSupport
         /// <param name="filePath">The file path to write the object instance to.</param>
         /// <param name="objectToWrite">The object instance to write to the file.</param>
         /// <param name="append">If false the file will be overwritten if it already exists. If true the contents will be appended to the file.</param>
-        public static void WriteToXmlFile<T>(string filePath, T objectToWrite, bool append = false) where T : new()
+        public static void WriteToXmlFile<T>(string filePath, T objectToWrite, out string error, bool append = false) where T : new()
         {
+            error = null;
             TextWriter writer = null;
             try
             {
@@ -29,8 +30,9 @@ namespace FileSupport
                 writer = new StreamWriter(filePath, append);
                 serializer.Serialize(writer, objectToWrite);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                error = ex.Message;
                 return;
             }
             finally

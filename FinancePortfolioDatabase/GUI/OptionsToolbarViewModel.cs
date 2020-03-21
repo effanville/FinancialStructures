@@ -6,6 +6,7 @@ using FinancialStructures.ReportLogging;
 using GUISupport;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -22,12 +23,24 @@ namespace FinanceWindowsViewModels
         public string BaseCurrency
         {
             get { return fBaseCurrency; }
-            set { fBaseCurrency = value; OnPropertyChanged(); }
+            set
+            {
+                if (fBaseCurrency != value)
+                {
+                    fBaseCurrency = value;
+                    OnPropertyChanged(nameof(BaseCurrency));
+                    DataUpdateCallback(portfolio => portfolio.BaseCurrency = BaseCurrency);
+                }
+            }
         }
 
         private List<string> fCurrencies;
 
-        public List<string> Currencies;
+        public List<string> Currencies
+        {
+            get { return fCurrencies; }
+            set { fCurrencies = value; OnPropertyChanged(); }
+        }
 
         public OptionsToolbarViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateData, LogReporter reportLogger)
             : base("Options")
@@ -42,20 +55,15 @@ namespace FinanceWindowsViewModels
             LoadDatabaseCommand = new BasicCommand(ExecuteLoadDatabase);
             UpdateDataCommand = new BasicCommand(ExecuteUpdateData);
             RefreshCommand = new BasicCommand(ExecuteRefresh);
-            SetCurrencyCommand = new BasicCommand(ExecuteSetCurrency);
         }
 
-        private void ExecuteSetCurrency(object obj)
-        {
-            DataUpdateCallback(portfolio => portfolio.BaseCurrency = BaseCurrency);
-        }
 
         public override void UpdateData(Portfolio portfolio)
         {
             fFileName = portfolio.DatabaseName + portfolio.Extension;
             fDirectory = portfolio.Directory;
+            Currencies = portfolio.Names(AccountType.Currency).Concat(portfolio.Companies(AccountType.Currency)).Distinct().ToList();
             BaseCurrency = portfolio.BaseCurrency;
-            Currencies = portfolio.Names(AccountType.Currency);
         }
 
         public ICommand OpenHelpCommand { get; }
@@ -111,7 +119,6 @@ namespace FinanceWindowsViewModels
         }
 
         public ICommand RefreshCommand { get; }
-        public BasicCommand SetCurrencyCommand { get; }
 
         private void ExecuteRefresh(Object obj)
         {
