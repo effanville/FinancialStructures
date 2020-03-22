@@ -1,8 +1,8 @@
-﻿using FinancialStructures.DataStructures;
+﻿using FinancialStructures.Database;
+using FinancialStructures.DataStructures;
 using FinancialStructures.DisplayStructures;
 using FinancialStructures.FinanceFunctionsList;
 using FinancialStructures.GUIFinanceStructures;
-using FinancialStructures.Database;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using FinanceWindowsViewModels;
+﻿using FinanceWindowsViewModels;
 using FinancialStructures.Database;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.ReportLogging;
+using System;
+using System.Collections.Generic;
 
 namespace FPD_UI_UnitTests.TestConstruction
 {
@@ -45,7 +45,7 @@ namespace FPD_UI_UnitTests.TestConstruction
 
         public static void UpdatePortfolio(Portfolio portfolio)
         {
-            portfolio.TryAdd(AccountType.Security, new NameData("Fidelity","China",  "GBP", "http://www.fidelity.co.uk", new List<string>() { "Bonds", "UK" }), TestingGUICode.DummyReportLogger);
+            portfolio.TryAdd(AccountType.Security, new NameData("Fidelity", "China", "GBP", "http://www.fidelity.co.uk", new List<string>() { "Bonds", "UK" }), TestingGUICode.DummyReportLogger);
             portfolio.TryAdd(AccountType.BankAccount, new NameData("Barclays", "currentAccount"), TestingGUICode.DummyReportLogger);
             portfolio.TryAdd(AccountType.Currency, new NameData(string.Empty, "GBP"), TestingGUICode.DummyReportLogger);
 

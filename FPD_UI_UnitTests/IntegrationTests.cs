@@ -1,6 +1,5 @@
-﻿using NUnit.Framework;
-using FinanceWindowsViewModels;
-using FPD_UI_UnitTests.TestConstruction;
+﻿using FPD_UI_UnitTests.TestConstruction;
+using NUnit.Framework;
 
 namespace FPD_UI_UnitTests
 {

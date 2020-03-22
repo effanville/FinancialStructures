@@ -1,6 +1,5 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceFunctionsList;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.PortfolioAPI;
 using System;
 using System.Collections.Generic;

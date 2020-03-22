@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace FinancialStructures.FinanceStructures
 {
     public partial class Security
-    { 
+    {
         internal double TotalInvestment(Currency currency = null)
         {
             var investments = InvestmentsBetween(FirstValue().Day, LatestValue().Day, currency);

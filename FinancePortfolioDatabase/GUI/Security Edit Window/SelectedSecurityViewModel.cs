@@ -1,15 +1,15 @@
 ﻿using FinanceCommonViewModels;
 using FinancialStructures.Database;
 using FinancialStructures.DataReader;
-using FinancialStructures.PortfolioAPI;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.NamingStructures;
+using FinancialStructures.PortfolioAPI;
+using FinancialStructures.ReportLogging;
 using GUISupport;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Windows.Input;
-using FinancialStructures.ReportLogging;
-using FinancialStructures.NamingStructures;
 
 namespace FinanceWindowsViewModels
 {
