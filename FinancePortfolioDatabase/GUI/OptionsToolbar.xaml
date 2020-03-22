@@ -8,16 +8,12 @@
              d:DesignHeight="450" 
              d:DesignWidth="800"
              Background="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}">
-    <Grid >
-        <TabControl TabStripPlacement="Left"
-                    Margin="-1">
-            <TabItem Header="File"
-                     Width="108"
-                     Height="20"
-                     Background="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}">
-                <StackPanel Orientation="Horizontal" 
-                            Background="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}"
-                            Margin="-2">
+    <Grid>
+        <StackPanel Orientation="Horizontal" 
+                    Background="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}"
+                    Margin="-2">
+            <ToolBarTray>
+                <ToolBar ToolTip="Database Save/Load">
                     <Button Content="New Database"
                             Style="{StaticResource ResourceKey=defaultButtonNoMargin}"
                             Command="{Binding NewDatabaseCommand}"/>
@@ -27,44 +23,35 @@
                     <Button Content="Load Database"
                             Style="{StaticResource ResourceKey=defaultButtonNoMargin}"
                             Command="{Binding LoadDatabaseCommand}"/>
-                    <Button Content="Update Data"
-                            Style="{StaticResource ResourceKey=defaultButtonNoMargin}"
-                            Command="{Binding UpdateDataCommand}"/>
                     <Button Content="Refresh Display"
                             Style="{StaticResource ResourceKey=defaultButtonNoMargin}"
                             Command="{Binding RefreshCommand}"/>
-                    
-                    <Label Content="Portfolio Base Currency"></Label>
+                </ToolBar>
+
+                <ToolBar ToolTip="Portfolio Settings">
+                    <Button Content="Update Data"
+                            Style="{StaticResource ResourceKey=defaultButtonNoMargin}"
+                            Command="{Binding UpdateDataCommand}"/>
+                    <Label Content="Portfolio Base Currency"/>
                     <ComboBox Margin="5 5 5 5"
                               MinWidth="50"
-                          ItemsSource="{Binding Currencies}"
-                          SelectedValue="{Binding Path=BaseCurrency}"/>
-                </StackPanel>
-               
-            </TabItem>
-            <TabItem Header="Help"
-                     Width="107"
-                     Height="20"
-                     Background="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}">
-                <StackPanel Orientation="Horizontal"
-                            Background="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}"
-                            Width="Auto"
-                            Margin="-2">
-                    <TextBlock FontSize="13"
-                           Margin="8"
-                           Text="Select the option on the left hand side "/>
-                    <Button Width="25"
-                        Height="25" 
-                        HorizontalAlignment="Right"
-                        Style="{StaticResource ResourceKey=defaultButton}"
-                        Command="{Binding OpenHelpCommand}">
+                              ItemsSource="{Binding Currencies}"
+                              SelectedValue="{Binding Path=BaseCurrency}"/>
+                </ToolBar>
+
+                <ToolBar ToolTip="Help Options">
+                    <Button Width="100"
+                            Height="25" 
+                            HorizontalAlignment="Right"
+                            Style="{StaticResource ResourceKey=defaultButton}"
+                            Command="{Binding OpenHelpCommand}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="GuiSupport/helpIcon.png" />
-                            <TextBlock>Open Help Docs</TextBlock>
+                            <TextBlock Background="LightGreen">Dont Panic!</TextBlock>
                         </StackPanel>
                     </Button>
-                </StackPanel>
-            </TabItem>
-        </TabControl>
+                </ToolBar>
+            </ToolBarTray>
+        </StackPanel>
     </Grid>
 </UserControl>
