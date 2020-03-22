@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.FinanceStructures;
 
 namespace FinancialStructures.PortfolioAPI
@@ -8,7 +8,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// returns the currency associated to the account.
         /// </summary>
-        internal static Currency Currency(Portfolio portfolio, AccountType elementType, object account)
+        internal static Currency Currency(IPortfolio portfolio, AccountType elementType, object account)
         {
             switch (elementType)
             {

@@ -1,10 +1,13 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 
 namespace FinancialStructures.PortfolioAPI
 {
+    /// <summary>
+    /// Collection of methods to add to a database.
+    /// </summary>
     public static class PortfolioAddMethods
     {
         /// <summary>
@@ -15,7 +18,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="name">The name data to add.</param>
         /// <param name="reportLogger">Report callback action.</param>
         /// <returns>Success or failure of adding.</returns>
-        public static bool TryAdd(this Portfolio portfolio, AccountType elementType, NameData name, LogReporter reportLogger)
+        public static bool TryAdd(this IPortfolio portfolio, AccountType elementType, NameData name, LogReporter reportLogger)
         {
             if (string.IsNullOrEmpty(name.Name) && string.IsNullOrEmpty(name.Company))
             {

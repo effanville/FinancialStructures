@@ -1,5 +1,5 @@
 ﻿using FinanceCommonViewModels;
-using FinancialStructures.Database;
+using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.ReportLogging;
@@ -12,7 +12,7 @@ namespace FinanceWindowsViewModels
 {
     internal class SecurityNamesViewModel : ViewModelBase
     {
-        private Portfolio Portfolio;
+        private IPortfolio Portfolio;
 
         private List<NameCompDate> fPreEditFundNames = new List<NameCompDate>();
 
@@ -37,11 +37,11 @@ namespace FinanceWindowsViewModels
             set { fSelectedName = value; OnPropertyChanged(); }
         }
 
-        private readonly Action<Action<Portfolio>> DataUpdateCallback;
+        private readonly Action<Action<IPortfolio>> DataUpdateCallback;
 
         private readonly LogReporter ReportLogger;
 
-        public SecurityNamesViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateData, LogReporter reportLogger, Action<NameData_ChangeLogged> loadSelectedData)
+        public SecurityNamesViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, LogReporter reportLogger, Action<NameData_ChangeLogged> loadSelectedData)
             : base("Listed Securities", loadSelectedData)
         {
             Portfolio = portfolio;
@@ -55,7 +55,7 @@ namespace FinanceWindowsViewModels
             DeleteSecurityCommand = new BasicCommand(ExecuteDeleteSecurity);
         }
 
-        public override void UpdateData(Portfolio portfolio, Action<object> removeTab)
+        public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)
         {
             Portfolio = portfolio;
             var currentSelectedName = selectedName;
@@ -75,7 +75,7 @@ namespace FinanceWindowsViewModels
         }
 
 
-        public override void UpdateData(Portfolio portfolio)
+        public override void UpdateData(IPortfolio portfolio)
         {
             UpdateData(portfolio, null);
         }

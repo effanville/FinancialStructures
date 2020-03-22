@@ -1,7 +1,7 @@
 ﻿using FinanceCommonViewModels;
 using FinanceViewModels.StatsViewModels;
 using FinanceWindows.StatsWindows;
-using FinancialStructures.Database;
+using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.ReportLogging;
 using FinancialStructures.StatsMakers;
 using GUISupport;
@@ -14,7 +14,7 @@ namespace FinanceWindowsViewModels
 {
     internal class StatsCreatorWindowViewModel : ViewModelBase
     {
-        private Portfolio fPortfolio;
+        private IPortfolio fPortfolio;
 
         public ObservableCollection<object> StatsTabs { get; set; } = new ObservableCollection<object>();
 
@@ -29,7 +29,7 @@ namespace FinanceWindowsViewModels
 
         private readonly LogReporter ReportLogger;
 
-        public StatsCreatorWindowViewModel(Portfolio portfolio, LogReporter reportLogger)
+        public StatsCreatorWindowViewModel(IPortfolio portfolio, LogReporter reportLogger)
             : base("Stats Creator")
         {
             StatsTabs.Add(new MainTabViewModel(openTab));
@@ -118,7 +118,7 @@ namespace FinanceWindowsViewModels
             LoadTab(TabType.StatsViewer, filePath);
         }
 
-        public override void UpdateData(Portfolio portfolio = null)
+        public override void UpdateData(IPortfolio portfolio = null)
         {
             foreach (var tab in StatsTabs)
             {

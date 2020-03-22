@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.PortfolioAPI;
 using System.Collections.Generic;
@@ -20,7 +20,7 @@ namespace FinanceViewModels.StatsViewModels
             DisplayValueFunds = displayValueFunds;
             DatabaseStats = fPortfolio.GenerateDatabaseStatistics();
         }
-        public DataBaseStatsViewModel(Portfolio portfolio, bool displayValueFunds)
+        public DataBaseStatsViewModel(IPortfolio portfolio, bool displayValueFunds)
     : base(portfolio, displayValueFunds)
         {
             Header = "Database Statistics";

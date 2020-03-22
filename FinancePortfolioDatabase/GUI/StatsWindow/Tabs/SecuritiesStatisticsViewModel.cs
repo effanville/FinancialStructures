@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.PortfolioAPI;
 using System.Collections.Generic;
@@ -21,7 +21,7 @@ namespace FinanceViewModels.StatsViewModels
             SecuritiesStats = fPortfolio.GenerateSecurityStatistics(DisplayValueFunds);
         }
 
-        public SecuritiesStatisticsViewModel(Portfolio portfolio, bool displayValueFunds)
+        public SecuritiesStatisticsViewModel(IPortfolio portfolio, bool displayValueFunds)
             : base(portfolio, displayValueFunds)
         {
             Header = "Security Statistics";

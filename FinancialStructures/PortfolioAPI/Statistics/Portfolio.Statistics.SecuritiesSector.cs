@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceFunctionsList;
 using FinancialStructures.FinanceStructures;
@@ -9,7 +9,7 @@ namespace FinancialStructures.PortfolioAPI
 {
     public static partial class PortfolioStatistics
     {
-        public static DateTime SectorFirstDate(this Portfolio portfolio, string sector)
+        public static DateTime SectorFirstDate(this IPortfolio portfolio, string sector)
         {
             var output = DateTime.Today;
             foreach (var sec in portfolio.SectorSecurities(sector))
@@ -22,7 +22,7 @@ namespace FinancialStructures.PortfolioAPI
 
             return output;
         }
-        public static double SectorValue(this Portfolio portfolio, string sectorName, DateTime date)
+        public static double SectorValue(this IPortfolio portfolio, string sectorName, DateTime date)
         {
             double sum = 0;
             if (portfolio.Funds != null)
@@ -39,12 +39,12 @@ namespace FinancialStructures.PortfolioAPI
             return sum;
         }
 
-        public static int NumberSecuritiesInSector(this Portfolio portfolio, string sectorName)
+        public static int NumberSecuritiesInSector(this IPortfolio portfolio, string sectorName)
         {
             return portfolio.SectorSecurities(sectorName).Count;
         }
 
-        public static List<Security> SectorSecurities(this Portfolio portfolio, string sectorName)
+        public static List<Security> SectorSecurities(this IPortfolio portfolio, string sectorName)
         {
             var securities = new List<Security>();
             foreach (var sec in portfolio.Funds)
@@ -58,7 +58,7 @@ namespace FinancialStructures.PortfolioAPI
             return securities;
         }
 
-        public static List<DayValue_Named> SectorInvestments(this Portfolio portfolio, string company)
+        public static List<DayValue_Named> SectorInvestments(this IPortfolio portfolio, string company)
         {
             var output = new List<DayValue_Named>();
             foreach (var sec in portfolio.SectorSecurities(company))
@@ -69,7 +69,7 @@ namespace FinancialStructures.PortfolioAPI
             return output;
         }
 
-        public static double SectorProfit(this Portfolio portfolio, string sectorName)
+        public static double SectorProfit(this IPortfolio portfolio, string sectorName)
         {
             var securities = portfolio.SectorSecurities(sectorName);
             double value = 0;
@@ -84,7 +84,7 @@ namespace FinancialStructures.PortfolioAPI
             return value;
         }
 
-        public static double SectorFraction(this Portfolio portfolio, string sectorName, DateTime date)
+        public static double SectorFraction(this IPortfolio portfolio, string sectorName, DateTime date)
         {
             return portfolio.SectorValue(sectorName, date) / portfolio.Value(date);
         }
@@ -92,7 +92,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// If possible, returns the IRR of all securities in the sector specified over the time period.
         /// </summary>
-        public static double IRRSector(this Portfolio portfolio, string sectorName, DateTime earlierTime, DateTime laterTime)
+        public static double IRRSector(this IPortfolio portfolio, string sectorName, DateTime earlierTime, DateTime laterTime)
         {
             var securities = portfolio.SectorSecurities(sectorName);
             if (securities.Count == 0)

@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.Database;
+using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.DataStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.PortfolioAPI;
@@ -18,7 +19,7 @@ namespace FinancialStructures.StatsMakers
                 writer.WriteLine("");
             }
         }
-        private static void WriteSectorAnalysis(StreamWriter writer, Portfolio portfolio, System.Reflection.PropertyInfo[] info, UserOptions options, int maxNameLength, int maxCompanyLength, int maxNumLength)
+        private static void WriteSectorAnalysis(StreamWriter writer, IPortfolio portfolio, System.Reflection.PropertyInfo[] info, UserOptions options, int maxNameLength, int maxCompanyLength, int maxNumLength)
         {
             writer.WriteLine("Analysis By Sector");
 
@@ -69,7 +70,7 @@ namespace FinancialStructures.StatsMakers
             }
         }
 
-        public static bool CreateCSVPageCustom(Portfolio portfolio, string filepath, UserOptions options)
+        public static bool CreateCSVPageCustom(IPortfolio portfolio, string filepath, UserOptions options)
         {
             int maxNameLength = Math.Min(25, portfolio.LongestName() + 2);
             int maxCompanyLength = Math.Min(25, portfolio.LongestCompany() + 2);

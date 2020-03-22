@@ -1,5 +1,5 @@
 ﻿using FinanceCommonViewModels;
-using FinancialStructures.Database;
+using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using System.Collections.Generic;
@@ -36,13 +36,13 @@ namespace FinanceWindowsViewModels
             set { fCurrencyNames = value; OnPropertyChanged(); }
         }
 
-        public BasicDataViewModel(Portfolio portfolio)
+        public BasicDataViewModel(IPortfolio portfolio)
             : base("Overview")
         {
             UpdateData(portfolio);
         }
 
-        public override void UpdateData(Portfolio portfolio)
+        public override void UpdateData(IPortfolio portfolio)
         {
             FundNames = portfolio.NameData(AccountType.Security);
             FundNames.Sort();

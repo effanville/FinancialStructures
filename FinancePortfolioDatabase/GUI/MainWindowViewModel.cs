@@ -1,5 +1,6 @@
 ﻿using FinanceCommonViewModels;
 using FinancialStructures.Database;
+using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.ReportLogging;
@@ -44,7 +45,7 @@ namespace FinanceWindowsViewModels
                 (portfolio, name, oldData, newData, reports) => portfolio.TryEditData(AccountType.Currency, name, oldData, newData, reports),
                 (portfolio, name, data, reports) => portfolio.TryDeleteData(AccountType.Currency, name, data, reports));
 
-        internal Portfolio ProgramPortfolio = new Portfolio();
+        internal IPortfolio ProgramPortfolio = new Portfolio();
 
         private OptionsToolbarViewModel fOptionsToolbarCommands;
 
@@ -104,11 +105,11 @@ namespace FinanceWindowsViewModels
         /// <summary>
         /// The mechanism by which the data in <see cref="Portfolio"/> is updated. This includes a GUI update action.
         /// </summary>
-        private Action<Action<Portfolio>> UpdateDataCallback => action => UpdateData(action);
+        private Action<Action<IPortfolio>> UpdateDataCallback => action => UpdateData(action);
 
         private void UpdateData(object obj)
         {
-            if (obj is Action<Portfolio> updateAction)
+            if (obj is Action<IPortfolio> updateAction)
             {
                 updateAction(ProgramPortfolio);
                 AllData_portfolioChanged(obj, null);

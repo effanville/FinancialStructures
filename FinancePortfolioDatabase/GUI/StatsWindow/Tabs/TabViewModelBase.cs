@@ -1,11 +1,11 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using GUISupport;
 
 namespace FinanceViewModels.StatsViewModels
 {
     internal class TabViewModelBase : PropertyChangedBase
     {
-        protected readonly Portfolio fPortfolio;
+        protected readonly IPortfolio fPortfolio;
 
         private bool fDisplayValueFunds = true;
         public bool DisplayValueFunds
@@ -20,7 +20,7 @@ namespace FinanceViewModels.StatsViewModels
         public virtual void GenerateStatistics(bool displayValueFunds)
         {
         }
-        public TabViewModelBase(Portfolio portfolio, bool displayValueFunds)
+        public TabViewModelBase(IPortfolio portfolio, bool displayValueFunds)
         {
             fPortfolio = portfolio;
             DisplayValueFunds = displayValueFunds;

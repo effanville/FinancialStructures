@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using System;
@@ -11,7 +11,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// returns the securities under the company name.
         /// </summary>
-        public static SecurityStatsHolder GenerateBenchMarkStatistics(this Portfolio portfolio, List<Sector> sectors, string sectorName)
+        public static SecurityStatsHolder GenerateBenchMarkStatistics(this IPortfolio portfolio, List<Sector> sectors, string sectorName)
         {
             if (portfolio != null)
             {

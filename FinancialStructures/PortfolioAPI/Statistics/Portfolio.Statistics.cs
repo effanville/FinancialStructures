@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.DataStructures;
 using FinancialStructures.DisplayStructures;
 using FinancialStructures.FinanceFunctionsList;
@@ -12,12 +12,12 @@ namespace FinancialStructures.PortfolioAPI
 {
     public static partial class PortfolioStatistics
     {
-        public static int LongestName(this Portfolio portfolio)
+        public static int LongestName(this IPortfolio portfolio)
         {
             return portfolio.Names(AccountType.Security).Max().Length;
         }
 
-        public static int LongestCompany(this Portfolio portfolio)
+        public static int LongestCompany(this IPortfolio portfolio)
         {
             var companies = portfolio.Companies(AccountType.Security);
             companies.Sort();
@@ -27,7 +27,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// Returns the earliest date held in the portfolio.
         /// </summary>
-        public static DateTime FirstValueDate(this Portfolio portfolio)
+        public static DateTime FirstValueDate(this IPortfolio portfolio)
         {
             var output = DateTime.Today;
             foreach (var sec in portfolio.Funds)
@@ -49,7 +49,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// returns the total profit in the portfolio.
         /// </summary>
-        public static double TotalProfit(this Portfolio portfolio)
+        public static double TotalProfit(this IPortfolio portfolio)
         {
             double total = 0;
             foreach (var sec in portfolio.Funds)
@@ -68,7 +68,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// returns the total profit in the portfolio.
         /// </summary>
-        public static double RecentChange(this Portfolio portfolio)
+        public static double RecentChange(this IPortfolio portfolio)
         {
             double total = 0;
             foreach (var desired in portfolio.Funds)
@@ -85,7 +85,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// If possible, returns the IRR of all securities over the time period.
         /// </summary>
-        public static double IRRPortfolio(this Portfolio portfolio, DateTime earlierTime, DateTime laterTime)
+        public static double IRRPortfolio(this IPortfolio portfolio, DateTime earlierTime, DateTime laterTime)
         {
             if (portfolio.NumberOf(AccountType.Security) == 0)
             {
@@ -113,12 +113,12 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// The total value of all securities and bank accounts on the date specified
         /// </summary>
-        public static double Value(this Portfolio portfolio, DateTime date)
+        public static double Value(this IPortfolio portfolio, DateTime date)
         {
             return portfolio.TotalValue(AccountType.Security, date) + portfolio.TotalValue(AccountType.BankAccount, date);
         }
 
-        public static List<DatabaseStatistics> GenerateDatabaseStatistics(this Portfolio portfolio)
+        public static List<DatabaseStatistics> GenerateDatabaseStatistics(this IPortfolio portfolio)
         {
             var names = new List<DatabaseStatistics>();
             foreach (var sec in portfolio.Funds)
@@ -133,7 +133,7 @@ namespace FinancialStructures.PortfolioAPI
             return names;
         }
 
-        public async static Task<List<HistoryStatistic>> GenerateHistoryStats(this Portfolio portfolio, int daysGap)
+        public async static Task<List<HistoryStatistic>> GenerateHistoryStats(this IPortfolio portfolio, int daysGap)
         {
             var outputs = new List<HistoryStatistic>();
             var calculationDate = portfolio.FirstValueDate();
@@ -141,7 +141,7 @@ namespace FinancialStructures.PortfolioAPI
             return outputs;
         }
 
-        private static void BackGroundTask(DateTime calculationDate, Portfolio portfolio, List<HistoryStatistic> outputs, int daysGap)
+        private static void BackGroundTask(DateTime calculationDate, IPortfolio portfolio, List<HistoryStatistic> outputs, int daysGap)
         {
             while (calculationDate < DateTime.Today)
             {

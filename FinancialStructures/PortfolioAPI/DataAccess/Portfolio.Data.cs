@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.Database;
+using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.NamingStructures;
@@ -12,7 +13,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// Queries for data for the security of name and company. 
         /// </summary>
-        public static List<DayDataView> SecurityData(this Portfolio portfolio, string company, string name)
+        public static List<DayDataView> SecurityData(this IPortfolio portfolio, string company, string name)
         {
             foreach (var security in portfolio.Funds)
             {
@@ -33,7 +34,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="name"></param>
         /// <param name="reportLogger"></param>
         /// <returns></returns>
-        public static List<DayValue_ChangeLogged> NumberData(this Portfolio portfolio, AccountType elementType, NameData name, LogReporter reportLogger)
+        public static List<DayValue_ChangeLogged> NumberData(this IPortfolio portfolio, AccountType elementType, NameData name, LogReporter reportLogger)
         {
             switch (elementType)
             {

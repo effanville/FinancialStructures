@@ -1,5 +1,5 @@
 ﻿using FinanceCommonViewModels;
-using FinancialStructures.Database;
+using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.DataReader;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.NamingStructures;
@@ -15,7 +15,7 @@ namespace FinanceWindowsViewModels
 {
     internal class SelectedSecurityViewModel : ViewModelBase
     {
-        private Portfolio Portfolio;
+        private IPortfolio Portfolio;
 
         public override bool Closable { get { return true; } }
 
@@ -56,11 +56,11 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private readonly Action<Action<Portfolio>> UpdateDataCallback;
+        private readonly Action<Action<IPortfolio>> UpdateDataCallback;
 
         private readonly LogReporter ReportLogger;
 
-        public SelectedSecurityViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateData, LogReporter reportLogger, NameData_ChangeLogged selectedName)
+        public SelectedSecurityViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, LogReporter reportLogger, NameData_ChangeLogged selectedName)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
         {
             fSelectedName = selectedName;
@@ -146,7 +146,7 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public override void UpdateData(Portfolio portfolio, Action<object> removeTab)
+        public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)
         {
             Portfolio = portfolio;
             if (fSelectedName != null)
@@ -169,7 +169,7 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public override void UpdateData(Portfolio portfolio)
+        public override void UpdateData(IPortfolio portfolio)
         {
             UpdateData(portfolio, null);
         }

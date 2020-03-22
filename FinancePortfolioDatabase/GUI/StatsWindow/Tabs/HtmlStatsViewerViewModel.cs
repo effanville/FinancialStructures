@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using GUISupport;
 using System;
 using System.Windows.Forms;
@@ -37,7 +37,7 @@ namespace FinanceViewModels.StatsViewModels
             }
         }
 
-        public HtmlStatsViewerViewModel(Portfolio portfolio, bool displayValueFunds, string filePath)
+        public HtmlStatsViewerViewModel(IPortfolio portfolio, bool displayValueFunds, string filePath)
 : base(portfolio, displayValueFunds)
         {
             StatsFilepath = filePath;

@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.DataStructures;
 using FinancialStructures.PortfolioAPI;
 using System.Collections.Generic;
@@ -20,7 +20,7 @@ namespace FinanceViewModels.StatsViewModels
             BankAccountStats = fPortfolio.GenerateBankAccountStatistics(DisplayValueFunds);
         }
 
-        public BankAccStatsViewModel(Portfolio portfolio, bool displayValueFunds)
+        public BankAccStatsViewModel(IPortfolio portfolio, bool displayValueFunds)
             : base(portfolio, displayValueFunds)
         {
             Header = "Bank Account Stats";

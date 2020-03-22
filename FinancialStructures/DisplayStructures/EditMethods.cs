@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using System;
@@ -29,7 +29,7 @@ namespace FinancialStructures.GUIFinanceStructures
                 return null;
             }
             object output = null;
-            var portfolio = (Portfolio)functionInputs[0];
+            var portfolio = (IPortfolio)functionInputs[0];
             NameData name = functionInputs.Length > 1 ? (NameData)functionInputs[1] : null;
 
             switch (functionType)
@@ -124,33 +124,33 @@ namespace FinancialStructures.GUIFinanceStructures
             return output;
         }
 
-        private readonly Func<Portfolio, NameData, LogReporter, Task> DownloadMethod;
-        private readonly Func<Portfolio, List<NameCompDate>> UpdateNameMethod;
+        private readonly Func<IPortfolio, NameData, LogReporter, Task> DownloadMethod;
+        private readonly Func<IPortfolio, List<NameCompDate>> UpdateNameMethod;
 
-        private readonly Func<Portfolio, NameData, LogReporter, bool> CreateMethod;
+        private readonly Func<IPortfolio, NameData, LogReporter, bool> CreateMethod;
 
-        private readonly Func<Portfolio, NameData, NameData, LogReporter, bool> EditMethod;
+        private readonly Func<IPortfolio, NameData, NameData, LogReporter, bool> EditMethod;
 
-        private readonly Func<Portfolio, NameData, LogReporter, bool> DeleteMethod;
+        private readonly Func<IPortfolio, NameData, LogReporter, bool> DeleteMethod;
 
-        private readonly Func<Portfolio, NameData, LogReporter, List<DayValue_ChangeLogged>> SelectedDataMethod;
+        private readonly Func<IPortfolio, NameData, LogReporter, List<DayValue_ChangeLogged>> SelectedDataMethod;
 
-        private readonly Func<Portfolio, NameData, DayValue_ChangeLogged, LogReporter, bool> AddDataMethod;
+        private readonly Func<IPortfolio, NameData, DayValue_ChangeLogged, LogReporter, bool> AddDataMethod;
 
-        private readonly Func<Portfolio, NameData, DayValue_ChangeLogged, DayValue_ChangeLogged, LogReporter, bool> EditDataMethod;
+        private readonly Func<IPortfolio, NameData, DayValue_ChangeLogged, DayValue_ChangeLogged, LogReporter, bool> EditDataMethod;
 
-        private readonly Func<Portfolio, NameData, DayValue_ChangeLogged, LogReporter, bool> DeleteDataMethod;
+        private readonly Func<IPortfolio, NameData, DayValue_ChangeLogged, LogReporter, bool> DeleteDataMethod;
 
         public EditMethods(
-            Func<Portfolio, NameData, LogReporter, Task> downloadMethod,
-            Func<Portfolio, List<NameCompDate>> updateNameMethod = null,
-            Func<Portfolio, NameData, LogReporter, bool> createMethod = null,
-            Func<Portfolio, NameData, NameData, LogReporter, bool> editMethod = null,
-            Func<Portfolio, NameData, LogReporter, bool> deleteMethod = null,
-            Func<Portfolio, NameData, LogReporter, List<DayValue_ChangeLogged>> selectedDataMethod = null,
-            Func<Portfolio, NameData, DayValue_ChangeLogged, LogReporter, bool> addDataMethod = null,
-            Func<Portfolio, NameData, DayValue_ChangeLogged, DayValue_ChangeLogged, LogReporter, bool> editDataMethod = null,
-            Func<Portfolio, NameData, DayValue_ChangeLogged, LogReporter, bool> deleteDataMethod = null)
+            Func<IPortfolio, NameData, LogReporter, Task> downloadMethod,
+            Func<IPortfolio, List<NameCompDate>> updateNameMethod = null,
+            Func<IPortfolio, NameData, LogReporter, bool> createMethod = null,
+            Func<IPortfolio, NameData, NameData, LogReporter, bool> editMethod = null,
+            Func<IPortfolio, NameData, LogReporter, bool> deleteMethod = null,
+            Func<IPortfolio, NameData, LogReporter, List<DayValue_ChangeLogged>> selectedDataMethod = null,
+            Func<IPortfolio, NameData, DayValue_ChangeLogged, LogReporter, bool> addDataMethod = null,
+            Func<IPortfolio, NameData, DayValue_ChangeLogged, DayValue_ChangeLogged, LogReporter, bool> editDataMethod = null,
+            Func<IPortfolio, NameData, DayValue_ChangeLogged, LogReporter, bool> deleteDataMethod = null)
         {
             DownloadMethod = downloadMethod;
             UpdateNameMethod = updateNameMethod;

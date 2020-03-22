@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.DisplayStructures;
 using FinancialStructures.PortfolioAPI;
 using System.Collections.Generic;
@@ -28,7 +28,7 @@ namespace FinanceViewModels.StatsViewModels
             HistoryStats = await fPortfolio.GenerateHistoryStats(HistoryGapDays).ConfigureAwait(false);
         }
 
-        public PortfolioHistoryViewModel(Portfolio portfolio, bool displayValueFunds)
+        public PortfolioHistoryViewModel(IPortfolio portfolio, bool displayValueFunds)
     : base(portfolio, displayValueFunds)
         {
             Header = "Portfolio History";

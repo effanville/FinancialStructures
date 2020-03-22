@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
@@ -11,7 +11,7 @@ namespace FinanceCommonViewModels
 {
     internal class DataNamesViewModel : ViewModelBase
     {
-        private Portfolio Portfolio;
+        private IPortfolio Portfolio;
 
         private List<NameCompDate> fPreEditNames = new List<NameCompDate>();
 
@@ -37,11 +37,11 @@ namespace FinanceCommonViewModels
             set { fSelectedName = value; OnPropertyChanged(); }
         }
 
-        private readonly Action<Action<Portfolio>> UpdateDataCallback;
+        private readonly Action<Action<IPortfolio>> UpdateDataCallback;
         private readonly LogReporter ReportLogger;
         private readonly EditMethods editMethods;
 
-        public DataNamesViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateDataCallback, LogReporter reportLogger, Action<NameData_ChangeLogged> loadSelectedData, EditMethods updateMethods)
+        public DataNamesViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, LogReporter reportLogger, Action<NameData_ChangeLogged> loadSelectedData, EditMethods updateMethods)
             : base("Accounts", loadSelectedData)
         {
             Portfolio = portfolio;
@@ -54,7 +54,7 @@ namespace FinanceCommonViewModels
             DownloadCommand = new BasicCommand(ExecuteDownloadCommand);
         }
 
-        public override void UpdateData(Portfolio portfolio, Action<object> removeTab)
+        public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)
         {
             Portfolio = portfolio;
             var currentSelectedName = SelectedName;
@@ -73,7 +73,7 @@ namespace FinanceCommonViewModels
             }
         }
 
-        public override void UpdateData(Portfolio portfolio)
+        public override void UpdateData(IPortfolio portfolio)
         {
             UpdateData(portfolio, null);
         }

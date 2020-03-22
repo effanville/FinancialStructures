@@ -1,4 +1,6 @@
-﻿using FinancialStructures.FinanceStructures;
+﻿using FinancialStructures.DatabaseInterfaces;
+using FinancialStructures.FinanceStructures;
+using FinancialStructures.PortfolioAPI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -8,7 +10,7 @@ namespace FinancialStructures.Database
     /// <summary>
     /// Data structure holding information about finances.
     /// </summary>
-    public partial class Portfolio
+    public partial class Portfolio : IPortfolio
     {
         private string fDatabaseFilePath;
 
@@ -111,7 +113,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Sector benchmarks for comparison of held data.
         /// </summary>
-        internal List<Sector> BenchMarks
+        public List<Sector> BenchMarks
         {
             get => fBenchMarks;
             set => fBenchMarks = value;
@@ -124,7 +126,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Copies references of other portfolio to this portfolio.
         /// </summary>
-        public void CopyData(Portfolio portfolio)
+        public void CopyData(IPortfolio portfolio)
         {
             this.BaseCurrency = portfolio.BaseCurrency;
             this.Funds = portfolio.Funds;
@@ -158,6 +160,39 @@ namespace FinancialStructures.Database
             {
                 handler?.Invoke(this, e);
             }
+        }
+
+        /// <summary>
+        /// Number of type in the database.
+        /// </summary>
+        /// <param name="portfolio">The database to query.</param>
+        /// <param name="elementType">The type to search for.</param>
+        /// <returns>The number of type in the database.</returns>
+        public int NumberOf(AccountType elementType)
+        {
+            switch (elementType)
+            {
+                case (AccountType.Security):
+                    {
+                        return Funds.Count;
+                    }
+                case (AccountType.Currency):
+                    {
+                        return Currencies.Count;
+                    }
+                case (AccountType.BankAccount):
+                    {
+                        return BankAccounts.Count;
+                    }
+                case (AccountType.Sector):
+                    {
+                        break;
+                    }
+                default:
+                    break;
+            }
+
+            return 0;
         }
     }
 }

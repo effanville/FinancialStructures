@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.Database;
+using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.Mathematics;
 using FinancialStructures.NamingStructures;
@@ -13,7 +14,7 @@ namespace FinancialStructures.GUIFinanceStructures
 
     public static class SecurityStatsGenerator
     {
-        public static void AddSecurityStats(this Portfolio portfolio, SecurityStatsHolder a, DateTime date)
+        public static void AddSecurityStats(this IPortfolio portfolio, SecurityStatsHolder a, DateTime date)
         {
 
             if (a.Name == "Totals" && string.IsNullOrEmpty(a.Company))
@@ -59,7 +60,7 @@ namespace FinancialStructures.GUIFinanceStructures
             }
         }
 
-        public static void AddSectorStats(this Portfolio portfolio, SecurityStatsHolder a, DateTime date, List<Sector> sectors)
+        public static void AddSectorStats(this IPortfolio portfolio, SecurityStatsHolder a, DateTime date, List<Sector> sectors)
         {
             if (a.Company == "BenchMark")
             {

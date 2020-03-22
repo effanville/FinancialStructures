@@ -1,4 +1,5 @@
-﻿using FinancialStructures.FinanceStructures;
+﻿using FinancialStructures.DatabaseInterfaces;
+using FinancialStructures.FinanceStructures;
 using System;
 using System.Collections.Generic;
 
@@ -9,7 +10,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Return alphabetically ordered list of all sectors linked to securities without repetition.
         /// </summary>
-        public static List<string> GetSecuritiesSectors(this Portfolio portfolio)
+        public static List<string> GetSecuritiesSectors(this IPortfolio portfolio)
         {
             var companies = new List<string>();
             foreach (var security in portfolio.Funds)
@@ -28,7 +29,7 @@ namespace FinancialStructures.Database
             return companies;
         }
 
-        public static double SecurityShares(this Portfolio portfolio, string company, string name, DateTime date)
+        public static double SecurityShares(this IPortfolio portfolio, string company, string name, DateTime date)
         {
             foreach (Security sec in portfolio.Funds)
             {

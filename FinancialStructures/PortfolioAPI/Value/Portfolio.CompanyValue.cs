@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.Database;
+using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.FinanceStructures;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="company">The company name to search for.</param>
         /// <param name="date">The date to calculate value on.</param>
         /// <returns>The value held in the company.</returns>
-        public static double CompanyValue(this Portfolio portfolio, AccountType elementType, string company, DateTime date)
+        public static double CompanyValue(this IPortfolio portfolio, AccountType elementType, string company, DateTime date)
         {
             switch (elementType)
             {
@@ -67,21 +68,6 @@ namespace FinancialStructures.PortfolioAPI
             }
 
             return 0.0;
-        }
-
-        private static List<CashAccount> CompanyBankAccounts(this Portfolio portfolio, string company)
-        {
-            var accounts = new List<CashAccount>();
-            foreach (var acc in portfolio.GetBankAccounts())
-            {
-                if (acc.GetCompany() == company)
-                {
-                    accounts.Add(acc);
-                }
-            }
-
-            accounts.Sort();
-            return accounts;
         }
     }
 }

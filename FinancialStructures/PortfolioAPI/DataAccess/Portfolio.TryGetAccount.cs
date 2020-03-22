@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.FinanceStructures;
 
 namespace FinancialStructures.PortfolioAPI
@@ -8,7 +8,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// Outputs a copy of the security if it exists.
         /// </summary>
-        public static bool TryGetSecurity(this Portfolio portfolio, string company, string name, out Security desired)
+        public static bool TryGetSecurity(this IPortfolio portfolio, string company, string name, out Security desired)
         {
             foreach (Security sec in portfolio.Funds)
             {
@@ -25,7 +25,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// Outputs a copy of the BankAccount if it exists.
         /// </summary>
-        public static bool TryGetBankAccount(this Portfolio portfolio, string company, string name, out CashAccount desired)
+        public static bool TryGetBankAccount(this IPortfolio portfolio, string company, string name, out CashAccount desired)
         {
             foreach (CashAccount sec in portfolio.BankAccounts)
             {
@@ -43,7 +43,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// Returns a sector from the database with specified name.
         /// </summary>
-        public static bool TryGetSector(this Portfolio portfolio, string name, out Sector Desired)
+        public static bool TryGetSector(this IPortfolio portfolio, string name, out Sector Desired)
         {
             foreach (Sector sector in portfolio.BenchMarks)
             {
@@ -61,9 +61,9 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// Outputs a copy of the BankAccount if it exists.
         /// </summary>
-        public static bool TryGetCurrency(this Portfolio portfolio, string name, out Currency desired)
+        public static bool TryGetCurrency(this IPortfolio portfolio, string name, out Currency desired)
         {
-            foreach (Currency sec in portfolio.GetCurrencies())
+            foreach (Currency sec in portfolio.Currencies)
             {
                 if (sec.GetName() == name)
                 {

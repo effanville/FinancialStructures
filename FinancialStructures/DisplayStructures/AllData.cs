@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.Database;
+using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.FinanceStructures;
 using System.Collections.Generic;
 
@@ -17,9 +18,9 @@ namespace SavingClasses
         {
         }
 
-        public AllData(Portfolio portfo, List<Sector> fSectors)
+        public AllData(IPortfolio portfo, List<Sector> fSectors)
         {
-            MyFunds = portfo;
+            MyFunds.CopyData(portfo);
             myBenchMarks = fSectors;
         }
     }

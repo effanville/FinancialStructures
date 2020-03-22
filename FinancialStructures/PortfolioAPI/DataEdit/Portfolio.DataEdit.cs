@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.NamingStructures;
@@ -13,7 +13,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// Edits the data of the security, if possible.
         /// </summary>
-        public static bool TryEditSecurityData(this Portfolio portfolio, LogReporter reportLogger, string company, string name, DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment = 0)
+        public static bool TryEditSecurityData(this IPortfolio portfolio, LogReporter reportLogger, string company, string name, DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment = 0)
         {
             for (int fundIndex = 0; fundIndex < portfolio.NumberOf(AccountType.Security); fundIndex++)
             {
@@ -38,7 +38,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
         /// <remarks> This cannot currently be used to add to securities due to different type of data.</remarks>
-        public static bool TryEditData(this Portfolio portfolio, AccountType elementType, NameData name, DayValue_ChangeLogged oldData, DayValue_ChangeLogged newData, LogReporter reportLogger)
+        public static bool TryEditData(this IPortfolio portfolio, AccountType elementType, NameData name, DayValue_ChangeLogged oldData, DayValue_ChangeLogged newData, LogReporter reportLogger)
         {
             switch (elementType)
             {

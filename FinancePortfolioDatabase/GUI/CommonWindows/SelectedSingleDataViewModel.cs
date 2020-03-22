@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
@@ -12,7 +12,7 @@ namespace FinanceCommonViewModels
 {
     internal class SelectedSingleDataViewModel : ViewModelBase
     {
-        private Portfolio Portfolio;
+        private IPortfolio Portfolio;
 
         public override bool Closable { get { return true; } }
 
@@ -59,13 +59,13 @@ namespace FinanceCommonViewModels
             }
         }
 
-        private readonly Action<Action<Portfolio>> UpdateDataCallback;
+        private readonly Action<Action<IPortfolio>> UpdateDataCallback;
 
         private readonly LogReporter ReportLogger;
 
         private readonly EditMethods EditMethods;
 
-        public SelectedSingleDataViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateDataCallback, LogReporter reportLogger, EditMethods editMethods, NameData_ChangeLogged selectedName)
+        public SelectedSingleDataViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, LogReporter reportLogger, EditMethods editMethods, NameData_ChangeLogged selectedName)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
         {
             SelectedName = selectedName;
@@ -78,7 +78,7 @@ namespace FinanceCommonViewModels
             ReportLogger = reportLogger;
         }
 
-        public override void UpdateData(Portfolio portfolio, Action<object> removeTab)
+        public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)
         {
             Portfolio = portfolio;
             if (SelectedName != null)
@@ -101,7 +101,7 @@ namespace FinanceCommonViewModels
                 SelectedData = null;
             }
         }
-        public override void UpdateData(Portfolio portfolio)
+        public override void UpdateData(IPortfolio portfolio)
         {
             UpdateData(portfolio, null);
         }

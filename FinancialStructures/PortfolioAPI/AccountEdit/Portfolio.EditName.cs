@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
@@ -17,7 +17,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="newName">The new name of the data.</param>
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure of editing.</returns>
-        public static bool TryEditName(this Portfolio portfolio, AccountType elementType, NameData oldName, NameData newName, LogReporter reportLogger)
+        public static bool TryEditName(this IPortfolio portfolio, AccountType elementType, NameData oldName, NameData newName, LogReporter reportLogger)
         {
             switch (elementType)
             {

@@ -1,8 +1,10 @@
 ﻿using FileSupport;
 using FinancialStructures.Database;
+using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.ReportLogging;
 using SavingClasses;
 using System.IO;
+using System.Linq;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -15,7 +17,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="benchMarks">The associated sectors to load into.</param>
         /// <param name="filePath">The path to load from.</param>
         /// <param name="reportLogger">Callback to report information.</param>
-        public static void LoadPortfolio(this Portfolio portfolio, string filePath, LogReporter reportLogger)
+        public static void LoadPortfolio(this IPortfolio portfolio, string filePath, LogReporter reportLogger)
         {
             string error = null;
             if (File.Exists(filePath))
@@ -24,8 +26,12 @@ namespace FinancialStructures.PortfolioAPI
                 if (database != null)
                 {
                     portfolio.CopyData(database.MyFunds);
-                    portfolio.SetBenchMarks(database.myBenchMarks);
-                    reportLogger.Log("Report", "Loading", $"Loaded new database from {filePath}");
+                    if (!database.MyFunds.BenchMarks.Any())
+                    {
+                        portfolio.SetBenchMarks(database.myBenchMarks);
+                    }
+
+                    reportLogger.LogDetailed("Critical", "Report", "Loading", $"Loaded new database from {filePath}");
                 }
                 else
                 {
@@ -46,9 +52,9 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="benchMarks">The associated sectors to save.</param>
         /// <param name="filePath">The path to save to.</param>
         /// <param name="reportLogger">Callback to report information.</param>
-        public static void SavePortfolio(this Portfolio portfolio, string filePath, LogReporter reportLogger)
+        public static void SavePortfolio(this IPortfolio portfolio, string filePath, LogReporter reportLogger)
         {
-            var toSave = new AllData(portfolio, portfolio.GetBenchMarks());
+            var toSave = new AllData(portfolio, portfolio.BenchMarks);
 
             if (filePath != null)
             {

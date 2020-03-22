@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.DataStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.PortfolioStatsCreatorHelper;
@@ -14,7 +14,7 @@ namespace FinanceWindowsViewModels
 {
     internal class StatsOptionsViewModel : PropertyChangedBase
     {
-        private Portfolio Portfolio;
+        private IPortfolio Portfolio;
         private bool fDisplayValueFunds = true;
         public bool displayValueFunds
         {
@@ -110,7 +110,7 @@ namespace FinanceWindowsViewModels
         {
             get { return "." + fExtension; }
         }
-        public StatsOptionsViewModel(Portfolio portfolio, ExportType exportType, LogReporter reportLogger, Action<string> CloseWindow)
+        public StatsOptionsViewModel(IPortfolio portfolio, ExportType exportType, LogReporter reportLogger, Action<string> CloseWindow)
         {
             windowType = exportType;
             Portfolio = portfolio;

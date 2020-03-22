@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.Database;
+using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.DataStructures;
 using FinancialStructures.Mathematics;
 using FinancialStructures.PortfolioAPI;
@@ -120,7 +121,7 @@ namespace FinancialStructures.DisplayStructures
             BankAccValues = bankValues;
         }
 
-        public HistoryStatistic(Portfolio portfolio, DateTime date)
+        public HistoryStatistic(IPortfolio portfolio, DateTime date)
         {
             TotalValue = new DailyValuation(date, MathSupport.Truncate(portfolio.Value(date)));
             BankAccValue = new DailyValuation(date, MathSupport.Truncate(portfolio.TotalValue(AccountType.BankAccount, date)));

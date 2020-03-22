@@ -1,6 +1,7 @@
 ﻿using FinanceWindowsViewModels;
 using FinancialStructures.Database;
 using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.ReportLogging;
 using System;

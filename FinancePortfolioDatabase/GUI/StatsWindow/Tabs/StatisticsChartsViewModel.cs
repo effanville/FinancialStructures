@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.DataStructures;
 using FinancialStructures.DisplayStructures;
 using FinancialStructures.PortfolioAPI;
@@ -102,7 +102,7 @@ namespace FinanceViewModels.StatsViewModels
             }
         }
 
-        public StatisticsChartsViewModel(Portfolio portfolio, bool displayValueFunds)
+        public StatisticsChartsViewModel(IPortfolio portfolio, bool displayValueFunds)
             : base(portfolio, displayValueFunds)
         {
             Header = "Charts";

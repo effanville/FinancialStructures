@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using System;
@@ -15,7 +15,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="portfolio">Database to query.</param>
         /// <param name="elementType">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        public static List<string> Companies(this Portfolio portfolio, AccountType elementType)
+        public static List<string> Companies(this IPortfolio portfolio, AccountType elementType)
         {
             return portfolio.NameData(elementType).Select(NameData => NameData.Company).Distinct().ToList();
         }
@@ -26,7 +26,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="portfolio">Database to query.</param>
         /// <param name="elementType">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        public static List<string> Names(this Portfolio portfolio, AccountType elementType)
+        public static List<string> Names(this IPortfolio portfolio, AccountType elementType)
         {
             return portfolio.NameData(elementType).Select(NameData => NameData.Name).ToList();
         }
@@ -37,7 +37,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="portfolio">Database to query.</param>
         /// <param name="elementType">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        public static List<NameCompDate> NameData(this Portfolio portfolio, AccountType elementType)
+        public static List<NameCompDate> NameData(this IPortfolio portfolio, AccountType elementType)
         {
             var namesAndCompanies = new List<NameCompDate>();
             switch (elementType)

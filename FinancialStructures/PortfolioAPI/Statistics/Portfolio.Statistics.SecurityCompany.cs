@@ -1,4 +1,5 @@
-﻿using FinancialStructures.DataStructures;
+﻿using FinancialStructures.DatabaseInterfaces;
+using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceFunctionsList;
 using FinancialStructures.PortfolioAPI;
 using System;
@@ -8,7 +9,7 @@ namespace FinancialStructures.Database
 {
     public static partial class PortfolioSecurity
     {
-        public static DateTime CompanyFirstDate(this Portfolio portfolio, string company)
+        public static DateTime CompanyFirstDate(this IPortfolio portfolio, string company)
         {
             var output = DateTime.Today;
             foreach (var sec in portfolio.CompanySecurities(company))
@@ -22,7 +23,7 @@ namespace FinancialStructures.Database
             return output;
         }
 
-        public static double CompanyRecentChange(this Portfolio portfolio, string company)
+        public static double CompanyRecentChange(this IPortfolio portfolio, string company)
         {
             double total = 0;
 
@@ -46,7 +47,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Returns a named list of all investments in the company.
         /// </summary>
-        public static List<DayValue_Named> CompanyInvestments(this Portfolio portfolio, string company)
+        public static List<DayValue_Named> CompanyInvestments(this IPortfolio portfolio, string company)
         {
             var output = new List<DayValue_Named>();
             foreach (var sec in portfolio.CompanySecurities(company))
@@ -61,7 +62,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// returns the profit in the company.
         /// </summary>
-        public static double CompanyProfit(this Portfolio portfolio, string company)
+        public static double CompanyProfit(this IPortfolio portfolio, string company)
         {
             var securities = portfolio.CompanySecurities(company);
             double value = 0;
@@ -80,7 +81,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// The fraction of money held in the company out of the portfolio.
         /// </summary>
-        public static double CompanyFraction(this Portfolio portfolio, string company, DateTime date)
+        public static double CompanyFraction(this IPortfolio portfolio, string company, DateTime date)
         {
             return portfolio.CompanyValue(AccountType.Security, company, date) / portfolio.TotalValue(AccountType.Security, date);
         }
@@ -88,7 +89,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Gives total return of all securities in the portfolio with given company
         /// </summary>
-        public static double IRRCompanyTotal(this Portfolio portfolio, string company)
+        public static double IRRCompanyTotal(this IPortfolio portfolio, string company)
         {
             DateTime earlierTime = DateTime.Today;
             DateTime laterTime = DateTime.Today;
@@ -119,7 +120,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// If possible, returns the IRR of all securities in the company specified over the time period.
         /// </summary>
-        public static double IRRCompany(this Portfolio portfolio, string company, DateTime earlierTime, DateTime laterTime)
+        public static double IRRCompany(this IPortfolio portfolio, string company, DateTime earlierTime, DateTime laterTime)
         {
             var securities = portfolio.CompanySecurities(company);
             if (securities.Count == 0)

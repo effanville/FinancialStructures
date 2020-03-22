@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using System;
 
 namespace FinancialStructures.PortfolioAPI
@@ -11,7 +11,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="portfolio">The database to query.</param>
         /// <param name="elementType">The type to find the total of.</param>
         /// <returns>The total value held on today.</returns>
-        public static double TotalValue(this Portfolio portfolio, AccountType elementType)
+        public static double TotalValue(this IPortfolio portfolio, AccountType elementType)
         {
             return portfolio.TotalValue(elementType, DateTime.Today);
         }
@@ -23,14 +23,14 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="elementType">The type to find the total of.</param>
         /// <param name="date">The date to find the total on.</param>
         /// <returns>The total value held.</returns>
-        public static double TotalValue(this Portfolio portfolio, AccountType elementType, DateTime date)
+        public static double TotalValue(this IPortfolio portfolio, AccountType elementType, DateTime date)
         {
             switch (elementType)
             {
                 case (AccountType.Security):
                     {
                         double total = 0;
-                        foreach (var sec in portfolio.GetSecurities())
+                        foreach (var sec in portfolio.Funds)
                         {
                             if (sec.Any())
                             {
@@ -48,7 +48,7 @@ namespace FinancialStructures.PortfolioAPI
                 case (AccountType.BankAccount):
                     {
                         double sum = 0;
-                        foreach (var acc in portfolio.GetBankAccounts())
+                        foreach (var acc in portfolio.BankAccounts)
                         {
                             var currency = Currency(portfolio, elementType, acc);
                             sum += acc.Value(date, currency).Value;

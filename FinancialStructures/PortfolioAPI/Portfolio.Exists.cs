@@ -1,9 +1,9 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.NamingStructures;
-using System;
 
 namespace FinancialStructures.PortfolioAPI
 {
+
     public static class PortfolioExistence
     {
         /// <summary>
@@ -12,9 +12,8 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="portfolio">The database to query.</param>
         /// <param name="elementType">The type of item to search for.</param>
         /// <param name="company">The company of the item to find.</param>
-        /// <param name="reportLogger">Report callback.</param>
         /// <returns>Whether exists or not.</returns>
-        public static bool CompanyExists(this Portfolio portfolio, AccountType elementType, string company, Action<string, string, string> reportLogger)
+        public static bool CompanyExists(this IPortfolio portfolio, AccountType elementType, string company)
         {
             foreach (string comp in portfolio.Companies(elementType))
             {
@@ -33,9 +32,8 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="portfolio">The database to query.</param>
         /// <param name="elementType">The type of item to search for.</param>
         /// <param name="name">The name of the item to find.</param>
-        /// <param name="reportLogger">Report callback.</param>
         /// <returns>Whether exists or not.</returns>
-        public static bool Exists(this Portfolio portfolio, AccountType elementType, NameData name)
+        public static bool Exists(this IPortfolio portfolio, AccountType elementType, NameData name)
         {
             foreach (NameData sec in portfolio.NameData(elementType))
             {

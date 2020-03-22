@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
@@ -15,7 +15,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="name">The name of the account to remove.</param>
         /// <param name="reportLogger">A report callback.</param>
         /// <returns>Success or failure.</returns>
-        public static bool TryRemove(this Portfolio portfolio, AccountType elementType, NameData name, LogReporter reportLogger)
+        public static bool TryRemove(this IPortfolio portfolio, AccountType elementType, NameData name, LogReporter reportLogger)
         {
             if (string.IsNullOrEmpty(name.Name) && string.IsNullOrEmpty(name.Company))
             {

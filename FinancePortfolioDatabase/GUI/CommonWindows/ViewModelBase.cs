@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.NamingStructures;
 using GUISupport;
 using System;
@@ -26,10 +26,10 @@ namespace FinanceCommonViewModels
             LoadSelectedTab = loadTab;
         }
 
-        public virtual void UpdateData(Portfolio portfolio, Action<object> removeTab)
+        public virtual void UpdateData(IPortfolio portfolio, Action<object> removeTab)
         {
         }
 
-        public abstract void UpdateData(Portfolio portfolio);
+        public abstract void UpdateData(IPortfolio portfolio);
     }
 }

@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.NamingStructures;
@@ -18,7 +18,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="data">The data to remove.</param>
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
-        public static bool TryDeleteData(this Portfolio portfolio, AccountType elementType, NameData name, DayValue_ChangeLogged data, LogReporter reportLogger)
+        public static bool TryDeleteData(this IPortfolio portfolio, AccountType elementType, NameData name, DayValue_ChangeLogged data, LogReporter reportLogger)
         {
             switch (elementType)
             {

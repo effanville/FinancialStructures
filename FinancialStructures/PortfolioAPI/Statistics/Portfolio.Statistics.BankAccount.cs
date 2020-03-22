@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.DataStructures;
 using System;
 using System.Collections.Generic;
@@ -7,11 +7,11 @@ namespace FinancialStructures.PortfolioAPI
 {
     public static partial class PortfolioStatistics
     {
-        public static List<DayValue_Named> GenerateCompanyBankAccountStatistics(this Portfolio portfolio, string company, bool DisplayValueFunds)
+        public static List<DayValue_Named> GenerateCompanyBankAccountStatistics(this IPortfolio portfolio, string company, bool DisplayValueFunds)
         {
             var namesAndCompanies = new List<DayValue_Named>();
 
-            foreach (var account in portfolio.GetBankAccounts())
+            foreach (var account in portfolio.BankAccounts)
             {
                 if (account.GetCompany() == company)
                 {
@@ -31,13 +31,13 @@ namespace FinancialStructures.PortfolioAPI
             return namesAndCompanies;
         }
 
-        public static List<DayValue_Named> GenerateBankAccountStatistics(this Portfolio portfolio, bool DisplayValueFunds)
+        public static List<DayValue_Named> GenerateBankAccountStatistics(this IPortfolio portfolio, bool DisplayValueFunds)
         {
             if (portfolio != null)
             {
                 var namesAndCompanies = new List<DayValue_Named>();
 
-                foreach (var acc in portfolio.GetBankAccounts())
+                foreach (var acc in portfolio.BankAccounts)
                 {
                     if ((DisplayValueFunds && acc.LatestValue().Value != 0) || !DisplayValueFunds)
                     {

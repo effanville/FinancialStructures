@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.DataStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.ReportLogging;
@@ -8,7 +8,7 @@ namespace FinancialStructures.StatsMakers
 {
     public static class InvestmentsExporter
     {
-        public static void Export(Portfolio portfolio, string filePath, LogReporter reportLogger)
+        public static void Export(IPortfolio portfolio, string filePath, LogReporter reportLogger)
         {
             StreamWriter statsWriter = new StreamWriter(filePath);
             // write in column headers

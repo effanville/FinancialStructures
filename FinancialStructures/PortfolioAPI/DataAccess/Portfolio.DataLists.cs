@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.Database;
+using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.FinanceStructures;
 using System.Collections.Generic;
 
@@ -10,7 +11,7 @@ namespace FinancialStructures.PortfolioAPI
         /// Returns a copy of the currently held portfolio. 
         /// Note one cannot use this portfolio to edit as it makes a copy.
         /// </summary>
-        public static Portfolio CopyPortfolio(this Portfolio portfolio)
+        public static IPortfolio CopyPortfolio(this IPortfolio portfolio)
         {
             var PortfoCopy = new Portfolio();
 
@@ -31,25 +32,12 @@ namespace FinancialStructures.PortfolioAPI
         }
 
         /// <summary>
-        /// Returns a copy of all securities in the portfolio
-        /// </summary>
-        public static List<Security> GetSecurities(this Portfolio portfolio)
-        {
-            var listOfFunds = new List<Security>();
-            foreach (Security sec in portfolio.Funds)
-            {
-                listOfFunds.Add(sec.Copy());
-            }
-            return listOfFunds;
-        }
-
-        /// <summary>
         /// Returns a copy of all securities with the company as specified.
         /// </summary>
-        public static List<Security> CompanySecurities(this Portfolio portfolio, string company)
+        public static List<Security> CompanySecurities(this IPortfolio portfolio, string company)
         {
             var securities = new List<Security>();
-            foreach (var sec in portfolio.GetSecurities())
+            foreach (var sec in portfolio.Funds)
             {
                 if (sec.GetCompany() == company)
                 {
@@ -60,43 +48,21 @@ namespace FinancialStructures.PortfolioAPI
             return securities;
         }
 
-        /// <summary>
-        /// A copy of all currencies in the database.
-        /// </summary>
-        public static List<Currency> GetCurrencies(this Portfolio portfolio)
-        {
-            var output = new List<Currency>();
-            foreach (var sector in portfolio.Currencies)
-            {
-                output.Add(sector);
-            }
-            return output;
-        }
 
-        /// <summary>
-        /// A copy of all bank accounts in the database.
-        /// </summary>
-        public static List<CashAccount> GetBankAccounts(this Portfolio portfolio)
+
+        public static List<CashAccount> CompanyBankAccounts(this IPortfolio portfolio, string company)
         {
-            var output = new List<CashAccount>();
+            var accounts = new List<CashAccount>();
             foreach (var acc in portfolio.BankAccounts)
             {
-                output.Add(acc.Copy());
+                if (acc.GetCompany() == company)
+                {
+                    accounts.Add(acc);
+                }
             }
-            return output;
-        }
 
-        /// <summary>
-        /// A copy of all bank accounts in the database.
-        /// </summary>
-        public static List<Sector> GetBenchMarks(this Portfolio portfolio)
-        {
-            var output = new List<Sector>();
-            foreach (var acc in portfolio.BenchMarks)
-            {
-                output.Add(acc.Copy());
-            }
-            return output;
+            accounts.Sort();
+            return accounts;
         }
     }
 }

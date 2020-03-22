@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.ReportLogging;
 using System;
@@ -9,7 +9,7 @@ namespace FinancialStructures.StatsMakers
 {
     public static class CSVHistoryWriter
     {
-        public async static void WriteHistoryToCSV(Portfolio portfolio, LogReporter reportLogger, string filePath, int daysGap)
+        public async static void WriteHistoryToCSV(IPortfolio portfolio, LogReporter reportLogger, string filePath, int daysGap)
         {
             try
             {

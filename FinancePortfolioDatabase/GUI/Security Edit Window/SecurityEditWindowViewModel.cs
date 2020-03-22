@@ -1,5 +1,5 @@
 ﻿using FinanceCommonViewModels;
-using FinancialStructures.Database;
+using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using System;
@@ -11,14 +11,14 @@ namespace FinanceWindowsViewModels
 {
     internal class SecurityEditWindowViewModel : ViewModelBase
     {
-        private Portfolio Portfolio;
+        private IPortfolio Portfolio;
 
         public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
 
         private readonly LogReporter ReportLogger;
-        private readonly Action<Action<Portfolio>> UpdateDataAction;
+        private readonly Action<Action<IPortfolio>> UpdateDataAction;
 
-        public SecurityEditWindowViewModel(Portfolio portfolio, Action<Action<Portfolio>> updateData, LogReporter reportLogger)
+        public SecurityEditWindowViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, LogReporter reportLogger)
     : base("Security Edit")
         {
             Portfolio = portfolio;
@@ -27,7 +27,7 @@ namespace FinanceWindowsViewModels
             Tabs.Add(new SecurityNamesViewModel(Portfolio, updateData, ReportLogger, LoadTab));
         }
 
-        public override void UpdateData(Portfolio portfolio)
+        public override void UpdateData(IPortfolio portfolio)
         {
             Portfolio = portfolio;
             if (Tabs != null)
