@@ -1,6 +1,6 @@
 ﻿using FinancialStructures.Database;
-using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Mathematics;
 using FinancialStructures.PortfolioAPI;
 using System;

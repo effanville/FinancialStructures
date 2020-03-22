@@ -1,4 +1,4 @@
-﻿using FinancialStructures.DatabaseInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
@@ -25,7 +25,7 @@ namespace FinancialStructures.PortfolioAPI
                     {
                         for (int fundIndex = 0; fundIndex < portfolio.NumberOf(AccountType.Security); fundIndex++)
                         {
-                            if (portfolio.Funds[fundIndex].GetCompany() == oldName.Company && portfolio.Funds[fundIndex].GetName() == oldName.Name)
+                            if (portfolio.Funds[fundIndex].Company == oldName.Company && portfolio.Funds[fundIndex].Name == oldName.Name)
                             {
                                 // now edit data
                                 return portfolio.Funds[fundIndex].EditNameData(newName);
@@ -54,11 +54,11 @@ namespace FinancialStructures.PortfolioAPI
             }
         }
 
-        private static bool TryEditNameSingleList<T>(List<T> values, AccountType elementType, NameData oldName, NameData newName, LogReporter reportLogger) where T : SingleValueDataList
+        private static bool TryEditNameSingleList<T>(List<T> values, AccountType elementType, NameData oldName, NameData newName, LogReporter reportLogger) where T : ISingleValueDataList
         {
             for (int AccountIndex = 0; AccountIndex < values.Count; AccountIndex++)
             {
-                if (values[AccountIndex].GetNameData().IsEqualTo(oldName))
+                if (values[AccountIndex].Names.IsEqualTo(oldName))
                 {
                     // now edit data
                     return values[AccountIndex].EditNameData(newName);

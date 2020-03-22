@@ -1,4 +1,4 @@
-﻿using FinancialStructures.DatabaseInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using GUISupport;
 
 namespace FinanceViewModels.StatsViewModels

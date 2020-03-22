@@ -1,6 +1,6 @@
 ﻿using FinanceCommonViewModels;
 using FinanceWindows;
-using FinancialStructures.DatabaseInterfaces;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.ReportLogging;
 using GUISupport;
@@ -63,6 +63,10 @@ namespace FinanceWindowsViewModels
             fFileName = portfolio.DatabaseName + portfolio.Extension;
             fDirectory = portfolio.Directory;
             Currencies = portfolio.Names(AccountType.Currency).Concat(portfolio.Companies(AccountType.Currency)).Distinct().ToList();
+            if (!Currencies.Contains(portfolio.BaseCurrency))
+            {
+                Currencies.Add(portfolio.BaseCurrency);
+            }
             BaseCurrency = portfolio.BaseCurrency;
         }
 

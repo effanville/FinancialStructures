@@ -1,4 +1,4 @@
-﻿using FinancialStructures.DatabaseInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
@@ -36,8 +36,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 case (AccountType.Security):
                     {
-                        Security newSecurity = new Security(name.Company, name.Name, name.Currency, name.Url, name.Sectors);
-                        portfolio.Funds.Add(newSecurity);
+                        portfolio.Funds.Add(new Security(name.Company, name.Name, name.Currency, name.Url, name.Sectors));
                         break;
                     }
                 case (AccountType.Currency):
@@ -46,25 +45,17 @@ namespace FinancialStructures.PortfolioAPI
                         {
                             name.Company = "GBP";
                         }
-                        Currency newSector = new Currency(name);
-                        portfolio.Currencies.Add(newSector);
+                        portfolio.Currencies.Add(new Currency(name));
                         break;
                     }
                 case (AccountType.BankAccount):
                     {
-                        var NewAccount = new CashAccount(name);
-                        foreach (var sector in name.Sectors)
-                        {
-                            NewAccount.TryAddSector(sector);
-                        }
-
-                        portfolio.BankAccounts.Add(NewAccount);
+                        portfolio.BankAccounts.Add(new CashAccount(name));
                         break;
                     }
                 case (AccountType.Sector):
                     {
-                        Sector newSector = new Sector(name);
-                        portfolio.BenchMarks.Add(newSector);
+                        portfolio.BenchMarks.Add(new Sector(name));
                         break;
                     }
                 default:

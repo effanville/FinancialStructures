@@ -1,9 +1,10 @@
 ﻿using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.FinanceStructures
 {
-    public class Sector : SingleValueDataList
+    public class Sector : SingleValueDataList, ISector
     {
 
         /// <summary>
@@ -23,7 +24,7 @@ namespace FinancialStructures.FinanceStructures
         {
         }
 
-        public new Sector Copy()
+        public new ISector Copy()
         {
             return new Sector(Names, Values);
         }

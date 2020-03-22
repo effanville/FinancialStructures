@@ -1,4 +1,4 @@
-﻿using FinancialStructures.DatabaseInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using System;
 
 namespace FinancialStructures.PortfolioAPI

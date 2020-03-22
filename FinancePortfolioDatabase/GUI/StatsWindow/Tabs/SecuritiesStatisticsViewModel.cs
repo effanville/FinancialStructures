@@ -1,4 +1,4 @@
-﻿using FinancialStructures.DatabaseInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.PortfolioAPI;
 using System.Collections.Generic;

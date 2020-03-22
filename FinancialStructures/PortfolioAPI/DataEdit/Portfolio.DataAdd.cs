@@ -1,5 +1,4 @@
-﻿using FinancialStructures.DatabaseInterfaces;
-using FinancialStructures.FinanceStructures;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
@@ -17,7 +16,7 @@ namespace FinancialStructures.PortfolioAPI
         {
             for (int fundIndex = 0; fundIndex < portfolio.NumberOf(AccountType.Security); fundIndex++)
             {
-                if (portfolio.Funds[fundIndex].GetCompany() == company && portfolio.Funds[fundIndex].GetName() == name)
+                if (portfolio.Funds[fundIndex].Company == company && portfolio.Funds[fundIndex].Name == name)
                 {
                     return portfolio.Funds[fundIndex].TryAddData(reportLogger, date, unitPrice, shares, Investment);
                 }
@@ -62,11 +61,11 @@ namespace FinancialStructures.PortfolioAPI
             }
         }
 
-        private static bool SingleListAdd<T>(List<T> listToEdit, NameData name, DayValue_ChangeLogged data, LogReporter reportLogger) where T : SingleValueDataList
+        private static bool SingleListAdd<T>(List<T> listToEdit, NameData name, DayValue_ChangeLogged data, LogReporter reportLogger) where T : ISingleValueDataList
         {
             for (int accountIndex = 0; accountIndex < listToEdit.Count; accountIndex++)
             {
-                if (listToEdit[accountIndex].GetNameData().IsEqualTo(name))
+                if (listToEdit[accountIndex].Names.IsEqualTo(name))
                 {
                     // now edit data
                     return listToEdit[accountIndex].TryAddData(data.Day, data.Value, reportLogger);

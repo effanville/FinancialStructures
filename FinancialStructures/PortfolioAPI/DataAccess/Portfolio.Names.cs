@@ -1,4 +1,4 @@
-﻿using FinancialStructures.DatabaseInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using System;
@@ -52,7 +52,7 @@ namespace FinancialStructures.PortfolioAPI
                                 date = security.LatestValue().Day;
                             }
 
-                            namesAndCompanies.Add(new NameCompDate(security.GetCompany(), security.GetName(), security.GetCurrency(), security.GetUrl(), security.GetSectors(), date));
+                            namesAndCompanies.Add(new NameCompDate(security.Company, security.Name, security.Currency, security.Url, security.Sectors, date));
                         }
                         break;
                     }
@@ -75,7 +75,7 @@ namespace FinancialStructures.PortfolioAPI
             return namesAndCompanies;
         }
 
-        private static List<NameCompDate> SingleDataNameObtainer<T>(List<T> objects) where T : SingleValueDataList
+        private static List<NameCompDate> SingleDataNameObtainer<T>(List<T> objects) where T : ISingleValueDataList
         {
             var namesAndCompanies = new List<NameCompDate>();
             if (objects != null)
@@ -88,7 +88,7 @@ namespace FinancialStructures.PortfolioAPI
                         date = dataList.LatestValue().Day;
                     }
 
-                    namesAndCompanies.Add(new NameCompDate(dataList.GetCompany(), dataList.GetName(), dataList.GetCurrency(), dataList.GetUrl(), dataList.GetSectors(), date));
+                    namesAndCompanies.Add(new NameCompDate(dataList.Company, dataList.Name, dataList.Currency, dataList.Url, dataList.Names.Sectors, date));
                 }
             }
             return namesAndCompanies;

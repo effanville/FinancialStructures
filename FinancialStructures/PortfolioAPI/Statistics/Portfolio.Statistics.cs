@@ -1,7 +1,7 @@
-﻿using FinancialStructures.DatabaseInterfaces;
-using FinancialStructures.DataStructures;
+﻿using FinancialStructures.DataStructures;
 using FinancialStructures.DisplayStructures;
 using FinancialStructures.FinanceFunctionsList;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.GUIFinanceStructures;
 using System;
 using System.Collections.Generic;
@@ -34,7 +34,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 if (sec.Any())
                 {
-                    var currencyName = sec.GetCurrency();
+                    var currencyName = sec.Currency;
                     var currency = portfolio.Currencies.Find(cur => cur.Name == currencyName);
                     var securityEarliest = sec.FirstValue(currency).Day;
                     if (securityEarliest < output)
@@ -56,9 +56,9 @@ namespace FinancialStructures.PortfolioAPI
             {
                 if (sec.Any())
                 {
-                    var currencyName = sec.GetCurrency();
+                    var currencyName = sec.Currency;
                     var currency = portfolio.Currencies.Find(cur => cur.Name == currencyName);
-                    total += portfolio.Profit(sec.GetCompany(), sec.GetName());
+                    total += portfolio.Profit(sec.Company, sec.Name);
                 }
             }
 
@@ -75,7 +75,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 if (desired.Any())
                 {
-                    total += portfolio.RecentChange(desired.GetCompany(), desired.GetName());
+                    total += portfolio.RecentChange(desired.Company, desired.Name);
                 }
             }
 
@@ -99,7 +99,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 if (security.Any())
                 {
-                    var currencyName = security.GetCurrency();
+                    var currencyName = security.Currency;
                     var currency = portfolio.Currencies.Find(cur => cur.Name == currencyName);
                     earlierValue += security.Value(earlierTime, currency).Value;
                     laterValue += security.Value(laterTime, currency).Value;
@@ -123,11 +123,11 @@ namespace FinancialStructures.PortfolioAPI
             var names = new List<DatabaseStatistics>();
             foreach (var sec in portfolio.Funds)
             {
-                names.Add(new DatabaseStatistics(sec.GetCompany(), sec.GetName(), sec.FirstValue().Day, sec.LatestValue().Day, sec.Count(), (sec.LatestValue().Day - sec.FirstValue().Day).Days / (365 * (double)sec.Count())));
+                names.Add(new DatabaseStatistics(sec.Company, sec.Name, sec.FirstValue().Day, sec.LatestValue().Day, sec.Count(), (sec.LatestValue().Day - sec.FirstValue().Day).Days / (365 * (double)sec.Count())));
             }
             foreach (var bankAcc in portfolio.BankAccounts)
             {
-                names.Add(new DatabaseStatistics(bankAcc.GetName(), bankAcc.GetCompany(), bankAcc.FirstValue().Day, bankAcc.LatestValue().Day, bankAcc.Count(), 365 * (double)bankAcc.Count() / (bankAcc.LatestValue().Day - bankAcc.FirstValue().Day).Days));
+                names.Add(new DatabaseStatistics(bankAcc.Name, bankAcc.Company, bankAcc.FirstValue().Day, bankAcc.LatestValue().Day, bankAcc.Count(), 365 * (double)bankAcc.Count() / (bankAcc.LatestValue().Day - bankAcc.FirstValue().Day).Days));
             }
 
             return names;

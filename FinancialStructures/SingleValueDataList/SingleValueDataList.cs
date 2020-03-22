@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using System;
 
@@ -10,14 +11,19 @@ namespace FinancialStructures.FinanceStructures
     /// <example>
     /// e.g. FTSE100 or MSCI-Asia
     /// </example>
-    public partial class SingleValueDataList : IComparable
+    public partial class SingleValueDataList : IComparable, ISingleValueDataList
     {
+        public override string ToString()
+        {
+            return Names.Company + " - " + Names.Name;
+        }
+
         /// <summary>
         /// Method of comparison
         /// </summary>
         public int CompareTo(object obj)
         {
-            if (obj is CashAccount value)
+            if (obj is ICashAccount value)
             {
                 return Names.CompareTo(value.Names);
             }
@@ -105,7 +111,7 @@ namespace FinancialStructures.FinanceStructures
             fValues = values;
         }
 
-        public SingleValueDataList Copy()
+        public ISingleValueDataList Copy()
         {
             return new SingleValueDataList(Names, fValues);
         }

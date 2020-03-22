@@ -1,7 +1,6 @@
 ﻿using FinancialStructures.Database;
-using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceStructures;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.GUIFinanceStructures;
 using System;
 using System.Collections.Generic;
@@ -23,7 +22,7 @@ namespace FinancialStructures.PortfolioAPI
 
                 foreach (var security in funds)
                 {
-                    var latest = new SecurityStatsHolder(security.GetName(), security.GetCompany());
+                    var latest = new SecurityStatsHolder(security.Name, security.Company);
                     portfolio.AddSecurityStats(latest, DateTime.Today);
                     if ((DisplayValueFunds && latest.LatestVal > 0) || !DisplayValueFunds)
                     {
@@ -79,9 +78,9 @@ namespace FinancialStructures.PortfolioAPI
 
                 foreach (var security in funds)
                 {
-                    if (security.GetCompany() == company)
+                    if (security.Company == company)
                     {
-                        var latest = new SecurityStatsHolder(security.GetName(), security.GetCompany());
+                        var latest = new SecurityStatsHolder(security.Name, security.Company);
                         portfolio.AddSecurityStats(latest, DateTime.Today);
                         namesAndCompanies.Add(latest);
                     }
@@ -104,12 +103,12 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// returns the securities under the company name.
         /// </summary>
-        public static SecurityStatsHolder GenerateSectorFundsStatistics(this IPortfolio portfolio, List<Sector> sectors, string sectorName)
+        public static SecurityStatsHolder GenerateSectorFundsStatistics(this IPortfolio portfolio, string sectorName)
         {
             if (portfolio != null)
             {
                 var totals = new SecurityStatsHolder(sectorName, "Totals");
-                portfolio.AddSectorStats(totals, DateTime.Today, sectors);
+                portfolio.AddSectorStats(totals, DateTime.Today);
                 return totals;
             }
 
@@ -125,7 +124,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <returns></returns>
         public static double RecentChange(this IPortfolio portfolio, string company, string name)
         {
-            if (portfolio.TryGetSecurity(company, name, out Security desired))
+            if (portfolio.TryGetSecurity(company, name, out ISecurity desired))
             {
                 if (desired.Any())
                 {
@@ -143,7 +142,7 @@ namespace FinancialStructures.PortfolioAPI
         /// </summary>
         public static double Profit(this IPortfolio portfolio, string company, string name)
         {
-            if (portfolio.TryGetSecurity(company, name, out Security desired))
+            if (portfolio.TryGetSecurity(company, name, out ISecurity desired))
             {
                 if (desired.Any())
                 {
@@ -160,7 +159,7 @@ namespace FinancialStructures.PortfolioAPI
         /// </summary>
         public static double SecurityFraction(this IPortfolio portfolio, string company, string name, DateTime date)
         {
-            if (portfolio.TryGetSecurity(company, name, out Security desired))
+            if (portfolio.TryGetSecurity(company, name, out ISecurity desired))
             {
                 if (desired.Any())
                 {
@@ -185,7 +184,7 @@ namespace FinancialStructures.PortfolioAPI
         /// </summary>
         private static List<DayValue_Named> SecurityInvestments(this IPortfolio portfolio, string company, string name)
         {
-            if (portfolio.TryGetSecurity(company, name, out Security desired))
+            if (portfolio.TryGetSecurity(company, name, out ISecurity desired))
             {
                 if (desired.Any())
                 {
@@ -198,28 +197,11 @@ namespace FinancialStructures.PortfolioAPI
         }
 
         /// <summary>
-        /// If possible, returns the CAR of the security specified.
-        /// </summary>
-        public static double CAR(this IPortfolio portfolio, string company, string name, DateTime earlierTime, DateTime laterTime)
-        {
-            if (portfolio.TryGetSecurity(company, name, out Security desired))
-            {
-                if (desired.Any())
-                {
-                    var currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
-                    return desired.CAR(earlierTime, laterTime, currency);
-                }
-            }
-
-            return double.NaN;
-        }
-
-        /// <summary>
         /// If possible, returns the IRR of the security specified.
         /// </summary>
         public static double IRR(this IPortfolio portfolio, string company, string name)
         {
-            if (portfolio.TryGetSecurity(company, name, out Security desired))
+            if (portfolio.TryGetSecurity(company, name, out ISecurity desired))
             {
                 if (desired.Any())
                 {
@@ -236,7 +218,7 @@ namespace FinancialStructures.PortfolioAPI
         /// </summary>
         public static double IRR(this IPortfolio portfolio, string company, string name, DateTime earlierTime, DateTime laterTime)
         {
-            if (portfolio.TryGetSecurity(company, name, out Security desired))
+            if (portfolio.TryGetSecurity(company, name, out ISecurity desired))
             {
                 if (desired.Any())
                 {

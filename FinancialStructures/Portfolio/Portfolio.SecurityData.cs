@@ -1,5 +1,4 @@
-﻿using FinancialStructures.DatabaseInterfaces;
-using FinancialStructures.FinanceStructures;
+﻿using FinancialStructures.FinanceInterfaces;
 using System;
 using System.Collections.Generic;
 
@@ -15,8 +14,7 @@ namespace FinancialStructures.Database
             var companies = new List<string>();
             foreach (var security in portfolio.Funds)
             {
-                var sectors = security.GetSectors();
-                foreach (var sector in sectors)
+                foreach (var sector in security.Sectors)
                 {
                     if (companies.IndexOf(sector) == -1)
                     {
@@ -31,9 +29,9 @@ namespace FinancialStructures.Database
 
         public static double SecurityShares(this IPortfolio portfolio, string company, string name, DateTime date)
         {
-            foreach (Security sec in portfolio.Funds)
+            foreach (ISecurity sec in portfolio.Funds)
             {
-                if (sec.GetName() == name && sec.GetCompany() == company)
+                if (sec.Name == name && sec.Company == company)
                 {
                     return sec.Shares.NearestEarlierValue(date).Value;
                 }

@@ -1,9 +1,7 @@
 ﻿using FinancialStructures.DataStructures;
-using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace FinancialStructures.FinanceStructures
@@ -14,173 +12,10 @@ namespace FinancialStructures.FinanceStructures
     public partial class Security
     {
         /// <summary>
-        /// Compares another security and determines if has same name and company.
-        /// </summary>
-        internal bool IsEqualTo(Security otherSecurity)
-        {
-            if (otherSecurity.GetName() != Names.Name)
-            {
-                return false;
-            }
-
-            if (otherSecurity.GetCompany() != Names.Company)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        public int Count()
-        {
-            return fUnitPrice.Count();
-        }
-        /// <summary>
-        /// Returns true if shares and unit prices have an item or are not null.
-        /// </summary>
-        public bool Any()
-        {
-            if (fUnitPrice.Any() && fShares.Any())
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Makes a copy of the security.
-        /// </summary>
-        internal Security Copy()
-        {
-            return new Security(Names.Company, Names.Name, Names.Currency, Names.Url, fShares, fUnitPrice, fInvestments);
-        }
-
-        /// <summary>
-        /// Returns the name of the security.
-        /// </summary>
-        public string GetName()
-        {
-            return Names.Name;
-        }
-
-        /// <summary>
-        /// Returns the company field of the security
-        /// </summary>
-        public string GetCompany()
-        {
-            return Names.Company;
-        }
-
-        /// <summary>
-        /// Returns the currency field of the security
-        /// </summary>
-        public string GetCurrency()
-        {
-            return Names.Currency;
-        }
-
-        /// <summary>
-        /// Returns the Uri field of the security
-        /// </summary>
-        public string GetUrl()
-        {
-            return Names.Url;
-        }
-
-        /// <summary>
-        /// Returns the sectors associated to this security.
-        /// </summary>
-        /// <returns></returns>
-        public List<string> GetSectors()
-        {
-            return Names.Sectors;
-        }
-
-        public DayDataView DayData(DateTime day)
-        {
-            fUnitPrice.TryGetValue(day, out double UnitPrice);
-            fShares.TryGetValue(day, out double shares);
-            fInvestments.TryGetValue(day, out double invest);
-            return new DayDataView(day, UnitPrice, shares, invest);
-        }
-
-        /// <summary>
-        /// Produces a list of data for visual display purposes. Display in the base currency of the fund ( so this does not modify values due to currency)
-        /// </summary>
-        internal List<DayDataView> GetDataForDisplay()
-        {
-            var output = new List<DayDataView>();
-            if (fUnitPrice.Any())
-            {
-                foreach (var datevalue in fUnitPrice.GetValuesBetween(fUnitPrice.FirstDate(), fUnitPrice.LatestDate()))
-                {
-                    fUnitPrice.TryGetValue(datevalue.Day, out double UnitPrice);
-                    fShares.TryGetValue(datevalue.Day, out double shares);
-                    fInvestments.TryGetValue(datevalue.Day, out double invest);
-                    var thisday = new DayDataView(datevalue.Day, UnitPrice, shares, invest);
-                    output.Add(thisday);
-                }
-            }
-            if (fShares.Any())
-            {
-                foreach (var datevalue in fShares.GetValuesBetween(fShares.FirstDate(), fShares.LatestDate()))
-                {
-                    if (!fUnitPrice.TryGetValue(datevalue.Day, out double _))
-                    {
-                        fShares.TryGetValue(datevalue.Day, out double shares);
-                        fInvestments.TryGetValue(datevalue.Day, out double invest);
-                        var thisday = new DayDataView(datevalue.Day, double.NaN, shares, invest);
-                        output.Add(thisday);
-                    }
-                }
-            }
-            if (fInvestments.Any())
-            {
-                foreach (var datevalue in fInvestments.GetValuesBetween(fInvestments.FirstDate(), fInvestments.LatestDate()))
-                {
-                    if (!fUnitPrice.TryGetValue(datevalue.Day, out double _) && !fShares.TryGetValue(datevalue.Day, out double _))
-                    {
-                        fInvestments.TryGetValue(datevalue.Day, out double invest);
-                        var thisday = new DayDataView(datevalue.Day, double.NaN, double.NaN, invest);
-
-                        output.Add(thisday);
-                    }
-                }
-            }
-            output.Sort();
-            return output;
-        }
-
-        /// <summary>
-        /// Checks if SharePrice data for the date specified exists. if so outputs index value
-        /// </summary>
-        internal bool DoesDateSharesDataExist(DateTime date, out int index)
-        {
-            return fShares.ValueExists(date, out index);
-        }
-
-        /// <summary>
-        /// Checks if UnitPrice data for the date specified exists. if so outputs index value
-        /// </summary>
-        internal bool DoesDateUnitPriceDataExist(DateTime date, out int index)
-        {
-            return fUnitPrice.ValueExists(date, out index);
-        }
-
-        /// <summary>
-        /// Checks if UnitPrice data for the date specified exists. if so outputs index value
-        /// </summary>
-        internal bool DoesDateInvestmentDataExist(DateTime date, out int index)
-        {
-            return fInvestments.ValueExists(date, out index);
-        }
-
-        /// <summary>
         /// Attempts to add data for the date specified.
         /// If cannot add any value that one wants to, then doesn't add all the values chosen.
         /// </summary>
-        internal bool TryAddData(LogReporter reportLogger, DateTime date, double unitPrice, double shares = 0, double investment = 0)
+        public bool TryAddData(LogReporter reportLogger, DateTime date, double unitPrice, double shares = 0, double investment = 0)
         {
             if (DoesDateSharesDataExist(date, out int _) || DoesDateInvestmentDataExist(date, out int _) || DoesDateUnitPriceDataExist(date, out int _))
             {
@@ -212,7 +47,7 @@ namespace FinancialStructures.FinanceStructures
         /// If do have relevant values, then edit that value
         /// If investment value doesnt exist, then add that value.
         /// </summary>
-        internal bool TryEditData(LogReporter reportLogger, DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment)
+        public bool TryEditData(LogReporter reportLogger, DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment)
         {
             bool editShares = false;
             bool editUnitPrice = false;
@@ -234,7 +69,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Edits name and company data of security.
         /// </summary>
-        internal bool EditNameData(NameData name)
+        public bool EditNameData(NameData name)
         {
             Names = name;
             return true;
@@ -262,7 +97,7 @@ namespace FinancialStructures.FinanceStructures
             return false;
         }
 
-        internal bool IsSectorLinked(string sectorName)
+        public bool IsSectorLinked(string sectorName)
         {
             if (Names.Sectors != null && Names.Sectors.Any())
             {
@@ -278,9 +113,9 @@ namespace FinancialStructures.FinanceStructures
             return false;
         }
 
-        internal int NumberSectors()
+        public int NumberSectors()
         {
-            return Sectors.Count;
+            return Names.Sectors.Count;
         }
 
         /// <summary>
@@ -302,7 +137,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Tries to delete the data. If it can, it deletes all data specified, then returns true only if all data has been successfully deleted.
         /// </summary>
-        internal bool TryDeleteData(DateTime date, LogReporter reportLogger)
+        public bool TryDeleteData(DateTime date, LogReporter reportLogger)
         {
             return fUnitPrice.TryDeleteValue(date, reportLogger) & fShares.TryDeleteValue(date, reportLogger) & fInvestments.TryDeleteValue(date, reportLogger) && ComputeInvestments(reportLogger);
         }

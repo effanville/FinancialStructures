@@ -1,6 +1,5 @@
 ﻿using FinancialStructures.Database;
-using FinancialStructures.DatabaseInterfaces;
-using FinancialStructures.FinanceStructures;
+using FinancialStructures.FinanceInterfaces;
 using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
@@ -34,12 +33,12 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// Returns a copy of all securities with the company as specified.
         /// </summary>
-        public static List<Security> CompanySecurities(this IPortfolio portfolio, string company)
+        public static List<ISecurity> CompanySecurities(this IPortfolio portfolio, string company)
         {
-            var securities = new List<Security>();
-            foreach (var sec in portfolio.Funds)
+            var securities = new List<ISecurity>();
+            foreach (ISecurity sec in portfolio.Funds)
             {
-                if (sec.GetCompany() == company)
+                if (sec.Company == company)
                 {
                     securities.Add(sec.Copy());
                 }
@@ -50,12 +49,12 @@ namespace FinancialStructures.PortfolioAPI
 
 
 
-        public static List<CashAccount> CompanyBankAccounts(this IPortfolio portfolio, string company)
+        public static List<ICashAccount> CompanyBankAccounts(this IPortfolio portfolio, string company)
         {
-            var accounts = new List<CashAccount>();
-            foreach (var acc in portfolio.BankAccounts)
+            var accounts = new List<ICashAccount>();
+            foreach (ICashAccount acc in portfolio.BankAccounts)
             {
-                if (acc.GetCompany() == company)
+                if (acc.Company == company)
                 {
                     accounts.Add(acc);
                 }

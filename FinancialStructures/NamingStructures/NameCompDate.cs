@@ -16,7 +16,7 @@ namespace FinancialStructures.NamingStructures
         {
         }
 
-        public NameCompDate(string company, string name, string currency, string url, List<string> sectors, DateTime date) : base(company, name, currency, url, sectors, false)
+        public NameCompDate(string company, string name, string currency, string url, HashSet<string> sectors, DateTime date) : base(company, name, currency, url, sectors, false)
         {
             fDateToRecord = date;
         }

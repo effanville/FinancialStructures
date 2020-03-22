@@ -1,5 +1,4 @@
-﻿using FinancialStructures.DatabaseInterfaces;
-using FinancialStructures.FinanceStructures;
+﻿using FinancialStructures.FinanceInterfaces;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -8,11 +7,11 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// Outputs a copy of the security if it exists.
         /// </summary>
-        public static bool TryGetSecurity(this IPortfolio portfolio, string company, string name, out Security desired)
+        public static bool TryGetSecurity(this IPortfolio portfolio, string company, string name, out ISecurity desired)
         {
-            foreach (Security sec in portfolio.Funds)
+            foreach (ISecurity sec in portfolio.Funds)
             {
-                if (sec.GetName() == name && sec.GetCompany() == company)
+                if (sec.Name == name && sec.Company == company)
                 {
                     desired = sec.Copy();
                     return true;
@@ -25,11 +24,11 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// Outputs a copy of the BankAccount if it exists.
         /// </summary>
-        public static bool TryGetBankAccount(this IPortfolio portfolio, string company, string name, out CashAccount desired)
+        public static bool TryGetBankAccount(this IPortfolio portfolio, string company, string name, out ICashAccount desired)
         {
-            foreach (CashAccount sec in portfolio.BankAccounts)
+            foreach (ICashAccount sec in portfolio.BankAccounts)
             {
-                if (sec.GetName() == name && sec.GetCompany() == company)
+                if (sec.Name == name && sec.Company == company)
                 {
                     desired = sec.Copy();
                     return true;
@@ -43,11 +42,11 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// Returns a sector from the database with specified name.
         /// </summary>
-        public static bool TryGetSector(this IPortfolio portfolio, string name, out Sector Desired)
+        public static bool TryGetSector(this IPortfolio portfolio, string name, out ISector Desired)
         {
-            foreach (Sector sector in portfolio.BenchMarks)
+            foreach (ISector sector in portfolio.BenchMarks)
             {
-                if (sector.GetName() == name)
+                if (sector.Name == name)
                 {
                     Desired = sector.Copy();
                     return true;
@@ -61,13 +60,13 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// Outputs a copy of the BankAccount if it exists.
         /// </summary>
-        public static bool TryGetCurrency(this IPortfolio portfolio, string name, out Currency desired)
+        public static bool TryGetCurrency(this IPortfolio portfolio, string name, out ICurrency desired)
         {
-            foreach (Currency sec in portfolio.Currencies)
+            foreach (ICurrency currency in portfolio.Currencies)
             {
-                if (sec.GetName() == name)
+                if (currency.Name == name)
                 {
-                    desired = sec.Copy();
+                    desired = currency.Copy();
                     return true;
                 }
             }

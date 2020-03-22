@@ -98,6 +98,9 @@
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Width="Auto" 
+                                            Header="Company" 
+                                            DisplayMemberBinding="{Binding Company}"/>
+                            <GridViewColumn Width="Auto" 
                                             Header="Name" 
                                             DisplayMemberBinding="{Binding Name}" />
                             <GridViewColumn Width="Auto" 

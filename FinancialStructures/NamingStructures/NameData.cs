@@ -23,7 +23,7 @@ namespace FinancialStructures.NamingStructures
         /// <summary>
         /// Set all name type values.
         /// </summary>
-        public NameData(string company, string name, string currency, string url, List<string> sectors)
+        public NameData(string company, string name, string currency, string url, HashSet<string> sectors)
             : base(company, name)
         {
             Currency = currency;
@@ -71,15 +71,21 @@ namespace FinancialStructures.NamingStructures
             set { fCurrency = value; }
         }
 
-        private List<string> fSectors = new List<string>();
+        private HashSet<string> fSectors = new HashSet<string>();
 
         /// <summary>
         /// Sectors associated to account.
         /// </summary>
-        public List<string> Sectors
+        public HashSet<string> Sectors
         {
-            get { return fSectors; }
-            set { fSectors = value; }
+            get
+            {
+                return fSectors;
+            }
+            set
+            {
+                fSectors = value;
+            }
         }
 
         public virtual string SectorsFlat
@@ -87,19 +93,20 @@ namespace FinancialStructures.NamingStructures
             get { return string.Join(",", fSectors); }
             set
             {
-                List<string> sectorList = new List<string>();
+                HashSet<string> sectorList = new HashSet<string>();
                 if (!string.IsNullOrEmpty(value))
                 {
                     var sectorsSplit = value.Split(',');
 
-                    sectorList.AddRange(sectorsSplit);
-                    for (int i = 0; i < sectorList.Count; i++)
+                    for (int i = 0; i < sectorsSplit.Length; i++)
                     {
-                        sectorList[i] = sectorList[i].Trim(' ');
+                        sectorsSplit[i] = sectorsSplit[i].Trim(' ');
                     }
+
+                    sectorList.UnionWith(sectorsSplit);
                 }
 
-                fSectors = sectorList;
+                Sectors = sectorList;
             }
         }
     }

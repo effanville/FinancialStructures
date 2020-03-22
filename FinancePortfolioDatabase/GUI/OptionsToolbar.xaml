@@ -32,7 +32,8 @@
                     <Button Content="Update Data"
                             Style="{StaticResource ResourceKey=defaultButtonNoMargin}"
                             Command="{Binding UpdateDataCommand}"/>
-                    <Label Content="Portfolio Base Currency"/>
+                    <Label Margin="5 5 5 5"
+                           Content="Base Currency"/>
                     <ComboBox Margin="5 5 5 5"
                               MinWidth="50"
                               ItemsSource="{Binding Currencies}"

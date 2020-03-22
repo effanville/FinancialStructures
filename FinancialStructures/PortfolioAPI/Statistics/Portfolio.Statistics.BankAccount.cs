@@ -1,5 +1,5 @@
-﻿using FinancialStructures.DatabaseInterfaces;
-using FinancialStructures.DataStructures;
+﻿using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceInterfaces;
 using System;
 using System.Collections.Generic;
 
@@ -13,12 +13,12 @@ namespace FinancialStructures.PortfolioAPI
 
             foreach (var account in portfolio.BankAccounts)
             {
-                if (account.GetCompany() == company)
+                if (account.Company == company)
                 {
                     if ((DisplayValueFunds && account.LatestValue().Value != 0) || !DisplayValueFunds)
                     {
                         var currency = PortfolioValues.Currency(portfolio, AccountType.BankAccount, account);
-                        namesAndCompanies.Add(new DayValue_Named(account.GetCompany(), account.GetName(), account.LatestValue(currency).Day, account.LatestValue(currency).Value));
+                        namesAndCompanies.Add(new DayValue_Named(account.Company, account.Name, account.LatestValue(currency).Day, account.LatestValue(currency).Value));
                     }
                 }
             }
@@ -42,7 +42,7 @@ namespace FinancialStructures.PortfolioAPI
                     if ((DisplayValueFunds && acc.LatestValue().Value != 0) || !DisplayValueFunds)
                     {
                         var currency = PortfolioValues.Currency(portfolio, AccountType.BankAccount, acc);
-                        var latest = new DayValue_Named(acc.GetCompany(), acc.GetName(), acc.LatestValue(currency));
+                        var latest = new DayValue_Named(acc.Company, acc.Name, acc.LatestValue(currency));
                         namesAndCompanies.Add(latest);
                     }
                 }

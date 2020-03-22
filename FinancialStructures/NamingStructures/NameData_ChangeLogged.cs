@@ -53,7 +53,7 @@ namespace FinancialStructures.NamingStructures
         /// <summary>
         /// Set all name type values.
         /// </summary>
-        public NameData_ChangeLogged(string company, string name, string currency, string url, List<string> sectors, bool newValue = true)
+        public NameData_ChangeLogged(string company, string name, string currency, string url, HashSet<string> sectors, bool newValue = true)
             : base(company, name, currency, url, sectors)
         {
             NewValue = newValue;

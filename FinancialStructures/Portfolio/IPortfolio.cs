@@ -2,7 +2,7 @@
 using FinancialStructures.PortfolioAPI;
 using System.Collections.Generic;
 
-namespace FinancialStructures.DatabaseInterfaces
+namespace FinancialStructures.FinanceInterfaces
 {
     public interface IPortfolio
     {

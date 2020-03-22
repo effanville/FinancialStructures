@@ -1,5 +1,5 @@
-﻿using FinancialStructures.DatabaseInterfaces;
-using FinancialStructures.DisplayStructures;
+﻿using FinancialStructures.DisplayStructures;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
 using System.Collections.Generic;
 

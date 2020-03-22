@@ -1,4 +1,4 @@
-﻿using FinancialStructures.DatabaseInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using System;
@@ -29,25 +29,25 @@ namespace FinancialStructures.PortfolioAPI
         public async static Task DownloadSecurity(IPortfolio portfolio, string company, string name, LogReporter reportLogger)
         {
             portfolio.TryGetSecurity(company, name, out var sec);
-            await DownloadLatestValue(sec.GetCompany(), sec.GetName(), sec.GetUrl(), value => sec.UpdateSecurityData(value, reportLogger, DateTime.Today), reportLogger).ConfigureAwait(false);
+            await DownloadLatestValue(sec.Company, sec.Name, sec.Url, value => sec.UpdateSecurityData(value, reportLogger, DateTime.Today), reportLogger).ConfigureAwait(false);
         }
 
         public async static Task DownloadCurrency(IPortfolio portfolio, NameData name, LogReporter reportLogger)
         {
             portfolio.TryGetCurrency(name.Name, out var currency);
-            await DownloadLatestValue(string.Empty, currency.GetName(), currency.GetUrl(), value => currency.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+            await DownloadLatestValue(string.Empty, currency.Name, currency.Url, value => currency.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
         }
 
         public async static Task DownloadBankAccount(IPortfolio portfolio, NameData name, LogReporter reportLogger)
         {
             portfolio.TryGetBankAccount(name.Company, name.Name, out var acc);
-            await DownloadLatestValue(acc.GetCompany(), acc.GetName(), acc.GetUrl(), value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+            await DownloadLatestValue(acc.Company, acc.Name, acc.Url, value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
         }
 
         public async static Task DownloadSector(IPortfolio portfolio, NameData name, LogReporter reportLogger)
         {
             portfolio.TryGetSector(name.Name, out var sector);
-            await DownloadLatestValue(string.Empty, sector.GetName(), sector.GetUrl(), value => sector.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+            await DownloadLatestValue(string.Empty, sector.Name, sector.Url, value => sector.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
         }
 
         private static string Pence = "GBX";
@@ -95,21 +95,21 @@ namespace FinancialStructures.PortfolioAPI
 
         private async static Task DownloadPortfolioLatest(IPortfolio portfo, LogReporter reportLogger)
         {
-            foreach (var sec in portfo.Funds)
+            foreach (ISecurity sec in portfo.Funds)
             {
-                await DownloadLatestValue(sec.GetCompany(), sec.GetName(), sec.GetUrl(), value => sec.UpdateSecurityData(value, reportLogger, DateTime.Today), reportLogger).ConfigureAwait(false);
+                await DownloadLatestValue(sec.Company, sec.Name, sec.Url, value => sec.UpdateSecurityData(value, reportLogger, DateTime.Today), reportLogger).ConfigureAwait(false);
             }
             foreach (var acc in portfo.BankAccounts)
             {
-                await DownloadLatestValue(acc.GetCompany(), acc.GetName(), acc.GetUrl(), value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                await DownloadLatestValue(acc.Company, acc.Name, acc.Url, value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
             }
-            foreach (var currency in portfo.Currencies)
+            foreach (ICurrency currency in portfo.Currencies)
             {
-                await DownloadLatestValue(string.Empty, currency.GetName(), currency.GetUrl(), value => currency.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                await DownloadLatestValue(string.Empty, currency.Name, currency.Url, value => currency.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
             }
             foreach (var sector in portfo.BenchMarks)
             {
-                await DownloadLatestValue(string.Empty, sector.GetName(), sector.GetUrl(), value => sector.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                await DownloadLatestValue(string.Empty, sector.Name, sector.Url, value => sector.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
             }
         }
 

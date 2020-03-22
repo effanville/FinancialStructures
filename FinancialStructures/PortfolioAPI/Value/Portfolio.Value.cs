@@ -1,5 +1,4 @@
-﻿using FinancialStructures.DatabaseInterfaces;
-using FinancialStructures.FinanceStructures;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using System;
 
@@ -33,7 +32,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 case (AccountType.Security):
                     {
-                        if (!portfolio.TryGetSecurity(name.Company, name.Name, out Security desired) || !desired.Any())
+                        if (!portfolio.TryGetSecurity(name.Company, name.Name, out ISecurity desired) || !desired.Any())
                         {
                             return double.NaN;
                         }
@@ -42,9 +41,9 @@ namespace FinancialStructures.PortfolioAPI
                     }
                 case (AccountType.Currency):
                     {
-                        foreach (var currency in portfolio.Currencies)
+                        foreach (ICurrency currency in portfolio.Currencies)
                         {
-                            if (currency.GetName() == name.Name && currency.GetCompany() == name.Company)
+                            if (currency.Name == name.Name && currency.Company == name.Company)
                             {
                                 return currency.Value(date).Value;
                             }
@@ -54,7 +53,7 @@ namespace FinancialStructures.PortfolioAPI
                     }
                 case (AccountType.BankAccount):
                     {
-                        if (!portfolio.TryGetBankAccount(name.Company, name.Name, out CashAccount desired))
+                        if (!portfolio.TryGetBankAccount(name.Company, name.Name, out ICashAccount desired))
                         {
                             return double.NaN;
                         }

@@ -1,5 +1,4 @@
-﻿using FinancialStructures.Database;
-using FinancialStructures.DatabaseInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.NamingStructures;
@@ -17,7 +16,7 @@ namespace FinancialStructures.PortfolioAPI
         {
             foreach (var security in portfolio.Funds)
             {
-                if (security.GetName() == name && security.GetCompany() == company)
+                if (security.Name == name && security.Company == company)
                 {
                     return security.GetDataForDisplay();
                 }
@@ -59,11 +58,11 @@ namespace FinancialStructures.PortfolioAPI
             }
         }
 
-        private static List<DayValue_ChangeLogged> SingleDataListDataObtainer<T>(List<T> objects, AccountType elementType, NameData name, LogReporter reportLogger) where T : SingleValueDataList
+        private static List<DayValue_ChangeLogged> SingleDataListDataObtainer<T>(List<T> objects, AccountType elementType, NameData name, LogReporter reportLogger) where T : ISingleValueDataList
         {
             foreach (var account in objects)
             {
-                if (account.GetName() == name.Name && account.GetCompany() == name.Company)
+                if (account.Name == name.Name && account.Company == name.Company)
                 {
                     return account.GetDataForDisplay();
                 }

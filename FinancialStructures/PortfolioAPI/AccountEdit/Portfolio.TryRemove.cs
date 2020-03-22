@@ -1,4 +1,4 @@
-﻿using FinancialStructures.DatabaseInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
@@ -29,7 +29,7 @@ namespace FinancialStructures.PortfolioAPI
                     {
                         foreach (Security sec in portfolio.Funds)
                         {
-                            if (sec.GetCompany().Equals(name.Company) && sec.GetName().Equals(name.Name))
+                            if (sec.Company.Equals(name.Company) && sec.Name.Equals(name.Name))
                             {
                                 portfolio.Funds.Remove(sec);
                                 reportLogger.LogDetailed("Detailed", "Report", "DeletingData", $"Security `{name.Company}'-`{name}' removed from the database.");
@@ -41,11 +41,11 @@ namespace FinancialStructures.PortfolioAPI
                     }
                 case (AccountType.Currency):
                     {
-                        foreach (var currency in portfolio.Currencies)
+                        foreach (Currency currency in portfolio.Currencies)
                         {
-                            if (name.Name == currency.GetName())
+                            if (name.Name == currency.Name)
                             {
-                                reportLogger.LogDetailed("Detailed", "Report", "DeletingData", $"Deleted sector {currency.GetName()}");
+                                reportLogger.LogDetailed("Detailed", "Report", "DeletingData", $"Deleted sector {currency.Name}");
                                 portfolio.Currencies.Remove(currency);
                                 return true;
                             }
@@ -57,7 +57,7 @@ namespace FinancialStructures.PortfolioAPI
                     {
                         foreach (CashAccount acc in portfolio.BankAccounts)
                         {
-                            if (acc.GetCompany() == name.Company && acc.GetName() == name.Name)
+                            if (acc.Company == name.Company && acc.Name == name.Name)
                             {
                                 portfolio.BankAccounts.Remove(acc);
                                 reportLogger.LogDetailed("Detailed", "Report", "DeletingData", $"Deleting Bank Account: Deleted `{name.Company}'-`{name.Name}'.");
@@ -69,11 +69,11 @@ namespace FinancialStructures.PortfolioAPI
                     }
                 case (AccountType.Sector):
                     {
-                        foreach (var sector in portfolio.BenchMarks)
+                        foreach (Sector sector in portfolio.BenchMarks)
                         {
-                            if (name.Name.Equals(sector.GetName()))
+                            if (name.Name.Equals(sector.Name))
                             {
-                                reportLogger.LogDetailed("Detailed", "Report", "DeletingData", $"Deleted sector {sector.GetName()}");
+                                reportLogger.LogDetailed("Detailed", "Report", "DeletingData", $"Deleted sector {sector.Name}");
                                 portfolio.BenchMarks.Remove(sector);
                                 return true;
                             }

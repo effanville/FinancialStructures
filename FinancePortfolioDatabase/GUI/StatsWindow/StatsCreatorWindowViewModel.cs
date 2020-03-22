@@ -1,7 +1,7 @@
 ﻿using FinanceCommonViewModels;
 using FinanceViewModels.StatsViewModels;
 using FinanceWindows.StatsWindows;
-using FinancialStructures.DatabaseInterfaces;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.ReportLogging;
 using FinancialStructures.StatsMakers;
 using GUISupport;

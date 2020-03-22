@@ -1,4 +1,4 @@
-﻿using FinancialStructures.DatabaseInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.NamingStructures;
@@ -26,7 +26,7 @@ namespace FinancialStructures.PortfolioAPI
                     {
                         for (int fundIndex = 0; fundIndex < portfolio.NumberOf(AccountType.Security); fundIndex++)
                         {
-                            if (portfolio.Funds[fundIndex].GetCompany() == name.Company && portfolio.Funds[fundIndex].GetName() == name.Name)
+                            if (portfolio.Funds[fundIndex].Company == name.Company && portfolio.Funds[fundIndex].Name == name.Name)
                             {
                                 // now edit data
                                 return portfolio.Funds[fundIndex].TryDeleteData(data.Day, reportLogger);
@@ -57,11 +57,11 @@ namespace FinancialStructures.PortfolioAPI
             return false;
         }
 
-        private static bool TryDeleteSingleListData<T>(List<T> values, AccountType elementType, NameData name, DayValue_ChangeLogged data, LogReporter reportLogger) where T : SingleValueDataList
+        private static bool TryDeleteSingleListData<T>(List<T> values, AccountType elementType, NameData name, DayValue_ChangeLogged data, LogReporter reportLogger) where T : ISingleValueDataList
         {
             foreach (var account in values)
             {
-                if (name.IsEqualTo(account.GetNameData()))
+                if (name.IsEqualTo(account.Names))
                 {
                     return account.TryDeleteData(data.Day, reportLogger);
                 }

@@ -1,4 +1,5 @@
-﻿using FinancialStructures.GUIFinanceStructures;
+﻿using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using System;
@@ -15,7 +16,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Compares another security and determines if has same name and company.
         /// </summary>
-        internal bool IsEqualTo(SingleValueDataList otherAccount)
+        public bool IsEqualTo(ISingleValueDataList otherAccount)
         {
             return Names.IsEqualTo(otherAccount.Names);
         }
@@ -23,36 +24,6 @@ namespace FinancialStructures.FinanceStructures
         public int Count()
         {
             return fValues.Count();
-        }
-
-        public string GetCompany()
-        {
-            return Names.Company;
-        }
-
-        public string GetName()
-        {
-            return Names.Name;
-        }
-
-        public string GetUrl()
-        {
-            return Names.Url;
-        }
-
-        public List<string> GetSectors()
-        {
-            return Names.Sectors;
-        }
-
-        public string GetCurrency()
-        {
-            return Names.Currency;
-        }
-
-        public NameData GetNameData()
-        {
-            return Names.Copy();
         }
 
         public List<DayValue_ChangeLogged> GetDataForDisplay()
@@ -76,7 +47,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         /// <param name="newNames"></param>
         /// <returns></returns>
-        internal virtual bool EditNameData(NameData newNames)
+        public virtual bool EditNameData(NameData newNames)
         {
             Names = newNames;
             return true;
@@ -85,7 +56,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Adds <param name="value"/> to amounts on <param name="date"/> if data doesnt exist.
         /// </summary>
-        internal bool TryAddData(DateTime date, double value, LogReporter reportLogger)
+        public bool TryAddData(DateTime date, double value, LogReporter reportLogger)
         {
             if (fValues.ValueExists(date, out _))
             {
@@ -122,17 +93,6 @@ namespace FinancialStructures.FinanceStructures
             if (IsSectorLinked(sectorName))
             {
                 Names.Sectors.Remove(sectorName);
-                return true;
-            }
-
-            return false;
-        }
-
-        public bool TryAddSector(string sectorName)
-        {
-            if (!IsSectorLinked(sectorName))
-            {
-                Names.Sectors.Add(sectorName);
                 return true;
             }
 

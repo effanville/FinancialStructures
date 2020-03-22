@@ -1,7 +1,6 @@
-﻿using FinancialStructures.DatabaseInterfaces;
-using FinancialStructures.DataStructures;
+﻿using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceFunctionsList;
-using FinancialStructures.FinanceStructures;
+using FinancialStructures.FinanceInterfaces;
 using System;
 using System.Collections.Generic;
 
@@ -44,9 +43,9 @@ namespace FinancialStructures.PortfolioAPI
             return portfolio.SectorSecurities(sectorName).Count;
         }
 
-        public static List<Security> SectorSecurities(this IPortfolio portfolio, string sectorName)
+        public static List<ISecurity> SectorSecurities(this IPortfolio portfolio, string sectorName)
         {
-            var securities = new List<Security>();
+            var securities = new List<ISecurity>();
             foreach (var sec in portfolio.Funds)
             {
                 if (sec.IsSectorLinked(sectorName))

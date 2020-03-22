@@ -1,6 +1,6 @@
 ﻿using FinanceCommonViewModels;
 using FinancialStructures.Database;
-using FinancialStructures.DatabaseInterfaces;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.ReportLogging;

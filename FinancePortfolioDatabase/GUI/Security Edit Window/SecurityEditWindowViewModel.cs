@@ -1,5 +1,5 @@
 ﻿using FinanceCommonViewModels;
-using FinancialStructures.DatabaseInterfaces;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using System;

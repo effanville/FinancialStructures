@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.FinanceStructures
@@ -6,7 +7,7 @@ namespace FinancialStructures.FinanceStructures
     /// <summary>
     /// A wrapper class of a single list to desribe a currency pair.
     /// </summary>
-    public class Currency : SingleValueDataList
+    public class Currency : SingleValueDataList, ICurrency
     {
         /// <summary>
         /// The base currency the currency is derived from.
@@ -32,12 +33,12 @@ namespace FinancialStructures.FinanceStructures
             }
         }
 
-        public new Currency Copy()
+        public new ICurrency Copy()
         {
             return new Currency(Names, Values);
         }
 
-        public Currency Inverted()
+        public ICurrency Inverted()
         {
             return new Currency(Names, Values.Inverted());
         }

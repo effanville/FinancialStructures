@@ -1,8 +1,5 @@
-﻿using FinancialStructures.Database;
-using FinancialStructures.DatabaseInterfaces;
-using FinancialStructures.FinanceStructures;
+﻿using FinancialStructures.FinanceInterfaces;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace FinancialStructures.PortfolioAPI

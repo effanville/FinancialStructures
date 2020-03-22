@@ -1,6 +1,6 @@
-﻿using FinancialStructures.DatabaseInterfaces;
-using FinancialStructures.DataStructures;
+﻿using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceFunctionsList;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
 using System;
 using System.Collections.Generic;
@@ -37,7 +37,7 @@ namespace FinancialStructures.Database
             {
                 if (desired.Any())
                 {
-                    total += portfolio.RecentChange(desired.GetCompany(), desired.GetName());
+                    total += portfolio.RecentChange(desired.Company, desired.Name);
                 }
             }
 
@@ -135,7 +135,7 @@ namespace FinancialStructures.Database
             {
                 if (security.Any())
                 {
-                    var currencyName = security.GetCurrency();
+                    var currencyName = security.Currency;
                     var currency = portfolio.Currencies.Find(cur => cur.Name == currencyName);
                     earlierValue += security.Value(earlierTime, currency).Value;
                     laterValue += security.Value(laterTime, currency).Value;

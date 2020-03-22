@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ namespace FinancialStructures.FinanceStructures
     /// <summary>
     /// Class to model a stock, or a unit trust.
     /// </summary>
-    public partial class Security : IComparable, INameDataObtainer
+    public partial class Security : ISecurity, IComparable
     {
         public override string ToString()
         {
@@ -71,6 +72,17 @@ namespace FinancialStructures.FinanceStructures
         }
 
         /// <summary>
+        /// For backwards compatibility with old systems where this was the true store of sectors.
+        /// </summary>
+        public HashSet<string> Sectors
+        {
+            get
+            {
+                return Names.Sectors;
+            }
+        }
+
+        /// <summary>
         /// The data of the price per unit/share of this security.
         /// </summary>
         private TimeList fUnitPrice = new TimeList();
@@ -99,15 +111,6 @@ namespace FinancialStructures.FinanceStructures
         }
 
         /// <summary>
-        /// For serialisation only.
-        /// </summary>
-        public List<string> Sectors
-        {
-            get { return Names.Sectors; }
-            set { Names.Sectors = value; }
-        }
-
-        /// <summary>
         /// An empty constructor.
         /// </summary>
         private Security()
@@ -119,7 +122,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Constructor creating a new security.
         /// </summary>
-        internal Security(string company, string name, string currency = "GBP", string url = null, List<string> sectors = null)
+        internal Security(string company, string name, string currency = "GBP", string url = null, HashSet<string> sectors = null)
         {
             Names = new NameData(company, name, currency, url, sectors);
         }
@@ -140,7 +143,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public int CompareTo(object obj)
         {
-            if (obj is Security value)
+            if (obj is ISecurity value)
             {
                 return Names.CompareTo(value.Names);
             }

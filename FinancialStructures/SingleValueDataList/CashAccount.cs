@@ -1,12 +1,13 @@
 ﻿using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using System;
 
 namespace FinancialStructures.FinanceStructures
 {
-    public class CashAccount : SingleValueDataList
+    public class CashAccount : SingleValueDataList, ICashAccount
     {
-        public new CashAccount Copy()
+        public new ICashAccount Copy()
         {
             return new CashAccount(Names, Values);
         }
@@ -44,7 +45,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Returns the interpolated value of the security on the date provided.
         /// </summary>
-        internal DailyValuation Value(DateTime date, SingleValueDataList currency = null)
+        public DailyValuation Value(DateTime date, ICurrency currency = null)
         {
             DailyValuation perSharePrice = Values.ValueZeroBefore(date);
             double currencyValue = currency == null ? 1.0 : currency.Value(date).Value;
@@ -55,7 +56,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Returns the latest valuation of the OldCashAccount.
         /// </summary>
-        internal DailyValuation LatestValue(SingleValueDataList currency = null)
+        public DailyValuation LatestValue(ICurrency currency = null)
         {
             DailyValuation latestDate = Values.LatestValuation();
             if (latestDate == null)
@@ -72,7 +73,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Returns the first valuation of the OldCashAccount.
         /// </summary>
-        internal DailyValuation FirstValue(SingleValueDataList currency = null)
+        public DailyValuation FirstValue(ICurrency currency = null)
         {
             DailyValuation firstDate = Values.FirstValuation();
             if (firstDate == null)
@@ -89,7 +90,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Returns the latest earlier valuation of the OldCashAccount to <paramref name="date"/>.
         /// </summary>
-        internal DailyValuation NearestEarlierValuation(DateTime date, SingleValueDataList currency = null)
+        public DailyValuation NearestEarlierValuation(DateTime date, ICurrency currency = null)
         {
             var value = Values.NearestEarlierValue(date);
             double currencyValue = currency == null ? 1.0 : currency.Value(value.Day).Value;

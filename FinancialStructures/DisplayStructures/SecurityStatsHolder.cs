@@ -1,6 +1,5 @@
 ﻿using FinancialStructures.Database;
-using FinancialStructures.DatabaseInterfaces;
-using FinancialStructures.FinanceStructures;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Mathematics;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
@@ -46,7 +45,7 @@ namespace FinancialStructures.GUIFinanceStructures
             {
                 var c = a.Company;
                 var n = a.Name;
-                portfolio.TryGetSecurity(c, n, out Security des);
+                portfolio.TryGetSecurity(c, n, out ISecurity des);
                 a.Number = des.NumberSectors();
                 a.LatestVal = MathSupport.Truncate(portfolio.LatestValue(AccountType.Security, new NameData(c, n)));
                 a.RecentChange = MathSupport.Truncate(portfolio.RecentChange(c, n));
@@ -60,14 +59,14 @@ namespace FinancialStructures.GUIFinanceStructures
             }
         }
 
-        public static void AddSectorStats(this IPortfolio portfolio, SecurityStatsHolder a, DateTime date, List<Sector> sectors)
+        public static void AddSectorStats(this IPortfolio portfolio, SecurityStatsHolder a, DateTime date)
         {
             if (a.Company == "BenchMark")
             {
-                Sector chosenSector = null;
-                foreach (var sector in sectors)
+                ISector chosenSector = null;
+                foreach (ISector sector in portfolio.BenchMarks)
                 {
-                    if (a.Name == sector.GetName())
+                    if (a.Name == sector.Name)
                     {
                         chosenSector = sector.Copy();
                     }
@@ -77,7 +76,7 @@ namespace FinancialStructures.GUIFinanceStructures
                     a.LatestVal = MathSupport.Truncate(chosenSector.LatestValue().Value);
                     a.FundsFraction = 0.0;
                     a.Profit = 0.0;
-                    a.Number = portfolio.NumberSecuritiesInSector(chosenSector.GetName());
+                    a.Number = portfolio.NumberSecuritiesInSector(chosenSector.Name);
                     a.CAR3M = MathSupport.Truncate(100 * chosenSector.CAR(date.AddMonths(-3), date));
                     a.CAR6M = MathSupport.Truncate(100 * chosenSector.CAR(date.AddMonths(-6), date));
                     a.CAR1Y = MathSupport.Truncate(100 * chosenSector.CAR(date.AddMonths(-12), date));

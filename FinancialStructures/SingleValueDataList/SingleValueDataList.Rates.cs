@@ -9,7 +9,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Returns the latest valuation of the CashAccount.
         /// </summary>
-        internal virtual DailyValuation LatestValue()
+        public virtual DailyValuation LatestValue()
         {
             DateTime latestDate = fValues.LatestDate();
             double latestValue = fValues.LatestValue();

@@ -1,4 +1,4 @@
-﻿using FinancialStructures.DatabaseInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
 
 namespace FinancialStructures.PortfolioAPI
@@ -8,14 +8,14 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// returns the currency associated to the account.
         /// </summary>
-        internal static Currency Currency(IPortfolio portfolio, AccountType elementType, object account)
+        internal static ICurrency Currency(IPortfolio portfolio, AccountType elementType, object account)
         {
             switch (elementType)
             {
                 case (AccountType.Security):
                     {
-                        var currencyName = ((Security)account).GetCurrency();
-                        Currency currency = portfolio.Currencies.Find(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == portfolio.BaseCurrency);
+                        var currencyName = ((ISecurity)account).Currency;
+                        ICurrency currency = portfolio.Currencies.Find(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == portfolio.BaseCurrency);
                         if (currency != null)
                         {
                             return currency;
@@ -25,12 +25,12 @@ namespace FinancialStructures.PortfolioAPI
                     }
                 case (AccountType.Currency):
                     {
-                        return (Currency)account;
+                        return (ICurrency)account;
                     }
                 case (AccountType.BankAccount):
                     {
-                        var currencyName = ((CashAccount)account).GetCurrency();
-                        Currency currency = portfolio.Currencies.Find(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == portfolio.BaseCurrency);
+                        var currencyName = ((ICashAccount)account).Currency;
+                        ICurrency currency = portfolio.Currencies.Find(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == portfolio.BaseCurrency);
                         if (currency != null)
                         {
                             return currency;

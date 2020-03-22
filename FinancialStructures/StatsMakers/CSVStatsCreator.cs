@@ -1,6 +1,6 @@
 ﻿using FinancialStructures.Database;
-using FinancialStructures.DatabaseInterfaces;
 using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.PortfolioStatsCreatorHelper;
@@ -29,8 +29,8 @@ namespace FinancialStructures.StatsMakers
             foreach (string sectorName in sectorNames)
             {
                 List<SecurityStatsHolder> valuesToWrite = new List<SecurityStatsHolder>();
-                valuesToWrite.Add(portfolio.GenerateSectorFundsStatistics(portfolio.BenchMarks, sectorName));
-                valuesToWrite.Add(portfolio.GenerateBenchMarkStatistics(portfolio.BenchMarks, sectorName));
+                valuesToWrite.Add(portfolio.GenerateSectorFundsStatistics(sectorName));
+                valuesToWrite.Add(portfolio.GenerateBenchMarkStatistics(sectorName));
                 int linesWritten = 0;
                 foreach (var value in valuesToWrite)
                 {
