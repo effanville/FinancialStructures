@@ -195,6 +195,7 @@
       <DependentUpon>SecurityInvestments.xaml</DependentUpon>
     </Compile>
     <Compile Include="GUI\StatsWindow\Tabs\SecurityInvestmentViewModel.cs" />
+    <Compile Include="GUI\StatsWindow\Tabs\SecurityStatsHolder.cs" />
     <Compile Include="GUI\StatsWindow\Tabs\StatisticsCharts.xaml.cs">
       <DependentUpon>StatisticsCharts.xaml</DependentUpon>
     </Compile>

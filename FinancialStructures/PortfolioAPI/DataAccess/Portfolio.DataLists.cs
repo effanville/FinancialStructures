@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.FinanceStructures;
 using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
@@ -10,21 +11,29 @@ namespace FinancialStructures.PortfolioAPI
         /// Returns a copy of the currently held portfolio. 
         /// Note one cannot use this portfolio to edit as it makes a copy.
         /// </summary>
+        /// <remarks> 
+        /// This is in theory dangerous. I know thought that a security copied 
+        /// returns a genuine security, so I can case without trouble.
+        /// </remarks>
         public static IPortfolio CopyPortfolio(this IPortfolio portfolio)
         {
             var PortfoCopy = new Portfolio();
 
-            foreach (var security in portfolio.Funds)
+            foreach (Security security in portfolio.Funds)
             {
-                PortfoCopy.Funds.Add(security);
+                PortfoCopy.Funds.Add((Security)security.Copy());
             }
-            foreach (var bankAcc in portfolio.BankAccounts)
+            foreach (CashAccount bankAcc in portfolio.BankAccounts)
             {
-                PortfoCopy.BankAccounts.Add(bankAcc);
+                PortfoCopy.BankAccounts.Add((CashAccount)bankAcc.Copy());
             }
-            foreach (var currency in portfolio.Currencies)
+            foreach (Currency currency in portfolio.Currencies)
             {
-                PortfoCopy.Currencies.Add(currency);
+                PortfoCopy.Currencies.Add((Currency)currency.Copy());
+            }
+            foreach (Sector sector in portfolio.BenchMarks)
+            {
+                PortfoCopy.BenchMarks.Add((Sector)sector.Copy());
             }
 
             return PortfoCopy;

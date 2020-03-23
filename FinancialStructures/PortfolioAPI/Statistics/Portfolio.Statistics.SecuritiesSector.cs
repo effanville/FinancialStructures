@@ -11,7 +11,7 @@ namespace FinancialStructures.PortfolioAPI
         public static DateTime SectorFirstDate(this IPortfolio portfolio, string sector)
         {
             var output = DateTime.Today;
-            foreach (var sec in portfolio.SectorSecurities(sector))
+            foreach (ISecurity sec in portfolio.SectorSecurities(sector))
             {
                 if (sec.FirstValue().Day < output)
                 {
@@ -26,7 +26,7 @@ namespace FinancialStructures.PortfolioAPI
             double sum = 0;
             if (portfolio.Funds != null)
             {
-                foreach (var fund in portfolio.Funds)
+                foreach (ISecurity fund in portfolio.Funds)
                 {
                     if (fund.IsSectorLinked(sectorName))
                     {
@@ -46,23 +46,23 @@ namespace FinancialStructures.PortfolioAPI
         public static List<ISecurity> SectorSecurities(this IPortfolio portfolio, string sectorName)
         {
             var securities = new List<ISecurity>();
-            foreach (var sec in portfolio.Funds)
+            foreach (ISecurity security in portfolio.Funds)
             {
-                if (sec.IsSectorLinked(sectorName))
+                if (security.IsSectorLinked(sectorName))
                 {
-                    securities.Add(sec);
+                    securities.Add(security);
                 }
             }
             securities.Sort();
             return securities;
         }
 
-        public static List<DayValue_Named> SectorInvestments(this IPortfolio portfolio, string company)
+        public static List<DayValue_Named> SectorInvestments(this IPortfolio portfolio, string sectorName)
         {
             var output = new List<DayValue_Named>();
-            foreach (var sec in portfolio.SectorSecurities(company))
+            foreach (ISecurity security in portfolio.SectorSecurities(sectorName))
             {
-                output.AddRange(sec.AllInvestmentsNamed());
+                output.AddRange(security.AllInvestmentsNamed());
             }
 
             return output;
@@ -70,9 +70,8 @@ namespace FinancialStructures.PortfolioAPI
 
         public static double SectorProfit(this IPortfolio portfolio, string sectorName)
         {
-            var securities = portfolio.SectorSecurities(sectorName);
             double value = 0;
-            foreach (var security in securities)
+            foreach (ISecurity security in portfolio.SectorSecurities(sectorName))
             {
                 if (security.Any())
                 {

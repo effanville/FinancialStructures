@@ -1,4 +1,4 @@
-﻿using FinancialStructures.GUIFinanceStructures;
+﻿using FinancialStructures.DataStructures;
 using FinancialStructures.PortfolioAPI;
 using System;
 using System.Collections.Generic;
@@ -67,7 +67,7 @@ namespace FinancialStructures.DataReader
                     break;
                 }
 
-                var line = new DayDataView(DateTime.Parse(dayValuation[0]), double.Parse(dayValuation[1]), double.Parse(dayValuation[2]), double.Parse(dayValuation[3]));
+                var line = new SecurityDayData(DateTime.Parse(dayValuation[0]), double.Parse(dayValuation[1]), double.Parse(dayValuation[2]), double.Parse(dayValuation[3]));
                 dailyValuations.Add(line);
             }
 

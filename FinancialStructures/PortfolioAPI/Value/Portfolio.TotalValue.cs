@@ -30,7 +30,7 @@ namespace FinancialStructures.PortfolioAPI
                 case (AccountType.Security):
                     {
                         double total = 0;
-                        foreach (var sec in portfolio.Funds)
+                        foreach (ISecurity sec in portfolio.Funds)
                         {
                             if (sec.Any())
                             {
@@ -48,7 +48,7 @@ namespace FinancialStructures.PortfolioAPI
                 case (AccountType.BankAccount):
                     {
                         double sum = 0;
-                        foreach (var acc in portfolio.BankAccounts)
+                        foreach (ICashAccount acc in portfolio.BankAccounts)
                         {
                             var currency = Currency(portfolio, elementType, acc);
                             sum += acc.Value(date, currency).Value;

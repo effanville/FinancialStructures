@@ -26,28 +26,35 @@ namespace FinancialStructures.PortfolioAPI
             await DownloadPortfolioLatest(portfolio, reportLogger).ConfigureAwait(false);
         }
 
-        public async static Task DownloadSecurity(IPortfolio portfolio, string company, string name, LogReporter reportLogger)
+        public async static Task DownloadOfType(AccountType accountType, IPortfolio portfolio, TwoName names, LogReporter reportLogger)
         {
-            portfolio.TryGetSecurity(company, name, out var sec);
-            await DownloadLatestValue(sec.Company, sec.Name, sec.Url, value => sec.UpdateSecurityData(value, reportLogger, DateTime.Today), reportLogger).ConfigureAwait(false);
-        }
-
-        public async static Task DownloadCurrency(IPortfolio portfolio, NameData name, LogReporter reportLogger)
-        {
-            portfolio.TryGetCurrency(name.Name, out var currency);
-            await DownloadLatestValue(string.Empty, currency.Name, currency.Url, value => currency.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
-        }
-
-        public async static Task DownloadBankAccount(IPortfolio portfolio, NameData name, LogReporter reportLogger)
-        {
-            portfolio.TryGetBankAccount(name.Company, name.Name, out var acc);
-            await DownloadLatestValue(acc.Company, acc.Name, acc.Url, value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
-        }
-
-        public async static Task DownloadSector(IPortfolio portfolio, NameData name, LogReporter reportLogger)
-        {
-            portfolio.TryGetSector(name.Name, out var sector);
-            await DownloadLatestValue(string.Empty, sector.Name, sector.Url, value => sector.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+            switch (accountType)
+            {
+                case (AccountType.Security):
+                    {
+                        portfolio.TryGetSecurity(names, out var sec);
+                        await DownloadLatestValue(sec.Names, value => sec.UpdateSecurityData(value, reportLogger, DateTime.Today), reportLogger).ConfigureAwait(false);
+                        break;
+                    }
+                case (AccountType.BankAccount):
+                    {
+                        portfolio.TryGetBankAccount(names, out var acc);
+                        await DownloadLatestValue(acc.Names, value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                        break;
+                    }
+                case (AccountType.Currency):
+                    {
+                        portfolio.TryGetCurrency(names, out var currency);
+                        await DownloadLatestValue(currency.Names, value => currency.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                        break;
+                    }
+                case (AccountType.Sector):
+                    {
+                        portfolio.TryGetSector(names.Name, out var sector);
+                        await DownloadLatestValue(sector.Names, value => sector.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                        break;
+                    }
+            }
         }
 
         private static string Pence = "GBX";
@@ -97,31 +104,31 @@ namespace FinancialStructures.PortfolioAPI
         {
             foreach (ISecurity sec in portfo.Funds)
             {
-                await DownloadLatestValue(sec.Company, sec.Name, sec.Url, value => sec.UpdateSecurityData(value, reportLogger, DateTime.Today), reportLogger).ConfigureAwait(false);
+                await DownloadLatestValue(sec.Names, value => sec.UpdateSecurityData(value, reportLogger, DateTime.Today), reportLogger).ConfigureAwait(false);
             }
-            foreach (var acc in portfo.BankAccounts)
+            foreach (ICashAccount acc in portfo.BankAccounts)
             {
-                await DownloadLatestValue(acc.Company, acc.Name, acc.Url, value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                await DownloadLatestValue(acc.Names, value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
             }
             foreach (ICurrency currency in portfo.Currencies)
             {
-                await DownloadLatestValue(string.Empty, currency.Name, currency.Url, value => currency.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                await DownloadLatestValue(currency.Names, value => currency.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
             }
-            foreach (var sector in portfo.BenchMarks)
+            foreach (ISector sector in portfo.BenchMarks)
             {
-                await DownloadLatestValue(string.Empty, sector.Name, sector.Url, value => sector.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                await DownloadLatestValue(sector.Names, value => sector.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
             }
         }
 
-        public async static Task DownloadLatestValue(string company, string name, string url, Action<double> updateValue, LogReporter reportLogger)
+        public async static Task DownloadLatestValue(NameData names, Action<double> updateValue, LogReporter reportLogger)
         {
-            string data = await DownloadFromURL(url, reportLogger).ConfigureAwait(false);
+            string data = await DownloadFromURL(names.Url, reportLogger).ConfigureAwait(false);
             if (string.IsNullOrEmpty(data))
             {
-                reportLogger.Log("Error", "Downloading", $"{company}-{name}: could not download data from {url}");
+                reportLogger.Log("Error", "Downloading", $"{names.Company}-{names.Name}: could not download data from {names.Url}");
                 return;
             }
-            if (!ProcessDownloadString(url, data, reportLogger, out double value))
+            if (!ProcessDownloadString(names.Url, data, reportLogger, out double value))
             {
                 return;
             }

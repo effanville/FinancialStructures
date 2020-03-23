@@ -1,20 +1,7 @@
 ﻿using System.Collections.Generic;
 
-namespace FinancialStructures.PortfolioStatsCreatorHelper
+namespace FinancialStructures.StatsMakers
 {
-    public class VisibleName
-    {
-        public string Name { get; set; }
-        public bool Visible { get; set; }
-        public VisibleName()
-        { }
-
-        public VisibleName(string name, bool vis)
-        {
-            Visible = vis;
-            Name = name;
-        }
-    }
     public static class NameGetter
     {
         public static bool GetData(List<VisibleName> names, string nameToSearch)

@@ -1,6 +1,5 @@
-﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.GUIFinanceStructures;
+﻿using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using System;
@@ -13,11 +12,11 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// Edits the data of the security, if possible.
         /// </summary>
-        public static bool TryEditSecurityData(this IPortfolio portfolio, LogReporter reportLogger, string company, string name, DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment = 0)
+        public static bool TryEditSecurityData(this IPortfolio portfolio, LogReporter reportLogger, TwoName names, DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment = 0)
         {
             for (int fundIndex = 0; fundIndex < portfolio.NumberOf(AccountType.Security); fundIndex++)
             {
-                if (portfolio.Funds[fundIndex].Company == company && portfolio.Funds[fundIndex].Name == name)
+                if (names.IsEqualTo(portfolio.Funds[fundIndex].Names))
                 {
                     // now edit data
                     return portfolio.Funds[fundIndex].TryEditData(reportLogger, oldDate, newDate, shares, unitPrice, Investment);

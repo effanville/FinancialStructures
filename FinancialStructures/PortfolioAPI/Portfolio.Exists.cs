@@ -33,9 +33,9 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="elementType">The type of item to search for.</param>
         /// <param name="name">The name of the item to find.</param>
         /// <returns>Whether exists or not.</returns>
-        public static bool Exists(this IPortfolio portfolio, AccountType elementType, NameData name)
+        public static bool Exists(this IPortfolio portfolio, AccountType elementType, TwoName name)
         {
-            foreach (NameData sec in portfolio.NameData(elementType))
+            foreach (TwoName sec in portfolio.NameData(elementType))
             {
                 if (sec.IsEqualTo(name))
                 {

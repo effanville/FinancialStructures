@@ -29,7 +29,7 @@ namespace FinancialStructures.PortfolioAPI
                     {
                         foreach (Security sec in portfolio.Funds)
                         {
-                            if (sec.Company.Equals(name.Company) && sec.Name.Equals(name.Name))
+                            if (name.IsEqualTo(sec.Names))
                             {
                                 portfolio.Funds.Remove(sec);
                                 reportLogger.LogDetailed("Detailed", "Report", "DeletingData", $"Security `{name.Company}'-`{name}' removed from the database.");
@@ -43,7 +43,7 @@ namespace FinancialStructures.PortfolioAPI
                     {
                         foreach (Currency currency in portfolio.Currencies)
                         {
-                            if (name.Name == currency.Name)
+                            if (name.IsEqualTo(currency.Names))
                             {
                                 reportLogger.LogDetailed("Detailed", "Report", "DeletingData", $"Deleted sector {currency.Name}");
                                 portfolio.Currencies.Remove(currency);
@@ -57,7 +57,7 @@ namespace FinancialStructures.PortfolioAPI
                     {
                         foreach (CashAccount acc in portfolio.BankAccounts)
                         {
-                            if (acc.Company == name.Company && acc.Name == name.Name)
+                            if (name.IsEqualTo(acc.Names))
                             {
                                 portfolio.BankAccounts.Remove(acc);
                                 reportLogger.LogDetailed("Detailed", "Report", "DeletingData", $"Deleting Bank Account: Deleted `{name.Company}'-`{name.Name}'.");
@@ -71,7 +71,7 @@ namespace FinancialStructures.PortfolioAPI
                     {
                         foreach (Sector sector in portfolio.BenchMarks)
                         {
-                            if (name.Name.Equals(sector.Name))
+                            if (name.IsEqualTo(sector.Names))
                             {
                                 reportLogger.LogDetailed("Detailed", "Report", "DeletingData", $"Deleted sector {sector.Name}");
                                 portfolio.BenchMarks.Remove(sector);

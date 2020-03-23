@@ -1,7 +1,6 @@
-﻿using FinancialStructures.DataStructures;
-using System;
+﻿using System;
 
-namespace FinancialStructures.GUIFinanceStructures
+namespace FinancialStructures.DataStructures
 {
     public class DayValue_ChangeLogged : DailyValuation
     {

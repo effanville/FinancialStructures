@@ -16,7 +16,7 @@ namespace FinancialStructures.StatsMakers
             statsWriter.WriteLine("Date, Company, Name, Investment Amount");
             foreach (DayValue_Named stats in portfolio.AllSecuritiesInvestments())
             {
-                string securitiesData = stats.Day.ToShortDateString() + ", " + stats.Company + ", " + stats.Name + ", " + stats.Value.ToString();
+                string securitiesData = stats.Day.ToShortDateString() + ", " + stats.Names.Company + ", " + stats.Names.Name + ", " + stats.Value.ToString();
                 statsWriter.WriteLine(securitiesData);
             }
 

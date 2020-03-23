@@ -1,8 +1,7 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.GUIFinanceStructures;
-using FinancialStructures.PortfolioStatsCreatorHelper;
 using FinancialStructures.ReportLogging;
+using FinancialStructures.StatisticStructures;
 using FinancialStructures.StatsMakers;
 using GUISupport;
 using System;
@@ -118,7 +117,7 @@ namespace FinanceWindowsViewModels
             CloseWindowAction = CloseWindow;
             ExportCommand = new BasicCommand(ExecuteExportCommand);
 
-            var totals = new SecurityStatsHolder();
+            var totals = new SecurityStatistics();
             var properties = totals.GetType().GetProperties();
             foreach (var info in properties)
             {

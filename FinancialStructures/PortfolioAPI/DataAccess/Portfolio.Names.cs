@@ -1,5 +1,4 @@
 ﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using System;
 using System.Collections.Generic;
@@ -44,7 +43,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 case (AccountType.Security):
                     {
-                        foreach (var security in portfolio.Funds)
+                        foreach (ISecurity security in portfolio.Funds)
                         {
                             DateTime date = DateTime.MinValue;
                             if (security.Any())

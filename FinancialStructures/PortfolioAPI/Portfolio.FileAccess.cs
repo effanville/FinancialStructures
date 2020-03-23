@@ -2,7 +2,7 @@
 using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.ReportLogging;
-using SavingClasses;
+using FinancialStructures.SavingClasses;
 using System.IO;
 using System.Linq;
 
@@ -14,7 +14,6 @@ namespace FinancialStructures.PortfolioAPI
         /// Load database from xml file.
         /// </summary>
         /// <param name="portfolio">The database to load into..</param>
-        /// <param name="benchMarks">The associated sectors to load into.</param>
         /// <param name="filePath">The path to load from.</param>
         /// <param name="reportLogger">Callback to report information.</param>
         public static void LoadPortfolio(this IPortfolio portfolio, string filePath, LogReporter reportLogger)
@@ -49,7 +48,6 @@ namespace FinancialStructures.PortfolioAPI
         /// Save database to xml file.
         /// </summary>
         /// <param name="portfolio">The database to save.</param>
-        /// <param name="benchMarks">The associated sectors to save.</param>
         /// <param name="filePath">The path to save to.</param>
         /// <param name="reportLogger">Callback to report information.</param>
         public static void SavePortfolio(this IPortfolio portfolio, string filePath, LogReporter reportLogger)

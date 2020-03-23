@@ -1,5 +1,5 @@
-﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.GUIFinanceStructures;
+﻿using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using System;

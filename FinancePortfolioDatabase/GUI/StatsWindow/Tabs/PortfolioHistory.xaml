@@ -19,7 +19,7 @@
                               ItemsSource="{Binding HistoryStats}"
                               ScrollViewer.VerticalScrollBarVisibility="Visible">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="Total Values" Binding="{Binding TotalValue.Day, StringFormat=\{0:dd.MM.yyyy\}}"></DataGridTextColumn>
+                <DataGridTextColumn Header="Date" Binding="{Binding TotalValue.Day, StringFormat=\{0:dd.MM.yyyy\}}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Total Values" Binding="{Binding TotalValue.Value}"></DataGridTextColumn>
                 <DataGridTextColumn Header="Securities" Binding="{Binding SecurityValue.Value}"></DataGridTextColumn>
                 <DataGridTextColumn Header="BankAccounts" Binding="{Binding BankAccValue.Value}"></DataGridTextColumn>

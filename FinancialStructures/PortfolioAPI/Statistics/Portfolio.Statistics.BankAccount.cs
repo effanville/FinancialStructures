@@ -11,7 +11,7 @@ namespace FinancialStructures.PortfolioAPI
         {
             var namesAndCompanies = new List<DayValue_Named>();
 
-            foreach (var account in portfolio.BankAccounts)
+            foreach (ICashAccount account in portfolio.BankAccounts)
             {
                 if (account.Company == company)
                 {
@@ -37,7 +37,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 var namesAndCompanies = new List<DayValue_Named>();
 
-                foreach (var acc in portfolio.BankAccounts)
+                foreach (ICashAccount acc in portfolio.BankAccounts)
                 {
                     if ((DisplayValueFunds && acc.LatestValue().Value != 0) || !DisplayValueFunds)
                     {

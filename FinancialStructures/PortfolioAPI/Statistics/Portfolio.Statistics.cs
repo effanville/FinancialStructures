@@ -1,8 +1,7 @@
 ﻿using FinancialStructures.DataStructures;
-using FinancialStructures.DisplayStructures;
 using FinancialStructures.FinanceFunctionsList;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.StatisticStructures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,12 +29,11 @@ namespace FinancialStructures.PortfolioAPI
         public static DateTime FirstValueDate(this IPortfolio portfolio)
         {
             var output = DateTime.Today;
-            foreach (var sec in portfolio.Funds)
+            foreach (ISecurity sec in portfolio.Funds)
             {
                 if (sec.Any())
                 {
-                    var currencyName = sec.Currency;
-                    var currency = portfolio.Currencies.Find(cur => cur.Name == currencyName);
+                    ICurrency currency = portfolio.Currencies.Find(cur => cur.Name == sec.Currency);
                     var securityEarliest = sec.FirstValue(currency).Day;
                     if (securityEarliest < output)
                     {
@@ -52,13 +50,12 @@ namespace FinancialStructures.PortfolioAPI
         public static double TotalProfit(this IPortfolio portfolio)
         {
             double total = 0;
-            foreach (var sec in portfolio.Funds)
+            foreach (ISecurity security in portfolio.Funds)
             {
-                if (sec.Any())
+                if (security.Any())
                 {
-                    var currencyName = sec.Currency;
-                    var currency = portfolio.Currencies.Find(cur => cur.Name == currencyName);
-                    total += portfolio.Profit(sec.Company, sec.Name);
+                    ICurrency currency = portfolio.Currencies.Find(cur => cur.Name == security.Currency);
+                    total += portfolio.Profit(security.Names);
                 }
             }
 
@@ -71,11 +68,11 @@ namespace FinancialStructures.PortfolioAPI
         public static double RecentChange(this IPortfolio portfolio)
         {
             double total = 0;
-            foreach (var desired in portfolio.Funds)
+            foreach (ISecurity desired in portfolio.Funds)
             {
                 if (desired.Any())
                 {
-                    total += portfolio.RecentChange(desired.Company, desired.Name);
+                    total += portfolio.RecentChange(desired.Names);
                 }
             }
 
@@ -95,12 +92,11 @@ namespace FinancialStructures.PortfolioAPI
             double laterValue = 0;
             var Investments = new List<DailyValuation>();
 
-            foreach (var security in portfolio.Funds)
+            foreach (ISecurity security in portfolio.Funds)
             {
                 if (security.Any())
                 {
-                    var currencyName = security.Currency;
-                    var currency = portfolio.Currencies.Find(cur => cur.Name == currencyName);
+                    ICurrency currency = portfolio.Currencies.Find(cur => cur.Name == security.Currency);
                     earlierValue += security.Value(earlierTime, currency).Value;
                     laterValue += security.Value(laterTime, currency).Value;
                     Investments.AddRange(security.InvestmentsBetween(earlierTime, laterTime, currency));
@@ -121,11 +117,11 @@ namespace FinancialStructures.PortfolioAPI
         public static List<DatabaseStatistics> GenerateDatabaseStatistics(this IPortfolio portfolio)
         {
             var names = new List<DatabaseStatistics>();
-            foreach (var sec in portfolio.Funds)
+            foreach (ISecurity sec in portfolio.Funds)
             {
                 names.Add(new DatabaseStatistics(sec.Company, sec.Name, sec.FirstValue().Day, sec.LatestValue().Day, sec.Count(), (sec.LatestValue().Day - sec.FirstValue().Day).Days / (365 * (double)sec.Count())));
             }
-            foreach (var bankAcc in portfolio.BankAccounts)
+            foreach (ICashAccount bankAcc in portfolio.BankAccounts)
             {
                 names.Add(new DatabaseStatistics(bankAcc.Name, bankAcc.Company, bankAcc.FirstValue().Day, bankAcc.LatestValue().Day, bankAcc.Count(), 365 * (double)bankAcc.Count() / (bankAcc.LatestValue().Day - bankAcc.FirstValue().Day).Days));
             }
@@ -133,25 +129,25 @@ namespace FinancialStructures.PortfolioAPI
             return names;
         }
 
-        public async static Task<List<HistoryStatistic>> GenerateHistoryStats(this IPortfolio portfolio, int daysGap)
+        public async static Task<List<PortfolioDaySnapshot>> GenerateHistoryStats(this IPortfolio portfolio, int daysGap)
         {
-            var outputs = new List<HistoryStatistic>();
+            var outputs = new List<PortfolioDaySnapshot>();
             var calculationDate = portfolio.FirstValueDate();
             await Task.Run(() => BackGroundTask(calculationDate, portfolio, outputs, daysGap));
             return outputs;
         }
 
-        private static void BackGroundTask(DateTime calculationDate, IPortfolio portfolio, List<HistoryStatistic> outputs, int daysGap)
+        private static void BackGroundTask(DateTime calculationDate, IPortfolio portfolio, List<PortfolioDaySnapshot> outputs, int daysGap)
         {
             while (calculationDate < DateTime.Today)
             {
-                var calcuationDateStatistics = new HistoryStatistic(portfolio, calculationDate);
+                var calcuationDateStatistics = new PortfolioDaySnapshot(calculationDate, portfolio);
                 outputs.Add(calcuationDateStatistics);
                 calculationDate = calculationDate.AddDays(daysGap);
             }
             if (calculationDate == DateTime.Today)
             {
-                var calcuationDateStatistics = new HistoryStatistic(portfolio, calculationDate);
+                var calcuationDateStatistics = new PortfolioDaySnapshot(calculationDate, portfolio);
                 outputs.Add(calcuationDateStatistics);
             }
         }

@@ -1,7 +1,7 @@
 ﻿using FinanceCommonViewModels;
 using FinancialStructures.DataReader;
+using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.ReportLogging;
@@ -24,17 +24,17 @@ namespace FinanceWindowsViewModels
         /// <summary>
         /// The pricing data of the selected security.
         /// </summary>
-        private List<DayDataView> fSelectedSecurityData = new List<DayDataView>();
-        public List<DayDataView> SelectedSecurityData
+        private List<SecurityDayData> fSelectedSecurityData = new List<SecurityDayData>();
+        public List<SecurityDayData> SelectedSecurityData
         {
             get { return fSelectedSecurityData; }
             set { fSelectedSecurityData = value; OnPropertyChanged(); }
         }
 
-        private DayDataView fSelectedValues;
-        private DayDataView fOldSelectedValues;
+        private SecurityDayData fSelectedValues;
+        private SecurityDayData fOldSelectedValues;
         private int selectedIndex;
-        public DayDataView selectedValues
+        public SecurityDayData selectedValues
         {
             get
             {
@@ -99,9 +99,9 @@ namespace FinanceWindowsViewModels
                 {
                     foreach (var objec in outputs)
                     {
-                        if (objec is DayDataView view)
+                        if (objec is SecurityDayData view)
                         {
-                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(ReportLogger, fSelectedName.Company, fSelectedName.Name, view.Date, view.ShareNo, view.UnitPrice, view.NewInvestment));
+                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(ReportLogger, fSelectedName, view.Date, view.ShareNo, view.UnitPrice, view.NewInvestment));
                         }
                         else
                         {
@@ -118,10 +118,10 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null)
             {
-                Portfolio.TryGetSecurity(fSelectedName.Company, fSelectedName.Name, out var desired);
+                Portfolio.TryGetSecurity(fSelectedName, out var desired);
                 if (desired.Count() != SelectedSecurityData.Count)
                 {
-                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(ReportLogger, fSelectedName.Company, fSelectedName.Name, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment));
+                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(ReportLogger, fSelectedName, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment));
                     fSelectedName.NewValue = false;
                 }
                 else
@@ -134,7 +134,7 @@ namespace FinanceWindowsViewModels
                         if (name.NewValue)
                         {
                             edited = true;
-                            UpdateDataCallback(programPortfolio => programPortfolio.TryEditSecurityData(ReportLogger, fSelectedName.Company, fSelectedName.Name, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment));
+                            UpdateDataCallback(programPortfolio => programPortfolio.TryEditSecurityData(ReportLogger, fSelectedName, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment));
                             name.NewValue = false;
                         }
                     }
@@ -151,7 +151,7 @@ namespace FinanceWindowsViewModels
             Portfolio = portfolio;
             if (fSelectedName != null)
             {
-                if (!portfolio.TryGetSecurity(fSelectedName.Company, fSelectedName.Name, out _))
+                if (!portfolio.TryGetSecurity(fSelectedName, out _))
                 {
                     if (removeTab != null)
                     {
@@ -160,7 +160,7 @@ namespace FinanceWindowsViewModels
                     return;
                 }
 
-                SelectedSecurityData = Portfolio.SecurityData(fSelectedName.Company, fSelectedName.Name);
+                SelectedSecurityData = Portfolio.SecurityData(fSelectedName);
                 SelectLatestValue();
             }
             else

@@ -1,6 +1,5 @@
-﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.GUIFinanceStructures;
+﻿using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using System.Collections.Generic;
@@ -26,7 +25,7 @@ namespace FinancialStructures.PortfolioAPI
                     {
                         for (int fundIndex = 0; fundIndex < portfolio.NumberOf(AccountType.Security); fundIndex++)
                         {
-                            if (portfolio.Funds[fundIndex].Company == name.Company && portfolio.Funds[fundIndex].Name == name.Name)
+                            if (name.IsEqualTo(portfolio.Funds[fundIndex].Names))
                             {
                                 // now edit data
                                 return portfolio.Funds[fundIndex].TryDeleteData(data.Day, reportLogger);

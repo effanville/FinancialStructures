@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.Mathematics;
-using FinancialStructures.PortfolioStatsCreatorHelper;
+using FinancialStructures.NamingStructures;
+using FinancialStructures.StatsMakers;
 using System;
 using System.Collections.Generic;
 
@@ -11,12 +12,7 @@ namespace FinancialStructures.DataStructures
         {
             if (obj is DayValue_Named value)
             {
-                if (Company == value.Company)
-                {
-                    return Name.CompareTo(value.Name);
-                }
-
-                return Company.CompareTo(value.Company);
+                return Names.CompareTo(value.Names);
             }
 
             return 0;
@@ -71,28 +67,13 @@ namespace FinancialStructures.DataStructures
         /// <inheritdoc/>
         public override string ToString()
         {
-            //both name and company cannot be null so this is all cases.
-            if (string.IsNullOrEmpty(Company) && !string.IsNullOrEmpty(Name))
-            {
-                return Name + "-" + base.ToString();
-            }
-            if (string.IsNullOrEmpty(Name) && !string.IsNullOrEmpty(Company))
-            {
-                return Company + "-" + base.ToString();
-            }
-
-            return Company + "-" + Name + "-" + base.ToString();
+            return Names.ToString() + "-" + base.ToString();
         }
 
         /// <summary>
-        /// Added company of the Daily valuation
+        /// Names associated to the values.
         /// </summary>
-        public string Company { get; set; }
-
-        /// <summary>
-        /// Added name of the daily valuation.
-        /// </summary>
-        public string Name { get; set; }
+        public TwoName Names { get; set; }
 
         /// <summary>
         /// Empty constructor.
@@ -107,8 +88,7 @@ namespace FinancialStructures.DataStructures
         public DayValue_Named(string company, string name, DateTime day, double value)
             : base(day, value)
         {
-            Name = name;
-            Company = company;
+            Names = new TwoName(company, name);
         }
 
         /// <summary>

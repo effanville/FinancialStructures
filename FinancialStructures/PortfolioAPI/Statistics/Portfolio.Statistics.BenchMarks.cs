@@ -1,5 +1,5 @@
 ﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.GUIFinanceStructures;
+using FinancialStructures.StatisticStructures;
 using System;
 
 namespace FinancialStructures.PortfolioAPI
@@ -9,16 +9,16 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// returns the securities under the company name.
         /// </summary>
-        public static SecurityStatsHolder GenerateBenchMarkStatistics(this IPortfolio portfolio, string sectorName)
+        public static SecurityStatistics GenerateBenchMarkStatistics(this IPortfolio portfolio, string sectorName)
         {
             if (portfolio != null)
             {
-                var totals = new SecurityStatsHolder(sectorName, "BenchMark");
+                var totals = new SecurityStatistics(StatisticsType.BenchMarkTotal, new NamingStructures.TwoName("BenchMark", sectorName));
                 portfolio.AddSectorStats(totals, DateTime.Today);
                 return totals;
             }
 
-            return new SecurityStatsHolder();
+            return new SecurityStatistics();
         }
     }
 }

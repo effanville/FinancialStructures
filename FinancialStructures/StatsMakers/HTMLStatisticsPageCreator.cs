@@ -1,9 +1,8 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.PortfolioStatsCreatorHelper;
+using FinancialStructures.StatisticStructures;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -25,7 +24,7 @@ namespace FinancialStructures.StatsMakers
             writer.WriteLine("<table>");
             writer.WriteLine("<thead><tr>");
 
-            SecurityStatsHolder temp = new SecurityStatsHolder();
+            SecurityStatistics temp = new SecurityStatistics();
             writer.WriteLine(temp.HtmlTableHeader(options, options.SecurityDataToExport));
             writer.WriteLine("</tr></thead>");
             writer.WriteLine("<tbody>");
@@ -33,7 +32,7 @@ namespace FinancialStructures.StatsMakers
             List<string> sectorNames = portfolio.GetSecuritiesSectors();
             foreach (string sectorName in sectorNames)
             {
-                List<SecurityStatsHolder> valuesToWrite = new List<SecurityStatsHolder>();
+                List<SecurityStatistics> valuesToWrite = new List<SecurityStatistics>();
                 valuesToWrite.Add(portfolio.GenerateSectorFundsStatistics(sectorName));
                 valuesToWrite.Add(portfolio.GenerateBenchMarkStatistics(sectorName));
                 int linesWritten = 0;

@@ -3,10 +3,10 @@ using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
 using System.Collections.Generic;
 
-namespace SavingClasses
+namespace FinancialStructures.SavingClasses
 {
     /// <summary>
-    /// Saves into a file only. For legacy reasons really.
+    /// Saves into a file only. Used to ensure compatibility with legacy saved files.
     /// </summary>
     public class AllData
     {

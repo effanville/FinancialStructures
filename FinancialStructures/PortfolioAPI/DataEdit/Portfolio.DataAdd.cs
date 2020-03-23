@@ -1,5 +1,5 @@
-﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.GUIFinanceStructures;
+﻿using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using System;
@@ -12,16 +12,16 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// Adds the desired data to the security if it can.
         /// </summary>
-        public static bool TryAddDataToSecurity(this IPortfolio portfolio, LogReporter reportLogger, string company, string name, DateTime date, double shares, double unitPrice, double Investment = 0)
+        public static bool TryAddDataToSecurity(this IPortfolio portfolio, LogReporter reportLogger, TwoName names, DateTime date, double shares, double unitPrice, double Investment = 0)
         {
             for (int fundIndex = 0; fundIndex < portfolio.NumberOf(AccountType.Security); fundIndex++)
             {
-                if (portfolio.Funds[fundIndex].Company == company && portfolio.Funds[fundIndex].Name == name)
+                if (names.IsEqualTo(portfolio.Funds[fundIndex].Names))
                 {
                     return portfolio.Funds[fundIndex].TryAddData(reportLogger, date, unitPrice, shares, Investment);
                 }
             }
-            reportLogger.LogDetailed("Critical", "Error", "AddingData", $"Security `{company}'-`{name}' could not be found in the database.");
+            reportLogger.LogDetailed("Critical", "Error", "AddingData", $"Security `{names.Company}'-`{names.Name}' could not be found in the database.");
             return false;
         }
 

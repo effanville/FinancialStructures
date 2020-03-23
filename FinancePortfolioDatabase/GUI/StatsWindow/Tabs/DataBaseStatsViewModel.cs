@@ -1,6 +1,6 @@
 ﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.PortfolioAPI;
+using FinancialStructures.StatisticStructures;
 using System.Collections.Generic;
 
 namespace FinanceViewModels.StatsViewModels

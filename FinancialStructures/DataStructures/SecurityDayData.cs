@@ -1,30 +1,30 @@
 ﻿using System;
 
-namespace FinancialStructures.GUIFinanceStructures
+namespace FinancialStructures.DataStructures
 {
-    public class DayDataView : IComparable
+    public class SecurityDayData : IComparable
     {
         public int CompareTo(Object obj)
         {
-            if (obj is DayDataView dailyView)
+            if (obj is SecurityDayData dailyView)
             {
                 return DateTime.Compare(Date, dailyView.Date);
             }
             return 0;
         }
 
-        public DayDataView Copy()
+        public SecurityDayData Copy()
         {
-            return new DayDataView(Date, UnitPrice, ShareNo, NewInvestment, NewValue);
+            return new SecurityDayData(Date, UnitPrice, ShareNo, NewInvestment, NewValue);
         }
 
-        public DayDataView()
+        public SecurityDayData()
         {
             NewValue = true;
             Date = DateTime.Today;
         }
 
-        public DayDataView(DateTime date, double unitPrice, double shareNo, double newInvestment, bool newValue = true)
+        public SecurityDayData(DateTime date, double unitPrice, double shareNo, double newInvestment, bool newValue = true)
         {
             Date = date;
             UnitPrice = unitPrice;

@@ -1,15 +1,15 @@
 ﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.PortfolioAPI;
+using FinancialStructures.StatisticStructures;
 using System.Collections.Generic;
 
 namespace FinanceViewModels.StatsViewModels
 {
     internal class SecuritiesStatisticsViewModel : TabViewModelBase
     {
-        private List<SecurityStatsHolder> fSecuritiesStats;
+        private List<SecurityStatistics> fSecuritiesStats;
 
-        public List<SecurityStatsHolder> SecuritiesStats
+        public List<SecurityStatistics> SecuritiesStats
         {
             get { return fSecuritiesStats; }
             set { fSecuritiesStats = value; OnPropertyChanged(); }

@@ -1,6 +1,6 @@
-﻿using FinancialStructures.DisplayStructures;
-using FinancialStructures.FinanceInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
+using FinancialStructures.StatisticStructures;
 using System.Collections.Generic;
 
 namespace FinanceViewModels.StatsViewModels
@@ -15,8 +15,8 @@ namespace FinanceViewModels.StatsViewModels
             set { fHistoryGapDays = value; OnPropertyChanged(); }
         }
 
-        private List<HistoryStatistic> fHistoryStats;
-        public List<HistoryStatistic> HistoryStats
+        private List<PortfolioDaySnapshot> fHistoryStats;
+        public List<PortfolioDaySnapshot> HistoryStats
         {
             get { return fHistoryStats; }
             set { fHistoryStats = value; OnPropertyChanged(); }

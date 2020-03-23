@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:cl="clr-namespace:GUISupport"
-        xmlns:vm="clr-namespace:FinancialStructures.PortfolioStatsCreatorHelper;assembly=FinancialStructures"
+        xmlns:vm="clr-namespace:FinancialStructures.StatsMakers;assembly=FinancialStructures"
         mc:Ignorable="d"
         Title="StatsOptionsWindow"
         Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}" 

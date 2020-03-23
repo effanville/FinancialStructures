@@ -37,7 +37,7 @@ namespace FinancialStructures.Database
             {
                 if (desired.Any())
                 {
-                    total += portfolio.RecentChange(desired.Company, desired.Name);
+                    total += portfolio.RecentChange(desired.Names);
                 }
             }
 
@@ -135,8 +135,7 @@ namespace FinancialStructures.Database
             {
                 if (security.Any())
                 {
-                    var currencyName = security.Currency;
-                    var currency = portfolio.Currencies.Find(cur => cur.Name == currencyName);
+                    ICurrency currency = portfolio.Currencies.Find(cur => cur.Name == security.Currency);
                     earlierValue += security.Value(earlierTime, currency).Value;
                     laterValue += security.Value(laterTime, currency).Value;
                     Investments.AddRange(security.InvestmentsBetween(earlierTime, laterTime, currency));

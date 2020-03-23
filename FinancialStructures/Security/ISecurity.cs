@@ -1,5 +1,4 @@
 ﻿using FinancialStructures.DataStructures;
-using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using System;
@@ -24,7 +23,7 @@ namespace FinancialStructures.FinanceInterfaces
         int Count();
         bool Any();
         ISecurity Copy();
-        List<DayDataView> GetDataForDisplay();
+        List<SecurityDayData> GetDataForDisplay();
         int NumberSectors();
 
         double TotalInvestment(ICurrency currency = null);

@@ -118,6 +118,10 @@ namespace FinancialStructures.FinanceStructures
             Names = new NameData();
         }
 
+        internal Security(NameData names)
+        {
+            Names = names;
+        }
 
         /// <summary>
         /// Constructor creating a new security.

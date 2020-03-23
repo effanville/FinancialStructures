@@ -132,7 +132,7 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null)
             {
-                DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.DownloadSecurity(programPortfolio, fSelectedName.Company, fSelectedName.Name, ReportLogger).ConfigureAwait(false));
+                DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.DownloadOfType(AccountType.Security, programPortfolio, fSelectedName, ReportLogger).ConfigureAwait(false));
             }
         }
 

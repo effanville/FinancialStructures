@@ -12,38 +12,11 @@ namespace FinanceWindowsViewModels
 {
     internal class MainWindowViewModel : PropertyChangedBase
     {
-        public EditMethods bankAccEditMethods = new EditMethods(
-              (portfolio, name, reportUpdate) => PortfolioDataUpdater.DownloadBankAccount(portfolio, name, reportUpdate),
-              (portfolio) => portfolio.NameData(AccountType.BankAccount),
-              (portfolio, name, reports) => portfolio.TryAdd(AccountType.BankAccount, name, reports),
-              (portfolio, oldName, newName, reports) => portfolio.TryEditName(AccountType.BankAccount, oldName, newName, reports),
-              (portfolio, name, reports) => portfolio.TryRemove(AccountType.BankAccount, name, reports),
-              (portfolio, name, reports) => portfolio.NumberData(AccountType.BankAccount, name, reports),
-              (portfolio, name, data, reports) => portfolio.TryAddData(AccountType.BankAccount, name, data, reports),
-              (portfolio, name, oldData, newData, reports) => portfolio.TryEditData(AccountType.BankAccount, name, oldData, newData, reports),
-              (portfolio, name, data, reports) => portfolio.TryDeleteData(AccountType.BankAccount, name, data, reports));
+        public EditMethods bankAccEditMethods = EditMethods.GenerateEditMethods(AccountType.BankAccount);
 
-        public EditMethods sectorEditMethods = new EditMethods(
-                (portfolio, name, reportUpdate) => PortfolioDataUpdater.DownloadSector(portfolio, name, reportUpdate),
-                (portfolio) => portfolio.NameData(AccountType.Sector),
-                (portfolio, name, reports) => portfolio.TryAdd(AccountType.Sector, name, reports),
-                (portfolio, oldName, newName, reports) => portfolio.TryEditName(AccountType.Sector, oldName, newName, reports),
-                (portfolio, name, reports) => portfolio.TryRemove(AccountType.Sector, name, reports),
-                (portfolio, name, reports) => portfolio.NumberData(AccountType.Sector, name, reports),
-                (portfolio, name, data, reports) => portfolio.TryAddData(AccountType.Sector, name, data, reports),
-                (portfolio, name, oldData, newData, reports) => portfolio.TryEditData(AccountType.Sector, name, oldData, newData, reports),
-                (portfolio, name, data, reports) => portfolio.TryDeleteData(AccountType.Sector, name, data, reports));
+        public EditMethods sectorEditMethods = EditMethods.GenerateEditMethods(AccountType.Sector);
 
-        public EditMethods currencyEditMethods = new EditMethods(
-                (portfolio, name, reportUpdate) => PortfolioDataUpdater.DownloadCurrency(portfolio, name, reportUpdate),
-                (portfolio) => portfolio.NameData(AccountType.Currency),
-                (portfolio, name, reports) => portfolio.TryAdd(AccountType.Currency, name, reports),
-                (portfolio, oldName, newName, reports) => portfolio.TryEditName(AccountType.Currency, oldName, newName, reports),
-                (portfolio, name, reports) => portfolio.TryRemove(AccountType.Currency, name, reports),
-                (portfolio, name, reports) => portfolio.NumberData(AccountType.Currency, name, reports),
-                (portfolio, name, data, reports) => portfolio.TryAddData(AccountType.Currency, name, data, reports),
-                (portfolio, name, oldData, newData, reports) => portfolio.TryEditData(AccountType.Currency, name, oldData, newData, reports),
-                (portfolio, name, data, reports) => portfolio.TryDeleteData(AccountType.Currency, name, data, reports));
+        public EditMethods currencyEditMethods = EditMethods.GenerateEditMethods(AccountType.Currency);
 
         internal IPortfolio ProgramPortfolio = new Portfolio();
 

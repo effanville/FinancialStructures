@@ -36,7 +36,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 case (AccountType.Security):
                     {
-                        portfolio.Funds.Add(new Security(name.Company, name.Name, name.Currency, name.Url, name.Sectors));
+                        portfolio.Funds.Add(new Security(name));
                         break;
                     }
                 case (AccountType.Currency):

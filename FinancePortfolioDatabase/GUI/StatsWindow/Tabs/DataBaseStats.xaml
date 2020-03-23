@@ -22,7 +22,7 @@
                 <DataGridTextColumn Header="Company" MaxWidth="200" MinWidth="70" Binding="{Binding Path=Company}"/>
                 <DataGridTextColumn Header="Name" MaxWidth="200" MinWidth="70" Binding="{Binding Path=Name}"/>
                 <DataGridTextColumn Header="First Date" MaxWidth="200" MinWidth="70" Binding="{Binding Path=FirstDate, StringFormat=dd/MM/yyyy}"/>
-                <DataGridTextColumn Header="Latest Date" MaxWidth="200" MinWidth="70" Binding="{Binding Path=Date, StringFormat=dd/MM/yyyy}"/>
+                <DataGridTextColumn Header="Latest Date" MaxWidth="200" MinWidth="70" Binding="{Binding Path=LatestDate, StringFormat=dd/MM/yyyy}"/>
                 <DataGridTextColumn Header="Number Entries" MaxWidth="200" MinWidth="70" Binding="{Binding Path=NumEntries}"/>
                 <DataGridTextColumn Header="Entry Year Density" MaxWidth="200" MinWidth="70" Binding="{Binding Path=EntryYearDensity}"/>
             </DataGrid.Columns>

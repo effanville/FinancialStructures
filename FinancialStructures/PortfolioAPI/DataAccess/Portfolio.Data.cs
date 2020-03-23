@@ -1,6 +1,5 @@
-﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.GUIFinanceStructures;
+﻿using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using System.Collections.Generic;
@@ -12,17 +11,17 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// Queries for data for the security of name and company. 
         /// </summary>
-        public static List<DayDataView> SecurityData(this IPortfolio portfolio, string company, string name)
+        public static List<SecurityDayData> SecurityData(this IPortfolio portfolio, TwoName names)
         {
-            foreach (var security in portfolio.Funds)
+            foreach (ISecurity security in portfolio.Funds)
             {
-                if (security.Name == name && security.Company == company)
+                if (names.IsEqualTo(security.Names))
                 {
                     return security.GetDataForDisplay();
                 }
             }
 
-            return new List<DayDataView>();
+            return new List<SecurityDayData>();
         }
 
         /// <summary>
@@ -62,7 +61,7 @@ namespace FinancialStructures.PortfolioAPI
         {
             foreach (var account in objects)
             {
-                if (account.Name == name.Name && account.Company == name.Company)
+                if (name.IsEqualTo(account.Names))
                 {
                     return account.GetDataForDisplay();
                 }

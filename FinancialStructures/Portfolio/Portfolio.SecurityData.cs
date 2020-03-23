@@ -12,7 +12,7 @@ namespace FinancialStructures.Database
         public static List<string> GetSecuritiesSectors(this IPortfolio portfolio)
         {
             var companies = new List<string>();
-            foreach (var security in portfolio.Funds)
+            foreach (ISecurity security in portfolio.Funds)
             {
                 foreach (var sector in security.Sectors)
                 {

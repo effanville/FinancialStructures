@@ -1,5 +1,7 @@
-﻿using FinancialStructures.FinanceInterfaces;
+﻿using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
+using FinancialStructures.PortfolioAPI;
 using FinancialStructures.ReportLogging;
 using System;
 using System.Collections.Generic;
@@ -141,7 +143,25 @@ namespace FinancialStructures.GUIFinanceStructures
 
         private readonly Func<IPortfolio, NameData, DayValue_ChangeLogged, LogReporter, bool> DeleteDataMethod;
 
-        public EditMethods(
+        /// <summary>
+        /// Generates collection of methods to edit/create object of type accountType. Note this will not work with Security type as
+        /// these data are special.
+        /// </summary>
+        public static EditMethods GenerateEditMethods(AccountType accountType)
+        {
+            return new EditMethods(
+              (portfolio, name, reportUpdate) => PortfolioDataUpdater.DownloadOfType(accountType, portfolio, name, reportUpdate),
+              (portfolio) => portfolio.NameData(accountType),
+              (portfolio, name, reports) => portfolio.TryAdd(accountType, name, reports),
+              (portfolio, oldName, newName, reports) => portfolio.TryEditName(accountType, oldName, newName, reports),
+              (portfolio, name, reports) => portfolio.TryRemove(accountType, name, reports),
+              (portfolio, name, reports) => portfolio.NumberData(accountType, name, reports),
+              (portfolio, name, data, reports) => portfolio.TryAddData(accountType, name, data, reports),
+              (portfolio, name, oldData, newData, reports) => portfolio.TryEditData(accountType, name, oldData, newData, reports),
+              (portfolio, name, data, reports) => portfolio.TryDeleteData(accountType, name, data, reports));
+        }
+
+        private EditMethods(
             Func<IPortfolio, NameData, LogReporter, Task> downloadMethod,
             Func<IPortfolio, List<NameCompDate>> updateNameMethod = null,
             Func<IPortfolio, NameData, LogReporter, bool> createMethod = null,

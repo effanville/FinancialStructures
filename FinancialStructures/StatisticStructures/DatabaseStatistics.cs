@@ -1,8 +1,11 @@
 ﻿using FinancialStructures.NamingStructures;
 using System;
 
-namespace FinancialStructures.GUIFinanceStructures
+namespace FinancialStructures.StatisticStructures
 {
+    /// <summary>
+    /// Holds statistics about an account pertaining to the records stored in the account.
+    /// </summary>
     public class DatabaseStatistics : TwoName
     {
         private DateTime fFirstDate;
@@ -12,11 +15,11 @@ namespace FinancialStructures.GUIFinanceStructures
             set { fFirstDate = value; }
         }
 
-        private DateTime fDate;
-        public DateTime Date
+        private DateTime fLatestDate;
+        public DateTime LatestDate
         {
-            get { return fDate; }
-            set { fDate = value; }
+            get { return fLatestDate; }
+            set { fLatestDate = value; }
         }
 
         private int fNumEntries;
@@ -40,14 +43,9 @@ namespace FinancialStructures.GUIFinanceStructures
             : base(company, name)
         {
             FirstDate = firstDate;
-            Date = latestDate;
+            LatestDate = latestDate;
             NumEntries = numEntries;
             EntryYearDensity = density;
-        }
-
-        public DatabaseStatistics(string company, string name)
-            : base(company, name)
-        {
         }
     }
 }

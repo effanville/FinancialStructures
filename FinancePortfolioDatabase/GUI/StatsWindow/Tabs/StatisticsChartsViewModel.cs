@@ -1,7 +1,7 @@
 ﻿using FinancialStructures.DataStructures;
-using FinancialStructures.DisplayStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
+using FinancialStructures.StatisticStructures;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,8 +21,8 @@ namespace FinanceViewModels.StatsViewModels
             set { fHistoryGapDays = value; OnPropertyChanged(); }
         }
 
-        private List<HistoryStatistic> fHistoryStats;
-        public List<HistoryStatistic> HistoryStats
+        private List<PortfolioDaySnapshot> fHistoryStats;
+        public List<PortfolioDaySnapshot> HistoryStats
         {
             get { return fHistoryStats; }
             set { fHistoryStats = value; OnPropertyChanged(); }
@@ -87,7 +87,7 @@ namespace FinanceViewModels.StatsViewModels
                         series1.DependentValuePath = "Value";
                         series1.IndependentValuePath = "Key";
                         series1.ItemsSource = pc;
-                        series1.Title = HistoryStats[0].SectorCar[sectorIndex].Company;
+                        series1.Title = HistoryStats[0].SectorCar[sectorIndex].Names.Company;
                         Style style = new Style(typeof(DataPoint));
                         Setter st1 = new Setter(DataPoint.TemplateProperty, null);
                         Byte[] b = new Byte[3];

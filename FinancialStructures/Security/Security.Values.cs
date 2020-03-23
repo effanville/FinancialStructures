@@ -1,5 +1,5 @@
-﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.GUIFinanceStructures;
+﻿using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using System;
 using System.Collections.Generic;
@@ -93,20 +93,21 @@ namespace FinancialStructures.FinanceStructures
 
             return false;
         }
-        public DayDataView DayData(DateTime day)
+
+        public SecurityDayData DayData(DateTime day)
         {
             fUnitPrice.TryGetValue(day, out double UnitPrice);
             fShares.TryGetValue(day, out double shares);
             fInvestments.TryGetValue(day, out double invest);
-            return new DayDataView(day, UnitPrice, shares, invest);
+            return new SecurityDayData(day, UnitPrice, shares, invest);
         }
 
         /// <summary>
         /// Produces a list of data for visual display purposes. Display in the base currency of the fund ( so this does not modify values due to currency)
         /// </summary>
-        public List<DayDataView> GetDataForDisplay()
+        public List<SecurityDayData> GetDataForDisplay()
         {
-            var output = new List<DayDataView>();
+            var output = new List<SecurityDayData>();
             if (fUnitPrice.Any())
             {
                 foreach (var datevalue in fUnitPrice.GetValuesBetween(fUnitPrice.FirstDate(), fUnitPrice.LatestDate()))
@@ -114,7 +115,7 @@ namespace FinancialStructures.FinanceStructures
                     fUnitPrice.TryGetValue(datevalue.Day, out double UnitPrice);
                     fShares.TryGetValue(datevalue.Day, out double shares);
                     fInvestments.TryGetValue(datevalue.Day, out double invest);
-                    var thisday = new DayDataView(datevalue.Day, UnitPrice, shares, invest);
+                    var thisday = new SecurityDayData(datevalue.Day, UnitPrice, shares, invest);
                     output.Add(thisday);
                 }
             }
@@ -126,7 +127,7 @@ namespace FinancialStructures.FinanceStructures
                     {
                         fShares.TryGetValue(datevalue.Day, out double shares);
                         fInvestments.TryGetValue(datevalue.Day, out double invest);
-                        var thisday = new DayDataView(datevalue.Day, double.NaN, shares, invest);
+                        var thisday = new SecurityDayData(datevalue.Day, double.NaN, shares, invest);
                         output.Add(thisday);
                     }
                 }
@@ -138,7 +139,7 @@ namespace FinancialStructures.FinanceStructures
                     if (!fUnitPrice.TryGetValue(datevalue.Day, out double _) && !fShares.TryGetValue(datevalue.Day, out double _))
                     {
                         fInvestments.TryGetValue(datevalue.Day, out double invest);
-                        var thisday = new DayDataView(datevalue.Day, double.NaN, double.NaN, invest);
+                        var thisday = new SecurityDayData(datevalue.Day, double.NaN, double.NaN, invest);
 
                         output.Add(thisday);
                     }
