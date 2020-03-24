@@ -1,6 +1,6 @@
 ﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.NamingStructures;
+using FinancialStructures.PortfolioAPI;
 using FinancialStructures.ReportLogging;
 using System;
 using System.Collections.Generic;
@@ -11,6 +11,7 @@ namespace FinanceCommonViewModels
 {
     internal class SingleValueEditWindowViewModel : ViewModelBase
     {
+        private AccountType TypeOfAccount;
         private IPortfolio Portfolio;
         public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
 
@@ -18,12 +19,13 @@ namespace FinanceCommonViewModels
         private readonly LogReporter ReportLogger;
         private readonly EditMethods EditMethods;
 
-        public SingleValueEditWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, LogReporter reportLogger, EditMethods editMethods)
+        public SingleValueEditWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, LogReporter reportLogger, EditMethods editMethods, AccountType accountType)
             : base(title)
         {
             UpdateDataCallback = updateDataCallback;
             ReportLogger = reportLogger;
             EditMethods = editMethods;
+            TypeOfAccount = accountType;
             UpdateData(portfolio);
             Tabs.Add(new DataNamesViewModel(Portfolio, updateDataCallback, reportLogger, LoadTab, editMethods));
         }
@@ -61,7 +63,7 @@ namespace FinanceCommonViewModels
 
         private void LoadTabFunc(NameData_ChangeLogged name)
         {
-            Tabs.Add(new SelectedSingleDataViewModel(Portfolio, UpdateDataCallback, ReportLogger, EditMethods, name));
+            Tabs.Add(new SelectedSingleDataViewModel(Portfolio, UpdateDataCallback, ReportLogger, EditMethods, name, TypeOfAccount));
         }
     }
 }

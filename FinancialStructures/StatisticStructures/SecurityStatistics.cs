@@ -63,7 +63,7 @@ namespace FinancialStructures.StatisticStructures
         {
             if (securityStats.StatsType == StatisticsType.BenchMarkTotal)
             {
-                portfolio.TryGetSector(securityStats.Name, out ISector chosenSector);
+                portfolio.TryGetAccount(AccountType.Sector, securityStats.Names, out var chosenSector);
                 if (chosenSector != null)
                 {
                     securityStats.LatestVal = MathSupport.Truncate(chosenSector.LatestValue().Value);

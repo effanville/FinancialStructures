@@ -1,7 +1,6 @@
 ﻿using FinanceCommonViewModels;
 using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.GUIFinanceStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.ReportLogging;
 using GUISupport;
@@ -49,9 +48,9 @@ namespace FinanceWindowsViewModels
             OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger);
             Tabs.Add(new BasicDataViewModel(ProgramPortfolio));
             Tabs.Add(new SecurityEditWindowViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger));
-            Tabs.Add(new SingleValueEditWindowViewModel("Bank Account Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, bankAccEditMethods));
-            Tabs.Add(new SingleValueEditWindowViewModel("Sector Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, sectorEditMethods));
-            Tabs.Add(new SingleValueEditWindowViewModel("Currency Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, currencyEditMethods));
+            Tabs.Add(new SingleValueEditWindowViewModel("Bank Account Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, bankAccEditMethods, AccountType.BankAccount));
+            Tabs.Add(new SingleValueEditWindowViewModel("Sector Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, sectorEditMethods, AccountType.Sector));
+            Tabs.Add(new SingleValueEditWindowViewModel("Currency Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, currencyEditMethods, AccountType.Currency));
             Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger));
 
 

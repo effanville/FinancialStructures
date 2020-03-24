@@ -23,57 +23,53 @@ namespace FinancialStructures.PortfolioAPI
         }
 
         /// <summary>
-        /// Outputs a copy of the BankAccount if it exists.
+        /// Outputs a copy of the account if it exists.
         /// </summary>
-        public static bool TryGetBankAccount(this IPortfolio portfolio, TwoName names, out ICashAccount desired)
+        public static bool TryGetAccount(this IPortfolio portfolio, AccountType accountType, TwoName names, out ISingleValueDataList desired)
         {
-            foreach (ICashAccount sec in portfolio.BankAccounts)
-            {
-                if (names.IsEqualTo(sec.Names))
-                {
-                    desired = sec.Copy();
-                    return true;
-                }
-            }
-
+            bool success = false;
             desired = null;
-            return false;
-        }
-
-        /// <summary>
-        /// Returns a sector from the database with specified name.
-        /// </summary>
-        public static bool TryGetSector(this IPortfolio portfolio, string name, out ISector Desired)
-        {
-            foreach (ISector sector in portfolio.BenchMarks)
+            switch (accountType)
             {
-                if (sector.Name == name)
-                {
-                    Desired = sector.Copy();
-                    return true;
-                }
+                case (AccountType.BankAccount):
+                    {
+                        foreach (ICashAccount sec in portfolio.BankAccounts)
+                        {
+                            if (names.IsEqualTo(sec.Names))
+                            {
+                                desired = sec.Copy();
+                                success = true;
+                            }
+                        }
+                        break;
+                    }
+                case (AccountType.Currency):
+                    {
+                        foreach (ICurrency currency in portfolio.Currencies)
+                        {
+                            if (names.IsEqualTo(currency.Names))
+                            {
+                                desired = currency.Copy();
+                                success = true;
+                            }
+                        }
+                        break;
+                    }
+                case (AccountType.Sector):
+                    {
+                        foreach (ISector sector in portfolio.BenchMarks)
+                        {
+                            if (sector.Name == names.Name)
+                            {
+                                desired = sector.Copy();
+                                success = true;
+                            }
+                        }
+                        break;
+                    }
             }
 
-            Desired = null;
-            return false;
-        }
-
-        /// <summary>
-        /// Outputs a copy of the BankAccount if it exists.
-        /// </summary>
-        public static bool TryGetCurrency(this IPortfolio portfolio, TwoName names, out ICurrency desired)
-        {
-            foreach (ICurrency currency in portfolio.Currencies)
-            {
-                if (names.IsEqualTo(currency.Names))
-                {
-                    desired = currency.Copy();
-                    return true;
-                }
-            }
-
-            desired = null;
-            return false;
+            return success;
         }
     }
 }

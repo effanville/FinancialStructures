@@ -1,5 +1,5 @@
 ﻿using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceFunctionsList;
+using FinancialStructures.FinanceFunctions;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.StatisticStructures;
 using System;

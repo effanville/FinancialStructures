@@ -66,6 +66,7 @@ namespace FinanceWindowsViewModels
             fSelectedName = selectedName;
             DeleteValuationCommand = new BasicCommand(ExecuteDeleteValuation);
             AddCsvData = new BasicCommand(ExecuteAddCsvData);
+            ExportCsvData = new BasicCommand(ExecuteExportCsvData);
             AddEditSecurityDataCommand = new BasicCommand(ExecuteAddEditSecData);
             UpdateData(portfolio, null);
             UpdateDataCallback = updateData;
@@ -88,12 +89,12 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null)
             {
-                OpenFileDialog openFile = new OpenFileDialog() { DefaultExt = "xml" };
+                OpenFileDialog openFile = new OpenFileDialog() { DefaultExt = "csv" };
                 openFile.Filter = "Csv Files|*.csv|All Files|*.*";
                 List<object> outputs = null;
                 if (openFile.ShowDialog() == DialogResult.OK)
                 {
-                    outputs = CsvDataRead.ReadFromCsv(openFile.FileName, AccountType.Security, ReportLogger.Log);
+                    outputs = CsvDataRead.ReadFromCsv(openFile.FileName, AccountType.Security, ReportLogger);
                 }
                 if (outputs != null)
                 {
@@ -107,6 +108,29 @@ namespace FinanceWindowsViewModels
                         {
                             ReportLogger.Log("Error", "StatisticsPage", "Have the wrong type of thing");
                         }
+                    }
+                }
+            }
+        }
+
+        public ICommand ExportCsvData { get; }
+
+        private void ExecuteExportCsvData(Object obj)
+        {
+            if (fSelectedName != null)
+            {
+                SaveFileDialog saveFile = new SaveFileDialog() { DefaultExt = "csv" };
+                saveFile.Filter = "Csv Files|*.csv|All Files|*.*";
+                List<object> outputs = null;
+                if (saveFile.ShowDialog() == DialogResult.OK)
+                {
+                    if (Portfolio.TryGetSecurity(fSelectedName, out var security))
+                    {
+                        CsvDataRead.WriteToCSVFile(saveFile.FileName, AccountType.Security, security, ReportLogger);
+                    }
+                    else
+                    {
+                        ReportLogger.LogDetailed("Critical", "Error", "Saving", "Could not find security.");
                     }
                 }
             }

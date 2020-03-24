@@ -1,5 +1,4 @@
 ﻿using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.ReportLogging;
@@ -7,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace FinancialStructures.GUIFinanceStructures
+namespace FinancialStructures.FinanceInterfaces
 {
     public enum FunctionType
     {

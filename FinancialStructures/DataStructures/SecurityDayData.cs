@@ -4,6 +4,11 @@ namespace FinancialStructures.DataStructures
 {
     public class SecurityDayData : IComparable
     {
+        public override string ToString()
+        {
+            return string.Concat(Date.Day.ToString().PadLeft(2, '0'), "/", Date.Month.ToString().PadLeft(2, '0'), "/", Date.Year, ", ", UnitPrice.ToString(), ", ", ShareNo.ToString(), ", ", NewInvestment.ToString());
+        }
+
         public int CompareTo(Object obj)
         {
             if (obj is SecurityDayData dailyView)

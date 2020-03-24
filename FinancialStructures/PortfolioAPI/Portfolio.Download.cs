@@ -37,21 +37,11 @@ namespace FinancialStructures.PortfolioAPI
                         break;
                     }
                 case (AccountType.BankAccount):
-                    {
-                        portfolio.TryGetBankAccount(names, out var acc);
-                        await DownloadLatestValue(acc.Names, value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
-                        break;
-                    }
                 case (AccountType.Currency):
-                    {
-                        portfolio.TryGetCurrency(names, out var currency);
-                        await DownloadLatestValue(currency.Names, value => currency.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
-                        break;
-                    }
                 case (AccountType.Sector):
                     {
-                        portfolio.TryGetSector(names.Name, out var sector);
-                        await DownloadLatestValue(sector.Names, value => sector.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                        portfolio.TryGetAccount(accountType, names, out var acc);
+                        await DownloadLatestValue(acc.Names, value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
                         break;
                     }
             }

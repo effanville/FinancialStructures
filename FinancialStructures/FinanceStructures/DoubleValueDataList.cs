@@ -1,8 +1,7 @@
 ﻿using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures
+namespace FinancialStructures.FinanceStructures
 {
     public class DoubleValueDataList : SingleValueDataList
     {

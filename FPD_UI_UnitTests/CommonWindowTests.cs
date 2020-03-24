@@ -32,7 +32,7 @@ namespace FPD_UI_UnitTests
             {
                 var output = TestingGUICode.CreateBasicDataBase();
 
-                var viewModel = new SelectedSingleDataViewModel(output, TestingGUICode.DummyDataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyEditMethods, null);
+                var viewModel = new SelectedSingleDataViewModel(output, TestingGUICode.DummyDataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyEditMethods, null, FinancialStructures.PortfolioAPI.AccountType.BankAccount);
             }
         }
     }

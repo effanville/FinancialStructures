@@ -20,10 +20,14 @@
                 Style="{StaticResource ResourceKey=defaultButton}"
                     Command="{Binding DeleteValuationCommand}"
                     ToolTip="Deletes the security data highlighted."/>
-            <Button Content="Add Data From Csv file"
+            <Button Content="Import Data"
                 Style="{StaticResource ResourceKey=defaultButton}"
                 Command="{Binding AddCsvData}"
-                ToolTip="Adds data to the selected security."/>
+                ToolTip="Adds data to the selected security from a csv file."/>
+            <Button Content="Export Data"
+                Style="{StaticResource ResourceKey=defaultButton}"
+                Command="{Binding ExportCsvData}"
+                ToolTip="Exports data from the selected security to a csv file."/>
         </StackPanel>
 
 

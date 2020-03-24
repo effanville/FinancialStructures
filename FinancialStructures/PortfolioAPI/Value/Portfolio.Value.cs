@@ -53,7 +53,7 @@ namespace FinancialStructures.PortfolioAPI
                     }
                 case (AccountType.BankAccount):
                     {
-                        if (!portfolio.TryGetBankAccount(name, out ICashAccount desired))
+                        if (!portfolio.TryGetAccount(AccountType.BankAccount, name, out var desired))
                         {
                             return double.NaN;
                         }
