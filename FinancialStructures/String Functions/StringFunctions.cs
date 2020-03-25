@@ -19,5 +19,13 @@ namespace StringFunctions
 
             return value.Substring(0, Math.Min(value.Length, maxLength));
         }
+
+        /// <summary>
+        /// Convert a string into the enum type given by T.
+        /// </summary>
+        public static T ToEnum<T>(this string value)
+        {
+            return (T)Enum.Parse(typeof(T), value, true);
+        }
     }
 }
