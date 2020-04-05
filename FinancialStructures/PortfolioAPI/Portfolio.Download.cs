@@ -2,7 +2,9 @@
 using FinancialStructures.NamingStructures;
 using FinancialStructures.ReportLogging;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 
@@ -139,7 +141,17 @@ namespace FinancialStructures.PortfolioAPI
             {
                 try
                 {
-                    HttpResponseMessage response = await client.GetAsync(newUrl).ConfigureAwait(false);
+                    HttpRequestMessage requestMessage = new HttpRequestMessage();
+                    requestMessage.RequestUri = new Uri(newUrl);
+                    requestMessage.Headers.Add("Cookie", "A1S=d=AQABBBqjZl4CELBdwrYAVcmgp1PaEGx2xoQFEgABAQGPgF5eX_bPb2UB_iMAAAcIGqNmXmx2xoQ&S=AQAAAii_Jnul1r-aKGkxwIrap9c&j=GDPR");
+                    requestMessage.Headers.Add("Cookie", "A1=d=AQABBBqjZl4CELBdwrYAVcmgp1PaEGx2xoQFEgABAQGPgF5eX_bPb2UB_iMAAAcIGqNmXmx2xoQ&S=AQAAAii_Jnul1r-aKGkxwIrap9c");
+                    requestMessage.Headers.Add("Cookie", "A3=d=AQABBBqjZl4CELBdwrYAVcmgp1PaEGx2xoQFEgABAQGPgF5eX_bPb2UB_iMAAAcIGqNmXmx2xoQ&S=AQAAAii_Jnul1r-aKGkxwIrap9c");
+                    requestMessage.Headers.Add("Cookie", "B=89hjmdhf6d8oq&b=3&s=bv");
+                    requestMessage.Headers.Add("Cookie", "cmp=v=28&t=1586111544&j=1&o=106");
+                    requestMessage.Headers.Add("Cookie", "EuConsent=BOw-KL2OxZWozAOABCENC7uAAAAtl6__f_97_8_v2ddvduz_Ov_j_c__3XW8fPZvcELzhK9Meu_2xzd4u9wNRM5wckx87eJrEso5czISsG-RMod_zt__3ziX9oxPowEc9rz3nbEw6vs2v-ZzBCGJ_Iw");
+                    requestMessage.Headers.Add("Cookie", "GUC=AQABAQFegI9fXkIe8wSV");
+                    requestMessage.Headers.Add("Cookie", "PRF=t%3D2800.HK%252BVUKE.L%252BIGLS.L%252BSAAA.L%252BVWRL.L");
+                    HttpResponseMessage response = await client.SendAsync(requestMessage).ConfigureAwait(false);
                     response.EnsureSuccessStatusCode();
                     string result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
                     if (result != null)
@@ -251,7 +263,8 @@ namespace FinancialStructures.PortfolioAPI
 
                 return false;
             };
-            string searchString = "data-reactid=\"33\"><span class=\"Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)\" data-reactid=\"34\">";
+            int number = 31;
+            string searchString = $"data-reactid=\"{number}\"><span class=\"Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)\" data-reactid=\"{number + 1}\">";
             int poundsValue = data.IndexOf(searchString);
             if (poundsValue != -1)
             {
