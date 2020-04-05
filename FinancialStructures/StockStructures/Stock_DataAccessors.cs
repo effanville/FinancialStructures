@@ -51,6 +51,8 @@ namespace FinancialStructures.StockStructures
                     return values.High / values.Open;
                 case (DataStream.LowOpen):
                     return values.Low / values.Open;
+                case DataStream.Volume:
+                    return values.Volume;
                 case (DataStream.Close):
                 default:
                     return values.Close;
