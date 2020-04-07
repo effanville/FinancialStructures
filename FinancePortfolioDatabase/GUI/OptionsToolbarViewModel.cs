@@ -4,10 +4,11 @@ using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.ReportLogging;
 using GUISupport;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
+using System.Windows;
 using System.Windows.Input;
 
 namespace FinanceWindowsViewModels
@@ -80,8 +81,8 @@ namespace FinanceWindowsViewModels
         public ICommand NewDatabaseCommand { get; }
         private void ExecuteNewDatabase(Object obj)
         {
-            DialogResult result = MessageBox.Show("Do you want to load a new database?", "New Database?", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
-            if (result == DialogResult.Yes)
+            MessageBoxResult result = MessageBox.Show("Do you want to load a new database?", "New Database?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (result == MessageBoxResult.Yes)
             {
                 DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(""));
                 DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio("", ReportLogger));
@@ -93,13 +94,12 @@ namespace FinanceWindowsViewModels
         {
             SaveFileDialog saving = new SaveFileDialog() { DefaultExt = "xml", FileName = fFileName, InitialDirectory = fDirectory };
             saving.Filter = "XML Files|*.xml|All Files|*.*";
-            if (saving.ShowDialog() == DialogResult.OK)
+            bool? saved = saving.ShowDialog();
+            if (saved != null && (bool)saved)
             {
                 DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(saving.FileName));
                 DataUpdateCallback(programPortfolio => programPortfolio.SavePortfolio(saving.FileName, ReportLogger));
             }
-
-            saving.Dispose();
         }
 
         public ICommand LoadDatabaseCommand { get; }
@@ -107,13 +107,13 @@ namespace FinanceWindowsViewModels
         {
             OpenFileDialog openFile = new OpenFileDialog() { DefaultExt = "xml" };
             openFile.Filter = "XML Files|*.xml|All Files|*.*";
-            if (openFile.ShowDialog() == DialogResult.OK)
+            bool? showed = openFile.ShowDialog();
+            if (showed != null && (bool)showed)
             {
                 DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(openFile.FileName));
                 DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio(openFile.FileName, ReportLogger));
 
             }
-            openFile.Dispose();
         }
 
         public ICommand UpdateDataCommand { get; }

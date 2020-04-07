@@ -5,10 +5,10 @@ using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.ReportLogging;
 using GUISupport;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace FinanceCommonViewModels
@@ -170,7 +170,8 @@ namespace FinanceCommonViewModels
                 OpenFileDialog openFile = new OpenFileDialog() { DefaultExt = "csv" };
                 openFile.Filter = "Csv Files|*.csv|All Files|*.*";
                 List<object> outputs = null;
-                if (openFile.ShowDialog() == DialogResult.OK)
+                bool? showed = openFile.ShowDialog();
+                if (showed != null && (bool)showed)
                 {
                     outputs = CsvDataRead.ReadFromCsv(openFile.FileName, AccountType.Security, ReportLogger);
                 }
@@ -199,8 +200,9 @@ namespace FinanceCommonViewModels
             {
                 SaveFileDialog saveFile = new SaveFileDialog() { DefaultExt = "csv" };
                 saveFile.Filter = "Csv Files|*.csv|All Files|*.*";
-                List<object> outputs = null;
-                if (saveFile.ShowDialog() == DialogResult.OK)
+
+                bool? saved = saveFile.ShowDialog();
+                if (saved != null && (bool)saved)
                 {
                     if (Portfolio.TryGetAccount(TypeOfAccount, fSelectedName, out var security))
                     {

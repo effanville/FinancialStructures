@@ -1,4 +1,5 @@
 ﻿using FinanceCommonViewModels;
+using FinancialStructures.PortfolioAPI;
 using FPD_UI_UnitTests.TestConstruction;
 using NUnit.Framework;
 
@@ -11,7 +12,7 @@ namespace FPD_UI_UnitTests
         {
             var output = TestingGUICode.CreateBasicDataBase();
 
-            var viewModel = new SingleValueEditWindowViewModel("Dummy", output, TestingGUICode.DummyDataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyEditMethods);
+            var viewModel = new SingleValueEditWindowViewModel("Dummy", output, TestingGUICode.DummyDataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyEditMethods, AccountType.BankAccount);
         }
 
         public class SecurityNamesTests

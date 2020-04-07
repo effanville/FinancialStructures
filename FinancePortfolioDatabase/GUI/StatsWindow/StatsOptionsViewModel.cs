@@ -4,9 +4,9 @@ using FinancialStructures.ReportLogging;
 using FinancialStructures.StatisticStructures;
 using FinancialStructures.StatsMakers;
 using GUISupport;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace FinanceWindowsViewModels
@@ -59,7 +59,9 @@ namespace FinanceWindowsViewModels
             SaveFileDialog saving = new SaveFileDialog() { DefaultExt = fFileExtension, FileName = Portfolio.DatabaseName + "-" + fExtension + "HTMLStats" + fFileExtension, InitialDirectory = Portfolio.Directory };
             saving.Filter = fExtension + " file|*" + fFileExtension + "|All files|*.*";
             string path = null;
-            if (saving.ShowDialog() == DialogResult.OK)
+
+            bool? saved = saving.ShowDialog();
+            if (saved != null && (bool)saved)
             {
                 path = saving.FileName;
                 var selected = new List<string>();
@@ -94,7 +96,6 @@ namespace FinanceWindowsViewModels
                 ReportLogger.LogDetailed("Critical", "Error", "StatisticsPage", "Was not able to create " + fExtension + " page in place specified.");
             }
 
-            saving.Dispose();
             CloseWindowAction(path);
         }
 

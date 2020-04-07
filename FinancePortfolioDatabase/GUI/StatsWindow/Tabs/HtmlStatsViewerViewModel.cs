@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.FinanceInterfaces;
 using GUISupport;
+using Microsoft.Win32;
 using System;
 using System.Windows.Forms;
 using System.Windows.Input;
@@ -31,7 +32,9 @@ namespace FinanceViewModels.StatsViewModels
         {
             OpenFileDialog fileSelect = new OpenFileDialog();
             fileSelect.Filter = "HTML file|*.html;*.htm|All files|*.*";
-            if (fileSelect.ShowDialog() == DialogResult.OK)
+
+            bool? saved = fileSelect.ShowDialog();
+            if (saved != null && (bool)saved)
             {
                 StatsFilepath = fileSelect.FileName;
             }

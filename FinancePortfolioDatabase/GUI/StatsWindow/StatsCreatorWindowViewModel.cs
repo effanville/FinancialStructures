@@ -5,9 +5,9 @@ using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.ReportLogging;
 using FinancialStructures.StatsMakers;
 using GUISupport;
+using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
-using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace FinanceWindowsViewModels
@@ -67,7 +67,8 @@ namespace FinanceWindowsViewModels
         {
             SaveFileDialog saving = new SaveFileDialog() { DefaultExt = ".csv", FileName = fPortfolio.DatabaseName + "-CSVStats.csv", InitialDirectory = fPortfolio.Directory };
             saving.Filter = "CSV file|*.csv|All files|*.*";
-            if (saving.ShowDialog() == DialogResult.OK)
+            bool? saved = saving.ShowDialog();
+            if (saved != null && (bool)saved)
             {
                 if (!saving.FileName.EndsWith(".csv"))
                 {
@@ -80,14 +81,14 @@ namespace FinanceWindowsViewModels
             {
                 ReportLogger.Log("Error", "StatisticsPage", $"Was not able to create Investment list page at {saving.FileName}");
             }
-            saving.Dispose();
         }
 
         private void ExecuteCreateHistory(Object obj)
         {
             SaveFileDialog saving = new SaveFileDialog() { DefaultExt = ".csv", FileName = DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + fPortfolio.DatabaseName + "-History.csv", InitialDirectory = fPortfolio.Directory };
             saving.Filter = "CSV file|*.csv|All files|*.*";
-            if (saving.ShowDialog() == DialogResult.OK)
+            bool? saved = saving.ShowDialog();
+            if (saved != null && (bool)saved)
             {
                 if (!saving.FileName.EndsWith(".csv"))
                 {
@@ -100,7 +101,6 @@ namespace FinanceWindowsViewModels
             {
                 ReportLogger.Log("Error", "StatisticsPage", $"Was not able to create Investment list page at {saving.FileName}");
             }
-            saving.Dispose();
         }
 
         private void ExecuteCreateHTMLCommand(Object obj)

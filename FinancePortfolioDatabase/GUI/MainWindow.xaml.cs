@@ -40,6 +40,7 @@ namespace FinanceWindows
             string msg = "Data may not be saved. Would you like to save before closing?";
             MessageBoxResult result =
                   MessageBox.Show(
+                    this,
                     msg,
                     $"Closing {Title}.",
                     MessageBoxButton.YesNoCancel,

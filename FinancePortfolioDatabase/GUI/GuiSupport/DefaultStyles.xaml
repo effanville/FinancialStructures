@@ -2,9 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:cl="clr-namespace:GUISupport"
                     xmlns:fs="clr-namespace:FinancialStructures.DataStructures;assembly=FinancialStructures"
-                    xmlns:datavis="clr-namespace:System.Windows.Controls.DataVisualization;assembly=System.Windows.Controls.DataVisualization.Toolkit"
-                   xmlns:cht="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
-                    xmlns:chartingPrimitives="clr-namespace:System.Windows.Controls.DataVisualization.Charting.Primitives;assembly=System.Windows.Controls.DataVisualization.Toolkit">
+                    xmlns:cht="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit" xmlns:chartingPrimitives="clr-namespace:System.Windows.Controls.DataVisualization.Charting.Primitives;assembly=DotNetProjects.DataVisualization.Toolkit">
     <Style x:Key="defaultButton" 
            TargetType="Button">
         <Setter Property="Background" Value="{Binding Source={x:Static cl:Colours.DefaultButtonBrush}}"/>
@@ -40,7 +38,7 @@
         <Setter Property="Padding" Value="10"/>
         <Setter Property="TitleStyle">
             <Setter.Value>
-                <Style TargetType="datavis:Title">
+                <Style TargetType="cht:Title">
                     <Setter Property="FontSize" Value="15"/>
                     <Setter Property="FontWeight" Value="Bold"/>
                     <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -50,7 +48,7 @@
         </Setter>
         <Setter Property="LegendStyle">
             <Setter.Value>
-                <Style TargetType="datavis:Legend">
+                <Style TargetType="cht:Legend">
                     <Setter Property="Margin" Value="15,0,15,0"/>
                     <Setter Property="HorizontalAlignment" Value="Center"/>
                     <Setter Property="BorderBrush" Value="#FFDBDBDB"/>
@@ -113,7 +111,7 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
-                            <datavis:Title Content="{TemplateBinding Title}" 
+                            <cht:Title Content="{TemplateBinding Title}" 
                                            Grid.Row="0"  
                                            Style="{TemplateBinding TitleStyle}"/>
                             <chartingPrimitives:EdgePanel x:Name="ChartArea" 
@@ -126,7 +124,7 @@
                                         BorderThickness="1" 
                                         Canvas.ZIndex="10"/>
                             </chartingPrimitives:EdgePanel>
-                            <datavis:Legend Grid.Row="1" FontSize="14" FontWeight="Normal"  x:Name="Legend"  Header="{TemplateBinding LegendTitle}" Style="{TemplateBinding LegendStyle}"/>
+                            <cht:Legend Grid.Row="1" FontSize="14" FontWeight="Normal"  x:Name="Legend"  Header="{TemplateBinding LegendTitle}" Style="{TemplateBinding LegendStyle}"/>
                         </Grid>
                     </Border>
                 </ControlTemplate>
