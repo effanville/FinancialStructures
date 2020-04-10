@@ -1,6 +1,6 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 using System;
 using System.Linq;
 
@@ -15,11 +15,11 @@ namespace FinancialStructures.FinanceStructures
         /// Attempts to add data for the date specified.
         /// If cannot add any value that one wants to, then doesn't add all the values chosen.
         /// </summary>
-        public bool TryAddData(LogReporter reportLogger, DateTime date, double unitPrice, double shares = 0, double investment = 0)
+        public bool TryAddData(DateTime date, double unitPrice, double shares = 0, double investment = 0, IReportLogger reportLogger = null)
         {
             if (DoesDateSharesDataExist(date, out int _) || DoesDateInvestmentDataExist(date, out int _) || DoesDateUnitPriceDataExist(date, out int _))
             {
-                reportLogger.Log("Error", "AddingData", $"Security {Names.ToString()} already has NumShares or UnitPrice or Investment data on {date.ToString("d")}.");
+                reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, $"Security {Names.ToString()} already has NumShares or UnitPrice or Investment data on {date.ToString("d")}.");
                 return false;
             }
 
@@ -29,7 +29,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Adds the value to the data with todays date and with the latest number of shares.
         /// </summary>
-        public void UpdateSecurityData(double value, LogReporter reportLogger, DateTime day)
+        public void UpdateSecurityData(DateTime day, double value, IReportLogger reportLogger = null)
         {
             // best approximation for number of units is last known number of units.
             TryGetEarlierData(day, out DailyValuation _, out DailyValuation units, out DailyValuation _);
@@ -38,7 +38,7 @@ namespace FinancialStructures.FinanceStructures
                 units = new DailyValuation(day, 0);
             }
 
-            TryAddData(reportLogger, day, value, units.Value);
+            TryAddData(day, value, units.Value, reportLogger: reportLogger);
         }
 
 
@@ -47,7 +47,7 @@ namespace FinancialStructures.FinanceStructures
         /// If do have relevant values, then edit that value
         /// If investment value doesnt exist, then add that value.
         /// </summary>
-        public bool TryEditData(LogReporter reportLogger, DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment)
+        public bool TryEditData(DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment, IReportLogger reportLogger = null)
         {
             bool editShares = false;
             bool editUnitPrice = false;
@@ -137,7 +137,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Tries to delete the data. If it can, it deletes all data specified, then returns true only if all data has been successfully deleted.
         /// </summary>
-        public bool TryDeleteData(DateTime date, LogReporter reportLogger)
+        public bool TryDeleteData(DateTime date, IReportLogger reportLogger = null)
         {
             return fUnitPrice.TryDeleteValue(date, reportLogger) & fShares.TryDeleteValue(date, reportLogger) & fInvestments.TryDeleteValue(date, reportLogger) && ComputeInvestments(reportLogger);
         }
@@ -150,7 +150,7 @@ namespace FinancialStructures.FinanceStructures
         /// <remarks>
         /// This should be called throughout, whenever one updates the data stored in the Security.
         /// </remarks>
-        private bool ComputeInvestments(LogReporter reportLogger)
+        private bool ComputeInvestments(IReportLogger reportLogger = null)
         {
             // return true;
             for (int index = 0; index < fInvestments.Count(); index++)

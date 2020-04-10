@@ -4,7 +4,7 @@ using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 using GUISupport;
 using Microsoft.Win32;
 using System;
@@ -59,9 +59,9 @@ namespace FinanceWindowsViewModels
 
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
 
-        private readonly LogReporter ReportLogger;
+        private readonly IReportLogger ReportLogger;
 
-        public SelectedSecurityViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, LogReporter reportLogger, NameData_ChangeLogged selectedName)
+        public SelectedSecurityViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, NameData_ChangeLogged selectedName)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
         {
             fSelectedName = selectedName;
@@ -104,11 +104,11 @@ namespace FinanceWindowsViewModels
                     {
                         if (objec is SecurityDayData view)
                         {
-                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(ReportLogger, fSelectedName, view.Date, view.ShareNo, view.UnitPrice, view.NewInvestment));
+                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(fSelectedName, view.Date, view.ShareNo, view.UnitPrice, view.NewInvestment, ReportLogger));
                         }
                         else
                         {
-                            ReportLogger.Log("Error", "StatisticsPage", "Have the wrong type of thing");
+                            ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", "Have the wrong type of thing");
                         }
                     }
                 }
@@ -132,7 +132,7 @@ namespace FinanceWindowsViewModels
                     }
                     else
                     {
-                        ReportLogger.LogDetailed("Critical", "Error", "Saving", "Could not find security.");
+                        ReportLogger.LogWithStrings("Critical", "Error", "Saving", "Could not find security.");
                     }
                 }
             }
@@ -147,7 +147,7 @@ namespace FinanceWindowsViewModels
                 Portfolio.TryGetSecurity(fSelectedName, out var desired);
                 if (desired.Count() != SelectedSecurityData.Count)
                 {
-                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(ReportLogger, fSelectedName, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment));
+                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(fSelectedName, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment, ReportLogger));
                     fSelectedName.NewValue = false;
                 }
                 else
@@ -160,13 +160,13 @@ namespace FinanceWindowsViewModels
                         if (name.NewValue)
                         {
                             edited = true;
-                            UpdateDataCallback(programPortfolio => programPortfolio.TryEditSecurityData(ReportLogger, fSelectedName, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment));
+                            UpdateDataCallback(programPortfolio => programPortfolio.TryEditSecurityData(fSelectedName, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment, ReportLogger));
                             name.NewValue = false;
                         }
                     }
                     if (!edited)
                     {
-                        ReportLogger.Log("Error", "EditingData", "Was not able to edit security data.");
+                        ReportLogger.LogUsefulWithStrings("Error", "EditingData", "Was not able to edit security data.");
                     }
                 }
             }

@@ -1,7 +1,7 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,7 +20,7 @@ namespace FinancialStructures.DataReader
         /// <param name="type">The type of data to import.</param>
         /// <param name="reportLogger">Reporting Callback.</param>
         /// <returns></returns>
-        public static List<object> ReadFromCsv(string filePath, AccountType type, LogReporter reportLogger)
+        public static List<object> ReadFromCsv(string filePath, AccountType type, IReportLogger reportLogger = null)
         {
             TextReader reader = null;
             try
@@ -49,7 +49,7 @@ namespace FinancialStructures.DataReader
             }
             catch (Exception ex)
             {
-                reportLogger.LogDetailed("Critical", "Error", "Loading", ex.Message);
+                reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, ex.Message);
                 return new List<object>();
             }
             finally
@@ -59,14 +59,14 @@ namespace FinancialStructures.DataReader
             }
         }
 
-        private static List<object> CreateSecurityData(List<string[]> valuationsToRead, LogReporter reportLogger)
+        private static List<object> CreateSecurityData(List<string[]> valuationsToRead, IReportLogger reportLogger = null)
         {
             var dailyValuations = new List<object>();
             foreach (var dayValuation in valuationsToRead)
             {
                 if (dayValuation.Length != 4)
                 {
-                    reportLogger.LogDetailed("Critical", "Error", "Loading", "Line in Csv file has incomplete data.");
+                    reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, "Line in Csv file has incomplete data.");
                     break;
                 }
 
@@ -77,14 +77,14 @@ namespace FinancialStructures.DataReader
             return dailyValuations;
         }
 
-        private static List<object> CreateAccountData(List<string[]> valuationsToRead, LogReporter reportLogger)
+        private static List<object> CreateAccountData(List<string[]> valuationsToRead, IReportLogger reportLogger = null)
         {
             var dailyValuations = new List<object>();
             foreach (var dayValuation in valuationsToRead)
             {
                 if (dayValuation.Length != 2)
                 {
-                    reportLogger.LogDetailed("Critical", "Error", "Loading", "Line in Csv file has incomplete data.");
+                    reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, "Line in Csv file has incomplete data.");
                     break;
                 }
 
@@ -102,7 +102,7 @@ namespace FinancialStructures.DataReader
         /// <param name="type">The type of data to import.</param>
         /// <param name="accountToExport">The account of which the data is exported.</param>
         /// <param name="reportLogger">Reporting Callback.</param>
-        public static void WriteToCSVFile(string filePath, AccountType type, object accountToExport, LogReporter reportLogger)
+        public static void WriteToCSVFile(string filePath, AccountType type, object accountToExport, IReportLogger reportLogger = null)
         {
             TextWriter writer = null;
             try
@@ -120,13 +120,13 @@ namespace FinancialStructures.DataReader
                         WriteAccountData(writer, (ISingleValueDataList)accountToExport, reportLogger);
                         break;
                     default:
-                        reportLogger.LogDetailed("Critical", "Error", "Loading", "Account Type wasn't a known type.");
+                        reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, "Account Type wasn't a known type.");
                         break;
                 }
             }
             catch (Exception ex)
             {
-                reportLogger.LogDetailed("Critical", "Error", "Loading", ex.Message);
+                reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, ex.Message);
             }
             finally
             {
@@ -135,7 +135,7 @@ namespace FinancialStructures.DataReader
             }
         }
 
-        private static void WriteSecurityData(TextWriter writer, ISecurity accountToExport, LogReporter reportLogger)
+        private static void WriteSecurityData(TextWriter writer, ISecurity accountToExport, IReportLogger reportLogger)
         {
             foreach (SecurityDayData value in accountToExport.GetDataForDisplay())
             {
@@ -143,7 +143,7 @@ namespace FinancialStructures.DataReader
             }
         }
 
-        private static void WriteAccountData(TextWriter writer, ISingleValueDataList accountToExport, LogReporter reportLogger)
+        private static void WriteAccountData(TextWriter writer, ISingleValueDataList accountToExport, IReportLogger reportLogger)
         {
             foreach (DayValue_ChangeLogged value in accountToExport.GetDataForDisplay())
             {

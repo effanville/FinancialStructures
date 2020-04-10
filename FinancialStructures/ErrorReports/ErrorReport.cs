@@ -2,8 +2,15 @@
 
 namespace FinancialStructures.Reporting
 {
+    /// <summary>
+    /// A report structure containing information about a possible problem (or just info) happening in the program.
+    /// </summary>
     public class ErrorReport : IComparable
     {
+        /// <summary>
+        /// Output of error as a string. This does not include the severity of the report.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return ErrorType.ToString() + " - " + ErrorLocation.ToString() + " - " + Message;
@@ -33,9 +40,12 @@ namespace FinancialStructures.Reporting
             return 0;
         }
 
-        private Severity fErrorSeverity;
+        private ReportSeverity fErrorSeverity;
 
-        public Severity ErrorSeverity
+        /// <summary>
+        /// How serious the report is, enabling a grading of the reports based on seriousness.
+        /// </summary>
+        public ReportSeverity ErrorSeverity
         {
             get { return fErrorSeverity; }
             set { fErrorSeverity = value; }
@@ -43,21 +53,31 @@ namespace FinancialStructures.Reporting
 
         private ReportType fErrorType;
 
+        /// <summary>
+        /// The type of the report (is this an error or a warning etc).
+        /// </summary>
         public ReportType ErrorType
         {
             get { return fErrorType; }
             set { fErrorType = value; }
         }
 
-        private Location fErrorLocation;
+        private ReportLocation fErrorLocation;
 
-        public Location ErrorLocation
+        /// <summary>
+        /// Where is this a report from.
+        /// </summary>
+        public ReportLocation ErrorLocation
         {
             get { return fErrorLocation; }
             set { fErrorLocation = value; }
         }
 
         private string fMessage;
+
+        /// <summary>
+        /// Any extra text needed to aid info to the report.
+        /// </summary>
         public string Message
         {
             get { return fMessage; }
@@ -68,14 +88,14 @@ namespace FinancialStructures.Reporting
         {
         }
 
-        public ErrorReport(ReportType type, Location errorLocation, string msg)
+        public ErrorReport(ReportType type, ReportLocation errorLocation, string msg)
         {
             ErrorType = type;
             ErrorLocation = errorLocation;
             Message = msg;
         }
 
-        public ErrorReport(Severity severity, ReportType type, Location errorLocation, string msg)
+        public ErrorReport(ReportSeverity severity, ReportType type, ReportLocation errorLocation, string msg)
         {
             ErrorSeverity = severity;
             ErrorType = type;

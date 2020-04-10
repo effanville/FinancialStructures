@@ -2,7 +2,7 @@
 using FinanceWindows;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 using GUISupport;
 using Microsoft.Win32;
 using System;
@@ -18,7 +18,7 @@ namespace FinanceWindowsViewModels
         private string fFileName;
         private string fDirectory;
         private readonly Action<Action<IPortfolio>> DataUpdateCallback;
-        private readonly LogReporter ReportLogger;
+        private readonly IReportLogger ReportLogger;
         private string fBaseCurrency;
 
         public string BaseCurrency
@@ -43,7 +43,7 @@ namespace FinanceWindowsViewModels
             set { fCurrencies = value; OnPropertyChanged(); }
         }
 
-        public OptionsToolbarViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, LogReporter reportLogger)
+        public OptionsToolbarViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger)
             : base("Options")
         {
             ReportLogger = reportLogger;

@@ -1,6 +1,6 @@
 ﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
@@ -16,7 +16,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="newName">The new name of the data.</param>
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure of editing.</returns>
-        public static bool TryEditName(this IPortfolio portfolio, AccountType elementType, NameData oldName, NameData newName, LogReporter reportLogger)
+        public static bool TryEditName(this IPortfolio portfolio, AccountType elementType, NameData oldName, NameData newName, IReportLogger reportLogger = null)
         {
             switch (elementType)
             {
@@ -30,7 +30,7 @@ namespace FinancialStructures.PortfolioAPI
                                 return portfolio.Funds[fundIndex].EditNameData(newName);
                             }
                         }
-                        reportLogger.Log("Error", "EditingData", $"Renaming {elementType.ToString()}: Could not find {elementType.ToString()} with name {oldName.ToString()}.");
+                        reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Renaming {elementType.ToString()}: Could not find {elementType.ToString()} with name {oldName.ToString()}.");
                         return false;
                     }
                 case (AccountType.Currency):
@@ -47,13 +47,13 @@ namespace FinancialStructures.PortfolioAPI
                     }
                 default:
                     {
-                        reportLogger.Log("Error", "EditingData", $"Editing an Unknown type.");
+                        reportLogger.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Editing an Unknown type.");
                         return false;
                     }
             }
         }
 
-        private static bool TryEditNameSingleList<T>(List<T> values, AccountType elementType, NameData oldName, NameData newName, LogReporter reportLogger) where T : ISingleValueDataList
+        private static bool TryEditNameSingleList<T>(List<T> values, AccountType elementType, NameData oldName, NameData newName, IReportLogger reportLogger = null) where T : ISingleValueDataList
         {
             for (int AccountIndex = 0; AccountIndex < values.Count; AccountIndex++)
             {
@@ -64,7 +64,7 @@ namespace FinancialStructures.PortfolioAPI
                 }
             }
 
-            reportLogger.Log("Error", "EditingData", $"Renaming {elementType.ToString()}: Could not find {elementType.ToString()} with name {oldName.ToString()}.");
+            reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Renaming {elementType.ToString()}: Could not find {elementType.ToString()} with name {oldName.ToString()}.");
             return false;
         }
     }

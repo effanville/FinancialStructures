@@ -2,7 +2,7 @@
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 using GUISupport;
 using System;
 using System.Collections.Generic;
@@ -39,9 +39,9 @@ namespace FinanceWindowsViewModels
 
         private readonly Action<Action<IPortfolio>> DataUpdateCallback;
 
-        private readonly LogReporter ReportLogger;
+        private readonly IReportLogger ReportLogger;
 
-        public SecurityNamesViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, LogReporter reportLogger, Action<NameData_ChangeLogged> loadSelectedData)
+        public SecurityNamesViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, Action<NameData_ChangeLogged> loadSelectedData)
             : base("Listed Securities", loadSelectedData)
         {
             Portfolio = portfolio;
@@ -100,7 +100,7 @@ namespace FinanceWindowsViewModels
 
                 if (!edited)
                 {
-                    ReportLogger.Log("Error", "AddingData", "No Name provided to create a sector.");
+                    ReportLogger.LogUsefulWithStrings("Error", "AddingData", "No Name provided to create a sector.");
                 }
             }
             else
@@ -121,7 +121,7 @@ namespace FinanceWindowsViewModels
                 }
                 if (!edited)
                 {
-                    ReportLogger.Log("Error", "EditingData", "Was not able to edit desired security.");
+                    ReportLogger.LogUsefulWithStrings("Error", "EditingData", "Was not able to edit desired security.");
                 }
             }
         }
@@ -146,7 +146,7 @@ namespace FinanceWindowsViewModels
             }
             else
             {
-                ReportLogger.Log("Error", "DeletingData", "Something went wrong when trying to delete security.");
+                ReportLogger.LogUsefulWithStrings("Error", "DeletingData", "Something went wrong when trying to delete security.");
             }
         }
     }

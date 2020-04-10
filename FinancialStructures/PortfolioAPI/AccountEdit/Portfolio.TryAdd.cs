@@ -1,7 +1,7 @@
 ﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -18,17 +18,17 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="name">The name data to add.</param>
         /// <param name="reportLogger">Report callback action.</param>
         /// <returns>Success or failure of adding.</returns>
-        public static bool TryAdd(this IPortfolio portfolio, AccountType elementType, NameData name, LogReporter reportLogger)
+        public static bool TryAdd(this IPortfolio portfolio, AccountType elementType, NameData name, IReportLogger reportLogger = null)
         {
             if (string.IsNullOrEmpty(name.Name) && string.IsNullOrEmpty(name.Company))
             {
-                reportLogger.LogDetailed("Critical", "Error", "AddingData", $"Adding {elementType}: Company `{name.Company}' or name `{name.Name}' cannot both be empty.");
+                reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Adding {elementType}: Company `{name.Company}' or name `{name.Name}' cannot both be empty.");
                 return false;
             }
 
             if (portfolio.Exists(elementType, name))
             {
-                reportLogger.LogDetailed("Critical", "Error", "AddingData", $"{elementType.ToString()} `{name.Company}'-`{name.Name}' already exists.");
+                reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"{elementType.ToString()} `{name.Company}'-`{name.Name}' already exists.");
                 return false;
             }
 
@@ -59,11 +59,11 @@ namespace FinancialStructures.PortfolioAPI
                         break;
                     }
                 default:
-                    reportLogger.Log("Error", "EditingData", $"Editing an Unknown type.");
+                    reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Editing an Unknown type.");
                     return false;
             }
 
-            reportLogger.LogDetailed("Detailed", "Report", "AddingData", $"{elementType.ToString()} `{name.Company}'-`{name.Name}' added to database.");
+            reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"{elementType.ToString()} `{name.Company}'-`{name.Name}' added to database.");
             return true;
         }
     }

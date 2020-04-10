@@ -1,7 +1,7 @@
 ﻿using FinanceCommonViewModels;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,10 +15,10 @@ namespace FinanceWindowsViewModels
 
         public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
 
-        private readonly LogReporter ReportLogger;
+        private readonly IReportLogger ReportLogger;
         private readonly Action<Action<IPortfolio>> UpdateDataAction;
 
-        public SecurityEditWindowViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, LogReporter reportLogger)
+        public SecurityEditWindowViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger)
     : base("Security Edit")
         {
             Portfolio = portfolio;

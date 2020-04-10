@@ -1,47 +1,125 @@
 ﻿using System;
+using StringFunctions;
 
-namespace FinancialStructures.ReportLogging
+namespace FinancialStructures.Reporting
 {
     /// <summary>
     /// Collection of standard reporting mechanisms.
     /// </summary>
-    public class LogReporter
+    public class LogReporter : IReportLogger
     {
-        /// <summary>
-        /// Log an arbitrary message.
-        /// Parameter order is
-        /// Level of detail for display.
-        /// Type of report.
-        /// Location of report.
-        /// Message for the report.
-        /// </summary>
-        public Action<string, string, string, string> LogDetailed;
+        private readonly Action<ReportSeverity, ReportType, ReportLocation, string> fLoggingAction;
 
         /// <summary>
         /// Log an arbitrary message.
-        /// Parameter order is
-        /// Type of report.
-        /// Location of report.
-        /// Message for the report.
         /// </summary>
-        public Action<string, string, string> Log;
+        public bool LogWithStrings(string severity, string type, string location, string message)
+        {
+            if (fLoggingAction != null)
+            {
+                fLoggingAction(severity.ToEnum<ReportSeverity>(), type.ToEnum<ReportType>(), location.ToEnum<ReportLocation>(), message);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Log an arbitrary message.
+        /// </summary>
+        public bool Log(ReportSeverity severity, ReportType type, ReportLocation location, string message)
+        {
+            if (fLoggingAction != null)
+            {
+                fLoggingAction(severity, type, location, message);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Log an arbitrary message.
+        /// </summary>
+        public bool LogUsefulWithStrings(string type, string location, string message)
+        {
+            if (fLoggingAction != null)
+            {
+                fLoggingAction(ReportSeverity.Useful, type.ToEnum<ReportType>(), location.ToEnum<ReportLocation>(), message);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Log an arbitrary message.
+        /// </summary>
+        public bool LogUseful(ReportType type, ReportLocation location, string message)
+        {
+            if (fLoggingAction != null)
+            {
+                fLoggingAction(ReportSeverity.Useful, type, location, message);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Log an arbitrary message.
+        /// </summary>
+        public bool LogUsefulError(ReportLocation location, string message)
+        {
+            if (fLoggingAction != null)
+            {
+                fLoggingAction(ReportSeverity.Useful, ReportType.Error, location, message);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         /// Log an error message.
-        /// Parameter order is
-        /// Location of report.
-        /// Message for the report.
         /// </summary>
-        public Action<string, string> LogError;
+        public bool LogUsefulErrorWithStrings(string location, string message)
+        {
+            if (fLoggingAction != null)
+            {
+                fLoggingAction("Useful".ToEnum<ReportSeverity>(), "Error".ToEnum<ReportType>(), location.ToEnum<ReportLocation>(), message);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         /// <summary>
         /// Constructor for reporting mechanisms. Parameter addReport is the report callback mechanism.
         /// </summary>
         public LogReporter(Action<string, string, string, string> addReport)
         {
-            LogDetailed = (detailLevel, type, location, message) => addReport(detailLevel, type, location, message); ;
-            Log = (type, location, message) => addReport("Useful", type, location, message);
-            LogError = (location, message) => addReport("Useful", "Error", location, message);
+            fLoggingAction = (detailLevel, type, location, message) => addReport(detailLevel.ToString(), type.ToString(), location.ToString(), message);
+        }
+
+        /// <summary>
+        /// Constructor for reporting mechanisms. Parameter addReport is the report callback mechanism.
+        /// </summary>
+        public LogReporter(Action<ReportSeverity, ReportType, ReportLocation, string> addReport)
+        {
+            fLoggingAction = addReport;
         }
     }
 }

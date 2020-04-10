@@ -2,7 +2,7 @@
 using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 using GUISupport;
 using System;
 using System.Collections.Generic;
@@ -72,7 +72,7 @@ namespace FinanceWindowsViewModels
         /// <summary>
         /// 
         /// </summary>
-        internal readonly LogReporter ReportLogger;
+        internal readonly IReportLogger ReportLogger;
 
         /// <summary>
         /// The mechanism by which the data in <see cref="Portfolio"/> is updated. This includes a GUI update action.

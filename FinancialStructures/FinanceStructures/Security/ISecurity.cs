@@ -1,6 +1,6 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 using System;
 using System.Collections.Generic;
 
@@ -37,11 +37,11 @@ namespace FinancialStructures.FinanceInterfaces
         double IRRTime(DateTime earlierDate, DateTime laterDate, ICurrency currency = null);
         double IRR(ICurrency currency = null);
 
-        bool TryAddData(LogReporter reportLogger, DateTime date, double unitPrice, double shares = 0, double investment = 0);
-        void UpdateSecurityData(double value, LogReporter reportLogger, DateTime day);
-        bool TryEditData(LogReporter reportLogger, DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment);
+        bool TryAddData(DateTime date, double unitPrice, double shares, double investment, IReportLogger reportLogger);
+        void UpdateSecurityData(DateTime day, double value, IReportLogger reportLogger = null);
+        bool TryEditData(DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment, IReportLogger reportLogger = null);
         bool EditNameData(NameData name);
         bool IsSectorLinked(string sectorName);
-        bool TryDeleteData(DateTime date, LogReporter reportLogger);
+        bool TryDeleteData(DateTime date, IReportLogger reportLogger = null);
     }
 }

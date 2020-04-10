@@ -1,6 +1,6 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 using FinancialStructures.StatisticStructures;
 using FinancialStructures.StatsMakers;
 using GUISupport;
@@ -89,17 +89,17 @@ namespace FinanceWindowsViewModels
                 {
                     CSVStatsCreator.CreateCSVPageCustom(Portfolio, saving.FileName, options);
                 }
-                ReportLogger.Log("Report", "StatisticsPage", "Created statistics page");
+                ReportLogger.LogUsefulWithStrings("Report", "StatisticsPage", "Created statistics page");
             }
             else
             {
-                ReportLogger.LogDetailed("Critical", "Error", "StatisticsPage", "Was not able to create " + fExtension + " page in place specified.");
+                ReportLogger.LogWithStrings("Critical", "Error", "StatisticsPage", "Was not able to create " + fExtension + " page in place specified.");
             }
 
             CloseWindowAction(path);
         }
 
-        private readonly LogReporter ReportLogger;
+        private readonly IReportLogger ReportLogger;
         private Action<string> CloseWindowAction;
         private ExportType windowType;
         private string fExtension
@@ -110,7 +110,7 @@ namespace FinanceWindowsViewModels
         {
             get { return "." + fExtension; }
         }
-        public StatsOptionsViewModel(IPortfolio portfolio, ExportType exportType, LogReporter reportLogger, Action<string> CloseWindow)
+        public StatsOptionsViewModel(IPortfolio portfolio, ExportType exportType, IReportLogger reportLogger, Action<string> CloseWindow)
         {
             windowType = exportType;
             Portfolio = portfolio;

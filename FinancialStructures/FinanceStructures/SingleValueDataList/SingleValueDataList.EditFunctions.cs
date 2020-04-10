@@ -1,7 +1,7 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,11 +56,11 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Adds <param name="value"/> to amounts on <param name="date"/> if data doesnt exist.
         /// </summary>
-        public bool TryAddData(DateTime date, double value, LogReporter reportLogger)
+        public bool TryAddData(DateTime date, double value, IReportLogger reportLogger = null)
         {
             if (fValues.ValueExists(date, out _))
             {
-                reportLogger.Log("Error", "AddingData", "Data already exists.");
+                reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, "Data already exists.");
                 return false;
             }
 
@@ -70,7 +70,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Edits value if value exists. Does nothing if it doesn't exist.
         /// </summary>
-        public bool TryEditData(DateTime oldDate, DateTime date, double value, LogReporter reportLogger)
+        public bool TryEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null)
         {
             return fValues.TryEditData(oldDate, date, value, reportLogger);
         }
@@ -78,7 +78,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Removes data on <paramref name="date"/> if it exists.
         /// </summary>
-        public bool TryDeleteData(DateTime date, LogReporter reportLogger)
+        public bool TryDeleteData(DateTime date, IReportLogger reportLogger = null)
         {
             return fValues.TryDeleteValue(date, reportLogger);
         }

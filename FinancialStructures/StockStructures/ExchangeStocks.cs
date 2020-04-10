@@ -1,7 +1,7 @@
 ﻿using FinancialStructures.FileAccess;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -72,7 +72,17 @@ namespace FinancialStructures.StockStructures
             set { fStocks = value; }
         }
 
-        public void LoadExchangeStocks(string filePath, LogReporter reportLogger)
+        public bool CheckValidity()
+        {
+            if (Stocks.Count() == 0)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public void LoadExchangeStocks(string filePath, IReportLogger reportLogger = null)
         {
             if (File.Exists(filePath))
             {
@@ -84,20 +94,20 @@ namespace FinancialStructures.StockStructures
                 return;
             }
 
-            reportLogger.Log("Report", "Loading", "Loaded Empty New Database.");
+            reportLogger?.LogUseful(ReportType.Report, ReportLocation.Loading, "Loaded Empty New Database.");
             Stocks = new List<Stock>();
         }
 
-        public void SaveExchangeStocks(string filePath, LogReporter reportLogger)
+        public void SaveExchangeStocks(string filePath, IReportLogger reportLogger = null)
         {
             XmlFileAccess.WriteToXmlFile<ExchangeStocks>(filePath, this, out string error);
             if (error != null)
             {
-                reportLogger.LogError("Saving", error);
+                reportLogger?.LogUseful(ReportType.Error, ReportLocation.Saving, error);
             }
         }
 
-        public void Download(DownloadType downloadType, DateTime startDate, DateTime endDate, LogReporter reportLogger)
+        public void Download(DownloadType downloadType, DateTime startDate, DateTime endDate, IReportLogger reportLogger = null)
         {
             foreach (var stock in Stocks)
             {

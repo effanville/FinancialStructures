@@ -1,7 +1,7 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -42,7 +42,7 @@ namespace FinancialStructures.FinanceInterfaces
                             break;
                         }
 
-                        await DownloadMethod(portfolio, (NameData)functionInputs[1], (LogReporter)functionInputs[2]).ConfigureAwait(false);
+                        await DownloadMethod(portfolio, (NameData)functionInputs[1], (IReportLogger)functionInputs[2]).ConfigureAwait(false);
                         break;
                     }
                 case (FunctionType.NameUpdate):
@@ -61,7 +61,7 @@ namespace FinancialStructures.FinanceInterfaces
                         {
                             break;
                         }
-                        output = CreateMethod(portfolio, name, (LogReporter)functionInputs[2]);
+                        output = CreateMethod(portfolio, name, (IReportLogger)functionInputs[2]);
                         break;
                     }
                 case (FunctionType.Edit):
@@ -71,7 +71,7 @@ namespace FinancialStructures.FinanceInterfaces
                             break;
 
                         }
-                        output = EditMethod(portfolio, name, (NameData)functionInputs[2], (LogReporter)functionInputs[3]);
+                        output = EditMethod(portfolio, name, (NameData)functionInputs[2], (IReportLogger)functionInputs[3]);
                         break;
                     }
                 case (FunctionType.Delete):
@@ -80,7 +80,7 @@ namespace FinancialStructures.FinanceInterfaces
                         {
                             break;
                         }
-                        output = DeleteMethod(portfolio, name, (LogReporter)functionInputs[2]);
+                        output = DeleteMethod(portfolio, name, (IReportLogger)functionInputs[2]);
                         break;
                     }
                 case (FunctionType.SelectData):
@@ -89,7 +89,7 @@ namespace FinancialStructures.FinanceInterfaces
                         {
                             break;
                         }
-                        output = SelectedDataMethod(portfolio, name, (LogReporter)functionInputs[2]);
+                        output = SelectedDataMethod(portfolio, name, (IReportLogger)functionInputs[2]);
                         break;
                     }
                 case (FunctionType.AddData):
@@ -98,7 +98,7 @@ namespace FinancialStructures.FinanceInterfaces
                         {
                             break;
                         }
-                        output = AddDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[2], (LogReporter)functionInputs[3]);
+                        output = AddDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[2], (IReportLogger)functionInputs[3]);
                         break;
                     }
                 case (FunctionType.EditData):
@@ -107,7 +107,7 @@ namespace FinancialStructures.FinanceInterfaces
                         {
                             break;
                         }
-                        output = EditDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[2], (DayValue_ChangeLogged)functionInputs[3], (LogReporter)functionInputs[4]);
+                        output = EditDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[2], (DayValue_ChangeLogged)functionInputs[3], (IReportLogger)functionInputs[4]);
                         break;
                     }
                 case (FunctionType.DeleteData):
@@ -116,7 +116,7 @@ namespace FinancialStructures.FinanceInterfaces
                         {
                             break;
                         }
-                        output = DeleteDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[2], (LogReporter)functionInputs[3]);
+                        output = DeleteDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[2], (IReportLogger)functionInputs[3]);
                         break;
                     }
                 default:
@@ -125,22 +125,22 @@ namespace FinancialStructures.FinanceInterfaces
             return output;
         }
 
-        private readonly Func<IPortfolio, NameData, LogReporter, Task> DownloadMethod;
+        private readonly Func<IPortfolio, NameData, IReportLogger, Task> DownloadMethod;
         private readonly Func<IPortfolio, List<NameCompDate>> UpdateNameMethod;
 
-        private readonly Func<IPortfolio, NameData, LogReporter, bool> CreateMethod;
+        private readonly Func<IPortfolio, NameData, IReportLogger, bool> CreateMethod;
 
-        private readonly Func<IPortfolio, NameData, NameData, LogReporter, bool> EditMethod;
+        private readonly Func<IPortfolio, NameData, NameData, IReportLogger, bool> EditMethod;
 
-        private readonly Func<IPortfolio, NameData, LogReporter, bool> DeleteMethod;
+        private readonly Func<IPortfolio, NameData, IReportLogger, bool> DeleteMethod;
 
-        private readonly Func<IPortfolio, NameData, LogReporter, List<DayValue_ChangeLogged>> SelectedDataMethod;
+        private readonly Func<IPortfolio, NameData, IReportLogger, List<DayValue_ChangeLogged>> SelectedDataMethod;
 
-        private readonly Func<IPortfolio, NameData, DayValue_ChangeLogged, LogReporter, bool> AddDataMethod;
+        private readonly Func<IPortfolio, NameData, DayValue_ChangeLogged, IReportLogger, bool> AddDataMethod;
 
-        private readonly Func<IPortfolio, NameData, DayValue_ChangeLogged, DayValue_ChangeLogged, LogReporter, bool> EditDataMethod;
+        private readonly Func<IPortfolio, NameData, DayValue_ChangeLogged, DayValue_ChangeLogged, IReportLogger, bool> EditDataMethod;
 
-        private readonly Func<IPortfolio, NameData, DayValue_ChangeLogged, LogReporter, bool> DeleteDataMethod;
+        private readonly Func<IPortfolio, NameData, DayValue_ChangeLogged, IReportLogger, bool> DeleteDataMethod;
 
         /// <summary>
         /// Generates collection of methods to edit/create object of type accountType. Note this will not work with Security type as
@@ -161,15 +161,15 @@ namespace FinancialStructures.FinanceInterfaces
         }
 
         private EditMethods(
-            Func<IPortfolio, NameData, LogReporter, Task> downloadMethod,
+            Func<IPortfolio, NameData, IReportLogger, Task> downloadMethod,
             Func<IPortfolio, List<NameCompDate>> updateNameMethod = null,
-            Func<IPortfolio, NameData, LogReporter, bool> createMethod = null,
-            Func<IPortfolio, NameData, NameData, LogReporter, bool> editMethod = null,
-            Func<IPortfolio, NameData, LogReporter, bool> deleteMethod = null,
-            Func<IPortfolio, NameData, LogReporter, List<DayValue_ChangeLogged>> selectedDataMethod = null,
-            Func<IPortfolio, NameData, DayValue_ChangeLogged, LogReporter, bool> addDataMethod = null,
-            Func<IPortfolio, NameData, DayValue_ChangeLogged, DayValue_ChangeLogged, LogReporter, bool> editDataMethod = null,
-            Func<IPortfolio, NameData, DayValue_ChangeLogged, LogReporter, bool> deleteDataMethod = null)
+            Func<IPortfolio, NameData, IReportLogger, bool> createMethod = null,
+            Func<IPortfolio, NameData, NameData, IReportLogger, bool> editMethod = null,
+            Func<IPortfolio, NameData, IReportLogger, bool> deleteMethod = null,
+            Func<IPortfolio, NameData, IReportLogger, List<DayValue_ChangeLogged>> selectedDataMethod = null,
+            Func<IPortfolio, NameData, DayValue_ChangeLogged, IReportLogger, bool> addDataMethod = null,
+            Func<IPortfolio, NameData, DayValue_ChangeLogged, DayValue_ChangeLogged, IReportLogger, bool> editDataMethod = null,
+            Func<IPortfolio, NameData, DayValue_ChangeLogged, IReportLogger, bool> deleteDataMethod = null)
         {
             DownloadMethod = downloadMethod;
             UpdateNameMethod = updateNameMethod;

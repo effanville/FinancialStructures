@@ -1,7 +1,7 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
@@ -32,7 +32,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="name"></param>
         /// <param name="reportLogger"></param>
         /// <returns></returns>
-        public static List<DayValue_ChangeLogged> NumberData(this IPortfolio portfolio, AccountType elementType, NameData name, LogReporter reportLogger)
+        public static List<DayValue_ChangeLogged> NumberData(this IPortfolio portfolio, AccountType elementType, NameData name, IReportLogger reportLogger = null)
         {
             switch (elementType)
             {
@@ -57,7 +57,7 @@ namespace FinancialStructures.PortfolioAPI
             }
         }
 
-        private static List<DayValue_ChangeLogged> SingleDataListDataObtainer<T>(List<T> objects, AccountType elementType, NameData name, LogReporter reportLogger) where T : ISingleValueDataList
+        private static List<DayValue_ChangeLogged> SingleDataListDataObtainer<T>(List<T> objects, AccountType elementType, NameData name, IReportLogger reportLogger = null) where T : ISingleValueDataList
         {
             foreach (var account in objects)
             {
@@ -67,7 +67,7 @@ namespace FinancialStructures.PortfolioAPI
                 }
             }
 
-            reportLogger.Log("Error", "DatabaseAccess", $"Could not find {elementType.ToString()} - {name.ToString()}");
+            reportLogger?.LogUseful(ReportType.Error, ReportLocation.DatabaseAccess, $"Could not find {elementType.ToString()} - {name.ToString()}");
             return new List<DayValue_ChangeLogged>();
         }
     }

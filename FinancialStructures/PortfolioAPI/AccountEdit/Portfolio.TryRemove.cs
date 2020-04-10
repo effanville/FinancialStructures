@@ -1,7 +1,7 @@
 ﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -13,13 +13,13 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="portfolio">The database to query.</param>
         /// <param name="elementType">The type of account to remove.</param>
         /// <param name="name">The name of the account to remove.</param>
-        /// <param name="reportLogger">A report callback.</param>
+        /// <param name="reportLogger">(optional) A report callback.</param>
         /// <returns>Success or failure.</returns>
-        public static bool TryRemove(this IPortfolio portfolio, AccountType elementType, NameData name, LogReporter reportLogger)
+        public static bool TryRemove(this IPortfolio portfolio, AccountType elementType, NameData name, IReportLogger reportLogger = null)
         {
             if (string.IsNullOrEmpty(name.Name) && string.IsNullOrEmpty(name.Company))
             {
-                reportLogger.LogDetailed("Critical", "Error", "RemovingData", $"Adding {elementType}: Company `{name.Company}' or name `{name.Name}' cannot both be empty.");
+                reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.DeletingData, $"Adding {elementType}: Company `{name.Company}' or name `{name.Name}' cannot both be empty.");
                 return false;
             }
 
@@ -32,7 +32,7 @@ namespace FinancialStructures.PortfolioAPI
                             if (name.IsEqualTo(sec.Names))
                             {
                                 portfolio.Funds.Remove(sec);
-                                reportLogger.LogDetailed("Detailed", "Report", "DeletingData", $"Security `{name.Company}'-`{name}' removed from the database.");
+                                reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Security `{name.Company}'-`{name}' removed from the database.");
                                 return true;
                             }
                         }
@@ -45,7 +45,7 @@ namespace FinancialStructures.PortfolioAPI
                         {
                             if (name.IsEqualTo(currency.Names))
                             {
-                                reportLogger.LogDetailed("Detailed", "Report", "DeletingData", $"Deleted sector {currency.Name}");
+                                reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted sector {currency.Name}");
                                 portfolio.Currencies.Remove(currency);
                                 return true;
                             }
@@ -60,7 +60,7 @@ namespace FinancialStructures.PortfolioAPI
                             if (name.IsEqualTo(acc.Names))
                             {
                                 portfolio.BankAccounts.Remove(acc);
-                                reportLogger.LogDetailed("Detailed", "Report", "DeletingData", $"Deleting Bank Account: Deleted `{name.Company}'-`{name.Name}'.");
+                                reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleting Bank Account: Deleted `{name.Company}'-`{name.Name}'.");
                                 return true;
                             }
                         }
@@ -73,7 +73,7 @@ namespace FinancialStructures.PortfolioAPI
                         {
                             if (name.IsEqualTo(sector.Names))
                             {
-                                reportLogger.LogDetailed("Detailed", "Report", "DeletingData", $"Deleted sector {sector.Name}");
+                                reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted sector {sector.Name}");
                                 portfolio.BenchMarks.Remove(sector);
                                 return true;
                             }
@@ -82,11 +82,11 @@ namespace FinancialStructures.PortfolioAPI
                         break;
                     }
                 default:
-                    reportLogger.Log("Error", "DeletingData", $"Editing an Unknown type.");
+                    reportLogger?.LogUseful(ReportType.Error, ReportLocation.DeletingData, $"Editing an Unknown type.");
                     return false;
             }
 
-            reportLogger.Log("Error", "AddingData", $"{elementType.ToString()} - {name.ToString()} could not be found in the database.");
+            reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, $"{elementType.ToString()} - {name.ToString()} could not be found in the database.");
             return false;
         }
     }

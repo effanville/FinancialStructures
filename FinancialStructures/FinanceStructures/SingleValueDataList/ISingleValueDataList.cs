@@ -1,6 +1,6 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 using System;
 using System.Collections.Generic;
 
@@ -27,9 +27,9 @@ namespace FinancialStructures.FinanceInterfaces
         DailyValuation Value(DateTime date);
         List<DayValue_ChangeLogged> GetDataForDisplay();
         bool EditNameData(NameData newNames);
-        bool TryAddData(DateTime date, double value, LogReporter reportLogger);
-        bool TryEditData(DateTime oldDate, DateTime date, double value, LogReporter reportLogger);
-        bool TryDeleteData(DateTime date, LogReporter reportLogger);
+        bool TryAddData(DateTime date, double value, IReportLogger reportLogger = null);
+        bool TryEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null);
+        bool TryDeleteData(DateTime date, IReportLogger reportLogger = null);
         bool TryRemoveSector(string sectorName);
     }
 }

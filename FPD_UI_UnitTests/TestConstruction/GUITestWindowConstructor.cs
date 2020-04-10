@@ -3,7 +3,7 @@ using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 using System;
 using System.Collections.Generic;
 
@@ -16,7 +16,7 @@ namespace FPD_UI_UnitTests.TestConstruction
 
         internal static LogReporter DummyReportLogger = new LogReporter(dummyFunction);
 
-        private static void dummyFunction(string a, string b, string c, string d)
+        private static void dummyFunction(ReportSeverity a, ReportType b, ReportLocation c, string d)
         {
             return;
         }

@@ -34,17 +34,17 @@ namespace FinanceWindowsViewModels
             set { fIndexToDelete = value; OnPropertyChanged(nameof(IndexToDelete)); }
         }
 
-        private Severity fReportingSeverity;
+        private ReportSeverity fReportingSeverity;
 
-        public Severity ReportingSeverity
+        public ReportSeverity ReportingSeverity
         {
             get { return fReportingSeverity; }
             set { fReportingSeverity = value; OnPropertyChanged(nameof(ReportingSeverity)); SyncReports(); }
         }
 
-        public List<Severity> EnumValues
+        public List<ReportSeverity> EnumValues
         {
-            get { return Enum.GetValues(typeof(Severity)).Cast<Severity>().ToList(); }
+            get { return Enum.GetValues(typeof(ReportSeverity)).Cast<ReportSeverity>().ToList(); }
         }
 
         public ReportingWindowViewModel()
@@ -67,7 +67,7 @@ namespace FinanceWindowsViewModels
 
         private void ExecuteClearReports(Object obj)
         {
-            Reports = new ErrorReports();
+            Reports.Clear();
             SyncReports();
         }
 
@@ -79,15 +79,9 @@ namespace FinanceWindowsViewModels
             SyncReports();
         }
 
-        public void UpdateReport(string type, string location, string message)
+        public void UpdateReport(ReportSeverity severity, ReportType type, ReportLocation location, string message)
         {
-            Reports.AddReport(Severity.Useful.ToString(), type, location, message);
-            SyncReports();
-        }
-
-        public void UpdateReport(string severity, string type, string location, string message)
-        {
-            Reports.AddReport(severity, type, location, message);
+            Reports.AddErrorReport(severity, type, location, message);
             SyncReports();
         }
     }

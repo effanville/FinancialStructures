@@ -2,7 +2,7 @@
 using FinanceViewModels.StatsViewModels;
 using FinanceWindows.StatsWindows;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 using FinancialStructures.StatsMakers;
 using GUISupport;
 using Microsoft.Win32;
@@ -27,9 +27,9 @@ namespace FinanceWindowsViewModels
 
         public int HistoryGapDays { get; set; }
 
-        private readonly LogReporter ReportLogger;
+        private readonly IReportLogger ReportLogger;
 
-        public StatsCreatorWindowViewModel(IPortfolio portfolio, LogReporter reportLogger)
+        public StatsCreatorWindowViewModel(IPortfolio portfolio, IReportLogger reportLogger)
             : base("Stats Creator")
         {
             StatsTabs.Add(new MainTabViewModel(openTab));
@@ -79,7 +79,7 @@ namespace FinanceWindowsViewModels
             }
             else
             {
-                ReportLogger.Log("Error", "StatisticsPage", $"Was not able to create Investment list page at {saving.FileName}");
+                ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", $"Was not able to create Investment list page at {saving.FileName}");
             }
         }
 
@@ -95,11 +95,11 @@ namespace FinanceWindowsViewModels
                     saving.FileName += ".csv";
                 }
 
-                CSVHistoryWriter.WriteHistoryToCSV(fPortfolio, ReportLogger, saving.FileName, HistoryGapDays);
+                CSVHistoryWriter.WriteHistoryToCSV(fPortfolio, saving.FileName, HistoryGapDays, ReportLogger);
             }
             else
             {
-                ReportLogger.Log("Error", "StatisticsPage", $"Was not able to create Investment list page at {saving.FileName}");
+                ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", $"Was not able to create Investment list page at {saving.FileName}");
             }
         }
 

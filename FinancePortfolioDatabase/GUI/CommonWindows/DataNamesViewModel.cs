@@ -1,6 +1,6 @@
 ﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 using GUISupport;
 using System;
 using System.Collections.Generic;
@@ -37,10 +37,10 @@ namespace FinanceCommonViewModels
         }
 
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
-        private readonly LogReporter ReportLogger;
+        private readonly IReportLogger ReportLogger;
         private readonly EditMethods editMethods;
 
-        public DataNamesViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, LogReporter reportLogger, Action<NameData_ChangeLogged> loadSelectedData, EditMethods updateMethods)
+        public DataNamesViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, Action<NameData_ChangeLogged> loadSelectedData, EditMethods updateMethods)
             : base("Accounts", loadSelectedData)
         {
             Portfolio = portfolio;
@@ -105,7 +105,7 @@ namespace FinanceCommonViewModels
                 }
                 if (!edited)
                 {
-                    ReportLogger.LogDetailed("Critical", "Error", "AddingData", "No Name provided on creation.");
+                    ReportLogger.LogWithStrings("Critical", "Error", "AddingData", "No Name provided on creation.");
                 }
             }
             else
@@ -126,7 +126,7 @@ namespace FinanceCommonViewModels
                 }
                 if (!edited)
                 {
-                    ReportLogger.LogDetailed("Critical", "Error", "EditingData", "Was not able to edit desired.");
+                    ReportLogger.LogWithStrings("Critical", "Error", "EditingData", "Was not able to edit desired.");
                 }
             }
         }
@@ -140,7 +140,7 @@ namespace FinanceCommonViewModels
             }
             else
             {
-                ReportLogger.LogDetailed("Critical", "Error", "DeletingData", "Nothing was selected when trying to delete.");
+                ReportLogger.LogWithStrings("Critical", "Error", "DeletingData", "Nothing was selected when trying to delete.");
             }
         }
     }

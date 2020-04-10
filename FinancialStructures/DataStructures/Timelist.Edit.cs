@@ -1,4 +1,4 @@
-﻿using FinancialStructures.ReportLogging;
+﻿using FinancialStructures.Reporting;
 using System;
 using System.Linq;
 
@@ -9,11 +9,11 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Adds value to the data.
         /// </summary>
-        private void AddData(DateTime date, double value, LogReporter reportLogger)
+        private void AddData(DateTime date, double value, IReportLogger reportLogger = null)
         {
             var valuation = new DailyValuation(date, value);
             fValues.Add(valuation);
-            reportLogger.LogDetailed("Detailed", "Report", "AddingData", $"Added value {value}");
+            reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Added value {value}");
             Sort();
         }
 
@@ -52,7 +52,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Adds value to the data only if value of the date doesn't currently exist.
         /// </summary>
-        internal bool TryAddValue(DateTime date, double value, LogReporter reportLogger)
+        internal bool TryAddValue(DateTime date, double value, IReportLogger reportLogger = null)
         {
             for (int i = 0; i < fValues.Count; i++)
             {
@@ -69,7 +69,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Edits data on <paramref name="date"/> and replaces existing value with <paramref name="value"/>.
         /// </summary>
-        internal bool TryEditData(DateTime date, double value, LogReporter reportLogger)
+        internal bool TryEditData(DateTime date, double value, IReportLogger reportLogger = null)
         {
             if (fValues != null && fValues.Any())
             {
@@ -77,7 +77,7 @@ namespace FinancialStructures.DataStructures
                 {
                     if (fValues[i].Day == date)
                     {
-                        reportLogger.LogDetailed("Detailed", "Report", "EditingData", $"Editing Data: {date} value changed from {fValues[i].Value} to {value}");
+                        reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.EditingData, $"Editing Data: {date} value changed from {fValues[i].Value} to {value}");
                         fValues[i].SetValue(value);
 
                         return true;
@@ -88,7 +88,7 @@ namespace FinancialStructures.DataStructures
             return false;
         }
 
-        internal bool TryEditData(DateTime oldDate, DateTime newDate, double value, LogReporter reportLogger)
+        internal bool TryEditData(DateTime oldDate, DateTime newDate, double value, IReportLogger reportLogger = null)
         {
             if (fValues != null && fValues.Any())
             {
@@ -96,7 +96,7 @@ namespace FinancialStructures.DataStructures
                 {
                     if (fValues[i].Day == oldDate)
                     {
-                        reportLogger.LogDetailed("Detailed", "Report", "EditingData", $"Editing Data: {oldDate} value changed from {fValues[i].Value} to {newDate} - {value}");
+                        reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.EditingData, $"Editing Data: {oldDate} value changed from {fValues[i].Value} to {newDate} - {value}");
                         fValues[i].SetData(newDate, value);
                         return true;
                     }
@@ -109,7 +109,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Edits the data on date specified. If data doesn't exist then adds the data.
         /// </summary>
-        internal void TryEditDataOtherwiseAdd(DateTime oldDate, DateTime date, double value, LogReporter reportLogger)
+        internal void TryEditDataOtherwiseAdd(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null)
         {
             if (!TryEditData(oldDate, date, value, reportLogger))
             {
@@ -120,7 +120,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Deletes data if exists. If deletes, returns true.
         /// </summary>
-        internal bool TryDeleteValue(DateTime date, LogReporter reportLogger)
+        internal bool TryDeleteValue(DateTime date, IReportLogger reportLogger = null)
         {
             if (fValues != null && fValues.Any())
             {
@@ -128,14 +128,14 @@ namespace FinancialStructures.DataStructures
                 {
                     if (fValues[i].Day == date)
                     {
-                        reportLogger.LogDetailed("Detailed", "Report", "DeletingData", $"Deleted value: date - {date} and value - {fValues[i].Value}");
+                        reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted value: date - {date} and value - {fValues[i].Value}");
                         fValues.RemoveAt(i);
                         return true;
                     }
                 }
             }
 
-            reportLogger.Log("Error", "DeletingData", $"Deleting Value: Could not find data on date {date}.");
+            reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.DeletingData, $"Deleting Value: Could not find data on date {date}.");
             return false;
         }
 

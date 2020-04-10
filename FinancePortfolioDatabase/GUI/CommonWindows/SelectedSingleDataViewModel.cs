@@ -3,7 +3,7 @@ using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.ReportLogging;
+using FinancialStructures.Reporting;
 using GUISupport;
 using Microsoft.Win32;
 using System;
@@ -65,11 +65,11 @@ namespace FinanceCommonViewModels
 
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
 
-        private readonly LogReporter ReportLogger;
+        private readonly IReportLogger ReportLogger;
 
         private readonly EditMethods EditMethods;
 
-        public SelectedSingleDataViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, LogReporter reportLogger, EditMethods editMethods, NameData_ChangeLogged selectedName, AccountType accountType)
+        public SelectedSingleDataViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, EditMethods editMethods, NameData_ChangeLogged selectedName, AccountType accountType)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
         {
             SelectedName = selectedName;
@@ -141,7 +141,7 @@ namespace FinanceCommonViewModels
                     }
                     if (!edited)
                     {
-                        ReportLogger.LogDetailed("Critical", "Error", "EditingData", "Was not able to edit data.");
+                        ReportLogger.LogWithStrings("Critical", "Error", "EditingData", "Was not able to edit data.");
                     }
                 }
             }
@@ -157,7 +157,7 @@ namespace FinanceCommonViewModels
             }
             else
             {
-                ReportLogger.LogDetailed("Critical", "Error", "DeletingData", "No Account was selected when trying to delete data.");
+                ReportLogger.LogWithStrings("Critical", "Error", "DeletingData", "No Account was selected when trying to delete data.");
             }
         }
 
@@ -181,11 +181,11 @@ namespace FinanceCommonViewModels
                     {
                         if (objec is SecurityDayData view)
                         {
-                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(ReportLogger, fSelectedName, view.Date, view.ShareNo, view.UnitPrice, view.NewInvestment));
+                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(fSelectedName, view.Date, view.ShareNo, view.UnitPrice, view.NewInvestment, ReportLogger));
                         }
                         else
                         {
-                            ReportLogger.Log("Error", "StatisticsPage", "Have the wrong type of thing");
+                            ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", "Have the wrong type of thing");
                         }
                     }
                 }
@@ -210,7 +210,7 @@ namespace FinanceCommonViewModels
                     }
                     else
                     {
-                        ReportLogger.LogDetailed("Critical", "Error", "Saving", "Could not find security.");
+                        ReportLogger.LogWithStrings("Critical", "Error", "Saving", "Could not find security.");
                     }
                 }
             }
