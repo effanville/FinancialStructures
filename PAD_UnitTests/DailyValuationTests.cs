@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using System;
 
-namespace DataStructures._UnitTests
+namespace DataStructures_UnitTests
 {
     public class DailyValuationTests
     {
