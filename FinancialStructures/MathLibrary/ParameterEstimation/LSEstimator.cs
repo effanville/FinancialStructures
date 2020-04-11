@@ -7,6 +7,18 @@
     {
         public double[] Estimator { get; private set; }
 
+        public double[,] Uncertainty { get; private set; }
+
+        public double GoodnessOfFit { get; private set; }
+
+        public int NumberOfParameters { get { return Estimator.Length; } }
+
+        public int NumberOfDataPoints { get { return FitValues.Length; } }
+
+        public double[,] FitData { get; private set; }
+
+        public double[] FitValues { get; private set; }
+
         public LSEstimator(double[,] data, double[] values)
         {
             GenerateEstimator(data, values);
@@ -29,6 +41,8 @@
 
         public void GenerateEstimator(double[,] data, double[] values)
         {
+            FitData = data;
+            FitValues = values;
             var XTY = data.Transpose().PostMultiplyVector(values);
             Estimator = data.XTX().Inverse().PostMultiplyVector(XTY);
         }
