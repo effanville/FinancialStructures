@@ -4,8 +4,14 @@ using NUnit.Framework;
 
 namespace FPD_UI_UnitTests
 {
+    /// <summary>
+    /// Tests for the MainWindowViewModel.
+    /// </summary>
     public class MainWindowTests
     {
+        /// <summary>
+        /// Checks whether the MainWindowViewModel can be loaded successfully.
+        /// </summary>
         [Test]
         public void CanSuccessfullyCreateMainViewModel()
         {

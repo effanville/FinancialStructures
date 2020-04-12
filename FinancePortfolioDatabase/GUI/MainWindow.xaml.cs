@@ -38,9 +38,16 @@ namespace FinanceWindows
             DataContext = viewModel;
         }
 
+        /// <summary>
+        /// Event fires when one closes the window. Checks if the user wishes to save or not.
+        /// </summary>
+        /// <remarks>
+        /// This should really check if the data has changed or not, but this
+        /// is not currently possible.
+        /// </remarks>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            MessageBoxResult result = fDialogCreationService.ShowMessageBox(this, "Data may not be saved. Would you like to save before closing?", $"Closing {Title}.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+            MessageBoxResult result = fDialogCreationService.ShowMessageBox("Data may not be saved. Would you like to save before closing?", $"Closing {Title}.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
             var VM = DataContext as MainWindowViewModel;
             if (result == MessageBoxResult.Yes)
             {

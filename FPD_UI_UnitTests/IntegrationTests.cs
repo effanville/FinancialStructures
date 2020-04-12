@@ -6,8 +6,14 @@ using System;
 
 namespace FPD_UI_UnitTests
 {
+    /// <summary>
+    /// Tests to ensure the entire ViewModel system integrates together.
+    /// </summary>
     public class IntegrationTests
     {
+        /// <summary>
+        /// The open database button propagates the new database to all tabs in the main view.
+        /// </summary>
         [Test]
         public void OpenDatabaseUpdatesAllTabs()
         {

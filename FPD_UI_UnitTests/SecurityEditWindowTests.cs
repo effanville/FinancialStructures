@@ -9,6 +9,9 @@ using System.Linq;
 
 namespace FPD_UI_UnitTests.SecurityWindowTests
 {
+    /// <summary>
+    /// Tests for window displaying security data.
+    /// </summary>
     [TestFixture]
     public class SecurityEditWindowTests
     {

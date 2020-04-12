@@ -10,6 +10,9 @@ using System.Linq;
 
 namespace FPD_UI_UnitTests.CommonWindowTests
 {
+    /// <summary>
+    /// Tests for window displaying single data stream data.
+    /// </summary>
     [TestFixture]
     public class CommonWindowTests
     {

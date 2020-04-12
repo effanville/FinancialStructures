@@ -23,12 +23,18 @@
             set;
         }
 
+        /// <summary>
+        /// Constructor setting values.
+        /// </summary>
         public FileInteractionResult(bool? success, string filePath)
         {
             Success = success;
             FilePath = filePath;
         }
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public FileInteractionResult()
         {
         }

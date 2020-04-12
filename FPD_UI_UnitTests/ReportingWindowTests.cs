@@ -5,8 +5,14 @@ using System.Linq;
 
 namespace FPD_UI_UnitTests
 {
+    /// <summary>
+    /// Tests for the report display panel.
+    /// </summary>
     public class ReportingWindowTests
     {
+        /// <summary>
+        /// Ensures the two report structures display the same data.
+        /// </summary>
         [Test]
         public void ReportsSync()
         {
@@ -21,6 +27,9 @@ namespace FPD_UI_UnitTests
             Assert.AreEqual("Is this added?", viewModel.ReportsToView.Single().Message);
         }
 
+        /// <summary>
+        /// Ensures the window list updates when one adds a report.
+        /// </summary>
         [Test]
         public void CanAddReport()
         {
@@ -35,6 +44,9 @@ namespace FPD_UI_UnitTests
             Assert.AreEqual("Is this added?", viewModel.ReportsToView.Single().Message);
         }
 
+        /// <summary>
+        /// Ensures reports clear when clear reports button is pressed.
+        /// </summary>
         [Test]
         public void CanClearReports()
         {
@@ -51,6 +63,9 @@ namespace FPD_UI_UnitTests
             Assert.AreEqual(0, viewModel.ReportsToView.Count, "Viewable reports should have been cleared.");
         }
 
+        /// <summary>
+        /// Ensure the correct selected report is removed when clear single report is pressed.
+        /// </summary>
         [Test]
         public void CanClearSingleReport()
         {
