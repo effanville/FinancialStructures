@@ -24,7 +24,7 @@ namespace FinancialStructures.PortfolioAPI
                     {
                         for (int fundIndex = 0; fundIndex < portfolio.NumberOf(AccountType.Security); fundIndex++)
                         {
-                            if (newName.IsEqualTo(portfolio.Funds[fundIndex].Names))
+                            if (oldName.IsEqualTo(portfolio.Funds[fundIndex].Names))
                             {
                                 // now edit data
                                 return portfolio.Funds[fundIndex].EditNameData(newName);

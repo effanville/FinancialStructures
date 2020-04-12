@@ -28,12 +28,15 @@ namespace FPD_UI_UnitTests
         [Test]
         public void CanUpdateData()
         {
+            // Setup basic data in the display.
             var portfolio = new Portfolio();
             var viewModel = new BasicDataViewModel(portfolio);
 
+            // Now update that data.
             TestingGUICode.UpdatePortfolio(portfolio);
-
             viewModel.UpdateData(portfolio);
+
+            // Ensure new data has been displayed correctly.
             Assert.AreEqual(1, viewModel.FundNames.Count);
             Assert.AreEqual("China", viewModel.FundNames.Single().Name);
             Assert.AreEqual("Fidelity", viewModel.FundNames.Single().Company);
