@@ -5,7 +5,7 @@ using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Reporting;
 using GUISupport;
-using Microsoft.Win32;
+using GUISupport.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,10 +66,12 @@ namespace FinanceCommonViewModels
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
 
         private readonly IReportLogger ReportLogger;
+        private readonly IFileInteractionService fFileService;
+        private readonly IDialogCreationService fDialogCreationService;
 
         private readonly EditMethods EditMethods;
 
-        public SelectedSingleDataViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, EditMethods editMethods, NameData_ChangeLogged selectedName, AccountType accountType)
+        public SelectedSingleDataViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, EditMethods editMethods, NameData_ChangeLogged selectedName, AccountType accountType)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
         {
             SelectedName = selectedName;
@@ -83,6 +85,9 @@ namespace FinanceCommonViewModels
             ExportCsvData = new BasicCommand(ExecuteExportCsvData);
             UpdateDataCallback = updateDataCallback;
             ReportLogger = reportLogger;
+            fFileService = fileService;
+            fDialogCreationService = dialogCreation;
+            fOldSelectedValue = SelectedValue?.Copy();
         }
 
         public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)
@@ -167,13 +172,12 @@ namespace FinanceCommonViewModels
         {
             if (fSelectedName != null)
             {
-                OpenFileDialog openFile = new OpenFileDialog() { DefaultExt = "csv" };
-                openFile.Filter = "Csv Files|*.csv|All Files|*.*";
+                var result = fFileService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
                 List<object> outputs = null;
-                bool? showed = openFile.ShowDialog();
-                if (showed != null && (bool)showed)
+
+                if (result.Success != null && (bool)result.Success)
                 {
-                    outputs = CsvDataRead.ReadFromCsv(openFile.FileName, AccountType.Security, ReportLogger);
+                    outputs = CsvDataRead.ReadFromCsv(result.FilePath, AccountType.Security, ReportLogger);
                 }
                 if (outputs != null)
                 {
@@ -198,15 +202,12 @@ namespace FinanceCommonViewModels
         {
             if (fSelectedName != null)
             {
-                SaveFileDialog saveFile = new SaveFileDialog() { DefaultExt = "csv" };
-                saveFile.Filter = "Csv Files|*.csv|All Files|*.*";
-
-                bool? saved = saveFile.ShowDialog();
-                if (saved != null && (bool)saved)
+                var result = fFileService.SaveFile("csv", string.Empty, Portfolio.Directory, "Csv Files|*.csv|All Files|*.*");
+                if (result.Success != null && (bool)result.Success)
                 {
                     if (Portfolio.TryGetAccount(TypeOfAccount, fSelectedName, out var security))
                     {
-                        CsvDataRead.WriteToCSVFile(saveFile.FileName, AccountType.Security, security, ReportLogger);
+                        CsvDataRead.WriteToCSVFile(result.FilePath, AccountType.Security, security, ReportLogger);
                     }
                     else
                     {

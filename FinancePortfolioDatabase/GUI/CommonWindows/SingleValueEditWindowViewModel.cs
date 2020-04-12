@@ -2,6 +2,7 @@
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Reporting;
+using GUISupport.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,34 +13,40 @@ namespace FinanceCommonViewModels
     internal class SingleValueEditWindowViewModel : ViewModelBase
     {
         private AccountType TypeOfAccount;
-        private IPortfolio Portfolio;
+        internal IPortfolio Portfolio;
         public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
 
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
         private readonly IReportLogger ReportLogger;
+        private readonly IFileInteractionService fFileService;
+        private readonly IDialogCreationService fDialogCreationService;
         private readonly EditMethods EditMethods;
 
-        public SingleValueEditWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, EditMethods editMethods, AccountType accountType)
+        public SingleValueEditWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, EditMethods editMethods, AccountType accountType)
             : base(title)
         {
             UpdateDataCallback = updateDataCallback;
             ReportLogger = reportLogger;
+            fFileService = fileService;
+            fDialogCreationService = dialogCreation;
             EditMethods = editMethods;
             TypeOfAccount = accountType;
             UpdateData(portfolio);
-            Tabs.Add(new DataNamesViewModel(Portfolio, updateDataCallback, reportLogger, LoadTab, editMethods));
+            LoadSelectedTab = (name) => LoadTabFunc(name);
+            Tabs.Add(new DataNamesViewModel(Portfolio, updateDataCallback, reportLogger, LoadSelectedTab, editMethods));
         }
 
         public override void UpdateData(IPortfolio portfolio)
         {
             Portfolio = portfolio;
+            List<object> removableTabs = new List<object>();
             if (Tabs != null)
             {
                 foreach (var item in Tabs)
                 {
                     if (item is ViewModelBase viewModel)
                     {
-                        viewModel.UpdateData(portfolio, removeTab);
+                        viewModel.UpdateData(portfolio, tabItem => removableTabs.Add(tabItem));
                     }
                 }
 
@@ -55,15 +62,9 @@ namespace FinanceCommonViewModels
             }
         }
 
-        private List<object> removableTabs = new List<object>();
-
-        private Action<object> removeTab => tabItem => removableTabs.Add(tabItem);
-
-        private Action<NameData_ChangeLogged> LoadTab => (name) => LoadTabFunc(name);
-
         private void LoadTabFunc(NameData_ChangeLogged name)
         {
-            Tabs.Add(new SelectedSingleDataViewModel(Portfolio, UpdateDataCallback, ReportLogger, EditMethods, name, TypeOfAccount));
+            Tabs.Add(new SelectedSingleDataViewModel(Portfolio, UpdateDataCallback, ReportLogger, fFileService, fDialogCreationService, EditMethods, name, TypeOfAccount));
         }
     }
 }

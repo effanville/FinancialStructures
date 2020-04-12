@@ -1,6 +1,6 @@
 ﻿using FinanceWindowsViewModels;
 using FinancialStructures.PortfolioAPI;
-using Microsoft.Win32;
+using GUISupport.Services;
 using System;
 using System.Reflection;
 using System.Windows;
@@ -23,11 +23,14 @@ namespace FinanceWindows
             }
         }
 
-        private static string versionNumber = DateTime.Now.ToShortDateString() + " " + DateTime.Now.ToShortTimeString();
+        private readonly IFileInteractionService fFileInteractionService;
+        private readonly IDialogCreationService fDialogCreationService;
 
         public MainWindow()
         {
-            var viewModel = new MainWindowViewModel();
+            fFileInteractionService = new FileInteractionService(this);
+            fDialogCreationService = new DialogCreationService(this);
+            var viewModel = new MainWindowViewModel(fFileInteractionService, fDialogCreationService);
             InitializeComponent();
 
             Title = "Financial Database v" + AssemblyCreationDate.Value.ToString("yyyy.MM.dd.HHmmss");
@@ -37,24 +40,16 @@ namespace FinanceWindows
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            string msg = "Data may not be saved. Would you like to save before closing?";
-            MessageBoxResult result =
-                  MessageBox.Show(
-                    this,
-                    msg,
-                    $"Closing {Title}.",
-                    MessageBoxButton.YesNoCancel,
-                    MessageBoxImage.Warning);
+            MessageBoxResult result = fDialogCreationService.ShowMessageBox(this, "Data may not be saved. Would you like to save before closing?", $"Closing {Title}.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
             var VM = DataContext as MainWindowViewModel;
             if (result == MessageBoxResult.Yes)
             {
-                SaveFileDialog saving = new SaveFileDialog() { DefaultExt = "xml", FileName = VM.ProgramPortfolio.DatabaseName + VM.ProgramPortfolio.Extension, InitialDirectory = VM.ProgramPortfolio.Directory };
-                saving.Filter = "XML Files|*.xml|All Files|*.*";
-                if (saving.ShowDialog() == true)
+                var savingResult = fFileInteractionService.SaveFile("xml", VM.ProgramPortfolio.DatabaseName + VM.ProgramPortfolio.Extension, VM.ProgramPortfolio.Directory, "XML Files|*.xml|All Files|*.*");
+                if (savingResult.Success != null && (bool)savingResult.Success)
                 {
-                    VM.ProgramPortfolio.SetFilePath(saving.FileName);
+                    VM.ProgramPortfolio.SetFilePath(savingResult.FilePath);
                     var vm = DataContext as MainWindowViewModel;
-                    vm.ProgramPortfolio.SavePortfolio(saving.FileName, vm.ReportLogger);
+                    vm.ProgramPortfolio.SavePortfolio(savingResult.FilePath, vm.ReportLogger);
                 }
 
                 // saving.Dispose();

@@ -4,6 +4,7 @@ using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Reporting;
 using GUISupport;
+using GUISupport.Services;
 using System;
 using System.Collections.Generic;
 
@@ -40,18 +41,18 @@ namespace FinanceWindowsViewModels
         /// </summary>
         public List<object> Tabs { get; } = new List<object>(6);
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(IFileInteractionService fileInteractionService, IDialogCreationService dialogCreationService)
         {
             ReportsViewModel = new ReportingWindowViewModel();
             ReportLogger = new LogReporter(ReportsViewModel.UpdateReport);
 
-            OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger);
+            OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService);
             Tabs.Add(new BasicDataViewModel(ProgramPortfolio));
-            Tabs.Add(new SecurityEditWindowViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger));
-            Tabs.Add(new SingleValueEditWindowViewModel("Bank Account Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, bankAccEditMethods, AccountType.BankAccount));
-            Tabs.Add(new SingleValueEditWindowViewModel("Sector Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, sectorEditMethods, AccountType.Sector));
-            Tabs.Add(new SingleValueEditWindowViewModel("Currency Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, currencyEditMethods, AccountType.Currency));
-            Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger));
+            Tabs.Add(new SecurityEditWindowViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService));
+            Tabs.Add(new SingleValueEditWindowViewModel("Bank Account Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, bankAccEditMethods, AccountType.BankAccount));
+            Tabs.Add(new SingleValueEditWindowViewModel("Sector Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, sectorEditMethods, AccountType.Sector));
+            Tabs.Add(new SingleValueEditWindowViewModel("Currency Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, currencyEditMethods, AccountType.Currency));
+            Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, fileInteractionService, dialogCreationService));
 
 
         }
