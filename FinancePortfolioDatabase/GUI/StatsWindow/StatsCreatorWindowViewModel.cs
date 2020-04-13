@@ -1,11 +1,10 @@
 ﻿using FinanceCommonViewModels;
 using FinanceViewModels.StatsViewModels;
-using FinanceWindows.StatsWindows;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Reporting;
 using FinancialStructures.StatsMakers;
 using GUISupport;
-using Microsoft.Win32;
+using GUISupport.Services;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -28,10 +27,15 @@ namespace FinanceWindowsViewModels
         public int HistoryGapDays { get; set; }
 
         private readonly IReportLogger ReportLogger;
+        private readonly IFileInteractionService fFileService;
+        private readonly IDialogCreationService fDialogCreationService;
 
-        public StatsCreatorWindowViewModel(IPortfolio portfolio, IReportLogger reportLogger)
+        public StatsCreatorWindowViewModel(IPortfolio portfolio, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation)
             : base("Stats Creator")
         {
+            ReportLogger = reportLogger;
+            fFileService = fileService;
+            fDialogCreationService = dialogCreation;
             StatsTabs.Add(new MainTabViewModel(openTab));
             StatsTabs.Add(new SecuritiesStatisticsViewModel(portfolio, DisplayValueFunds));
 
@@ -40,7 +44,7 @@ namespace FinanceWindowsViewModels
                 fPortfolio = portfolio;
             }
 
-            ReportLogger = reportLogger;
+
             CreateCSVStatsCommand = new BasicCommand(ExecuteExportToCSVCommand);
             CreateInvestmentListCommand = new BasicCommand(ExecuteInvestmentListCommand);
             CreateHTMLCommand = new BasicCommand(ExecuteCreateHTMLCommand);
@@ -56,65 +60,56 @@ namespace FinanceWindowsViewModels
 
         private void ExecuteExportToCSVCommand(Object obj)
         {
-            var optionWindow = new StatsOptionsWindow();
-            Action<string> StatsOptionFeedback = (filePath) => StatsFeedback(optionWindow, filePath);
-            var context = new StatsOptionsViewModel(fPortfolio, ExportType.CSV, ReportLogger, StatsOptionFeedback);
-            optionWindow.DataContext = context;
-            optionWindow.ShowDialog();
+            Action<string> StatsOptionFeedback = (filePath) => StatsFeedback(filePath);
+            var context = new StatsOptionsViewModel(fPortfolio, ExportType.CSV, ReportLogger, StatsOptionFeedback, fFileService, fDialogCreationService);
+            fDialogCreationService.DisplayCustomDialog(context);
         }
 
         private void ExecuteInvestmentListCommand(Object obj)
         {
-            SaveFileDialog saving = new SaveFileDialog() { DefaultExt = ".csv", FileName = fPortfolio.DatabaseName + "-CSVStats.csv", InitialDirectory = fPortfolio.Directory };
-            saving.Filter = "CSV file|*.csv|All files|*.*";
-            bool? saved = saving.ShowDialog();
-            if (saved != null && (bool)saved)
+            var result = fFileService.SaveFile(".csv", fPortfolio.DatabaseName + "-CSVStats.csv", fPortfolio.Directory, "CSV file|*.csv|All files|*.*");
+            if (result.Success != null && (bool)result.Success)
             {
-                if (!saving.FileName.EndsWith(".csv"))
+                if (!result.FilePath.EndsWith(".csv"))
                 {
-                    saving.FileName += ".csv";
+                    result.FilePath += ".csv";
                 }
 
-                InvestmentsExporter.Export(fPortfolio, saving.FileName, ReportLogger);
+                InvestmentsExporter.Export(fPortfolio, result.FilePath, ReportLogger);
             }
             else
             {
-                ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", $"Was not able to create Investment list page at {saving.FileName}");
+                ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", $"Was not able to create Investment list page at {result.FilePath}");
             }
         }
 
         private void ExecuteCreateHistory(Object obj)
         {
-            SaveFileDialog saving = new SaveFileDialog() { DefaultExt = ".csv", FileName = DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + fPortfolio.DatabaseName + "-History.csv", InitialDirectory = fPortfolio.Directory };
-            saving.Filter = "CSV file|*.csv|All files|*.*";
-            bool? saved = saving.ShowDialog();
-            if (saved != null && (bool)saved)
+            var result = fFileService.SaveFile(".csv", DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + fPortfolio.DatabaseName + "-History.csv", fPortfolio.Directory, "CSV file|*.csv|All files|*.*");
+            if (result.Success != null && (bool)result.Success)
             {
-                if (!saving.FileName.EndsWith(".csv"))
+                if (!result.FilePath.EndsWith(".csv"))
                 {
-                    saving.FileName += ".csv";
+                    result.FilePath += ".csv";
                 }
 
-                CSVHistoryWriter.WriteHistoryToCSV(fPortfolio, saving.FileName, HistoryGapDays, ReportLogger);
+                CSVHistoryWriter.WriteHistoryToCSV(fPortfolio, result.FilePath, HistoryGapDays, ReportLogger);
             }
             else
             {
-                ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", $"Was not able to create Investment list page at {saving.FileName}");
+                ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", $"Was not able to create Investment list page at {result.FilePath}");
             }
         }
 
         private void ExecuteCreateHTMLCommand(Object obj)
         {
-            var optionWindow = new StatsOptionsWindow();
-            Action<string> StatsOptionFeedback = (filePath) => StatsFeedback(optionWindow, filePath);
-            var context = new StatsOptionsViewModel(fPortfolio, ExportType.HTML, ReportLogger, StatsOptionFeedback);
-            optionWindow.DataContext = context;
-            optionWindow.ShowDialog();
+            Action<string> StatsOptionFeedback = (filePath => StatsFeedback(filePath));
+            var context = new StatsOptionsViewModel(fPortfolio, ExportType.HTML, ReportLogger, StatsOptionFeedback, fFileService, fDialogCreationService);
+            fDialogCreationService.DisplayCustomDialog(context);
         }
 
-        private void StatsFeedback(StatsOptionsWindow window, string filePath)
+        private void StatsFeedback(string filePath)
         {
-            window.Close();
             LoadTab(TabType.StatsViewer, filePath);
         }
 

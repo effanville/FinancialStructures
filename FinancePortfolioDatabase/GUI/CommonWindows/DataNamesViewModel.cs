@@ -10,7 +10,7 @@ namespace FinanceCommonViewModels
 {
     internal class DataNamesViewModel : ViewModelBase
     {
-        private IPortfolio Portfolio;
+        internal IPortfolio Portfolio;
 
         private List<NameCompDate> fPreEditNames = new List<NameCompDate>();
 
@@ -47,6 +47,10 @@ namespace FinanceCommonViewModels
             UpdateDataCallback = updateDataCallback;
             ReportLogger = reportLogger;
             editMethods = updateMethods;
+            DataNames = (List<NameCompDate>)editMethods.ExecuteFunction(FunctionType.NameUpdate, portfolio).Result;
+            DataNames.Sort();
+            fPreEditNames = (List<NameCompDate>)editMethods.ExecuteFunction(FunctionType.NameUpdate, portfolio).Result;
+            fPreEditNames.Sort();
 
             CreateCommand = new BasicCommand(ExecuteCreateEdit);
             DeleteCommand = new BasicCommand(ExecuteDelete);

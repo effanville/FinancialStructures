@@ -4,7 +4,7 @@ using FinancialStructures.Reporting;
 using FinancialStructures.StatisticStructures;
 using FinancialStructures.StatsMakers;
 using GUISupport;
-using Microsoft.Win32;
+using GUISupport.Services;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
@@ -56,14 +56,12 @@ namespace FinanceWindowsViewModels
 
         private void ExecuteExportCommand(Object obj)
         {
-            SaveFileDialog saving = new SaveFileDialog() { DefaultExt = fFileExtension, FileName = Portfolio.DatabaseName + "-" + fExtension + "HTMLStats" + fFileExtension, InitialDirectory = Portfolio.Directory };
-            saving.Filter = fExtension + " file|*" + fFileExtension + "|All files|*.*";
+            var result = fFileService.SaveFile(fFileExtension, Portfolio.DatabaseName + "-" + fExtension + "HTMLStats" + fFileExtension, Portfolio.Directory, fExtension + " file|*" + fFileExtension + "|All files|*.*");
             string path = null;
 
-            bool? saved = saving.ShowDialog();
-            if (saved != null && (bool)saved)
+            if (result.Success != null && (bool)result.Success)
             {
-                path = saving.FileName;
+                path = result.FilePath;
                 var selected = new List<string>();
                 foreach (var column in ColumnNames)
                 {
@@ -83,12 +81,13 @@ namespace FinanceWindowsViewModels
                 var options = new UserOptions(selected, BankSelected, selected, DisplayConditions);
                 if (windowType == ExportType.HTML)
                 {
-                    PortfolioStatsCreators.CreateHTMLPageCustom(Portfolio, saving.FileName, options);
+                    PortfolioStatsCreators.CreateHTMLPageCustom(Portfolio, result.FilePath, options);
                 }
                 else
                 {
-                    CSVStatsCreator.CreateCSVPageCustom(Portfolio, saving.FileName, options);
+                    CSVStatsCreator.CreateCSVPageCustom(Portfolio, result.FilePath, options);
                 }
+
                 ReportLogger.LogUsefulWithStrings("Report", "StatisticsPage", "Created statistics page");
             }
             else
@@ -99,6 +98,8 @@ namespace FinanceWindowsViewModels
             CloseWindowAction(path);
         }
 
+        private readonly IFileInteractionService fFileService;
+        private readonly IDialogCreationService fDialogCreationService;
         private readonly IReportLogger ReportLogger;
         private Action<string> CloseWindowAction;
         private ExportType windowType;
@@ -110,11 +111,13 @@ namespace FinanceWindowsViewModels
         {
             get { return "." + fExtension; }
         }
-        public StatsOptionsViewModel(IPortfolio portfolio, ExportType exportType, IReportLogger reportLogger, Action<string> CloseWindow)
+        public StatsOptionsViewModel(IPortfolio portfolio, ExportType exportType, IReportLogger reportLogger, Action<string> CloseWindow, IFileInteractionService fileService, IDialogCreationService dialogCreation)
         {
             windowType = exportType;
             Portfolio = portfolio;
             ReportLogger = reportLogger;
+            fFileService = fileService;
+            fDialogCreationService = dialogCreation;
             CloseWindowAction = CloseWindow;
             ExportCommand = new BasicCommand(ExecuteExportCommand);
 

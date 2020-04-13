@@ -12,7 +12,7 @@ namespace FinanceWindowsViewModels
 {
     internal class SecurityNamesViewModel : ViewModelBase
     {
-        private IPortfolio Portfolio;
+        internal IPortfolio Portfolio;
 
         private List<NameCompDate> fPreEditFundNames = new List<NameCompDate>();
 
@@ -73,7 +73,6 @@ namespace FinanceWindowsViewModels
                 }
             }
         }
-
 
         public override void UpdateData(IPortfolio portfolio)
         {

@@ -6,10 +6,9 @@ using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Reporting;
 using GUISupport;
-using Microsoft.Win32;
+using GUISupport.Services;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace FinanceWindowsViewModels
@@ -43,7 +42,6 @@ namespace FinanceWindowsViewModels
             }
             set
             {
-                fSelectedValues = value;
                 if (SelectedSecurityData != null)
                 {
                     int index = SelectedSecurityData.IndexOf(value);
@@ -53,6 +51,8 @@ namespace FinanceWindowsViewModels
                         fOldSelectedValues = fSelectedValues?.Copy();
                     }
                 }
+
+                fSelectedValues = value;
                 OnPropertyChanged();
             }
         }
@@ -60,8 +60,10 @@ namespace FinanceWindowsViewModels
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
 
         private readonly IReportLogger ReportLogger;
+        private readonly IFileInteractionService fFileService;
+        private readonly IDialogCreationService fDialogCreationService;
 
-        public SelectedSecurityViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, NameData_ChangeLogged selectedName)
+        public SelectedSecurityViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, NameData_ChangeLogged selectedName)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
         {
             fSelectedName = selectedName;
@@ -72,6 +74,9 @@ namespace FinanceWindowsViewModels
             UpdateData(portfolio, null);
             UpdateDataCallback = updateData;
             ReportLogger = reportLogger;
+            fFileService = fileService;
+            fDialogCreationService = dialogCreation;
+            fOldSelectedValues = selectedValues?.Copy();
         }
 
         public ICommand DeleteValuationCommand { get; }
@@ -90,13 +95,12 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null)
             {
-                OpenFileDialog openFile = new OpenFileDialog() { DefaultExt = "csv" };
-                openFile.Filter = "Csv Files|*.csv|All Files|*.*";
+                var result = fFileService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
                 List<object> outputs = null;
-                bool? showed = openFile.ShowDialog();
-                if (showed != null && (bool)showed)
+
+                if (result.Success != null && (bool)result.Success)
                 {
-                    outputs = CsvDataRead.ReadFromCsv(openFile.FileName, AccountType.Security, ReportLogger);
+                    outputs = CsvDataRead.ReadFromCsv(result.FilePath, AccountType.Security, ReportLogger);
                 }
                 if (outputs != null)
                 {
@@ -121,14 +125,12 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null)
             {
-                SaveFileDialog saveFile = new SaveFileDialog() { DefaultExt = "csv" };
-                saveFile.Filter = "Csv Files|*.csv|All Files|*.*";
-                bool? saved = saveFile.ShowDialog();
-                if (saved != null && (bool)saved)
+                var result = fFileService.SaveFile("csv", string.Empty, Portfolio.Directory, "Csv Files|*.csv|All Files|*.*");
+                if (result.Success != null && (bool)result.Success)
                 {
                     if (Portfolio.TryGetSecurity(fSelectedName, out var security))
                     {
-                        CsvDataRead.WriteToCSVFile(saveFile.FileName, AccountType.Security, security, ReportLogger);
+                        CsvDataRead.WriteToCSVFile(result.FilePath, AccountType.Security, security, ReportLogger);
                     }
                     else
                     {

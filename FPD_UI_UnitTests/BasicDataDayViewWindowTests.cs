@@ -6,8 +6,14 @@ using System.Linq;
 
 namespace FPD_UI_UnitTests
 {
+    /// <summary>
+    /// Tests for the default data window.
+    /// </summary>
     public class BasicDataViewWindowTests
     {
+        /// <summary>
+        /// Ensures that the window displays data on loading.
+        /// </summary>
         [Test]
         public void CanViewData()
         {
@@ -25,15 +31,21 @@ namespace FPD_UI_UnitTests
             Assert.AreEqual("UK", viewModel.SectorNames.Single().Name);
         }
 
+        /// <summary>
+        /// Ensures the window displays data if the underlying database is modified.
+        /// </summary>
         [Test]
         public void CanUpdateData()
         {
+            // Setup basic data in the display.
             var portfolio = new Portfolio();
             var viewModel = new BasicDataViewModel(portfolio);
 
+            // Now update that data.
             TestingGUICode.UpdatePortfolio(portfolio);
-
             viewModel.UpdateData(portfolio);
+
+            // Ensure new data has been displayed correctly.
             Assert.AreEqual(1, viewModel.FundNames.Count);
             Assert.AreEqual("China", viewModel.FundNames.Single().Name);
             Assert.AreEqual("Fidelity", viewModel.FundNames.Single().Company);

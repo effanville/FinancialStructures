@@ -4,7 +4,7 @@ using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Reporting;
 using GUISupport;
-using Microsoft.Win32;
+using GUISupport.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +18,9 @@ namespace FinanceWindowsViewModels
         private string fFileName;
         private string fDirectory;
         private readonly Action<Action<IPortfolio>> DataUpdateCallback;
-        private readonly IReportLogger ReportLogger;
+        private readonly IReportLogger fReportLogger;
+        private readonly IFileInteractionService fFileService;
+        private readonly IDialogCreationService fDialogCreationService;
         private string fBaseCurrency;
 
         public string BaseCurrency
@@ -43,10 +45,12 @@ namespace FinanceWindowsViewModels
             set { fCurrencies = value; OnPropertyChanged(); }
         }
 
-        public OptionsToolbarViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger)
+        public OptionsToolbarViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation)
             : base("Options")
         {
-            ReportLogger = reportLogger;
+            fReportLogger = reportLogger;
+            fFileService = fileService;
+            fDialogCreationService = dialogCreation;
             DataUpdateCallback = updateData;
             UpdateData(portfolio);
 
@@ -74,52 +78,47 @@ namespace FinanceWindowsViewModels
         public ICommand OpenHelpCommand { get; }
         private void OpenHelpDocsCommand(Object obj)
         {
-            var helpwindow = new HelpWindow(ReportLogger);
+            var helpwindow = new HelpWindow(fReportLogger);
             helpwindow.Show();
         }
 
         public ICommand NewDatabaseCommand { get; }
         private void ExecuteNewDatabase(Object obj)
         {
-            MessageBoxResult result = MessageBox.Show("Do you want to load a new database?", "New Database?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            MessageBoxResult result = fDialogCreationService.ShowMessageBox("Do you want to load a new database?", "New Database?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Yes)
             {
                 DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(""));
-                DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio("", ReportLogger));
+                DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio("", fReportLogger));
             }
         }
 
         public ICommand SaveDatabaseCommand { get; }
         private void ExecuteSaveDatabase(Object obj)
         {
-            SaveFileDialog saving = new SaveFileDialog() { DefaultExt = "xml", FileName = fFileName, InitialDirectory = fDirectory };
-            saving.Filter = "XML Files|*.xml|All Files|*.*";
-            bool? saved = saving.ShowDialog();
-            if (saved != null && (bool)saved)
+            var result = fFileService.SaveFile("xml", fFileName, fDirectory, "XML Files|*.xml|All Files|*.*");
+            if (result.Success != null && (bool)result.Success)
             {
-                DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(saving.FileName));
-                DataUpdateCallback(programPortfolio => programPortfolio.SavePortfolio(saving.FileName, ReportLogger));
+                DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(result.FilePath));
+                DataUpdateCallback(programPortfolio => programPortfolio.SavePortfolio(result.FilePath, fReportLogger));
             }
         }
 
         public ICommand LoadDatabaseCommand { get; }
         private void ExecuteLoadDatabase(Object obj)
         {
-            OpenFileDialog openFile = new OpenFileDialog() { DefaultExt = "xml" };
-            openFile.Filter = "XML Files|*.xml|All Files|*.*";
-            bool? showed = openFile.ShowDialog();
-            if (showed != null && (bool)showed)
+            var result = fFileService.OpenFile("xml", filter: "XML Files|*.xml|All Files|*.*");
+            if (result.Success != null && (bool)result.Success)
             {
-                DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(openFile.FileName));
-                DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio(openFile.FileName, ReportLogger));
-
+                DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(result.FilePath));
+                DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio(result.FilePath, fReportLogger));
             }
         }
 
         public ICommand UpdateDataCommand { get; }
         private void ExecuteUpdateData(Object obj)
         {
-            DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.Downloader(programPortfolio, ReportLogger).ConfigureAwait(false));
+            DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.Downloader(programPortfolio, fReportLogger).ConfigureAwait(false));
         }
 
         public ICommand RefreshCommand { get; }
