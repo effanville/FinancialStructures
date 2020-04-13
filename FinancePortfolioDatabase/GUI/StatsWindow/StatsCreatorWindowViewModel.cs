@@ -1,6 +1,5 @@
 ﻿using FinanceCommonViewModels;
 using FinanceViewModels.StatsViewModels;
-using FinanceWindows.StatsWindows;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Reporting;
 using FinancialStructures.StatsMakers;
@@ -61,11 +60,9 @@ namespace FinanceWindowsViewModels
 
         private void ExecuteExportToCSVCommand(Object obj)
         {
-            var optionWindow = new StatsOptionsWindow();
-            Action<string> StatsOptionFeedback = (filePath) => StatsFeedback(optionWindow, filePath);
+            Action<string> StatsOptionFeedback = (filePath) => StatsFeedback(filePath);
             var context = new StatsOptionsViewModel(fPortfolio, ExportType.CSV, ReportLogger, StatsOptionFeedback, fFileService, fDialogCreationService);
-            optionWindow.DataContext = context;
-            optionWindow.ShowDialog();
+            fDialogCreationService.DisplayCustomDialog(context);
         }
 
         private void ExecuteInvestmentListCommand(Object obj)
@@ -106,16 +103,13 @@ namespace FinanceWindowsViewModels
 
         private void ExecuteCreateHTMLCommand(Object obj)
         {
-            var optionWindow = new StatsOptionsWindow();
-            Action<string> StatsOptionFeedback = (filePath) => StatsFeedback(optionWindow, filePath);
+            Action<string> StatsOptionFeedback = (filePath => StatsFeedback(filePath));
             var context = new StatsOptionsViewModel(fPortfolio, ExportType.HTML, ReportLogger, StatsOptionFeedback, fFileService, fDialogCreationService);
-            optionWindow.DataContext = context;
-            optionWindow.ShowDialog();
+            fDialogCreationService.DisplayCustomDialog(context);
         }
 
-        private void StatsFeedback(StatsOptionsWindow window, string filePath)
+        private void StatsFeedback(string filePath)
         {
-            window.Close();
             LoadTab(TabType.StatsViewer, filePath);
         }
 

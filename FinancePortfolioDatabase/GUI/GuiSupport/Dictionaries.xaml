@@ -3,5 +3,6 @@
         <ResourceDictionary Source="DefaultStyles.xaml"/>
         <ResourceDictionary Source="../CommonWindows/ViewModelToViewDictionary.xaml"/>
         <ResourceDictionary Source="../MainWindowTemplates.xaml"/>
+        <ResourceDictionary Source="../DialogTemplates.xaml"/>
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

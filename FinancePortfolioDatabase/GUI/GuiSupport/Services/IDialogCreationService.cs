@@ -17,5 +17,11 @@ namespace GUISupport.Services
         /// Shows a standard message box with the specified parameters with non-default owner.
         /// </summary>
         MessageBoxResult ShowMessageBox(Window owner, string text, string title, MessageBoxButton buttons, MessageBoxImage imageType);
+
+        /// <summary>
+        /// Displays an arbitrary dialog window, populated from an object which is
+        /// either a window itself, or is a viewModel.
+        /// </summary>
+        void DisplayCustomDialog(object obj);
     }
 }

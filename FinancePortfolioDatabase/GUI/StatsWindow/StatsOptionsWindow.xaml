@@ -1,4 +1,4 @@
-﻿<Window x:Class="FinanceWindows.StatsWindows.StatsOptionsWindow"
+﻿<ItemsControl x:Class="FinanceWindows.StatsWindows.StatsOptionsWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -6,10 +6,9 @@
         xmlns:cl="clr-namespace:GUISupport"
         xmlns:vm="clr-namespace:FinancialStructures.StatsMakers;assembly=FinancialStructures"
         mc:Ignorable="d"
-        Title="StatsOptionsWindow"
         Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}" 
-        Height="300" 
-        Width="300"
+        Height="400" 
+        Width="400"
         MinHeight="200"
         MinWidth="200">
     <StackPanel>
@@ -69,4 +68,4 @@
                 Style="{StaticResource ResourceKey=defaultButton}"
                 Command="{Binding ExportCommand}"/>
     </StackPanel>
-</Window>
+</ItemsControl>
