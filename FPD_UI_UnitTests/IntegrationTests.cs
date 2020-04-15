@@ -35,8 +35,8 @@ namespace FPD_UI_UnitTests
             Assert.AreEqual(1, dataView.SectorNames.Count);
 
             var securityView = viewModel.Tabs[1] as SecurityEditWindowViewModel;
-            var securityNamesView = securityView.Tabs[0] as SecurityNamesViewModel;
-            Assert.AreEqual(1, securityNamesView.FundNames.Count);
+            var securityNamesView = securityView.Tabs[0] as DataNamesViewModel;
+            Assert.AreEqual(1, securityNamesView.DataNames.Count);
 
             var bankAccView = viewModel.Tabs[2] as SingleValueEditWindowViewModel;
             var bankAccNamesView = bankAccView.Tabs[0] as DataNamesViewModel;

@@ -5,10 +5,6 @@
                     xmlns:vm="clr-namespace:FinanceWindowsViewModels"
                     xmlns:cvm="clr-namespace:FinanceCommonViewModels">
     
-    <DataTemplate DataType="{x:Type vm:SecurityNamesViewModel}">
-            <view:SecurityNamesView/>
-    </DataTemplate>
-    
     <DataTemplate DataType="{x:Type vm:SelectedSecurityViewModel}">
         <view:SelectedSecurityView/>
     </DataTemplate>

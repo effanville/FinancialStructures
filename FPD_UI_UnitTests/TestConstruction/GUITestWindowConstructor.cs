@@ -54,6 +54,11 @@ namespace FPD_UI_UnitTests.TestConstruction
             return;
         }
 
+        public static EditMethods GetMethodsForTesting(AccountType accountType)
+        {
+            return EditMethods.GenerateEditMethods(accountType);
+        }
+
         internal static EditMethods DummyEditMethods = EditMethods.GenerateEditMethods(AccountType.BankAccount);
 
         public static Portfolio CreateBasicDataBase()
