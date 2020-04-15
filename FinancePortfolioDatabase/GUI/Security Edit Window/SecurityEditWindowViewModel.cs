@@ -22,7 +22,7 @@ namespace FinanceWindowsViewModels
 
         private readonly Action<Action<IPortfolio>> UpdateDataAction;
 
-        public SecurityEditWindowViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation)
+        public SecurityEditWindowViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, EditMethods securityEditMethods, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation)
             : base("Security Edit")
         {
             Portfolio = portfolio;
@@ -31,7 +31,7 @@ namespace FinanceWindowsViewModels
             fFileService = fileService;
             fDialogCreationService = dialogCreation;
             LoadSelectedTab = (name) => LoadTabFunc(name);
-            Tabs.Add(new SecurityNamesViewModel(Portfolio, updateData, ReportLogger, LoadSelectedTab));
+            Tabs.Add(new DataNamesViewModel(Portfolio, updateData, ReportLogger, LoadSelectedTab, securityEditMethods));
         }
 
         public override void UpdateData(IPortfolio portfolio)
