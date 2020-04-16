@@ -66,6 +66,7 @@
         <Button Margin="5" 
                 Content="Export Statistics"
                 Style="{StaticResource ResourceKey=defaultButton}"
-                Command="{Binding ExportCommand}"/>
+                Command="{Binding ExportCommand}"
+                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
     </StackPanel>
 </ItemsControl>
