@@ -48,6 +48,7 @@ namespace FinancialStructures.StatisticStructures
                 portfolio.TryGetSecurity(names, out ISecurity des);
                 securityStats.Number = des.NumberSectors();
                 securityStats.LatestVal = MathSupport.Truncate(portfolio.LatestValue(AccountType.Security, names));
+                securityStats.SharePrice = MathSupport.Truncate(portfolio.SecurityPrices(names, date, SecurityDataStream.SharePrice), 4);
                 securityStats.RecentChange = MathSupport.Truncate(portfolio.RecentChange(names));
                 securityStats.FundsFraction = MathSupport.Truncate(portfolio.SecurityFraction(names, date), 4);
                 securityStats.Profit = MathSupport.Truncate(portfolio.Profit(names));
@@ -160,10 +161,11 @@ namespace FinancialStructures.StatisticStructures
             Names = names;
         }
 
-        public TwoName Names { get; set; }
+        public TwoName Names;
         public string Company { get { return Names.Company; } }
         public string Name { get { return Names.Name; } }
         public double LatestVal { get; set; }
+        public double SharePrice { get; set; }
         public double RecentChange { get; set; }
         public double FundsFraction { get; set; }
         public int Number { get; set; }

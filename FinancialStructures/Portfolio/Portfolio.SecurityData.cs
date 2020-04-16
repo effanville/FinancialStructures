@@ -1,9 +1,16 @@
 ﻿using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.NamingStructures;
 using System;
 using System.Collections.Generic;
 
 namespace FinancialStructures.Database
 {
+    public enum SecurityDataStream
+    {
+        NumberOfShares,
+        SharePrice
+    }
+
     public static partial class PortfolioSecurity
     {
         /// <summary>
@@ -27,13 +34,20 @@ namespace FinancialStructures.Database
             return companies;
         }
 
-        public static double SecurityShares(this IPortfolio portfolio, string company, string name, DateTime date)
+        public static double SecurityPrices(this IPortfolio portfolio, TwoName names, DateTime date, SecurityDataStream dataStream = SecurityDataStream.NumberOfShares)
         {
             foreach (ISecurity sec in portfolio.Funds)
             {
-                if (sec.Name == name && sec.Company == company)
+                if (sec.Names.Equals(names))
                 {
-                    return sec.Shares.NearestEarlierValue(date).Value;
+                    if (dataStream.Equals(SecurityDataStream.NumberOfShares))
+                    {
+                        return sec.Shares.NearestEarlierValue(date).Value;
+                    }
+                    else
+                    {
+                        return sec.UnitPrice.NearestEarlierValue(date).Value;
+                    }
                 }
             }
 
