@@ -13,14 +13,23 @@ namespace FinancialStructures.PortfolioAPI
     {
         public static int LongestName(this IPortfolio portfolio)
         {
-            return portfolio.Names(AccountType.Security).Max().Length;
+            var names = portfolio.Names(AccountType.Security);
+            if (names.Any())
+            {
+                return names.Max().Length;
+            }
+            return 0;
         }
 
         public static int LongestCompany(this IPortfolio portfolio)
         {
             var companies = portfolio.Companies(AccountType.Security);
             companies.Sort();
-            return companies.Select(c => c.Length).Max();
+            if (companies != null)
+            {
+                return companies.Select(c => c.Length).Max();
+            }
+            return 0;
         }
 
         /// <summary>

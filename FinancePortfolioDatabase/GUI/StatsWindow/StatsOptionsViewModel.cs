@@ -7,6 +7,7 @@ using GUISupport;
 using GUISupport.Services;
 using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Input;
 
 namespace FinanceWindowsViewModels
@@ -96,6 +97,10 @@ namespace FinanceWindowsViewModels
             }
 
             CloseWindowAction(path);
+            if (obj is ICloseable window)
+            {
+                window.Close();
+            }
         }
 
         private readonly IFileInteractionService fFileService;
