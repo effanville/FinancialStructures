@@ -42,6 +42,7 @@ namespace FinanceWindowsViewModels
             }
             set
             {
+                fSelectedValues = value;
                 if (SelectedSecurityData != null)
                 {
                     int index = SelectedSecurityData.IndexOf(value);
@@ -52,7 +53,6 @@ namespace FinanceWindowsViewModels
                     }
                 }
 
-                fSelectedValues = value;
                 OnPropertyChanged();
             }
         }
@@ -76,7 +76,6 @@ namespace FinanceWindowsViewModels
             ReportLogger = reportLogger;
             fFileService = fileService;
             fDialogCreationService = dialogCreation;
-            fOldSelectedValues = selectedValues?.Copy();
         }
 
         public ICommand DeleteValuationCommand { get; }
