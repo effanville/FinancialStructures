@@ -12,17 +12,6 @@ namespace FinanceWindows
     /// </summary>
     public partial class MainWindow : Window
     {
-        private static class AssemblyCreationDate
-        {
-            public static readonly DateTime Value;
-
-            static AssemblyCreationDate()
-            {
-                Version version = Assembly.GetExecutingAssembly().GetName().Version;
-                Value = new DateTime(2000, 1, 1, 20, 24, 30).AddDays(version.Build).AddSeconds(version.MinorRevision * 2);
-            }
-        }
-
         private readonly IFileInteractionService fFileInteractionService;
         private readonly IDialogCreationService fDialogCreationService;
 
@@ -33,7 +22,8 @@ namespace FinanceWindows
             var viewModel = new MainWindowViewModel(fFileInteractionService, fDialogCreationService);
             InitializeComponent();
 
-            Title = "Financial Database v" + AssemblyCreationDate.Value.ToString("yyyy.MM.dd.HHmmss");
+            Version version = Assembly.GetExecutingAssembly().GetName().Version;
+            Title = "Financial Database v" + version.ToString();
 
             DataContext = viewModel;
         }
@@ -58,8 +48,6 @@ namespace FinanceWindows
                     var vm = DataContext as MainWindowViewModel;
                     vm.ProgramPortfolio.SavePortfolio(savingResult.FilePath, vm.ReportLogger);
                 }
-
-                // saving.Dispose();
             }
             if (result == MessageBoxResult.Cancel)
             {
