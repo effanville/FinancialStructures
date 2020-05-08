@@ -161,8 +161,8 @@ namespace FinanceWindowsViewModels
                         if (name.NewValue)
                         {
                             edited = true;
-                            UpdateDataCallback(programPortfolio => programPortfolio.TryEditSecurityData(fSelectedName, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment, ReportLogger));
                             name.NewValue = false;
+                            UpdateDataCallback(programPortfolio => programPortfolio.TryEditSecurityData(fSelectedName, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment, ReportLogger));
                         }
                     }
                     if (!edited)
@@ -180,10 +180,7 @@ namespace FinanceWindowsViewModels
             {
                 if (!portfolio.TryGetSecurity(fSelectedName, out _))
                 {
-                    if (removeTab != null)
-                    {
-                        removeTab(this);
-                    }
+                    removeTab?.Invoke(this);
                     return;
                 }
 

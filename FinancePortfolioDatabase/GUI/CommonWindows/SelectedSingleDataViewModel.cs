@@ -97,11 +97,7 @@ namespace FinanceCommonViewModels
             {
                 if (!((List<NameCompDate>)EditMethods.ExecuteFunction(FunctionType.NameUpdate, Portfolio).Result).Exists(name => name.IsEqualTo(SelectedName)))
                 {
-                    if (removeTab != null)
-                    {
-                        removeTab(this);
-
-                    }
+                    removeTab?.Invoke(this);
                     return;
                 }
 
@@ -140,10 +136,11 @@ namespace FinanceCommonViewModels
                         if (name.NewValue)
                         {
                             edited = true;
-                            UpdateDataCallback(programPortfolio => EditMethods.ExecuteFunction(FunctionType.EditData, programPortfolio, SelectedName, fOldSelectedValue, SelectedValue, ReportLogger).Wait());
                             name.NewValue = false;
+                            UpdateDataCallback(programPortfolio => EditMethods.ExecuteFunction(FunctionType.EditData, programPortfolio, SelectedName, fOldSelectedValue, SelectedValue, ReportLogger).Wait());
                         }
                     }
+
                     if (!edited)
                     {
                         ReportLogger.LogWithStrings("Critical", "Error", "EditingData", "Was not able to edit data.");
