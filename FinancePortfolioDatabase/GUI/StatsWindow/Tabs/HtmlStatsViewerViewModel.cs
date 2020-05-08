@@ -2,7 +2,6 @@
 using GUISupport;
 using Microsoft.Win32;
 using System;
-using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace FinanceViewModels.StatsViewModels
