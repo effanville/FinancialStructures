@@ -1,7 +1,0 @@
-﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    <Color x:Key="MainPetal">#F98866</Color>
-    <Color x:Key="MainPoppy">#FF420E</Color>
-    <Color x:Key="MainStem">#80BD9E</Color>
-    <Color x:Key="MainSpringGreen">#89DA59</Color>
-</ResourceDictionary>

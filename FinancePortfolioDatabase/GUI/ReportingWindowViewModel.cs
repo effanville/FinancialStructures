@@ -1,32 +1,29 @@
-﻿using GUISupport;
-using FinancialStructures.ReportingStructures;
+﻿using FinancialStructures.Reporting;
+using GUISupport;
 using System;
 using System.Collections.Generic;
-using System.Windows.Input;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Windows.Input;
 
 namespace FinanceWindowsViewModels
 {
-    public class ReportingWindowViewModel : PropertyChangedBase
+    internal class ReportingWindowViewModel : PropertyChangedBase
     {
-        public ICommand ClearReportsCommand { get; }
-
-        public ICommand ClearSingleReportCommand { get; }
-
         private ObservableCollection<ErrorReport> fReportsToView;
 
         public ObservableCollection<ErrorReport> ReportsToView
         {
             get { return fReportsToView; }
-            set { fReportsToView = value; OnPropertyChanged(); }
+            set { fReportsToView = value; OnPropertyChanged(nameof(ReportsToView)); }
         }
 
         private ErrorReports fReports;
-        
+
         public ErrorReports Reports
-        { 
+        {
             get { return fReports; }
-            set { fReports = value; OnPropertyChanged(); }
+            set { fReports = value; OnPropertyChanged(nameof(Reports)); }
         }
 
         private int fIndexToDelete;
@@ -34,32 +31,20 @@ namespace FinanceWindowsViewModels
         public int IndexToDelete
         {
             get { return fIndexToDelete; }
-            set { fIndexToDelete = value; OnPropertyChanged(); }
+            set { fIndexToDelete = value; OnPropertyChanged(nameof(IndexToDelete)); }
         }
 
-        private void SyncReports()
+        private ReportSeverity fReportingSeverity;
+
+        public ReportSeverity ReportingSeverity
         {
-            ReportsToView = null;
-            ReportsToView = new ObservableCollection<ErrorReport>(Reports.GetReports());
-            OnPropertyChanged(nameof(ReportsToView));
+            get { return fReportingSeverity; }
+            set { fReportingSeverity = value; OnPropertyChanged(nameof(ReportingSeverity)); SyncReports(); }
         }
 
-        void ExecuteClearReports(Object obj)
+        public List<ReportSeverity> EnumValues
         {
-            Reports = new ErrorReports();
-            SyncReports();
-        }
-
-        void ExecuteClearSelectedReport(Object obj)
-        {
-            Reports.RemoveReport(IndexToDelete);
-            SyncReports();
-        }
-
-        public void UpdateReports(ErrorReports reports)
-        {
-            Reports.AddReports(reports);
-            SyncReports();
+            get { return Enum.GetValues(typeof(ReportSeverity)).Cast<ReportSeverity>().ToList(); }
         }
 
         public ReportingWindowViewModel()
@@ -71,5 +56,33 @@ namespace FinanceWindowsViewModels
             SyncReports();
         }
 
+        internal void SyncReports()
+        {
+            ReportsToView = null;
+            ReportsToView = new ObservableCollection<ErrorReport>(Reports.GetReports(ReportingSeverity));
+            OnPropertyChanged(nameof(ReportsToView));
+        }
+
+        public ICommand ClearReportsCommand { get; }
+
+        private void ExecuteClearReports(Object obj)
+        {
+            Reports.Clear();
+            SyncReports();
+        }
+
+        public ICommand ClearSingleReportCommand { get; }
+
+        private void ExecuteClearSelectedReport(Object obj)
+        {
+            Reports.RemoveReport(IndexToDelete);
+            SyncReports();
+        }
+
+        public void UpdateReport(ReportSeverity severity, ReportType type, ReportLocation location, string message)
+        {
+            Reports.AddErrorReport(severity, type, location, message);
+            SyncReports();
+        }
     }
 }

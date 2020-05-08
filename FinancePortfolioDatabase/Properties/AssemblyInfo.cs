@@ -1,12 +1,11 @@
 ﻿using System.Reflection;
-using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
 
 // Which testing suite internals are visible to
-[assembly: InternalsVisibleTo("PAD_UnitTests")]
+[assembly: InternalsVisibleTo("FPD_UI_UnitTests")]
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
@@ -14,7 +13,6 @@ using System.Windows;
 [assembly: AssemblyTitle("FinancePortfolioDatabase")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("FinancePortfolioDatabase")]
 [assembly: AssemblyCopyright("Copyright ©  2019")]
 [assembly: AssemblyTrademark("")]
@@ -55,5 +53,5 @@ using System.Windows;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyFileVersion("1.0.*")]
+[assembly: AssemblyVersion("1.5.*")]
+[assembly: AssemblyFileVersion("1.5.*")]

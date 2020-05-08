@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:cl="clr-namespace:GUISupport"
       mc:Ignorable="d"
       HorizontalAlignment="Stretch"
       VerticalAlignment="Stretch">
@@ -11,35 +12,37 @@
           VerticalAlignment="Stretch">
         
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="110"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid Background="#F98866"
+        <Grid Background="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}"
               Grid.Column="0">
-        <StackPanel 
-                    VerticalAlignment="Top">
-            <TextBlock Margin="10 10 10 10" Text="Error Reports"/>
-            <Button Margin="10 10 10 10"
+            <StackPanel VerticalAlignment="Top">
+                <Button Style="{StaticResource ResourceKey=defaultButton}"
                     Content="Clear Reports"
                     Command="{Binding ClearReportsCommand}"/>
-            <Button Margin="10 10 10 10"
-                    Content="Clear Selected"
-                    Command="{Binding ClearSingleReportCommand}"/>
-        </StackPanel>
+                
+                <Button Content="Clear Selected"
+                        Style="{StaticResource ResourceKey=defaultButton}"
+                        Command="{Binding ClearSingleReportCommand}"/>
+                <TextBlock Margin="5 5 5 5" 
+                           Text="Display Reports:"/>
+                <ComboBox Margin="5 5 5 5"
+                          ItemsSource="{Binding EnumValues}"
+                          SelectedValue="{Binding Path=ReportingSeverity}"/>
+            </StackPanel>
         </Grid>
-        <ListView Name="SecBox"
+        <DataGrid Name="SecBox"
+                  SelectionUnit="FullRow"
+                  CanUserAddRows="True"
+                  CanUserDeleteRows="False"
+                  AutoGenerateColumns="True"
+                  GridLinesVisibility="None"
                   ItemsSource="{Binding ReportsToView, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedIndex="{Binding IndexToDelete}"
                   Grid.Column="1"
                   Margin="10 10 10 10"
                   ScrollViewer.VerticalScrollBarVisibility="Auto">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Type" 
-                                    DisplayMemberBinding="{Binding ErrorType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                    <GridViewColumn Header="Message" 
-                                    DisplayMemberBinding="{Binding Message, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                </GridView>
-            </ListView.View>
-        </ListView>
+        </DataGrid>
     </Grid>
 </Grid>

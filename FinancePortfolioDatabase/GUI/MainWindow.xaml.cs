@@ -1,8 +1,9 @@
-﻿using GUIAccessorFunctions;
-using GlobalHeldData;
+﻿using FinanceWindowsViewModels;
+using FinancialStructures.PortfolioAPI;
+using GUISupport.Services;
+using System;
+using System.Reflection;
 using System.Windows;
-using Microsoft.Win32;
-using FinancialStructures.ReportingStructures;
 
 namespace FinanceWindows
 {
@@ -11,42 +12,42 @@ namespace FinanceWindows
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly IFileInteractionService fFileInteractionService;
+        private readonly IDialogCreationService fDialogCreationService;
+
         public MainWindow()
         {
-            DatabaseAccessor.LoadPortfolio(new ErrorReports());
+            fFileInteractionService = new FileInteractionService(this);
+            fDialogCreationService = new DialogCreationService(this);
+            var viewModel = new MainWindowViewModel(fFileInteractionService, fDialogCreationService);
             InitializeComponent();
 
-            Title = "Financial Database v" + AssemblyCreationDate.Value.ToString("yyyy.MM.dd.HHmmss");
+            Version version = Assembly.GetExecutingAssembly().GetName().Version;
+            Title = "Financial Database v" + version.ToString();
+
+            DataContext = viewModel;
         }
 
-        private void OpenHelpDocsCommand(object sender, RoutedEventArgs e)
-        {
-            var helpwindow = new HelpWindow();
-            helpwindow.Show();
-        }
-
+        /// <summary>
+        /// Event fires when one closes the window. Checks if the user wishes to save or not.
+        /// </summary>
+        /// <remarks>
+        /// This should really check if the data has changed or not, but this
+        /// is not currently possible.
+        /// </remarks>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            string msg = "Data may not be saved. Would you like to save before closing?";
-            MessageBoxResult result =
-                  MessageBox.Show(
-                    msg,
-                    $"Closing {Title}.",
-                    MessageBoxButton.YesNoCancel,
-                    MessageBoxImage.Warning);
+            MessageBoxResult result = fDialogCreationService.ShowMessageBox("Data may not be saved. Would you like to save before closing?", $"Closing {Title}.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+            var VM = DataContext as MainWindowViewModel;
             if (result == MessageBoxResult.Yes)
             {
-                SaveFileDialog saving = new SaveFileDialog();
-                if (saving.ShowDialog() == true)
+                var savingResult = fFileInteractionService.SaveFile("xml", VM.ProgramPortfolio.DatabaseName + VM.ProgramPortfolio.Extension, VM.ProgramPortfolio.Directory, "XML Files|*.xml|All Files|*.*");
+                if (savingResult.Success != null && (bool)savingResult.Success)
                 {
-                    //if (!File.Exists(saving.FileName))
-                    {
-                        DatabaseAccessor.SetFilePath(saving.FileName);
-                    }
+                    VM.ProgramPortfolio.SetFilePath(savingResult.FilePath);
+                    var vm = DataContext as MainWindowViewModel;
+                    vm.ProgramPortfolio.SavePortfolio(savingResult.FilePath, vm.ReportLogger);
                 }
-
-                DatabaseAccessor.SavePortfolio(new ErrorReports());
-                // saving.Dispose();
             }
             if (result == MessageBoxResult.Cancel)
             {

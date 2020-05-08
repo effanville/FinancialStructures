@@ -1,10 +1,10 @@
-using NUnit.Framework;
-using FinancialStructures.FinanceFunctionsList;
-using System;
 using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceFunctions;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 
-namespace PAD_UnitTests
+namespace MathLibrary.FinancialFunctions_UnitTests
 {
     public class RatesTests
     {
@@ -18,7 +18,7 @@ namespace PAD_UnitTests
                 case 1:
                     return new List<DailyValuation>() { new DailyValuation(DateTime.Parse("1/1/2018"), 1000) };
                 case 2:
-                    return new List<DailyValuation>() { new DailyValuation(DateTime.Parse("1/1/2018"), 1000), new DailyValuation(DateTime.Parse("1/6/2018"), 1000)};
+                    return new List<DailyValuation>() { new DailyValuation(DateTime.Parse("1/1/2018"), 1000), new DailyValuation(DateTime.Parse("1/6/2018"), 1000) };
             }
 
             return null;
@@ -55,8 +55,8 @@ namespace PAD_UnitTests
             Assert.AreEqual(expected, rate, "CAR is not as expected.");
         }
 
-        [TestCase(0,"1/1/2019", 2000.0, double.NaN)]
-        [TestCase(1,"1/1/2019", 2000.0, 1.0)]
+        [TestCase(0, "1/1/2019", 2000.0, double.NaN)]
+        [TestCase(1, "1/1/2019", 2000.0, 1.0)]
         [TestCase(2, "1/1/2019", 2000.0, 0.0)]
         [TestCase(2, "1/1/2019", 4000.0, 1.351)]
         public void IRRTests(int switcher, string last, double lastValue, double expected)
@@ -65,7 +65,7 @@ namespace PAD_UnitTests
             Assert.AreEqual(expected, rate, 1e-3, "CAR is not as expected.");
         }
 
-        [TestCase(0, "1/1/2018",1000.0, "1/1/2019", 2000.0, double.NaN)]
+        [TestCase(0, "1/1/2018", 1000.0, "1/1/2019", 2000.0, double.NaN)]
         [TestCase(1, "1/1/2018", 1000.0, "1/1/2019", 2000.0, 1.0)]
         [TestCase(1, "1/6/2018", 1000.0, "1/1/2019", 2000.0, 2.261)]
         [TestCase(2, "1/1/2018", 1000.0, "1/1/2019", 2000.0, 0.0)]

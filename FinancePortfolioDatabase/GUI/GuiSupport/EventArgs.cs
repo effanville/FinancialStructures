@@ -2,7 +2,7 @@
 
 namespace GUISupport
 {
-    public class EventArgs<T> : EventArgs
+    internal class EventArgs<T> : EventArgs
     {
         public EventArgs(T value)
         {

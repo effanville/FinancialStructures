@@ -2,7 +2,7 @@
 
 namespace GUISupport
 {
-    public class PropertyChangedBase : INotifyPropertyChanged
+    internal class PropertyChangedBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

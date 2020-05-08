@@ -1,0 +1,19 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:view="clr-namespace:FinanceWindows"
+                    xmlns:cview="clr-namespace:FinanceCommonWindows"
+                    xmlns:vm="clr-namespace:FinanceWindowsViewModels"
+                    xmlns:cvm="clr-namespace:FinanceCommonViewModels">
+    
+    <DataTemplate DataType="{x:Type vm:SelectedSecurityViewModel}">
+        <view:SelectedSecurityView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type cvm:DataNamesViewModel}">
+        <cview:DataNamesView/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type cvm:SelectedSingleDataViewModel}">
+        <cview:SelectedSingleDataView/>
+    </DataTemplate>
+</ResourceDictionary>

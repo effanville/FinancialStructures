@@ -1,10 +1,9 @@
-using NUnit.Framework;
-using FinancialStructures.FinanceFunctionsList;
-using System;
 using FinancialStructures.DataStructures;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 
-namespace PAD_UnitTests
+namespace DataStructures.TimeList_UnitTests
 {
     public class TimeList_RatesTests
     {
@@ -16,9 +15,9 @@ namespace PAD_UnitTests
                 case 0:
                     return null;
                 case 1:
-                    return new TimeList( new List<DailyValuation>() { new DailyValuation(DateTime.Parse("1/1/2018"), 1000) });
+                    return new TimeList(new List<DailyValuation>() { new DailyValuation(DateTime.Parse("1/1/2018"), 1000) });
                 case 2:
-                    return new TimeList(new List<DailyValuation>() { new DailyValuation(DateTime.Parse("1/1/2018"), 1000), new DailyValuation(DateTime.Parse("1/6/2018"), 1000)});
+                    return new TimeList(new List<DailyValuation>() { new DailyValuation(DateTime.Parse("1/1/2018"), 1000), new DailyValuation(DateTime.Parse("1/6/2018"), 1000) });
                 case 3:
                     return new TimeList(new List<DailyValuation>() { new DailyValuation(DateTime.Parse("1/1/2017"), 1000), new DailyValuation(DateTime.Parse("1/1/2018"), 1100), new DailyValuation(DateTime.Parse("1/6/2018"), 1200) });
                 case 4:

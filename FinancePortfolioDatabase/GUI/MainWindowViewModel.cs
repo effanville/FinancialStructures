@@ -1,225 +1,94 @@
-﻿using System;
-using FinancialStructures.ReportingStructures;
+﻿using FinanceCommonViewModels;
+using FinancialStructures.Database;
+using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.PortfolioAPI;
+using FinancialStructures.Reporting;
 using GUISupport;
+using GUISupport.Services;
+using System;
+using System.Collections.Generic;
 
 namespace FinanceWindowsViewModels
 {
-    public class MainWindowViewModel : PropertyChangedBase
+    internal class MainWindowViewModel : PropertyChangedBase
     {
-        private bool fDataWindowVisibility;
-        public bool DataWindowVisibility
+        public EditMethods securityEditMethods = EditMethods.GenerateEditMethods(AccountType.Security);
+
+        public EditMethods bankAccEditMethods = EditMethods.GenerateEditMethods(AccountType.BankAccount);
+
+        public EditMethods sectorEditMethods = EditMethods.GenerateEditMethods(AccountType.Sector);
+
+        public EditMethods currencyEditMethods = EditMethods.GenerateEditMethods(AccountType.Currency);
+
+        internal IPortfolio ProgramPortfolio = new Portfolio();
+
+        private OptionsToolbarViewModel fOptionsToolbarCommands;
+
+        public OptionsToolbarViewModel OptionsToolbarCommands
         {
-            get { return fDataWindowVisibility; }
-            set { fDataWindowVisibility = value; OnPropertyChanged(); }
-        }
-
-        private bool fSecurityEditWindowVisibility;
-        public bool SecurityEditWindowVisibility
-        {
-            get { return fSecurityEditWindowVisibility; }
-            set { fSecurityEditWindowVisibility = value; OnPropertyChanged(); }
-        }
-
-        private bool fBankAccEditWindowVisibility;
-        public bool BankAccEditWindowVisibility
-        {
-            get { return fBankAccEditWindowVisibility; }
-            set { fBankAccEditWindowVisibility = value; OnPropertyChanged(); }
-        }
-
-        private bool fSectorEditWindowVisibility;
-        public bool SectorEditWindowVisibility
-        {
-            get { return fSectorEditWindowVisibility; }
-            set { fSectorEditWindowVisibility = value; OnPropertyChanged(); }
-        }
-        private bool fStatsEditWindowVisibility;
-        public bool StatsEditWindowVisibility
-        {
-            get { return fStatsEditWindowVisibility; }
-            set { fStatsEditWindowVisibility = value; OnPropertyChanged(); }
-        }
-
-        public MainWindowViewModel()
-        {
-            OptionsPanelCommands = new OptionsPanelViewModel(UpdateWindow,UpdateSubWindow, displayWindowChoice, UpdateReports);
-            DataView = new BasicDataViewModel(UpdateWindow);
-            ReportsViewModel = new ReportingWindowViewModel();
-            DataWindowVisibility = true;
-            SecurityEditWindowVisibility = false;
-        }
-        Action<ErrorReports> UpdateReports => (val) => AddReports(val);
-
-        public void AddReports(ErrorReports reports)
-        {
-            ReportsViewModel.UpdateReports(reports);
-        }
-
-        Action<bool> UpdateWindow => (val) => UpdateData(val);
-
-        public void UpdateData(object obj)
-        {
-            if (obj is bool updateReportsOnly)
-            {
-                if (!updateReportsOnly)
-                {
-                    DataView.DataUpdate();
-                }
-
-                UpdateSubWindowData(false);
-            }
-        }
-
-        Action<bool> UpdateSubWindow => (val) => UpdateSubWindowData(val);
-
-        public void UpdateSubWindowData(object obj)
-        {
-            if (SecurityEditViewModel != null)
-            {
-                SecurityEditViewModel.UpdateFundListBox();
-            }
-            if (BankAccEditViewModel != null)
-            {
-                BankAccEditViewModel.UpdateAccountListBox();
-            }
-            if (SectorEditViewModel != null)
-            {
-                SectorEditViewModel.UpdateSectorListBox();
-            }
-            if (StatsEditViewModel != null)
-            {
-                StatsEditViewModel.GenerateStatistics();
-            }
-        }
-
-        Action<string> displayWindowChoice => (name) => WindowDisplayChoice(name);
-
-        private void WindowDisplayChoice(string windowName)
-        {
-            switch (windowName)
-            {
-                case "SecurityEditWindow":
-                    OpenSecurityEditWindow();
-                    break;
-                case "BankAccEditWindow":
-                    OpenBankAccEditWindow();
-                    break;
-                case "SectorEditWindow":
-                    OpenSectorEditWindow();
-                    break;
-                case "StatsCreatorWindow":
-                    OpenStatsCreatorWindow();
-                    break;
-                default:
-                    ShowDataView();
-                    break;
-            }
-        }
-
-        private void ShowDataView()
-        {
-            UpdateData(true);
-            SecurityEditViewModel = null;
-            SectorEditViewModel = null;
-            BankAccEditViewModel = null;
-            StatsEditViewModel = null;
-            DataWindowVisibility = true;
-            SecurityEditWindowVisibility = false;
-            SectorEditWindowVisibility = false;
-            BankAccEditWindowVisibility = false;
-            StatsEditWindowVisibility = false;
-        }
-
-        private void OpenSecurityEditWindow()
-        {
-            SecurityEditViewModel = new SecurityEditWindowViewModel(UpdateWindow, displayWindowChoice, UpdateReports);
-            DataWindowVisibility = false;
-            SectorEditWindowVisibility = false;
-            BankAccEditWindowVisibility = false;
-            StatsEditWindowVisibility = false;
-            SecurityEditWindowVisibility = true;
-        }
-
-        private void OpenBankAccEditWindow()
-        {
-            BankAccEditViewModel = new BankAccEditWindowViewModel(UpdateWindow, displayWindowChoice, UpdateReports);
-            DataWindowVisibility = false;
-            SectorEditWindowVisibility = false;
-            SecurityEditWindowVisibility = false;
-            StatsEditWindowVisibility = false;
-            BankAccEditWindowVisibility = true;
-        }
-        private void OpenSectorEditWindow()
-        {
-            SectorEditViewModel = new SectorEditWindowViewModel(UpdateWindow, displayWindowChoice, UpdateReports);
-            DataWindowVisibility = false;
-            SecurityEditWindowVisibility = false;
-            BankAccEditWindowVisibility = false;
-            StatsEditWindowVisibility = false;
-            SectorEditWindowVisibility = true;
-        }
-
-        private void OpenStatsCreatorWindow()
-        {
-            StatsEditViewModel = new StatsCreatorWindowViewModel(UpdateWindow, displayWindowChoice, UpdateReports);
-            DataWindowVisibility = false;
-            SecurityEditWindowVisibility = false;
-            BankAccEditWindowVisibility = false;
-            SectorEditWindowVisibility = false;
-            StatsEditWindowVisibility = true;
-        }
-
-        private OptionsPanelViewModel fOptionsPanelCommands;
-
-        public OptionsPanelViewModel OptionsPanelCommands
-        {
-            get { return fOptionsPanelCommands; }
-            set { fOptionsPanelCommands = value; OnPropertyChanged(); }
-        }
-        private BasicDataViewModel fDataView;
-
-        public BasicDataViewModel DataView
-        {
-            get { return fDataView; }
-            set { fDataView = value; OnPropertyChanged(); }
-        }
-
-        private SecurityEditWindowViewModel fSecurityEditViewModel;
-        public SecurityEditWindowViewModel SecurityEditViewModel
-        {
-            get { return fSecurityEditViewModel; }
-            set { fSecurityEditViewModel = value; OnPropertyChanged(); }
-        }
-
-        private SectorEditWindowViewModel fSectorEditViewModel;
-
-        public SectorEditWindowViewModel SectorEditViewModel
-        {
-            get { return fSectorEditViewModel; }
-            set { fSectorEditViewModel = value; OnPropertyChanged(); }
-        }
-
-        private BankAccEditWindowViewModel fBankAccEditViewModel;
-
-        public BankAccEditWindowViewModel BankAccEditViewModel
-        {
-            get { return fBankAccEditViewModel; }
-            set { fBankAccEditViewModel = value; OnPropertyChanged(); }
-        }
-
-        private StatsCreatorWindowViewModel fStatsViewModel;
-
-        public StatsCreatorWindowViewModel StatsEditViewModel
-        {
-            get { return fStatsViewModel; }
-            set { fStatsViewModel = value; OnPropertyChanged(); }
+            get { return fOptionsToolbarCommands; }
+            set { fOptionsToolbarCommands = value; OnPropertyChanged(); }
         }
 
         private ReportingWindowViewModel fReports;
+
         public ReportingWindowViewModel ReportsViewModel
-        { 
+        {
             get { return fReports; }
-            set { fReports = value; OnPropertyChanged();} 
+            set { fReports = value; OnPropertyChanged(); }
+        }
+
+        /// <summary>
+        /// The collection of tabs to hold the data and interactions for the various subwindows.
+        /// </summary>
+        public List<object> Tabs { get; } = new List<object>(6);
+
+        public MainWindowViewModel(IFileInteractionService fileInteractionService, IDialogCreationService dialogCreationService)
+        {
+            ReportsViewModel = new ReportingWindowViewModel();
+            ReportLogger = new LogReporter(ReportsViewModel.UpdateReport);
+
+            OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService);
+            Tabs.Add(new BasicDataViewModel(ProgramPortfolio));
+            Tabs.Add(new SecurityEditWindowViewModel(ProgramPortfolio, UpdateDataCallback, securityEditMethods, ReportLogger, fileInteractionService, dialogCreationService));
+            Tabs.Add(new SingleValueEditWindowViewModel("Bank Account Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, bankAccEditMethods, AccountType.BankAccount));
+            Tabs.Add(new SingleValueEditWindowViewModel("Sector Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, sectorEditMethods, AccountType.Sector));
+            Tabs.Add(new SingleValueEditWindowViewModel("Currency Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, currencyEditMethods, AccountType.Currency));
+            Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, fileInteractionService, dialogCreationService));
+
+
+        }
+
+        private void AllData_portfolioChanged(object sender, EventArgs e)
+        {
+            foreach (var tab in Tabs)
+            {
+                if (tab is ViewModelBase vm)
+                {
+                    vm.UpdateData(ProgramPortfolio);
+                }
+            }
+
+            OptionsToolbarCommands.UpdateData(ProgramPortfolio);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        internal readonly IReportLogger ReportLogger;
+
+        /// <summary>
+        /// The mechanism by which the data in <see cref="Portfolio"/> is updated. This includes a GUI update action.
+        /// </summary>
+        private Action<Action<IPortfolio>> UpdateDataCallback => action => UpdateData(action);
+
+        private void UpdateData(object obj)
+        {
+            if (obj is Action<IPortfolio> updateAction)
+            {
+                updateAction(ProgramPortfolio);
+                AllData_portfolioChanged(obj, null);
+            }
         }
     }
 }

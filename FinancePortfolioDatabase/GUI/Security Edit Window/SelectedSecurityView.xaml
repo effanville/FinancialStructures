@@ -1,0 +1,71 @@
+﻿<UserControl x:Class="FinanceWindows.SelectedSecurityView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" 
+             d:DesignWidth="800">
+    <Grid Width="Auto">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0" 
+                    Grid.Column="0" 
+                    Orientation="Horizontal">
+            <Button Content="Delete Valuation"
+                    Style="{StaticResource ResourceKey=defaultButton}"
+                    Command="{Binding DeleteValuationCommand}"
+                    ToolTip="Deletes the security data highlighted."/>
+            <Button Content="Import Data"
+                    Style="{StaticResource ResourceKey=defaultButton}"
+                    Command="{Binding AddCsvData}"
+                    ToolTip="Adds data to the selected security from a csv file."/>
+            <Button Content="Export Data"
+                    Style="{StaticResource ResourceKey=defaultButton}"
+                    Command="{Binding ExportCsvData}"
+                    ToolTip="Exports data from the selected security to a csv file."/>
+        </StackPanel>
+
+
+        <DataGrid Grid.Row="1" 
+                  Grid.Column="0"
+                  Margin="5"
+                  SelectionUnit="FullRow"
+                  CanUserAddRows="True"
+                  CanUserDeleteRows="False"
+                  AutoGenerateColumns="False"
+                  ItemsSource="{Binding Path=SelectedSecurityData, Mode=TwoWay}"
+                  SelectedItem="{Binding Path=selectedValues, Mode=TwoWay}"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="RowEditEnding">
+                    <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=AddEditSecurityDataCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Date" 
+                                    MinWidth="50"
+                                    Binding="{Binding Path=Date, StringFormat=\{0:dd.MM.yyyy\}, UpdateSourceTrigger=LostFocus}"/>
+                <DataGridTextColumn Header="Unit Price" 
+                                    MinWidth="50"
+                                    Binding="{Binding Path=UnitPrice, UpdateSourceTrigger=LostFocus}"/>
+                <DataGridTextColumn Header="Number of Shares"
+                                    MinWidth="50"
+                                    Binding="{Binding Path=ShareNo, UpdateSourceTrigger=LostFocus}"/>
+                <DataGridTextColumn Header="Value"
+                                    MinWidth="50"
+                                    Binding="{Binding Path=Value, UpdateSourceTrigger=LostFocus}"/>
+                <DataGridTextColumn Header="New Investment"
+                                    MinWidth="50"
+                                    Binding="{Binding Path=NewInvestment, UpdateSourceTrigger=LostFocus}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

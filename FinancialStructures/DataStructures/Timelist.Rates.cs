@@ -1,5 +1,6 @@
-﻿using System;
-using FinancialStructures.FinanceFunctionsList;
+﻿using FinancialStructures.FinanceFunctions;
+using System;
+using System.Collections.Generic;
 
 namespace FinancialStructures.DataStructures
 {
@@ -8,6 +9,23 @@ namespace FinancialStructures.DataStructures
     /// </summary>
     public partial class TimeList
     {
+        public TimeList Inverted()
+        {
+            var invertedValues = new List<DailyValuation>();
+            if (fValues != null && fValues.Count > 0)
+            {
+                foreach (var value in fValues)
+                {
+                    invertedValues.Add(new DailyValuation(value.Day, 1 / value.Value));
+                }
+            }
+
+            return new TimeList(invertedValues);
+        }
+
+        /// <summary>
+        /// Adds all values in the list.
+        /// </summary>
         public double Sum()
         {
             if (fValues != null && fValues.Count > 0)
@@ -23,13 +41,14 @@ namespace FinancialStructures.DataStructures
 
             return double.NaN;
         }
+
         /// <summary>
         /// returns the CAR of the timelist between the dates provided.
         /// </summary>
         public double CAR(DateTime earlierTime, DateTime laterTime)
         {
-            var earlierValue = GetNearestEarlierValue(earlierTime);
-            var laterValue = GetNearestEarlierValue(laterTime);
+            var earlierValue = NearestEarlierValue(earlierTime);
+            var laterValue = NearestEarlierValue(laterTime);
             if (earlierValue == null || laterValue == null)
             {
                 return double.NaN;
@@ -45,7 +64,7 @@ namespace FinancialStructures.DataStructures
             // if have only one investment easy to return the CAR.
             if (Count() == 1)
             {
-                return FinancialFunctions.CAR(latestValue, GetFirstValuation());
+                return FinancialFunctions.CAR(latestValue, FirstValuation());
             }
 
             return FinancialFunctions.IRR(fValues, latestValue);

@@ -1,16 +1,24 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.5</TargetFramework>
+    <TargetFrameworks>net48;netcoreapp3.1</TargetFrameworks>
     <Deterministic>false</Deterministic>
+    <Platforms>AnyCPU;x64</Platforms>
+    <Configurations>Debug;Release</Configurations>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>bin\FinancialStructures.xml</DocumentationFile>
+    <OutputPath>bin\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <DocumentationFile></DocumentationFile>
+    <OutputPath>..\bin\</OutputPath>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Portfolio\Portfolio.StatisticsPageCreator.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.Net.Http" Version="4.3.4" />
+    <Reference Include="System.Net.Http" />
   </ItemGroup>
 
 </Project>

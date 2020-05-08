@@ -4,42 +4,28 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FinanceWindows"
-        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:cl="clr-namespace:GUISupport"
         mc:Ignorable="d"
         Title="{Binding TitleValue}"
         MinHeight="400"
         MinWidth="400"
-        Background="LightPink"
+        Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}"
         Closing="Window_Closing">
     <Grid Height="Auto"
-                Width="Auto">
+                Width="Auto"
+          Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="*" MaxHeight="40"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <Border Background="#F98866"
-                Height="40"
-                VerticalAlignment="Top"
-                Grid.Row="0">
-            <StackPanel Orientation="Horizontal"
-                        Width="Auto">
-                <TextBlock FontSize="13"
-                           Margin="12 12 12 12"
-                           Text="Select the option on the left hand side "/>
-                <Button Width="25"
-                        Height="25" 
-                        HorizontalAlignment="Right"
-                        Click="OpenHelpDocsCommand" 
-                        ClickMode="Press">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="GuiSupport/helpIcon.png" />
-                        <TextBlock>Open Help Docs</TextBlock>
-                    </StackPanel>
-                </Button>
-            </StackPanel>
-        </Border>
 
-        <local:MainUserControl Grid.Row="1"/>
+        <local:OptionsToolbar Grid.Row="0"
+                              DataContext="{Binding OptionsToolbarCommands}"
+                              Background="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}"/>
+
+        <local:MainUserControl Grid.Row="1" 
+                               DataContext="{Binding}"
+                               Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}"/>
 
     </Grid>
 

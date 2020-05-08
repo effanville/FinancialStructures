@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Globalization;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace FinancePortfolioDatabase.GUI.GuiSupport
+namespace GUISupport
 {
     public static class OutputHelper
     {

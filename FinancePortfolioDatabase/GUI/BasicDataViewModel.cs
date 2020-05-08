@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using GUIAccessorFunctions;
-using FinancialStructures.GUIFinanceStructures;
-using GUISupport;
-using System;
+﻿using FinanceCommonViewModels;
+using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.NamingStructures;
+using FinancialStructures.PortfolioAPI;
+using System.Collections.Generic;
 
 namespace FinanceWindowsViewModels
 {
-    public class BasicDataViewModel : PropertyChangedBase
+    internal class BasicDataViewModel : ViewModelBase
     {
         private List<NameCompDate> fFundNames;
         public List<NameCompDate> FundNames
@@ -15,41 +15,43 @@ namespace FinanceWindowsViewModels
             set { fFundNames = value; OnPropertyChanged(); }
         }
 
-        private List<NameComp> fAccountNames;
-        public List<NameComp> AccountNames
+        private List<NameCompDate> fAccountNames;
+        public List<NameCompDate> AccountNames
         {
             get { return fAccountNames; }
             set { fAccountNames = value; OnPropertyChanged(); }
         }
 
-        private List<NameComp> fSectorNames;
-        public List<NameComp> SectorNames
+        private List<NameCompDate> fSectorNames;
+        public List<NameCompDate> SectorNames
         {
             get { return fSectorNames; }
             set { fSectorNames = value; OnPropertyChanged(); }
         }
 
-        public void DataUpdate()
+        private List<NameCompDate> fCurrencyNames;
+        public List<NameCompDate> CurrencyNames
         {
-            FundNames = DatabaseAccessor.GetSecurityNamesAndCompanies();
-            FundNames.Sort();
-            AccountNames = DatabaseAccessor.GetBankAccountNamesAndCompanies();
-            AccountNames.Sort();
-            SectorNames = DatabaseAccessor.GetSectorNames();
-            SectorNames.Sort();
+            get { return fCurrencyNames; }
+            set { fCurrencyNames = value; OnPropertyChanged(); }
         }
 
-        Action<bool> UpdateMainWindow;
-
-        public BasicDataViewModel(Action<bool> updateWindow)
+        public BasicDataViewModel(IPortfolio portfolio)
+            : base("Overview")
         {
-            UpdateMainWindow = updateWindow;
-            FundNames = DatabaseAccessor.GetSecurityNamesAndCompanies();
+            UpdateData(portfolio);
+        }
+
+        public override void UpdateData(IPortfolio portfolio)
+        {
+            FundNames = portfolio.NameData(AccountType.Security);
             FundNames.Sort();
-            AccountNames = DatabaseAccessor.GetBankAccountNamesAndCompanies();
+            AccountNames = portfolio.NameData(AccountType.BankAccount);
             AccountNames.Sort();
-            SectorNames = DatabaseAccessor.GetSectorNames();
+            SectorNames = portfolio.NameData(AccountType.Sector);
             SectorNames.Sort();
+            CurrencyNames = portfolio.NameData(AccountType.Currency);
+            CurrencyNames.Sort();
         }
     }
 }

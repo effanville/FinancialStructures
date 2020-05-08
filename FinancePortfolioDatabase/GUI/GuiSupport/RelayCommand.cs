@@ -3,7 +3,7 @@ using System.Windows.Input;
 
 namespace GUISupport
 {
-    public class RelayCommand<T> : ICommand
+    internal class RelayCommand<T> : ICommand
     {
         private readonly Predicate<T> _canExecute;
         private readonly Action<T> _execute;
@@ -41,7 +41,7 @@ namespace GUISupport
         }
     }
 
-    public class RelayCommand : ICommand
+    internal class RelayCommand : ICommand
     {
         private readonly Predicate<object> _canExecute;
         private readonly Action<object> _execute;
