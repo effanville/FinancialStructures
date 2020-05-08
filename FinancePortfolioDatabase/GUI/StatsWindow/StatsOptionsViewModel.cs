@@ -3,12 +3,13 @@ using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Reporting;
 using FinancialStructures.StatisticStructures;
 using FinancialStructures.StatsMakers;
-using GUISupport;
-using GUISupport.Services;
+using UICommon.Services;
 using System;
 using System.Collections.Generic;
-using System.Windows;
 using System.Windows.Input;
+using UICommon.Interfaces;
+using UICommon.Commands;
+using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
@@ -55,7 +56,7 @@ namespace FinanceWindowsViewModels
 
         public ICommand ExportCommand { get; }
 
-        private void ExecuteExportCommand(Object obj)
+        private void ExecuteExportCommand(ICloseable window)
         {
             var result = fFileService.SaveFile(fFileExtension, Portfolio.DatabaseName + "-" + fExtension + "HTMLStats" + fFileExtension, Portfolio.Directory, fExtension + " file|*" + fFileExtension + "|All files|*.*");
             string path = null;
@@ -97,10 +98,7 @@ namespace FinanceWindowsViewModels
             }
 
             CloseWindowAction(path);
-            if (obj is ICloseable window)
-            {
-                window.Close();
-            }
+            window.Close();
         }
 
         private readonly IFileInteractionService fFileService;
@@ -124,7 +122,7 @@ namespace FinanceWindowsViewModels
             fFileService = fileService;
             fDialogCreationService = dialogCreation;
             CloseWindowAction = CloseWindow;
-            ExportCommand = new BasicCommand(ExecuteExportCommand);
+            ExportCommand = new BasicCommand<ICloseable>(ExecuteExportCommand);
 
             var totals = new SecurityStatistics();
             var properties = totals.GetType().GetProperties();

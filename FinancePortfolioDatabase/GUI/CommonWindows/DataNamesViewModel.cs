@@ -1,10 +1,10 @@
 ﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Reporting;
-using GUISupport;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
+using UICommon.Commands;
 
 namespace FinanceCommonViewModels
 {
@@ -91,7 +91,7 @@ namespace FinanceCommonViewModels
         /// Command that opens a tab associated to the selected entry.
         /// </summary>
         public ICommand OpenTabCommand { get; }
-        private void OpenTab(object obj)
+        private void OpenTab()
         {
             LoadSelectedTab(SelectedName);
         }
@@ -130,7 +130,7 @@ namespace FinanceCommonViewModels
         /// Downloads the latest data for the selected entry.
         /// </summary>
         public ICommand DownloadCommand { get; }
-        private void ExecuteDownloadCommand(Object obj)
+        private void ExecuteDownloadCommand()
         {
             if (SelectedName != null)
             {
@@ -143,7 +143,7 @@ namespace FinanceCommonViewModels
         /// Adds a new entry if the view has more than the repository, or edits an entry if these are the same.
         /// </summary>
         public ICommand CreateCommand { get; set; }
-        private void ExecuteCreateEdit(Object obj)
+        private void ExecuteCreateEdit()
         {
             if (((List<NameCompDate>)editMethods.ExecuteFunction(FunctionType.NameUpdate, Portfolio).Result).Count != DataNames.Count)
             {
@@ -190,7 +190,7 @@ namespace FinanceCommonViewModels
         /// Deletes the selected entry.
         /// </summary>
         public ICommand DeleteCommand { get; }
-        private void ExecuteDelete(Object obj)
+        private void ExecuteDelete()
         {
             if (SelectedName.Name != null)
             {

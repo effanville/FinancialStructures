@@ -1,7 +1,7 @@
 ﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using GUISupport;
 using System;
+using UICommon.ViewModelBases;
 
 namespace FinanceCommonViewModels
 {

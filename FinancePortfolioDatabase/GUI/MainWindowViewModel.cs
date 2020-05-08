@@ -3,10 +3,10 @@ using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Reporting;
-using GUISupport;
-using GUISupport.Services;
+using UICommon.Services;
 using System;
 using System.Collections.Generic;
+using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {

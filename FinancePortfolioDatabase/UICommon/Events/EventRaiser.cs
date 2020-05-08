@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace GUISupport
+namespace UICommon.Events
 {
-    internal static class EventRaiser
+    public static class EventRaiser
     {
         public static void Raise(this EventHandler handler, object sender)
         {

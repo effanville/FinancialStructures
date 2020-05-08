@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Controls.DataVisualization.Charting;
 
-namespace GUISupport
+namespace UICommon.DisplayObjects
 {
     internal class BindableChart : Chart
     {

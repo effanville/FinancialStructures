@@ -1,4 +1,4 @@
-﻿namespace GUISupport.Services
+﻿namespace UICommon.Services
 {
     /// <summary>
     /// Interface for interacting with the file structure.

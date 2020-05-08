@@ -1,22 +1,22 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace GUISupport
+namespace UICommon.Commands
 {
-    internal class BasicCommand : ICommand
+    public sealed class BasicCommand<T> : ICommand
     {
-        private Action<object> execute;
+        private readonly Action<T> fExecute;
 
-        private Predicate<object> canExecute;
+        private readonly Predicate<T> fCanExecute;
 
-        private event EventHandler CanExecuteChangedInternal;
+        private event EventHandler fCanExecuteChangedInternal;
 
-        public BasicCommand(Action<object> execute)
+        public BasicCommand(Action<T> execute)
             : this(execute, DefaultCanExecute)
         {
         }
 
-        public BasicCommand(Action<object> execute, Predicate<object> canExecute)
+        public BasicCommand(Action<T> execute, Predicate<T> canExecute)
         {
             if (execute == null)
             {
@@ -28,8 +28,8 @@ namespace GUISupport
                 throw new ArgumentNullException("canExecute");
             }
 
-            this.execute = execute;
-            this.canExecute = canExecute;
+            fExecute = execute;
+            fCanExecute = canExecute;
         }
 
         public event EventHandler CanExecuteChanged
@@ -37,29 +37,29 @@ namespace GUISupport
             add
             {
                 CommandManager.RequerySuggested += value;
-                this.CanExecuteChangedInternal += value;
+                fCanExecuteChangedInternal += value;
             }
 
             remove
             {
                 CommandManager.RequerySuggested -= value;
-                this.CanExecuteChangedInternal -= value;
+                fCanExecuteChangedInternal -= value;
             }
         }
 
         public bool CanExecute(object parameter)
         {
-            return this.canExecute != null && this.canExecute(parameter);
+            return fCanExecute != null && fCanExecute((T)parameter);
         }
 
         public void Execute(object parameter)
         {
-            this.execute(parameter);
+            fExecute((T)parameter);
         }
 
         public void OnCanExecuteChanged()
         {
-            EventHandler handler = this.CanExecuteChangedInternal;
+            EventHandler handler = fCanExecuteChangedInternal;
             if (handler != null)
             {
                 //DispatcherHelper.BeginInvokeOnUIThread(() => handler.Invoke(this, EventArgs.Empty));
@@ -67,13 +67,7 @@ namespace GUISupport
             }
         }
 
-        public void Destroy()
-        {
-            this.canExecute = _ => false;
-            this.execute = _ => { return; };
-        }
-
-        private static bool DefaultCanExecute(object parameter)
+        private static bool DefaultCanExecute(T parameter)
         {
             return true;
         }

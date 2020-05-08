@@ -1,6 +1,6 @@
 ﻿using FinanceWindowsViewModels;
 using FinancialStructures.PortfolioAPI;
-using GUISupport.Services;
+using UICommon.Services;
 using System;
 using System.Reflection;
 using System.Windows;

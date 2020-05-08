@@ -2,7 +2,7 @@
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Reporting;
-using GUISupport.Services;
+using UICommon.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

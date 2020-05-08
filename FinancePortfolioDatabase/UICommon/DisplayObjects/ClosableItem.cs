@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace GuiSupport
+namespace UICommon.DisplayObjects
 {
     class ClosableTab : TabItem
     {

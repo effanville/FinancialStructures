@@ -1,7 +1,7 @@
 ﻿using Microsoft.Win32;
 using System.Windows;
 
-namespace GUISupport.Services
+namespace UICommon.Services
 {
     /// <summary>
     /// Interaction service for the file system. Note this lives in the UI, but is a service for the view models.

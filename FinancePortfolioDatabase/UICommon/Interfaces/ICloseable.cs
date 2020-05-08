@@ -1,4 +1,4 @@
-﻿namespace GUISupport
+﻿namespace UICommon.Interfaces
 {
     public interface ICloseable
     {

@@ -1,7 +1,7 @@
 ﻿using FinanceWindowsViewModels;
-using GUISupport;
 using System;
 using System.Windows.Input;
+using UICommon.Commands;
 
 namespace FinanceViewModels.StatsViewModels
 {
@@ -32,37 +32,37 @@ namespace FinanceViewModels.StatsViewModels
             OpenHtmlViewerTab = new BasicCommand(ExecuteHtmlViewerTab);
         }
 
-        private void ExecuteHtmlViewerTab(object obj)
+        private void ExecuteHtmlViewerTab()
         {
             OpenTab(TabType.StatsViewer, null);
         }
 
-        private void ExecuteChartsTab(object obj)
+        private void ExecuteChartsTab()
         {
             OpenTab(TabType.StatsCharts, null);
         }
 
-        private void ExecuteHistoryTab(object obj)
+        private void ExecuteHistoryTab()
         {
             OpenTab(TabType.PortfolioHistory, null);
         }
 
-        private void ExecuteBankAccTab(object obj)
+        private void ExecuteBankAccTab()
         {
             OpenTab(TabType.BankAccountStats, null);
         }
 
-        private void ExecuteSecInvTab(object obj)
+        private void ExecuteSecInvTab()
         {
             OpenTab(TabType.SecurityInvestment, null);
         }
 
-        private void ExecuteSecuritiesTab(object obj)
+        private void ExecuteSecuritiesTab()
         {
             OpenTab(TabType.SecurityStats, null);
         }
 
-        private void ExecuteDatabaseTab(object obj)
+        private void ExecuteDatabaseTab()
         {
             OpenTab(TabType.DatabaseStats, null);
         }

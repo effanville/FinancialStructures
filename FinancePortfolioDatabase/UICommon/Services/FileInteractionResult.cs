@@ -1,9 +1,9 @@
-﻿namespace GUISupport.Services
+﻿namespace UICommon.Services
 {
     /// <summary>
     /// The result of an interaction with a file system.
     /// </summary>
-    public class FileInteractionResult
+    public sealed class FileInteractionResult
     {
         /// <summary>
         /// Whether the interaction was a success or not.

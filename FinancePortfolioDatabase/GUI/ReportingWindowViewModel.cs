@@ -1,10 +1,11 @@
 ﻿using FinancialStructures.Reporting;
-using GUISupport;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
+using UICommon.Commands;
+using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
@@ -65,7 +66,7 @@ namespace FinanceWindowsViewModels
 
         public ICommand ClearReportsCommand { get; }
 
-        private void ExecuteClearReports(Object obj)
+        private void ExecuteClearReports()
         {
             Reports.Clear();
             SyncReports();
@@ -73,7 +74,7 @@ namespace FinanceWindowsViewModels
 
         public ICommand ClearSingleReportCommand { get; }
 
-        private void ExecuteClearSelectedReport(Object obj)
+        private void ExecuteClearSelectedReport()
         {
             Reports.RemoveReport(IndexToDelete);
             SyncReports();

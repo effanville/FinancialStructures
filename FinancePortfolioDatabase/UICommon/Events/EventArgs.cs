@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace GUISupport
+namespace UICommon.Events
 {
-    internal class EventArgs<T> : EventArgs
+    public sealed class EventArgs<T> : EventArgs
     {
         public EventArgs(T value)
         {

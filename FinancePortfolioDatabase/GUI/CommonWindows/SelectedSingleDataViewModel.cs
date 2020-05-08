@@ -4,8 +4,8 @@ using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Reporting;
-using GUISupport;
-using GUISupport.Services;
+using UICommon.Services;
+using UICommon.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -117,7 +117,7 @@ namespace FinanceCommonViewModels
 
         public ICommand EditDataCommand { get; set; }
 
-        private void ExecuteEditDataCommand(Object obj)
+        private void ExecuteEditDataCommand()
         {
             if (SelectedName != null)
             {
@@ -151,7 +151,7 @@ namespace FinanceCommonViewModels
 
         public ICommand DeleteValuationCommand { get; }
 
-        private void ExecuteDeleteValuation(Object obj)
+        private void ExecuteDeleteValuation()
         {
             if (SelectedName != null)
             {
@@ -165,7 +165,7 @@ namespace FinanceCommonViewModels
 
         public ICommand AddCsvData { get; }
 
-        private void ExecuteAddCsvData(Object obj)
+        private void ExecuteAddCsvData()
         {
             if (fSelectedName != null)
             {
@@ -195,7 +195,7 @@ namespace FinanceCommonViewModels
 
         public ICommand ExportCsvData { get; }
 
-        private void ExecuteExportCsvData(Object obj)
+        private void ExecuteExportCsvData()
         {
             if (fSelectedName != null)
             {

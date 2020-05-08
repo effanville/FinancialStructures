@@ -5,11 +5,11 @@ using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Reporting;
-using GUISupport;
-using GUISupport.Services;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
+using UICommon.Commands;
+using UICommon.Services;
 
 namespace FinanceWindowsViewModels
 {
@@ -80,7 +80,7 @@ namespace FinanceWindowsViewModels
 
         public ICommand DeleteValuationCommand { get; }
 
-        private void ExecuteDeleteValuation(Object obj)
+        private void ExecuteDeleteValuation()
         {
             if (fSelectedName != null && fSelectedValues != null)
             {
@@ -90,7 +90,7 @@ namespace FinanceWindowsViewModels
 
         public ICommand AddCsvData { get; }
 
-        private void ExecuteAddCsvData(Object obj)
+        private void ExecuteAddCsvData()
         {
             if (fSelectedName != null)
             {
@@ -120,7 +120,7 @@ namespace FinanceWindowsViewModels
 
         public ICommand ExportCsvData { get; }
 
-        private void ExecuteExportCsvData(Object obj)
+        private void ExecuteExportCsvData()
         {
             if (fSelectedName != null)
             {
@@ -141,7 +141,7 @@ namespace FinanceWindowsViewModels
 
         public ICommand AddEditSecurityDataCommand { get; set; }
 
-        private void ExecuteAddEditSecData(Object obj)
+        private void ExecuteAddEditSecData()
         {
             if (fSelectedName != null)
             {

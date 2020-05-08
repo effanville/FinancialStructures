@@ -4,7 +4,7 @@ using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Reporting;
-using GUISupport.Services;
+using UICommon.Services;
 using Moq;
 using System;
 using System.Windows;

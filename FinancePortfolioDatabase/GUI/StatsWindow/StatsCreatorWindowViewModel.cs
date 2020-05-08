@@ -3,11 +3,11 @@ using FinanceViewModels.StatsViewModels;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Reporting;
 using FinancialStructures.StatsMakers;
-using GUISupport;
-using GUISupport.Services;
+using UICommon.Services;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using UICommon.Commands;
 
 namespace FinanceWindowsViewModels
 {
@@ -58,14 +58,14 @@ namespace FinanceWindowsViewModels
 
         public ICommand ExportHistoryCommand { get; }
 
-        private void ExecuteExportToCSVCommand(Object obj)
+        private void ExecuteExportToCSVCommand()
         {
             Action<string> StatsOptionFeedback = (filePath) => StatsFeedback(filePath);
             var context = new StatsOptionsViewModel(fPortfolio, ExportType.CSV, ReportLogger, StatsOptionFeedback, fFileService, fDialogCreationService);
             fDialogCreationService.DisplayCustomDialog(context);
         }
 
-        private void ExecuteInvestmentListCommand(Object obj)
+        private void ExecuteInvestmentListCommand()
         {
             var result = fFileService.SaveFile(".csv", fPortfolio.DatabaseName + "-CSVStats.csv", fPortfolio.Directory, "CSV file|*.csv|All files|*.*");
             if (result.Success != null && (bool)result.Success)
@@ -83,7 +83,7 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private void ExecuteCreateHistory(Object obj)
+        private void ExecuteCreateHistory()
         {
             var result = fFileService.SaveFile(".csv", DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + fPortfolio.DatabaseName + "-History.csv", fPortfolio.Directory, "CSV file|*.csv|All files|*.*");
             if (result.Success != null && (bool)result.Success)
@@ -101,7 +101,7 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private void ExecuteCreateHTMLCommand(Object obj)
+        private void ExecuteCreateHTMLCommand()
         {
             Action<string> StatsOptionFeedback = (filePath => StatsFeedback(filePath));
             var context = new StatsOptionsViewModel(fPortfolio, ExportType.HTML, ReportLogger, StatsOptionFeedback, fFileService, fDialogCreationService);

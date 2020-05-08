@@ -30,4 +30,8 @@
     <ProjectReference Include="..\FinancialStructures\FinancialStructures.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UICommon\Styles\" />
+  </ItemGroup>
+
 </Project>

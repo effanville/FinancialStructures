@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GUISupport.Services
+namespace UICommon.Services
 {
     public class TestFileInteractionService : IFileInteractionService
     {
