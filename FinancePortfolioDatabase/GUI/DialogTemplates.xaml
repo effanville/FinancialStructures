@@ -3,7 +3,7 @@
                     xmlns:viewStats="clr-namespace:FinanceWindows.StatsWindows"
                     xmlns:vm="clr-namespace:FinanceWindowsViewModels">
     <DataTemplate DataType="{x:Type vm:StatsOptionsViewModel}">
-        <viewStats:StatsOptionsWindow/>
+        <viewStats:StatsOptionsWindow />
     </DataTemplate>
     <Style TargetType="{x:Type Rectangle}" />
 </ResourceDictionary>

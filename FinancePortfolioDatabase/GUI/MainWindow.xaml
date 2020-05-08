@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FinanceWindows"
-        xmlns:cl="clr-namespace:GUISupport"
+        xmlns:cl="clr-namespace:Colouring"
         mc:Ignorable="d"
         Title="{Binding TitleValue}"
         MinHeight="400"
@@ -12,21 +12,18 @@
         Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}"
         Closing="Window_Closing">
     <Grid Height="Auto"
-                Width="Auto"
+          Width="Auto"
           Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" MaxHeight="40"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="*"
+                           MaxHeight="40" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
         <local:OptionsToolbar Grid.Row="0"
                               DataContext="{Binding OptionsToolbarCommands}"
-                              Background="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}"/>
-
-        <local:MainUserControl Grid.Row="1" 
+                              Background="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}" />
+        <local:MainUserControl Grid.Row="1"
                                DataContext="{Binding}"
-                               Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}"/>
-
+                               Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}" />
     </Grid>
-
 </Window>

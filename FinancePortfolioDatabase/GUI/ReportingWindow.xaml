@@ -1,35 +1,32 @@
 ﻿<Grid x:Class="FinanceWindows.ReportingWindow"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:cl="clr-namespace:GUISupport"
+      xmlns:cl="clr-namespace:Colouring"
       mc:Ignorable="d"
       HorizontalAlignment="Stretch"
       VerticalAlignment="Stretch">
-    
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
-        
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="110"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="110" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Grid Background="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}"
               Grid.Column="0">
             <StackPanel VerticalAlignment="Top">
                 <Button Style="{StaticResource ResourceKey=defaultButton}"
-                    Content="Clear Reports"
-                    Command="{Binding ClearReportsCommand}"/>
-                
+                        Content="Clear Reports"
+                        Command="{Binding ClearReportsCommand}" />
                 <Button Content="Clear Selected"
                         Style="{StaticResource ResourceKey=defaultButton}"
-                        Command="{Binding ClearSingleReportCommand}"/>
-                <TextBlock Margin="5 5 5 5" 
-                           Text="Display Reports:"/>
+                        Command="{Binding ClearSingleReportCommand}" />
+                <TextBlock Margin="5 5 5 5"
+                           Text="Display Reports:" />
                 <ComboBox Margin="5 5 5 5"
                           ItemsSource="{Binding EnumValues}"
-                          SelectedValue="{Binding Path=ReportingSeverity}"/>
+                          SelectedValue="{Binding Path=ReportingSeverity}" />
             </StackPanel>
         </Grid>
         <DataGrid Name="SecBox"
@@ -42,7 +39,6 @@
                   SelectedIndex="{Binding IndexToDelete}"
                   Grid.Column="1"
                   Margin="10 10 10 10"
-                  ScrollViewer.VerticalScrollBarVisibility="Auto">
-        </DataGrid>
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"></DataGrid>
     </Grid>
 </Grid>
