@@ -18,7 +18,7 @@
         
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="150"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0"
@@ -40,8 +40,11 @@
             </TabControl.ItemContainerStyle>
         </TabControl>
 
-        <local:ReportingWindow VerticalAlignment="Stretch" 
-                               DataContext="{Binding ReportsViewModel}"
-                               Grid.Row="1"/>
+        <Expander VerticalAlignment="Stretch" 
+                  Background="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}"
+                  IsExpanded="True"
+                  Header="Error Reports"
+                  Content="{Binding ReportsViewModel}"
+                  Grid.Row="1"/>
     </Grid>
 </UserControl>

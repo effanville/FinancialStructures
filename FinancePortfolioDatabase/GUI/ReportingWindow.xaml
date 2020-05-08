@@ -17,16 +17,16 @@
         </Grid.ColumnDefinitions>
         <Grid Background="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}"
               Grid.Column="0">
-        <StackPanel 
-                    VerticalAlignment="Top">
-            <TextBlock Margin="5 5 5 5" Text="Error Reports"/>
-            <Button Style="{StaticResource ResourceKey=defaultButton}"
+            <StackPanel VerticalAlignment="Top">
+                <Button Style="{StaticResource ResourceKey=defaultButton}"
                     Content="Clear Reports"
                     Command="{Binding ClearReportsCommand}"/>
-            <Button Content="Clear Selected"
-                    Style="{StaticResource ResourceKey=defaultButton}"
-                    Command="{Binding ClearSingleReportCommand}"/>
-                <TextBlock Margin="5 5 5 5" Text="Display Reports:"/>
+                
+                <Button Content="Clear Selected"
+                        Style="{StaticResource ResourceKey=defaultButton}"
+                        Command="{Binding ClearSingleReportCommand}"/>
+                <TextBlock Margin="5 5 5 5" 
+                           Text="Display Reports:"/>
                 <ComboBox Margin="5 5 5 5"
                           ItemsSource="{Binding EnumValues}"
                           SelectedValue="{Binding Path=ReportingSeverity}"/>
