@@ -10,10 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using UICommon.ViewModelBases;
 
 namespace FinanceCommonViewModels
 {
-    internal class SelectedSingleDataViewModel : ViewModelBase
+    internal class SelectedSingleDataViewModel : ViewModelBase<IPortfolio>
     {
         private AccountType TypeOfAccount;
         private IPortfolio Portfolio;
@@ -109,6 +110,7 @@ namespace FinanceCommonViewModels
                 SelectedData = null;
             }
         }
+
         public override void UpdateData(IPortfolio portfolio)
         {
             UpdateData(portfolio, null);

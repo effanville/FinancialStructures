@@ -1,5 +1,4 @@
-﻿using FinanceCommonViewModels;
-using FinanceViewModels.StatsViewModels;
+﻿using FinanceViewModels.StatsViewModels;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Reporting;
 using FinancialStructures.StatsMakers;
@@ -8,10 +7,11 @@ using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using UICommon.Commands;
+using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
-    internal class StatsCreatorWindowViewModel : ViewModelBase
+    internal class StatsCreatorWindowViewModel : ViewModelBase<IPortfolio>
     {
         private IPortfolio fPortfolio;
 

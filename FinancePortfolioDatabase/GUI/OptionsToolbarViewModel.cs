@@ -1,5 +1,4 @@
-﻿using FinanceCommonViewModels;
-using FinanceWindows;
+﻿using FinanceWindows;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Reporting;
@@ -10,10 +9,11 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using UICommon.Commands;
+using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
-    internal class OptionsToolbarViewModel : ViewModelBase
+    internal class OptionsToolbarViewModel : ViewModelBase<IPortfolio>
     {
         private string fFileName;
         private string fDirectory;

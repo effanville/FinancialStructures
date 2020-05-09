@@ -47,7 +47,7 @@ namespace FPD_UI_UnitTests.TestConstruction
             return DummyDataUpdater;
         }
 
-        internal static Action<NameData> DummyOpenTab => action => OpenTab(action);
+        internal static Action<object> DummyOpenTab => action => OpenTab(action);
 
         private static void OpenTab(object obj)
         {

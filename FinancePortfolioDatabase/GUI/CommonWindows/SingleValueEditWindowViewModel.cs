@@ -7,10 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using UICommon.ViewModelBases;
 
 namespace FinanceCommonViewModels
 {
-    internal class SingleValueEditWindowViewModel : ViewModelBase
+    internal class SingleValueEditWindowViewModel : ViewModelBase<IPortfolio>
     {
         private AccountType TypeOfAccount;
         internal IPortfolio Portfolio;
@@ -44,7 +45,7 @@ namespace FinanceCommonViewModels
             {
                 foreach (var item in Tabs)
                 {
-                    if (item is ViewModelBase viewModel)
+                    if (item is ViewModelBase<IPortfolio> viewModel)
                     {
                         viewModel.UpdateData(portfolio, tabItem => removableTabs.Add(tabItem));
                     }
@@ -62,9 +63,12 @@ namespace FinanceCommonViewModels
             }
         }
 
-        private void LoadTabFunc(NameData_ChangeLogged name)
+        private void LoadTabFunc(Object obj)
         {
-            Tabs.Add(new SelectedSingleDataViewModel(Portfolio, UpdateDataCallback, ReportLogger, fFileService, fDialogCreationService, EditMethods, name, TypeOfAccount));
+            if (obj is NameData_ChangeLogged name)
+            {
+                Tabs.Add(new SelectedSingleDataViewModel(Portfolio, UpdateDataCallback, ReportLogger, fFileService, fDialogCreationService, EditMethods, name, TypeOfAccount));
+            }
         }
     }
 }

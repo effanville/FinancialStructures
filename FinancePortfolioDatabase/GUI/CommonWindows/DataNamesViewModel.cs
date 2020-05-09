@@ -5,13 +5,14 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 using UICommon.Commands;
+using UICommon.ViewModelBases;
 
 namespace FinanceCommonViewModels
 {
     /// <summary>
     /// Data store behind view for a list of names and associated update name methods.
     /// </summary>
-    internal class DataNamesViewModel : ViewModelBase
+    internal class DataNamesViewModel : ViewModelBase<IPortfolio>
     {
         /// <summary>
         /// Reference to the repository
@@ -69,7 +70,7 @@ namespace FinanceCommonViewModels
         /// <summary>
         /// Construct an instance.
         /// </summary>
-        public DataNamesViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, Action<NameData_ChangeLogged> loadSelectedData, EditMethods updateMethods)
+        public DataNamesViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, Action<object> loadSelectedData, EditMethods updateMethods)
             : base("Accounts", loadSelectedData)
         {
             Portfolio = portfolio;

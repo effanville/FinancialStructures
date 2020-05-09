@@ -7,10 +7,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
-    internal class SecurityEditWindowViewModel : ViewModelBase
+    internal class SecurityEditWindowViewModel : ViewModelBase<IPortfolio>
     {
         internal IPortfolio Portfolio;
 
@@ -42,7 +43,7 @@ namespace FinanceWindowsViewModels
             {
                 for (int tabIndex = 0; tabIndex < Tabs.Count; tabIndex++)
                 {
-                    if (Tabs[tabIndex] is ViewModelBase viewModel)
+                    if (Tabs[tabIndex] is ViewModelBase<IPortfolio> viewModel)
                     {
                         viewModel.UpdateData(portfolio, tabItem => removableTabs.Add(tabItem));
                     }
@@ -59,9 +60,12 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private void LoadTabFunc(NameData_ChangeLogged name)
+        private void LoadTabFunc(Object obj)
         {
-            Tabs.Add(new SelectedSecurityViewModel(Portfolio, UpdateDataAction, ReportLogger, fFileService, fDialogCreationService, name));
+            if (obj is NameData_ChangeLogged name)
+            {
+                Tabs.Add(new SelectedSecurityViewModel(Portfolio, UpdateDataAction, ReportLogger, fFileService, fDialogCreationService, name));
+            }
         }
     }
 }

@@ -63,7 +63,7 @@ namespace FinanceWindowsViewModels
         {
             foreach (var tab in Tabs)
             {
-                if (tab is ViewModelBase vm)
+                if (tab is ViewModelBase<IPortfolio> vm)
                 {
                     vm.UpdateData(ProgramPortfolio);
                 }

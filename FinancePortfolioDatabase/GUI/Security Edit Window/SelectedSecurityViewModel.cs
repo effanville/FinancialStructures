@@ -1,5 +1,4 @@
-﻿using FinanceCommonViewModels;
-using FinancialStructures.DataReader;
+﻿using FinancialStructures.DataReader;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
@@ -10,10 +9,11 @@ using System.Collections.Generic;
 using System.Windows.Input;
 using UICommon.Commands;
 using UICommon.Services;
+using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
-    internal class SelectedSecurityViewModel : ViewModelBase
+    internal class SelectedSecurityViewModel : ViewModelBase<IPortfolio>
     {
         private IPortfolio Portfolio;
 
