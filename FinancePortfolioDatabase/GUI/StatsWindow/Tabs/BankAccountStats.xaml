@@ -1,27 +1,26 @@
-﻿<statswindow:AutoGenColumnControl
-    xmlns:statswindow="clr-namespace:FinanceWindows.StatsWindow"
-    x:ClassModifier="internal"
-    x:Class="FinanceWindows.StatsWindow.BankAccountStats"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:cl="clr-namespace:GUISupport"
-             mc:Ignorable="d">
+﻿<statswindow:AutoGenColumnControl xmlns:statswindow="clr-namespace:FinanceWindows.StatsWindow"
+                                  x:ClassModifier="internal"
+                                  x:Class="FinanceWindows.StatsWindow.BankAccountStats"
+                                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                                  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                                  xmlns:cl="clr-namespace:Colouring"
+                                  mc:Ignorable="d">
     <Grid VerticalAlignment="Stretch"
-                      Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
+          Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
         <DataGrid Name="BankAccBox"
-                              Margin="5"
-                              VerticalAlignment="Stretch"
-                              SelectionUnit="FullRow"
-                              CanUserAddRows="False"
-                              CanUserDeleteRows="False"
-                              IsReadOnly="True"
-                              AutoGenerateColumns="True"
-                              AutoGeneratingColumn="OnAutoGeneratingColumn"
-                              GridLinesVisibility="None"
-                              ItemsSource="{Binding BankAccountStats}"
-                              ScrollViewer.VerticalScrollBarVisibility="Visible">
+                  Margin="5"
+                  VerticalAlignment="Stretch"
+                  SelectionUnit="FullRow"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  IsReadOnly="True"
+                  AutoGenerateColumns="True"
+                  AutoGeneratingColumn="OnAutoGeneratingColumn"
+                  GridLinesVisibility="None"
+                  ItemsSource="{Binding BankAccountStats}"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible">
         </DataGrid>
     </Grid>
 </statswindow:AutoGenColumnControl>

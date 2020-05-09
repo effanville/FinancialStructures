@@ -1,19 +1,19 @@
-﻿using FinanceCommonViewModels;
-using FinancialStructures.DataReader;
+﻿using FinancialStructures.DataReader;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Reporting;
-using GUISupport;
-using GUISupport.Services;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
+using UICommon.Commands;
+using UICommon.Services;
+using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
-    internal class SelectedSecurityViewModel : ViewModelBase
+    internal class SelectedSecurityViewModel : ViewModelBase<IPortfolio>
     {
         private IPortfolio Portfolio;
 
@@ -67,10 +67,10 @@ namespace FinanceWindowsViewModels
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
         {
             fSelectedName = selectedName;
-            DeleteValuationCommand = new BasicCommand(ExecuteDeleteValuation);
-            AddCsvData = new BasicCommand(ExecuteAddCsvData);
-            ExportCsvData = new BasicCommand(ExecuteExportCsvData);
-            AddEditSecurityDataCommand = new BasicCommand(ExecuteAddEditSecData);
+            DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);
+            AddCsvData = new RelayCommand(ExecuteAddCsvData);
+            ExportCsvData = new RelayCommand(ExecuteExportCsvData);
+            AddEditSecurityDataCommand = new RelayCommand(ExecuteAddEditSecData);
             UpdateData(portfolio, null);
             UpdateDataCallback = updateData;
             ReportLogger = reportLogger;
@@ -80,7 +80,7 @@ namespace FinanceWindowsViewModels
 
         public ICommand DeleteValuationCommand { get; }
 
-        private void ExecuteDeleteValuation(Object obj)
+        private void ExecuteDeleteValuation()
         {
             if (fSelectedName != null && fSelectedValues != null)
             {
@@ -90,7 +90,7 @@ namespace FinanceWindowsViewModels
 
         public ICommand AddCsvData { get; }
 
-        private void ExecuteAddCsvData(Object obj)
+        private void ExecuteAddCsvData()
         {
             if (fSelectedName != null)
             {
@@ -120,7 +120,7 @@ namespace FinanceWindowsViewModels
 
         public ICommand ExportCsvData { get; }
 
-        private void ExecuteExportCsvData(Object obj)
+        private void ExecuteExportCsvData()
         {
             if (fSelectedName != null)
             {
@@ -141,7 +141,7 @@ namespace FinanceWindowsViewModels
 
         public ICommand AddEditSecurityDataCommand { get; set; }
 
-        private void ExecuteAddEditSecData(Object obj)
+        private void ExecuteAddEditSecData()
         {
             if (fSelectedName != null)
             {

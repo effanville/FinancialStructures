@@ -27,7 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\UICommon\UICommon.csproj" />
     <ProjectReference Include="..\FinancialStructures\FinancialStructures.csproj" />
   </ItemGroup>
-
 </Project>

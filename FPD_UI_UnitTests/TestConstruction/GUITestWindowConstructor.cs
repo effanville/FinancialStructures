@@ -1,15 +1,15 @@
 ﻿using FinanceWindowsViewModels;
 using FinancialStructures.Database;
+using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Reporting;
-using GUISupport.Services;
 using Moq;
 using System;
-using System.Windows;
 using System.Collections.Generic;
-using FinancialStructures.DataStructures;
+using System.Windows;
+using UICommon.Services;
 
 namespace FPD_UI_UnitTests.TestConstruction
 {
@@ -47,7 +47,7 @@ namespace FPD_UI_UnitTests.TestConstruction
             return DummyDataUpdater;
         }
 
-        internal static Action<NameData> DummyOpenTab => action => OpenTab(action);
+        internal static Action<object> DummyOpenTab => action => OpenTab(action);
 
         private static void OpenTab(object obj)
         {

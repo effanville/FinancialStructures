@@ -1,8 +1,8 @@
 ﻿using FinancialStructures.FinanceInterfaces;
-using GUISupport;
 using Microsoft.Win32;
 using System;
 using System.Windows.Input;
+using UICommon.Commands;
 
 namespace FinanceViewModels.StatsViewModels
 {
@@ -27,7 +27,7 @@ namespace FinanceViewModels.StatsViewModels
 
         public ICommand FileSelect { get; }
 
-        private void ExecuteFileSelect(Object obj)
+        private void ExecuteFileSelect()
         {
             OpenFileDialog fileSelect = new OpenFileDialog();
             fileSelect.Filter = "HTML file|*.html;*.htm|All files|*.*";
@@ -45,7 +45,7 @@ namespace FinanceViewModels.StatsViewModels
             StatsFilepath = filePath;
             Header = "Exported Stats";
             GenerateStatistics(displayValueFunds);
-            FileSelect = new BasicCommand(ExecuteFileSelect);
+            FileSelect = new RelayCommand(ExecuteFileSelect);
         }
     }
 }

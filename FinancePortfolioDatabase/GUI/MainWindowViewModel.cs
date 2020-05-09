@@ -3,10 +3,10 @@ using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Reporting;
-using GUISupport;
-using GUISupport.Services;
 using System;
 using System.Collections.Generic;
+using UICommon.Services;
+using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
@@ -55,15 +55,13 @@ namespace FinanceWindowsViewModels
             Tabs.Add(new SingleValueEditWindowViewModel("Sector Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, sectorEditMethods, AccountType.Sector));
             Tabs.Add(new SingleValueEditWindowViewModel("Currency Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, currencyEditMethods, AccountType.Currency));
             Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, fileInteractionService, dialogCreationService));
-
-
         }
 
         private void AllData_portfolioChanged(object sender, EventArgs e)
         {
             foreach (var tab in Tabs)
             {
-                if (tab is ViewModelBase vm)
+                if (tab is ViewModelBase<IPortfolio> vm)
                 {
                     vm.UpdateData(ProgramPortfolio);
                 }
@@ -80,7 +78,13 @@ namespace FinanceWindowsViewModels
         /// <summary>
         /// The mechanism by which the data in <see cref="Portfolio"/> is updated. This includes a GUI update action.
         /// </summary>
-        private Action<Action<IPortfolio>> UpdateDataCallback => action => UpdateData(action);
+        private Action<Action<IPortfolio>> UpdateDataCallback
+        {
+            get
+            {
+                return action => UpdateData(action);
+            }
+        }
 
         private void UpdateData(object obj)
         {

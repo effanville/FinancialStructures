@@ -4,16 +4,17 @@ using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Reporting;
-using GUISupport;
-using GUISupport.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using UICommon.Commands;
+using UICommon.Services;
+using UICommon.ViewModelBases;
 
 namespace FinanceCommonViewModels
 {
-    internal class SelectedSingleDataViewModel : ViewModelBase
+    internal class SelectedSingleDataViewModel : ViewModelBase<IPortfolio>
     {
         private AccountType TypeOfAccount;
         private IPortfolio Portfolio;
@@ -79,10 +80,10 @@ namespace FinanceCommonViewModels
             TypeOfAccount = accountType;
             UpdateData(portfolio);
 
-            EditDataCommand = new BasicCommand(ExecuteEditDataCommand);
-            DeleteValuationCommand = new BasicCommand(ExecuteDeleteValuation);
-            AddCsvData = new BasicCommand(ExecuteAddCsvData);
-            ExportCsvData = new BasicCommand(ExecuteExportCsvData);
+            EditDataCommand = new RelayCommand(ExecuteEditDataCommand);
+            DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);
+            AddCsvData = new RelayCommand(ExecuteAddCsvData);
+            ExportCsvData = new RelayCommand(ExecuteExportCsvData);
             UpdateDataCallback = updateDataCallback;
             ReportLogger = reportLogger;
             fFileService = fileService;
@@ -109,6 +110,7 @@ namespace FinanceCommonViewModels
                 SelectedData = null;
             }
         }
+
         public override void UpdateData(IPortfolio portfolio)
         {
             UpdateData(portfolio, null);
@@ -117,7 +119,7 @@ namespace FinanceCommonViewModels
 
         public ICommand EditDataCommand { get; set; }
 
-        private void ExecuteEditDataCommand(Object obj)
+        private void ExecuteEditDataCommand()
         {
             if (SelectedName != null)
             {
@@ -151,7 +153,7 @@ namespace FinanceCommonViewModels
 
         public ICommand DeleteValuationCommand { get; }
 
-        private void ExecuteDeleteValuation(Object obj)
+        private void ExecuteDeleteValuation()
         {
             if (SelectedName != null)
             {
@@ -165,7 +167,7 @@ namespace FinanceCommonViewModels
 
         public ICommand AddCsvData { get; }
 
-        private void ExecuteAddCsvData(Object obj)
+        private void ExecuteAddCsvData()
         {
             if (fSelectedName != null)
             {
@@ -195,7 +197,7 @@ namespace FinanceCommonViewModels
 
         public ICommand ExportCsvData { get; }
 
-        private void ExecuteExportCsvData(Object obj)
+        private void ExecuteExportCsvData()
         {
             if (fSelectedName != null)
             {

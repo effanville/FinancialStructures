@@ -5,7 +5,7 @@
              DispatcherUnhandledException="Application_DispatcherUnhandledException"
              Startup="Application_Startup">
     <Application.Resources>
-        <ResourceDictionary Source="GUI/GuiSupport/Dictionaries.xaml"/>
+        <ResourceDictionary Source="GUI/TemplatesAndStyles/Dictionaries.xaml" />
     </Application.Resources>
 </Application>
 

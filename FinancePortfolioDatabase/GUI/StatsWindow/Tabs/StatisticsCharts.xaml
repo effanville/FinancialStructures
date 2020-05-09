@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:spt="clr-namespace:GUISupport" 
+             xmlns:ucdo="clr-namespace:UICommon.DisplayObjects;assembly=UICommon" 
              xmlns:cht="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
@@ -46,7 +46,7 @@
                 </cht:LineSeries>
             </cht:Chart.Series>
         </cht:Chart>
-        <spt:BindableChart x:Name="securityCarChart"
+        <ucdo:BindableChart x:Name="securityCarChart"
                                Title="Sector IRR over time"
                                Style="{StaticResource ChartStyle1}"
                                Height="Auto"
@@ -54,7 +54,7 @@
                                Grid.Row="0"
                    SeriesSource="{Binding IRRLines}"
                                Grid.Column="1">
-        </spt:BindableChart>
+        </ucdo:BindableChart>
         <Grid Grid.Row="1"
                           Grid.Column="0">
             <Grid.ColumnDefinitions>

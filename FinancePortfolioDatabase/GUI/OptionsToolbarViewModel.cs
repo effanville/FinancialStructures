@@ -1,19 +1,19 @@
-﻿using FinanceCommonViewModels;
-using FinanceWindows;
+﻿using FinanceWindows;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Reporting;
-using GUISupport;
-using GUISupport.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using UICommon.Commands;
+using UICommon.Services;
+using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
-    internal class OptionsToolbarViewModel : ViewModelBase
+    internal class OptionsToolbarViewModel : ViewModelBase<IPortfolio>
     {
         private string fFileName;
         private string fDirectory;
@@ -54,12 +54,12 @@ namespace FinanceWindowsViewModels
             DataUpdateCallback = updateData;
             UpdateData(portfolio);
 
-            OpenHelpCommand = new BasicCommand(OpenHelpDocsCommand);
-            NewDatabaseCommand = new BasicCommand(ExecuteNewDatabase);
-            SaveDatabaseCommand = new BasicCommand(ExecuteSaveDatabase);
-            LoadDatabaseCommand = new BasicCommand(ExecuteLoadDatabase);
-            UpdateDataCommand = new BasicCommand(ExecuteUpdateData);
-            RefreshCommand = new BasicCommand(ExecuteRefresh);
+            OpenHelpCommand = new RelayCommand(OpenHelpDocsCommand);
+            NewDatabaseCommand = new RelayCommand(ExecuteNewDatabase);
+            SaveDatabaseCommand = new RelayCommand(ExecuteSaveDatabase);
+            LoadDatabaseCommand = new RelayCommand(ExecuteLoadDatabase);
+            UpdateDataCommand = new RelayCommand(ExecuteUpdateData);
+            RefreshCommand = new RelayCommand(ExecuteRefresh);
         }
 
 
@@ -76,14 +76,14 @@ namespace FinanceWindowsViewModels
         }
 
         public ICommand OpenHelpCommand { get; }
-        private void OpenHelpDocsCommand(Object obj)
+        private void OpenHelpDocsCommand()
         {
             var helpwindow = new HelpWindow(fReportLogger);
             helpwindow.Show();
         }
 
         public ICommand NewDatabaseCommand { get; }
-        private void ExecuteNewDatabase(Object obj)
+        private void ExecuteNewDatabase()
         {
             MessageBoxResult result = fDialogCreationService.ShowMessageBox("Do you want to load a new database?", "New Database?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if (result == MessageBoxResult.Yes)
@@ -94,7 +94,7 @@ namespace FinanceWindowsViewModels
         }
 
         public ICommand SaveDatabaseCommand { get; }
-        private void ExecuteSaveDatabase(Object obj)
+        private void ExecuteSaveDatabase()
         {
             var result = fFileService.SaveFile("xml", fFileName, fDirectory, "XML Files|*.xml|All Files|*.*");
             if (result.Success != null && (bool)result.Success)
@@ -105,7 +105,7 @@ namespace FinanceWindowsViewModels
         }
 
         public ICommand LoadDatabaseCommand { get; }
-        private void ExecuteLoadDatabase(Object obj)
+        private void ExecuteLoadDatabase()
         {
             var result = fFileService.OpenFile("xml", filter: "XML Files|*.xml|All Files|*.*");
             if (result.Success != null && (bool)result.Success)
@@ -116,14 +116,14 @@ namespace FinanceWindowsViewModels
         }
 
         public ICommand UpdateDataCommand { get; }
-        private void ExecuteUpdateData(Object obj)
+        private void ExecuteUpdateData()
         {
             DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.Downloader(programPortfolio, fReportLogger).ConfigureAwait(false));
         }
 
         public ICommand RefreshCommand { get; }
 
-        private void ExecuteRefresh(Object obj)
+        private void ExecuteRefresh()
         {
             DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(fFileName));
         }

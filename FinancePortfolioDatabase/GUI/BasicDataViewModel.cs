@@ -1,12 +1,12 @@
-﻿using FinanceCommonViewModels;
-using FinancialStructures.FinanceInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using System.Collections.Generic;
+using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
-    internal class BasicDataViewModel : ViewModelBase
+    internal class BasicDataViewModel : ViewModelBase<IPortfolio>
     {
         private List<NameCompDate> fFundNames;
         public List<NameCompDate> FundNames

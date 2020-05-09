@@ -3,25 +3,19 @@
                     xmlns:view="clr-namespace:FinanceWindows"
                     xmlns:vm="clr-namespace:FinanceWindowsViewModels"
                     xmlns:cvm="clr-namespace:FinanceCommonViewModels">
-    
     <DataTemplate DataType="{x:Type vm:BasicDataViewModel}">
-        <view:BasicDataView/>
+        <view:BasicDataView />
     </DataTemplate>
-
     <DataTemplate DataType="{x:Type vm:SecurityEditWindowViewModel}">
-        <view:SecurityEditWindow/>
+        <view:SecurityEditWindow />
     </DataTemplate>
-    
     <DataTemplate DataType="{x:Type cvm:SingleValueEditWindowViewModel}">
-        <view:SingleValueEditWindow/>
+        <view:SingleValueEditWindow />
     </DataTemplate>
-
     <DataTemplate DataType="{x:Type vm:StatsCreatorWindowViewModel}">
-        <view:StatsCreatorWindow/>
+        <view:StatsCreatorWindow />
     </DataTemplate>
-
     <DataTemplate DataType="{x:Type vm:ReportingWindowViewModel}">
-        <view:ReportingWindow/>
+        <view:ReportingWindow />
     </DataTemplate>
-
 </ResourceDictionary>

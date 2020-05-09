@@ -1,16 +1,19 @@
 ﻿<Grid x:Class="FinanceWindows.BasicDataView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:cl="clr-namespace:GUISupport"
-      mc:Ignorable="d" 
-      d:DesignHeight="450" 
+      xmlns:cl="clr-namespace:Colouring"
+      xmlns:uic="clr-namespace:UICommon.Converters;assembly=UICommon"
+      mc:Ignorable="d"
+      d:DesignHeight="450"
       d:DesignWidth="800"
       HorizontalAlignment="Stretch"
       ScrollViewer.VerticalScrollBarVisibility="Visible"
       Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
-    
+    <Grid.Resources>
+        <uic:StringToUKDateConverter x:Key="StringToUKDate" />
+    </Grid.Resources>
     <TabControl x:Name="fDataView"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
@@ -27,29 +30,28 @@
                           ScrollViewer.VerticalScrollBarVisibility="Visible">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
-                            <Setter Property="HorizontalContentAlignment" 
-                                    Value="Stretch"/>
-                            <Setter Property="VerticalContentAlignment" 
-                                    Value="Stretch"/>
+                            <Setter Property="HorizontalContentAlignment"
+                                    Value="Stretch" />
+                            <Setter Property="VerticalContentAlignment"
+                                    Value="Stretch" />
                         </Style>
                     </ListView.ItemContainerStyle>
                     <ListView.View>
                         <GridView>
                             <GridViewColumn Width="Auto"
-                                            Header="Company" 
-                                            DisplayMemberBinding="{Binding Company}"/>
-                            <GridViewColumn Width="Auto" 
-                                            Header="Name" 
+                                            Header="Company"
+                                            DisplayMemberBinding="{Binding Company}" />
+                            <GridViewColumn Width="Auto"
+                                            Header="Name"
                                             DisplayMemberBinding="{Binding Name}" />
-                            <GridViewColumn Width="Auto" 
-                                            Header="Last Recorded" 
-                                            DisplayMemberBinding="{Binding DateToRecord, StringFormat=\{0:dd.MM.yyyy\}}" />
+                            <GridViewColumn Width="Auto"
+                                            Header="Last Recorded"
+                                            DisplayMemberBinding="{Binding DateToRecord, Converter={StaticResource StringToUKDate} }" />
                         </GridView>
                     </ListView.View>
                 </ListView>
             </Grid>
         </TabItem>
-        
         <TabItem Header="Bank Accounts">
             <Grid Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
                 <ListView Name="BankAccounts"
@@ -58,15 +60,15 @@
                           ScrollViewer.VerticalScrollBarVisibility="Visible">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Width="Auto" 
-                                            Header="Company" 
-                                            DisplayMemberBinding="{Binding Company}"/>
                             <GridViewColumn Width="Auto"
-                                            Header="Name" 
+                                            Header="Company"
+                                            DisplayMemberBinding="{Binding Company}" />
+                            <GridViewColumn Width="Auto"
+                                            Header="Name"
                                             DisplayMemberBinding="{Binding Name}" />
-                            <GridViewColumn Width="Auto" 
-                                            Header="Last Recorded" 
-                                            DisplayMemberBinding="{Binding DateToRecord, StringFormat=\{0:dd.MM.yyyy\}}" />
+                            <GridViewColumn Width="Auto"
+                                            Header="Last Recorded"
+                                            DisplayMemberBinding="{Binding DateToRecord, Converter={StaticResource StringToUKDate}}" />
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -75,16 +77,16 @@
         <TabItem Header="Sectors">
             <Grid Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
                 <ListView Name="Sectors"
-                         ItemsSource="{Binding SectorNames}"
-                         Margin="2,2,2,2">
+                          ItemsSource="{Binding SectorNames}"
+                          Margin="2,2,2,2">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Width="100" 
-                                            Header="Name" 
+                            <GridViewColumn Width="100"
+                                            Header="Name"
                                             DisplayMemberBinding="{Binding Name}" />
-                            <GridViewColumn Width="Auto" 
-                                            Header="Last Recorded" 
-                                            DisplayMemberBinding="{Binding DateToRecord, StringFormat=\{0:dd.MM.yyyy\}}" />
+                            <GridViewColumn Width="Auto"
+                                            Header="Last Recorded"
+                                            DisplayMemberBinding="{Binding DateToRecord, Converter={StaticResource StringToUKDate}}" />
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -93,18 +95,18 @@
         <TabItem Header="Currencies">
             <Grid Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
                 <ListView Name="Currencies"
-                         ItemsSource="{Binding CurrencyNames}"
-                         Margin="2,2,2,2">
+                          ItemsSource="{Binding CurrencyNames}"
+                          Margin="2,2,2,2">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Width="Auto" 
-                                            Header="Company" 
-                                            DisplayMemberBinding="{Binding Company}"/>
-                            <GridViewColumn Width="Auto" 
-                                            Header="Name" 
+                            <GridViewColumn Width="Auto"
+                                            Header="Company"
+                                            DisplayMemberBinding="{Binding Company}" />
+                            <GridViewColumn Width="Auto"
+                                            Header="Name"
                                             DisplayMemberBinding="{Binding Name}" />
-                            <GridViewColumn Width="Auto" 
-                                            Header="Last Recorded" 
+                            <GridViewColumn Width="Auto"
+                                            Header="Last Recorded"
                                             DisplayMemberBinding="{Binding DateToRecord, StringFormat=\{0:dd.MM.yyyy\}}" />
                         </GridView>
                     </ListView.View>

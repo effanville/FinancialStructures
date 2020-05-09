@@ -1,5 +1,5 @@
 ﻿using FinancialStructures.FinanceInterfaces;
-using GUISupport;
+using UICommon.ViewModelBases;
 
 namespace FinanceViewModels.StatsViewModels
 {

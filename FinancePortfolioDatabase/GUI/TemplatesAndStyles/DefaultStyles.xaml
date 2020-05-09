@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:cl="clr-namespace:GUISupport"
+                    xmlns:cl="clr-namespace:Colouring"
                     xmlns:fs="clr-namespace:FinancialStructures.DataStructures;assembly=FinancialStructures"
                     xmlns:cht="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit" xmlns:chartingPrimitives="clr-namespace:System.Windows.Controls.DataVisualization.Charting.Primitives;assembly=DotNetProjects.DataVisualization.Toolkit">
     <Style x:Key="defaultButton" 
