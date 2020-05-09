@@ -45,7 +45,7 @@
                             Style="{StaticResource ResourceKey=defaultButton}"
                             Command="{Binding OpenHelpCommand}">
                         <StackPanel Orientation="Horizontal">
-                            <Image Source="GuiSupport/helpIcon.png" />
+                            <Image Source="TemplatesAndStyles/helpIcon.png" />
                             <TextBlock Background="LightGreen">Dont Panic!</TextBlock>
                         </StackPanel>
                     </Button>
