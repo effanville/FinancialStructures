@@ -33,17 +33,17 @@ namespace UICommon.Converters
         {
             if (value is string stringValue)
             {
-                if (culture.IetfLanguageTag == "en-GB")
+                if (culture.IetfLanguageTag == "en-US")
                 {
-                    if (DateTime.TryParse(stringValue, culture.DateTimeFormat, DateTimeStyles.None, out DateTime date))
+                    CultureInfo UKEnglishCulture = new CultureInfo("en-GB");
+                    if (DateTime.TryParse(stringValue, UKEnglishCulture.DateTimeFormat, DateTimeStyles.None, out DateTime date))
                     {
                         return date;
                     }
                 }
                 else
                 {
-                    CultureInfo UKEnglishCulture = new CultureInfo("en-GB");
-                    if (DateTime.TryParse(stringValue, UKEnglishCulture.DateTimeFormat, DateTimeStyles.None, out DateTime date))
+                    if (DateTime.TryParse(stringValue, culture.DateTimeFormat, DateTimeStyles.None, out DateTime date))
                     {
                         return date;
                     }

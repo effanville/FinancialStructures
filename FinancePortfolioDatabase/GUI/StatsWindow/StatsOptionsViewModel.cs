@@ -3,12 +3,12 @@ using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Reporting;
 using FinancialStructures.StatisticStructures;
 using FinancialStructures.StatsMakers;
-using UICommon.Services;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
-using UICommon.Interfaces;
 using UICommon.Commands;
+using UICommon.Interfaces;
+using UICommon.Services;
 using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels

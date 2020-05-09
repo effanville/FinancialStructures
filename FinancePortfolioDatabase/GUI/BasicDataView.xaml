@@ -4,12 +4,16 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:cl="clr-namespace:Colouring"
+      xmlns:uic="clr-namespace:UICommon.Converters"
       mc:Ignorable="d"
       d:DesignHeight="450"
       d:DesignWidth="800"
       HorizontalAlignment="Stretch"
       ScrollViewer.VerticalScrollBarVisibility="Visible"
       Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
+    <Grid.Resources>
+        <uic:StringToUKDateConverter x:Key="StringToUKDate" />
+    </Grid.Resources>
     <TabControl x:Name="fDataView"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch"
@@ -42,7 +46,7 @@
                                             DisplayMemberBinding="{Binding Name}" />
                             <GridViewColumn Width="Auto"
                                             Header="Last Recorded"
-                                            DisplayMemberBinding="{Binding DateToRecord, StringFormat=\{0:dd.MM.yyyy\}}" />
+                                            DisplayMemberBinding="{Binding DateToRecord, Converter={StaticResource StringToUKDate} }" />
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -64,7 +68,7 @@
                                             DisplayMemberBinding="{Binding Name}" />
                             <GridViewColumn Width="Auto"
                                             Header="Last Recorded"
-                                            DisplayMemberBinding="{Binding DateToRecord, StringFormat=\{0:dd.MM.yyyy\}}" />
+                                            DisplayMemberBinding="{Binding DateToRecord, Converter={StaticResource StringToUKDate}}" />
                         </GridView>
                     </ListView.View>
                 </ListView>
@@ -82,7 +86,7 @@
                                             DisplayMemberBinding="{Binding Name}" />
                             <GridViewColumn Width="Auto"
                                             Header="Last Recorded"
-                                            DisplayMemberBinding="{Binding DateToRecord, StringFormat=\{0:dd.MM.yyyy\}}" />
+                                            DisplayMemberBinding="{Binding DateToRecord, Converter={StaticResource StringToUKDate}}" />
                         </GridView>
                     </ListView.View>
                 </ListView>

@@ -1,9 +1,9 @@
 ﻿using FinanceWindowsViewModels;
 using FinancialStructures.PortfolioAPI;
-using UICommon.Services;
 using System;
 using System.Reflection;
 using System.Windows;
+using UICommon.Services;
 
 namespace FinanceWindows
 {

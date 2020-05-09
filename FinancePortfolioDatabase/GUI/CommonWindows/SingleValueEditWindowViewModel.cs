@@ -2,11 +2,11 @@
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Reporting;
-using UICommon.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using UICommon.Services;
 using UICommon.ViewModelBases;
 
 namespace FinanceCommonViewModels

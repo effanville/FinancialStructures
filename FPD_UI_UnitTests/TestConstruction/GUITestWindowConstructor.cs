@@ -1,15 +1,15 @@
 ﻿using FinanceWindowsViewModels;
 using FinancialStructures.Database;
+using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Reporting;
-using UICommon.Services;
 using Moq;
 using System;
-using System.Windows;
 using System.Collections.Generic;
-using FinancialStructures.DataStructures;
+using System.Windows;
+using UICommon.Services;
 
 namespace FPD_UI_UnitTests.TestConstruction
 {

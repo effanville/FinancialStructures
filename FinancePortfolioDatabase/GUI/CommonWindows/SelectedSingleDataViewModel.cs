@@ -4,12 +4,12 @@ using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Reporting;
-using UICommon.Services;
-using UICommon.Commands;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
+using UICommon.Commands;
+using UICommon.Services;
 using UICommon.ViewModelBases;
 
 namespace FinanceCommonViewModels
