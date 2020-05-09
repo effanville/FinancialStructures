@@ -52,7 +52,7 @@ namespace FinanceWindowsViewModels
                 {
                     foreach (var tab in removableTabs)
                     {
-                        Tabs.Remove(tab);
+                        _ = Tabs.Remove(tab);
                     }
 
                     removableTabs.Clear();

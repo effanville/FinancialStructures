@@ -122,7 +122,7 @@ namespace FinanceWindowsViewModels
             fFileService = fileService;
             fDialogCreationService = dialogCreation;
             CloseWindowAction = CloseWindow;
-            ExportCommand = new BasicCommand<ICloseable>(ExecuteExportCommand);
+            ExportCommand = new RelayCommand<ICloseable>(ExecuteExportCommand);
 
             var totals = new SecurityStatistics();
             var properties = totals.GetType().GetProperties();

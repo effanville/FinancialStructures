@@ -45,10 +45,10 @@ namespace FinanceWindowsViewModels
             }
 
 
-            CreateCSVStatsCommand = new BasicCommand(ExecuteExportToCSVCommand);
-            CreateInvestmentListCommand = new BasicCommand(ExecuteInvestmentListCommand);
-            CreateHTMLCommand = new BasicCommand(ExecuteCreateHTMLCommand);
-            ExportHistoryCommand = new BasicCommand(ExecuteCreateHistory);
+            CreateCSVStatsCommand = new RelayCommand(ExecuteExportToCSVCommand);
+            CreateInvestmentListCommand = new RelayCommand(ExecuteInvestmentListCommand);
+            CreateHTMLCommand = new RelayCommand(ExecuteCreateHTMLCommand);
+            ExportHistoryCommand = new RelayCommand(ExecuteCreateHistory);
         }
 
         public ICommand CreateCSVStatsCommand { get; }

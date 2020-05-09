@@ -82,10 +82,10 @@ namespace FinanceCommonViewModels
             fPreEditNames = (List<NameCompDate>)editMethods.ExecuteFunction(FunctionType.NameUpdate, portfolio).Result;
             fPreEditNames.Sort();
 
-            CreateCommand = new BasicCommand(ExecuteCreateEdit);
-            DeleteCommand = new BasicCommand(ExecuteDelete);
-            DownloadCommand = new BasicCommand(ExecuteDownloadCommand);
-            OpenTabCommand = new BasicCommand(OpenTab);
+            CreateCommand = new RelayCommand(ExecuteCreateEdit);
+            DeleteCommand = new RelayCommand(ExecuteDelete);
+            DownloadCommand = new RelayCommand(ExecuteDownloadCommand);
+            OpenTabCommand = new RelayCommand(OpenTab);
         }
 
         /// <summary>

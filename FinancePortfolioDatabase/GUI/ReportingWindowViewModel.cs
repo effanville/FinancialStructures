@@ -52,8 +52,8 @@ namespace FinanceWindowsViewModels
         {
             Reports = new ErrorReports();
             ReportsToView = new ObservableCollection<ErrorReport>();
-            ClearReportsCommand = new BasicCommand(ExecuteClearReports);
-            ClearSingleReportCommand = new BasicCommand(ExecuteClearSelectedReport);
+            ClearReportsCommand = new RelayCommand(ExecuteClearReports);
+            ClearSingleReportCommand = new RelayCommand(ExecuteClearSelectedReport);
             SyncReports();
         }
 

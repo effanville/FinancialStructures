@@ -67,10 +67,10 @@ namespace FinanceWindowsViewModels
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
         {
             fSelectedName = selectedName;
-            DeleteValuationCommand = new BasicCommand(ExecuteDeleteValuation);
-            AddCsvData = new BasicCommand(ExecuteAddCsvData);
-            ExportCsvData = new BasicCommand(ExecuteExportCsvData);
-            AddEditSecurityDataCommand = new BasicCommand(ExecuteAddEditSecData);
+            DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);
+            AddCsvData = new RelayCommand(ExecuteAddCsvData);
+            ExportCsvData = new RelayCommand(ExecuteExportCsvData);
+            AddEditSecurityDataCommand = new RelayCommand(ExecuteAddEditSecData);
             UpdateData(portfolio, null);
             UpdateDataCallback = updateData;
             ReportLogger = reportLogger;

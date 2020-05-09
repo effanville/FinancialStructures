@@ -45,7 +45,7 @@ namespace FinanceViewModels.StatsViewModels
             StatsFilepath = filePath;
             Header = "Exported Stats";
             GenerateStatistics(displayValueFunds);
-            FileSelect = new BasicCommand(ExecuteFileSelect);
+            FileSelect = new RelayCommand(ExecuteFileSelect);
         }
     }
 }

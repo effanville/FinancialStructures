@@ -3,7 +3,10 @@ using System.Windows.Input;
 
 namespace UICommon.Commands
 {
-    public sealed class BasicCommand<T> : ICommand
+    /// <summary>
+    /// Command instance that executes with an argument of the specified type T.
+    /// </summary>
+    public sealed class RelayCommand<T> : ICommand
     {
         private readonly Action<T> fExecute;
 
@@ -11,12 +14,18 @@ namespace UICommon.Commands
 
         private event EventHandler fCanExecuteChangedInternal;
 
-        public BasicCommand(Action<T> execute)
+        /// <summary>
+        /// Constructor that takes an execution method, and can always execute
+        /// </summary>
+        public RelayCommand(Action<T> execute)
             : this(execute, DefaultCanExecute)
         {
         }
 
-        public BasicCommand(Action<T> execute, Predicate<T> canExecute)
+        /// <summary>
+        /// Constructor that takes a execution method and whether one can execute.
+        /// </summary>
+        public RelayCommand(Action<T> execute, Predicate<T> canExecute)
         {
             if (execute == null)
             {
@@ -47,11 +56,13 @@ namespace UICommon.Commands
             }
         }
 
+        /// <inheritdoc/>
         public bool CanExecute(object parameter)
         {
             return fCanExecute != null && fCanExecute((T)parameter);
         }
 
+        /// <inheritdoc/>
         public void Execute(object parameter)
         {
             fExecute((T)parameter);

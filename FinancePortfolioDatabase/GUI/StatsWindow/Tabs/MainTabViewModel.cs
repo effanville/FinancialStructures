@@ -23,13 +23,13 @@ namespace FinanceViewModels.StatsViewModels
         {
             Header = "Statistics Selection";
             OpenTab = openTab;
-            OpenSecuritiesTab = new BasicCommand(ExecuteSecuritiesTab);
-            OpenSecInvTab = new BasicCommand(ExecuteSecInvTab);
-            OpenDatabaseTab = new BasicCommand(ExecuteDatabaseTab);
-            OpenBankAccTab = new BasicCommand(ExecuteBankAccTab);
-            OpenHistoryTab = new BasicCommand(ExecuteHistoryTab);
-            OpenChartsTab = new BasicCommand(ExecuteChartsTab);
-            OpenHtmlViewerTab = new BasicCommand(ExecuteHtmlViewerTab);
+            OpenSecuritiesTab = new RelayCommand(ExecuteSecuritiesTab);
+            OpenSecInvTab = new RelayCommand(ExecuteSecInvTab);
+            OpenDatabaseTab = new RelayCommand(ExecuteDatabaseTab);
+            OpenBankAccTab = new RelayCommand(ExecuteBankAccTab);
+            OpenHistoryTab = new RelayCommand(ExecuteHistoryTab);
+            OpenChartsTab = new RelayCommand(ExecuteChartsTab);
+            OpenHtmlViewerTab = new RelayCommand(ExecuteHtmlViewerTab);
         }
 
         private void ExecuteHtmlViewerTab()

@@ -80,10 +80,10 @@ namespace FinanceCommonViewModels
             TypeOfAccount = accountType;
             UpdateData(portfolio);
 
-            EditDataCommand = new BasicCommand(ExecuteEditDataCommand);
-            DeleteValuationCommand = new BasicCommand(ExecuteDeleteValuation);
-            AddCsvData = new BasicCommand(ExecuteAddCsvData);
-            ExportCsvData = new BasicCommand(ExecuteExportCsvData);
+            EditDataCommand = new RelayCommand(ExecuteEditDataCommand);
+            DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);
+            AddCsvData = new RelayCommand(ExecuteAddCsvData);
+            ExportCsvData = new RelayCommand(ExecuteExportCsvData);
             UpdateDataCallback = updateDataCallback;
             ReportLogger = reportLogger;
             fFileService = fileService;

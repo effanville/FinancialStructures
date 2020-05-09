@@ -54,12 +54,12 @@ namespace FinanceWindowsViewModels
             DataUpdateCallback = updateData;
             UpdateData(portfolio);
 
-            OpenHelpCommand = new BasicCommand(OpenHelpDocsCommand);
-            NewDatabaseCommand = new BasicCommand(ExecuteNewDatabase);
-            SaveDatabaseCommand = new BasicCommand(ExecuteSaveDatabase);
-            LoadDatabaseCommand = new BasicCommand(ExecuteLoadDatabase);
-            UpdateDataCommand = new BasicCommand(ExecuteUpdateData);
-            RefreshCommand = new BasicCommand(ExecuteRefresh);
+            OpenHelpCommand = new RelayCommand(OpenHelpDocsCommand);
+            NewDatabaseCommand = new RelayCommand(ExecuteNewDatabase);
+            SaveDatabaseCommand = new RelayCommand(ExecuteSaveDatabase);
+            LoadDatabaseCommand = new RelayCommand(ExecuteLoadDatabase);
+            UpdateDataCommand = new RelayCommand(ExecuteUpdateData);
+            RefreshCommand = new RelayCommand(ExecuteRefresh);
         }
 
 
