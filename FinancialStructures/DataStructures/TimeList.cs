@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FinancialStructures.DataStructures
@@ -9,6 +10,15 @@ namespace FinancialStructures.DataStructures
     /// <remarks>This list is sorted, with oldest value the first and latest the last.</remarks>
     public partial class TimeList
     {
+        /// <summary>
+        /// Event that controls when data is edited.
+        /// </summary>
+        public event EventHandler DataEdit;
+
+        internal void OnDataEdit(object edited)
+        {
+            DataEdit?.Invoke(edited, new EventArgs());
+        }
 
         /// <summary>
         /// Collection of data within the TimeList.

@@ -55,6 +55,7 @@ namespace FinanceWindowsViewModels
             Tabs.Add(new SingleValueEditWindowViewModel("Sector Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, sectorEditMethods, AccountType.Sector));
             Tabs.Add(new SingleValueEditWindowViewModel("Currency Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, currencyEditMethods, AccountType.Currency));
             Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, fileInteractionService, dialogCreationService));
+            ProgramPortfolio.PortfolioChanged += AllData_portfolioChanged;
         }
 
         private void AllData_portfolioChanged(object sender, EventArgs e)
@@ -76,22 +77,13 @@ namespace FinanceWindowsViewModels
         internal readonly IReportLogger ReportLogger;
 
         /// <summary>
-        /// The mechanism by which the data in <see cref="Portfolio"/> is updated. This includes a GUI update action.
+        /// The mechanism by which the data in <see cref="ProgramPortfolio"/> is updated. This includes a GUI update action.
         /// </summary>
         private Action<Action<IPortfolio>> UpdateDataCallback
         {
             get
             {
-                return action => UpdateData(action);
-            }
-        }
-
-        private void UpdateData(object obj)
-        {
-            if (obj is Action<IPortfolio> updateAction)
-            {
-                updateAction(ProgramPortfolio);
-                AllData_portfolioChanged(obj, null);
+                return action => action(ProgramPortfolio);
             }
         }
     }

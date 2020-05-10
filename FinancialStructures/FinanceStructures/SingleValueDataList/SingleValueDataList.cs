@@ -13,9 +13,27 @@ namespace FinancialStructures.FinanceStructures
     /// </example>
     public partial class SingleValueDataList : IComparable, ISingleValueDataList
     {
+        /// <summary>
+        /// Event that controls when data is edited.
+        /// </summary>
+        public event EventHandler DataEdit;
+
+        internal void OnDataEdit(object edited, EventArgs e)
+        {
+            DataEdit?.Invoke(edited, e);
+        }
+
+        public void SetupEventListening()
+        {
+            Values.DataEdit += OnDataEdit;
+        }
+
+        /// <summary>
+        /// The string representation of this list.
+        /// </summary>
         public override string ToString()
         {
-            return Names.Company + " - " + Names.Name;
+            return Names.ToString();
         }
 
         /// <summary>
@@ -92,6 +110,7 @@ namespace FinancialStructures.FinanceStructures
         public SingleValueDataList()
         {
             Names = new NameData();
+            SetupEventListening();
         }
 
         /// <summary>
@@ -100,6 +119,7 @@ namespace FinancialStructures.FinanceStructures
         public SingleValueDataList(NameData names)
         {
             Names = names;
+            SetupEventListening();
         }
 
         /// <summary>
@@ -109,6 +129,7 @@ namespace FinancialStructures.FinanceStructures
         {
             Names = names;
             fValues = values;
+            SetupEventListening();
         }
 
         public ISingleValueDataList Copy()

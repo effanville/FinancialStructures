@@ -30,7 +30,8 @@ namespace FinancialStructures.PortfolioAPI
                                 return portfolio.Funds[fundIndex].EditNameData(newName);
                             }
                         }
-                        reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Renaming {elementType.ToString()}: Could not find {elementType.ToString()} with name {oldName.ToString()}.");
+
+                        _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Renaming {elementType}: Could not find {elementType} with name {oldName}.");
                         return false;
                     }
                 case (AccountType.Currency):
@@ -47,7 +48,7 @@ namespace FinancialStructures.PortfolioAPI
                     }
                 default:
                     {
-                        reportLogger.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Editing an Unknown type.");
+                        _ = reportLogger.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Editing an Unknown type.");
                         return false;
                     }
             }
@@ -64,7 +65,7 @@ namespace FinancialStructures.PortfolioAPI
                 }
             }
 
-            reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Renaming {elementType.ToString()}: Could not find {elementType.ToString()} with name {oldName.ToString()}.");
+            _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Renaming {elementType}: Could not find {elementType} with name {oldName}.");
             return false;
         }
     }

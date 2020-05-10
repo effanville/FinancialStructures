@@ -13,7 +13,8 @@ namespace FinancialStructures.DataStructures
         {
             var valuation = new DailyValuation(date, value);
             fValues.Add(valuation);
-            reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Added value {value}");
+            OnDataEdit(this);
+            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Added value {value}");
             Sort();
         }
 
@@ -77,7 +78,8 @@ namespace FinancialStructures.DataStructures
                 {
                     if (fValues[i].Day == date)
                     {
-                        reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.EditingData, $"Editing Data: {date} value changed from {fValues[i].Value} to {value}");
+                        _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.EditingData, $"Editing Data: {date} value changed from {fValues[i].Value} to {value}");
+                        OnDataEdit(this);
                         fValues[i].SetValue(value);
 
                         return true;
@@ -96,8 +98,9 @@ namespace FinancialStructures.DataStructures
                 {
                     if (fValues[i].Day == oldDate)
                     {
-                        reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.EditingData, $"Editing Data: {oldDate} value changed from {fValues[i].Value} to {newDate} - {value}");
+                        _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.EditingData, $"Editing Data: {oldDate} value changed from {fValues[i].Value} to {newDate} - {value}");
                         fValues[i].SetData(newDate, value);
+                        OnDataEdit(this);
                         return true;
                     }
                 }
@@ -128,14 +131,15 @@ namespace FinancialStructures.DataStructures
                 {
                     if (fValues[i].Day == date)
                     {
-                        reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted value: date - {date} and value - {fValues[i].Value}");
+                        _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted value: date - {date} and value - {fValues[i].Value}");
                         fValues.RemoveAt(i);
+                        OnDataEdit(this);
                         return true;
                     }
                 }
             }
 
-            reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.DeletingData, $"Deleting Value: Could not find data on date {date}.");
+            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.DeletingData, $"Deleting Value: Could not find data on date {date}.");
             return false;
         }
 

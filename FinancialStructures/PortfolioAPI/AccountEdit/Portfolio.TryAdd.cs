@@ -22,13 +22,13 @@ namespace FinancialStructures.PortfolioAPI
         {
             if (string.IsNullOrEmpty(name.Name) && string.IsNullOrEmpty(name.Company))
             {
-                reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Adding {elementType}: Company `{name.Company}' or name `{name.Name}' cannot both be empty.");
+                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Adding {elementType}: Company `{name.Company}' or name `{name.Name}' cannot both be empty.");
                 return false;
             }
 
             if (portfolio.Exists(elementType, name))
             {
-                reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"{elementType.ToString()} `{name.Company}'-`{name.Name}' already exists.");
+                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"{elementType} `{name.Company}'-`{name.Name}' already exists.");
                 return false;
             }
 
@@ -36,7 +36,10 @@ namespace FinancialStructures.PortfolioAPI
             {
                 case (AccountType.Security):
                     {
-                        portfolio.Funds.Add(new Security(name));
+                        var toAdd = new Security(name);
+                        toAdd.DataEdit += portfolio.OnPortfolioChanged;
+                        portfolio.Funds.Add(toAdd);
+                        portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());
                         break;
                     }
                 case (AccountType.Currency):
@@ -45,25 +48,34 @@ namespace FinancialStructures.PortfolioAPI
                         {
                             name.Company = "GBP";
                         }
-                        portfolio.Currencies.Add(new Currency(name));
+                        var toAdd = new Currency(name);
+                        toAdd.DataEdit += portfolio.OnPortfolioChanged;
+                        portfolio.Currencies.Add(toAdd);
+                        portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());
                         break;
                     }
                 case (AccountType.BankAccount):
                     {
-                        portfolio.BankAccounts.Add(new CashAccount(name));
+                        var toAdd = new CashAccount(name);
+                        toAdd.DataEdit += portfolio.OnPortfolioChanged;
+                        portfolio.BankAccounts.Add(toAdd);
+                        portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());
                         break;
                     }
                 case (AccountType.Sector):
                     {
-                        portfolio.BenchMarks.Add(new Sector(name));
+                        var toAdd = new Sector(name);
+                        toAdd.DataEdit += portfolio.OnPortfolioChanged;
+                        portfolio.BenchMarks.Add(toAdd);
+                        portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());
                         break;
                     }
                 default:
-                    reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Editing an Unknown type.");
+                    _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Editing an Unknown type.");
                     return false;
             }
 
-            reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"{elementType.ToString()} `{name.Company}'-`{name.Name}' added to database.");
+            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"{elementType} `{name.Company}'-`{name.Name}' added to database.");
             return true;
         }
     }

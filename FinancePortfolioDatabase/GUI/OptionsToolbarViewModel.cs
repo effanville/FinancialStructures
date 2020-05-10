@@ -46,7 +46,7 @@ namespace FinanceWindowsViewModels
         }
 
         public OptionsToolbarViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation)
-            : base("Options")
+            : base("Options", portfolio)
         {
             fReportLogger = reportLogger;
             fFileService = fileService;
@@ -65,6 +65,7 @@ namespace FinanceWindowsViewModels
 
         public override void UpdateData(IPortfolio portfolio)
         {
+            base.UpdateData(portfolio);
             fFileName = portfolio.DatabaseName + portfolio.Extension;
             fDirectory = portfolio.Directory;
             Currencies = portfolio.Names(AccountType.Currency).Concat(portfolio.Companies(AccountType.Currency)).Distinct().ToList();
@@ -72,7 +73,9 @@ namespace FinanceWindowsViewModels
             {
                 Currencies.Add(portfolio.BaseCurrency);
             }
-            BaseCurrency = portfolio.BaseCurrency;
+
+            // We have just updated the portfolio, so shouldnt be setting BaseCurrency here.
+            fBaseCurrency = portfolio.BaseCurrency;
         }
 
         public ICommand OpenHelpCommand { get; }
@@ -85,7 +88,15 @@ namespace FinanceWindowsViewModels
         public ICommand NewDatabaseCommand { get; }
         private void ExecuteNewDatabase()
         {
-            MessageBoxResult result = fDialogCreationService.ShowMessageBox("Do you want to load a new database?", "New Database?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            MessageBoxResult result;
+            if (DataStore.IsAlteredSinceSave)
+            {
+                result = fDialogCreationService.ShowMessageBox("Current database has unsaved alterations. Are you sure you want to load a new database?", "New Database?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            }
+            else
+            {
+                result = fDialogCreationService.ShowMessageBox("Do you want to load a new database?", "New Database?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            }
             if (result == MessageBoxResult.Yes)
             {
                 DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(""));

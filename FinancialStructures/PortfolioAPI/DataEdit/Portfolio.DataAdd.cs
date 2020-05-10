@@ -21,7 +21,7 @@ namespace FinancialStructures.PortfolioAPI
                     return portfolio.Funds[fundIndex].TryAddData(date, unitPrice, shares, Investment, reportLogger);
                 }
             }
-            reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Security `{names.Company}'-`{names.Name}' could not be found in the database.");
+            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Security `{names.Company}'-`{names.Name}' could not be found in the database.");
             return false;
         }
 
@@ -56,7 +56,7 @@ namespace FinancialStructures.PortfolioAPI
                         return SingleListAdd(portfolio.BenchMarks, name, data, reportLogger);
                     }
                 default:
-                    reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, $"Editing an Unknown type.");
+                    _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, $"Editing an Unknown type.");
                     return false;
             }
         }

@@ -15,8 +15,6 @@ namespace FinanceWindowsViewModels
 {
     internal class SelectedSecurityViewModel : ViewModelBase<IPortfolio>
     {
-        private IPortfolio Portfolio;
-
         public override bool Closable { get { return true; } }
 
         private readonly NameData_ChangeLogged fSelectedName;
@@ -64,7 +62,7 @@ namespace FinanceWindowsViewModels
         private readonly IDialogCreationService fDialogCreationService;
 
         public SelectedSecurityViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, NameData_ChangeLogged selectedName)
-            : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
+            : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name", portfolio)
         {
             fSelectedName = selectedName;
             DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);
@@ -124,10 +122,10 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null)
             {
-                var result = fFileService.SaveFile("csv", string.Empty, Portfolio.Directory, "Csv Files|*.csv|All Files|*.*");
+                var result = fFileService.SaveFile("csv", string.Empty, DataStore.Directory, "Csv Files|*.csv|All Files|*.*");
                 if (result.Success != null && (bool)result.Success)
                 {
-                    if (Portfolio.TryGetSecurity(fSelectedName, out var security))
+                    if (DataStore.TryGetSecurity(fSelectedName, out var security))
                     {
                         CsvDataRead.WriteToCSVFile(result.FilePath, AccountType.Security, security, ReportLogger);
                     }
@@ -145,7 +143,7 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null)
             {
-                Portfolio.TryGetSecurity(fSelectedName, out var desired);
+                DataStore.TryGetSecurity(fSelectedName, out var desired);
                 if (desired.Count() != SelectedSecurityData.Count)
                 {
                     UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(fSelectedName, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment, ReportLogger));
@@ -175,7 +173,7 @@ namespace FinanceWindowsViewModels
 
         public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)
         {
-            Portfolio = portfolio;
+            base.UpdateData(portfolio);
             if (fSelectedName != null)
             {
                 if (!portfolio.TryGetSecurity(fSelectedName, out _))
@@ -184,7 +182,7 @@ namespace FinanceWindowsViewModels
                     return;
                 }
 
-                SelectedSecurityData = Portfolio.SecurityData(fSelectedName);
+                SelectedSecurityData = DataStore.SecurityData(fSelectedName);
                 SelectLatestValue();
             }
             else
@@ -203,6 +201,7 @@ namespace FinanceWindowsViewModels
             if (SelectedSecurityData != null && SelectedSecurityData.Count > 0)
             {
                 selectedValues = SelectedSecurityData[SelectedSecurityData.Count - 1];
+                fOldSelectedValues = selectedValues.Copy();
             }
         }
     }

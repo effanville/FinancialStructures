@@ -57,6 +57,7 @@ namespace FinancialStructures.StatisticStructures
                 securityStats.CAR1Y = MathSupport.Truncate(100 * portfolio.IRR(names, date.AddMonths(-12), date));
                 securityStats.CAR5Y = MathSupport.Truncate(100 * portfolio.IRR(names, date.AddMonths(-60), date));
                 securityStats.CARTotal = MathSupport.Truncate(100 * portfolio.IRR(names));
+                securityStats.Sectors = des.Names.SectorsFlat;
             }
         }
 
@@ -101,7 +102,7 @@ namespace FinancialStructures.StatisticStructures
         /// </summary>
         public string HtmlTableData(UserOptions options, List<string> names)
         {
-            var properties = this.GetType().GetProperties();
+            var properties = GetType().GetProperties();
             string htmlData = "<th scope=\"row\">";
 
             for (int i = 0; i < properties.Length; i++)
@@ -127,7 +128,7 @@ namespace FinancialStructures.StatisticStructures
         /// <returns></returns>
         public string HtmlTableHeader(UserOptions options, List<string> names)
         {
-            var properties = this.GetType().GetProperties();
+            var properties = GetType().GetProperties();
             string htmlHeader = string.Empty;
             foreach (var property in properties)
             {
@@ -175,5 +176,6 @@ namespace FinancialStructures.StatisticStructures
         public double CAR1Y { get; set; }
         public double CAR5Y { get; set; }
         public double CARTotal { get; set; }
+        public string Sectors { get; set; } = string.Empty;
     }
 }

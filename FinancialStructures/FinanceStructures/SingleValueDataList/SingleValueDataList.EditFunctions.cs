@@ -50,6 +50,7 @@ namespace FinancialStructures.FinanceStructures
         public virtual bool EditNameData(NameData newNames)
         {
             Names = newNames;
+            OnDataEdit(this, new EventArgs());
             return true;
         }
 
@@ -60,7 +61,7 @@ namespace FinancialStructures.FinanceStructures
         {
             if (fValues.ValueExists(date, out _))
             {
-                reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, "Data already exists.");
+                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, "Data already exists.");
                 return false;
             }
 

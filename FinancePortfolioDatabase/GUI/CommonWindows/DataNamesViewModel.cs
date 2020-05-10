@@ -15,11 +15,6 @@ namespace FinanceCommonViewModels
     internal class DataNamesViewModel : ViewModelBase<IPortfolio>
     {
         /// <summary>
-        /// Reference to the repository
-        /// </summary>
-        internal IPortfolio Portfolio;
-
-        /// <summary>
         /// List of names preceding any possible edit.
         /// </summary>
         private List<NameCompDate> fPreEditNames = new List<NameCompDate>();
@@ -71,9 +66,8 @@ namespace FinanceCommonViewModels
         /// Construct an instance.
         /// </summary>
         public DataNamesViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, Action<object> loadSelectedData, EditMethods updateMethods)
-            : base("Accounts", loadSelectedData)
+            : base("Accounts", portfolio, loadSelectedData)
         {
-            Portfolio = portfolio;
             UpdateDataCallback = updateDataCallback;
             ReportLogger = reportLogger;
             editMethods = updateMethods;
@@ -102,7 +96,7 @@ namespace FinanceCommonViewModels
         /// </summary>
         public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)
         {
-            Portfolio = portfolio;
+            base.UpdateData(portfolio);
             var currentSelectedName = SelectedName;
             DataNames = (List<NameCompDate>)editMethods.ExecuteFunction(FunctionType.NameUpdate, portfolio).Result;
             DataNames.Sort();
@@ -146,7 +140,7 @@ namespace FinanceCommonViewModels
         public ICommand CreateCommand { get; set; }
         private void ExecuteCreateEdit()
         {
-            if (((List<NameCompDate>)editMethods.ExecuteFunction(FunctionType.NameUpdate, Portfolio).Result).Count != DataNames.Count)
+            if (((List<NameCompDate>)editMethods.ExecuteFunction(FunctionType.NameUpdate, DataStore).Result).Count != DataNames.Count)
             {
                 bool edited = false;
                 if (SelectedName.NewValue)

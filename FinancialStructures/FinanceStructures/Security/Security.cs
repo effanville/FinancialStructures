@@ -11,9 +11,29 @@ namespace FinancialStructures.FinanceStructures
     /// </summary>
     public partial class Security : ISecurity, IComparable
     {
+        /// <summary>
+        /// Event that controls when data is edited.
+        /// </summary>
+        public event EventHandler DataEdit;
+
+        internal void OnDataEdit(object edited, EventArgs e)
+        {
+            DataEdit?.Invoke(edited, e);
+        }
+
+        public void SetupEventListening()
+        {
+            UnitPrice.DataEdit += OnDataEdit;
+            Shares.DataEdit += OnDataEdit;
+            Investments.DataEdit += OnDataEdit;
+        }
+
+        /// <summary>
+        /// Returns a string describing this security.
+        /// </summary>
         public override string ToString()
         {
-            return Names.Company + " - " + Names.Name;
+            return Names.ToString();
         }
 
         private NameData fNames;
@@ -45,12 +65,18 @@ namespace FinancialStructures.FinanceStructures
             set { Names.Company = value; }
         }
 
+        /// <summary>
+        /// The url for this security.
+        /// </summary>
         public string Url
         {
             get { return Names.Url; }
             set { Names.Url = value; }
         }
 
+        /// <summary>
+        /// The currency this security is valued in.
+        /// </summary>
         public string Currency
         {
             get { return Names.Currency; }
@@ -121,6 +147,7 @@ namespace FinancialStructures.FinanceStructures
         internal Security(NameData names)
         {
             Names = names;
+            SetupEventListening();
         }
 
         /// <summary>
@@ -129,17 +156,19 @@ namespace FinancialStructures.FinanceStructures
         internal Security(string company, string name, string currency = "GBP", string url = null, HashSet<string> sectors = null)
         {
             Names = new NameData(company, name, currency, url, sectors);
+            SetupEventListening();
         }
 
         /// <summary>
         /// Constructor to make a new security from known data.
         /// </summary>
-        private Security(string company, string name, string currency, string url, TimeList shares, TimeList prices, TimeList investments)
+        private Security(NameData names, TimeList shares, TimeList prices, TimeList investments)
         {
-            Names = new NameData(company, name, currency, url);
+            Names = names.Copy();
             fShares = shares;
             fUnitPrice = prices;
             fInvestments = investments;
+            SetupEventListening();
         }
 
         /// <summary>
