@@ -32,6 +32,7 @@ namespace FinancialStructures.PortfolioAPI
 
                     portfolio.WireDataChangedEvents();
                     portfolio.OnPortfolioChanged(portfolio, new EventArgs());
+                    portfolio.Saving();
                     _ = reportLogger.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Loading, $"Loaded new database from {filePath}");
                 }
                 else
@@ -47,6 +48,7 @@ namespace FinancialStructures.PortfolioAPI
             portfolio.CopyData(new Portfolio());
             portfolio.WireDataChangedEvents();
             portfolio.OnPortfolioChanged(portfolio, new EventArgs());
+            portfolio.Saving();
         }
 
         /// <summary>
