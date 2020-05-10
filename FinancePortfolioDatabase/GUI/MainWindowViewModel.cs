@@ -77,22 +77,13 @@ namespace FinanceWindowsViewModels
         internal readonly IReportLogger ReportLogger;
 
         /// <summary>
-        /// The mechanism by which the data in <see cref="Portfolio"/> is updated. This includes a GUI update action.
+        /// The mechanism by which the data in <see cref="ProgramPortfolio"/> is updated. This includes a GUI update action.
         /// </summary>
         private Action<Action<IPortfolio>> UpdateDataCallback
         {
             get
             {
-                return action => UpdateData(action);
-            }
-        }
-
-        private void UpdateData(object obj)
-        {
-            if (obj is Action<IPortfolio> updateAction)
-            {
-                updateAction(ProgramPortfolio);
-                AllData_portfolioChanged(obj, null);
+                return action => action(ProgramPortfolio);
             }
         }
     }
