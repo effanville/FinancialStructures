@@ -201,6 +201,7 @@ namespace FinanceWindowsViewModels
             if (SelectedSecurityData != null && SelectedSecurityData.Count > 0)
             {
                 selectedValues = SelectedSecurityData[SelectedSecurityData.Count - 1];
+                fOldSelectedValues = selectedValues.Copy();
             }
         }
     }

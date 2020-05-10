@@ -45,8 +45,8 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var newData = TestingGUICode.CreateBasicDataBase();
             viewModel.UpdateData(newData);
 
-            Assert.AreEqual("TestFilePath", viewModel.Portfolio.FilePath);
-            Assert.AreEqual(1, viewModel.Portfolio.Funds.Count);
+            Assert.AreEqual("TestFilePath", viewModel.DataStore.FilePath);
+            Assert.AreEqual(1, viewModel.DataStore.Funds.Count);
         }
 
         [Test]
@@ -67,8 +67,8 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var newData = TestingGUICode.CreateBasicDataBase();
             viewModel.UpdateData(newData);
             Assert.AreEqual(1, viewModel.Tabs.Count);
-            Assert.AreEqual("TestFilePath", viewModel.Portfolio.FilePath);
-            Assert.AreEqual(1, viewModel.Portfolio.Funds.Count);
+            Assert.AreEqual("TestFilePath", viewModel.DataStore.FilePath);
+            Assert.AreEqual(1, viewModel.DataStore.Funds.Count);
         }
 
         [Test]
@@ -186,11 +186,11 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var editMethods = TestingGUICode.GetMethodsForTesting(AccountType.Security);
             var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, editMethods);
 
-            Assert.AreEqual(1, viewModel.Portfolio.Funds.Count);
+            Assert.AreEqual(1, viewModel.DataStore.Funds.Count);
             Assert.AreEqual(1, portfolio.Funds.Count);
             viewModel.SelectedName = new NameData_ChangeLogged("Fidelity", "China");
             viewModel.DeleteCommand.Execute(1);
-            Assert.AreEqual(0, viewModel.Portfolio.Funds.Count);
+            Assert.AreEqual(0, viewModel.DataStore.Funds.Count);
             Assert.AreEqual(0, portfolio.Funds.Count);
         }
     }

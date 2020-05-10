@@ -41,8 +41,8 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var newData = TestingGUICode.CreateBasicDataBase();
             viewModel.UpdateData(newData);
 
-            Assert.AreEqual("TestFilePath", viewModel.Portfolio.FilePath);
-            Assert.AreEqual(1, viewModel.Portfolio.BankAccounts.Count);
+            Assert.AreEqual("TestFilePath", viewModel.DataStore.FilePath);
+            Assert.AreEqual(1, viewModel.DataStore.BankAccounts.Count);
         }
 
         [Test]
@@ -62,8 +62,8 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var newData = TestingGUICode.CreateBasicDataBase();
             viewModel.UpdateData(newData);
             Assert.AreEqual(1, viewModel.Tabs.Count);
-            Assert.AreEqual("TestFilePath", viewModel.Portfolio.FilePath);
-            Assert.AreEqual(1, viewModel.Portfolio.BankAccounts.Count);
+            Assert.AreEqual("TestFilePath", viewModel.DataStore.FilePath);
+            Assert.AreEqual(1, viewModel.DataStore.BankAccounts.Count);
         }
 
         [Test]
@@ -175,11 +175,11 @@ namespace FPD_UI_UnitTests.CommonWindowTests
 
             var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, TestingGUICode.DummyEditMethods);
 
-            Assert.AreEqual(1, viewModel.Portfolio.BankAccounts.Count);
+            Assert.AreEqual(1, viewModel.DataStore.BankAccounts.Count);
             Assert.AreEqual(1, portfolio.BankAccounts.Count);
             viewModel.SelectedName = new NameData_ChangeLogged("Barclays", "currentAccount");
             viewModel.DeleteCommand.Execute(1);
-            Assert.AreEqual(0, viewModel.Portfolio.BankAccounts.Count);
+            Assert.AreEqual(0, viewModel.DataStore.BankAccounts.Count);
             Assert.AreEqual(0, portfolio.BankAccounts.Count);
         }
     }
