@@ -6,7 +6,6 @@ namespace FinancialStructures.FinanceStructures
 {
     public class Sector : SingleValueDataList, ISector
     {
-
         /// <summary>
         /// default constructor.
         /// </summary>

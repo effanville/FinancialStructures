@@ -13,9 +13,22 @@ namespace FinancialStructures.FinanceStructures
     /// </example>
     public partial class SingleValueDataList : IComparable, ISingleValueDataList
     {
+        /// <summary>
+        /// Event that controls when data is edited.
+        /// </summary>
+        public event EventHandler DataEdit;
+
+        internal void OnDataEdit(object edited)
+        {
+            DataEdit?.Invoke(edited, new EventArgs());
+        }
+
+        /// <summary>
+        /// The string representation of this list.
+        /// </summary>
         public override string ToString()
         {
-            return Names.Company + " - " + Names.Name;
+            return Names.ToString();
         }
 
         /// <summary>

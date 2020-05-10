@@ -11,9 +11,22 @@ namespace FinancialStructures.FinanceStructures
     /// </summary>
     public partial class Security : ISecurity, IComparable
     {
+        /// <summary>
+        /// Event that controls when data is edited.
+        /// </summary>
+        public event EventHandler DataEdit;
+
+        internal void OnDataEdit(object edited)
+        {
+            DataEdit?.Invoke(edited, new EventArgs());
+        }
+
+        /// <summary>
+        /// Returns a string describing this security.
+        /// </summary>
         public override string ToString()
         {
-            return Names.Company + " - " + Names.Name;
+            return Names.ToString();
         }
 
         private NameData fNames;
@@ -45,12 +58,18 @@ namespace FinancialStructures.FinanceStructures
             set { Names.Company = value; }
         }
 
+        /// <summary>
+        /// The url for this security.
+        /// </summary>
         public string Url
         {
             get { return Names.Url; }
             set { Names.Url = value; }
         }
 
+        /// <summary>
+        /// The currency this security is valued in.
+        /// </summary>
         public string Currency
         {
             get { return Names.Currency; }

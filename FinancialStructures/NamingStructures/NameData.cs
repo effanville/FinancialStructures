@@ -7,6 +7,10 @@ namespace FinancialStructures.NamingStructures
     /// </summary>
     public class NameData : TwoName
     {
+        /// <summary>
+        /// Takes a copy of the data.
+        /// </summary>
+        /// <returns></returns>
         public NameData Copy()
         {
             return new NameData(Company, Name, Currency, Url, Sectors);
@@ -88,6 +92,9 @@ namespace FinancialStructures.NamingStructures
             }
         }
 
+        /// <summary>
+        /// Input of sector values from a string, with comma as separator.
+        /// </summary>
         public virtual string SectorsFlat
         {
             get { return string.Join(",", fSectors); }

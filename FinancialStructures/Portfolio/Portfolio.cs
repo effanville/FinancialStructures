@@ -67,58 +67,54 @@ namespace FinancialStructures.Database
             }
         }
 
-        private string fBaseCurrency;
-
+        /// <summary>
+        /// The default currency for the portfolio.
+        /// </summary>
         public string BaseCurrency
         {
-            get { return fBaseCurrency; }
-            set { fBaseCurrency = value; }
+            get;
+            set;
         }
-
-        private List<Security> fFunds = new List<Security>();
 
         /// <summary>
         /// Securities stored in this database.
         /// </summary>
         public List<Security> Funds
         {
-            get { return fFunds; }
-            private set { fFunds = value; }
-        }
-
-        private List<CashAccount> fBankAccounts = new List<CashAccount>();
+            get;
+            private set;
+        } = new List<Security>();
 
         /// <summary>
         /// Bank accounts stored in this database.
         /// </summary>
         public List<CashAccount> BankAccounts
         {
-            get { return fBankAccounts; }
-            private set { fBankAccounts = value; }
-        }
-
-        private List<Currency> fCurrencies = new List<Currency>();
+            get;
+            private set;
+        } = new List<CashAccount>();
 
         /// <summary>
         /// The currencies other objects are held in.
         /// </summary>
         public List<Currency> Currencies
         {
-            get { return fCurrencies; }
-            private set { fCurrencies = value; }
-        }
-
-        private List<Sector> fBenchMarks = new List<Sector>();
+            get;
+            private set;
+        } = new List<Currency>();
 
         /// <summary>
         /// Sector benchmarks for comparison of held data.
         /// </summary>
         public List<Sector> BenchMarks
         {
-            get => fBenchMarks;
-            set => fBenchMarks = value;
-        }
+            get;
+            set;
+        } = new List<Sector>();
 
+        /// <summary>
+        /// Default parameterless constructor.
+        /// </summary>
         public Portfolio()
         {
         }
@@ -128,11 +124,11 @@ namespace FinancialStructures.Database
         /// </summary>
         public void CopyData(IPortfolio portfolio)
         {
-            this.BaseCurrency = portfolio.BaseCurrency;
-            this.Funds = portfolio.Funds;
-            this.BankAccounts = portfolio.BankAccounts;
-            this.Currencies = portfolio.Currencies;
-            this.BenchMarks = portfolio.BenchMarks;
+            BaseCurrency = portfolio.BaseCurrency;
+            Funds = portfolio.Funds;
+            BankAccounts = portfolio.BankAccounts;
+            Currencies = portfolio.Currencies;
+            BenchMarks = portfolio.BenchMarks;
         }
 
         /// <summary>
@@ -141,21 +137,21 @@ namespace FinancialStructures.Database
         /// <param name="sectors"></param>
         public void SetBenchMarks(List<Sector> sectors)
         {
-            fBenchMarks.Clear();
-            fBenchMarks.AddRange(sectors);
+            BenchMarks.Clear();
+            BenchMarks.AddRange(sectors);
         }
 
         /// <summary>
         /// Event to be raised when elements are changed.
         /// </summary>
-        public static event EventHandler portfolioChanged;
+        public static event EventHandler PortfolioChanged;
 
         /// <summary>
         /// handle the events raised in the above.
         /// </summary>
         protected void OnPortfolioChanged(EventArgs e)
         {
-            EventHandler handler = portfolioChanged;
+            EventHandler handler = PortfolioChanged;
             if (handler != null)
             {
                 handler?.Invoke(this, e);
@@ -165,7 +161,6 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Number of type in the database.
         /// </summary>
-        /// <param name="portfolio">The database to query.</param>
         /// <param name="elementType">The type to search for.</param>
         /// <returns>The number of type in the database.</returns>
         public int NumberOf(AccountType elementType)
