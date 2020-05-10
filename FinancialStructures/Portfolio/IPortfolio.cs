@@ -1,9 +1,13 @@
 ﻿using FinancialStructures.FinanceStructures;
 using FinancialStructures.PortfolioAPI;
+using System;
 using System.Collections.Generic;
 
 namespace FinancialStructures.FinanceInterfaces
 {
+    /// <summary>
+    /// Interface for portfolio.
+    /// </summary>
     public interface IPortfolio
     {
         void SetFilePath(string path);
@@ -24,5 +28,20 @@ namespace FinancialStructures.FinanceInterfaces
         void SetBenchMarks(List<Sector> sectors);
 
         int NumberOf(AccountType accountType);
+
+        /// <summary>
+        /// Handler for the event that data stored in the portfolio has changed.
+        /// </summary>
+        event EventHandler PortfolioChanged;
+
+        /// <summary>
+        /// Raise event if something has changed.
+        /// </summary>
+        void OnPortfolioChanged(object obj, EventArgs e);
+
+        /// <summary>
+        /// Enacts subscriptions of data changed events when creating portfolio.
+        /// </summary>
+        void WireDataChangedEvents();
     }
 }

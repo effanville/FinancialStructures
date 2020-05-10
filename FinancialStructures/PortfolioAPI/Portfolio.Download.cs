@@ -32,7 +32,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 case (AccountType.Security):
                     {
-                        portfolio.TryGetSecurity(names, out var sec);
+                        _ = portfolio.TryGetSecurity(names, out var sec);
                         await DownloadLatestValue(sec.Names, value => sec.UpdateSecurityData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
                         break;
                     }
@@ -40,7 +40,7 @@ namespace FinancialStructures.PortfolioAPI
                 case (AccountType.Currency):
                 case (AccountType.Sector):
                     {
-                        portfolio.TryGetAccount(accountType, names, out var acc);
+                        _ = portfolio.TryGetAccount(accountType, names, out var acc);
                         await DownloadLatestValue(acc.Names, value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
                         break;
                     }

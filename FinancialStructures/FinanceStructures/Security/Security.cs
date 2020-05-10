@@ -16,9 +16,16 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public event EventHandler DataEdit;
 
-        internal void OnDataEdit(object edited)
+        internal void OnDataEdit(object edited, EventArgs e)
         {
-            DataEdit?.Invoke(edited, new EventArgs());
+            DataEdit?.Invoke(edited, e);
+        }
+
+        public void SetupEventListening()
+        {
+            UnitPrice.DataEdit += OnDataEdit;
+            Shares.DataEdit += OnDataEdit;
+            Investments.DataEdit += OnDataEdit;
         }
 
         /// <summary>
@@ -140,6 +147,7 @@ namespace FinancialStructures.FinanceStructures
         internal Security(NameData names)
         {
             Names = names;
+            SetupEventListening();
         }
 
         /// <summary>
@@ -148,6 +156,7 @@ namespace FinancialStructures.FinanceStructures
         internal Security(string company, string name, string currency = "GBP", string url = null, HashSet<string> sectors = null)
         {
             Names = new NameData(company, name, currency, url, sectors);
+            SetupEventListening();
         }
 
         /// <summary>
@@ -159,6 +168,7 @@ namespace FinancialStructures.FinanceStructures
             fShares = shares;
             fUnitPrice = prices;
             fInvestments = investments;
+            SetupEventListening();
         }
 
         /// <summary>

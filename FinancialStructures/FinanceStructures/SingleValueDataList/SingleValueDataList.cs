@@ -18,9 +18,14 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public event EventHandler DataEdit;
 
-        internal void OnDataEdit(object edited)
+        internal void OnDataEdit(object edited, EventArgs e)
         {
-            DataEdit?.Invoke(edited, new EventArgs());
+            DataEdit?.Invoke(edited, e);
+        }
+
+        public void SetupEventListening()
+        {
+            Values.DataEdit += OnDataEdit;
         }
 
         /// <summary>
@@ -105,6 +110,7 @@ namespace FinancialStructures.FinanceStructures
         public SingleValueDataList()
         {
             Names = new NameData();
+            SetupEventListening();
         }
 
         /// <summary>
@@ -113,6 +119,7 @@ namespace FinancialStructures.FinanceStructures
         public SingleValueDataList(NameData names)
         {
             Names = names;
+            SetupEventListening();
         }
 
         /// <summary>
@@ -122,6 +129,7 @@ namespace FinancialStructures.FinanceStructures
         {
             Names = names;
             fValues = values;
+            SetupEventListening();
         }
 
         public ISingleValueDataList Copy()

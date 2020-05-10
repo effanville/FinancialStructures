@@ -144,17 +144,17 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Event to be raised when elements are changed.
         /// </summary>
-        public static event EventHandler PortfolioChanged;
+        public event EventHandler PortfolioChanged;
 
         /// <summary>
         /// handle the events raised in the above.
         /// </summary>
-        protected void OnPortfolioChanged(EventArgs e)
+        public void OnPortfolioChanged(object obj, EventArgs e)
         {
             EventHandler handler = PortfolioChanged;
             if (handler != null)
             {
-                handler?.Invoke(this, e);
+                handler?.Invoke(obj, e);
             }
         }
 
@@ -188,6 +188,34 @@ namespace FinancialStructures.Database
             }
 
             return 0;
+        }
+
+        /// <inheritdoc/>
+        public void WireDataChangedEvents()
+        {
+            foreach (var security in Funds)
+            {
+                security.DataEdit += OnPortfolioChanged;
+                security.SetupEventListening();
+            }
+
+            foreach (var bankAccount in BankAccounts)
+            {
+                bankAccount.DataEdit += OnPortfolioChanged;
+                bankAccount.SetupEventListening();
+            }
+
+            foreach (var sector in BenchMarks)
+            {
+                sector.DataEdit += OnPortfolioChanged;
+                sector.SetupEventListening();
+            }
+
+            foreach (var currency in Currencies)
+            {
+                currency.DataEdit += OnPortfolioChanged;
+                currency.SetupEventListening();
+            }
         }
     }
 }

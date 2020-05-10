@@ -18,10 +18,9 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="reportLogger">Callback to report information.</param>
         public static void LoadPortfolio(this IPortfolio portfolio, string filePath, IReportLogger reportLogger)
         {
-            string error = null;
             if (File.Exists(filePath))
             {
-                var database = XmlFileAccess.ReadFromXmlFile<AllData>(filePath, out error);
+                var database = XmlFileAccess.ReadFromXmlFile<AllData>(filePath, out string error);
                 if (database != null)
                 {
                     portfolio.CopyData(database.MyFunds);
@@ -30,17 +29,18 @@ namespace FinancialStructures.PortfolioAPI
                         portfolio.SetBenchMarks(database.myBenchMarks);
                     }
 
-                    reportLogger.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Loading, $"Loaded new database from {filePath}");
+                    portfolio.WireDataChangedEvents();
+                    _ = reportLogger.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Loading, $"Loaded new database from {filePath}");
                 }
                 else
                 {
-                    reportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, $" Failed to load new database from {filePath}. {error}.");
+                    _ = reportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, $" Failed to load new database from {filePath}. {error}.");
                 }
 
                 return;
             }
 
-            reportLogger.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Loading, "Loaded Empty New Database.");
+            _ = reportLogger.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Loading, "Loaded Empty New Database.");
             portfolio.CopyData(new Portfolio());
         }
 
@@ -59,11 +59,11 @@ namespace FinancialStructures.PortfolioAPI
                 XmlFileAccess.WriteToXmlFile(filePath, toSave, out string error);
                 if (error != null)
                 {
-                    reportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Saving, $"Failed to save database: {error}");
+                    _ = reportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Saving, $"Failed to save database: {error}");
                     return;
                 }
 
-                reportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Saving, $"Saved Database at {filePath}");
+                _ = reportLogger.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Saving, $"Saved Database at {filePath}");
             }
         }
     }

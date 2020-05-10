@@ -72,6 +72,7 @@ namespace FinancialStructures.FinanceStructures
         public bool EditNameData(NameData name)
         {
             Names = name;
+            OnDataEdit(this, new EventArgs());
             return true;
         }
 
@@ -79,7 +80,8 @@ namespace FinancialStructures.FinanceStructures
         {
             if (IsSectorLinked(sectorName))
             {
-                Names.Sectors.Remove(sectorName);
+                _ = Names.Sectors.Remove(sectorName);
+                OnDataEdit(this, new EventArgs());
                 return true;
             }
 
@@ -90,7 +92,8 @@ namespace FinancialStructures.FinanceStructures
         {
             if (!IsSectorLinked(sectorName))
             {
-                Names.Sectors.Add(sectorName);
+                _ = Names.Sectors.Add(sectorName);
+                OnDataEdit(this, new EventArgs());
                 return true;
             }
 
