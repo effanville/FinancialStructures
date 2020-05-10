@@ -13,7 +13,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public ISecurity Copy()
         {
-            return new Security(Names.Company, Names.Name, Names.Currency, Names.Url, fShares, fUnitPrice, fInvestments);
+            return new Security(Names, fShares, fUnitPrice, fInvestments);
         }
 
         /// <summary>

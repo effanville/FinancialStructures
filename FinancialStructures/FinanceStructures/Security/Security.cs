@@ -162,9 +162,9 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Constructor to make a new security from known data.
         /// </summary>
-        private Security(string company, string name, string currency, string url, TimeList shares, TimeList prices, TimeList investments)
+        private Security(NameData names, TimeList shares, TimeList prices, TimeList investments)
         {
-            Names = new NameData(company, name, currency, url);
+            Names = names.Copy();
             fShares = shares;
             fUnitPrice = prices;
             fInvestments = investments;
