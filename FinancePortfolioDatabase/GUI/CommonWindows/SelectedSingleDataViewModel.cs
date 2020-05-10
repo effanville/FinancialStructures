@@ -17,7 +17,6 @@ namespace FinanceCommonViewModels
     internal class SelectedSingleDataViewModel : ViewModelBase<IPortfolio>
     {
         private AccountType TypeOfAccount;
-        private IPortfolio Portfolio;
 
         public override bool Closable { get { return true; } }
 
@@ -73,7 +72,7 @@ namespace FinanceCommonViewModels
         private readonly EditMethods EditMethods;
 
         public SelectedSingleDataViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, EditMethods editMethods, NameData_ChangeLogged selectedName, AccountType accountType)
-            : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
+            : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name", portfolio)
         {
             SelectedName = selectedName;
             EditMethods = editMethods;
@@ -93,16 +92,16 @@ namespace FinanceCommonViewModels
 
         public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)
         {
-            Portfolio = portfolio;
+            base.UpdateData(portfolio);
             if (SelectedName != null)
             {
-                if (!((List<NameCompDate>)EditMethods.ExecuteFunction(FunctionType.NameUpdate, Portfolio).Result).Exists(name => name.IsEqualTo(SelectedName)))
+                if (!((List<NameCompDate>)EditMethods.ExecuteFunction(FunctionType.NameUpdate, DataStore).Result).Exists(name => name.IsEqualTo(SelectedName)))
                 {
                     removeTab?.Invoke(this);
                     return;
                 }
 
-                SelectedData = (List<DayValue_ChangeLogged>)EditMethods.ExecuteFunction(FunctionType.SelectData, Portfolio, SelectedName, ReportLogger).Result;
+                SelectedData = (List<DayValue_ChangeLogged>)EditMethods.ExecuteFunction(FunctionType.SelectData, DataStore, SelectedName, ReportLogger).Result;
                 SelectLatestValue();
             }
             else
@@ -123,7 +122,7 @@ namespace FinanceCommonViewModels
         {
             if (SelectedName != null)
             {
-                if (((List<DayValue_ChangeLogged>)EditMethods.ExecuteFunction(FunctionType.SelectData, Portfolio, SelectedName, ReportLogger).Result).Count() != SelectedData.Count)
+                if (((List<DayValue_ChangeLogged>)EditMethods.ExecuteFunction(FunctionType.SelectData, DataStore, SelectedName, ReportLogger).Result).Count() != SelectedData.Count)
                 {
                     UpdateDataCallback(programPortfolio => EditMethods.ExecuteFunction(FunctionType.AddData, programPortfolio, SelectedName, SelectedValue, ReportLogger).Wait());
                     SelectedName.NewValue = false;
@@ -201,10 +200,10 @@ namespace FinanceCommonViewModels
         {
             if (fSelectedName != null)
             {
-                var result = fFileService.SaveFile("csv", string.Empty, Portfolio.Directory, "Csv Files|*.csv|All Files|*.*");
+                var result = fFileService.SaveFile("csv", string.Empty, DataStore.Directory, "Csv Files|*.csv|All Files|*.*");
                 if (result.Success != null && (bool)result.Success)
                 {
-                    if (Portfolio.TryGetAccount(TypeOfAccount, fSelectedName, out var security))
+                    if (DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out var security))
                     {
                         CsvDataRead.WriteToCSVFile(result.FilePath, AccountType.Security, security, ReportLogger);
                     }

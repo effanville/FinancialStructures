@@ -14,7 +14,6 @@ namespace FinanceCommonViewModels
     internal class SingleValueEditWindowViewModel : ViewModelBase<IPortfolio>
     {
         private AccountType TypeOfAccount;
-        internal IPortfolio Portfolio;
         public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
 
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
@@ -24,7 +23,7 @@ namespace FinanceCommonViewModels
         private readonly EditMethods EditMethods;
 
         public SingleValueEditWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, EditMethods editMethods, AccountType accountType)
-            : base(title)
+            : base(title, portfolio)
         {
             UpdateDataCallback = updateDataCallback;
             ReportLogger = reportLogger;
@@ -34,12 +33,12 @@ namespace FinanceCommonViewModels
             TypeOfAccount = accountType;
             UpdateData(portfolio);
             LoadSelectedTab = (name) => LoadTabFunc(name);
-            Tabs.Add(new DataNamesViewModel(Portfolio, updateDataCallback, reportLogger, LoadSelectedTab, editMethods));
+            Tabs.Add(new DataNamesViewModel(DataStore, updateDataCallback, reportLogger, LoadSelectedTab, editMethods));
         }
 
         public override void UpdateData(IPortfolio portfolio)
         {
-            Portfolio = portfolio;
+            base.UpdateData(portfolio);
             List<object> removableTabs = new List<object>();
             if (Tabs != null)
             {
@@ -67,7 +66,7 @@ namespace FinanceCommonViewModels
         {
             if (obj is NameData_ChangeLogged name)
             {
-                Tabs.Add(new SelectedSingleDataViewModel(Portfolio, UpdateDataCallback, ReportLogger, fFileService, fDialogCreationService, EditMethods, name, TypeOfAccount));
+                Tabs.Add(new SelectedSingleDataViewModel(DataStore, UpdateDataCallback, ReportLogger, fFileService, fDialogCreationService, EditMethods, name, TypeOfAccount));
             }
         }
     }
