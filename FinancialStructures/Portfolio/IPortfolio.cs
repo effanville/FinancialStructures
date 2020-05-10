@@ -43,5 +43,15 @@ namespace FinancialStructures.FinanceInterfaces
         /// Enacts subscriptions of data changed events when creating portfolio.
         /// </summary>
         void WireDataChangedEvents();
+
+        /// <summary>
+        /// Whether the user has changed the database since last save.
+        /// </summary>
+        bool IsAlteredSinceSave { get; }
+
+        /// <summary>
+        /// Enacts internal things in the portfolio when it is being saved.
+        /// </summary>
+        void Saving();
     }
 }

@@ -63,6 +63,7 @@ namespace FinancialStructures.PortfolioAPI
                     return;
                 }
 
+                portfolio.Saving();
                 _ = reportLogger.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Saving, $"Saved Database at {filePath}");
             }
         }

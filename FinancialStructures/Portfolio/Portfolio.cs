@@ -4,6 +4,7 @@ using FinancialStructures.PortfolioAPI;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml.Serialization;
 
 namespace FinancialStructures.Database
 {
@@ -12,6 +13,18 @@ namespace FinancialStructures.Database
     /// </summary>
     public partial class Portfolio : IPortfolio
     {
+        [XmlIgnoreAttribute]
+        public bool IsAlteredSinceSave
+        {
+            get;
+            private set;
+        }
+
+        public void Saving()
+        {
+            IsAlteredSinceSave = false;
+        }
+
         private string fDatabaseFilePath;
 
         /// <summary>
@@ -151,6 +164,7 @@ namespace FinancialStructures.Database
         /// </summary>
         public void OnPortfolioChanged(object obj, EventArgs e)
         {
+            IsAlteredSinceSave = true;
             EventHandler handler = PortfolioChanged;
             if (handler != null)
             {
