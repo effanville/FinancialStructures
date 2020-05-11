@@ -38,5 +38,10 @@ namespace StringFunctions
         {
             return dateTime.Year.ToString() + dateTime.Month.ToString() + dateTime.Day.ToString() + "-" + dateTime.Hour.ToString() + dateTime.Minute.ToString("D2");
         }
+
+        public static string FileSuitableUKDateString(this DateTime date)
+        {
+            return date.Year.ToString() + date.Month.ToString() + date.Day.ToString();
+        }
     }
 }

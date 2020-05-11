@@ -36,19 +36,19 @@ namespace FinancialStructures.StatsMakers
             ShowBankAccounts = NameGetter.GetData(conditions, nameof(ShowBankAccounts));
             ShowSectors = NameGetter.GetData(conditions, nameof(ShowSectors));
         }
-        public List<string> SecurityDataToExport { get; set; }
+        public List<string> SecurityDataToExport { get; set; } = new List<string>();
 
-        public List<string> BankAccDataToExport { get; set; }
+        public List<string> BankAccDataToExport { get; set; } = new List<string>();
 
-        public List<string> SectorDataToExport { get; set; }
-        public bool DisplayValueFunds { get; set; }
-        public bool Spacing { get; set; }
+        public List<string> SectorDataToExport { get; set; } = new List<string>();
+        public bool DisplayValueFunds { get; set; } = false;
+        public bool Spacing { get; set; } = false;
 
-        public bool Colours { get; set; }
+        public bool Colours { get; set; } = false;
 
-        public bool ShowSecurites { get; set; }
-        public bool ShowBankAccounts { get; set; }
+        public bool ShowSecurites { get; set; } = true;
+        public bool ShowBankAccounts { get; set; } = true;
 
-        public bool ShowSectors { get; set; }
+        public bool ShowSectors { get; set; } = true;
     }
 }
