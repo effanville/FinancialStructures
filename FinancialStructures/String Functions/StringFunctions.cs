@@ -29,5 +29,14 @@ namespace StringFunctions
             output = (T)Enum.Parse(typeof(T), value, true);
             return output;
         }
+
+        /// <summary>
+        /// Returns a string representation of the DateTime in a format suitable to be 
+        /// used in filenames.
+        /// </summary>
+        public static string FileSuitableDateTimeValue(this DateTime dateTime)
+        {
+            return dateTime.Year.ToString() + dateTime.Month.ToString() + dateTime.Day.ToString() + "-" + dateTime.Hour.ToString() + dateTime.Minute.ToString("D2");
+        }
     }
 }
