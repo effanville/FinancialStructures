@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FinancialStructures.MathLibrary.Functions
+namespace StructureCommon.MathLibrary.Functions
 {
     /// <summary>
     /// The incomplete Gamma function written as P(a,x).

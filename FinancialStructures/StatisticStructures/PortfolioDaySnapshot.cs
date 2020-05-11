@@ -1,7 +1,7 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.Mathematics;
+using StructureCommon.MathLibrary;
 using FinancialStructures.PortfolioAPI;
 using System;
 using System.Collections.Generic;

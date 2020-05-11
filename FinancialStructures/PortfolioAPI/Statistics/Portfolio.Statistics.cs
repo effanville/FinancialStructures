@@ -1,7 +1,7 @@
 ﻿using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceFunctions;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.StatisticStructures;
+using StructureCommon.FinanceFunctions;
 using System;
 using System.Collections.Generic;
 using System.Linq;

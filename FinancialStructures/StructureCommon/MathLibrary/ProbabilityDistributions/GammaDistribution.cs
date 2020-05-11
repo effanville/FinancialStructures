@@ -1,8 +1,7 @@
-﻿
-using FinancialStructures.MathLibrary.Functions;
+﻿using StructureCommon.MathLibrary.Functions;
 using System;
 
-namespace FinancialStructures.MathLibrary.ProbabilityDistributions
+namespace StructureCommon.MathLibrary.ProbabilityDistributions
 {
     public class GammaDistribution : Gamma, IProbabilityDistribution
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FinancialStructures.Mathematics
+namespace StructureCommon.MathLibrary
 {
     public static class MathSupport
     {

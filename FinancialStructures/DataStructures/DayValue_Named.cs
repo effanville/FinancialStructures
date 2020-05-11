@@ -1,8 +1,8 @@
-﻿using FinancialStructures.Mathematics;
-using FinancialStructures.NamingStructures;
+﻿using FinancialStructures.NamingStructures;
 using FinancialStructures.StatsMakers;
 using System;
 using System.Collections.Generic;
+using StructureCommon.MathLibrary;
 
 namespace FinancialStructures.DataStructures
 {

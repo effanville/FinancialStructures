@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.MathLibrary.Functions
+﻿namespace StructureCommon.MathLibrary.Functions
 {
     public class GaussLegendreQuadrature
     {

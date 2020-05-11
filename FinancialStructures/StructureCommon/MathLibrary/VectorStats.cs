@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FinancialStructures.Mathematics
+namespace StructureCommon.Mathematics
 {
     public static class VectorStats
     {

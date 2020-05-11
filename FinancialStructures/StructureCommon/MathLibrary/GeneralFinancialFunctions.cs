@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace FinancialStructures.FinanceFunctions
+namespace StructureCommon.FinanceFunctions
 {
     /// <summary>
     /// Default financial based functions.

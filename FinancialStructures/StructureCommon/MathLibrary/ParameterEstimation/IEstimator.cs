@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.Mathematics
+﻿namespace StructureCommon.MathLibrary.ParameterEstimation
 {
     /// <summary>
     /// Container for any estimator of values.

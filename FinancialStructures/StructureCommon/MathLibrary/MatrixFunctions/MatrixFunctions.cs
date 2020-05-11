@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.Mathematics
+﻿namespace StructureCommon.MathLibrary.Matrices
 {
     public static class MatrixFunctions
     {

@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.MathLibrary.ProbabilityDistributions
+﻿namespace StructureCommon.MathLibrary.ProbabilityDistributions
 {
     interface IProbabilityDistribution
     {

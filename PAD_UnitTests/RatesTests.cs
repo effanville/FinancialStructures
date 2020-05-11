@@ -1,6 +1,6 @@
 using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceFunctions;
 using NUnit.Framework;
+using StructureCommon.FinanceFunctions;
 using System;
 using System.Collections.Generic;
 

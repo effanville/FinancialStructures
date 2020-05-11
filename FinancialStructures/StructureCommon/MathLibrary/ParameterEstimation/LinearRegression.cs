@@ -1,8 +1,7 @@
-﻿using FinancialStructures.Mathematics;
-using FinancialStructures.MathLibrary.Functions;
+﻿using StructureCommon.MathLibrary.Functions;
 using System;
 
-namespace FinancialStructures.MathLibrary
+namespace StructureCommon.MathLibrary.ParameterEstimation
 {
     /// <summary>
     /// Object for fitting a straight line y = a + b x to a set of points (x_i,y_i) with or without error 

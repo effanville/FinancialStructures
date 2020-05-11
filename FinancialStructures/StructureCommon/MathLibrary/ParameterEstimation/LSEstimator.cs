@@ -1,4 +1,6 @@
-﻿namespace FinancialStructures.Mathematics
+﻿using StructureCommon.MathLibrary.Matrices;
+
+namespace StructureCommon.MathLibrary.ParameterEstimation
 {
     /// <summary>
     /// Holds data on least squares estimator for a matrix of data inputs and corresponding y values.

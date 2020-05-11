@@ -1,5 +1,5 @@
 ﻿using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceFunctions;
+using StructureCommon.FinanceFunctions;
 using System;
 
 namespace FinancialStructures.FinanceStructures
