@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StringFunctions
+namespace StructureCommon.StringFunctions
 {
     /// <summary>
     /// Static extension methods for strings.

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Xml.Serialization;
 
-namespace FinancialStructures.FileAccess
+namespace StructureCommon.FileAccess
 {
     /// <summary>
     /// Contains generic type routines for writing and reading from xml file.

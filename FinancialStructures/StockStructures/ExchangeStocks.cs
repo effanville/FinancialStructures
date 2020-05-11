@@ -1,7 +1,7 @@
-﻿using FinancialStructures.FileAccess;
-using FinancialStructures.NamingStructures;
+﻿using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Reporting;
+using StructureCommon.FileAccess;
 using System;
 using System.Collections.Generic;
 using System.IO;

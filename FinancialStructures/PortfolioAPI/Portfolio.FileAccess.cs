@@ -1,8 +1,8 @@
 ﻿using FinancialStructures.Database;
-using FinancialStructures.FileAccess;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Reporting;
 using FinancialStructures.SavingClasses;
+using StructureCommon.FileAccess;
 using System;
 using System.IO;
 using System.Linq;
