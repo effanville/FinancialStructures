@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FinancialStructures.Reporting
+namespace StructureCommon.Reporting
 {
     /// <summary>
     /// A report structure containing information about a possible problem (or just info) happening in the program.

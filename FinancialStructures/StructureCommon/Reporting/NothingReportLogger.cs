@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.Reporting
+﻿namespace StructureCommon.Reporting
 {
     /// <summary>
     /// Report logger that does nothing, but declares successfully reported.

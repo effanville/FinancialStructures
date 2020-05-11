@@ -1,27 +1,5 @@
-﻿namespace FinancialStructures.Reporting
+﻿namespace StructureCommon.Reporting
 {
-    public enum ReportType
-    {
-        Error = 0,
-        Warning = 1,
-        Report = 2
-    }
-
-    public enum ReportLocation
-    {
-        Unknown,
-        Downloading,
-        Saving,
-        Loading,
-        AddingData,
-        EditingData,
-        DeletingData,
-        Parsing,
-        StatisticsPage,
-        DatabaseAccess,
-        Help
-    }
-
     /// <summary>
     /// How serious the report is.
     /// </summary>

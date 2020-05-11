@@ -1,7 +1,7 @@
-﻿using StringFunctions;
+﻿using StructureCommon.StringFunctions;
 using System;
 
-namespace FinancialStructures.Reporting
+namespace StructureCommon.Reporting
 {
     /// <summary>
     /// Collection of standard reporting mechanisms.

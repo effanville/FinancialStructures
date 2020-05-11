@@ -1,7 +1,7 @@
 ﻿using FinanceWindows;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.Reporting;
+using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
 using System.Linq;

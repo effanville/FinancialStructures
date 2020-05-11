@@ -1,6 +1,6 @@
 ﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.Reporting;
+using StructureCommon.Reporting;
 using System;
 using System.IO;
 using System.Linq;

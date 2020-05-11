@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace FinancialStructures.Reporting
+namespace StructureCommon.Reporting
 {
     /// <summary>
     /// Collection of ErrorReport with added query functionality to tell the user what is happening.

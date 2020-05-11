@@ -1,6 +1,6 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.Reporting;
+using StructureCommon.Reporting;
 using FinancialStructures.SavingClasses;
 using StructureCommon.FileAccess;
 using System;

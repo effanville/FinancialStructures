@@ -1,6 +1,6 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.Reporting;
+using StructureCommon.Reporting;
 using FinancialStructures.StatisticStructures;
 using FinancialStructures.StatsMakers;
 using System;

@@ -1,6 +1,6 @@
 ﻿using FinanceViewModels.StatsViewModels;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.Reporting;
+using StructureCommon.Reporting;
 using FinancialStructures.StatsMakers;
 using System;
 using System.Collections.ObjectModel;

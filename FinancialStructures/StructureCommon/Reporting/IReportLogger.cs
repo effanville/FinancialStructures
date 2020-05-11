@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.Reporting
+﻿namespace StructureCommon.Reporting
 {
     /// <summary>
     /// Report Logger contract. Allows for reporting using types or strings.
