@@ -54,6 +54,10 @@
               <Day>2020-05-10T00:00:00+01:00</Day>
               <Value>100</Value>
             </DailyValuation>
+            <DailyValuation>
+              <Day>2020-05-11T00:00:00+01:00</Day>
+              <Value>100</Value>
+            </DailyValuation>
           </Values>
         </Shares>
         <Sectors>
@@ -96,6 +100,10 @@
             <DailyValuation>
               <Day>2020-05-10T00:00:00+01:00</Day>
               <Value>13.3</Value>
+            </DailyValuation>
+            <DailyValuation>
+              <Day>2020-05-11T00:00:00+01:00</Day>
+              <Value>13.66</Value>
             </DailyValuation>
           </Values>
         </UnitPrice>
@@ -167,6 +175,10 @@
               <Day>2020-05-10T00:00:00+01:00</Day>
               <Value>100</Value>
             </DailyValuation>
+            <DailyValuation>
+              <Day>2020-05-11T00:00:00+01:00</Day>
+              <Value>100</Value>
+            </DailyValuation>
           </Values>
         </Shares>
         <Sectors>
@@ -216,6 +228,10 @@
             </DailyValuation>
             <DailyValuation>
               <Day>2020-05-10T00:00:00+01:00</Day>
+              <Value>25.41</Value>
+            </DailyValuation>
+            <DailyValuation>
+              <Day>2020-05-11T00:00:00+01:00</Day>
               <Value>25.41</Value>
             </DailyValuation>
           </Values>
@@ -284,6 +300,10 @@
               <Day>2020-05-10T00:00:00+01:00</Day>
               <Value>200</Value>
             </DailyValuation>
+            <DailyValuation>
+              <Day>2020-05-11T00:00:00+01:00</Day>
+              <Value>200</Value>
+            </DailyValuation>
           </Values>
         </Shares>
         <Sectors>
@@ -330,6 +350,10 @@
             <DailyValuation>
               <Day>2020-05-10T00:00:00+01:00</Day>
               <Value>0.5078</Value>
+            </DailyValuation>
+            <DailyValuation>
+              <Day>2020-05-11T00:00:00+01:00</Day>
+              <Value>0.5114</Value>
             </DailyValuation>
           </Values>
         </UnitPrice>
@@ -381,6 +405,10 @@
               <Day>2020-05-10T00:00:00+01:00</Day>
               <Value>100</Value>
             </DailyValuation>
+            <DailyValuation>
+              <Day>2020-05-11T00:00:00+01:00</Day>
+              <Value>100</Value>
+            </DailyValuation>
           </Values>
         </Shares>
         <Sectors>
@@ -407,6 +435,10 @@
             <DailyValuation>
               <Day>2020-05-10T00:00:00+01:00</Day>
               <Value>0.7228</Value>
+            </DailyValuation>
+            <DailyValuation>
+              <Day>2020-05-11T00:00:00+01:00</Day>
+              <Value>0.7164</Value>
             </DailyValuation>
           </Values>
         </UnitPrice>
@@ -642,6 +674,10 @@
               <Day>2020-05-10T00:00:00+01:00</Day>
               <Value>0</Value>
             </DailyValuation>
+            <DailyValuation>
+              <Day>2020-05-11T00:00:00+01:00</Day>
+              <Value>0</Value>
+            </DailyValuation>
           </Values>
         </Shares>
         <Sectors>
@@ -688,6 +724,10 @@
             <DailyValuation>
               <Day>2020-05-10T00:00:00+01:00</Day>
               <Value>0.6462</Value>
+            </DailyValuation>
+            <DailyValuation>
+              <Day>2020-05-11T00:00:00+01:00</Day>
+              <Value>0.6470999999999999</Value>
             </DailyValuation>
           </Values>
         </UnitPrice>
