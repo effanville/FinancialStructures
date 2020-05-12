@@ -1,9 +1,9 @@
 ﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using StructureCommon.Reporting;
+using StructureCommon.WebAccess;
 using System;
 using System.Linq;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace FinancialStructures.PortfolioAPI
@@ -49,16 +49,6 @@ namespace FinancialStructures.PortfolioAPI
 
         private static string Pence = "GBX";
         private static string Pounds = "GBP";
-        private static HttpClient client = new HttpClient();
-        private static bool IsValidWebAddress(string address)
-        {
-            if (!Uri.TryCreate(address, UriKind.Absolute, out Uri uri) || null == uri)
-            {
-                return false;
-            }
-
-            return Uri.IsWellFormedUriString(address, UriKind.Absolute);
-        }
 
         private static WebsiteType AddressType(string address)
         {
@@ -112,7 +102,7 @@ namespace FinancialStructures.PortfolioAPI
 
         public static async Task DownloadLatestValue(NameData names, Action<double> updateValue, IReportLogger reportLogger)
         {
-            string data = await DownloadFromURL(names.Url, reportLogger).ConfigureAwait(false);
+            string data = await WebDownloader.DownloadFromURLasync(names.Url, reportLogger).ConfigureAwait(false);
             if (string.IsNullOrEmpty(data))
             {
                 reportLogger.LogUseful(ReportType.Error, ReportLocation.Downloading, $"{names.Company}-{names.Name}: could not download data from {names.Url}");
@@ -124,49 +114,6 @@ namespace FinancialStructures.PortfolioAPI
             }
 
             updateValue(value);
-        }
-
-        public static async Task<string> DownloadFromURL(string url, IReportLogger reportLogger)
-        {
-            if (string.IsNullOrEmpty(url))
-            {
-                return string.Empty;
-            }
-
-            string newUrl = Uri.EscapeUriString(url);
-            string output = string.Empty;
-            if (IsValidWebAddress(newUrl))
-            {
-                try
-                {
-                    HttpRequestMessage requestMessage = new HttpRequestMessage
-                    {
-                        RequestUri = new Uri(newUrl)
-                    };
-                    requestMessage.Headers.Add("Cookie", "A1S=d=AQABBBqjZl4CELBdwrYAVcmgp1PaEGx2xoQFEgABAQGPgF5eX_bPb2UB_iMAAAcIGqNmXmx2xoQ&S=AQAAAii_Jnul1r-aKGkxwIrap9c&j=GDPR");
-                    requestMessage.Headers.Add("Cookie", "A1=d=AQABBBqjZl4CELBdwrYAVcmgp1PaEGx2xoQFEgABAQGPgF5eX_bPb2UB_iMAAAcIGqNmXmx2xoQ&S=AQAAAii_Jnul1r-aKGkxwIrap9c");
-                    requestMessage.Headers.Add("Cookie", "A3=d=AQABBBqjZl4CELBdwrYAVcmgp1PaEGx2xoQFEgABAQGPgF5eX_bPb2UB_iMAAAcIGqNmXmx2xoQ&S=AQAAAii_Jnul1r-aKGkxwIrap9c");
-                    requestMessage.Headers.Add("Cookie", "B=89hjmdhf6d8oq&b=3&s=bv");
-                    requestMessage.Headers.Add("Cookie", "cmp=v=28&t=1586111544&j=1&o=106");
-                    requestMessage.Headers.Add("Cookie", "EuConsent=BOw-KL2OxZWozAOABCENC7uAAAAtl6__f_97_8_v2ddvduz_Ov_j_c__3XW8fPZvcELzhK9Meu_2xzd4u9wNRM5wckx87eJrEso5czISsG-RMod_zt__3ziX9oxPowEc9rz3nbEw6vs2v-ZzBCGJ_Iw");
-                    requestMessage.Headers.Add("Cookie", "GUC=AQABAQFegI9fXkIe8wSV");
-                    requestMessage.Headers.Add("Cookie", "PRF=t%3D2800.HK%252BVUKE.L%252BIGLS.L%252BSAAA.L%252BVWRL.L");
-                    HttpResponseMessage response = await client.SendAsync(requestMessage).ConfigureAwait(false);
-                    response.EnsureSuccessStatusCode();
-                    string result = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-                    if (result != null)
-                    {
-                        output = result;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    reportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Failed to download from url {url}. Reason : {ex.Message}");
-                    return output;
-                }
-            }
-
-            return output;
         }
 
         private static bool ProcessDownloadString(string url, string data, IReportLogger reportLogger, out double value)
