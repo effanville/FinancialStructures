@@ -1,8 +1,8 @@
-﻿using FinancialStructures.DataReader;
-using FinancialStructures.DataStructures;
+﻿using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
+using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
@@ -113,10 +113,10 @@ namespace FinanceWindowsViewModels
             {
                 var result = fFileService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
                 List<object> outputs = null;
-
-                if (result.Success != null && (bool)result.Success)
+                bool exists = DataStore.TryGetSecurity(fSelectedName, out ISecurity security);
+                if (result.Success != null && (bool)result.Success && exists)
                 {
-                    outputs = CsvDataRead.ReadFromCsv(result.FilePath, AccountType.Security, ReportLogger);
+                    outputs = CsvReaderWriter.ReadFromCsv(security, result.FilePath, ReportLogger);
                 }
                 if (outputs != null)
                 {
@@ -149,7 +149,7 @@ namespace FinanceWindowsViewModels
                 {
                     if (DataStore.TryGetSecurity(fSelectedName, out var security))
                     {
-                        CsvDataRead.WriteToCSVFile(result.FilePath, AccountType.Security, security, ReportLogger);
+                        CsvReaderWriter.WriteToCSVFile(security, result.FilePath, ReportLogger);
                     }
                     else
                     {

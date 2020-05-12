@@ -4,6 +4,7 @@ using FinancialStructures.NamingStructures;
 using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace FinancialStructures.FinanceStructures
@@ -66,6 +67,32 @@ namespace FinancialStructures.FinanceStructures
             }
 
             return fValues.TryAddValue(date, value, reportLogger);
+        }
+
+        public List<object> CreateDataFromCsv(List<string[]> valuationsToRead, IReportLogger reportLogger = null)
+        {
+            var dailyValuations = new List<object>();
+            foreach (var dayValuation in valuationsToRead)
+            {
+                if (dayValuation.Length != 2)
+                {
+                    reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, "Line in Csv file has incomplete data.");
+                    break;
+                }
+
+                var line = new DayValue_ChangeLogged(DateTime.Parse(dayValuation[0]), double.Parse(dayValuation[1]));
+                dailyValuations.Add(line);
+            }
+
+            return dailyValuations;
+        }
+
+        public void WriteDataToCsv(TextWriter writer, IReportLogger reportLogger)
+        {
+            foreach (DayValue_ChangeLogged value in GetDataForDisplay())
+            {
+                writer.WriteLine(value.ToString());
+            }
         }
 
         /// <summary>

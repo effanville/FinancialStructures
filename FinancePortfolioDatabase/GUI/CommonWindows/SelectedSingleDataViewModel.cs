@@ -3,6 +3,7 @@ using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
+using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
@@ -201,18 +202,18 @@ namespace FinanceCommonViewModels
             {
                 var result = fFileService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
                 List<object> outputs = null;
-
-                if (result.Success != null && (bool)result.Success)
+                bool exists = DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out var account);
+                if (result.Success != null && (bool)result.Success && exists)
                 {
-                    outputs = CsvDataRead.ReadFromCsv(result.FilePath, AccountType.Security, ReportLogger);
+                    outputs = CsvReaderWriter.ReadFromCsv(account, result.FilePath, ReportLogger);
                 }
                 if (outputs != null)
                 {
                     foreach (var objec in outputs)
                     {
-                        if (objec is SecurityDayData view)
+                        if (objec is DayValue_ChangeLogged view)
                         {
-                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(fSelectedName, view.Date, view.ShareNo, view.UnitPrice, view.NewInvestment, ReportLogger));
+                            UpdateDataCallback(programPortfolio => EditMethods.ExecuteFunction(FunctionType.AddData, programPortfolio, SelectedName, view, ReportLogger).Wait());
                         }
                         else
                         {
@@ -235,9 +236,9 @@ namespace FinanceCommonViewModels
                 var result = fFileService.SaveFile("csv", string.Empty, DataStore.Directory, "Csv Files|*.csv|All Files|*.*");
                 if (result.Success != null && (bool)result.Success)
                 {
-                    if (DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out var security))
+                    if (DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out var account))
                     {
-                        CsvDataRead.WriteToCSVFile(result.FilePath, AccountType.Security, security, ReportLogger);
+                        CsvReaderWriter.WriteToCSVFile(account, result.FilePath, ReportLogger);
                     }
                     else
                     {

@@ -1,12 +1,13 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.NamingStructures;
+using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
 
 namespace FinancialStructures.FinanceInterfaces
 {
-    public interface ISingleValueDataList
+    public interface ISingleValueDataList : ICSVAccess
     {
         string ToString();
         int CompareTo(object obj);
