@@ -1,4 +1,4 @@
-﻿using FinancialStructures.DataStructures;
+﻿using StructureCommon.DataStructures;
 using StructureCommon.FinanceFunctions;
 using System;
 

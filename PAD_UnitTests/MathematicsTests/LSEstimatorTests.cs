@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using StructureCommon.MathLibrary.ParameterEstimation;
 using System;
 
 namespace FinancialStructures_Tests

@@ -1,5 +1,5 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.NamingStructures;
+﻿using FinancialStructures.NamingStructures;
+using StructureCommon.DataStructures;
 using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
 using System;

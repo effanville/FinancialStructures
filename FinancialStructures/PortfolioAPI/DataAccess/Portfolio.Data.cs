@@ -1,6 +1,7 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
+using StructureCommon.DataStructures;
 using StructureCommon.Reporting;
 using System.Collections.Generic;
 

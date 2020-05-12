@@ -1,10 +1,11 @@
 ﻿using FinanceWindowsViewModels;
 using FinancialStructures.Database;
-using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using Moq;
+using StructureCommon.DataStructures;
+using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
 using System.Windows;

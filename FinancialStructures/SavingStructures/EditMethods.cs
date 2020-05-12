@@ -1,6 +1,6 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.NamingStructures;
+﻿using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
+using StructureCommon.DataStructures;
 using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;

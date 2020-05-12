@@ -1,5 +1,6 @@
 using FinanceWindowsViewModels;
 using NUnit.Framework;
+using StructureCommon.Reporting;
 using System.Linq;
 
 namespace FPD_UI_UnitTests

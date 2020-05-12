@@ -1,4 +1,4 @@
-﻿using FinancialStructures.DataStructures;
+﻿using StructureCommon.DataStructures;
 using System;
 
 namespace FinancialStructures.FinanceInterfaces

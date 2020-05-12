@@ -4,6 +4,7 @@ using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FPD_UI_UnitTests.TestConstruction;
 using NUnit.Framework;
+using StructureCommon.DataStructures;
 using System;
 using System.Collections.Generic;
 using System.Linq;

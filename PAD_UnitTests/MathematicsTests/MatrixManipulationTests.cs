@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using StructureCommon.MathLibrary.Matrices;
 
 namespace FinancialStructures_Tests
 {

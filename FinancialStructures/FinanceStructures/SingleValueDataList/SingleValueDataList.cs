@@ -1,6 +1,6 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
+using StructureCommon.DataStructures;
 using System;
 
 namespace FinancialStructures.FinanceStructures

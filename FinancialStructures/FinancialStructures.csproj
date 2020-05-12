@@ -18,7 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Reference Include="System.Net.Http" />
+    <ProjectReference Include="..\..\Common\StructureCommon\StructureCommon.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 ﻿using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
 using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
+using StructureCommon.WebAccess;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -127,7 +127,7 @@ namespace FinancialStructures.StockStructures
                 {
                     downloadUrl = new Uri(stock.Name.Url);
                 }
-                string stockWebsite = PortfolioDataUpdater.DownloadFromURL(downloadUrl.ToString(), reportLogger).Result;
+                string stockWebsite = WebDownloader.DownloadFromURLasync(downloadUrl.ToString(), reportLogger).Result;
                 ProcessAndAddData(downloadType, stock, stockWebsite);
             }
         }
