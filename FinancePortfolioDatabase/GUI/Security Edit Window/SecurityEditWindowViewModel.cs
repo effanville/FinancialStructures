@@ -1,6 +1,7 @@
 ﻿using FinanceCommonViewModels;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
+using FinancialStructures.PortfolioAPI;
 using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
@@ -21,7 +22,7 @@ namespace FinanceWindowsViewModels
 
         private readonly Action<Action<IPortfolio>> UpdateDataAction;
 
-        public SecurityEditWindowViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, EditMethods securityEditMethods, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation)
+        public SecurityEditWindowViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation)
             : base("Security Edit", portfolio)
         {
             UpdateDataAction = updateData;
@@ -29,7 +30,7 @@ namespace FinanceWindowsViewModels
             fFileService = fileService;
             fDialogCreationService = dialogCreation;
             LoadSelectedTab = (name) => LoadTabFunc(name);
-            Tabs.Add(new DataNamesViewModel(DataStore, updateData, ReportLogger, LoadSelectedTab, securityEditMethods));
+            Tabs.Add(new DataNamesViewModel(DataStore, updateData, ReportLogger, LoadSelectedTab, AccountType.Security));
         }
 
         public override void UpdateData(IPortfolio portfolio)

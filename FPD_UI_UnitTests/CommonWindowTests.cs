@@ -1,5 +1,4 @@
 ﻿using FinanceCommonViewModels;
-using FinancialStructures.DataStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FPD_UI_UnitTests.TestConstruction;
@@ -24,7 +23,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var viewModel = new SingleValueEditWindowViewModel("Dummy", portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, TestingGUICode.DummyEditMethods, AccountType.BankAccount);
+            var viewModel = new SingleValueEditWindowViewModel("Dummy", portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, AccountType.BankAccount);
 
             Assert.AreEqual(1, viewModel.Tabs.Count);
             var tab = viewModel.Tabs.Single();
@@ -38,7 +37,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateEmptyDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var viewModel = new SingleValueEditWindowViewModel("Dummy", portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, TestingGUICode.DummyEditMethods, AccountType.BankAccount);
+            var viewModel = new SingleValueEditWindowViewModel("Dummy", portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, AccountType.BankAccount);
             var newData = TestingGUICode.CreateBasicDataBase();
             viewModel.UpdateData(newData);
 
@@ -53,7 +52,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateEmptyDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var viewModel = new SingleValueEditWindowViewModel("Dummy", portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, TestingGUICode.DummyEditMethods, AccountType.BankAccount);
+            var viewModel = new SingleValueEditWindowViewModel("Dummy", portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, AccountType.BankAccount);
 
             var newNameData = new NameData_ChangeLogged("Fidelity", "Europe");
             viewModel.LoadSelectedTab(newNameData);
@@ -74,7 +73,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var viewModel = new SingleValueEditWindowViewModel("Dummy", portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, TestingGUICode.DummyEditMethods, AccountType.BankAccount);
+            var viewModel = new SingleValueEditWindowViewModel("Dummy", portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, AccountType.BankAccount);
 
             var newData = new NameData_ChangeLogged("Fidelity", "China");
             viewModel.LoadSelectedTab(newData);
@@ -90,7 +89,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
         {
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, TestingGUICode.DummyEditMethods);
+            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, AccountType.BankAccount);
             Assert.AreEqual(1, viewModel.DataNames.Count);
         }
 
@@ -102,7 +101,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var portfolio = TestingGUICode.CreateEmptyDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
 
-            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, TestingGUICode.DummyEditMethods);
+            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, AccountType.BankAccount);
 
             var newData = TestingGUICode.CreateBasicDataBase();
 
@@ -119,7 +118,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
 
-            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, TestingGUICode.DummyEditMethods);
+            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, AccountType.BankAccount);
             var newName = new NameCompDate("company", "name", "GBP", "someUrl", new HashSet<string>(), DateTime.Today)
             {
                 Company = "Company"
@@ -139,7 +138,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
 
-            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, TestingGUICode.DummyEditMethods);
+            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, AccountType.BankAccount);
             viewModel.SelectedName = viewModel.DataNames[0];
 
             viewModel.SelectedName.Company = "NewCompany";
@@ -160,7 +159,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var portfolio = TestingGUICode.CreateEmptyDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
 
-            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, TestingGUICode.DummyEditMethods)
+            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, AccountType.BankAccount)
             {
                 SelectedName = new NameData_ChangeLogged("Barclays", "currentAccount")
             };
@@ -177,7 +176,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
 
-            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, TestingGUICode.DummyEditMethods);
+            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, AccountType.BankAccount);
 
             Assert.AreEqual(1, viewModel.DataStore.BankAccounts.Count);
             Assert.AreEqual(1, portfolio.BankAccounts.Count);
@@ -198,7 +197,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, TestingGUICode.DummyEditMethods, new NameData_ChangeLogged("Barclays", "currentAccount"), AccountType.BankAccount);
+            var viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData_ChangeLogged("Barclays", "currentAccount"), AccountType.BankAccount);
 
             Assert.AreEqual(1, viewModel.SelectedData.Count);
         }
@@ -210,7 +209,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, TestingGUICode.DummyEditMethods, new NameData_ChangeLogged("Barclays", "currentAccount"), AccountType.BankAccount);
+            var viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData_ChangeLogged("Barclays", "currentAccount"), AccountType.BankAccount);
 
             Assert.AreEqual(1, viewModel.SelectedData.Count);
             var newValue = new DayValue_ChangeLogged(new DateTime(2002, 1, 1), 1);
@@ -228,7 +227,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, TestingGUICode.DummyEditMethods, new NameData_ChangeLogged("Barclays", "currentAccount"), AccountType.BankAccount);
+            var viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData_ChangeLogged("Barclays", "currentAccount"), AccountType.BankAccount);
 
             Assert.AreEqual(1, viewModel.SelectedData.Count);
             var newValue = new DayValue_ChangeLogged(new DateTime(2000, 1, 1), 1);
@@ -249,7 +248,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, TestingGUICode.DummyEditMethods, new NameData_ChangeLogged("Barclays", "currentAccount"), AccountType.BankAccount);
+            var viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData_ChangeLogged("Barclays", "currentAccount"), AccountType.BankAccount);
 
             Assert.AreEqual(1, viewModel.SelectedData.Count);
         }
@@ -262,7 +261,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, TestingGUICode.DummyEditMethods, new NameData_ChangeLogged("Barclays", "currentAccount"), AccountType.BankAccount);
+            var viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData_ChangeLogged("Barclays", "currentAccount"), AccountType.BankAccount);
 
             Assert.AreEqual(1, viewModel.SelectedData.Count);
         }
@@ -274,7 +273,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, TestingGUICode.DummyEditMethods, new NameData_ChangeLogged("Barclays", "currentAccount"), AccountType.BankAccount);
+            var viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData_ChangeLogged("Barclays", "currentAccount"), AccountType.BankAccount);
             viewModel.SelectedValue = viewModel.SelectedData.Single();
             Assert.AreEqual(1, viewModel.SelectedData.Count);
 

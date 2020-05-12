@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
+using FinancialStructures.PortfolioAPI;
 using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace FinanceCommonViewModels
     /// </summary>
     internal class DataNamesViewModel : ViewModelBase<IPortfolio>
     {
+        private readonly AccountType TypeOfAccount;
+
         /// <summary>
         /// List of names preceding any possible edit.
         /// </summary>
@@ -72,22 +75,17 @@ namespace FinanceCommonViewModels
         private readonly IReportLogger ReportLogger;
 
         /// <summary>
-        /// Collection of functions for editing the Names stored here.
-        /// </summary>
-        private readonly EditMethods editMethods;
-
-        /// <summary>
         /// Construct an instance.
         /// </summary>
-        public DataNamesViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, Action<object> loadSelectedData, EditMethods updateMethods)
+        public DataNamesViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, Action<object> loadSelectedData, AccountType accountType)
             : base("Accounts", portfolio, loadSelectedData)
         {
             UpdateDataCallback = updateDataCallback;
+            TypeOfAccount = accountType;
             ReportLogger = reportLogger;
-            editMethods = updateMethods;
-            DataNames = (List<NameCompDate>)editMethods.ExecuteFunction(FunctionType.NameUpdate, portfolio).Result;
+            DataNames = portfolio.NameData(accountType);
             DataNames.Sort();
-            fPreEditNames = (List<NameCompDate>)editMethods.ExecuteFunction(FunctionType.NameUpdate, portfolio).Result;
+            fPreEditNames = portfolio.NameData(accountType);
             fPreEditNames.Sort();
 
             CreateCommand = new RelayCommand(ExecuteCreateEdit);
@@ -115,9 +113,9 @@ namespace FinanceCommonViewModels
         {
             base.UpdateData(portfolio);
             var currentSelectedName = SelectedName;
-            DataNames = (List<NameCompDate>)editMethods.ExecuteFunction(FunctionType.NameUpdate, portfolio).Result;
+            DataNames = portfolio.NameData(TypeOfAccount);
             DataNames.Sort();
-            fPreEditNames = (List<NameCompDate>)editMethods.ExecuteFunction(FunctionType.NameUpdate, portfolio).Result;
+            fPreEditNames = portfolio.NameData(TypeOfAccount);
             fPreEditNames.Sort();
 
             for (int i = 0; i < DataNames.Count; i++)
@@ -150,7 +148,7 @@ namespace FinanceCommonViewModels
             if (SelectedName != null)
             {
                 NameData names = SelectedName as NameData;
-                UpdateDataCallback(async programPortfolio => await editMethods.ExecuteFunction(FunctionType.Download, programPortfolio, names, ReportLogger).ConfigureAwait(false));
+                UpdateDataCallback(async programPortfolio => await PortfolioDataUpdater.DownloadOfType(TypeOfAccount, programPortfolio, names, ReportLogger).ConfigureAwait(false));
             }
         }
 
@@ -163,13 +161,13 @@ namespace FinanceCommonViewModels
         }
         private void ExecuteCreateEdit()
         {
-            if (((List<NameCompDate>)editMethods.ExecuteFunction(FunctionType.NameUpdate, DataStore).Result).Count != DataNames.Count)
+            if (DataStore.NameData(TypeOfAccount).Count != DataNames.Count)
             {
                 bool edited = false;
                 if (SelectedName.NewValue)
                 {
                     NameData name_add = new NameData(SelectedName.Company, SelectedName.Name, SelectedName.Currency, SelectedName.Url, SelectedName.Sectors);
-                    UpdateDataCallback(programPortfolio => editMethods.ExecuteFunction(FunctionType.Create, programPortfolio, name_add, ReportLogger).Wait());
+                    UpdateDataCallback(programPortfolio => programPortfolio.TryAdd(TypeOfAccount, name_add, ReportLogger));
                     edited = true;
                     if (SelectedName != null)
                     {
@@ -178,7 +176,7 @@ namespace FinanceCommonViewModels
                 }
                 if (!edited)
                 {
-                    ReportLogger.LogWithStrings("Critical", "Error", "AddingData", "No Name provided on creation.");
+                    _ = ReportLogger.LogWithStrings("Critical", "Error", "AddingData", "No Name provided on creation.");
                 }
             }
             else
@@ -193,13 +191,13 @@ namespace FinanceCommonViewModels
                     {
                         edited = true;
                         NameData name_add = new NameData(name.Company, name.Name, name.Currency, name.Url, name.Sectors);
-                        UpdateDataCallback(programPortfolio => editMethods.ExecuteFunction(FunctionType.Edit, programPortfolio, fPreEditNames[i], name_add, ReportLogger).Wait());
+                        UpdateDataCallback(programPortfolio => programPortfolio.TryEditName(TypeOfAccount, fPreEditNames[i], name_add, ReportLogger));
                         name.NewValue = false;
                     }
                 }
                 if (!edited)
                 {
-                    ReportLogger.LogWithStrings("Critical", "Error", "EditingData", "Was not able to edit desired.");
+                    _ = ReportLogger.LogWithStrings("Critical", "Error", "EditingData", "Was not able to edit desired.");
                 }
             }
         }
@@ -215,11 +213,11 @@ namespace FinanceCommonViewModels
         {
             if (SelectedName.Name != null)
             {
-                UpdateDataCallback(programPortfolio => editMethods.ExecuteFunction(FunctionType.Delete, programPortfolio, SelectedName, ReportLogger).Wait());
+                UpdateDataCallback(programPortfolio => programPortfolio.TryRemove(TypeOfAccount, SelectedName, ReportLogger));
             }
             else
             {
-                ReportLogger.LogWithStrings("Critical", "Error", "DeletingData", "Nothing was selected when trying to delete.");
+                _ = ReportLogger.LogWithStrings("Critical", "Error", "DeletingData", "Nothing was selected when trying to delete.");
             }
         }
     }

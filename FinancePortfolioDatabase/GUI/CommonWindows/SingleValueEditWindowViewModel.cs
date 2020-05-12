@@ -20,20 +20,18 @@ namespace FinanceCommonViewModels
         private readonly IReportLogger ReportLogger;
         private readonly IFileInteractionService fFileService;
         private readonly IDialogCreationService fDialogCreationService;
-        private readonly EditMethods EditMethods;
 
-        public SingleValueEditWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, EditMethods editMethods, AccountType accountType)
+        public SingleValueEditWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, AccountType accountType)
             : base(title, portfolio)
         {
             UpdateDataCallback = updateDataCallback;
             ReportLogger = reportLogger;
             fFileService = fileService;
             fDialogCreationService = dialogCreation;
-            EditMethods = editMethods;
             TypeOfAccount = accountType;
             UpdateData(portfolio);
             LoadSelectedTab = (name) => LoadTabFunc(name);
-            Tabs.Add(new DataNamesViewModel(DataStore, updateDataCallback, reportLogger, LoadSelectedTab, editMethods));
+            Tabs.Add(new DataNamesViewModel(DataStore, updateDataCallback, reportLogger, LoadSelectedTab, accountType));
         }
 
         public override void UpdateData(IPortfolio portfolio)
@@ -54,7 +52,7 @@ namespace FinanceCommonViewModels
                 {
                     foreach (var tab in removableTabs)
                     {
-                        Tabs.Remove(tab);
+                        _ = Tabs.Remove(tab);
                     }
 
                     removableTabs.Clear();
@@ -66,7 +64,7 @@ namespace FinanceCommonViewModels
         {
             if (obj is NameData_ChangeLogged name)
             {
-                Tabs.Add(new SelectedSingleDataViewModel(DataStore, UpdateDataCallback, ReportLogger, fFileService, fDialogCreationService, EditMethods, name, TypeOfAccount));
+                Tabs.Add(new SelectedSingleDataViewModel(DataStore, UpdateDataCallback, ReportLogger, fFileService, fDialogCreationService, name, TypeOfAccount));
             }
         }
     }

@@ -89,13 +89,10 @@ namespace FinanceCommonViewModels
         private readonly IFileInteractionService fFileService;
         private readonly IDialogCreationService fDialogCreationService;
 
-        private readonly EditMethods EditMethods;
-
-        public SelectedSingleDataViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, EditMethods editMethods, NameData_ChangeLogged selectedName, AccountType accountType)
+        public SelectedSingleDataViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, NameData_ChangeLogged selectedName, AccountType accountType)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name", portfolio)
         {
             SelectedName = selectedName;
-            EditMethods = editMethods;
             TypeOfAccount = accountType;
             UpdateData(portfolio);
 
@@ -115,13 +112,13 @@ namespace FinanceCommonViewModels
             base.UpdateData(portfolio);
             if (SelectedName != null)
             {
-                if (!((List<NameCompDate>)EditMethods.ExecuteFunction(FunctionType.NameUpdate, DataStore).Result).Exists(name => name.IsEqualTo(SelectedName)))
+                if (!portfolio.NameData(TypeOfAccount).Exists(name => name.IsEqualTo(SelectedName)))
                 {
                     removeTab?.Invoke(this);
                     return;
                 }
 
-                SelectedData = (List<DayValue_ChangeLogged>)EditMethods.ExecuteFunction(FunctionType.SelectData, DataStore, SelectedName, ReportLogger).Result;
+                SelectedData = DataStore.NumberData(TypeOfAccount, SelectedName, ReportLogger);
                 SelectLatestValue();
             }
             else
@@ -145,9 +142,9 @@ namespace FinanceCommonViewModels
         {
             if (SelectedName != null)
             {
-                if (((List<DayValue_ChangeLogged>)EditMethods.ExecuteFunction(FunctionType.SelectData, DataStore, SelectedName, ReportLogger).Result).Count() != SelectedData.Count)
+                if (DataStore.NumberData(TypeOfAccount, SelectedName, ReportLogger).Count() != SelectedData.Count)
                 {
-                    UpdateDataCallback(programPortfolio => EditMethods.ExecuteFunction(FunctionType.AddData, programPortfolio, SelectedName, SelectedValue, ReportLogger).Wait());
+                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddData(TypeOfAccount, SelectedName, SelectedValue, ReportLogger));
                     SelectedName.NewValue = false;
                 }
                 else
@@ -161,13 +158,13 @@ namespace FinanceCommonViewModels
                         {
                             edited = true;
                             name.NewValue = false;
-                            UpdateDataCallback(programPortfolio => EditMethods.ExecuteFunction(FunctionType.EditData, programPortfolio, SelectedName, fOldSelectedValue, SelectedValue, ReportLogger).Wait());
+                            UpdateDataCallback(programPortfolio => programPortfolio.TryEditData(TypeOfAccount, SelectedName, fOldSelectedValue, SelectedValue, ReportLogger));
                         }
                     }
 
                     if (!edited)
                     {
-                        ReportLogger.LogWithStrings("Critical", "Error", "EditingData", "Was not able to edit data.");
+                        _ = ReportLogger.LogWithStrings("Critical", "Error", "EditingData", "Was not able to edit data.");
                     }
                 }
             }
@@ -182,11 +179,11 @@ namespace FinanceCommonViewModels
         {
             if (SelectedName != null)
             {
-                UpdateDataCallback(programPortfolio => EditMethods.ExecuteFunction(FunctionType.DeleteData, programPortfolio, SelectedName, SelectedValue, ReportLogger).Wait());
+                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(TypeOfAccount, SelectedName, SelectedValue, ReportLogger));
             }
             else
             {
-                ReportLogger.LogWithStrings("Critical", "Error", "DeletingData", "No Account was selected when trying to delete data.");
+                _ = ReportLogger.LogWithStrings("Critical", "Error", "DeletingData", "No Account was selected when trying to delete data.");
             }
         }
 
@@ -208,15 +205,15 @@ namespace FinanceCommonViewModels
                 }
                 if (outputs != null)
                 {
-                    foreach (var objec in outputs)
+                    foreach (object objec in outputs)
                     {
                         if (objec is DayValue_ChangeLogged view)
                         {
-                            UpdateDataCallback(programPortfolio => EditMethods.ExecuteFunction(FunctionType.AddData, programPortfolio, SelectedName, view, ReportLogger).Wait());
+                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddData(TypeOfAccount, SelectedName, view, ReportLogger));
                         }
                         else
                         {
-                            ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", "Have the wrong type of thing");
+                            _ = ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", "Have the wrong type of thing");
                         }
                     }
                 }
@@ -241,7 +238,7 @@ namespace FinanceCommonViewModels
                     }
                     else
                     {
-                        ReportLogger.LogWithStrings("Critical", "Error", "Saving", "Could not find security.");
+                        _ = ReportLogger.LogWithStrings("Critical", "Error", "Saving", "Could not find security.");
                     }
                 }
             }
