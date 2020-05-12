@@ -2,7 +2,7 @@
 using FinancialStructures.StatsMakers;
 using System;
 using System.Collections.Generic;
-using StructureCommon.MathLibrary;
+using StructureCommon.Extensions;
 
 namespace FinancialStructures.DataStructures
 {
@@ -50,7 +50,7 @@ namespace FinancialStructures.DataStructures
                     }
                     if (double.TryParse(properties[i].GetValue(this).ToString(), out double value))
                     {
-                        htmlData += MathSupport.Trunc(value);
+                        htmlData += value.TruncateToString();
                     }
                     else
                     {

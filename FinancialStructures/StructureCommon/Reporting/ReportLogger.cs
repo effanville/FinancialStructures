@@ -1,4 +1,4 @@
-﻿using StructureCommon.StringFunctions;
+﻿using StructureCommon.Extensions;
 using System;
 
 namespace StructureCommon.Reporting
