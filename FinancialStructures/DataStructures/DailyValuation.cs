@@ -65,8 +65,14 @@ namespace FinancialStructures.DataStructures
         /// </summary>
         public virtual DateTime Day
         {
-            get { return fDate; }
-            set { fDate = value; }
+            get
+            {
+                return fDate;
+            }
+            set
+            {
+                fDate = value;
+            }
         }
 
         protected double fValue;
@@ -76,8 +82,14 @@ namespace FinancialStructures.DataStructures
         /// </summary>
         public virtual double Value
         {
-            get { return fValue; }
-            set { fValue = value; }
+            get
+            {
+                return fValue;
+            }
+            set
+            {
+                fValue = value;
+            }
         }
 
         /// <summary>
@@ -98,6 +110,7 @@ namespace FinancialStructures.DataStructures
 
         public DailyValuation(DailyValuation dailyValue)
             : this(dailyValue.Day, dailyValue.Value)
-        { }
+        {
+        }
     }
 }

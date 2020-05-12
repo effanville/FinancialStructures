@@ -26,16 +26,30 @@ namespace FinanceWindowsViewModels
 
         public OptionsToolbarViewModel OptionsToolbarCommands
         {
-            get { return fOptionsToolbarCommands; }
-            set { fOptionsToolbarCommands = value; OnPropertyChanged(); }
+            get
+            {
+                return fOptionsToolbarCommands;
+            }
+            set
+            {
+                fOptionsToolbarCommands = value;
+                OnPropertyChanged();
+            }
         }
 
         private ReportingWindowViewModel fReports;
 
         public ReportingWindowViewModel ReportsViewModel
         {
-            get { return fReports; }
-            set { fReports = value; OnPropertyChanged(); }
+            get
+            {
+                return fReports;
+            }
+            set
+            {
+                fReports = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>

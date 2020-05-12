@@ -29,8 +29,15 @@ namespace FinanceCommonViewModels
         /// </summary>
         public List<NameCompDate> DataNames
         {
-            get { return fDataNames; }
-            set { fDataNames = value; OnPropertyChanged(); }
+            get
+            {
+                return fDataNames;
+            }
+            set
+            {
+                fDataNames = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -43,8 +50,15 @@ namespace FinanceCommonViewModels
         /// </summary>
         public NameData_ChangeLogged SelectedName
         {
-            get { return fSelectedName; }
-            set { fSelectedName = value; OnPropertyChanged(); }
+            get
+            {
+                return fSelectedName;
+            }
+            set
+            {
+                fSelectedName = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -85,7 +99,10 @@ namespace FinanceCommonViewModels
         /// <summary>
         /// Command that opens a tab associated to the selected entry.
         /// </summary>
-        public ICommand OpenTabCommand { get; }
+        public ICommand OpenTabCommand
+        {
+            get;
+        }
         private void OpenTab()
         {
             LoadSelectedTab(SelectedName);
@@ -124,7 +141,10 @@ namespace FinanceCommonViewModels
         /// <summary>
         /// Downloads the latest data for the selected entry.
         /// </summary>
-        public ICommand DownloadCommand { get; }
+        public ICommand DownloadCommand
+        {
+            get;
+        }
         private void ExecuteDownloadCommand()
         {
             if (SelectedName != null)
@@ -137,7 +157,10 @@ namespace FinanceCommonViewModels
         /// <summary>
         /// Adds a new entry if the view has more than the repository, or edits an entry if these are the same.
         /// </summary>
-        public ICommand CreateCommand { get; set; }
+        public ICommand CreateCommand
+        {
+            get; set;
+        }
         private void ExecuteCreateEdit()
         {
             if (((List<NameCompDate>)editMethods.ExecuteFunction(FunctionType.NameUpdate, DataStore).Result).Count != DataNames.Count)
@@ -184,7 +207,10 @@ namespace FinanceCommonViewModels
         /// <summary>
         /// Deletes the selected entry.
         /// </summary>
-        public ICommand DeleteCommand { get; }
+        public ICommand DeleteCommand
+        {
+            get;
+        }
         private void ExecuteDelete()
         {
             if (SelectedName.Name != null)

@@ -37,21 +37,21 @@ namespace FinancialStructures.PortfolioAPI
             switch (elementType)
             {
                 case (AccountType.Security):
-                    {
-                        return new List<DayValue_ChangeLogged>();
-                    }
+                {
+                    return new List<DayValue_ChangeLogged>();
+                }
                 case (AccountType.Currency):
-                    {
-                        return SingleDataListDataObtainer(portfolio.Currencies, elementType, name, reportLogger);
-                    }
+                {
+                    return SingleDataListDataObtainer(portfolio.Currencies, elementType, name, reportLogger);
+                }
                 case (AccountType.BankAccount):
-                    {
-                        return SingleDataListDataObtainer(portfolio.BankAccounts, elementType, name, reportLogger);
-                    }
+                {
+                    return SingleDataListDataObtainer(portfolio.BankAccounts, elementType, name, reportLogger);
+                }
                 case (AccountType.Sector):
-                    {
-                        return SingleDataListDataObtainer(portfolio.BenchMarks, elementType, name, reportLogger);
-                    }
+                {
+                    return SingleDataListDataObtainer(portfolio.BenchMarks, elementType, name, reportLogger);
+                }
                 default:
                     return new List<DayValue_ChangeLogged>();
             }

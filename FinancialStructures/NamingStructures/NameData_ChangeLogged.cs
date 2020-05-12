@@ -18,27 +18,47 @@ namespace FinancialStructures.NamingStructures
 
         public override string Company
         {
-            set { base.Company = value; NewValue = true; }
+            set
+            {
+                base.Company = value;
+                NewValue = true;
+            }
         }
 
         public override string Name
         {
-            set { base.Name = value; NewValue = true; }
+            set
+            {
+                base.Name = value;
+                NewValue = true;
+            }
         }
 
         public override string Currency
         {
-            set { base.Currency = value; NewValue = true; }
+            set
+            {
+                base.Currency = value;
+                NewValue = true;
+            }
         }
 
         public override string Url
         {
-            set { base.Url = value; NewValue = true; }
+            set
+            {
+                base.Url = value;
+                NewValue = true;
+            }
         }
 
         public override string SectorsFlat
         {
-            set { base.SectorsFlat = value; NewValue = true; }
+            set
+            {
+                base.SectorsFlat = value;
+                NewValue = true;
+            }
         }
 
         /// <summary>

@@ -1,9 +1,9 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
-using StructureCommon.Extensions;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.StatsMakers;
+using StructureCommon.Extensions;
 using System;
 using System.Collections.Generic;
 
@@ -34,7 +34,7 @@ namespace FinancialStructures.StatisticStructures
                 var company = securityStats.Names.Company;
                 securityStats.LatestVal = portfolio.CompanyValue(AccountType.Security, company, date).Truncate();
                 securityStats.RecentChange = portfolio.CompanyRecentChange(company).Truncate();
-                securityStats.FundsFraction = portfolio.CompanyFraction(company, date).Truncate( 4);
+                securityStats.FundsFraction = portfolio.CompanyFraction(company, date).Truncate(4);
                 securityStats.Profit = portfolio.CompanyProfit(company).Truncate();
                 securityStats.CAR3M = 100 * portfolio.IRRCompany(company, date.AddMonths(-3), date).Truncate();
                 securityStats.CAR6M = 100 * portfolio.IRRCompany(company, date.AddMonths(-6), date).Truncate();
@@ -154,7 +154,8 @@ namespace FinancialStructures.StatisticStructures
         }
 
         public SecurityStatistics()
-        { }
+        {
+        }
 
         public SecurityStatistics(StatisticsType statsType, TwoName names)
         {
@@ -163,19 +164,64 @@ namespace FinancialStructures.StatisticStructures
         }
 
         public TwoName Names;
-        public string Company { get { return Names.Company; } }
-        public string Name { get { return Names.Name; } }
-        public double LatestVal { get; set; }
-        public double SharePrice { get; set; }
-        public double RecentChange { get; set; }
-        public double FundsFraction { get; set; }
-        public int Number { get; set; }
-        public double Profit { get; set; }
-        public double CAR3M { get; set; }
-        public double CAR6M { get; set; }
-        public double CAR1Y { get; set; }
-        public double CAR5Y { get; set; }
-        public double CARTotal { get; set; }
+        public string Company
+        {
+            get
+            {
+                return Names.Company;
+            }
+        }
+        public string Name
+        {
+            get
+            {
+                return Names.Name;
+            }
+        }
+        public double LatestVal
+        {
+            get; set;
+        }
+        public double SharePrice
+        {
+            get; set;
+        }
+        public double RecentChange
+        {
+            get; set;
+        }
+        public double FundsFraction
+        {
+            get; set;
+        }
+        public int Number
+        {
+            get; set;
+        }
+        public double Profit
+        {
+            get; set;
+        }
+        public double CAR3M
+        {
+            get; set;
+        }
+        public double CAR6M
+        {
+            get; set;
+        }
+        public double CAR1Y
+        {
+            get; set;
+        }
+        public double CAR5Y
+        {
+            get; set;
+        }
+        public double CARTotal
+        {
+            get; set;
+        }
         public string Sectors { get; set; } = string.Empty;
     }
 }

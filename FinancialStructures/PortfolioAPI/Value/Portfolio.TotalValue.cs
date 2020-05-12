@@ -28,38 +28,38 @@ namespace FinancialStructures.PortfolioAPI
             switch (elementType)
             {
                 case (AccountType.Security):
+                {
+                    double total = 0;
+                    foreach (ISecurity sec in portfolio.Funds)
                     {
-                        double total = 0;
-                        foreach (ISecurity sec in portfolio.Funds)
+                        if (sec.Any())
                         {
-                            if (sec.Any())
-                            {
-                                var currency = Currency(portfolio, elementType, sec);
-                                total += sec.Value(date, currency).Value;
-                            }
+                            var currency = Currency(portfolio, elementType, sec);
+                            total += sec.Value(date, currency).Value;
                         }
-
-                        return total;
                     }
+
+                    return total;
+                }
                 case (AccountType.Currency):
-                    {
-                        return 0.0;
-                    }
+                {
+                    return 0.0;
+                }
                 case (AccountType.BankAccount):
+                {
+                    double sum = 0;
+                    foreach (ICashAccount acc in portfolio.BankAccounts)
                     {
-                        double sum = 0;
-                        foreach (ICashAccount acc in portfolio.BankAccounts)
-                        {
-                            var currency = Currency(portfolio, elementType, acc);
-                            sum += acc.Value(date, currency).Value;
-                        }
+                        var currency = Currency(portfolio, elementType, acc);
+                        sum += acc.Value(date, currency).Value;
+                    }
 
-                        return sum;
-                    }
+                    return sum;
+                }
                 case (AccountType.Sector):
-                    {
-                        break;
-                    }
+                {
+                    break;
+                }
                 default:
                     break;
             }

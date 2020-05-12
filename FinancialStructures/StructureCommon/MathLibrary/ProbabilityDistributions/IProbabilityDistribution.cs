@@ -1,6 +1,6 @@
 ﻿namespace StructureCommon.MathLibrary.ProbabilityDistributions
 {
-    interface IProbabilityDistribution
+    internal interface IProbabilityDistribution
     {
         /// <summary>
         /// Returns the probability density function at the point x.

@@ -81,8 +81,14 @@ namespace FinancialStructures.NamingStructures
         /// </summary>
         public virtual string Company
         {
-            get { return fCompany; }
-            set { fCompany = value; }
+            get
+            {
+                return fCompany;
+            }
+            set
+            {
+                fCompany = value;
+            }
         }
 
         private string fName;
@@ -92,8 +98,14 @@ namespace FinancialStructures.NamingStructures
         /// </summary>
         public virtual string Name
         {
-            get { return fName; }
-            set { fName = value; }
+            get
+            {
+                return fName;
+            }
+            set
+            {
+                fName = value;
+            }
         }
 
         /// <summary>

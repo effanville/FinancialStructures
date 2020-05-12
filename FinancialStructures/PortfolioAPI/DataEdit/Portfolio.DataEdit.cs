@@ -42,21 +42,21 @@ namespace FinancialStructures.PortfolioAPI
             switch (elementType)
             {
                 case (AccountType.Security):
-                    {
-                        return false;
-                    }
+                {
+                    return false;
+                }
                 case (AccountType.Currency):
-                    {
-                        return TryEditSingleDataList(portfolio.Currencies, elementType, name, oldData, newData, reportLogger);
-                    }
+                {
+                    return TryEditSingleDataList(portfolio.Currencies, elementType, name, oldData, newData, reportLogger);
+                }
                 case (AccountType.BankAccount):
-                    {
-                        return TryEditSingleDataList(portfolio.BankAccounts, elementType, name, oldData, newData, reportLogger);
-                    }
+                {
+                    return TryEditSingleDataList(portfolio.BankAccounts, elementType, name, oldData, newData, reportLogger);
+                }
                 case (AccountType.Sector):
-                    {
-                        return TryEditSingleDataList(portfolio.BenchMarks, elementType, name, oldData, newData, reportLogger);
-                    }
+                {
+                    return TryEditSingleDataList(portfolio.BenchMarks, elementType, name, oldData, newData, reportLogger);
+                }
                 default:
                     reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Editing an Unknown type.");
                     return false;

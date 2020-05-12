@@ -5,9 +5,9 @@ namespace StructureCommon.MathLibrary.ProbabilityDistributions
 {
     public class GammaDistribution : Gamma, IProbabilityDistribution
     {
-        double Alpha;
-        double Beta;
-        double Fac;
+        private double Alpha;
+        private double Beta;
+        private double Fac;
 
         public GammaDistribution(double alpha, double beta)
         {

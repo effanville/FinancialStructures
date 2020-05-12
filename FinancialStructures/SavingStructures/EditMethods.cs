@@ -36,89 +36,89 @@ namespace FinancialStructures.FinanceInterfaces
             switch (functionType)
             {
                 case (FunctionType.Download):
+                {
+                    if (functionInputs.Length != 3)
                     {
-                        if (functionInputs.Length != 3)
-                        {
-                            break;
-                        }
-
-                        await DownloadMethod(portfolio, (NameData)functionInputs[1], (IReportLogger)functionInputs[2]).ConfigureAwait(false);
                         break;
                     }
+
+                    await DownloadMethod(portfolio, (NameData)functionInputs[1], (IReportLogger)functionInputs[2]).ConfigureAwait(false);
+                    break;
+                }
                 case (FunctionType.NameUpdate):
+                {
+                    if (functionInputs.Length != 1)
                     {
-                        if (functionInputs.Length != 1)
-                        {
-                            break;
-                        }
-
-                        output = UpdateNameMethod(portfolio);
                         break;
                     }
+
+                    output = UpdateNameMethod(portfolio);
+                    break;
+                }
                 case (FunctionType.Create):
+                {
+                    if (functionInputs.Length != 3)
                     {
-                        if (functionInputs.Length != 3)
-                        {
-                            break;
-                        }
-                        output = CreateMethod(portfolio, name, (IReportLogger)functionInputs[2]);
                         break;
                     }
+                    output = CreateMethod(portfolio, name, (IReportLogger)functionInputs[2]);
+                    break;
+                }
                 case (FunctionType.Edit):
+                {
+                    if (functionInputs.Length != 4)
                     {
-                        if (functionInputs.Length != 4)
-                        {
-                            break;
+                        break;
 
-                        }
-                        output = EditMethod(portfolio, name, (NameData)functionInputs[2], (IReportLogger)functionInputs[3]);
-                        break;
                     }
+                    output = EditMethod(portfolio, name, (NameData)functionInputs[2], (IReportLogger)functionInputs[3]);
+                    break;
+                }
                 case (FunctionType.Delete):
+                {
+                    if (functionInputs.Length != 3)
                     {
-                        if (functionInputs.Length != 3)
-                        {
-                            break;
-                        }
-                        output = DeleteMethod(portfolio, name, (IReportLogger)functionInputs[2]);
                         break;
                     }
+                    output = DeleteMethod(portfolio, name, (IReportLogger)functionInputs[2]);
+                    break;
+                }
                 case (FunctionType.SelectData):
+                {
+                    if (functionInputs.Length != 3)
                     {
-                        if (functionInputs.Length != 3)
-                        {
-                            break;
-                        }
-                        output = SelectedDataMethod(portfolio, name, (IReportLogger)functionInputs[2]);
                         break;
                     }
+                    output = SelectedDataMethod(portfolio, name, (IReportLogger)functionInputs[2]);
+                    break;
+                }
                 case (FunctionType.AddData):
+                {
+                    if (functionInputs.Length != 4)
                     {
-                        if (functionInputs.Length != 4)
-                        {
-                            break;
-                        }
-                        output = AddDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[2], (IReportLogger)functionInputs[3]);
                         break;
                     }
+                    output = AddDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[2], (IReportLogger)functionInputs[3]);
+                    break;
+                }
                 case (FunctionType.EditData):
+                {
+                    if (functionInputs.Length != 5)
                     {
-                        if (functionInputs.Length != 5)
-                        {
-                            break;
-                        }
-                        output = EditDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[2], (DayValue_ChangeLogged)functionInputs[3], (IReportLogger)functionInputs[4]);
                         break;
                     }
+                    output = EditDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[2], (DayValue_ChangeLogged)functionInputs[3], (IReportLogger)functionInputs[4]);
+                    break;
+                }
                 case (FunctionType.DeleteData):
+                {
+                    if (functionInputs.Length != 4)
                     {
-                        if (functionInputs.Length != 4)
-                        {
-                            break;
-                        }
-                        output = DeleteDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[2], (IReportLogger)functionInputs[3]);
                         break;
                     }
+                    output = DeleteDataMethod(portfolio, name, (DayValue_ChangeLogged)functionInputs[2], (IReportLogger)functionInputs[3]);
+                    break;
+                }
                 default:
                     break;
             }
@@ -183,6 +183,7 @@ namespace FinancialStructures.FinanceInterfaces
         }
 
         public EditMethods()
-        { }
+        {
+        }
     }
 }

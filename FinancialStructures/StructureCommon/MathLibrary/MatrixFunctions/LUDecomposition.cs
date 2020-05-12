@@ -6,8 +6,7 @@
         internal double[,] UpperDecomp;
 
         internal double[,] LowerDecomp;
-
-        int[] PivotValues;
+        private int[] PivotValues;
 
         public bool Invertible = true;
         public bool Square = true;

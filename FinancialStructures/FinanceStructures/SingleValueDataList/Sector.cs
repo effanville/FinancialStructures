@@ -11,7 +11,8 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public Sector()
             : base()
-        { }
+        {
+        }
 
         public Sector(NameData names)
             : base(names)

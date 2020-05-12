@@ -22,7 +22,8 @@ namespace WebBrowserWindow
         public static void BindableSourcePropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
             WebBrowser browser = o as WebBrowser;
-            if (browser == null) return;
+            if (browser == null)
+                return;
 
             Uri uri = null;
 

@@ -119,8 +119,10 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
 
             var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, TestingGUICode.DummyEditMethods);
-            var newName = new NameCompDate("company", "name", "GBP", "someUrl", new HashSet<string>(), DateTime.Today);
-            newName.Company = "Company";
+            var newName = new NameCompDate("company", "name", "GBP", "someUrl", new HashSet<string>(), DateTime.Today)
+            {
+                Company = "Company"
+            };
             viewModel.SelectedName = newName;
             viewModel.DataNames.Add(newName);
             viewModel.CreateCommand.Execute(1);
@@ -157,9 +159,10 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var portfolio = TestingGUICode.CreateEmptyDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
 
-            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, TestingGUICode.DummyEditMethods);
-
-            viewModel.SelectedName = new NameData_ChangeLogged("Barclays", "currentAccount");
+            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, TestingGUICode.DummyEditMethods)
+            {
+                SelectedName = new NameData_ChangeLogged("Barclays", "currentAccount")
+            };
             viewModel.DownloadCommand.Execute(1);
 
             Assert.AreEqual(1, viewModel.DataNames.Count);

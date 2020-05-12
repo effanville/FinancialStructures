@@ -8,8 +8,14 @@ namespace FinancialStructures.NamingStructures
         private DateTime fDateToRecord;
         public DateTime DateToRecord
         {
-            get { return fDateToRecord; }
-            set { fDateToRecord = value; }
+            get
+            {
+                return fDateToRecord;
+            }
+            set
+            {
+                fDateToRecord = value;
+            }
         }
 
         public NameCompDate() : base()

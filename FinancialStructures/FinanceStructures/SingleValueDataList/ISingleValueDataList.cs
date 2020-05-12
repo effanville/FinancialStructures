@@ -11,12 +11,30 @@ namespace FinancialStructures.FinanceInterfaces
         string ToString();
         int CompareTo(object obj);
         bool IsEqualTo(ISingleValueDataList otherAccount);
-        NameData Names { get; }
-        string Name { get; }
-        string Company { get; }
-        string Url { get; }
-        string Currency { get; }
-        TimeList Values { get; }
+        NameData Names
+        {
+            get;
+        }
+        string Name
+        {
+            get;
+        }
+        string Company
+        {
+            get;
+        }
+        string Url
+        {
+            get;
+        }
+        string Currency
+        {
+            get;
+        }
+        TimeList Values
+        {
+            get;
+        }
 
         ISingleValueDataList Copy();
         bool Any();

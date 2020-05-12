@@ -138,7 +138,7 @@ namespace FinancialStructures.PortfolioAPI
             return names;
         }
 
-        public async static Task<List<PortfolioDaySnapshot>> GenerateHistoryStats(this IPortfolio portfolio, int daysGap)
+        public static async Task<List<PortfolioDaySnapshot>> GenerateHistoryStats(this IPortfolio portfolio, int daysGap)
         {
             var outputs = new List<PortfolioDaySnapshot>();
             var calculationDate = portfolio.FirstValueDate();

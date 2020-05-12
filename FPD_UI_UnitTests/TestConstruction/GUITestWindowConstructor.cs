@@ -4,7 +4,6 @@ using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.Reporting;
 using Moq;
 using System;
 using System.Collections.Generic;
@@ -47,7 +46,13 @@ namespace FPD_UI_UnitTests.TestConstruction
             return DummyDataUpdater;
         }
 
-        internal static Action<object> DummyOpenTab => action => OpenTab(action);
+        internal static Action<object> DummyOpenTab
+        {
+            get
+            {
+                return action => OpenTab(action);
+            }
+        }
 
         private static void OpenTab(object obj)
         {
@@ -89,8 +94,10 @@ namespace FPD_UI_UnitTests.TestConstruction
         {
             var fileMock = CreateFileMock("filepath");
             var dialogMock = CreateDialogMock(MessageBoxResult.OK);
-            var viewModel = new MainWindowViewModel(fileMock.Object, dialogMock.Object);
-            viewModel.ProgramPortfolio = portfolio;
+            var viewModel = new MainWindowViewModel(fileMock.Object, dialogMock.Object)
+            {
+                ProgramPortfolio = portfolio
+            };
             return viewModel;
         }
     }

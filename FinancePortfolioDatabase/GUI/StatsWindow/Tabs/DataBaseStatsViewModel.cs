@@ -11,8 +11,15 @@ namespace FinanceViewModels.StatsViewModels
         private List<DatabaseStatistics> fDatabaseStats;
         public List<DatabaseStatistics> DatabaseStats
         {
-            get { return fDatabaseStats; }
-            set { fDatabaseStats = value; OnPropertyChanged(); }
+            get
+            {
+                return fDatabaseStats;
+            }
+            set
+            {
+                fDatabaseStats = value;
+                OnPropertyChanged();
+            }
         }
 
         public override void GenerateStatistics(bool displayValueFunds)

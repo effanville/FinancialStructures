@@ -15,7 +15,13 @@ namespace FinanceWindowsViewModels
 {
     internal class SelectedSecurityViewModel : ViewModelBase<IPortfolio>
     {
-        public override bool Closable { get { return true; } }
+        public override bool Closable
+        {
+            get
+            {
+                return true;
+            }
+        }
 
         private readonly NameData_ChangeLogged fSelectedName;
 
@@ -25,8 +31,15 @@ namespace FinanceWindowsViewModels
         private List<SecurityDayData> fSelectedSecurityData = new List<SecurityDayData>();
         public List<SecurityDayData> SelectedSecurityData
         {
-            get { return fSelectedSecurityData; }
-            set { fSelectedSecurityData = value; OnPropertyChanged(); }
+            get
+            {
+                return fSelectedSecurityData;
+            }
+            set
+            {
+                fSelectedSecurityData = value;
+                OnPropertyChanged();
+            }
         }
 
         private SecurityDayData fSelectedValues;
@@ -76,7 +89,10 @@ namespace FinanceWindowsViewModels
             fDialogCreationService = dialogCreation;
         }
 
-        public ICommand DeleteValuationCommand { get; }
+        public ICommand DeleteValuationCommand
+        {
+            get;
+        }
 
         private void ExecuteDeleteValuation()
         {
@@ -86,7 +102,10 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public ICommand AddCsvData { get; }
+        public ICommand AddCsvData
+        {
+            get;
+        }
 
         private void ExecuteAddCsvData()
         {
@@ -116,7 +135,10 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public ICommand ExportCsvData { get; }
+        public ICommand ExportCsvData
+        {
+            get;
+        }
 
         private void ExecuteExportCsvData()
         {
@@ -137,7 +159,10 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public ICommand AddEditSecurityDataCommand { get; set; }
+        public ICommand AddEditSecurityDataCommand
+        {
+            get; set;
+        }
 
         private void ExecuteAddEditSecData()
         {

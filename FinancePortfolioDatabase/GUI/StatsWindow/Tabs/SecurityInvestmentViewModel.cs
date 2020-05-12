@@ -11,8 +11,15 @@ namespace FinanceViewModels.StatsViewModels
 
         public List<DayValue_Named> SecuritiesInvestments
         {
-            get { return fSecuritiesInvestments; }
-            set { fSecuritiesInvestments = value; OnPropertyChanged(); }
+            get
+            {
+                return fSecuritiesInvestments;
+            }
+            set
+            {
+                fSecuritiesInvestments = value;
+                OnPropertyChanged();
+            }
         }
 
         public override void GenerateStatistics(bool displayValueFunds)

@@ -27,7 +27,8 @@ namespace FinancialStructures.FinanceStructures
             DailyValuation latestDate = fUnitPrice.LatestValuation();
             if (latestDate == null)
             {
-                return new DailyValuation(DateTime.Today, 0.0); ;
+                return new DailyValuation(DateTime.Today, 0.0);
+                ;
             }
 
             double currencyValue = currency == null ? 1.0 : currency.Value(latestDate.Day).Value;
@@ -44,7 +45,8 @@ namespace FinancialStructures.FinanceStructures
             DailyValuation firstDate = fUnitPrice.FirstValuation();
             if (firstDate == null)
             {
-                return new DailyValuation(DateTime.MinValue, 0.0); ;
+                return new DailyValuation(DateTime.MinValue, 0.0);
+                ;
             }
             double currencyValue = currency == null ? 1.0 : currency.Value(firstDate.Day).Value;
             double latestValue = firstDate.Value * fShares.FirstValue() * currencyValue;
@@ -139,7 +141,7 @@ namespace FinancialStructures.FinanceStructures
                 {
                     double currencyValue = currency == null ? 1.0 : currency.Value(value.Day).Value;
                     value.SetValue(value.Value * currencyValue);
-                    namedValues.Add(new DayValue_Named(this.Names.Company, this.Names.Name, value));
+                    namedValues.Add(new DayValue_Named(Names.Company, Names.Name, value));
                 }
             }
             return namedValues;

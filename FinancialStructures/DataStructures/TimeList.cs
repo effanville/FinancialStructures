@@ -30,8 +30,14 @@ namespace FinancialStructures.DataStructures
         /// </summary>
         public List<DailyValuation> Values
         {
-            get { return fValues; }
-            set { fValues = value; }
+            get
+            {
+                return fValues;
+            }
+            set
+            {
+                fValues = value;
+            }
         }
 
         /// <summary>
@@ -39,7 +45,10 @@ namespace FinancialStructures.DataStructures
         /// </summary>
         public DailyValuation this[int index]
         {
-            get { return new DailyValuation(fValues[index]); }
+            get
+            {
+                return new DailyValuation(fValues[index]);
+            }
         }
 
         /// <summary>

@@ -5,27 +5,48 @@
     /// </summary>
     public interface IEstimator
     {
-        int NumberOfParameters { get; }
+        int NumberOfParameters
+        {
+            get;
+        }
 
-        int NumberOfDataPoints { get; }
+        int NumberOfDataPoints
+        {
+            get;
+        }
 
-        double[,] FitData { get; }
-        double[] FitValues { get; }
+        double[,] FitData
+        {
+            get;
+        }
+        double[] FitValues
+        {
+            get;
+        }
 
         /// <summary>
         /// Returns the values one has estimated.
         /// </summary>
-        double[] Estimator { get; }
+        double[] Estimator
+        {
+            get;
+        }
 
         /// <summary>
         /// The covariance matrix of the estimator.
         /// </summary>
-        double[,] Uncertainty { get; }
+        double[,] Uncertainty
+        {
+            get;
+        }
 
         /// <summary>
         /// The quality of the fit given by the estimator.
         /// </summary>
-        double GoodnessOfFit { get; }
+        double GoodnessOfFit
+        {
+            get;
+        }
 
         /// <summary>
         /// Evaluates the point using the estimator calculated.

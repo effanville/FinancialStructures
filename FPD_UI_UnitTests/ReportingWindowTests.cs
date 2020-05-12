@@ -1,5 +1,4 @@
 using FinanceWindowsViewModels;
-using FinancialStructures.Reporting;
 using NUnit.Framework;
 using System.Linq;
 
@@ -16,8 +15,10 @@ namespace FPD_UI_UnitTests
         [Test]
         public void ReportsSync()
         {
-            var viewModel = new ReportingWindowViewModel();
-            viewModel.ReportingSeverity = ReportSeverity.Detailed;
+            var viewModel = new ReportingWindowViewModel
+            {
+                ReportingSeverity = ReportSeverity.Detailed
+            };
             viewModel.Reports.AddErrorReport(ReportSeverity.Critical, ReportType.Error, ReportLocation.Unknown, "Is this added?");
             viewModel.SyncReports();
 
@@ -33,8 +34,10 @@ namespace FPD_UI_UnitTests
         [Test]
         public void CanAddReport()
         {
-            var viewModel = new ReportingWindowViewModel();
-            viewModel.ReportingSeverity = ReportSeverity.Detailed;
+            var viewModel = new ReportingWindowViewModel
+            {
+                ReportingSeverity = ReportSeverity.Detailed
+            };
             viewModel.UpdateReport(ReportSeverity.Useful, ReportType.Error, ReportLocation.Unknown, "Is this added?");
 
             Assert.AreEqual(1, viewModel.Reports.GetReports().Count, "Reports should have a report added.");
@@ -50,8 +53,10 @@ namespace FPD_UI_UnitTests
         [Test]
         public void CanClearReports()
         {
-            var viewModel = new ReportingWindowViewModel();
-            viewModel.ReportingSeverity = ReportSeverity.Detailed;
+            var viewModel = new ReportingWindowViewModel
+            {
+                ReportingSeverity = ReportSeverity.Detailed
+            };
             viewModel.UpdateReport(ReportSeverity.Useful, ReportType.Error, ReportLocation.Unknown, "Is this added?");
             viewModel.UpdateReport(ReportSeverity.Useful, ReportType.Error, ReportLocation.Unknown, "Is this also added?");
 
@@ -69,8 +74,10 @@ namespace FPD_UI_UnitTests
         [Test]
         public void CanClearSingleReport()
         {
-            var viewModel = new ReportingWindowViewModel();
-            viewModel.ReportingSeverity = ReportSeverity.Detailed;
+            var viewModel = new ReportingWindowViewModel
+            {
+                ReportingSeverity = ReportSeverity.Detailed
+            };
             viewModel.UpdateReport(ReportSeverity.Useful, ReportType.Error, ReportLocation.Unknown, "Is this added?");
             viewModel.UpdateReport(ReportSeverity.Useful, ReportType.Error, ReportLocation.Unknown, "Is this also added?");
 

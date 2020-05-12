@@ -31,39 +31,39 @@ namespace FinancialStructures.PortfolioAPI
             switch (elementType)
             {
                 case (AccountType.Security):
+                {
+                    if (!portfolio.TryGetSecurity(name, out ISecurity desired) || !desired.Any())
                     {
-                        if (!portfolio.TryGetSecurity(name, out ISecurity desired) || !desired.Any())
-                        {
-                            return double.NaN;
-                        }
-                        var currency = Currency(portfolio, AccountType.Security, desired);
-                        return desired.Value(date, currency).Value;
+                        return double.NaN;
                     }
+                    var currency = Currency(portfolio, AccountType.Security, desired);
+                    return desired.Value(date, currency).Value;
+                }
                 case (AccountType.Currency):
+                {
+                    foreach (ICurrency currency in portfolio.Currencies)
                     {
-                        foreach (ICurrency currency in portfolio.Currencies)
+                        if (name.IsEqualTo(currency.Names))
                         {
-                            if (name.IsEqualTo(currency.Names))
-                            {
-                                return currency.Value(date).Value;
-                            }
+                            return currency.Value(date).Value;
                         }
-
-                        return 1.0;
                     }
+
+                    return 1.0;
+                }
                 case (AccountType.BankAccount):
+                {
+                    if (!portfolio.TryGetAccount(AccountType.BankAccount, name, out var desired))
                     {
-                        if (!portfolio.TryGetAccount(AccountType.BankAccount, name, out var desired))
-                        {
-                            return double.NaN;
-                        }
+                        return double.NaN;
+                    }
 
-                        return desired.LatestValue().Value;
-                    }
+                    return desired.LatestValue().Value;
+                }
                 case (AccountType.Sector):
-                    {
-                        break;
-                    }
+                {
+                    break;
+                }
                 default:
                     break;
             }

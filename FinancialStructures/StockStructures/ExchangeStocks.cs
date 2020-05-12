@@ -1,7 +1,7 @@
 ﻿using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
-using StructureCommon.Reporting;
 using StructureCommon.FileAccess;
+using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +18,8 @@ namespace FinancialStructures.StockStructures
     public class ExchangeStocks
     {
         public ExchangeStocks()
-        { }
+        {
+        }
 
         public double GetValue(NameData name, DateTime date, DataStream datatype = DataStream.Close)
         {
@@ -68,8 +69,14 @@ namespace FinancialStructures.StockStructures
 
         public List<Stock> Stocks
         {
-            get { return fStocks; }
-            set { fStocks = value; }
+            get
+            {
+                return fStocks;
+            }
+            set
+            {
+                fStocks = value;
+            }
         }
 
         public bool CheckValidity()

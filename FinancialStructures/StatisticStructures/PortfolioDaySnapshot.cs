@@ -1,8 +1,8 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
-using StructureCommon.Extensions;
 using FinancialStructures.PortfolioAPI;
+using StructureCommon.Extensions;
 using System;
 using System.Collections.Generic;
 
@@ -69,11 +69,20 @@ namespace FinancialStructures.StatisticStructures
             return outputCSVStyle;
         }
 
-        public DailyValuation TotalValue { get; }
+        public DailyValuation TotalValue
+        {
+            get;
+        }
 
-        public DailyValuation BankAccValue { get; }
+        public DailyValuation BankAccValue
+        {
+            get;
+        }
 
-        public DailyValuation SecurityValue { get; }
+        public DailyValuation SecurityValue
+        {
+            get;
+        }
 
         public List<DayValue_Named> SecurityValues { get; } = new List<DayValue_Named>();
 
@@ -90,7 +99,8 @@ namespace FinancialStructures.StatisticStructures
         /// Default Constructor.
         /// </summary>
         public PortfolioDaySnapshot()
-        { }
+        {
+        }
 
         /// <summary>
         /// Constructor which generates the snapshot.

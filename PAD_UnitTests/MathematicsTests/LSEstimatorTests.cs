@@ -1,5 +1,4 @@
-﻿using FinancialStructures.Mathematics;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using System;
 
 namespace FinancialStructures_Tests

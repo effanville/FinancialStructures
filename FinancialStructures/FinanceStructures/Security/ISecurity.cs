@@ -8,15 +8,42 @@ namespace FinancialStructures.FinanceInterfaces
 {
     public interface ISecurity
     {
-        NameData Names { get; }
-        string Name { get; }
-        string Company { get; }
-        string Url { get; }
-        string Currency { get; }
-        HashSet<string> Sectors { get; }
-        TimeList Shares { get; }
-        TimeList UnitPrice { get; }
-        TimeList Investments { get; }
+        NameData Names
+        {
+            get;
+        }
+        string Name
+        {
+            get;
+        }
+        string Company
+        {
+            get;
+        }
+        string Url
+        {
+            get;
+        }
+        string Currency
+        {
+            get;
+        }
+        HashSet<string> Sectors
+        {
+            get;
+        }
+        TimeList Shares
+        {
+            get;
+        }
+        TimeList UnitPrice
+        {
+            get;
+        }
+        TimeList Investments
+        {
+            get;
+        }
         bool IsEqualTo(ISecurity otherSecurity);
         bool SameName(TwoName otherNames);
         bool SameName(string company, string name);

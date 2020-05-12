@@ -60,8 +60,14 @@ namespace FinancialStructures.NamingStructures
         /// </summary>
         public virtual string Url
         {
-            get { return fUrl; }
-            set { fUrl = value; }
+            get
+            {
+                return fUrl;
+            }
+            set
+            {
+                fUrl = value;
+            }
         }
 
         private string fCurrency;
@@ -71,8 +77,14 @@ namespace FinancialStructures.NamingStructures
         /// </summary>
         public virtual string Currency
         {
-            get { return fCurrency; }
-            set { fCurrency = value; }
+            get
+            {
+                return fCurrency;
+            }
+            set
+            {
+                fCurrency = value;
+            }
         }
 
         private HashSet<string> fSectors = new HashSet<string>();
@@ -97,7 +109,10 @@ namespace FinancialStructures.NamingStructures
         /// </summary>
         public virtual string SectorsFlat
         {
-            get { return string.Join(",", fSectors); }
+            get
+            {
+                return string.Join(",", fSectors);
+            }
             set
             {
                 HashSet<string> sectorList = new HashSet<string>();

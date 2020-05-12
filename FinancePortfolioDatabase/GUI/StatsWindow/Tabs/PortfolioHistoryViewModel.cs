@@ -5,21 +5,35 @@ using System.Collections.Generic;
 
 namespace FinanceViewModels.StatsViewModels
 {
-    class PortfolioHistoryViewModel : TabViewModelBase
+    internal class PortfolioHistoryViewModel : TabViewModelBase
     {
 
         private int fHistoryGapDays = 25;
         public int HistoryGapDays
         {
-            get { return fHistoryGapDays; }
-            set { fHistoryGapDays = value; OnPropertyChanged(); }
+            get
+            {
+                return fHistoryGapDays;
+            }
+            set
+            {
+                fHistoryGapDays = value;
+                OnPropertyChanged();
+            }
         }
 
         private List<PortfolioDaySnapshot> fHistoryStats;
         public List<PortfolioDaySnapshot> HistoryStats
         {
-            get { return fHistoryStats; }
-            set { fHistoryStats = value; OnPropertyChanged(); }
+            get
+            {
+                return fHistoryStats;
+            }
+            set
+            {
+                fHistoryStats = value;
+                OnPropertyChanged();
+            }
         }
 
         public override async void GenerateStatistics(bool displayValueFunds)

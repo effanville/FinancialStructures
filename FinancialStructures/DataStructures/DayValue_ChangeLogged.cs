@@ -27,18 +27,35 @@ namespace FinancialStructures.DataStructures
         }
 
 
-        public bool NewValue { get; set; }
+        public bool NewValue
+        {
+            get; set;
+        }
 
         public override DateTime Day
         {
-            get { return base.fDate; }
-            set { fDate = value; NewValue = true; }
+            get
+            {
+                return base.fDate;
+            }
+            set
+            {
+                fDate = value;
+                NewValue = true;
+            }
         }
 
         public override double Value
         {
-            get { return fValue; }
-            set { fValue = value; NewValue = true; }
+            get
+            {
+                return fValue;
+            }
+            set
+            {
+                fValue = value;
+                NewValue = true;
+            }
         }
     }
 }

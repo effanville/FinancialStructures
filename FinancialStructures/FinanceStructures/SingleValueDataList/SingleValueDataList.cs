@@ -56,8 +56,14 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public NameData Names
         {
-            get { return fNames; }
-            set { fNames = value; }
+            get
+            {
+                return fNames;
+            }
+            set
+            {
+                fNames = value;
+            }
         }
 
         /// <summary>
@@ -65,8 +71,15 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public virtual string Name
         {
-            get => Names.Name;
-            set => Names.Name = value;
+            get
+            {
+                return Names.Name;
+            }
+
+            set
+            {
+                Names.Name = value;
+            }
         }
 
         /// <summary>
@@ -74,20 +87,40 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public string Company
         {
-            get => Names.Company;
-            set => Names.Company = value;
+            get
+            {
+                return Names.Company;
+            }
+
+            set
+            {
+                Names.Company = value;
+            }
         }
 
         public string Url
         {
-            get => Names.Url;
-            set => Names.Url = value;
+            get
+            {
+                return Names.Url;
+            }
+
+            set
+            {
+                Names.Url = value;
+            }
         }
 
         public string Currency
         {
-            get { return Names.Currency; }
-            set { Names.Currency = value; }
+            get
+            {
+                return Names.Currency;
+            }
+            set
+            {
+                Names.Currency = value;
+            }
         }
 
         /// <summary>
@@ -100,8 +133,15 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public TimeList Values
         {
-            get => fValues;
-            set => fValues = value;
+            get
+            {
+                return fValues;
+            }
+
+            set
+            {
+                fValues = value;
+            }
         }
 
         /// <summary>

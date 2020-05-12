@@ -50,13 +50,15 @@ namespace FinancialStructures.FinanceStructures
 
         private Currency(NameData name, TimeList values)
             : base(name, values)
-        { }
+        {
+        }
 
         /// <summary>
         /// default constructor.
         /// </summary>
         internal Currency()
             : base()
-        { }
+        {
+        }
     }
 }

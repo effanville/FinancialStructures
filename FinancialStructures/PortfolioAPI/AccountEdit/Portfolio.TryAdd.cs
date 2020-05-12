@@ -35,41 +35,41 @@ namespace FinancialStructures.PortfolioAPI
             switch (elementType)
             {
                 case (AccountType.Security):
-                    {
-                        var toAdd = new Security(name);
-                        toAdd.DataEdit += portfolio.OnPortfolioChanged;
-                        portfolio.Funds.Add(toAdd);
-                        portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());
-                        break;
-                    }
+                {
+                    var toAdd = new Security(name);
+                    toAdd.DataEdit += portfolio.OnPortfolioChanged;
+                    portfolio.Funds.Add(toAdd);
+                    portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());
+                    break;
+                }
                 case (AccountType.Currency):
+                {
+                    if (string.IsNullOrEmpty(name.Company))
                     {
-                        if (string.IsNullOrEmpty(name.Company))
-                        {
-                            name.Company = "GBP";
-                        }
-                        var toAdd = new Currency(name);
-                        toAdd.DataEdit += portfolio.OnPortfolioChanged;
-                        portfolio.Currencies.Add(toAdd);
-                        portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());
-                        break;
+                        name.Company = "GBP";
                     }
+                    var toAdd = new Currency(name);
+                    toAdd.DataEdit += portfolio.OnPortfolioChanged;
+                    portfolio.Currencies.Add(toAdd);
+                    portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());
+                    break;
+                }
                 case (AccountType.BankAccount):
-                    {
-                        var toAdd = new CashAccount(name);
-                        toAdd.DataEdit += portfolio.OnPortfolioChanged;
-                        portfolio.BankAccounts.Add(toAdd);
-                        portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());
-                        break;
-                    }
+                {
+                    var toAdd = new CashAccount(name);
+                    toAdd.DataEdit += portfolio.OnPortfolioChanged;
+                    portfolio.BankAccounts.Add(toAdd);
+                    portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());
+                    break;
+                }
                 case (AccountType.Sector):
-                    {
-                        var toAdd = new Sector(name);
-                        toAdd.DataEdit += portfolio.OnPortfolioChanged;
-                        portfolio.BenchMarks.Add(toAdd);
-                        portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());
-                        break;
-                    }
+                {
+                    var toAdd = new Sector(name);
+                    toAdd.DataEdit += portfolio.OnPortfolioChanged;
+                    portfolio.BenchMarks.Add(toAdd);
+                    portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());
+                    break;
+                }
                 default:
                     _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Editing an Unknown type.");
                     return false;

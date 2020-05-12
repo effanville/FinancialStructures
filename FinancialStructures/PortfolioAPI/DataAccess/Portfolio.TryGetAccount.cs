@@ -32,41 +32,41 @@ namespace FinancialStructures.PortfolioAPI
             switch (accountType)
             {
                 case (AccountType.BankAccount):
+                {
+                    foreach (ICashAccount sec in portfolio.BankAccounts)
                     {
-                        foreach (ICashAccount sec in portfolio.BankAccounts)
+                        if (names.IsEqualTo(sec.Names))
                         {
-                            if (names.IsEqualTo(sec.Names))
-                            {
-                                desired = sec.Copy();
-                                success = true;
-                            }
+                            desired = sec.Copy();
+                            success = true;
                         }
-                        break;
                     }
+                    break;
+                }
                 case (AccountType.Currency):
+                {
+                    foreach (ICurrency currency in portfolio.Currencies)
                     {
-                        foreach (ICurrency currency in portfolio.Currencies)
+                        if (names.IsEqualTo(currency.Names))
                         {
-                            if (names.IsEqualTo(currency.Names))
-                            {
-                                desired = currency.Copy();
-                                success = true;
-                            }
+                            desired = currency.Copy();
+                            success = true;
                         }
-                        break;
                     }
+                    break;
+                }
                 case (AccountType.Sector):
+                {
+                    foreach (ISector sector in portfolio.BenchMarks)
                     {
-                        foreach (ISector sector in portfolio.BenchMarks)
+                        if (sector.Name == names.Name)
                         {
-                            if (sector.Name == names.Name)
-                            {
-                                desired = sector.Copy();
-                                success = true;
-                            }
+                            desired = sector.Copy();
+                            success = true;
                         }
-                        break;
                     }
+                    break;
+                }
             }
 
             return success;

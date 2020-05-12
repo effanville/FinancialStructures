@@ -19,47 +19,47 @@ namespace FinancialStructures.PortfolioAPI
             switch (elementType)
             {
                 case (AccountType.Security):
+                {
+                    var securities = portfolio.CompanySecurities(company);
+                    double value = 0;
+                    foreach (var security in securities)
                     {
-                        var securities = portfolio.CompanySecurities(company);
-                        double value = 0;
-                        foreach (var security in securities)
+                        if (security.Any())
                         {
-                            if (security.Any())
-                            {
-                                var currency = Currency(portfolio, AccountType.Security, security);
-                                value += security.Value(date, currency).Value;
-                            }
+                            var currency = Currency(portfolio, AccountType.Security, security);
+                            value += security.Value(date, currency).Value;
                         }
-
-                        return value;
                     }
+
+                    return value;
+                }
                 case (AccountType.Currency):
-                    {
-                        return 0.0;
-                    }
+                {
+                    return 0.0;
+                }
                 case (AccountType.BankAccount):
+                {
+                    var bankAccounts = portfolio.CompanyBankAccounts(company);
+                    if (bankAccounts.Count() == 0)
                     {
-                        var bankAccounts = portfolio.CompanyBankAccounts(company);
-                        if (bankAccounts.Count() == 0)
+                        return double.NaN;
+                    }
+                    double value = 0;
+                    foreach (var account in bankAccounts)
+                    {
+                        if (account != null && account.Any())
                         {
-                            return double.NaN;
+                            var currency = Currency(portfolio, AccountType.BankAccount, account);
+                            value += account.NearestEarlierValuation(date, currency).Value;
                         }
-                        double value = 0;
-                        foreach (var account in bankAccounts)
-                        {
-                            if (account != null && account.Any())
-                            {
-                                var currency = Currency(portfolio, AccountType.BankAccount, account);
-                                value += account.NearestEarlierValuation(date, currency).Value;
-                            }
-                        }
+                    }
 
-                        return value;
-                    }
+                    return value;
+                }
                 case (AccountType.Sector):
-                    {
-                        break;
-                    }
+                {
+                    break;
+                }
                 default:
                     break;
             }

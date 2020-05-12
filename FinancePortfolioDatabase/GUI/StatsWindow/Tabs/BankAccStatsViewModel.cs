@@ -10,8 +10,15 @@ namespace FinanceViewModels.StatsViewModels
         private List<DayValue_Named> fBankAccountStats;
         public List<DayValue_Named> BankAccountStats
         {
-            get { return fBankAccountStats; }
-            set { fBankAccountStats = value; OnPropertyChanged(); }
+            get
+            {
+                return fBankAccountStats;
+            }
+            set
+            {
+                fBankAccountStats = value;
+                OnPropertyChanged();
+            }
         }
 
         public override void GenerateStatistics(bool displayValueFunds)

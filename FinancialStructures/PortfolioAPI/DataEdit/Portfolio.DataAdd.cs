@@ -40,21 +40,21 @@ namespace FinancialStructures.PortfolioAPI
             switch (elementType)
             {
                 case (AccountType.Security):
-                    {
-                        return false;
-                    }
+                {
+                    return false;
+                }
                 case (AccountType.Currency):
-                    {
-                        return SingleListAdd(portfolio.Currencies, name, data, reportLogger);
-                    }
+                {
+                    return SingleListAdd(portfolio.Currencies, name, data, reportLogger);
+                }
                 case (AccountType.BankAccount):
-                    {
-                        return SingleListAdd(portfolio.BankAccounts, name, data, reportLogger);
-                    }
+                {
+                    return SingleListAdd(portfolio.BankAccounts, name, data, reportLogger);
+                }
                 case (AccountType.Sector):
-                    {
-                        return SingleListAdd(portfolio.BenchMarks, name, data, reportLogger);
-                    }
+                {
+                    return SingleListAdd(portfolio.BenchMarks, name, data, reportLogger);
+                }
                 default:
                     _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, $"Editing an Unknown type.");
                     return false;

@@ -15,7 +15,7 @@ namespace FinanceWindows
 
         private void CloseTabCommand(object sender, System.Windows.RoutedEventArgs e)
         {
-            var VM = this.DataContext as SingleValueEditWindowViewModel;
+            var VM = DataContext as SingleValueEditWindowViewModel;
             if (TabMain.SelectedIndex != 0)
             {
                 VM.Tabs.RemoveAt(TabMain.SelectedIndex);

@@ -18,7 +18,13 @@ namespace FinanceCommonViewModels
     {
         private AccountType TypeOfAccount;
 
-        public override bool Closable { get { return true; } }
+        public override bool Closable
+        {
+            get
+            {
+                return true;
+            }
+        }
 
         private NameData_ChangeLogged fSelectedName;
 
@@ -27,15 +33,29 @@ namespace FinanceCommonViewModels
         /// </summary>
         public NameData_ChangeLogged SelectedName
         {
-            get { return fSelectedName; }
-            set { fSelectedName = value; OnPropertyChanged(); }
+            get
+            {
+                return fSelectedName;
+            }
+            set
+            {
+                fSelectedName = value;
+                OnPropertyChanged();
+            }
         }
 
         private List<DayValue_ChangeLogged> fSelectedData;
         public List<DayValue_ChangeLogged> SelectedData
         {
-            get { return fSelectedData; }
-            set { fSelectedData = value; OnPropertyChanged(); }
+            get
+            {
+                return fSelectedData;
+            }
+            set
+            {
+                fSelectedData = value;
+                OnPropertyChanged();
+            }
         }
 
         private DayValue_ChangeLogged fSelectedValues;
@@ -116,7 +136,10 @@ namespace FinanceCommonViewModels
         }
 
 
-        public ICommand EditDataCommand { get; set; }
+        public ICommand EditDataCommand
+        {
+            get; set;
+        }
 
         private void ExecuteEditDataCommand()
         {
@@ -150,7 +173,10 @@ namespace FinanceCommonViewModels
             }
         }
 
-        public ICommand DeleteValuationCommand { get; }
+        public ICommand DeleteValuationCommand
+        {
+            get;
+        }
 
         private void ExecuteDeleteValuation()
         {
@@ -164,7 +190,10 @@ namespace FinanceCommonViewModels
             }
         }
 
-        public ICommand AddCsvData { get; }
+        public ICommand AddCsvData
+        {
+            get;
+        }
 
         private void ExecuteAddCsvData()
         {
@@ -194,7 +223,10 @@ namespace FinanceCommonViewModels
             }
         }
 
-        public ICommand ExportCsvData { get; }
+        public ICommand ExportCsvData
+        {
+            get;
+        }
 
         private void ExecuteExportCsvData()
         {

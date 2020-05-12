@@ -21,29 +21,29 @@ namespace FinancialStructures.PortfolioAPI
             NotImplemented
         }
 
-        public async static Task Downloader(IPortfolio portfolio, IReportLogger reportLogger)
+        public static async Task Downloader(IPortfolio portfolio, IReportLogger reportLogger)
         {
             await DownloadPortfolioLatest(portfolio, reportLogger).ConfigureAwait(false);
         }
 
-        public async static Task DownloadOfType(AccountType accountType, IPortfolio portfolio, TwoName names, IReportLogger reportLogger)
+        public static async Task DownloadOfType(AccountType accountType, IPortfolio portfolio, TwoName names, IReportLogger reportLogger)
         {
             switch (accountType)
             {
                 case (AccountType.Security):
-                    {
-                        _ = portfolio.TryGetSecurity(names, out var sec);
-                        await DownloadLatestValue(sec.Names, value => sec.UpdateSecurityData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
-                        break;
-                    }
+                {
+                    _ = portfolio.TryGetSecurity(names, out var sec);
+                    await DownloadLatestValue(sec.Names, value => sec.UpdateSecurityData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                    break;
+                }
                 case (AccountType.BankAccount):
                 case (AccountType.Currency):
                 case (AccountType.Sector):
-                    {
-                        _ = portfolio.TryGetAccount(accountType, names, out var acc);
-                        await DownloadLatestValue(acc.Names, value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
-                        break;
-                    }
+                {
+                    _ = portfolio.TryGetAccount(accountType, names, out var acc);
+                    await DownloadLatestValue(acc.Names, value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                    break;
+                }
             }
         }
 
@@ -90,7 +90,7 @@ namespace FinancialStructures.PortfolioAPI
             return WebsiteType.NotImplemented;
         }
 
-        private async static Task DownloadPortfolioLatest(IPortfolio portfo, IReportLogger reportLogger)
+        private static async Task DownloadPortfolioLatest(IPortfolio portfo, IReportLogger reportLogger)
         {
             foreach (ISecurity sec in portfo.Funds)
             {
@@ -110,7 +110,7 @@ namespace FinancialStructures.PortfolioAPI
             }
         }
 
-        public async static Task DownloadLatestValue(NameData names, Action<double> updateValue, IReportLogger reportLogger)
+        public static async Task DownloadLatestValue(NameData names, Action<double> updateValue, IReportLogger reportLogger)
         {
             string data = await DownloadFromURL(names.Url, reportLogger).ConfigureAwait(false);
             if (string.IsNullOrEmpty(data))
@@ -139,8 +139,10 @@ namespace FinancialStructures.PortfolioAPI
             {
                 try
                 {
-                    HttpRequestMessage requestMessage = new HttpRequestMessage();
-                    requestMessage.RequestUri = new Uri(newUrl);
+                    HttpRequestMessage requestMessage = new HttpRequestMessage
+                    {
+                        RequestUri = new Uri(newUrl)
+                    };
                     requestMessage.Headers.Add("Cookie", "A1S=d=AQABBBqjZl4CELBdwrYAVcmgp1PaEGx2xoQFEgABAQGPgF5eX_bPb2UB_iMAAAcIGqNmXmx2xoQ&S=AQAAAii_Jnul1r-aKGkxwIrap9c&j=GDPR");
                     requestMessage.Headers.Add("Cookie", "A1=d=AQABBBqjZl4CELBdwrYAVcmgp1PaEGx2xoQFEgABAQGPgF5eX_bPb2UB_iMAAAcIGqNmXmx2xoQ&S=AQAAAii_Jnul1r-aKGkxwIrap9c");
                     requestMessage.Headers.Add("Cookie", "A3=d=AQABBBqjZl4CELBdwrYAVcmgp1PaEGx2xoQFEgABAQGPgF5eX_bPb2UB_iMAAAcIGqNmXmx2xoQ&S=AQAAAii_Jnul1r-aKGkxwIrap9c");
@@ -173,25 +175,25 @@ namespace FinancialStructures.PortfolioAPI
             switch (AddressType(url))
             {
                 case WebsiteType.FT:
+                {
+                    value = ProcessFromFT(data);
+                    if (double.IsNaN(value))
                     {
-                        value = ProcessFromFT(data);
-                        if (double.IsNaN(value))
-                        {
-                            reportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from FT url: {url}");
-                            return false;
-                        }
-                        return true;
+                        reportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from FT url: {url}");
+                        return false;
                     }
+                    return true;
+                }
                 case WebsiteType.Yahoo:
+                {
+                    value = ProcessFromYahoo(data);
+                    if (double.IsNaN(value))
                     {
-                        value = ProcessFromYahoo(data);
-                        if (double.IsNaN(value))
-                        {
-                            reportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from Yahoo url: {url}");
-                            return false;
-                        }
-                        return true;
+                        reportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from Yahoo url: {url}");
+                        return false;
                     }
+                    return true;
+                }
                 default:
                 case WebsiteType.Morningstar:
                 case WebsiteType.Google:

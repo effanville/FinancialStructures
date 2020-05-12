@@ -1,8 +1,8 @@
 ﻿using FinancialStructures.NamingStructures;
 using FinancialStructures.StatsMakers;
+using StructureCommon.Extensions;
 using System;
 using System.Collections.Generic;
-using StructureCommon.Extensions;
 
 namespace FinancialStructures.DataStructures
 {
@@ -20,7 +20,7 @@ namespace FinancialStructures.DataStructures
 
         public string HTMLTableHeader(UserOptions options, List<string> names)
         {
-            var properties = this.GetType().GetProperties();
+            var properties = GetType().GetProperties();
             string htmlHeader = string.Empty;
             foreach (var property in properties)
             {
@@ -37,7 +37,7 @@ namespace FinancialStructures.DataStructures
 
         public string HTMLTableData(UserOptions options, List<string> names)
         {
-            var properties = this.GetType().GetProperties();
+            var properties = GetType().GetProperties();
             string htmlData = "<th scope=\"row\">";
 
             for (int i = 0; i < properties.Length; i++)
@@ -73,7 +73,10 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Names associated to the values.
         /// </summary>
-        public TwoName Names { get; set; }
+        public TwoName Names
+        {
+            get; set;
+        }
 
         /// <summary>
         /// Empty constructor.

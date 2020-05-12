@@ -9,7 +9,7 @@ namespace FinancialStructures.StatsMakers
 {
     public static class CSVHistoryWriter
     {
-        public async static void WriteHistoryToCSV(IPortfolio portfolio, string filePath, int daysGap, IReportLogger reportLogger = null)
+        public static async void WriteHistoryToCSV(IPortfolio portfolio, string filePath, int daysGap, IReportLogger reportLogger = null)
         {
             try
             {

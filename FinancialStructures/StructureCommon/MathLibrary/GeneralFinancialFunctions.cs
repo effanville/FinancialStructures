@@ -127,8 +127,10 @@ namespace StructureCommon.FinanceFunctions
                 return 0.0;
             }
             // reduce number of investments to recent only
-            var recentInvestments = new List<DailyValuation>();
-            recentInvestments.Add(startValue);
+            var recentInvestments = new List<DailyValuation>
+            {
+                startValue
+            };
 
             foreach (DailyValuation value in investments)
             {

@@ -5,10 +5,17 @@
     /// </summary>
     public class VisibleName
     {
-        public string Name { get; set; }
-        public bool Visible { get; set; }
+        public string Name
+        {
+            get; set;
+        }
+        public bool Visible
+        {
+            get; set;
+        }
         public VisibleName()
-        { }
+        {
+        }
 
         public VisibleName(string name, bool vis)
         {

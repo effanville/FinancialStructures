@@ -7,16 +7,44 @@ namespace FinanceViewModels.StatsViewModels
 {
     internal class MainTabViewModel : TabViewModelBase
     {
-        public override bool Closable { get { return false; } }
-        Action<TabType, string> OpenTab;
+        public override bool Closable
+        {
+            get
+            {
+                return false;
+            }
+        }
 
-        public ICommand OpenSecuritiesTab { get; private set; }
-        public ICommand OpenSecInvTab { get; }
-        public ICommand OpenDatabaseTab { get; }
-        public ICommand OpenBankAccTab { get; }
-        public ICommand OpenHistoryTab { get; }
-        public ICommand OpenChartsTab { get; }
-        public ICommand OpenHtmlViewerTab { get; }
+        private Action<TabType, string> OpenTab;
+
+        public ICommand OpenSecuritiesTab
+        {
+            get; private set;
+        }
+        public ICommand OpenSecInvTab
+        {
+            get;
+        }
+        public ICommand OpenDatabaseTab
+        {
+            get;
+        }
+        public ICommand OpenBankAccTab
+        {
+            get;
+        }
+        public ICommand OpenHistoryTab
+        {
+            get;
+        }
+        public ICommand OpenChartsTab
+        {
+            get;
+        }
+        public ICommand OpenHtmlViewerTab
+        {
+            get;
+        }
 
         public MainTabViewModel(Action<TabType, string> openTab)
             : base(null, false)

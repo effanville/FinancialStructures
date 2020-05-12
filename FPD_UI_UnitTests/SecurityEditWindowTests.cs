@@ -127,8 +127,10 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
 
             var editMethods = TestingGUICode.GetMethodsForTesting(AccountType.Security);
             var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, editMethods);
-            var newName = new NameCompDate("company", "name", "GBP", "someUrl", new HashSet<string>(), DateTime.Today);
-            newName.Company = "Company";
+            var newName = new NameCompDate("company", "name", "GBP", "someUrl", new HashSet<string>(), DateTime.Today)
+            {
+                Company = "Company"
+            };
             viewModel.SelectedName = newName;
             viewModel.DataNames.Add(newName);
             viewModel.CreateCommand.Execute(1);
@@ -167,9 +169,10 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
 
             var editMethods = TestingGUICode.GetMethodsForTesting(AccountType.Security);
-            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, editMethods);
-
-            viewModel.SelectedName = new NameData_ChangeLogged("Fidelity", "China");
+            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, editMethods)
+            {
+                SelectedName = new NameData_ChangeLogged("Fidelity", "China")
+            };
             viewModel.DownloadCommand.Execute(1);
 
             Assert.AreEqual(1, viewModel.DataNames.Count);
