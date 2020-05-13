@@ -44,8 +44,8 @@ namespace FinanceCommonViewModels
             }
         }
 
-        private List<DayValue_ChangeLogged> fSelectedData;
-        public List<DayValue_ChangeLogged> SelectedData
+        private List<DailyValuation> fSelectedData;
+        public List<DailyValuation> SelectedData
         {
             get
             {
@@ -58,10 +58,10 @@ namespace FinanceCommonViewModels
             }
         }
 
-        private DayValue_ChangeLogged fSelectedValues;
-        private DayValue_ChangeLogged fOldSelectedValue;
+        private DailyValuation fSelectedValues;
+        private DailyValuation fOldSelectedValue;
         private int SelectedIndex;
-        public DayValue_ChangeLogged SelectedValue
+        public DailyValuation SelectedValue
         {
             get
             {
@@ -150,17 +150,7 @@ namespace FinanceCommonViewModels
                 else
                 {
                     bool edited = false;
-                    for (int i = 0; i < SelectedData.Count; i++)
-                    {
-                        var name = SelectedData[i];
-
-                        if (name.NewValue)
-                        {
-                            edited = true;
-                            name.NewValue = false;
-                            UpdateDataCallback(programPortfolio => programPortfolio.TryEditData(TypeOfAccount, SelectedName, fOldSelectedValue, SelectedValue, ReportLogger));
-                        }
-                    }
+                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditData(TypeOfAccount, SelectedName, fOldSelectedValue, SelectedValue, ReportLogger));
 
                     if (!edited)
                     {
@@ -207,7 +197,7 @@ namespace FinanceCommonViewModels
                 {
                     foreach (object objec in outputs)
                     {
-                        if (objec is DayValue_ChangeLogged view)
+                        if (objec is DailyValuation view)
                         {
                             UpdateDataCallback(programPortfolio => programPortfolio.TryAddData(TypeOfAccount, SelectedName, view, ReportLogger));
                         }

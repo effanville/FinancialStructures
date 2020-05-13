@@ -27,15 +27,15 @@ namespace FinancialStructures.FinanceStructures
             return fValues.Count();
         }
 
-        public List<DayValue_ChangeLogged> GetDataForDisplay()
+        public List<DailyValuation> GetDataForDisplay()
         {
-            var output = new List<DayValue_ChangeLogged>();
+            var output = new List<DailyValuation>();
             if (fValues.Any())
             {
                 foreach (var datevalue in fValues.GetValuesBetween(fValues.FirstDate(), fValues.LatestDate()))
                 {
                     fValues.TryGetValue(datevalue.Day, out double UnitPrice);
-                    var thisday = new DayValue_ChangeLogged(datevalue.Day, UnitPrice, false);
+                    var thisday = new DailyValuation(datevalue.Day, UnitPrice);
                     output.Add(thisday);
                 }
             }
@@ -80,7 +80,7 @@ namespace FinancialStructures.FinanceStructures
                     break;
                 }
 
-                var line = new DayValue_ChangeLogged(DateTime.Parse(dayValuation[0]), double.Parse(dayValuation[1]));
+                var line = new DailyValuation(DateTime.Parse(dayValuation[0]), double.Parse(dayValuation[1]));
                 dailyValuations.Add(line);
             }
 
@@ -89,7 +89,7 @@ namespace FinancialStructures.FinanceStructures
 
         public void WriteDataToCsv(TextWriter writer, IReportLogger reportLogger)
         {
-            foreach (DayValue_ChangeLogged value in GetDataForDisplay())
+            foreach (DailyValuation value in GetDataForDisplay())
             {
                 writer.WriteLine(value.ToString());
             }

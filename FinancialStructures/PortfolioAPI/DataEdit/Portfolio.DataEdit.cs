@@ -37,7 +37,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
         /// <remarks> This cannot currently be used to add to securities due to different type of data.</remarks>
-        public static bool TryEditData(this IPortfolio portfolio, AccountType elementType, NameData name, DayValue_ChangeLogged oldData, DayValue_ChangeLogged newData, IReportLogger reportLogger = null)
+        public static bool TryEditData(this IPortfolio portfolio, AccountType elementType, NameData name, DailyValuation oldData, DailyValuation newData, IReportLogger reportLogger = null)
         {
             switch (elementType)
             {
@@ -63,7 +63,7 @@ namespace FinancialStructures.PortfolioAPI
             }
         }
 
-        private static bool TryEditSingleDataList<T>(List<T> values, AccountType elementType, NameData name, DayValue_ChangeLogged oldData, DayValue_ChangeLogged newData, IReportLogger reportLogger = null) where T : ISingleValueDataList
+        private static bool TryEditSingleDataList<T>(List<T> values, AccountType elementType, NameData name, DailyValuation oldData, DailyValuation newData, IReportLogger reportLogger = null) where T : ISingleValueDataList
         {
             for (int AccountIndex = 0; AccountIndex < values.Count; AccountIndex++)
             {

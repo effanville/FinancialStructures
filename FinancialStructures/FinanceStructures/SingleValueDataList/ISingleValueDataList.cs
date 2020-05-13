@@ -44,7 +44,7 @@ namespace FinancialStructures.FinanceInterfaces
         double CAR(DateTime earlierTime, DateTime laterTime);
 
         DailyValuation Value(DateTime date);
-        List<DayValue_ChangeLogged> GetDataForDisplay();
+        List<DailyValuation> GetDataForDisplay();
         bool EditNameData(NameData newNames);
         bool TryAddData(DateTime date, double value, IReportLogger reportLogger = null);
         bool TryEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null);

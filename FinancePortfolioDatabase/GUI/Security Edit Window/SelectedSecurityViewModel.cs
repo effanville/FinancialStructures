@@ -99,7 +99,7 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null && fSelectedValues != null)
             {
-                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(AccountType.Security, fSelectedName, new DayValue_ChangeLogged(fSelectedValues.Date, 0.0), ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(AccountType.Security, fSelectedName, new DailyValuation(fSelectedValues.Date, 0.0), ReportLogger));
             }
         }
 
@@ -178,17 +178,8 @@ namespace FinanceWindowsViewModels
                 else
                 {
                     bool edited = false;
-                    for (int i = 0; i < SelectedSecurityData.Count; i++)
-                    {
-                        var name = SelectedSecurityData[i];
+                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditSecurityData(fSelectedName, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment, ReportLogger));
 
-                        if (name.NewValue)
-                        {
-                            edited = true;
-                            name.NewValue = false;
-                            UpdateDataCallback(programPortfolio => programPortfolio.TryEditSecurityData(fSelectedName, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment, ReportLogger));
-                        }
-                    }
                     if (!edited)
                     {
                         ReportLogger.LogUsefulWithStrings("Error", "EditingData", "Was not able to edit security data.");
@@ -202,7 +193,7 @@ namespace FinanceWindowsViewModels
             base.UpdateData(portfolio);
             if (fSelectedName != null)
             {
-                if (!portfolio.TryGetSecurity(fSelectedName, out _))
+                if (!portfolio.Exists(AccountType.Security, fSelectedName))
                 {
                     removeTab?.Invoke(this);
                     return;

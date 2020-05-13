@@ -17,7 +17,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="data">The data to remove.</param>
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
-        public static bool TryDeleteData(this IPortfolio portfolio, AccountType elementType, NameData name, DayValue_ChangeLogged data, IReportLogger reportLogger)
+        public static bool TryDeleteData(this IPortfolio portfolio, AccountType elementType, NameData name, DailyValuation data, IReportLogger reportLogger)
         {
             switch (elementType)
             {
@@ -56,7 +56,7 @@ namespace FinancialStructures.PortfolioAPI
             return false;
         }
 
-        private static bool TryDeleteSingleListData<T>(List<T> values, AccountType elementType, NameData name, DayValue_ChangeLogged data, IReportLogger reportLogger) where T : ISingleValueDataList
+        private static bool TryDeleteSingleListData<T>(List<T> values, AccountType elementType, NameData name, DailyValuation data, IReportLogger reportLogger) where T : ISingleValueDataList
         {
             foreach (var account in values)
             {

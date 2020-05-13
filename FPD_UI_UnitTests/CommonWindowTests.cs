@@ -212,7 +212,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData_ChangeLogged("Barclays", "currentAccount"), AccountType.BankAccount);
 
             Assert.AreEqual(1, viewModel.SelectedData.Count);
-            var newValue = new DayValue_ChangeLogged(new DateTime(2002, 1, 1), 1);
+            var newValue = new DailyValuation(new DateTime(2002, 1, 1), 1);
             viewModel.SelectedData.Add(newValue);
             viewModel.SelectedValue = newValue;
             viewModel.EditDataCommand.Execute(1);
@@ -230,7 +230,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData_ChangeLogged("Barclays", "currentAccount"), AccountType.BankAccount);
 
             Assert.AreEqual(1, viewModel.SelectedData.Count);
-            var newValue = new DayValue_ChangeLogged(new DateTime(2000, 1, 1), 1);
+            var newValue = new DailyValuation(new DateTime(2000, 1, 1), 1);
             viewModel.SelectedData[0] = newValue;
             viewModel.SelectedValue = newValue;
             viewModel.EditDataCommand.Execute(1);
