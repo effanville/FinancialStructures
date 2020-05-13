@@ -18,11 +18,6 @@ namespace FinanceCommonViewModels
         private readonly AccountType TypeOfAccount;
 
         /// <summary>
-        /// List of names preceding any possible edit.
-        /// </summary>
-        private List<NameCompDate> fPreEditNames = new List<NameCompDate>();
-
-        /// <summary>
         /// Backing field for <see cref="DataNames"/>.
         /// </summary>
         private List<NameCompDate> fDataNames = new List<NameCompDate>();
@@ -43,15 +38,18 @@ namespace FinanceCommonViewModels
             }
         }
 
+        private NameCompDate fPreEditSelectedName;
+        private int selectedIndex;
+
         /// <summary>
         /// Backing field for <see cref="SelectedName"/>.
         /// </summary>
-        private NameData_ChangeLogged fSelectedName;
+        private NameCompDate fSelectedName;
 
         /// <summary>
         /// Name and Company data of the selected account in the list <see cref="DataNames"/>
         /// </summary>
-        public NameData_ChangeLogged SelectedName
+        public NameCompDate SelectedName
         {
             get
             {
@@ -60,6 +58,15 @@ namespace FinanceCommonViewModels
             set
             {
                 fSelectedName = value;
+                if (DataNames != null)
+                {
+                    int index = DataNames.IndexOf(value);
+                    if (selectedIndex != index)
+                    {
+                        selectedIndex = index;
+                        fPreEditSelectedName = fSelectedName?.Copy();
+                    }
+                }
                 OnPropertyChanged();
             }
         }
@@ -85,8 +92,6 @@ namespace FinanceCommonViewModels
             ReportLogger = reportLogger;
             DataNames = portfolio.NameData(accountType);
             DataNames.Sort();
-            fPreEditNames = portfolio.NameData(accountType);
-            fPreEditNames.Sort();
 
             CreateCommand = new RelayCommand(ExecuteCreateEdit);
             DeleteCommand = new RelayCommand(ExecuteDelete);
@@ -115,8 +120,6 @@ namespace FinanceCommonViewModels
             var currentSelectedName = SelectedName;
             DataNames = portfolio.NameData(TypeOfAccount);
             DataNames.Sort();
-            fPreEditNames = portfolio.NameData(TypeOfAccount);
-            fPreEditNames.Sort();
 
             for (int i = 0; i < DataNames.Count; i++)
             {
@@ -164,16 +167,8 @@ namespace FinanceCommonViewModels
             if (DataStore.NameData(TypeOfAccount).Count != DataNames.Count)
             {
                 bool edited = false;
-                if (SelectedName.NewValue)
-                {
-                    NameData name_add = new NameData(SelectedName.Company, SelectedName.Name, SelectedName.Currency, SelectedName.Url, SelectedName.Sectors);
-                    UpdateDataCallback(programPortfolio => programPortfolio.TryAdd(TypeOfAccount, name_add, ReportLogger));
-                    edited = true;
-                    if (SelectedName != null)
-                    {
-                        SelectedName.NewValue = false;
-                    }
-                }
+                UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAdd(TypeOfAccount, SelectedName.Copy(), ReportLogger));
+
                 if (!edited)
                 {
                     _ = ReportLogger.LogWithStrings("Critical", "Error", "AddingData", "No Name provided on creation.");
@@ -187,12 +182,9 @@ namespace FinanceCommonViewModels
                 {
                     var name = DataNames[i];
 
-                    if (name.NewValue && (!string.IsNullOrEmpty(name.Name) || !string.IsNullOrEmpty(name.Company)))
+                    if (!string.IsNullOrEmpty(SelectedName.Name) || !string.IsNullOrEmpty(SelectedName.Company))
                     {
-                        edited = true;
-                        NameData name_add = new NameData(name.Company, name.Name, name.Currency, name.Url, name.Sectors);
-                        UpdateDataCallback(programPortfolio => programPortfolio.TryEditName(TypeOfAccount, fPreEditNames[i], name_add, ReportLogger));
-                        name.NewValue = false;
+                        UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditName(TypeOfAccount, fPreEditSelectedName, SelectedName.Copy(), ReportLogger));
                     }
                 }
                 if (!edited)

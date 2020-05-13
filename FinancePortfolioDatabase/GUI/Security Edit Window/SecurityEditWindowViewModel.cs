@@ -60,7 +60,7 @@ namespace FinanceWindowsViewModels
 
         private void LoadTabFunc(Object obj)
         {
-            if (obj is NameData_ChangeLogged name)
+            if (obj is NameData name)
             {
                 Tabs.Add(new SelectedSecurityViewModel(DataStore, UpdateDataAction, ReportLogger, fFileService, fDialogCreationService, name));
             }

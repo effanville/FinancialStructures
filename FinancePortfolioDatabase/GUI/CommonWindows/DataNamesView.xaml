@@ -35,8 +35,9 @@
                   CanUserAddRows="True"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False"
-                  ItemsSource="{Binding Path=DataNames, Mode=TwoWay}"
-                  SelectedItem="{Binding Path=SelectedName, Mode=TwoWay}"
+                  ItemsSource="{Binding Path=DataNames, Mode=OneWay}"
+                  SelectedItem="{Binding Path=SelectedName, Mode=OneWay}"
+                  SelectedIndex="{Binding Path=SelectedIndex, Mode=OneWay}"
                   ScrollViewer.VerticalScrollBarVisibility="Visible"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <DataGrid.Resources>

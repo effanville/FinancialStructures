@@ -24,7 +24,7 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private readonly NameData_ChangeLogged fSelectedName;
+        private readonly NameData fSelectedName;
 
         /// <summary>
         /// The pricing data of the selected security.
@@ -75,7 +75,7 @@ namespace FinanceWindowsViewModels
         private readonly IFileInteractionService fFileService;
         private readonly IDialogCreationService fDialogCreationService;
 
-        public SelectedSecurityViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, NameData_ChangeLogged selectedName)
+        public SelectedSecurityViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, NameData selectedName)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name", portfolio)
         {
             fSelectedName = selectedName;
@@ -173,7 +173,6 @@ namespace FinanceWindowsViewModels
                 if (desired.Count() != SelectedSecurityData.Count)
                 {
                     UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(fSelectedName, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment, ReportLogger));
-                    fSelectedName.NewValue = false;
                 }
                 else
                 {

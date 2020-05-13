@@ -26,12 +26,12 @@ namespace FinanceCommonViewModels
             }
         }
 
-        private NameData_ChangeLogged fSelectedName;
+        private NameData fSelectedName;
 
         /// <summary>
         /// Name and Company data of the selected security in the list <see cref="AccountNames"/>
         /// </summary>
-        public NameData_ChangeLogged SelectedName
+        public NameData SelectedName
         {
             get
             {
@@ -89,7 +89,7 @@ namespace FinanceCommonViewModels
         private readonly IFileInteractionService fFileService;
         private readonly IDialogCreationService fDialogCreationService;
 
-        public SelectedSingleDataViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, NameData_ChangeLogged selectedName, AccountType accountType)
+        public SelectedSingleDataViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, NameData selectedName, AccountType accountType)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name", portfolio)
         {
             SelectedName = selectedName;
@@ -145,7 +145,6 @@ namespace FinanceCommonViewModels
                 if (DataStore.NumberData(TypeOfAccount, SelectedName, ReportLogger).Count() != SelectedData.Count)
                 {
                     UpdateDataCallback(programPortfolio => programPortfolio.TryAddData(TypeOfAccount, SelectedName, SelectedValue, ReportLogger));
-                    SelectedName.NewValue = false;
                 }
                 else
                 {
