@@ -23,11 +23,11 @@ namespace FinancialStructures.StatisticStructures
                 securityStats.RecentChange = portfolio.RecentChange().Truncate();
                 securityStats.FundsFraction = 1.0;
                 securityStats.Profit = portfolio.TotalProfit().Truncate();
-                securityStats.CAR3M = 100 * portfolio.IRRPortfolio(date.AddMonths(-3), date).Truncate();
-                securityStats.CAR6M = 100 * portfolio.IRRPortfolio(date.AddMonths(-6), date).Truncate();
-                securityStats.CAR1Y = 100 * portfolio.IRRPortfolio(date.AddMonths(-12), date).Truncate();
-                securityStats.CAR5Y = 100 * portfolio.IRRPortfolio(date.AddMonths(-60), date).Truncate();
-                securityStats.CARTotal = 100 * portfolio.IRRPortfolio(portfolio.FirstValueDate(), date).Truncate();
+                securityStats.CAR3M = (100 * portfolio.IRRPortfolio(date.AddMonths(-3), date)).Truncate();
+                securityStats.CAR6M = (100 * portfolio.IRRPortfolio(date.AddMonths(-6), date)).Truncate();
+                securityStats.CAR1Y = (100 * portfolio.IRRPortfolio(date.AddMonths(-12), date)).Truncate();
+                securityStats.CAR5Y = (100 * portfolio.IRRPortfolio(date.AddMonths(-60), date)).Truncate();
+                securityStats.CARTotal = (100 * portfolio.IRRPortfolio(portfolio.FirstValueDate(), date)).Truncate();
             }
             else if (securityStats.StatsType == StatisticsType.CompanyTotal)
             {
@@ -36,11 +36,11 @@ namespace FinancialStructures.StatisticStructures
                 securityStats.RecentChange = portfolio.CompanyRecentChange(company).Truncate();
                 securityStats.FundsFraction = portfolio.CompanyFraction(company, date).Truncate(4);
                 securityStats.Profit = portfolio.CompanyProfit(company).Truncate();
-                securityStats.CAR3M = 100 * portfolio.IRRCompany(company, date.AddMonths(-3), date).Truncate();
-                securityStats.CAR6M = 100 * portfolio.IRRCompany(company, date.AddMonths(-6), date).Truncate();
-                securityStats.CAR1Y = 100 * portfolio.IRRCompany(company, date.AddMonths(-12), date).Truncate();
-                securityStats.CAR5Y = 100 * portfolio.IRRCompany(company, date.AddMonths(-60), date).Truncate();
-                securityStats.CARTotal = 100 * portfolio.IRRCompanyTotal(company).Truncate();
+                securityStats.CAR3M = (100 * portfolio.IRRCompany(company, date.AddMonths(-3), date)).Truncate();
+                securityStats.CAR6M = (100 * portfolio.IRRCompany(company, date.AddMonths(-6), date)).Truncate();
+                securityStats.CAR1Y = (100 * portfolio.IRRCompany(company, date.AddMonths(-12), date)).Truncate();
+                securityStats.CAR5Y = (100 * portfolio.IRRCompany(company, date.AddMonths(-60), date)).Truncate();
+                securityStats.CARTotal = (100 * portfolio.IRRCompanyTotal(company)).Truncate();
             }
             else
             {
@@ -52,11 +52,11 @@ namespace FinancialStructures.StatisticStructures
                 securityStats.RecentChange = portfolio.RecentChange(names).Truncate();
                 securityStats.FundsFraction = portfolio.SecurityFraction(names, date).Truncate(4);
                 securityStats.Profit = portfolio.Profit(names).Truncate();
-                securityStats.CAR3M = 100 * portfolio.IRR(names, date.AddMonths(-3), date).Truncate();
-                securityStats.CAR6M = 100 * portfolio.IRR(names, date.AddMonths(-6), date).Truncate();
-                securityStats.CAR1Y = 100 * portfolio.IRR(names, date.AddMonths(-12), date).Truncate();
-                securityStats.CAR5Y = 100 * portfolio.IRR(names, date.AddMonths(-60), date).Truncate();
-                securityStats.CARTotal = 100 * portfolio.IRR(names).Truncate();
+                securityStats.CAR3M = (100 * portfolio.IRR(names, date.AddMonths(-3), date)).Truncate();
+                securityStats.CAR6M = (100 * portfolio.IRR(names, date.AddMonths(-6), date)).Truncate();
+                securityStats.CAR1Y = (100 * portfolio.IRR(names, date.AddMonths(-12), date)).Truncate();
+                securityStats.CAR5Y = (100 * portfolio.IRR(names, date.AddMonths(-60), date)).Truncate();
+                securityStats.CARTotal = (100 * portfolio.IRR(names)).Truncate();
                 securityStats.Sectors = des.Names.SectorsFlat;
             }
         }
@@ -72,11 +72,11 @@ namespace FinancialStructures.StatisticStructures
                     securityStats.FundsFraction = 0.0;
                     securityStats.Profit = 0.0;
                     securityStats.Number = portfolio.NumberSecuritiesInSector(chosenSector.Name);
-                    securityStats.CAR3M = 100 * chosenSector.CAR(date.AddMonths(-3), date).Truncate();
-                    securityStats.CAR6M = 100 * chosenSector.CAR(date.AddMonths(-6), date).Truncate();
-                    securityStats.CAR1Y = 100 * chosenSector.CAR(date.AddMonths(-12), date).Truncate();
-                    securityStats.CAR5Y = 100 * chosenSector.CAR(date.AddMonths(-60), date).Truncate();
-                    securityStats.CARTotal = 100 * chosenSector.CAR(portfolio.FirstValueDate(), date).Truncate();
+                    securityStats.CAR3M = (100 * chosenSector.CAR(date.AddMonths(-3), date)).Truncate();
+                    securityStats.CAR6M = (100 * chosenSector.CAR(date.AddMonths(-6), date)).Truncate();
+                    securityStats.CAR1Y = (100 * chosenSector.CAR(date.AddMonths(-12), date)).Truncate();
+                    securityStats.CAR5Y = (100 * chosenSector.CAR(date.AddMonths(-60), date)).Truncate();
+                    securityStats.CARTotal = (100 * chosenSector.CAR(portfolio.FirstValueDate(), date)).Truncate();
                 }
             }
             else
@@ -85,11 +85,11 @@ namespace FinancialStructures.StatisticStructures
                 securityStats.LatestVal = portfolio.SectorValue(name, date).Truncate();
                 securityStats.FundsFraction = portfolio.SectorFraction(name, date).Truncate(4);
                 securityStats.Profit = portfolio.SectorProfit(name).Truncate();
-                securityStats.CAR3M = 100 * portfolio.IRRSector(name, date.AddMonths(-3), date).Truncate();
-                securityStats.CAR6M = 100 * portfolio.IRRSector(name, date.AddMonths(-6), date).Truncate();
-                securityStats.CAR1Y = 100 * portfolio.IRRSector(name, date.AddMonths(-12), date).Truncate();
-                securityStats.CAR5Y = 100 * portfolio.IRRSector(name, date.AddMonths(-60), date).Truncate();
-                securityStats.CARTotal = 100 * portfolio.IRRSector(name, portfolio.FirstValueDate(), date).Truncate();
+                securityStats.CAR3M = (100 * portfolio.IRRSector(name, date.AddMonths(-3), date)).Truncate();
+                securityStats.CAR6M = (100 * portfolio.IRRSector(name, date.AddMonths(-6), date)).Truncate();
+                securityStats.CAR1Y = (100 * portfolio.IRRSector(name, date.AddMonths(-12), date)).Truncate();
+                securityStats.CAR5Y = (100 * portfolio.IRRSector(name, date.AddMonths(-60), date)).Truncate();
+                securityStats.CARTotal = (100 * portfolio.IRRSector(name, portfolio.FirstValueDate(), date)).Truncate();
             }
         }
     }
