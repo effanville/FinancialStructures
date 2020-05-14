@@ -7,6 +7,99 @@ namespace FinancialStructures.NamingStructures
     /// </summary>
     public class NameData : TwoName
     {
+        public override bool Equals(object obj)
+        {
+            if (obj is NameData otherName)
+            {
+                if (string.IsNullOrEmpty(Currency) && string.IsNullOrEmpty(Url) && string.IsNullOrEmpty(SectorsFlat))
+                {
+                    return base.Equals(otherName);
+                }
+
+                if (string.IsNullOrEmpty(Url) && string.IsNullOrEmpty(SectorsFlat))
+                {
+                    if (Currency.Equals(otherName.Currency))
+                    {
+                        return base.Equals(otherName);
+                    }
+
+                    return false;
+                }
+                if (string.IsNullOrEmpty(Currency) && string.IsNullOrEmpty(SectorsFlat))
+                {
+                    if (Url.Equals(otherName.Url))
+                    {
+                        return base.Equals(otherName);
+                    }
+
+                    return false;
+                }
+                if (string.IsNullOrEmpty(Currency) && string.IsNullOrEmpty(Url))
+                {
+                    if (SectorsFlat.Equals(otherName.SectorsFlat))
+                    {
+                        return base.Equals(otherName);
+                    }
+
+                    return false;
+                }
+
+                if (string.IsNullOrEmpty(Currency))
+                {
+                    if (string.IsNullOrEmpty(otherName.Currency))
+                    {
+                        if (Url.Equals(otherName.Url) && SectorsFlat.Equals(otherName.SectorsFlat))
+                        {
+                            return base.Equals(otherName);
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                if (string.IsNullOrEmpty(Url))
+                {
+                    if (string.IsNullOrEmpty(otherName.Url))
+                    {
+                        if (Currency.Equals(otherName.Currency) && SectorsFlat.Equals(otherName.SectorsFlat))
+                        {
+                            return base.Equals(otherName);
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                if (string.IsNullOrEmpty(SectorsFlat))
+                {
+                    if (string.IsNullOrEmpty(otherName.SectorsFlat))
+                    {
+                        if (Currency.Equals(otherName.Currency) && Url.Equals(otherName.Url))
+                        {
+                            return base.Equals(otherName);
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                if (Currency.Equals(otherName.Currency) && Url.Equals(otherName.Url) && SectorsFlat.Equals(otherName.SectorsFlat))
+                {
+                    return base.Equals(otherName);
+                }
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Currency.GetHashCode() + Url.GetHashCode() + Sectors.GetHashCode() + base.GetHashCode();
+        }
+
         /// <summary>
         /// Takes a copy of the data.
         /// </summary>

@@ -39,7 +39,6 @@ namespace FinanceCommonViewModels
         }
 
         private NameCompDate fPreEditSelectedName;
-        private int selectedIndex;
 
         /// <summary>
         /// Backing field for <see cref="SelectedName"/>.
@@ -57,16 +56,16 @@ namespace FinanceCommonViewModels
             }
             set
             {
-                fSelectedName = value;
-                if (DataNames != null)
+                if (SelectedName != null && !SelectedName.Equals(value))
                 {
-                    int index = DataNames.IndexOf(value);
-                    if (selectedIndex != index)
-                    {
-                        selectedIndex = index;
-                        fPreEditSelectedName = fSelectedName?.Copy();
-                    }
+                    fPreEditSelectedName = fSelectedName.Copy();
                 }
+                if (SelectedName == null)
+                {
+                    fPreEditSelectedName = value.Copy();
+                }
+
+                fSelectedName = value;
                 OnPropertyChanged();
             }
         }
@@ -97,6 +96,7 @@ namespace FinanceCommonViewModels
             DeleteCommand = new RelayCommand(ExecuteDelete);
             DownloadCommand = new RelayCommand(ExecuteDownloadCommand);
             OpenTabCommand = new RelayCommand(OpenTab);
+            fPreEditSelectedName = SelectedName?.Copy();
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace FinanceCommonViewModels
 
             for (int i = 0; i < DataNames.Count; i++)
             {
-                if (DataNames[i].IsEqualTo(currentSelectedName))
+                if (DataNames[i].Equals(currentSelectedName))
                 {
                     SelectedName = DataNames[i];
                     return;
@@ -164,9 +164,9 @@ namespace FinanceCommonViewModels
         }
         private void ExecuteCreateEdit()
         {
+            bool edited = false;
             if (DataStore.NameData(TypeOfAccount).Count != DataNames.Count)
             {
-                bool edited = false;
                 UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAdd(TypeOfAccount, SelectedName.Copy(), ReportLogger));
 
                 if (!edited)
@@ -177,15 +177,9 @@ namespace FinanceCommonViewModels
             else
             {
                 // maybe fired from editing stuff. Try that
-                bool edited = false;
-                for (int i = 0; i < DataNames.Count; i++)
+                if (!string.IsNullOrEmpty(SelectedName.Name) || !string.IsNullOrEmpty(SelectedName.Company))
                 {
-                    var name = DataNames[i];
-
-                    if (!string.IsNullOrEmpty(SelectedName.Name) || !string.IsNullOrEmpty(SelectedName.Company))
-                    {
-                        UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditName(TypeOfAccount, fPreEditSelectedName, SelectedName.Copy(), ReportLogger));
-                    }
+                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditName(TypeOfAccount, fPreEditSelectedName, SelectedName.Copy(), ReportLogger));
                 }
                 if (!edited)
                 {

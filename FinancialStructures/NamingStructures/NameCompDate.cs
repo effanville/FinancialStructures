@@ -5,6 +5,24 @@ namespace FinancialStructures.NamingStructures
 {
     public class NameCompDate : NameData
     {
+        public override bool Equals(object obj)
+        {
+            if (obj is NameCompDate otherName)
+            {
+                if (DateToRecord.Equals(otherName.DateToRecord))
+                {
+                    return base.Equals(otherName);
+                }
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return DateToRecord.GetHashCode() * 356 + base.GetHashCode();
+        }
+
         private DateTime fDateToRecord;
         public DateTime DateToRecord
         {

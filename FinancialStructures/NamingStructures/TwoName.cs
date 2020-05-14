@@ -56,18 +56,68 @@ namespace FinancialStructures.NamingStructures
         }
 
         /// <summary>
+        /// Returns whether another object is the same as this one.
+        /// </summary>
+        public override bool Equals(object obj)
+        {
+            return EqualityMethod(obj);
+
+        }
+
+        public override int GetHashCode()
+        {
+            return Company.GetHashCode() * 365 + Name.GetHashCode();
+        }
+
+        /// <summary>
         /// Equal if both names are the same.
+        /// Can be used in inherited classes to query the uniqueness of the names.
         /// </summary>
         public bool IsEqualTo(object obj)
         {
-            if (obj is TwoName value)
+            return EqualityMethod(obj);
+        }
+
+        private bool EqualityMethod(object obj)
+        {
+            if (obj is TwoName otherName)
             {
-                if (Company == value.Company)
+                if (otherName == null)
                 {
-                    if (Name == value.Name)
+                    return false;
+                }
+                if (string.IsNullOrEmpty(Company) && string.IsNullOrEmpty(Name))
+                {
+                    if (string.IsNullOrEmpty(otherName.Company) && string.IsNullOrEmpty(otherName.Name))
                     {
                         return true;
                     }
+
+                    return false;
+                }
+                if (string.IsNullOrEmpty(Company))
+                {
+                    if (string.IsNullOrEmpty(otherName.Company))
+                    {
+                        return Name.Equals(otherName.Name);
+                    }
+
+                    return false;
+                }
+
+                if (string.IsNullOrEmpty(Name))
+                {
+                    if (string.IsNullOrEmpty(otherName.Name))
+                    {
+                        return Company.Equals(otherName.Company);
+                    }
+
+                    return false;
+                }
+
+                if (Company.Equals(otherName.Company) && Name.Equals(otherName.Name))
+                {
+                    return true;
                 }
             }
 
@@ -79,7 +129,7 @@ namespace FinancialStructures.NamingStructures
         /// <summary>
         /// The primary name (the company name)
         /// </summary>
-        public virtual string Company
+        public string Company
         {
             get
             {
@@ -96,7 +146,7 @@ namespace FinancialStructures.NamingStructures
         /// <summary>
         /// The secondary name.
         /// </summary>
-        public virtual string Name
+        public string Name
         {
             get
             {
