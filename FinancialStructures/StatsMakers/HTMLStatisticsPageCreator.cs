@@ -32,9 +32,11 @@ namespace FinancialStructures.StatsMakers
             List<string> sectorNames = portfolio.GetSecuritiesSectors();
             foreach (string sectorName in sectorNames)
             {
-                List<SecurityStatistics> valuesToWrite = new List<SecurityStatistics>();
-                valuesToWrite.Add(portfolio.GenerateSectorFundsStatistics(sectorName));
-                valuesToWrite.Add(portfolio.GenerateBenchMarkStatistics(sectorName));
+                List<SecurityStatistics> valuesToWrite = new List<SecurityStatistics>
+                {
+                    portfolio.GenerateSectorFundsStatistics(sectorName),
+                    portfolio.GenerateBenchMarkStatistics(sectorName)
+                };
                 int linesWritten = 0;
                 foreach (var value in valuesToWrite)
                 {

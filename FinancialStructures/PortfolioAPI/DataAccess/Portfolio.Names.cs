@@ -42,31 +42,31 @@ namespace FinancialStructures.PortfolioAPI
             switch (elementType)
             {
                 case (AccountType.Security):
+                {
+                    foreach (ISecurity security in portfolio.Funds)
                     {
-                        foreach (ISecurity security in portfolio.Funds)
+                        DateTime date = DateTime.MinValue;
+                        if (security.Any())
                         {
-                            DateTime date = DateTime.MinValue;
-                            if (security.Any())
-                            {
-                                date = security.LatestValue().Day;
-                            }
-
-                            namesAndCompanies.Add(new NameCompDate(security.Company, security.Name, security.Currency, security.Url, security.Sectors, date));
+                            date = security.LatestValue().Day;
                         }
-                        break;
+
+                        namesAndCompanies.Add(new NameCompDate(security.Company, security.Name, security.Currency, security.Url, security.Sectors, date));
                     }
+                    break;
+                }
                 case (AccountType.Currency):
-                    {
-                        return SingleDataNameObtainer(portfolio.Currencies);
-                    }
+                {
+                    return SingleDataNameObtainer(portfolio.Currencies);
+                }
                 case (AccountType.BankAccount):
-                    {
-                        return SingleDataNameObtainer(portfolio.BankAccounts);
-                    }
+                {
+                    return SingleDataNameObtainer(portfolio.BankAccounts);
+                }
                 case (AccountType.Sector):
-                    {
-                        return SingleDataNameObtainer(portfolio.BenchMarks);
-                    }
+                {
+                    return SingleDataNameObtainer(portfolio.BenchMarks);
+                }
                 default:
                     break;
             }

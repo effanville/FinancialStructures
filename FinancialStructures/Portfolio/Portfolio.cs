@@ -182,21 +182,21 @@ namespace FinancialStructures.Database
             switch (elementType)
             {
                 case (AccountType.Security):
-                    {
-                        return Funds.Count;
-                    }
+                {
+                    return Funds.Count;
+                }
                 case (AccountType.Currency):
-                    {
-                        return Currencies.Count;
-                    }
+                {
+                    return Currencies.Count;
+                }
                 case (AccountType.BankAccount):
-                    {
-                        return BankAccounts.Count;
-                    }
+                {
+                    return BankAccounts.Count;
+                }
                 case (AccountType.Sector):
-                    {
-                        break;
-                    }
+                {
+                    break;
+                }
                 default:
                     break;
             }

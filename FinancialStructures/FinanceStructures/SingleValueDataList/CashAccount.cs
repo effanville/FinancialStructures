@@ -1,6 +1,6 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
+using StructureCommon.DataStructures;
 using System;
 
 namespace FinancialStructures.FinanceStructures
@@ -14,8 +14,14 @@ namespace FinancialStructures.FinanceStructures
 
         public TimeList Amounts
         {
-            get { return Values; }
-            set { Values = value; }
+            get
+            {
+                return Values;
+            }
+            set
+            {
+                Values = value;
+            }
         }
 
         /// <summary>
@@ -61,7 +67,8 @@ namespace FinancialStructures.FinanceStructures
             DailyValuation latestDate = Values.LatestValuation();
             if (latestDate == null)
             {
-                return new DailyValuation(DateTime.Today, 0.0); ;
+                return new DailyValuation(DateTime.Today, 0.0);
+                ;
             }
 
             double currencyValue = currency == null ? 1.0 : currency.Value(latestDate.Day).Value;
@@ -78,7 +85,8 @@ namespace FinancialStructures.FinanceStructures
             DailyValuation firstDate = Values.FirstValuation();
             if (firstDate == null)
             {
-                return new DailyValuation(DateTime.Today, 0.0); ;
+                return new DailyValuation(DateTime.Today, 0.0);
+                ;
             }
 
             double currencyValue = currency == null ? 1.0 : currency.Value(firstDate.Day).Value;

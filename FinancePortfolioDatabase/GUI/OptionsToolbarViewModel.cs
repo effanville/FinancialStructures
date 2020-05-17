@@ -1,7 +1,7 @@
 ﻿using FinanceWindows;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.Reporting;
+using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +25,10 @@ namespace FinanceWindowsViewModels
 
         public string BaseCurrency
         {
-            get { return fBaseCurrency; }
+            get
+            {
+                return fBaseCurrency;
+            }
             set
             {
                 if (fBaseCurrency != value)
@@ -41,8 +44,15 @@ namespace FinanceWindowsViewModels
 
         public List<string> Currencies
         {
-            get { return fCurrencies; }
-            set { fCurrencies = value; OnPropertyChanged(); }
+            get
+            {
+                return fCurrencies;
+            }
+            set
+            {
+                fCurrencies = value;
+                OnPropertyChanged();
+            }
         }
 
         public OptionsToolbarViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation)
@@ -78,14 +88,20 @@ namespace FinanceWindowsViewModels
             fBaseCurrency = portfolio.BaseCurrency;
         }
 
-        public ICommand OpenHelpCommand { get; }
+        public ICommand OpenHelpCommand
+        {
+            get;
+        }
         private void OpenHelpDocsCommand()
         {
             var helpwindow = new HelpWindow(fReportLogger);
             helpwindow.Show();
         }
 
-        public ICommand NewDatabaseCommand { get; }
+        public ICommand NewDatabaseCommand
+        {
+            get;
+        }
         private void ExecuteNewDatabase()
         {
             MessageBoxResult result;
@@ -104,7 +120,10 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public ICommand SaveDatabaseCommand { get; }
+        public ICommand SaveDatabaseCommand
+        {
+            get;
+        }
         private void ExecuteSaveDatabase()
         {
             var result = fFileService.SaveFile("xml", fFileName, fDirectory, "XML Files|*.xml|All Files|*.*");
@@ -115,7 +134,10 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public ICommand LoadDatabaseCommand { get; }
+        public ICommand LoadDatabaseCommand
+        {
+            get;
+        }
         private void ExecuteLoadDatabase()
         {
             var result = fFileService.OpenFile("xml", filter: "XML Files|*.xml|All Files|*.*");
@@ -126,13 +148,19 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public ICommand UpdateDataCommand { get; }
+        public ICommand UpdateDataCommand
+        {
+            get;
+        }
         private void ExecuteUpdateData()
         {
             DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.Downloader(programPortfolio, fReportLogger).ConfigureAwait(false));
         }
 
-        public ICommand RefreshCommand { get; }
+        public ICommand RefreshCommand
+        {
+            get;
+        }
 
         private void ExecuteRefresh()
         {

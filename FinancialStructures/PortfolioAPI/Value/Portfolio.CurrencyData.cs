@@ -13,35 +13,35 @@ namespace FinancialStructures.PortfolioAPI
             switch (elementType)
             {
                 case (AccountType.Security):
+                {
+                    var currencyName = ((ISecurity)account).Currency;
+                    ICurrency currency = portfolio.Currencies.Find(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == portfolio.BaseCurrency);
+                    if (currency != null)
                     {
-                        var currencyName = ((ISecurity)account).Currency;
-                        ICurrency currency = portfolio.Currencies.Find(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == portfolio.BaseCurrency);
-                        if (currency != null)
-                        {
-                            return currency;
-                        }
-
-                        return portfolio.Currencies.Find(cur => cur.Company == portfolio.BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted();
+                        return currency;
                     }
+
+                    return portfolio.Currencies.Find(cur => cur.Company == portfolio.BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted();
+                }
                 case (AccountType.Currency):
-                    {
-                        return (ICurrency)account;
-                    }
+                {
+                    return (ICurrency)account;
+                }
                 case (AccountType.BankAccount):
+                {
+                    var currencyName = ((ICashAccount)account).Currency;
+                    ICurrency currency = portfolio.Currencies.Find(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == portfolio.BaseCurrency);
+                    if (currency != null)
                     {
-                        var currencyName = ((ICashAccount)account).Currency;
-                        ICurrency currency = portfolio.Currencies.Find(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == portfolio.BaseCurrency);
-                        if (currency != null)
-                        {
-                            return currency;
-                        }
+                        return currency;
+                    }
 
-                        return portfolio.Currencies.Find(cur => cur.BaseCurrency == portfolio.BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted();
-                    }
+                    return portfolio.Currencies.Find(cur => cur.BaseCurrency == portfolio.BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted();
+                }
                 case (AccountType.Sector):
-                    {
-                        return new Currency();
-                    }
+                {
+                    return new Currency();
+                }
                 default:
                     return new Currency();
             }

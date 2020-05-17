@@ -1,7 +1,7 @@
-﻿using FinancialStructures.FileAccess;
-using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
-using FinancialStructures.Reporting;
+﻿using FinancialStructures.NamingStructures;
+using StructureCommon.FileAccess;
+using StructureCommon.Reporting;
+using StructureCommon.WebAccess;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +18,8 @@ namespace FinancialStructures.StockStructures
     public class ExchangeStocks
     {
         public ExchangeStocks()
-        { }
+        {
+        }
 
         public double GetValue(NameData name, DateTime date, DataStream datatype = DataStream.Close)
         {
@@ -68,8 +69,14 @@ namespace FinancialStructures.StockStructures
 
         public List<Stock> Stocks
         {
-            get { return fStocks; }
-            set { fStocks = value; }
+            get
+            {
+                return fStocks;
+            }
+            set
+            {
+                fStocks = value;
+            }
         }
 
         public bool CheckValidity()
@@ -120,7 +127,7 @@ namespace FinancialStructures.StockStructures
                 {
                     downloadUrl = new Uri(stock.Name.Url);
                 }
-                string stockWebsite = PortfolioDataUpdater.DownloadFromURL(downloadUrl.ToString(), reportLogger).Result;
+                string stockWebsite = WebDownloader.DownloadFromURLasync(downloadUrl.ToString(), reportLogger).Result;
                 ProcessAndAddData(downloadType, stock, stockWebsite);
             }
         }

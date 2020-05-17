@@ -1,6 +1,6 @@
 ﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.Reporting;
+using StructureCommon.Reporting;
 using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
@@ -21,36 +21,36 @@ namespace FinancialStructures.PortfolioAPI
             switch (elementType)
             {
                 case (AccountType.Security):
+                {
+                    for (int fundIndex = 0; fundIndex < portfolio.NumberOf(AccountType.Security); fundIndex++)
                     {
-                        for (int fundIndex = 0; fundIndex < portfolio.NumberOf(AccountType.Security); fundIndex++)
+                        if (oldName.IsEqualTo(portfolio.Funds[fundIndex].Names))
                         {
-                            if (oldName.IsEqualTo(portfolio.Funds[fundIndex].Names))
-                            {
-                                // now edit data
-                                return portfolio.Funds[fundIndex].EditNameData(newName);
-                            }
+                            // now edit data
+                            return portfolio.Funds[fundIndex].EditNameData(newName);
                         }
+                    }
 
-                        _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Renaming {elementType}: Could not find {elementType} with name {oldName}.");
-                        return false;
-                    }
+                    _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Renaming {elementType}: Could not find {elementType} with name {oldName}.");
+                    return false;
+                }
                 case (AccountType.Currency):
-                    {
-                        return TryEditNameSingleList(portfolio.Currencies, elementType, oldName, newName, reportLogger);
-                    }
+                {
+                    return TryEditNameSingleList(portfolio.Currencies, elementType, oldName, newName, reportLogger);
+                }
                 case (AccountType.BankAccount):
-                    {
-                        return TryEditNameSingleList(portfolio.BankAccounts, elementType, oldName, newName, reportLogger);
-                    }
+                {
+                    return TryEditNameSingleList(portfolio.BankAccounts, elementType, oldName, newName, reportLogger);
+                }
                 case (AccountType.Sector):
-                    {
-                        return TryEditNameSingleList(portfolio.BenchMarks, elementType, oldName, newName, reportLogger);
-                    }
+                {
+                    return TryEditNameSingleList(portfolio.BenchMarks, elementType, oldName, newName, reportLogger);
+                }
                 default:
-                    {
-                        _ = reportLogger.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Editing an Unknown type.");
-                        return false;
-                    }
+                {
+                    _ = reportLogger.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Editing an Unknown type.");
+                    return false;
+                }
             }
         }
 

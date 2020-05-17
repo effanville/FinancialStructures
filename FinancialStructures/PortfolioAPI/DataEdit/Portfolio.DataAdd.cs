@@ -1,7 +1,7 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.Reporting;
+using StructureCommon.DataStructures;
+using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
 
@@ -35,33 +35,33 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
         /// <remarks> This cannot currently be used to add to securities due to different type of data.</remarks>
-        public static bool TryAddData(this IPortfolio portfolio, AccountType elementType, NameData name, DayValue_ChangeLogged data, IReportLogger reportLogger = null)
+        public static bool TryAddData(this IPortfolio portfolio, AccountType elementType, NameData name, DailyValuation data, IReportLogger reportLogger = null)
         {
             switch (elementType)
             {
                 case (AccountType.Security):
-                    {
-                        return false;
-                    }
+                {
+                    return false;
+                }
                 case (AccountType.Currency):
-                    {
-                        return SingleListAdd(portfolio.Currencies, name, data, reportLogger);
-                    }
+                {
+                    return SingleListAdd(portfolio.Currencies, name, data, reportLogger);
+                }
                 case (AccountType.BankAccount):
-                    {
-                        return SingleListAdd(portfolio.BankAccounts, name, data, reportLogger);
-                    }
+                {
+                    return SingleListAdd(portfolio.BankAccounts, name, data, reportLogger);
+                }
                 case (AccountType.Sector):
-                    {
-                        return SingleListAdd(portfolio.BenchMarks, name, data, reportLogger);
-                    }
+                {
+                    return SingleListAdd(portfolio.BenchMarks, name, data, reportLogger);
+                }
                 default:
                     _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, $"Editing an Unknown type.");
                     return false;
             }
         }
 
-        private static bool SingleListAdd<T>(List<T> listToEdit, NameData name, DayValue_ChangeLogged data, IReportLogger reportLogger = null) where T : ISingleValueDataList
+        private static bool SingleListAdd<T>(List<T> listToEdit, NameData name, DailyValuation data, IReportLogger reportLogger = null) where T : ISingleValueDataList
         {
             for (int accountIndex = 0; accountIndex < listToEdit.Count; accountIndex++)
             {

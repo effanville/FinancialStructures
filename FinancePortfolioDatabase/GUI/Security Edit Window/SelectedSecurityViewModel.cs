@@ -1,9 +1,10 @@
-﻿using FinancialStructures.DataReader;
-using FinancialStructures.DataStructures;
+﻿using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.Reporting;
+using StructureCommon.DataStructures;
+using StructureCommon.FileAccess;
+using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
@@ -13,11 +14,17 @@ using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
-    internal class SelectedSecurityViewModel : ViewModelBase<IPortfolio>
+    internal class SelectedSecurityViewModel : TabViewModelBase<IPortfolio>
     {
-        public override bool Closable { get { return true; } }
+        public override bool Closable
+        {
+            get
+            {
+                return true;
+            }
+        }
 
-        private readonly NameData_ChangeLogged fSelectedName;
+        private readonly NameData fSelectedName;
 
         /// <summary>
         /// The pricing data of the selected security.
@@ -25,8 +32,15 @@ namespace FinanceWindowsViewModels
         private List<SecurityDayData> fSelectedSecurityData = new List<SecurityDayData>();
         public List<SecurityDayData> SelectedSecurityData
         {
-            get { return fSelectedSecurityData; }
-            set { fSelectedSecurityData = value; OnPropertyChanged(); }
+            get
+            {
+                return fSelectedSecurityData;
+            }
+            set
+            {
+                fSelectedSecurityData = value;
+                OnPropertyChanged();
+            }
         }
 
         private SecurityDayData fSelectedValues;
@@ -61,7 +75,7 @@ namespace FinanceWindowsViewModels
         private readonly IFileInteractionService fFileService;
         private readonly IDialogCreationService fDialogCreationService;
 
-        public SelectedSecurityViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, NameData_ChangeLogged selectedName)
+        public SelectedSecurityViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, NameData selectedName)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name", portfolio)
         {
             fSelectedName = selectedName;
@@ -76,17 +90,23 @@ namespace FinanceWindowsViewModels
             fDialogCreationService = dialogCreation;
         }
 
-        public ICommand DeleteValuationCommand { get; }
+        public ICommand DeleteValuationCommand
+        {
+            get;
+        }
 
         private void ExecuteDeleteValuation()
         {
             if (fSelectedName != null && fSelectedValues != null)
             {
-                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(AccountType.Security, fSelectedName, new DayValue_ChangeLogged(fSelectedValues.Date, 0.0), ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(AccountType.Security, fSelectedName, new DailyValuation(fSelectedValues.Date, 0.0), ReportLogger));
             }
         }
 
-        public ICommand AddCsvData { get; }
+        public ICommand AddCsvData
+        {
+            get;
+        }
 
         private void ExecuteAddCsvData()
         {
@@ -94,10 +114,10 @@ namespace FinanceWindowsViewModels
             {
                 var result = fFileService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
                 List<object> outputs = null;
-
-                if (result.Success != null && (bool)result.Success)
+                bool exists = DataStore.TryGetSecurity(fSelectedName, out ISecurity security);
+                if (result.Success != null && (bool)result.Success && exists)
                 {
-                    outputs = CsvDataRead.ReadFromCsv(result.FilePath, AccountType.Security, ReportLogger);
+                    outputs = CsvReaderWriter.ReadFromCsv(security, result.FilePath, ReportLogger);
                 }
                 if (outputs != null)
                 {
@@ -116,7 +136,10 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public ICommand ExportCsvData { get; }
+        public ICommand ExportCsvData
+        {
+            get;
+        }
 
         private void ExecuteExportCsvData()
         {
@@ -127,7 +150,7 @@ namespace FinanceWindowsViewModels
                 {
                     if (DataStore.TryGetSecurity(fSelectedName, out var security))
                     {
-                        CsvDataRead.WriteToCSVFile(result.FilePath, AccountType.Security, security, ReportLogger);
+                        CsvReaderWriter.WriteToCSVFile(security, result.FilePath, ReportLogger);
                     }
                     else
                     {
@@ -137,7 +160,10 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public ICommand AddEditSecurityDataCommand { get; set; }
+        public ICommand AddEditSecurityDataCommand
+        {
+            get; set;
+        }
 
         private void ExecuteAddEditSecData()
         {
@@ -147,22 +173,12 @@ namespace FinanceWindowsViewModels
                 if (desired.Count() != SelectedSecurityData.Count)
                 {
                     UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(fSelectedName, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment, ReportLogger));
-                    fSelectedName.NewValue = false;
                 }
                 else
                 {
                     bool edited = false;
-                    for (int i = 0; i < SelectedSecurityData.Count; i++)
-                    {
-                        var name = SelectedSecurityData[i];
+                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditSecurityData(fSelectedName, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment, ReportLogger));
 
-                        if (name.NewValue)
-                        {
-                            edited = true;
-                            name.NewValue = false;
-                            UpdateDataCallback(programPortfolio => programPortfolio.TryEditSecurityData(fSelectedName, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment, ReportLogger));
-                        }
-                    }
                     if (!edited)
                     {
                         ReportLogger.LogUsefulWithStrings("Error", "EditingData", "Was not able to edit security data.");
@@ -176,7 +192,7 @@ namespace FinanceWindowsViewModels
             base.UpdateData(portfolio);
             if (fSelectedName != null)
             {
-                if (!portfolio.TryGetSecurity(fSelectedName, out _))
+                if (!portfolio.Exists(AccountType.Security, fSelectedName))
                 {
                     removeTab?.Invoke(this);
                     return;

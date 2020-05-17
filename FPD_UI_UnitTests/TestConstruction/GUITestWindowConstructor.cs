@@ -1,11 +1,11 @@
 ﻿using FinanceWindowsViewModels;
 using FinancialStructures.Database;
-using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.Reporting;
 using Moq;
+using StructureCommon.DataStructures;
+using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -47,19 +47,18 @@ namespace FPD_UI_UnitTests.TestConstruction
             return DummyDataUpdater;
         }
 
-        internal static Action<object> DummyOpenTab => action => OpenTab(action);
+        internal static Action<object> DummyOpenTab
+        {
+            get
+            {
+                return action => OpenTab(action);
+            }
+        }
 
         private static void OpenTab(object obj)
         {
             return;
         }
-
-        public static EditMethods GetMethodsForTesting(AccountType accountType)
-        {
-            return EditMethods.GenerateEditMethods(accountType);
-        }
-
-        internal static EditMethods DummyEditMethods = EditMethods.GenerateEditMethods(AccountType.BankAccount);
 
         public static Portfolio CreateBasicDataBase()
         {
@@ -74,7 +73,7 @@ namespace FPD_UI_UnitTests.TestConstruction
             portfolio.TryAdd(AccountType.Security, new NameData("Fidelity", "China", "GBP", "http://www.fidelity.co.uk", new HashSet<string>() { "Bonds", "UK" }), TestingGUICode.DummyReportLogger);
             portfolio.TryAddDataToSecurity(new TwoName("Fidelity", "China"), new DateTime(2000, 1, 1), 1, 1, 1);
             portfolio.TryAdd(AccountType.BankAccount, new NameData("Barclays", "currentAccount"), TestingGUICode.DummyReportLogger);
-            portfolio.TryAddData(AccountType.BankAccount, new NameData("Barclays", "currentAccount"), new DayValue_ChangeLogged(new DateTime(2000, 1, 1), 1));
+            portfolio.TryAddData(AccountType.BankAccount, new NameData("Barclays", "currentAccount"), new DailyValuation(new DateTime(2000, 1, 1), 1));
             portfolio.TryAdd(AccountType.Currency, new NameData(string.Empty, "GBP"), TestingGUICode.DummyReportLogger);
 
             portfolio.TryAdd(AccountType.Sector, new NameData(string.Empty, "UK", string.Empty, "http://www.hi.com"), TestingGUICode.DummyReportLogger);
@@ -89,8 +88,10 @@ namespace FPD_UI_UnitTests.TestConstruction
         {
             var fileMock = CreateFileMock("filepath");
             var dialogMock = CreateDialogMock(MessageBoxResult.OK);
-            var viewModel = new MainWindowViewModel(fileMock.Object, dialogMock.Object);
-            viewModel.ProgramPortfolio = portfolio;
+            var viewModel = new MainWindowViewModel(fileMock.Object, dialogMock.Object)
+            {
+                ProgramPortfolio = portfolio
+            };
             return viewModel;
         }
     }

@@ -1,22 +1,41 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.NamingStructures;
-using FinancialStructures.Reporting;
+﻿using FinancialStructures.NamingStructures;
+using StructureCommon.DataStructures;
+using StructureCommon.FileAccess;
+using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
 
 namespace FinancialStructures.FinanceInterfaces
 {
-    public interface ISingleValueDataList
+    public interface ISingleValueDataList : ICSVAccess
     {
         string ToString();
         int CompareTo(object obj);
         bool IsEqualTo(ISingleValueDataList otherAccount);
-        NameData Names { get; }
-        string Name { get; }
-        string Company { get; }
-        string Url { get; }
-        string Currency { get; }
-        TimeList Values { get; }
+        NameData Names
+        {
+            get;
+        }
+        string Name
+        {
+            get;
+        }
+        string Company
+        {
+            get;
+        }
+        string Url
+        {
+            get;
+        }
+        string Currency
+        {
+            get;
+        }
+        TimeList Values
+        {
+            get;
+        }
 
         ISingleValueDataList Copy();
         bool Any();
@@ -25,7 +44,7 @@ namespace FinancialStructures.FinanceInterfaces
         double CAR(DateTime earlierTime, DateTime laterTime);
 
         DailyValuation Value(DateTime date);
-        List<DayValue_ChangeLogged> GetDataForDisplay();
+        List<DailyValuation> GetDataForDisplay();
         bool EditNameData(NameData newNames);
         bool TryAddData(DateTime date, double value, IReportLogger reportLogger = null);
         bool TryEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null);

@@ -21,7 +21,8 @@ namespace FinancialStructures.StatsMakers
     public class UserOptions
     {
         public UserOptions()
-        { }
+        {
+        }
 
         public UserOptions(List<string> securities, List<string> bankaccs, List<string> sectors, List<VisibleName> conditions)
         {

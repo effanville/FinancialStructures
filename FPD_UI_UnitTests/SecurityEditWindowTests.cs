@@ -24,8 +24,7 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var editMethods = TestingGUICode.GetMethodsForTesting(AccountType.Security);
-            var viewModel = new SecurityEditWindowViewModel(portfolio, dataUpdater, editMethods, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
+            var viewModel = new SecurityEditWindowViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
 
             Assert.AreEqual(1, viewModel.Tabs.Count);
             var tab = viewModel.Tabs.Single();
@@ -40,8 +39,7 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateEmptyDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var editMethods = TestingGUICode.GetMethodsForTesting(AccountType.Security);
-            var viewModel = new SecurityEditWindowViewModel(portfolio, dataUpdater, editMethods, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
+            var viewModel = new SecurityEditWindowViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
             var newData = TestingGUICode.CreateBasicDataBase();
             viewModel.UpdateData(newData);
 
@@ -56,11 +54,10 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateEmptyDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var editMethods = TestingGUICode.GetMethodsForTesting(AccountType.Security);
-            var viewModel = new SecurityEditWindowViewModel(portfolio, dataUpdater, editMethods, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
+            var viewModel = new SecurityEditWindowViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
 
-            var newNameData = new NameData_ChangeLogged("Fidelity", "Europe");
-            viewModel.LoadSelectedTab(newNameData);
+            var newNameData = new NameData("Fidelity", "Europe");
+            viewModel.LoadTabFunc(newNameData);
 
             Assert.AreEqual(2, viewModel.Tabs.Count);
 
@@ -78,11 +75,10 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var editMethods = TestingGUICode.GetMethodsForTesting(AccountType.Security);
-            var viewModel = new SecurityEditWindowViewModel(portfolio, dataUpdater, editMethods, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
+            var viewModel = new SecurityEditWindowViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
 
-            var newData = new NameData_ChangeLogged("Fidelity", "China");
-            viewModel.LoadSelectedTab(newData);
+            var newData = new NameData("Fidelity", "China");
+            viewModel.LoadTabFunc(newData);
 
             Assert.AreEqual(2, viewModel.Tabs.Count);
         }
@@ -96,8 +92,7 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var output = TestingGUICode.CreateBasicDataBase();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var editMethods = TestingGUICode.GetMethodsForTesting(AccountType.Security);
-            var viewModel = new DataNamesViewModel(output, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, editMethods);
+            var viewModel = new DataNamesViewModel(output, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, AccountType.Security);
             Assert.AreEqual(1, viewModel.DataNames.Count);
         }
 
@@ -108,9 +103,7 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateEmptyDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-
-            var editMethods = TestingGUICode.GetMethodsForTesting(AccountType.Security);
-            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, editMethods);
+            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, AccountType.Security);
             var newData = TestingGUICode.CreateBasicDataBase();
             viewModel.UpdateData(newData);
 
@@ -124,11 +117,11 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-
-            var editMethods = TestingGUICode.GetMethodsForTesting(AccountType.Security);
-            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, editMethods);
-            var newName = new NameCompDate("company", "name", "GBP", "someUrl", new HashSet<string>(), DateTime.Today);
-            newName.Company = "Company";
+            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, AccountType.Security);
+            var newName = new NameCompDate("company", "name", "GBP", "someUrl", new HashSet<string>(), DateTime.Today)
+            {
+                Company = "Company"
+            };
             viewModel.SelectedName = newName;
             viewModel.DataNames.Add(newName);
             viewModel.CreateCommand.Execute(1);
@@ -143,9 +136,7 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-
-            var editMethods = TestingGUICode.GetMethodsForTesting(AccountType.Security);
-            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, editMethods);
+            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, AccountType.Security);
             viewModel.SelectedName = viewModel.DataNames[0];
 
             viewModel.SelectedName.Company = "NewCompany";
@@ -165,11 +156,10 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateEmptyDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-
-            var editMethods = TestingGUICode.GetMethodsForTesting(AccountType.Security);
-            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, editMethods);
-
-            viewModel.SelectedName = new NameData_ChangeLogged("Fidelity", "China");
+            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, AccountType.Security)
+            {
+                SelectedName = new NameCompDate("Fidelity", "China")
+            };
             viewModel.DownloadCommand.Execute(1);
 
             Assert.AreEqual(1, viewModel.DataNames.Count);
@@ -182,13 +172,11 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-
-            var editMethods = TestingGUICode.GetMethodsForTesting(AccountType.Security);
-            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, editMethods);
+            var viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, AccountType.Security);
 
             Assert.AreEqual(1, viewModel.DataStore.Funds.Count);
             Assert.AreEqual(1, portfolio.Funds.Count);
-            viewModel.SelectedName = new NameData_ChangeLogged("Fidelity", "China");
+            viewModel.SelectedName = new NameCompDate("Fidelity", "China");
             viewModel.DeleteCommand.Execute(1);
             Assert.AreEqual(0, viewModel.DataStore.Funds.Count);
             Assert.AreEqual(0, portfolio.Funds.Count);
@@ -204,7 +192,7 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var viewModel = new SelectedSecurityViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData_ChangeLogged("Fidelity", "China"));
+            var viewModel = new SelectedSecurityViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Fidelity", "China"));
 
             Assert.AreEqual(1, viewModel.SelectedSecurityData.Count);
         }
@@ -216,7 +204,7 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var viewModel = new SelectedSecurityViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData_ChangeLogged("Fidelity", "China"));
+            var viewModel = new SelectedSecurityViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Fidelity", "China"));
 
             Assert.AreEqual(1, viewModel.SelectedSecurityData.Count);
             var newValue = new SecurityDayData(new DateTime(2002, 1, 1), 1, 1, 1);
@@ -234,7 +222,7 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var viewModel = new SelectedSecurityViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData_ChangeLogged("Fidelity", "China"));
+            var viewModel = new SelectedSecurityViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Fidelity", "China"));
 
             Assert.AreEqual(1, viewModel.SelectedSecurityData.Count);
             var newValue = new SecurityDayData(new DateTime(2000, 1, 1), 1, 1, 1);
@@ -254,7 +242,7 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var viewModel = new SelectedSecurityViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData_ChangeLogged("Fidelity", "China"));
+            var viewModel = new SelectedSecurityViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Fidelity", "China"));
 
             Assert.AreEqual(1, viewModel.SelectedSecurityData.Count);
         }
@@ -267,7 +255,7 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var viewModel = new SelectedSecurityViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData_ChangeLogged("Fidelity", "China"));
+            var viewModel = new SelectedSecurityViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Fidelity", "China"));
 
             Assert.AreEqual(1, viewModel.SelectedSecurityData.Count);
         }
@@ -279,7 +267,7 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var dialogMock = TestingGUICode.CreateDialogMock();
             var portfolio = TestingGUICode.CreateBasicDataBase();
             var dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            var viewModel = new SelectedSecurityViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData_ChangeLogged("Fidelity", "China"));
+            var viewModel = new SelectedSecurityViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Fidelity", "China"));
             viewModel.selectedValues = viewModel.SelectedSecurityData.Single();
             Assert.AreEqual(1, viewModel.SelectedSecurityData.Count);
 

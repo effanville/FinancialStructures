@@ -1,8 +1,8 @@
 ﻿using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.Reporting;
 using FinancialStructures.StatisticStructures;
 using FinancialStructures.StatsMakers;
+using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
@@ -19,42 +19,80 @@ namespace FinanceWindowsViewModels
         private bool fDisplayValueFunds = true;
         public bool displayValueFunds
         {
-            get { return fDisplayValueFunds; }
-            set { fDisplayValueFunds = value; OnPropertyChanged(); }
+            get
+            {
+                return fDisplayValueFunds;
+            }
+            set
+            {
+                fDisplayValueFunds = value;
+                OnPropertyChanged();
+            }
         }
         private UserOptions fSelectOptions;
 
         public UserOptions SelectOptions
         {
-            get { return fSelectOptions; }
-            set { fSelectOptions = value; OnPropertyChanged(); }
+            get
+            {
+                return fSelectOptions;
+            }
+            set
+            {
+                fSelectOptions = value;
+                OnPropertyChanged();
+            }
         }
 
         private List<VisibleName> fDisplayConditions = new List<VisibleName>();
 
         public List<VisibleName> DisplayConditions
         {
-            get { return fDisplayConditions; }
-            set { fDisplayConditions = value; OnPropertyChanged(); }
+            get
+            {
+                return fDisplayConditions;
+            }
+            set
+            {
+                fDisplayConditions = value;
+                OnPropertyChanged();
+            }
         }
 
         private List<VisibleName> fColumnNames = new List<VisibleName>();
 
         public List<VisibleName> ColumnNames
         {
-            get { return fColumnNames; }
-            set { fColumnNames = value; OnPropertyChanged(); }
+            get
+            {
+                return fColumnNames;
+            }
+            set
+            {
+                fColumnNames = value;
+                OnPropertyChanged();
+            }
         }
 
         private List<VisibleName> fBankColumnNames = new List<VisibleName>();
 
         public List<VisibleName> BankColumnNames
         {
-            get { return fBankColumnNames; }
-            set { fBankColumnNames = value; OnPropertyChanged(); }
+            get
+            {
+                return fBankColumnNames;
+            }
+            set
+            {
+                fBankColumnNames = value;
+                OnPropertyChanged();
+            }
         }
 
-        public ICommand ExportCommand { get; }
+        public ICommand ExportCommand
+        {
+            get;
+        }
 
         private void ExecuteExportCommand(ICloseable window)
         {
@@ -108,11 +146,17 @@ namespace FinanceWindowsViewModels
         private ExportType windowType;
         private string fExtension
         {
-            get { return windowType == ExportType.HTML ? "html" : "csv"; }
+            get
+            {
+                return windowType == ExportType.HTML ? "html" : "csv";
+            }
         }
         private string fFileExtension
         {
-            get { return "." + fExtension; }
+            get
+            {
+                return "." + fExtension;
+            }
         }
         public StatsOptionsViewModel(IPortfolio portfolio, ExportType exportType, IReportLogger reportLogger, Action<string> CloseWindow, IFileInteractionService fileService, IDialogCreationService dialogCreation)
         {

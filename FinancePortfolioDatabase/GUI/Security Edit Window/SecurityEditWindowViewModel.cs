@@ -1,7 +1,8 @@
 ﻿using FinanceCommonViewModels;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.Reporting;
+using FinancialStructures.PortfolioAPI;
+using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,15 +22,14 @@ namespace FinanceWindowsViewModels
 
         private readonly Action<Action<IPortfolio>> UpdateDataAction;
 
-        public SecurityEditWindowViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, EditMethods securityEditMethods, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation)
+        public SecurityEditWindowViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation)
             : base("Security Edit", portfolio)
         {
             UpdateDataAction = updateData;
             ReportLogger = reportLogger;
             fFileService = fileService;
             fDialogCreationService = dialogCreation;
-            LoadSelectedTab = (name) => LoadTabFunc(name);
-            Tabs.Add(new DataNamesViewModel(DataStore, updateData, ReportLogger, LoadSelectedTab, securityEditMethods));
+            Tabs.Add(new DataNamesViewModel(DataStore, updateData, ReportLogger, (name) => LoadTabFunc(name), AccountType.Security));
         }
 
         public override void UpdateData(IPortfolio portfolio)
@@ -40,7 +40,7 @@ namespace FinanceWindowsViewModels
             {
                 for (int tabIndex = 0; tabIndex < Tabs.Count; tabIndex++)
                 {
-                    if (Tabs[tabIndex] is ViewModelBase<IPortfolio> viewModel)
+                    if (Tabs[tabIndex] is TabViewModelBase<IPortfolio> viewModel)
                     {
                         viewModel.UpdateData(portfolio, tabItem => removableTabs.Add(tabItem));
                     }
@@ -57,9 +57,9 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private void LoadTabFunc(Object obj)
+        internal void LoadTabFunc(Object obj)
         {
-            if (obj is NameData_ChangeLogged name)
+            if (obj is NameData name)
             {
                 Tabs.Add(new SelectedSecurityViewModel(DataStore, UpdateDataAction, ReportLogger, fFileService, fDialogCreationService, name));
             }

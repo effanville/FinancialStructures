@@ -1,9 +1,9 @@
-﻿using FinancialStructures.DataReader;
-using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.Reporting;
+using StructureCommon.DataStructures;
+using StructureCommon.FileAccess;
+using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,34 +14,54 @@ using UICommon.ViewModelBases;
 
 namespace FinanceCommonViewModels
 {
-    internal class SelectedSingleDataViewModel : ViewModelBase<IPortfolio>
+    internal class SelectedSingleDataViewModel : TabViewModelBase<IPortfolio>
     {
         private AccountType TypeOfAccount;
 
-        public override bool Closable { get { return true; } }
+        public override bool Closable
+        {
+            get
+            {
+                return true;
+            }
+        }
 
-        private NameData_ChangeLogged fSelectedName;
+        private NameData fSelectedName;
 
         /// <summary>
         /// Name and Company data of the selected security in the list <see cref="AccountNames"/>
         /// </summary>
-        public NameData_ChangeLogged SelectedName
+        public NameData SelectedName
         {
-            get { return fSelectedName; }
-            set { fSelectedName = value; OnPropertyChanged(); }
+            get
+            {
+                return fSelectedName;
+            }
+            set
+            {
+                fSelectedName = value;
+                OnPropertyChanged();
+            }
         }
 
-        private List<DayValue_ChangeLogged> fSelectedData;
-        public List<DayValue_ChangeLogged> SelectedData
+        private List<DailyValuation> fSelectedData;
+        public List<DailyValuation> SelectedData
         {
-            get { return fSelectedData; }
-            set { fSelectedData = value; OnPropertyChanged(); }
+            get
+            {
+                return fSelectedData;
+            }
+            set
+            {
+                fSelectedData = value;
+                OnPropertyChanged();
+            }
         }
 
-        private DayValue_ChangeLogged fSelectedValues;
-        private DayValue_ChangeLogged fOldSelectedValue;
+        private DailyValuation fSelectedValues;
+        private DailyValuation fOldSelectedValue;
         private int SelectedIndex;
-        public DayValue_ChangeLogged SelectedValue
+        public DailyValuation SelectedValue
         {
             get
             {
@@ -69,13 +89,10 @@ namespace FinanceCommonViewModels
         private readonly IFileInteractionService fFileService;
         private readonly IDialogCreationService fDialogCreationService;
 
-        private readonly EditMethods EditMethods;
-
-        public SelectedSingleDataViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, EditMethods editMethods, NameData_ChangeLogged selectedName, AccountType accountType)
+        public SelectedSingleDataViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, NameData selectedName, AccountType accountType)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name", portfolio)
         {
             SelectedName = selectedName;
-            EditMethods = editMethods;
             TypeOfAccount = accountType;
             UpdateData(portfolio);
 
@@ -95,13 +112,13 @@ namespace FinanceCommonViewModels
             base.UpdateData(portfolio);
             if (SelectedName != null)
             {
-                if (!((List<NameCompDate>)EditMethods.ExecuteFunction(FunctionType.NameUpdate, DataStore).Result).Exists(name => name.IsEqualTo(SelectedName)))
+                if (!portfolio.NameData(TypeOfAccount).Exists(name => name.IsEqualTo(SelectedName)))
                 {
                     removeTab?.Invoke(this);
                     return;
                 }
 
-                SelectedData = (List<DayValue_ChangeLogged>)EditMethods.ExecuteFunction(FunctionType.SelectData, DataStore, SelectedName, ReportLogger).Result;
+                SelectedData = DataStore.NumberData(TypeOfAccount, SelectedName, ReportLogger);
                 SelectLatestValue();
             }
             else
@@ -116,55 +133,53 @@ namespace FinanceCommonViewModels
         }
 
 
-        public ICommand EditDataCommand { get; set; }
+        public ICommand EditDataCommand
+        {
+            get; set;
+        }
 
         private void ExecuteEditDataCommand()
         {
             if (SelectedName != null)
             {
-                if (((List<DayValue_ChangeLogged>)EditMethods.ExecuteFunction(FunctionType.SelectData, DataStore, SelectedName, ReportLogger).Result).Count() != SelectedData.Count)
+                if (DataStore.NumberData(TypeOfAccount, SelectedName, ReportLogger).Count() != SelectedData.Count)
                 {
-                    UpdateDataCallback(programPortfolio => EditMethods.ExecuteFunction(FunctionType.AddData, programPortfolio, SelectedName, SelectedValue, ReportLogger).Wait());
-                    SelectedName.NewValue = false;
+                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddData(TypeOfAccount, SelectedName, SelectedValue, ReportLogger));
                 }
                 else
                 {
                     bool edited = false;
-                    for (int i = 0; i < SelectedData.Count; i++)
-                    {
-                        var name = SelectedData[i];
-
-                        if (name.NewValue)
-                        {
-                            edited = true;
-                            name.NewValue = false;
-                            UpdateDataCallback(programPortfolio => EditMethods.ExecuteFunction(FunctionType.EditData, programPortfolio, SelectedName, fOldSelectedValue, SelectedValue, ReportLogger).Wait());
-                        }
-                    }
+                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditData(TypeOfAccount, SelectedName, fOldSelectedValue, SelectedValue, ReportLogger));
 
                     if (!edited)
                     {
-                        ReportLogger.LogWithStrings("Critical", "Error", "EditingData", "Was not able to edit data.");
+                        _ = ReportLogger.LogWithStrings("Critical", "Error", "EditingData", "Was not able to edit data.");
                     }
                 }
             }
         }
 
-        public ICommand DeleteValuationCommand { get; }
+        public ICommand DeleteValuationCommand
+        {
+            get;
+        }
 
         private void ExecuteDeleteValuation()
         {
             if (SelectedName != null)
             {
-                UpdateDataCallback(programPortfolio => EditMethods.ExecuteFunction(FunctionType.DeleteData, programPortfolio, SelectedName, SelectedValue, ReportLogger).Wait());
+                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(TypeOfAccount, SelectedName, SelectedValue, ReportLogger));
             }
             else
             {
-                ReportLogger.LogWithStrings("Critical", "Error", "DeletingData", "No Account was selected when trying to delete data.");
+                _ = ReportLogger.LogWithStrings("Critical", "Error", "DeletingData", "No Account was selected when trying to delete data.");
             }
         }
 
-        public ICommand AddCsvData { get; }
+        public ICommand AddCsvData
+        {
+            get;
+        }
 
         private void ExecuteAddCsvData()
         {
@@ -172,29 +187,32 @@ namespace FinanceCommonViewModels
             {
                 var result = fFileService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
                 List<object> outputs = null;
-
-                if (result.Success != null && (bool)result.Success)
+                bool exists = DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out var account);
+                if (result.Success != null && (bool)result.Success && exists)
                 {
-                    outputs = CsvDataRead.ReadFromCsv(result.FilePath, AccountType.Security, ReportLogger);
+                    outputs = CsvReaderWriter.ReadFromCsv(account, result.FilePath, ReportLogger);
                 }
                 if (outputs != null)
                 {
-                    foreach (var objec in outputs)
+                    foreach (object objec in outputs)
                     {
-                        if (objec is SecurityDayData view)
+                        if (objec is DailyValuation view)
                         {
-                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(fSelectedName, view.Date, view.ShareNo, view.UnitPrice, view.NewInvestment, ReportLogger));
+                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddData(TypeOfAccount, SelectedName, view, ReportLogger));
                         }
                         else
                         {
-                            ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", "Have the wrong type of thing");
+                            _ = ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", "Have the wrong type of thing");
                         }
                     }
                 }
             }
         }
 
-        public ICommand ExportCsvData { get; }
+        public ICommand ExportCsvData
+        {
+            get;
+        }
 
         private void ExecuteExportCsvData()
         {
@@ -203,13 +221,13 @@ namespace FinanceCommonViewModels
                 var result = fFileService.SaveFile("csv", string.Empty, DataStore.Directory, "Csv Files|*.csv|All Files|*.*");
                 if (result.Success != null && (bool)result.Success)
                 {
-                    if (DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out var security))
+                    if (DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out var account))
                     {
-                        CsvDataRead.WriteToCSVFile(result.FilePath, AccountType.Security, security, ReportLogger);
+                        CsvReaderWriter.WriteToCSVFile(account, result.FilePath, ReportLogger);
                     }
                     else
                     {
-                        ReportLogger.LogWithStrings("Critical", "Error", "Saving", "Could not find security.");
+                        _ = ReportLogger.LogWithStrings("Critical", "Error", "Saving", "Could not find security.");
                     }
                 }
             }

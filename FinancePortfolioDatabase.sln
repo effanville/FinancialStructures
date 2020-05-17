@@ -25,8 +25,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UICommon", "..\Common\UICommon\UICommon.csproj", "{FC126A33-B669-4AA6-9DCF-C30FBB65F58B}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug(Tests)|Any CPU = Debug(Tests)|Any CPU
@@ -94,18 +92,6 @@ Global
 		{5DC1103C-E51E-4F82-BD64-FFC47CB08C2C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5DC1103C-E51E-4F82-BD64-FFC47CB08C2C}.Release|x64.ActiveCfg = Release|Any CPU
 		{5DC1103C-E51E-4F82-BD64-FFC47CB08C2C}.Release|x64.Build.0 = Release|Any CPU
-		{FC126A33-B669-4AA6-9DCF-C30FBB65F58B}.Debug(Tests)|Any CPU.ActiveCfg = Debug|Any CPU
-		{FC126A33-B669-4AA6-9DCF-C30FBB65F58B}.Debug(Tests)|Any CPU.Build.0 = Debug|Any CPU
-		{FC126A33-B669-4AA6-9DCF-C30FBB65F58B}.Debug(Tests)|x64.ActiveCfg = Debug|Any CPU
-		{FC126A33-B669-4AA6-9DCF-C30FBB65F58B}.Debug(Tests)|x64.Build.0 = Debug|Any CPU
-		{FC126A33-B669-4AA6-9DCF-C30FBB65F58B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FC126A33-B669-4AA6-9DCF-C30FBB65F58B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FC126A33-B669-4AA6-9DCF-C30FBB65F58B}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{FC126A33-B669-4AA6-9DCF-C30FBB65F58B}.Debug|x64.Build.0 = Debug|Any CPU
-		{FC126A33-B669-4AA6-9DCF-C30FBB65F58B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FC126A33-B669-4AA6-9DCF-C30FBB65F58B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FC126A33-B669-4AA6-9DCF-C30FBB65F58B}.Release|x64.ActiveCfg = Release|Any CPU
-		{FC126A33-B669-4AA6-9DCF-C30FBB65F58B}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -39,15 +39,33 @@ namespace FinancialStructures.DataStructures
             NewValue = newValue;
         }
 
-        public bool NewValue { get; set; }
+        public bool NewValue
+        {
+            get; set;
+        }
 
-        public DateTime Date { get; set; }
-        public double UnitPrice { get; set; }
+        public DateTime Date
+        {
+            get; set;
+        }
+        public double UnitPrice
+        {
+            get; set;
+        }
 
-        public double ShareNo { get; set; }
+        public double ShareNo
+        {
+            get; set;
+        }
 
-        public double Value { get; set; }
+        public double Value
+        {
+            get; set;
+        }
 
-        public double NewInvestment { get; set; }
+        public double NewInvestment
+        {
+            get; set;
+        }
     }
 }

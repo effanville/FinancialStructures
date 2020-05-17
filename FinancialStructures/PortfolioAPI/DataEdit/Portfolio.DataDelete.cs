@@ -1,7 +1,7 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.Reporting;
+using StructureCommon.DataStructures;
+using StructureCommon.Reporting;
 using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
@@ -17,35 +17,35 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="data">The data to remove.</param>
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
-        public static bool TryDeleteData(this IPortfolio portfolio, AccountType elementType, NameData name, DayValue_ChangeLogged data, IReportLogger reportLogger)
+        public static bool TryDeleteData(this IPortfolio portfolio, AccountType elementType, NameData name, DailyValuation data, IReportLogger reportLogger)
         {
             switch (elementType)
             {
                 case (AccountType.Security):
+                {
+                    for (int fundIndex = 0; fundIndex < portfolio.NumberOf(AccountType.Security); fundIndex++)
                     {
-                        for (int fundIndex = 0; fundIndex < portfolio.NumberOf(AccountType.Security); fundIndex++)
+                        if (name.IsEqualTo(portfolio.Funds[fundIndex].Names))
                         {
-                            if (name.IsEqualTo(portfolio.Funds[fundIndex].Names))
-                            {
-                                // now edit data
-                                return portfolio.Funds[fundIndex].TryDeleteData(data.Day, reportLogger);
-                            }
+                            // now edit data
+                            return portfolio.Funds[fundIndex].TryDeleteData(data.Day, reportLogger);
                         }
+                    }
 
-                        break;
-                    }
+                    break;
+                }
                 case (AccountType.Currency):
-                    {
-                        return TryDeleteSingleListData(portfolio.Currencies, elementType, name, data, reportLogger);
-                    }
+                {
+                    return TryDeleteSingleListData(portfolio.Currencies, elementType, name, data, reportLogger);
+                }
                 case (AccountType.BankAccount):
-                    {
-                        return TryDeleteSingleListData(portfolio.BankAccounts, elementType, name, data, reportLogger);
-                    }
+                {
+                    return TryDeleteSingleListData(portfolio.BankAccounts, elementType, name, data, reportLogger);
+                }
                 case (AccountType.Sector):
-                    {
-                        return TryDeleteSingleListData(portfolio.BenchMarks, elementType, name, data, reportLogger);
-                    }
+                {
+                    return TryDeleteSingleListData(portfolio.BenchMarks, elementType, name, data, reportLogger);
+                }
                 default:
                     reportLogger.LogUseful(ReportType.Error, ReportLocation.DeletingData, $"Editing an Unknown type.");
                     return false;
@@ -56,7 +56,7 @@ namespace FinancialStructures.PortfolioAPI
             return false;
         }
 
-        private static bool TryDeleteSingleListData<T>(List<T> values, AccountType elementType, NameData name, DayValue_ChangeLogged data, IReportLogger reportLogger) where T : ISingleValueDataList
+        private static bool TryDeleteSingleListData<T>(List<T> values, AccountType elementType, NameData name, DailyValuation data, IReportLogger reportLogger) where T : ISingleValueDataList
         {
             foreach (var account in values)
             {

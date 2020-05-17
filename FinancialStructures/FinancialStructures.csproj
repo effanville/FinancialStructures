@@ -16,9 +16,20 @@
     <DocumentationFile></DocumentationFile>
     <OutputPath>..\bin\</OutputPath>
   </PropertyGroup>
-
   <ItemGroup>
-    <Reference Include="System.Net.Http" />
+    <PackageReference Include="StructureCommon" Version="1.0.0" />
   </ItemGroup>
 
+ <!-- Alternative locations for dlls, if Nuget links cannot be generated
+ <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+    <Reference Include="StructureCommon">
+      <HintPath>..\..\Publish\netcoreapp3.1\StructureCommon.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <Reference Include="StructureCommon">
+      <HintPath>..\..\Publish\net48\StructureCommon.dll</HintPath>
+    </Reference>
+  </ItemGroup> -->
 </Project>

@@ -125,7 +125,12 @@ namespace FinancialStructures.PortfolioAPI
                 {
                     var currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
                     var needed = desired.LatestValue(currency);
-                    return needed.Value - desired.LastEarlierValuation(needed.Day, currency).Value;
+                    if (needed.Value > 0)
+                    {
+                        return needed.Value - desired.LastEarlierValuation(needed.Day, currency).Value;
+                    }
+
+                    return 0.0;
                 }
             }
 

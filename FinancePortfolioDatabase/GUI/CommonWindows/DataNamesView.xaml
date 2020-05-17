@@ -35,7 +35,7 @@
                   CanUserAddRows="True"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False"
-                  ItemsSource="{Binding Path=DataNames, Mode=TwoWay}"
+                  ItemsSource="{Binding Path=DataNames, Mode=OneWay}"
                   SelectedItem="{Binding Path=SelectedName, Mode=TwoWay}"
                   ScrollViewer.VerticalScrollBarVisibility="Visible"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto">

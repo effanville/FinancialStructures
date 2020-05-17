@@ -1,7 +1,7 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.Reporting;
+using StructureCommon.DataStructures;
+using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
 
@@ -37,33 +37,33 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
         /// <remarks> This cannot currently be used to add to securities due to different type of data.</remarks>
-        public static bool TryEditData(this IPortfolio portfolio, AccountType elementType, NameData name, DayValue_ChangeLogged oldData, DayValue_ChangeLogged newData, IReportLogger reportLogger = null)
+        public static bool TryEditData(this IPortfolio portfolio, AccountType elementType, NameData name, DailyValuation oldData, DailyValuation newData, IReportLogger reportLogger = null)
         {
             switch (elementType)
             {
                 case (AccountType.Security):
-                    {
-                        return false;
-                    }
+                {
+                    return false;
+                }
                 case (AccountType.Currency):
-                    {
-                        return TryEditSingleDataList(portfolio.Currencies, elementType, name, oldData, newData, reportLogger);
-                    }
+                {
+                    return TryEditSingleDataList(portfolio.Currencies, elementType, name, oldData, newData, reportLogger);
+                }
                 case (AccountType.BankAccount):
-                    {
-                        return TryEditSingleDataList(portfolio.BankAccounts, elementType, name, oldData, newData, reportLogger);
-                    }
+                {
+                    return TryEditSingleDataList(portfolio.BankAccounts, elementType, name, oldData, newData, reportLogger);
+                }
                 case (AccountType.Sector):
-                    {
-                        return TryEditSingleDataList(portfolio.BenchMarks, elementType, name, oldData, newData, reportLogger);
-                    }
+                {
+                    return TryEditSingleDataList(portfolio.BenchMarks, elementType, name, oldData, newData, reportLogger);
+                }
                 default:
                     reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Editing an Unknown type.");
                     return false;
             }
         }
 
-        private static bool TryEditSingleDataList<T>(List<T> values, AccountType elementType, NameData name, DayValue_ChangeLogged oldData, DayValue_ChangeLogged newData, IReportLogger reportLogger = null) where T : ISingleValueDataList
+        private static bool TryEditSingleDataList<T>(List<T> values, AccountType elementType, NameData name, DailyValuation oldData, DailyValuation newData, IReportLogger reportLogger = null) where T : ISingleValueDataList
         {
             for (int AccountIndex = 0; AccountIndex < values.Count; AccountIndex++)
             {

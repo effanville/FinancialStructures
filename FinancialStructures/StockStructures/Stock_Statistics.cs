@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Mathematics;
+﻿using StructureCommon.Mathematics;
 using System;
 using System.Collections.Generic;
 

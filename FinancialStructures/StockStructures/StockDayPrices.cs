@@ -12,7 +12,8 @@ namespace FinancialStructures.StockStructures
         public double Volume;
 
         public StockDayPrices()
-        { }
+        {
+        }
 
         public StockDayPrices(DateTime time, double open, double high, double low, double close, double volume)
         {

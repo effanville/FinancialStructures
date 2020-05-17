@@ -1,7 +1,7 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceFunctions;
-using FinancialStructures.FinanceInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.StatisticStructures;
+using StructureCommon.DataStructures;
+using StructureCommon.FinanceFunctions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -138,7 +138,7 @@ namespace FinancialStructures.PortfolioAPI
             return names;
         }
 
-        public async static Task<List<PortfolioDaySnapshot>> GenerateHistoryStats(this IPortfolio portfolio, int daysGap)
+        public static async Task<List<PortfolioDaySnapshot>> GenerateHistoryStats(this IPortfolio portfolio, int daysGap)
         {
             var outputs = new List<PortfolioDaySnapshot>();
             var calculationDate = portfolio.FirstValueDate();

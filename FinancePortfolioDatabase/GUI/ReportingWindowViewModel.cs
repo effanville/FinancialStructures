@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Reporting;
+﻿using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,37 +15,69 @@ namespace FinanceWindowsViewModels
 
         public ObservableCollection<ErrorReport> ReportsToView
         {
-            get { return fReportsToView; }
-            set { fReportsToView = value; OnPropertyChanged(nameof(ReportsToView)); }
+            get
+            {
+                return fReportsToView;
+            }
+            set
+            {
+                fReportsToView = value;
+                OnPropertyChanged(nameof(ReportsToView));
+            }
         }
 
         private ErrorReports fReports;
 
         public ErrorReports Reports
         {
-            get { return fReports; }
-            set { fReports = value; OnPropertyChanged(nameof(Reports)); }
+            get
+            {
+                return fReports;
+            }
+            set
+            {
+                fReports = value;
+                OnPropertyChanged(nameof(Reports));
+            }
         }
 
         private int fIndexToDelete;
 
         public int IndexToDelete
         {
-            get { return fIndexToDelete; }
-            set { fIndexToDelete = value; OnPropertyChanged(nameof(IndexToDelete)); }
+            get
+            {
+                return fIndexToDelete;
+            }
+            set
+            {
+                fIndexToDelete = value;
+                OnPropertyChanged(nameof(IndexToDelete));
+            }
         }
 
         private ReportSeverity fReportingSeverity;
 
         public ReportSeverity ReportingSeverity
         {
-            get { return fReportingSeverity; }
-            set { fReportingSeverity = value; OnPropertyChanged(nameof(ReportingSeverity)); SyncReports(); }
+            get
+            {
+                return fReportingSeverity;
+            }
+            set
+            {
+                fReportingSeverity = value;
+                OnPropertyChanged(nameof(ReportingSeverity));
+                SyncReports();
+            }
         }
 
         public List<ReportSeverity> EnumValues
         {
-            get { return Enum.GetValues(typeof(ReportSeverity)).Cast<ReportSeverity>().ToList(); }
+            get
+            {
+                return Enum.GetValues(typeof(ReportSeverity)).Cast<ReportSeverity>().ToList();
+            }
         }
 
         public ReportingWindowViewModel()
@@ -64,7 +96,10 @@ namespace FinanceWindowsViewModels
             OnPropertyChanged(nameof(ReportsToView));
         }
 
-        public ICommand ClearReportsCommand { get; }
+        public ICommand ClearReportsCommand
+        {
+            get;
+        }
 
         private void ExecuteClearReports()
         {
@@ -72,7 +107,10 @@ namespace FinanceWindowsViewModels
             SyncReports();
         }
 
-        public ICommand ClearSingleReportCommand { get; }
+        public ICommand ClearSingleReportCommand
+        {
+            get;
+        }
 
         private void ExecuteClearSelectedReport()
         {

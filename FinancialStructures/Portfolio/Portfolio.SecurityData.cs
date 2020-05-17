@@ -38,7 +38,7 @@ namespace FinancialStructures.Database
         {
             foreach (ISecurity sec in portfolio.Funds)
             {
-                if (sec.Names.Equals(names))
+                if (sec.Names.IsEqualTo(names))
                 {
                     if (dataStream.Equals(SecurityDataStream.NumberOfShares))
                     {

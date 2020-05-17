@@ -15,7 +15,7 @@ namespace FinanceWindows
 
         private void CloseTabCommand(object sender, System.Windows.RoutedEventArgs e)
         {
-            var VM = this.DataContext as StatsCreatorWindowViewModel;
+            var VM = DataContext as StatsCreatorWindowViewModel;
             if (TabMain.SelectedIndex != 0)
             {
                 VM.StatsTabs.RemoveAt(TabMain.SelectedIndex);

@@ -1,7 +1,7 @@
 ﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.Reporting;
+using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -20,20 +20,17 @@ namespace FinanceCommonViewModels
         private readonly IReportLogger ReportLogger;
         private readonly IFileInteractionService fFileService;
         private readonly IDialogCreationService fDialogCreationService;
-        private readonly EditMethods EditMethods;
 
-        public SingleValueEditWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, EditMethods editMethods, AccountType accountType)
+        public SingleValueEditWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, AccountType accountType)
             : base(title, portfolio)
         {
             UpdateDataCallback = updateDataCallback;
             ReportLogger = reportLogger;
             fFileService = fileService;
             fDialogCreationService = dialogCreation;
-            EditMethods = editMethods;
             TypeOfAccount = accountType;
             UpdateData(portfolio);
-            LoadSelectedTab = (name) => LoadTabFunc(name);
-            Tabs.Add(new DataNamesViewModel(DataStore, updateDataCallback, reportLogger, LoadSelectedTab, editMethods));
+            Tabs.Add(new DataNamesViewModel(DataStore, updateDataCallback, reportLogger, (name) => LoadTabFunc(name), accountType));
         }
 
         public override void UpdateData(IPortfolio portfolio)
@@ -44,7 +41,7 @@ namespace FinanceCommonViewModels
             {
                 foreach (var item in Tabs)
                 {
-                    if (item is ViewModelBase<IPortfolio> viewModel)
+                    if (item is TabViewModelBase<IPortfolio> viewModel)
                     {
                         viewModel.UpdateData(portfolio, tabItem => removableTabs.Add(tabItem));
                     }
@@ -54,7 +51,7 @@ namespace FinanceCommonViewModels
                 {
                     foreach (var tab in removableTabs)
                     {
-                        Tabs.Remove(tab);
+                        _ = Tabs.Remove(tab);
                     }
 
                     removableTabs.Clear();
@@ -62,11 +59,11 @@ namespace FinanceCommonViewModels
             }
         }
 
-        private void LoadTabFunc(Object obj)
+        internal void LoadTabFunc(Object obj)
         {
-            if (obj is NameData_ChangeLogged name)
+            if (obj is NameData name)
             {
-                Tabs.Add(new SelectedSingleDataViewModel(DataStore, UpdateDataCallback, ReportLogger, fFileService, fDialogCreationService, EditMethods, name, TypeOfAccount));
+                Tabs.Add(new SelectedSingleDataViewModel(DataStore, UpdateDataCallback, ReportLogger, fFileService, fDialogCreationService, name, TypeOfAccount));
             }
         }
     }

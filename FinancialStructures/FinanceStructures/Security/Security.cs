@@ -1,6 +1,6 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
+using StructureCommon.DataStructures;
 using System;
 using System.Collections.Generic;
 
@@ -43,8 +43,14 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public NameData Names
         {
-            get { return fNames; }
-            set { fNames = value; }
+            get
+            {
+                return fNames;
+            }
+            set
+            {
+                fNames = value;
+            }
         }
 
         /// <summary>
@@ -52,8 +58,14 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public string Name
         {
-            get { return Names.Name; }
-            set { Names.Name = value; }
+            get
+            {
+                return Names.Name;
+            }
+            set
+            {
+                Names.Name = value;
+            }
         }
 
         /// <summary>
@@ -61,8 +73,14 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public string Company
         {
-            get { return Names.Company; }
-            set { Names.Company = value; }
+            get
+            {
+                return Names.Company;
+            }
+            set
+            {
+                Names.Company = value;
+            }
         }
 
         /// <summary>
@@ -70,8 +88,14 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public string Url
         {
-            get { return Names.Url; }
-            set { Names.Url = value; }
+            get
+            {
+                return Names.Url;
+            }
+            set
+            {
+                Names.Url = value;
+            }
         }
 
         /// <summary>
@@ -79,8 +103,14 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public string Currency
         {
-            get { return Names.Currency; }
-            set { Names.Currency = value; }
+            get
+            {
+                return Names.Currency;
+            }
+            set
+            {
+                Names.Currency = value;
+            }
         }
 
         /// <summary>
@@ -93,8 +123,14 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public TimeList Shares
         {
-            get { return fShares; }
-            set { fShares = value; }
+            get
+            {
+                return fShares;
+            }
+            set
+            {
+                fShares = value;
+            }
         }
 
         /// <summary>
@@ -118,8 +154,14 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public TimeList UnitPrice
         {
-            get { return fUnitPrice; }
-            set { fUnitPrice = value; }
+            get
+            {
+                return fUnitPrice;
+            }
+            set
+            {
+                fUnitPrice = value;
+            }
         }
 
         /// <summary>
@@ -132,8 +174,14 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public TimeList Investments
         {
-            get { return fInvestments; }
-            set { fInvestments = value; }
+            get
+            {
+                return fInvestments;
+            }
+            set
+            {
+                fInvestments = value;
+            }
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
+using StructureCommon.DataStructures;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -11,7 +11,8 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public Sector()
             : base()
-        { }
+        {
+        }
 
         public Sector(NameData names)
             : base(names)

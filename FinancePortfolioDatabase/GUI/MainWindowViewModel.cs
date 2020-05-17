@@ -2,7 +2,7 @@
 using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.Reporting;
+using StructureCommon.Reporting;
 using System;
 using System.Collections.Generic;
 using UICommon.Services;
@@ -12,30 +12,36 @@ namespace FinanceWindowsViewModels
 {
     internal class MainWindowViewModel : PropertyChangedBase
     {
-        public EditMethods securityEditMethods = EditMethods.GenerateEditMethods(AccountType.Security);
-
-        public EditMethods bankAccEditMethods = EditMethods.GenerateEditMethods(AccountType.BankAccount);
-
-        public EditMethods sectorEditMethods = EditMethods.GenerateEditMethods(AccountType.Sector);
-
-        public EditMethods currencyEditMethods = EditMethods.GenerateEditMethods(AccountType.Currency);
-
         internal IPortfolio ProgramPortfolio = new Portfolio();
 
         private OptionsToolbarViewModel fOptionsToolbarCommands;
 
         public OptionsToolbarViewModel OptionsToolbarCommands
         {
-            get { return fOptionsToolbarCommands; }
-            set { fOptionsToolbarCommands = value; OnPropertyChanged(); }
+            get
+            {
+                return fOptionsToolbarCommands;
+            }
+            set
+            {
+                fOptionsToolbarCommands = value;
+                OnPropertyChanged();
+            }
         }
 
         private ReportingWindowViewModel fReports;
 
         public ReportingWindowViewModel ReportsViewModel
         {
-            get { return fReports; }
-            set { fReports = value; OnPropertyChanged(); }
+            get
+            {
+                return fReports;
+            }
+            set
+            {
+                fReports = value;
+                OnPropertyChanged();
+            }
         }
 
         /// <summary>
@@ -50,10 +56,10 @@ namespace FinanceWindowsViewModels
 
             OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService);
             Tabs.Add(new BasicDataViewModel(ProgramPortfolio));
-            Tabs.Add(new SecurityEditWindowViewModel(ProgramPortfolio, UpdateDataCallback, securityEditMethods, ReportLogger, fileInteractionService, dialogCreationService));
-            Tabs.Add(new SingleValueEditWindowViewModel("Bank Account Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, bankAccEditMethods, AccountType.BankAccount));
-            Tabs.Add(new SingleValueEditWindowViewModel("Sector Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, sectorEditMethods, AccountType.Sector));
-            Tabs.Add(new SingleValueEditWindowViewModel("Currency Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, currencyEditMethods, AccountType.Currency));
+            Tabs.Add(new SecurityEditWindowViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService));
+            Tabs.Add(new SingleValueEditWindowViewModel("Bank Account Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, AccountType.BankAccount));
+            Tabs.Add(new SingleValueEditWindowViewModel("Sector Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, AccountType.Sector));
+            Tabs.Add(new SingleValueEditWindowViewModel("Currency Edit", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, AccountType.Currency));
             Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, fileInteractionService, dialogCreationService));
             ProgramPortfolio.PortfolioChanged += AllData_portfolioChanged;
         }

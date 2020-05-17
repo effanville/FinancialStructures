@@ -1,7 +1,7 @@
 ﻿using FinanceViewModels.StatsViewModels;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.Reporting;
 using FinancialStructures.StatsMakers;
+using StructureCommon.Reporting;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -18,11 +18,22 @@ namespace FinanceWindowsViewModels
         private bool fDisplayValueFunds = true;
         public bool DisplayValueFunds
         {
-            get { return fDisplayValueFunds; }
-            set { fDisplayValueFunds = value; OnPropertyChanged(); UpdateData(); }
+            get
+            {
+                return fDisplayValueFunds;
+            }
+            set
+            {
+                fDisplayValueFunds = value;
+                OnPropertyChanged();
+                UpdateData();
+            }
         }
 
-        public int HistoryGapDays { get; set; }
+        public int HistoryGapDays
+        {
+            get; set;
+        }
 
         private readonly IReportLogger ReportLogger;
         private readonly IFileInteractionService fFileService;
@@ -43,12 +54,24 @@ namespace FinanceWindowsViewModels
             ExportHistoryCommand = new RelayCommand(ExecuteCreateHistory);
         }
 
-        public ICommand CreateCSVStatsCommand { get; }
+        public ICommand CreateCSVStatsCommand
+        {
+            get;
+        }
 
-        public ICommand CreateInvestmentListCommand { get; }
-        public ICommand CreateHTMLCommand { get; }
+        public ICommand CreateInvestmentListCommand
+        {
+            get;
+        }
+        public ICommand CreateHTMLCommand
+        {
+            get;
+        }
 
-        public ICommand ExportHistoryCommand { get; }
+        public ICommand ExportHistoryCommand
+        {
+            get;
+        }
 
         private void ExecuteExportToCSVCommand()
         {
@@ -118,7 +141,7 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        Action<TabType, string> openTab
+        private Action<TabType, string> openTab
         {
             get
             {

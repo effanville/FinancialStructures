@@ -11,17 +11,44 @@ namespace FinancialStructures.FinanceInterfaces
     public interface IPortfolio
     {
         void SetFilePath(string path);
-        string FilePath { get; }
-        string Extension { get; }
+        string FilePath
+        {
+            get;
+        }
+        string Extension
+        {
+            get;
+        }
 
-        string Directory { get; }
-        string DatabaseName { get; }
-        string BaseCurrency { get; set; }
+        string Directory
+        {
+            get;
+        }
+        string DatabaseName
+        {
+            get;
+        }
+        string BaseCurrency
+        {
+            get; set;
+        }
 
-        List<Security> Funds { get; }
-        List<CashAccount> BankAccounts { get; }
-        List<Currency> Currencies { get; }
-        List<Sector> BenchMarks { get; }
+        List<Security> Funds
+        {
+            get;
+        }
+        List<CashAccount> BankAccounts
+        {
+            get;
+        }
+        List<Currency> Currencies
+        {
+            get;
+        }
+        List<Sector> BenchMarks
+        {
+            get;
+        }
 
         void CopyData(IPortfolio portfolio);
 
@@ -47,7 +74,10 @@ namespace FinancialStructures.FinanceInterfaces
         /// <summary>
         /// Whether the user has changed the database since last save.
         /// </summary>
-        bool IsAlteredSinceSave { get; }
+        bool IsAlteredSinceSave
+        {
+            get;
+        }
 
         /// <summary>
         /// Enacts internal things in the portfolio when it is being saved.
