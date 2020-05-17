@@ -55,7 +55,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var viewModel = new SingleValueEditWindowViewModel("Dummy", portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, AccountType.BankAccount);
 
             var newNameData = new NameData("Fidelity", "Europe");
-            viewModel.LoadSelectedTab(newNameData);
+            viewModel.LoadTabFunc(newNameData);
 
             Assert.AreEqual(2, viewModel.Tabs.Count);
 
@@ -76,7 +76,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             var viewModel = new SingleValueEditWindowViewModel("Dummy", portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, AccountType.BankAccount);
 
             var newData = new NameData("Fidelity", "China");
-            viewModel.LoadSelectedTab(newData);
+            viewModel.LoadTabFunc(newData);
 
             Assert.AreEqual(2, viewModel.Tabs.Count);
         }

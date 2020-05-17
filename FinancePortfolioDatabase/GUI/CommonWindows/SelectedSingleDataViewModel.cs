@@ -14,7 +14,7 @@ using UICommon.ViewModelBases;
 
 namespace FinanceCommonViewModels
 {
-    internal class SelectedSingleDataViewModel : ViewModelBase<IPortfolio>
+    internal class SelectedSingleDataViewModel : TabViewModelBase<IPortfolio>
     {
         private AccountType TypeOfAccount;
 

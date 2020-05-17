@@ -30,8 +30,7 @@ namespace FinanceCommonViewModels
             fDialogCreationService = dialogCreation;
             TypeOfAccount = accountType;
             UpdateData(portfolio);
-            LoadSelectedTab = (name) => LoadTabFunc(name);
-            Tabs.Add(new DataNamesViewModel(DataStore, updateDataCallback, reportLogger, LoadSelectedTab, accountType));
+            Tabs.Add(new DataNamesViewModel(DataStore, updateDataCallback, reportLogger, (name) => LoadTabFunc(name), accountType));
         }
 
         public override void UpdateData(IPortfolio portfolio)
@@ -42,7 +41,7 @@ namespace FinanceCommonViewModels
             {
                 foreach (var item in Tabs)
                 {
-                    if (item is ViewModelBase<IPortfolio> viewModel)
+                    if (item is TabViewModelBase<IPortfolio> viewModel)
                     {
                         viewModel.UpdateData(portfolio, tabItem => removableTabs.Add(tabItem));
                     }
@@ -60,7 +59,7 @@ namespace FinanceCommonViewModels
             }
         }
 
-        private void LoadTabFunc(Object obj)
+        internal void LoadTabFunc(Object obj)
         {
             if (obj is NameData name)
             {

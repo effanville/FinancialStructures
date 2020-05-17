@@ -29,8 +29,7 @@ namespace FinanceWindowsViewModels
             ReportLogger = reportLogger;
             fFileService = fileService;
             fDialogCreationService = dialogCreation;
-            LoadSelectedTab = (name) => LoadTabFunc(name);
-            Tabs.Add(new DataNamesViewModel(DataStore, updateData, ReportLogger, LoadSelectedTab, AccountType.Security));
+            Tabs.Add(new DataNamesViewModel(DataStore, updateData, ReportLogger, (name) => LoadTabFunc(name), AccountType.Security));
         }
 
         public override void UpdateData(IPortfolio portfolio)
@@ -41,7 +40,7 @@ namespace FinanceWindowsViewModels
             {
                 for (int tabIndex = 0; tabIndex < Tabs.Count; tabIndex++)
                 {
-                    if (Tabs[tabIndex] is ViewModelBase<IPortfolio> viewModel)
+                    if (Tabs[tabIndex] is TabViewModelBase<IPortfolio> viewModel)
                     {
                         viewModel.UpdateData(portfolio, tabItem => removableTabs.Add(tabItem));
                     }
@@ -58,7 +57,7 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private void LoadTabFunc(Object obj)
+        internal void LoadTabFunc(Object obj)
         {
             if (obj is NameData name)
             {

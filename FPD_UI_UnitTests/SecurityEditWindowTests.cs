@@ -57,7 +57,7 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var viewModel = new SecurityEditWindowViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
 
             var newNameData = new NameData("Fidelity", "Europe");
-            viewModel.LoadSelectedTab(newNameData);
+            viewModel.LoadTabFunc(newNameData);
 
             Assert.AreEqual(2, viewModel.Tabs.Count);
 
@@ -78,7 +78,7 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             var viewModel = new SecurityEditWindowViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
 
             var newData = new NameData("Fidelity", "China");
-            viewModel.LoadSelectedTab(newData);
+            viewModel.LoadTabFunc(newData);
 
             Assert.AreEqual(2, viewModel.Tabs.Count);
         }
