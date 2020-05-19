@@ -107,11 +107,20 @@ namespace FinancialStructures.StatisticStructures
 
             for (int i = 0; i < properties.Length; i++)
             {
+                bool isDouble = double.TryParse(properties[i].GetValue(this).ToString(), out double value);
+
                 if (names.Contains(properties[i].Name))
                 {
                     if (i != 0)
                     {
-                        htmlData += "<td>";
+                        if (value < 0)
+                        {
+                            htmlData += "<td data-negative>";
+                        }
+                        else
+                        {
+                            htmlData += "<td>";
+                        }
                     }
 
                     htmlData += properties[i].GetValue(this).ToString();

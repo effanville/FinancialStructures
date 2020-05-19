@@ -45,12 +45,21 @@ namespace FinancialStructures.DataStructures
             {
                 if (names.Contains(properties[i].Name))
                 {
+                    bool isDouble = double.TryParse(properties[i].GetValue(this).ToString(), out double value);
                     if (i != 0)
                     {
-                        htmlData += "<td>";
+                        if (value < 0)
+                        {
+                            htmlData += "<td data-negative>";
+                        }
+                        else
+                        {
+                            htmlData += "<td>";
+                        }
                     }
-                    if (double.TryParse(properties[i].GetValue(this).ToString(), out double value))
+                    if (isDouble)
                     {
+
                         htmlData += value.TruncateToString();
                     }
                     else

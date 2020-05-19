@@ -214,6 +214,7 @@ namespace FinancialStructures.StatsMakers
             {
                 writer.WriteLine("tr:nth-child(even) {background-color: #f0f8ff;}");
                 writer.WriteLine("th{ background-color: #ADD8E6; height: 1.5em; }");
+                writer.WriteLine("[data-negative] { background-color: red;}");
             }
             else
             {
