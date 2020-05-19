@@ -53,10 +53,8 @@ namespace FinancialStructures.NamingStructures
                             return base.Equals(otherName);
                         }
                     }
-                    else
-                    {
-                        return false;
-                    }
+
+                    return false;
                 }
                 if (string.IsNullOrEmpty(Url))
                 {
@@ -67,10 +65,8 @@ namespace FinancialStructures.NamingStructures
                             return base.Equals(otherName);
                         }
                     }
-                    else
-                    {
-                        return false;
-                    }
+
+                    return false;
                 }
                 if (string.IsNullOrEmpty(SectorsFlat))
                 {
@@ -81,10 +77,8 @@ namespace FinancialStructures.NamingStructures
                             return base.Equals(otherName);
                         }
                     }
-                    else
-                    {
-                        return false;
-                    }
+                        
+                    return false;
                 }
                 if (Currency.Equals(otherName.Currency) && Url.Equals(otherName.Url) && SectorsFlat.Equals(otherName.SectorsFlat))
                 {
@@ -97,7 +91,7 @@ namespace FinancialStructures.NamingStructures
 
         public override int GetHashCode()
         {
-            return Currency.GetHashCode() + Url.GetHashCode() + Sectors.GetHashCode() + base.GetHashCode();
+            return Currency == null ? 0 : Currency.GetHashCode() + Url.GetHashCode() + Sectors.GetHashCode() + base.GetHashCode();
         }
 
         /// <summary>
