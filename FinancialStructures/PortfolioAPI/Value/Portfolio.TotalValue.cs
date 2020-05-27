@@ -1,5 +1,5 @@
-﻿using FinancialStructures.FinanceInterfaces;
-using System;
+﻿using System;
+using FinancialStructures.FinanceInterfaces;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -34,7 +34,7 @@ namespace FinancialStructures.PortfolioAPI
                     {
                         if (sec.Any())
                         {
-                            var currency = Currency(portfolio, elementType, sec);
+                            ICurrency currency = Currency(portfolio, elementType, sec);
                             total += sec.Value(date, currency).Value;
                         }
                     }
@@ -50,7 +50,7 @@ namespace FinancialStructures.PortfolioAPI
                     double sum = 0;
                     foreach (ICashAccount acc in portfolio.BankAccounts)
                     {
-                        var currency = Currency(portfolio, elementType, acc);
+                        ICurrency currency = Currency(portfolio, elementType, acc);
                         sum += acc.Value(date, currency).Value;
                     }
 

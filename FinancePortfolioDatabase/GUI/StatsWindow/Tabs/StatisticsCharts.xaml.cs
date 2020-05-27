@@ -12,7 +12,7 @@ namespace FinanceWindows.StatsWindow
         {
             InitializeComponent();
         }
-        private Random rnd = new Random();
+        private readonly Random rnd = new Random();
 
     }
 }

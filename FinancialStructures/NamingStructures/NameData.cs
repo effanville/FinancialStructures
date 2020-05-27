@@ -77,7 +77,7 @@ namespace FinancialStructures.NamingStructures
                             return base.Equals(otherName);
                         }
                     }
-                        
+
                     return false;
                 }
                 if (Currency.Equals(otherName.Currency) && Url.Equals(otherName.Url) && SectorsFlat.Equals(otherName.SectorsFlat))
@@ -205,7 +205,7 @@ namespace FinancialStructures.NamingStructures
                 HashSet<string> sectorList = new HashSet<string>();
                 if (!string.IsNullOrEmpty(value))
                 {
-                    var sectorsSplit = value.Split(',');
+                    string[] sectorsSplit = value.Split(',');
 
                     for (int i = 0; i < sectorsSplit.Length; i++)
                     {

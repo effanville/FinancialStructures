@@ -1,10 +1,10 @@
-﻿using FinancialStructures.DataStructures;
+﻿using System;
+using System.Collections.Generic;
+using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
 using StructureCommon.DataStructures;
 using StructureCommon.FinanceFunctions;
-using System;
-using System.Collections.Generic;
 
 namespace FinancialStructures.Database
 {
@@ -12,8 +12,8 @@ namespace FinancialStructures.Database
     {
         public static DateTime CompanyFirstDate(this IPortfolio portfolio, string company)
         {
-            var output = DateTime.Today;
-            foreach (var sec in portfolio.CompanySecurities(company))
+            DateTime output = DateTime.Today;
+            foreach (ISecurity sec in portfolio.CompanySecurities(company))
             {
                 if (sec.FirstValue().Day < output)
                 {
@@ -28,13 +28,13 @@ namespace FinancialStructures.Database
         {
             double total = 0;
 
-            var securities = portfolio.CompanySecurities(company);
+            List<ISecurity> securities = portfolio.CompanySecurities(company);
             if (securities.Count == 0)
             {
                 return double.NaN;
             }
 
-            foreach (var desired in securities)
+            foreach (ISecurity desired in securities)
             {
                 if (desired.Any())
                 {
@@ -50,10 +50,10 @@ namespace FinancialStructures.Database
         /// </summary>
         public static List<DayValue_Named> CompanyInvestments(this IPortfolio portfolio, string company)
         {
-            var output = new List<DayValue_Named>();
-            foreach (var sec in portfolio.CompanySecurities(company))
+            List<DayValue_Named> output = new List<DayValue_Named>();
+            foreach (ISecurity sec in portfolio.CompanySecurities(company))
             {
-                var currency = PortfolioValues.Currency(portfolio, AccountType.Security, sec);
+                ICurrency currency = PortfolioValues.Currency(portfolio, AccountType.Security, sec);
                 output.AddRange(sec.AllInvestmentsNamed(currency));
             }
 
@@ -65,13 +65,13 @@ namespace FinancialStructures.Database
         /// </summary>
         public static double CompanyProfit(this IPortfolio portfolio, string company)
         {
-            var securities = portfolio.CompanySecurities(company);
+            List<ISecurity> securities = portfolio.CompanySecurities(company);
             double value = 0;
-            foreach (var security in securities)
+            foreach (ISecurity security in securities)
             {
                 if (security.Any())
                 {
-                    var currency = PortfolioValues.Currency(portfolio, AccountType.Security, security);
+                    ICurrency currency = PortfolioValues.Currency(portfolio, AccountType.Security, security);
                     value += security.LatestValue(currency).Value - security.TotalInvestment(currency);
                 }
             }
@@ -94,17 +94,17 @@ namespace FinancialStructures.Database
         {
             DateTime earlierTime = DateTime.Today;
             DateTime laterTime = DateTime.Today;
-            var securities = portfolio.CompanySecurities(company);
+            List<ISecurity> securities = portfolio.CompanySecurities(company);
             if (securities.Count == 0)
             {
                 return double.NaN;
             }
-            foreach (var security in securities)
+            foreach (ISecurity security in securities)
             {
                 if (security.Any())
                 {
-                    var first = security.FirstValue().Day;
-                    var last = security.LatestValue().Day;
+                    DateTime first = security.FirstValue().Day;
+                    DateTime last = security.LatestValue().Day;
                     if (first < earlierTime)
                     {
                         earlierTime = first;
@@ -123,16 +123,16 @@ namespace FinancialStructures.Database
         /// </summary>
         public static double IRRCompany(this IPortfolio portfolio, string company, DateTime earlierTime, DateTime laterTime)
         {
-            var securities = portfolio.CompanySecurities(company);
+            List<ISecurity> securities = portfolio.CompanySecurities(company);
             if (securities.Count == 0)
             {
                 return double.NaN;
             }
             double earlierValue = 0;
             double laterValue = 0;
-            var Investments = new List<DailyValuation>();
+            List<DailyValuation> Investments = new List<DailyValuation>();
 
-            foreach (var security in securities)
+            foreach (ISecurity security in securities)
             {
                 if (security.Any())
                 {

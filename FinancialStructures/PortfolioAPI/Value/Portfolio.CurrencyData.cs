@@ -14,7 +14,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 case (AccountType.Security):
                 {
-                    var currencyName = ((ISecurity)account).Currency;
+                    string currencyName = ((ISecurity)account).Currency;
                     ICurrency currency = portfolio.Currencies.Find(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == portfolio.BaseCurrency);
                     if (currency != null)
                     {
@@ -29,7 +29,7 @@ namespace FinancialStructures.PortfolioAPI
                 }
                 case (AccountType.BankAccount):
                 {
-                    var currencyName = ((ICashAccount)account).Currency;
+                    string currencyName = ((ICashAccount)account).Currency;
                     ICurrency currency = portfolio.Currencies.Find(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == portfolio.BaseCurrency);
                     if (currency != null)
                     {

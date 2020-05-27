@@ -36,7 +36,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 case (AccountType.Security):
                 {
-                    var toAdd = new Security(name);
+                    Security toAdd = new Security(name);
                     toAdd.DataEdit += portfolio.OnPortfolioChanged;
                     portfolio.Funds.Add(toAdd);
                     portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());
@@ -48,7 +48,7 @@ namespace FinancialStructures.PortfolioAPI
                     {
                         name.Company = "GBP";
                     }
-                    var toAdd = new Currency(name);
+                    Currency toAdd = new Currency(name);
                     toAdd.DataEdit += portfolio.OnPortfolioChanged;
                     portfolio.Currencies.Add(toAdd);
                     portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());
@@ -56,7 +56,7 @@ namespace FinancialStructures.PortfolioAPI
                 }
                 case (AccountType.BankAccount):
                 {
-                    var toAdd = new CashAccount(name);
+                    CashAccount toAdd = new CashAccount(name);
                     toAdd.DataEdit += portfolio.OnPortfolioChanged;
                     portfolio.BankAccounts.Add(toAdd);
                     portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());
@@ -64,7 +64,7 @@ namespace FinancialStructures.PortfolioAPI
                 }
                 case (AccountType.Sector):
                 {
-                    var toAdd = new Sector(name);
+                    Sector toAdd = new Sector(name);
                     toAdd.DataEdit += portfolio.OnPortfolioChanged;
                     portfolio.BenchMarks.Add(toAdd);
                     portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());

@@ -1,6 +1,6 @@
-﻿using FinancialStructures.FinanceInterfaces;
-using System;
+﻿using System;
 using System.Linq;
+using FinancialStructures.FinanceInterfaces;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -20,13 +20,13 @@ namespace FinancialStructures.PortfolioAPI
             {
                 case (AccountType.Security):
                 {
-                    var securities = portfolio.CompanySecurities(company);
+                    System.Collections.Generic.List<ISecurity> securities = portfolio.CompanySecurities(company);
                     double value = 0;
-                    foreach (var security in securities)
+                    foreach (ISecurity security in securities)
                     {
                         if (security.Any())
                         {
-                            var currency = Currency(portfolio, AccountType.Security, security);
+                            ICurrency currency = Currency(portfolio, AccountType.Security, security);
                             value += security.Value(date, currency).Value;
                         }
                     }
@@ -39,17 +39,17 @@ namespace FinancialStructures.PortfolioAPI
                 }
                 case (AccountType.BankAccount):
                 {
-                    var bankAccounts = portfolio.CompanyBankAccounts(company);
+                    System.Collections.Generic.List<ICashAccount> bankAccounts = portfolio.CompanyBankAccounts(company);
                     if (bankAccounts.Count() == 0)
                     {
                         return double.NaN;
                     }
                     double value = 0;
-                    foreach (var account in bankAccounts)
+                    foreach (ICashAccount account in bankAccounts)
                     {
                         if (account != null && account.Any())
                         {
-                            var currency = Currency(portfolio, AccountType.BankAccount, account);
+                            ICurrency currency = Currency(portfolio, AccountType.BankAccount, account);
                             value += account.NearestEarlierValuation(date, currency).Value;
                         }
                     }

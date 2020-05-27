@@ -1,10 +1,10 @@
-﻿using FinancialStructures.FinanceInterfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Input;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using StructureCommon.Reporting;
-using System;
-using System.Collections.Generic;
-using System.Windows.Input;
 using UICommon.Commands;
 using UICommon.ViewModelBases;
 
@@ -117,7 +117,7 @@ namespace FinanceCommonViewModels
         public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)
         {
             base.UpdateData(portfolio);
-            var currentSelectedName = SelectedName;
+            NameCompDate currentSelectedName = SelectedName;
             DataNames = portfolio.NameData(TypeOfAccount);
             DataNames.Sort();
 
@@ -150,7 +150,7 @@ namespace FinanceCommonViewModels
         {
             if (SelectedName != null)
             {
-                NameData names = SelectedName as NameData;
+                NameData names = SelectedName;
                 UpdateDataCallback(async programPortfolio => await PortfolioDataUpdater.DownloadOfType(TypeOfAccount, programPortfolio, names, ReportLogger).ConfigureAwait(false));
             }
         }

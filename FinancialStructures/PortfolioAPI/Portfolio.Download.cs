@@ -1,10 +1,10 @@
-﻿using FinancialStructures.FinanceInterfaces;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using StructureCommon.Reporting;
 using StructureCommon.WebAccess;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -32,7 +32,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 case (AccountType.Security):
                 {
-                    _ = portfolio.TryGetSecurity(names, out var sec);
+                    _ = portfolio.TryGetSecurity(names, out ISecurity sec);
                     await DownloadLatestValue(sec.Names, value => sec.UpdateSecurityData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
                     break;
                 }
@@ -40,15 +40,15 @@ namespace FinancialStructures.PortfolioAPI
                 case (AccountType.Currency):
                 case (AccountType.Sector):
                 {
-                    _ = portfolio.TryGetAccount(accountType, names, out var acc);
+                    _ = portfolio.TryGetAccount(accountType, names, out ISingleValueDataList acc);
                     await DownloadLatestValue(acc.Names, value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
                     break;
                 }
             }
         }
 
-        private static string Pence = "GBX";
-        private static string Pounds = "GBP";
+        private static readonly string Pence = "GBX";
+        private static readonly string Pounds = "GBP";
 
         private static WebsiteType AddressType(string address)
         {
@@ -168,9 +168,9 @@ namespace FinancialStructures.PortfolioAPI
             {
                 string containsNewValue = data.Substring(Pence.Length + penceValue, 20);
 
-                var digits = containsNewValue.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
+                char[] digits = containsNewValue.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
 
-                var str = new string(digits);
+                string str = new string(digits);
                 if (string.IsNullOrEmpty(str))
                 {
                     return double.NaN;
@@ -184,9 +184,9 @@ namespace FinancialStructures.PortfolioAPI
             if (poundsValue != -1)
             {
                 string containsNewValue = data.Substring(searchName.Length + poundsValue, 20);
-                var digits = containsNewValue.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
+                char[] digits = containsNewValue.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
 
-                var str = new string(digits);
+                string str = new string(digits);
                 if (string.IsNullOrEmpty(str))
                 {
                     return double.NaN;
@@ -217,9 +217,9 @@ namespace FinancialStructures.PortfolioAPI
             {
                 string containsNewValue = data.Substring(poundsValue + searchString.Length, 20);
 
-                var digits = containsNewValue.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
+                char[] digits = containsNewValue.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
 
-                var str = new string(digits);
+                string str = new string(digits);
                 if (string.IsNullOrEmpty(str))
                 {
                     return double.NaN;
@@ -252,9 +252,9 @@ namespace FinancialStructures.PortfolioAPI
             {
                 string containsNewValue = data.Substring(poundsValue + searchString.Length, 200);
 
-                var digits = containsNewValue.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
+                char[] digits = containsNewValue.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
 
-                var str = new string(digits);
+                string str = new string(digits);
                 if (string.IsNullOrEmpty(str))
                 {
                     return double.NaN;
@@ -268,9 +268,9 @@ namespace FinancialStructures.PortfolioAPI
             {
                 string containsNewValue = data.Substring(penceValue + searchString.Length, 200);
 
-                var digits = containsNewValue.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
+                char[] digits = containsNewValue.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
 
-                var str = new string(digits);
+                string str = new string(digits);
                 if (string.IsNullOrEmpty(str))
                 {
                     return double.NaN;

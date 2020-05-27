@@ -1,9 +1,9 @@
-﻿using FinancialStructures.NamingStructures;
+﻿using System;
+using System.Collections.Generic;
+using FinancialStructures.NamingStructures;
 using FinancialStructures.StatsMakers;
 using StructureCommon.DataStructures;
 using StructureCommon.Extensions;
-using System;
-using System.Collections.Generic;
 
 namespace FinancialStructures.DataStructures
 {
@@ -21,9 +21,9 @@ namespace FinancialStructures.DataStructures
 
         public string HTMLTableHeader(UserOptions options, List<string> names)
         {
-            var properties = GetType().GetProperties();
+            System.Reflection.PropertyInfo[] properties = GetType().GetProperties();
             string htmlHeader = string.Empty;
-            foreach (var property in properties)
+            foreach (System.Reflection.PropertyInfo property in properties)
             {
                 if (names.Contains(property.Name))
                 {
@@ -38,7 +38,7 @@ namespace FinancialStructures.DataStructures
 
         public string HTMLTableData(UserOptions options, List<string> names)
         {
-            var properties = GetType().GetProperties();
+            System.Reflection.PropertyInfo[] properties = GetType().GetProperties();
             string htmlData = "<th scope=\"row\">";
 
             for (int i = 0; i < properties.Length; i++)

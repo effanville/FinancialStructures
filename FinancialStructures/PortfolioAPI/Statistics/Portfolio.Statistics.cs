@@ -1,11 +1,11 @@
-﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.StatisticStructures;
-using StructureCommon.DataStructures;
-using StructureCommon.FinanceFunctions;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.StatisticStructures;
+using StructureCommon.DataStructures;
+using StructureCommon.FinanceFunctions;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -13,7 +13,7 @@ namespace FinancialStructures.PortfolioAPI
     {
         public static int LongestName(this IPortfolio portfolio)
         {
-            var names = portfolio.Names(AccountType.Security);
+            List<string> names = portfolio.Names(AccountType.Security);
             if (names.Any())
             {
                 return names.Max().Length;
@@ -23,7 +23,7 @@ namespace FinancialStructures.PortfolioAPI
 
         public static int LongestCompany(this IPortfolio portfolio)
         {
-            var companies = portfolio.Companies(AccountType.Security);
+            List<string> companies = portfolio.Companies(AccountType.Security);
             companies.Sort();
             if (companies != null)
             {
@@ -37,13 +37,13 @@ namespace FinancialStructures.PortfolioAPI
         /// </summary>
         public static DateTime FirstValueDate(this IPortfolio portfolio)
         {
-            var output = DateTime.Today;
+            DateTime output = DateTime.Today;
             foreach (ISecurity sec in portfolio.Funds)
             {
                 if (sec.Any())
                 {
                     ICurrency currency = portfolio.Currencies.Find(cur => cur.Name == sec.Currency);
-                    var securityEarliest = sec.FirstValue(currency).Day;
+                    DateTime securityEarliest = sec.FirstValue(currency).Day;
                     if (securityEarliest < output)
                     {
                         output = securityEarliest;
@@ -99,7 +99,7 @@ namespace FinancialStructures.PortfolioAPI
             }
             double earlierValue = 0;
             double laterValue = 0;
-            var Investments = new List<DailyValuation>();
+            List<DailyValuation> Investments = new List<DailyValuation>();
 
             foreach (ISecurity security in portfolio.Funds)
             {
@@ -125,7 +125,7 @@ namespace FinancialStructures.PortfolioAPI
 
         public static List<DatabaseStatistics> GenerateDatabaseStatistics(this IPortfolio portfolio)
         {
-            var names = new List<DatabaseStatistics>();
+            List<DatabaseStatistics> names = new List<DatabaseStatistics>();
             foreach (ISecurity sec in portfolio.Funds)
             {
                 names.Add(new DatabaseStatistics(sec.Company, sec.Name, sec.FirstValue().Day, sec.LatestValue().Day, sec.Count(), (sec.LatestValue().Day - sec.FirstValue().Day).Days / (365 * (double)sec.Count())));
@@ -140,8 +140,8 @@ namespace FinancialStructures.PortfolioAPI
 
         public static async Task<List<PortfolioDaySnapshot>> GenerateHistoryStats(this IPortfolio portfolio, int daysGap)
         {
-            var outputs = new List<PortfolioDaySnapshot>();
-            var calculationDate = portfolio.FirstValueDate();
+            List<PortfolioDaySnapshot> outputs = new List<PortfolioDaySnapshot>();
+            DateTime calculationDate = portfolio.FirstValueDate();
             await Task.Run(() => BackGroundTask(calculationDate, portfolio, outputs, daysGap));
             return outputs;
         }
@@ -150,13 +150,13 @@ namespace FinancialStructures.PortfolioAPI
         {
             while (calculationDate < DateTime.Today)
             {
-                var calcuationDateStatistics = new PortfolioDaySnapshot(calculationDate, portfolio);
+                PortfolioDaySnapshot calcuationDateStatistics = new PortfolioDaySnapshot(calculationDate, portfolio);
                 outputs.Add(calcuationDateStatistics);
                 calculationDate = calculationDate.AddDays(daysGap);
             }
             if (calculationDate == DateTime.Today)
             {
-                var calcuationDateStatistics = new PortfolioDaySnapshot(calculationDate, portfolio);
+                PortfolioDaySnapshot calcuationDateStatistics = new PortfolioDaySnapshot(calculationDate, portfolio);
                 outputs.Add(calcuationDateStatistics);
             }
         }

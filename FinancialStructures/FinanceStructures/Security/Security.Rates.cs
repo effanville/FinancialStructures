@@ -1,9 +1,9 @@
-﻿using FinancialStructures.DataStructures;
+﻿using System;
+using System.Collections.Generic;
+using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using StructureCommon.DataStructures;
 using StructureCommon.FinanceFunctions;
-using System;
-using System.Collections.Generic;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -11,9 +11,9 @@ namespace FinancialStructures.FinanceStructures
     {
         public double TotalInvestment(ICurrency currency = null)
         {
-            var investments = InvestmentsBetween(FirstValue().Day, LatestValue().Day, currency);
+            List<DailyValuation> investments = InvestmentsBetween(FirstValue().Day, LatestValue().Day, currency);
             double sum = 0;
-            foreach (var investment in investments)
+            foreach (DailyValuation investment in investments)
             {
                 sum += investment.Value;
             }
@@ -29,7 +29,6 @@ namespace FinancialStructures.FinanceStructures
             if (latestDate == null)
             {
                 return new DailyValuation(DateTime.Today, 0.0);
-                ;
             }
 
             double currencyValue = currency == null ? 1.0 : currency.Value(latestDate.Day).Value;
@@ -120,7 +119,7 @@ namespace FinancialStructures.FinanceStructures
         public List<DailyValuation> InvestmentsBetween(DateTime earlierDate, DateTime laterDate, ICurrency currency = null)
         {
             List<DailyValuation> values = fInvestments.GetValuesBetween(earlierDate, laterDate);
-            foreach (var value in values)
+            foreach (DailyValuation value in values)
             {
                 double currencyValue = currency == null ? 1.0 : currency.Value(value.Day).Value;
                 value.SetValue(value.Value * currencyValue);
@@ -136,7 +135,7 @@ namespace FinancialStructures.FinanceStructures
         {
             List<DailyValuation> values = fInvestments.GetValuesBetween(fInvestments.FirstDate(), fInvestments.LatestDate());
             List<DayValue_Named> namedValues = new List<DayValue_Named>();
-            foreach (var value in values)
+            foreach (DailyValuation value in values)
             {
                 if (value != null && value.Value != 0)
                 {
@@ -163,9 +162,9 @@ namespace FinancialStructures.FinanceStructures
         {
             if (Any())
             {
-                var invs = InvestmentsBetween(earlierDate, laterDate, currency);
-                var latestTime = Value(laterDate, currency);
-                var firstTime = Value(earlierDate, currency);
+                List<DailyValuation> invs = InvestmentsBetween(earlierDate, laterDate, currency);
+                DailyValuation latestTime = Value(laterDate, currency);
+                DailyValuation firstTime = Value(earlierDate, currency);
                 return FinancialFunctions.IRRTime(firstTime, invs, latestTime);
             }
             return double.NaN;

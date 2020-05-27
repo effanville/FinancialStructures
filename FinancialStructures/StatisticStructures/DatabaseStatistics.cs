@@ -1,5 +1,5 @@
-﻿using FinancialStructures.NamingStructures;
-using System;
+﻿using System;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.StatisticStructures
 {

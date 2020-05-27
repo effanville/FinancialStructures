@@ -1,10 +1,10 @@
-﻿using FinancialStructures.Database;
+﻿using System;
+using System.Collections.Generic;
+using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.StatisticStructures;
-using System;
-using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -18,11 +18,11 @@ namespace FinancialStructures.PortfolioAPI
         {
             if (portfolio != null)
             {
-                var namesAndCompanies = new List<SecurityStatistics>();
+                List<SecurityStatistics> namesAndCompanies = new List<SecurityStatistics>();
 
                 foreach (ISecurity security in portfolio.Funds)
                 {
-                    var latest = new SecurityStatistics(StatisticsType.Individual, security.Names);
+                    SecurityStatistics latest = new SecurityStatistics(StatisticsType.Individual, security.Names);
                     portfolio.AddSecurityStats(latest, DateTime.Today);
                     if ((DisplayValueFunds && latest.LatestVal > 0) || !DisplayValueFunds)
                     {
@@ -31,7 +31,7 @@ namespace FinancialStructures.PortfolioAPI
                 }
                 namesAndCompanies.Sort();
 
-                var totals = new SecurityStatistics(StatisticsType.PortfolioTotal, new TwoName(string.Empty, "Totals"));
+                SecurityStatistics totals = new SecurityStatistics(StatisticsType.PortfolioTotal, new TwoName(string.Empty, "Totals"));
                 portfolio.AddSecurityStats(totals, DateTime.Today);
                 if ((DisplayValueFunds && totals.LatestVal > 0) || !DisplayValueFunds)
                 {
@@ -47,7 +47,7 @@ namespace FinancialStructures.PortfolioAPI
         {
             if (portfolio != null)
             {
-                var totals = new SecurityStatistics(StatisticsType.CompanyTotal, new TwoName(company, "Totals"));
+                SecurityStatistics totals = new SecurityStatistics(StatisticsType.CompanyTotal, new TwoName(company, "Totals"));
                 portfolio.AddSecurityStats(totals, DateTime.Today);
                 return totals;
             }
@@ -58,7 +58,7 @@ namespace FinancialStructures.PortfolioAPI
         {
             if (portfolio != null)
             {
-                var totals = new SecurityStatistics(StatisticsType.PortfolioTotal, new TwoName(string.Empty, "Totals"));
+                SecurityStatistics totals = new SecurityStatistics(StatisticsType.PortfolioTotal, new TwoName(string.Empty, "Totals"));
                 portfolio.AddSecurityStats(totals, DateTime.Today);
                 return totals;
             }
@@ -73,13 +73,13 @@ namespace FinancialStructures.PortfolioAPI
         {
             if (portfolio != null)
             {
-                var namesAndCompanies = new List<SecurityStatistics>();
+                List<SecurityStatistics> namesAndCompanies = new List<SecurityStatistics>();
 
                 foreach (ISecurity security in portfolio.Funds)
                 {
                     if (security.Company == company)
                     {
-                        var latest = new SecurityStatistics(StatisticsType.Individual, security.Names);
+                        SecurityStatistics latest = new SecurityStatistics(StatisticsType.Individual, security.Names);
                         portfolio.AddSecurityStats(latest, DateTime.Today);
                         namesAndCompanies.Add(latest);
                     }
@@ -88,7 +88,7 @@ namespace FinancialStructures.PortfolioAPI
                 namesAndCompanies.Sort();
                 if (namesAndCompanies.Count > 1)
                 {
-                    var totals = new SecurityStatistics(StatisticsType.CompanyTotal, new TwoName(company, "Totals"));
+                    SecurityStatistics totals = new SecurityStatistics(StatisticsType.CompanyTotal, new TwoName(company, "Totals"));
                     portfolio.AddSecurityStats(totals, DateTime.Today);
                     namesAndCompanies.Add(totals);
                 }
@@ -106,7 +106,7 @@ namespace FinancialStructures.PortfolioAPI
         {
             if (portfolio != null)
             {
-                var totals = new SecurityStatistics(StatisticsType.SectorTotal, new TwoName("Totals", sectorName));
+                SecurityStatistics totals = new SecurityStatistics(StatisticsType.SectorTotal, new TwoName("Totals", sectorName));
                 portfolio.AddSectorStats(totals, DateTime.Today);
                 return totals;
             }
@@ -123,8 +123,8 @@ namespace FinancialStructures.PortfolioAPI
             {
                 if (desired.Any())
                 {
-                    var currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
-                    var needed = desired.LatestValue(currency);
+                    ICurrency currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
+                    StructureCommon.DataStructures.DailyValuation needed = desired.LatestValue(currency);
                     if (needed.Value > 0)
                     {
                         return needed.Value - desired.LastEarlierValuation(needed.Day, currency).Value;
@@ -146,7 +146,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 if (desired.Any())
                 {
-                    var currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
+                    ICurrency currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
                     return desired.LatestValue(currency).Value - desired.TotalInvestment(currency);
                 }
             }
@@ -163,7 +163,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 if (desired.Any())
                 {
-                    var currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
+                    ICurrency currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
                     return desired.Value(date, currency).Value / portfolio.TotalValue(AccountType.Security, date);
                 }
             }
@@ -188,7 +188,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 if (desired.Any())
                 {
-                    var currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
+                    ICurrency currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
                     return desired.AllInvestmentsNamed(currency);
                 }
             }
@@ -205,7 +205,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 if (desired.Any())
                 {
-                    var currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
+                    ICurrency currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
                     return desired.IRR(currency);
                 }
             }
@@ -222,7 +222,7 @@ namespace FinancialStructures.PortfolioAPI
             {
                 if (desired.Any())
                 {
-                    var currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
+                    ICurrency currency = PortfolioValues.Currency(portfolio, AccountType.Security, desired);
                     return desired.IRRTime(earlierTime, laterTime, currency);
                 }
             }
@@ -235,10 +235,10 @@ namespace FinancialStructures.PortfolioAPI
         /// </summary>
         public static List<DayValue_Named> AllSecuritiesInvestments(this IPortfolio portfolio)
         {
-            var output = new List<DayValue_Named>();
-            var companies = portfolio.Companies(AccountType.Security);
+            List<DayValue_Named> output = new List<DayValue_Named>();
+            List<string> companies = portfolio.Companies(AccountType.Security);
             companies.Sort();
-            foreach (var comp in companies)
+            foreach (string comp in companies)
             {
                 output.AddRange(portfolio.CompanyInvestments(comp));
             }

@@ -1,6 +1,6 @@
-﻿using StructureCommon.DataStructures;
+﻿using System;
+using StructureCommon.DataStructures;
 using StructureCommon.FinanceFunctions;
-using System;
 
 namespace FinancialStructures.FinanceStructures
 {

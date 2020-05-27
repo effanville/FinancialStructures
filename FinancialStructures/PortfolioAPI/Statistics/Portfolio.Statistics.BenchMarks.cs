@@ -1,6 +1,6 @@
-﻿using FinancialStructures.FinanceInterfaces;
+﻿using System;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.StatisticStructures;
-using System;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -13,7 +13,7 @@ namespace FinancialStructures.PortfolioAPI
         {
             if (portfolio != null)
             {
-                var totals = new SecurityStatistics(StatisticsType.BenchMarkTotal, new NamingStructures.TwoName("BenchMark", sectorName));
+                SecurityStatistics totals = new SecurityStatistics(StatisticsType.BenchMarkTotal, new NamingStructures.TwoName("BenchMark", sectorName));
                 portfolio.AddSectorStats(totals, DateTime.Today);
                 return totals;
             }

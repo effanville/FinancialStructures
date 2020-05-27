@@ -1,7 +1,7 @@
-﻿using FinancialStructures.FinanceInterfaces;
+﻿using System;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
-using System;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -100,7 +100,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public DailyValuation NearestEarlierValuation(DateTime date, ICurrency currency = null)
         {
-            var value = Values.NearestEarlierValue(date);
+            DailyValuation value = Values.NearestEarlierValue(date);
             double currencyValue = currency == null ? 1.0 : currency.Value(value.Day).Value;
             value.SetValue(value.Value * currencyValue);
             return value;

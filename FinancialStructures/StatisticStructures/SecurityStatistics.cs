@@ -1,11 +1,11 @@
-﻿using FinancialStructures.Database;
+﻿using System;
+using System.Collections.Generic;
+using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.StatsMakers;
 using StructureCommon.Extensions;
-using System;
-using System.Collections.Generic;
 
 namespace FinancialStructures.StatisticStructures
 {
@@ -32,7 +32,7 @@ namespace FinancialStructures.StatisticStructures
             }
             else if (securityStats.StatsType == StatisticsType.CompanyTotal)
             {
-                var company = securityStats.Names.Company;
+                string company = securityStats.Names.Company;
                 securityStats.LatestVal = portfolio.CompanyValue(AccountType.Security, company, date).Truncate();
                 securityStats.RecentChange = portfolio.CompanyRecentChange(company).Truncate();
                 securityStats.FundsFraction = portfolio.CompanyFraction(company, date).Truncate(4);
@@ -68,7 +68,7 @@ namespace FinancialStructures.StatisticStructures
         {
             if (securityStats.StatsType == StatisticsType.BenchMarkTotal)
             {
-                _ = portfolio.TryGetAccount(AccountType.Sector, securityStats.Names, out var chosenSector);
+                _ = portfolio.TryGetAccount(AccountType.Sector, securityStats.Names, out ISingleValueDataList chosenSector);
                 if (chosenSector != null)
                 {
                     securityStats.LatestVal = chosenSector.LatestValue().Value.Truncate();
@@ -85,7 +85,7 @@ namespace FinancialStructures.StatisticStructures
             }
             else
             {
-                var name = securityStats.Names.Name;
+                string name = securityStats.Names.Name;
                 securityStats.LatestVal = portfolio.SectorValue(name, date).Truncate();
                 securityStats.FundsFraction = portfolio.SectorFraction(name, date).Truncate(4);
                 securityStats.FundCompanyFraction = 0.0;
@@ -110,7 +110,7 @@ namespace FinancialStructures.StatisticStructures
         /// </summary>
         public string HtmlTableData(UserOptions options, List<string> names)
         {
-            var properties = GetType().GetProperties();
+            System.Reflection.PropertyInfo[] properties = GetType().GetProperties();
             string htmlData = "<th scope=\"row\">";
 
             for (int i = 0; i < properties.Length; i++)
@@ -145,9 +145,9 @@ namespace FinancialStructures.StatisticStructures
         /// <returns></returns>
         public string HtmlTableHeader(UserOptions options, List<string> names)
         {
-            var properties = GetType().GetProperties();
+            System.Reflection.PropertyInfo[] properties = GetType().GetProperties();
             string htmlHeader = string.Empty;
-            foreach (var property in properties)
+            foreach (System.Reflection.PropertyInfo property in properties)
             {
                 if (names.Contains(property.Name))
                 {

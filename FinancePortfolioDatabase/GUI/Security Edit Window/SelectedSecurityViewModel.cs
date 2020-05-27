@@ -1,13 +1,13 @@
-﻿using FinancialStructures.DataStructures;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Input;
+using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using StructureCommon.DataStructures;
 using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
-using System;
-using System.Collections.Generic;
-using System.Windows.Input;
 using UICommon.Commands;
 using UICommon.Services;
 using UICommon.ViewModelBases;
@@ -112,7 +112,7 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null)
             {
-                var result = fFileService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
+                FileInteractionResult result = fFileService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
                 List<object> outputs = null;
                 bool exists = DataStore.TryGetSecurity(fSelectedName, out ISecurity security);
                 if (result.Success != null && (bool)result.Success && exists)
@@ -121,7 +121,7 @@ namespace FinanceWindowsViewModels
                 }
                 if (outputs != null)
                 {
-                    foreach (var objec in outputs)
+                    foreach (object objec in outputs)
                     {
                         if (objec is SecurityDayData view)
                         {
@@ -145,10 +145,10 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null)
             {
-                var result = fFileService.SaveFile("csv", string.Empty, DataStore.Directory, "Csv Files|*.csv|All Files|*.*");
+                FileInteractionResult result = fFileService.SaveFile("csv", string.Empty, DataStore.Directory, "Csv Files|*.csv|All Files|*.*");
                 if (result.Success != null && (bool)result.Success)
                 {
-                    if (DataStore.TryGetSecurity(fSelectedName, out var security))
+                    if (DataStore.TryGetSecurity(fSelectedName, out ISecurity security))
                     {
                         CsvReaderWriter.WriteToCSVFile(security, result.FilePath, ReportLogger);
                     }
@@ -169,7 +169,7 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null)
             {
-                DataStore.TryGetSecurity(fSelectedName, out var desired);
+                DataStore.TryGetSecurity(fSelectedName, out ISecurity desired);
                 if (desired.Count() != SelectedSecurityData.Count)
                 {
                     UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(fSelectedName, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment, ReportLogger));

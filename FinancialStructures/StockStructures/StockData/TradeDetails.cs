@@ -9,15 +9,15 @@ namespace FinancialStructures.StockData
     }
     public class TradeDetails
     {
-        private string fTicker;
-        private string fName;
-        private string fCompany;
-        private DateTime fDay;
-        private double fTransactionValue;
-        private double fNumberSharesTraded;
-        private double fPricePerShare;
-        private double fTradeCosts;
-        private TradeType fTradeType;
+        private readonly string fTicker;
+        private readonly string fName;
+        private readonly string fCompany;
+        private readonly DateTime fDay;
+        private readonly double fTransactionValue;
+        private readonly double fNumberSharesTraded;
+        private readonly double fPricePerShare;
+        private readonly double fTradeCosts;
+        private readonly TradeType fTradeType;
 
         public TradeDetails()
         {

@@ -1,6 +1,6 @@
-﻿using FinancialStructures.FinanceInterfaces;
+﻿using System;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using System;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -36,7 +36,7 @@ namespace FinancialStructures.PortfolioAPI
                     {
                         return double.NaN;
                     }
-                    var currency = Currency(portfolio, AccountType.Security, desired);
+                    ICurrency currency = Currency(portfolio, AccountType.Security, desired);
                     return desired.Value(date, currency).Value;
                 }
                 case (AccountType.Currency):
@@ -53,7 +53,7 @@ namespace FinancialStructures.PortfolioAPI
                 }
                 case (AccountType.BankAccount):
                 {
-                    if (!portfolio.TryGetAccount(AccountType.BankAccount, name, out var desired))
+                    if (!portfolio.TryGetAccount(AccountType.BankAccount, name, out ISingleValueDataList desired))
                     {
                         return double.NaN;
                     }

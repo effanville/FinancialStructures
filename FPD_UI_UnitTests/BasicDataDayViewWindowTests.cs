@@ -1,8 +1,8 @@
-﻿using FinanceWindowsViewModels;
+﻿using System.Linq;
+using FinanceWindowsViewModels;
 using FinancialStructures.Database;
 using FPD_UI_UnitTests.TestConstruction;
 using NUnit.Framework;
-using System.Linq;
 
 namespace FPD_UI_UnitTests
 {
@@ -17,7 +17,7 @@ namespace FPD_UI_UnitTests
         [Test]
         public void CanViewData()
         {
-            var viewModel = new BasicDataViewModel(TestingGUICode.CreateBasicDataBase());
+            BasicDataViewModel viewModel = new BasicDataViewModel(TestingGUICode.CreateBasicDataBase());
 
             Assert.AreEqual(1, viewModel.FundNames.Count);
             Assert.AreEqual("China", viewModel.FundNames.Single().Name);
@@ -38,8 +38,8 @@ namespace FPD_UI_UnitTests
         public void CanUpdateData()
         {
             // Setup basic data in the display.
-            var portfolio = new Portfolio();
-            var viewModel = new BasicDataViewModel(portfolio);
+            Portfolio portfolio = new Portfolio();
+            BasicDataViewModel viewModel = new BasicDataViewModel(portfolio);
 
             // Now update that data.
             TestingGUICode.UpdatePortfolio(portfolio);

@@ -1,11 +1,11 @@
-﻿using FinancialStructures.Database;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.StatisticStructures;
-using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace FinancialStructures.StatsMakers
 {
@@ -38,7 +38,7 @@ namespace FinancialStructures.StatsMakers
                     portfolio.GenerateBenchMarkStatistics(sectorName)
                 };
                 int linesWritten = 0;
-                foreach (var value in valuesToWrite)
+                foreach (SecurityStatistics value in valuesToWrite)
                 {
                     if ((options.DisplayValueFunds && value.LatestVal > 0) || !options.DisplayValueFunds)
                     {
@@ -97,7 +97,7 @@ namespace FinancialStructures.StatsMakers
                 htmlWriter.WriteLine("<h2>Funds Data</h2>");
                 htmlWriter.WriteLine("<table>");
                 htmlWriter.WriteLine("<thead><tr>");
-                var totals = portfolio.GeneratePortfolioStatistics();
+                SecurityStatistics totals = portfolio.GeneratePortfolioStatistics();
 
                 htmlWriter.WriteLine(totals.HtmlTableHeader(options, options.SecurityDataToExport));
                 htmlWriter.WriteLine("</tr></thead>");
@@ -106,9 +106,9 @@ namespace FinancialStructures.StatsMakers
                 companies.Sort();
                 foreach (string compName in companies)
                 {
-                    var securities = portfolio.GenerateCompanyFundsStatistics(compName);
+                    List<SecurityStatistics> securities = portfolio.GenerateCompanyFundsStatistics(compName);
                     int linesWritten = 0;
-                    foreach (var sec in securities)
+                    foreach (SecurityStatistics sec in securities)
                     {
                         if ((options.DisplayValueFunds && sec.LatestVal > 0) || !options.DisplayValueFunds)
                         {
@@ -153,9 +153,9 @@ namespace FinancialStructures.StatsMakers
                 BankCompanies.Sort();
                 foreach (string compName in BankCompanies)
                 {
-                    var bankAccounts = portfolio.GenerateCompanyBankAccountStatistics(compName, options.DisplayValueFunds);
+                    List<DayValue_Named> bankAccounts = portfolio.GenerateCompanyBankAccountStatistics(compName, options.DisplayValueFunds);
                     int linesWritten = 0;
-                    foreach (var acc in bankAccounts)
+                    foreach (DayValue_Named acc in bankAccounts)
                     {
                         if ((options.DisplayValueFunds && acc.Value > 0) || !options.DisplayValueFunds)
                         {

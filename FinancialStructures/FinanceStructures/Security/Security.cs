@@ -1,8 +1,8 @@
-﻿using FinancialStructures.FinanceInterfaces;
+﻿using System;
+using System.Collections.Generic;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
-using System;
-using System.Collections.Generic;
 
 namespace FinancialStructures.FinanceStructures
 {

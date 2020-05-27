@@ -1,11 +1,11 @@
-﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
-using StructureCommon.Reporting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.NamingStructures;
+using FinancialStructures.PortfolioAPI;
+using StructureCommon.Reporting;
 using UICommon.Services;
 using UICommon.ViewModelBases;
 
@@ -13,7 +13,7 @@ namespace FinanceCommonViewModels
 {
     internal class SingleValueEditWindowViewModel : ViewModelBase<IPortfolio>
     {
-        private AccountType TypeOfAccount;
+        private readonly AccountType TypeOfAccount;
         public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
 
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
@@ -39,7 +39,7 @@ namespace FinanceCommonViewModels
             List<object> removableTabs = new List<object>();
             if (Tabs != null)
             {
-                foreach (var item in Tabs)
+                foreach (object item in Tabs)
                 {
                     if (item is TabViewModelBase<IPortfolio> viewModel)
                     {
@@ -49,7 +49,7 @@ namespace FinanceCommonViewModels
 
                 if (removableTabs.Any())
                 {
-                    foreach (var tab in removableTabs)
+                    foreach (object tab in removableTabs)
                     {
                         _ = Tabs.Remove(tab);
                     }

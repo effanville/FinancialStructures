@@ -1,13 +1,13 @@
-﻿using FinancialStructures.FinanceInterfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Input;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using StructureCommon.DataStructures;
 using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Input;
 using UICommon.Commands;
 using UICommon.Services;
 using UICommon.ViewModelBases;
@@ -16,7 +16,7 @@ namespace FinanceCommonViewModels
 {
     internal class SelectedSingleDataViewModel : TabViewModelBase<IPortfolio>
     {
-        private AccountType TypeOfAccount;
+        private readonly AccountType TypeOfAccount;
 
         public override bool Closable
         {
@@ -185,9 +185,9 @@ namespace FinanceCommonViewModels
         {
             if (fSelectedName != null)
             {
-                var result = fFileService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
+                FileInteractionResult result = fFileService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
                 List<object> outputs = null;
-                bool exists = DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out var account);
+                bool exists = DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out ISingleValueDataList account);
                 if (result.Success != null && (bool)result.Success && exists)
                 {
                     outputs = CsvReaderWriter.ReadFromCsv(account, result.FilePath, ReportLogger);
@@ -218,10 +218,10 @@ namespace FinanceCommonViewModels
         {
             if (fSelectedName != null)
             {
-                var result = fFileService.SaveFile("csv", string.Empty, DataStore.Directory, "Csv Files|*.csv|All Files|*.*");
+                FileInteractionResult result = fFileService.SaveFile("csv", string.Empty, DataStore.Directory, "Csv Files|*.csv|All Files|*.*");
                 if (result.Success != null && (bool)result.Success)
                 {
-                    if (DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out var account))
+                    if (DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out ISingleValueDataList account))
                     {
                         CsvReaderWriter.WriteToCSVFile(account, result.FilePath, ReportLogger);
                     }

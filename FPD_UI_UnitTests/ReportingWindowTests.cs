@@ -1,7 +1,7 @@
+using System.Linq;
 using FinanceWindowsViewModels;
 using NUnit.Framework;
 using StructureCommon.Reporting;
-using System.Linq;
 
 namespace FPD_UI_UnitTests
 {
@@ -16,7 +16,7 @@ namespace FPD_UI_UnitTests
         [Test]
         public void ReportsSync()
         {
-            var viewModel = new ReportingWindowViewModel
+            ReportingWindowViewModel viewModel = new ReportingWindowViewModel
             {
                 ReportingSeverity = ReportSeverity.Detailed
             };
@@ -35,7 +35,7 @@ namespace FPD_UI_UnitTests
         [Test]
         public void CanAddReport()
         {
-            var viewModel = new ReportingWindowViewModel
+            ReportingWindowViewModel viewModel = new ReportingWindowViewModel
             {
                 ReportingSeverity = ReportSeverity.Detailed
             };
@@ -54,7 +54,7 @@ namespace FPD_UI_UnitTests
         [Test]
         public void CanClearReports()
         {
-            var viewModel = new ReportingWindowViewModel
+            ReportingWindowViewModel viewModel = new ReportingWindowViewModel
             {
                 ReportingSeverity = ReportSeverity.Detailed
             };
@@ -75,7 +75,7 @@ namespace FPD_UI_UnitTests
         [Test]
         public void CanClearSingleReport()
         {
-            var viewModel = new ReportingWindowViewModel
+            ReportingWindowViewModel viewModel = new ReportingWindowViewModel
             {
                 ReportingSeverity = ReportSeverity.Detailed
             };

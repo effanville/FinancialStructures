@@ -16,10 +16,10 @@ namespace FPD_UI_UnitTests
         [Ignore("not yet implemented")]
         public void CanLoadWithNames()
         {
-            var output = TestingGUICode.CreateBasicDataBase();
-            var fileMock = TestingGUICode.CreateFileMock("nothing");
-            var dialogMock = TestingGUICode.CreateDialogMock();
-            var viewModel = new StatsCreatorWindowViewModel(output, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
+            FinancialStructures.Database.Portfolio output = TestingGUICode.CreateBasicDataBase();
+            Moq.Mock<UICommon.Services.IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
+            Moq.Mock<UICommon.Services.IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
+            StatsCreatorWindowViewModel viewModel = new StatsCreatorWindowViewModel(output, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
         }
     }
 }

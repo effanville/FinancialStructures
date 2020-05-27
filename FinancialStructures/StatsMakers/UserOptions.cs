@@ -6,7 +6,7 @@ namespace FinancialStructures.StatsMakers
     {
         public static bool GetData(List<VisibleName> names, string nameToSearch)
         {
-            foreach (var name in names)
+            foreach (VisibleName name in names)
             {
                 if (name.Name == nameToSearch)
                 {
