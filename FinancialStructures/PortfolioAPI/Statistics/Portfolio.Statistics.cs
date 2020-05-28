@@ -141,8 +141,11 @@ namespace FinancialStructures.PortfolioAPI
         public static async Task<List<PortfolioDaySnapshot>> GenerateHistoryStats(this IPortfolio portfolio, int daysGap)
         {
             List<PortfolioDaySnapshot> outputs = new List<PortfolioDaySnapshot>();
-            DateTime calculationDate = portfolio.FirstValueDate();
-            await Task.Run(() => BackGroundTask(calculationDate, portfolio, outputs, daysGap));
+            if (!daysGap.Equals(0))
+            {
+                DateTime calculationDate = portfolio.FirstValueDate();
+                await Task.Run(() => BackGroundTask(calculationDate, portfolio, outputs, daysGap));
+            }
             return outputs;
         }
 

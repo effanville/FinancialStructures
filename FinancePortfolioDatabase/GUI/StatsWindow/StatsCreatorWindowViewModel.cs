@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using FinanceViewModels.StatsViewModels;
 using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.PortfolioAPI;
+using FinancialStructures.StatisticStructures;
 using FinancialStructures.StatsMakers;
 using StructureCommon.Reporting;
 using UICommon.Commands;
@@ -33,7 +36,7 @@ namespace FinanceWindowsViewModels
         public int HistoryGapDays
         {
             get; set;
-        }
+        } = 20;
 
         private readonly IReportLogger ReportLogger;
         private readonly IFileInteractionService fFileService;
@@ -98,7 +101,7 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private void ExecuteCreateHistory()
+        private async void ExecuteCreateHistory()
         {
             FileInteractionResult result = fFileService.SaveFile(".csv", DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + DataStore.DatabaseName + "-History.csv", DataStore.Directory, "CSV file|*.csv|All files|*.*");
             if (result.Success != null && (bool)result.Success)
@@ -108,7 +111,8 @@ namespace FinanceWindowsViewModels
                     result.FilePath += ".csv";
                 }
 
-                CSVHistoryWriter.WriteHistoryToCSV(DataStore, result.FilePath, HistoryGapDays, ReportLogger);
+                List<PortfolioDaySnapshot> historyStatistics = await DataStore.GenerateHistoryStats(HistoryGapDays).ConfigureAwait(false);
+                CSVHistoryWriter.WriteToCSV(historyStatistics, result.FilePath, ReportLogger);
             }
             else
             {

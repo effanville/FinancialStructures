@@ -8,7 +8,7 @@ namespace FinanceViewModels.StatsViewModels
     internal class PortfolioHistoryViewModel : TabViewModelBase
     {
 
-        private int fHistoryGapDays = 25;
+        private int fHistoryGapDays = 20;
         public int HistoryGapDays
         {
             get
