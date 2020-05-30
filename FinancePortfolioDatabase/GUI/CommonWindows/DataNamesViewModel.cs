@@ -62,7 +62,7 @@ namespace FinanceCommonViewModels
                 }
                 if (SelectedName == null)
                 {
-                    fPreEditSelectedName = value.Copy();
+                    fPreEditSelectedName = value?.Copy();
                 }
 
                 fSelectedName = value;
