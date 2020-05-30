@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
@@ -83,6 +85,7 @@ namespace FinanceWindowsViewModels
             AddCsvData = new RelayCommand(ExecuteAddCsvData);
             ExportCsvData = new RelayCommand(ExecuteExportCsvData);
             AddEditSecurityDataCommand = new RelayCommand(ExecuteAddEditSecData);
+            AddDefaultDataCommand = new RelayCommand<AddingNewItemEventArgs>(e => DataGrid_AddingNewItem(null, e));
             UpdateData(portfolio, null);
             UpdateDataCallback = updateData;
             ReportLogger = reportLogger;
@@ -158,6 +161,25 @@ namespace FinanceWindowsViewModels
                     }
                 }
             }
+        }
+
+        public ICommand AddDefaultDataCommand
+        {
+            get; set;
+        }
+
+        private void DataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        {
+            double shareNo = 0;
+            if (SelectedSecurityData != null && SelectedSecurityData.Any())
+            {
+                shareNo = SelectedSecurityData.Last().ShareNo;
+            }
+            e.NewItem = new SecurityDayData()
+            {
+                UnitPrice = 0,
+                ShareNo = shareNo,
+            };
         }
 
         public ICommand AddEditSecurityDataCommand

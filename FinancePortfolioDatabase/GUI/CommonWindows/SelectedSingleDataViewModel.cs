@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
@@ -98,6 +99,7 @@ namespace FinanceCommonViewModels
 
             EditDataCommand = new RelayCommand(ExecuteEditDataCommand);
             DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);
+            AddDefaultDataCommand = new RelayCommand<AddingNewItemEventArgs>(e => DataGrid_AddingNewItem(null, e));
             AddCsvData = new RelayCommand(ExecuteAddCsvData);
             ExportCsvData = new RelayCommand(ExecuteExportCsvData);
             UpdateDataCallback = updateDataCallback;
@@ -132,6 +134,19 @@ namespace FinanceCommonViewModels
             UpdateData(portfolio, null);
         }
 
+        public ICommand AddDefaultDataCommand
+        {
+            get; set;
+        }
+
+        private void DataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        {
+            e.NewItem = new DailyValuation()
+            {
+                Day = DateTime.Today,
+                Value = 0
+            };
+        }
 
         public ICommand EditDataCommand
         {

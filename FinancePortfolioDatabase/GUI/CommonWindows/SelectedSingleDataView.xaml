@@ -43,7 +43,6 @@
             </Grid.ColumnDefinitions>
             <DataGrid Grid.Row="0"
                       Grid.Column="0"
-                      Margin="10 10 10 10"
                       SelectionUnit="FullRow"
                       CanUserAddRows="True"
                       CanUserDeleteRows="False"
@@ -57,6 +56,10 @@
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="RowEditEnding">
                         <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=EditDataCommand}" />
+                    </i:EventTrigger>
+                    <i:EventTrigger EventName="AddingNewItem">
+                        <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=AddDefaultDataCommand}"
+                                               PassEventArgsToCommand="True" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <DataGrid.Columns>
