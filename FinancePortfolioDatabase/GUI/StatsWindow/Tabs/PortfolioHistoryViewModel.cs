@@ -1,14 +1,14 @@
-﻿using FinancialStructures.FinanceInterfaces;
+﻿using System.Collections.Generic;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.StatisticStructures;
-using System.Collections.Generic;
 
 namespace FinanceViewModels.StatsViewModels
 {
     internal class PortfolioHistoryViewModel : TabViewModelBase
     {
 
-        private int fHistoryGapDays = 25;
+        private int fHistoryGapDays = 20;
         public int HistoryGapDays
         {
             get

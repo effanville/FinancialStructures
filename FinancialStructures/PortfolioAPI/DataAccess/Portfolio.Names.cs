@@ -1,8 +1,8 @@
-﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.NamingStructures;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -38,7 +38,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <returns>List of names of the desired type.</returns>
         public static List<NameCompDate> NameData(this IPortfolio portfolio, AccountType elementType)
         {
-            var namesAndCompanies = new List<NameCompDate>();
+            List<NameCompDate> namesAndCompanies = new List<NameCompDate>();
             switch (elementType)
             {
                 case (AccountType.Security):
@@ -76,10 +76,10 @@ namespace FinancialStructures.PortfolioAPI
 
         private static List<NameCompDate> SingleDataNameObtainer<T>(List<T> objects) where T : ISingleValueDataList
         {
-            var namesAndCompanies = new List<NameCompDate>();
+            List<NameCompDate> namesAndCompanies = new List<NameCompDate>();
             if (objects != null)
             {
-                foreach (var dataList in objects)
+                foreach (T dataList in objects)
                 {
                     DateTime date = DateTime.MinValue;
                     if (dataList.Any())

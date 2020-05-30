@@ -56,7 +56,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// default constructor.
         /// </summary>
-        internal Currency()
+        public Currency()
             : base()
         {
         }

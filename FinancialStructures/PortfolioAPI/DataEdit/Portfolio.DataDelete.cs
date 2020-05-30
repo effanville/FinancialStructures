@@ -1,8 +1,8 @@
-﻿using FinancialStructures.FinanceInterfaces;
+﻿using System.Collections.Generic;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 using StructureCommon.Reporting;
-using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -58,7 +58,7 @@ namespace FinancialStructures.PortfolioAPI
 
         private static bool TryDeleteSingleListData<T>(List<T> values, AccountType elementType, NameData name, DailyValuation data, IReportLogger reportLogger) where T : ISingleValueDataList
         {
-            foreach (var account in values)
+            foreach (T account in values)
             {
                 if (name.IsEqualTo(account.Names))
                 {

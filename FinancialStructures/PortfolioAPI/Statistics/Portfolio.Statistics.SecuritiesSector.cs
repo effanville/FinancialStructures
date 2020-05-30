@@ -1,9 +1,9 @@
-﻿using FinancialStructures.DataStructures;
+﻿using System;
+using System.Collections.Generic;
+using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using StructureCommon.DataStructures;
 using StructureCommon.FinanceFunctions;
-using System;
-using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -11,7 +11,7 @@ namespace FinancialStructures.PortfolioAPI
     {
         public static DateTime SectorFirstDate(this IPortfolio portfolio, string sector)
         {
-            var output = DateTime.Today;
+            DateTime output = DateTime.Today;
             foreach (ISecurity sec in portfolio.SectorSecurities(sector))
             {
                 if (sec.FirstValue().Day < output)
@@ -46,7 +46,7 @@ namespace FinancialStructures.PortfolioAPI
 
         public static List<ISecurity> SectorSecurities(this IPortfolio portfolio, string sectorName)
         {
-            var securities = new List<ISecurity>();
+            List<ISecurity> securities = new List<ISecurity>();
             foreach (ISecurity security in portfolio.Funds)
             {
                 if (security.IsSectorLinked(sectorName))
@@ -60,7 +60,7 @@ namespace FinancialStructures.PortfolioAPI
 
         public static List<DayValue_Named> SectorInvestments(this IPortfolio portfolio, string sectorName)
         {
-            var output = new List<DayValue_Named>();
+            List<DayValue_Named> output = new List<DayValue_Named>();
             foreach (ISecurity security in portfolio.SectorSecurities(sectorName))
             {
                 output.AddRange(security.AllInvestmentsNamed());
@@ -93,16 +93,16 @@ namespace FinancialStructures.PortfolioAPI
         /// </summary>
         public static double IRRSector(this IPortfolio portfolio, string sectorName, DateTime earlierTime, DateTime laterTime)
         {
-            var securities = portfolio.SectorSecurities(sectorName);
+            List<ISecurity> securities = portfolio.SectorSecurities(sectorName);
             if (securities.Count == 0)
             {
                 return double.NaN;
             }
             double earlierValue = 0;
             double laterValue = 0;
-            var Investments = new List<DailyValuation>();
+            List<DailyValuation> Investments = new List<DailyValuation>();
 
-            foreach (var security in securities)
+            foreach (ISecurity security in securities)
             {
                 if (security.Any())
                 {

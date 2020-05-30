@@ -1,4 +1,7 @@
-﻿using FinanceWindowsViewModels;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
+using FinanceWindowsViewModels;
 using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
@@ -6,9 +9,6 @@ using FinancialStructures.PortfolioAPI;
 using Moq;
 using StructureCommon.DataStructures;
 using StructureCommon.Reporting;
-using System;
-using System.Collections.Generic;
-using System.Windows;
 using UICommon.Services;
 
 namespace FPD_UI_UnitTests.TestConstruction
@@ -20,7 +20,7 @@ namespace FPD_UI_UnitTests.TestConstruction
 
         public static Mock<IFileInteractionService> CreateFileMock(string expectedFilePath)
         {
-            var mockfileinteraction = new Mock<IFileInteractionService>();
+            Mock<IFileInteractionService> mockfileinteraction = new Mock<IFileInteractionService>();
             mockfileinteraction.Setup(x => x.OpenFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInteractionResult(true, expectedFilePath));
             mockfileinteraction.Setup(x => x.SaveFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInteractionResult(true, expectedFilePath));
             return mockfileinteraction;
@@ -28,7 +28,7 @@ namespace FPD_UI_UnitTests.TestConstruction
 
         public static Mock<IDialogCreationService> CreateDialogMock(MessageBoxResult result = MessageBoxResult.OK)
         {
-            var mockfileinteraction = new Mock<IDialogCreationService>();
+            Mock<IDialogCreationService> mockfileinteraction = new Mock<IDialogCreationService>();
             mockfileinteraction.Setup(x => x.ShowMessageBox(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MessageBoxButton>(), It.IsAny<MessageBoxImage>())).Returns(result);
             return mockfileinteraction;
         }
@@ -62,7 +62,7 @@ namespace FPD_UI_UnitTests.TestConstruction
 
         public static Portfolio CreateBasicDataBase()
         {
-            var portfolio = new Portfolio();
+            Portfolio portfolio = new Portfolio();
             UpdatePortfolio(portfolio);
             return portfolio;
         }
@@ -86,9 +86,9 @@ namespace FPD_UI_UnitTests.TestConstruction
 
         internal static MainWindowViewModel SetupWindow(Portfolio portfolio)
         {
-            var fileMock = CreateFileMock("filepath");
-            var dialogMock = CreateDialogMock(MessageBoxResult.OK);
-            var viewModel = new MainWindowViewModel(fileMock.Object, dialogMock.Object)
+            Mock<IFileInteractionService> fileMock = CreateFileMock("filepath");
+            Mock<IDialogCreationService> dialogMock = CreateDialogMock(MessageBoxResult.OK);
+            MainWindowViewModel viewModel = new MainWindowViewModel(fileMock.Object, dialogMock.Object)
             {
                 ProgramPortfolio = portfolio
             };

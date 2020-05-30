@@ -1,7 +1,7 @@
-﻿using FinancialStructures.FinanceStructures;
-using FinancialStructures.PortfolioAPI;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using FinancialStructures.FinanceStructures;
+using FinancialStructures.PortfolioAPI;
 
 namespace FinancialStructures.FinanceInterfaces
 {

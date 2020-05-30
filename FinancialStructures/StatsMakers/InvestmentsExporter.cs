@@ -1,8 +1,8 @@
-﻿using FinancialStructures.DataStructures;
+﻿using System.IO;
+using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
 using StructureCommon.Reporting;
-using System.IO;
 
 namespace FinancialStructures.StatsMakers
 {

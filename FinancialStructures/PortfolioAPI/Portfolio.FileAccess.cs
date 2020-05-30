@@ -1,11 +1,11 @@
-﻿using FinancialStructures.Database;
+﻿using System;
+using System.IO;
+using System.Linq;
+using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.SavingClasses;
 using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
-using System;
-using System.IO;
-using System.Linq;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -21,7 +21,7 @@ namespace FinancialStructures.PortfolioAPI
         {
             if (File.Exists(filePath))
             {
-                var database = XmlFileAccess.ReadFromXmlFile<AllData>(filePath, out string error);
+                AllData database = XmlFileAccess.ReadFromXmlFile<AllData>(filePath, out string error);
                 if (database != null)
                 {
                     portfolio.CopyData(database.MyFunds);
@@ -59,7 +59,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="reportLogger">Callback to report information.</param>
         public static void SavePortfolio(this IPortfolio portfolio, string filePath, IReportLogger reportLogger)
         {
-            var toSave = new AllData(portfolio, portfolio.BenchMarks);
+            AllData toSave = new AllData(portfolio, portfolio.BenchMarks);
 
             if (filePath != null)
             {

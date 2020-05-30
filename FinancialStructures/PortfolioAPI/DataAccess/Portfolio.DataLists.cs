@@ -1,7 +1,7 @@
-﻿using FinancialStructures.Database;
+﻿using System.Collections.Generic;
+using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
-using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -17,7 +17,7 @@ namespace FinancialStructures.PortfolioAPI
         /// </remarks>
         public static IPortfolio CopyPortfolio(this IPortfolio portfolio)
         {
-            var PortfoCopy = new Portfolio();
+            Portfolio PortfoCopy = new Portfolio();
 
             foreach (Security security in portfolio.Funds)
             {
@@ -44,7 +44,7 @@ namespace FinancialStructures.PortfolioAPI
         /// </summary>
         public static List<ISecurity> CompanySecurities(this IPortfolio portfolio, string company)
         {
-            var securities = new List<ISecurity>();
+            List<ISecurity> securities = new List<ISecurity>();
             foreach (ISecurity sec in portfolio.Funds)
             {
                 if (sec.Company == company)
@@ -60,7 +60,7 @@ namespace FinancialStructures.PortfolioAPI
 
         public static List<ICashAccount> CompanyBankAccounts(this IPortfolio portfolio, string company)
         {
-            var accounts = new List<ICashAccount>();
+            List<ICashAccount> accounts = new List<ICashAccount>();
             foreach (ICashAccount acc in portfolio.BankAccounts)
             {
                 if (acc.Company == company)

@@ -1,6 +1,6 @@
-﻿using FinanceWindowsViewModels;
-using System;
+﻿using System;
 using System.Windows.Input;
+using FinanceWindowsViewModels;
 using UICommon.Commands;
 
 namespace FinanceViewModels.StatsViewModels
@@ -15,7 +15,7 @@ namespace FinanceViewModels.StatsViewModels
             }
         }
 
-        private Action<TabType, string> OpenTab;
+        private readonly Action<TabType, string> OpenTab;
 
         public ICommand OpenSecuritiesTab
         {

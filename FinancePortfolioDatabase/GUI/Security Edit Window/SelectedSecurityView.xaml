@@ -49,6 +49,10 @@
                 <i:EventTrigger EventName="RowEditEnding">
                     <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=AddEditSecurityDataCommand}" />
                 </i:EventTrigger>
+                <i:EventTrigger EventName="AddingNewItem">
+                    <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=AddDefaultDataCommand}"
+                                           PassEventArgsToCommand="True" />
+                </i:EventTrigger>
             </i:Interaction.Triggers>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Date"

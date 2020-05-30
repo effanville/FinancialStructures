@@ -53,10 +53,8 @@ namespace FinancialStructures.NamingStructures
                             return base.Equals(otherName);
                         }
                     }
-                    else
-                    {
-                        return false;
-                    }
+
+                    return false;
                 }
                 if (string.IsNullOrEmpty(Url))
                 {
@@ -67,10 +65,8 @@ namespace FinancialStructures.NamingStructures
                             return base.Equals(otherName);
                         }
                     }
-                    else
-                    {
-                        return false;
-                    }
+
+                    return false;
                 }
                 if (string.IsNullOrEmpty(SectorsFlat))
                 {
@@ -81,10 +77,8 @@ namespace FinancialStructures.NamingStructures
                             return base.Equals(otherName);
                         }
                     }
-                    else
-                    {
-                        return false;
-                    }
+
+                    return false;
                 }
                 if (Currency.Equals(otherName.Currency) && Url.Equals(otherName.Url) && SectorsFlat.Equals(otherName.SectorsFlat))
                 {
@@ -97,7 +91,10 @@ namespace FinancialStructures.NamingStructures
 
         public override int GetHashCode()
         {
-            return Currency.GetHashCode() + Url.GetHashCode() + Sectors.GetHashCode() + base.GetHashCode();
+            var currencyVal = Currency != null ? Currency.GetHashCode() : 0;
+            var urlVal = Url != null ? Url.GetHashCode() : 0;
+            var sectorVal = Sectors != null ? Sectors.GetHashCode() : 0;
+            return currencyVal + urlVal + sectorVal + base.GetHashCode();
         }
 
         /// <summary>
@@ -211,7 +208,7 @@ namespace FinancialStructures.NamingStructures
                 HashSet<string> sectorList = new HashSet<string>();
                 if (!string.IsNullOrEmpty(value))
                 {
-                    var sectorsSplit = value.Split(',');
+                    string[] sectorsSplit = value.Split(',');
 
                     for (int i = 0; i < sectorsSplit.Length; i++)
                     {

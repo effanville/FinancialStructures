@@ -1,7 +1,7 @@
-﻿using FinancialStructures.FinanceInterfaces;
+﻿using System;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
-using System;
 
 namespace FinancialStructures.FinanceStructures
 {

@@ -1,5 +1,5 @@
-﻿using FinanceCommonViewModels;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
+using FinanceCommonViewModels;
 
 namespace FinanceWindows
 {
@@ -15,7 +15,7 @@ namespace FinanceWindows
 
         private void CloseTabCommand(object sender, System.Windows.RoutedEventArgs e)
         {
-            var VM = DataContext as SingleValueEditWindowViewModel;
+            SingleValueEditWindowViewModel VM = DataContext as SingleValueEditWindowViewModel;
             if (TabMain.SelectedIndex != 0)
             {
                 VM.Tabs.RemoveAt(TabMain.SelectedIndex);

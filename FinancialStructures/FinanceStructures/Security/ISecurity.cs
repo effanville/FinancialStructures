@@ -1,10 +1,10 @@
-﻿using FinancialStructures.DataStructures;
+﻿using System;
+using System.Collections.Generic;
+using FinancialStructures.DataStructures;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
-using System;
-using System.Collections.Generic;
 
 namespace FinancialStructures.FinanceInterfaces
 {

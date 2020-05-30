@@ -1,8 +1,8 @@
-﻿using FinanceWindowsViewModels;
-using FinancialStructures.PortfolioAPI;
-using System;
+﻿using System;
 using System.Reflection;
 using System.Windows;
+using FinanceWindowsViewModels;
+using FinancialStructures.PortfolioAPI;
 using UICommon.Services;
 
 namespace FinanceWindows
@@ -19,7 +19,7 @@ namespace FinanceWindows
         {
             fFileInteractionService = new FileInteractionService(this);
             fDialogCreationService = new DialogCreationService(this);
-            var viewModel = new MainWindowViewModel(fFileInteractionService, fDialogCreationService);
+            MainWindowViewModel viewModel = new MainWindowViewModel(fFileInteractionService, fDialogCreationService);
             InitializeComponent();
 
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
@@ -37,7 +37,7 @@ namespace FinanceWindows
         /// </remarks>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var VM = DataContext as MainWindowViewModel;
+            MainWindowViewModel VM = DataContext as MainWindowViewModel;
             MessageBoxResult result;
             if (VM.ProgramPortfolio.IsAlteredSinceSave)
             {
@@ -49,11 +49,11 @@ namespace FinanceWindows
             }
             if (result == MessageBoxResult.Yes)
             {
-                var savingResult = fFileInteractionService.SaveFile("xml", VM.ProgramPortfolio.DatabaseName + VM.ProgramPortfolio.Extension, VM.ProgramPortfolio.Directory, "XML Files|*.xml|All Files|*.*");
+                FileInteractionResult savingResult = fFileInteractionService.SaveFile("xml", VM.ProgramPortfolio.DatabaseName + VM.ProgramPortfolio.Extension, VM.ProgramPortfolio.Directory, "XML Files|*.xml|All Files|*.*");
                 if (savingResult.Success != null && (bool)savingResult.Success)
                 {
                     VM.ProgramPortfolio.SetFilePath(savingResult.FilePath);
-                    var vm = DataContext as MainWindowViewModel;
+                    MainWindowViewModel vm = DataContext as MainWindowViewModel;
                     vm.ProgramPortfolio.SavePortfolio(savingResult.FilePath, vm.ReportLogger);
                 }
             }

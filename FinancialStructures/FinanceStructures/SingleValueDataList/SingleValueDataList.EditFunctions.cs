@@ -1,11 +1,11 @@
-﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.NamingStructures;
-using StructureCommon.DataStructures;
-using StructureCommon.Reporting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.NamingStructures;
+using StructureCommon.DataStructures;
+using StructureCommon.Reporting;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -29,13 +29,13 @@ namespace FinancialStructures.FinanceStructures
 
         public List<DailyValuation> GetDataForDisplay()
         {
-            var output = new List<DailyValuation>();
+            List<DailyValuation> output = new List<DailyValuation>();
             if (fValues.Any())
             {
-                foreach (var datevalue in fValues.GetValuesBetween(fValues.FirstDate(), fValues.LatestDate()))
+                foreach (DailyValuation datevalue in fValues.GetValuesBetween(fValues.FirstDate(), fValues.LatestDate()))
                 {
                     fValues.TryGetValue(datevalue.Day, out double UnitPrice);
-                    var thisday = new DailyValuation(datevalue.Day, UnitPrice);
+                    DailyValuation thisday = new DailyValuation(datevalue.Day, UnitPrice);
                     output.Add(thisday);
                 }
             }
@@ -71,8 +71,8 @@ namespace FinancialStructures.FinanceStructures
 
         public List<object> CreateDataFromCsv(List<string[]> valuationsToRead, IReportLogger reportLogger = null)
         {
-            var dailyValuations = new List<object>();
-            foreach (var dayValuation in valuationsToRead)
+            List<object> dailyValuations = new List<object>();
+            foreach (string[] dayValuation in valuationsToRead)
             {
                 if (dayValuation.Length != 2)
                 {
@@ -80,7 +80,7 @@ namespace FinancialStructures.FinanceStructures
                     break;
                 }
 
-                var line = new DailyValuation(DateTime.Parse(dayValuation[0]), double.Parse(dayValuation[1]));
+                DailyValuation line = new DailyValuation(DateTime.Parse(dayValuation[0]), double.Parse(dayValuation[1]));
                 dailyValuations.Add(line);
             }
 
@@ -131,7 +131,7 @@ namespace FinancialStructures.FinanceStructures
         {
             if (Names.Sectors != null && Names.Sectors.Any())
             {
-                foreach (var name in Names.Sectors)
+                foreach (string name in Names.Sectors)
                 {
                     if (name == sectorName)
                     {

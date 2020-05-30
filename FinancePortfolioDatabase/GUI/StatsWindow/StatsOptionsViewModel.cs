@@ -1,11 +1,11 @@
-﻿using FinancialStructures.DataStructures;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows.Input;
+using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.StatisticStructures;
 using FinancialStructures.StatsMakers;
 using StructureCommon.Reporting;
-using System;
-using System.Collections.Generic;
-using System.Windows.Input;
 using UICommon.Commands;
 using UICommon.Interfaces;
 using UICommon.Services;
@@ -15,7 +15,7 @@ namespace FinanceWindowsViewModels
 {
     internal class StatsOptionsViewModel : PropertyChangedBase
     {
-        private IPortfolio Portfolio;
+        private readonly IPortfolio Portfolio;
         private bool fDisplayValueFunds = true;
         public bool displayValueFunds
         {
@@ -96,29 +96,29 @@ namespace FinanceWindowsViewModels
 
         private void ExecuteExportCommand(ICloseable window)
         {
-            var result = fFileService.SaveFile(fFileExtension, Portfolio.DatabaseName + "-" + fExtension + "HTMLStats" + fFileExtension, Portfolio.Directory, fExtension + " file|*" + fFileExtension + "|All files|*.*");
+            FileInteractionResult result = fFileService.SaveFile(fFileExtension, Portfolio.DatabaseName + "-" + fExtension + "HTMLStats" + fFileExtension, Portfolio.Directory, fExtension + " file|*" + fFileExtension + "|All files|*.*");
             string path = null;
 
             if (result.Success != null && (bool)result.Success)
             {
                 path = result.FilePath;
-                var selected = new List<string>();
-                foreach (var column in ColumnNames)
+                List<string> selected = new List<string>();
+                foreach (VisibleName column in ColumnNames)
                 {
                     if (column.Visible || column.Name == "Name" || column.Name == "Company")
                     {
                         selected.Add(column.Name);
                     }
                 }
-                var BankSelected = new List<string>();
-                foreach (var column in BankColumnNames)
+                List<string> BankSelected = new List<string>();
+                foreach (VisibleName column in BankColumnNames)
                 {
                     if (column.Visible || column.Name == "Name" || column.Name == "Company")
                     {
                         BankSelected.Add(column.Name);
                     }
                 }
-                var options = new UserOptions(selected, BankSelected, selected, DisplayConditions);
+                UserOptions options = new UserOptions(selected, BankSelected, selected, DisplayConditions);
                 if (windowType == ExportType.HTML)
                 {
                     PortfolioStatsCreators.CreateHTMLPageCustom(Portfolio, result.FilePath, options);
@@ -142,8 +142,8 @@ namespace FinanceWindowsViewModels
         private readonly IFileInteractionService fFileService;
         private readonly IDialogCreationService fDialogCreationService;
         private readonly IReportLogger ReportLogger;
-        private Action<string> CloseWindowAction;
-        private ExportType windowType;
+        private readonly Action<string> CloseWindowAction;
+        private readonly ExportType windowType;
         private string fExtension
         {
             get
@@ -168,16 +168,16 @@ namespace FinanceWindowsViewModels
             CloseWindowAction = CloseWindow;
             ExportCommand = new RelayCommand<ICloseable>(ExecuteExportCommand);
 
-            var totals = new SecurityStatistics();
-            var properties = totals.GetType().GetProperties();
-            foreach (var info in properties)
+            SecurityStatistics totals = new SecurityStatistics();
+            System.Reflection.PropertyInfo[] properties = totals.GetType().GetProperties();
+            foreach (System.Reflection.PropertyInfo info in properties)
             {
                 ColumnNames.Add(new VisibleName(info.Name, true));
             }
 
-            var BankNames = new DayValue_Named();
-            var props = BankNames.GetType().GetProperties();
-            foreach (var info in props)
+            DayValue_Named BankNames = new DayValue_Named();
+            System.Reflection.PropertyInfo[] props = BankNames.GetType().GetProperties();
+            foreach (System.Reflection.PropertyInfo info in props)
             {
                 if (info.Name == "Day")
                 {
@@ -189,9 +189,9 @@ namespace FinanceWindowsViewModels
                 }
             }
 
-            var fish = new UserOptions();
-            var optionsInfo = fish.GetType().GetProperties();
-            foreach (var info in optionsInfo)
+            UserOptions fish = new UserOptions();
+            System.Reflection.PropertyInfo[] optionsInfo = fish.GetType().GetProperties();
+            foreach (System.Reflection.PropertyInfo info in optionsInfo)
             {
                 if (info.PropertyType == typeof(bool))
                 {

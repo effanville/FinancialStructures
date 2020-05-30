@@ -20,6 +20,8 @@
   <ItemGroup>
     <PackageReference Include="DotNetProjects.WpfToolkit.DataVisualization" Version="6.0.79" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
+    <PackageReference Include="StructureCommon" Version="1.0.2" />
+    <PackageReference Include="UICommon" Version="1.0.2" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
@@ -28,11 +30,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FinancialStructures\FinancialStructures.csproj" />
-  </ItemGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="StructureCommon" Version="1.0.0" />
-    <PackageReference Include="UICommon" Version="1.0.0" />
   </ItemGroup>
 
  <!-- Alternative locations for dlls, if Nuget links cannot be generated

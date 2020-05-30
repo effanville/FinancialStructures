@@ -1,9 +1,9 @@
-﻿using FinancialStructures.FinanceInterfaces;
+﻿using System;
+using System.Collections.Generic;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 using StructureCommon.Reporting;
-using System;
-using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
 {

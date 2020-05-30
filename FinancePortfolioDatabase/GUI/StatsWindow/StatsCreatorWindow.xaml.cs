@@ -1,5 +1,5 @@
-﻿using FinanceWindowsViewModels;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
+using FinanceWindowsViewModels;
 
 namespace FinanceWindows
 {
@@ -15,7 +15,7 @@ namespace FinanceWindows
 
         private void CloseTabCommand(object sender, System.Windows.RoutedEventArgs e)
         {
-            var VM = DataContext as StatsCreatorWindowViewModel;
+            StatsCreatorWindowViewModel VM = DataContext as StatsCreatorWindowViewModel;
             if (TabMain.SelectedIndex != 0)
             {
                 VM.StatsTabs.RemoveAt(TabMain.SelectedIndex);

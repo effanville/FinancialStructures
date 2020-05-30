@@ -1,27 +1,26 @@
-﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.PortfolioAPI;
-using StructureCommon.Reporting;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using FinancialStructures.StatisticStructures;
+using StructureCommon.Reporting;
 
 namespace FinancialStructures.StatsMakers
 {
     public static class CSVHistoryWriter
     {
-        public static async void WriteHistoryToCSV(IPortfolio portfolio, string filePath, int daysGap, IReportLogger reportLogger = null)
+        public static async void WriteToCSV(List<PortfolioDaySnapshot> historyStatistics, string filePath, IReportLogger reportLogger = null)
         {
             try
             {
                 StreamWriter historyWriter = new StreamWriter(filePath);
-                var historyStatistics = await portfolio.GenerateHistoryStats(daysGap).ConfigureAwait(false);
                 if (!historyStatistics.Any())
                 {
                     reportLogger?.LogUseful(ReportType.Error, ReportLocation.StatisticsPage, "Not enough history points to export.");
                     return;
                 }
                 historyWriter.WriteLine(historyStatistics[0].Headers());
-                foreach (var statistic in historyStatistics)
+                foreach (PortfolioDaySnapshot statistic in historyStatistics)
                 {
                     historyWriter.WriteLine(statistic.ToString());
                 }

@@ -1,12 +1,12 @@
-﻿using FinanceWindows;
-using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.PortfolioAPI;
-using StructureCommon.Reporting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using FinanceWindows;
+using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.PortfolioAPI;
+using StructureCommon.Reporting;
 using UICommon.Commands;
 using UICommon.Services;
 using UICommon.ViewModelBases;
@@ -94,7 +94,7 @@ namespace FinanceWindowsViewModels
         }
         private void OpenHelpDocsCommand()
         {
-            var helpwindow = new HelpWindow(fReportLogger);
+            HelpWindow helpwindow = new HelpWindow(fReportLogger);
             helpwindow.Show();
         }
 
@@ -126,7 +126,7 @@ namespace FinanceWindowsViewModels
         }
         private void ExecuteSaveDatabase()
         {
-            var result = fFileService.SaveFile("xml", fFileName, fDirectory, "XML Files|*.xml|All Files|*.*");
+            FileInteractionResult result = fFileService.SaveFile("xml", fFileName, fDirectory, "XML Files|*.xml|All Files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
                 DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(result.FilePath));
@@ -140,7 +140,7 @@ namespace FinanceWindowsViewModels
         }
         private void ExecuteLoadDatabase()
         {
-            var result = fFileService.OpenFile("xml", filter: "XML Files|*.xml|All Files|*.*");
+            FileInteractionResult result = fFileService.OpenFile("xml", filter: "XML Files|*.xml|All Files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
                 DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(result.FilePath));

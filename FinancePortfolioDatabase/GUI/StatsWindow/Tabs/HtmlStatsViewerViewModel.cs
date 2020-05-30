@@ -1,7 +1,7 @@
-﻿using FinancialStructures.FinanceInterfaces;
-using Microsoft.Win32;
-using System;
+﻿using System;
 using System.Windows.Input;
+using FinancialStructures.FinanceInterfaces;
+using Microsoft.Win32;
 using UICommon.Commands;
 
 namespace FinanceViewModels.StatsViewModels

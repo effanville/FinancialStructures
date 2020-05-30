@@ -1,11 +1,11 @@
-﻿using FinancialStructures.Database;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.StatisticStructures;
-using System;
-using System.Collections.Generic;
-using System.IO;
 
 namespace FinancialStructures.StatsMakers
 {
@@ -33,12 +33,12 @@ namespace FinancialStructures.StatsMakers
                     portfolio.GenerateBenchMarkStatistics(sectorName)
                 };
                 int linesWritten = 0;
-                foreach (var value in valuesToWrite)
+                foreach (SecurityStatistics value in valuesToWrite)
                 {
                     if ((options.DisplayValueFunds && value.LatestVal > 0) || !options.DisplayValueFunds)
                     {
                         string line = string.Empty;
-                        foreach (var props in info)
+                        foreach (System.Reflection.PropertyInfo props in info)
                         {
                             if (options.SecurityDataToExport.Contains(props.Name))
                             {
@@ -81,8 +81,8 @@ namespace FinancialStructures.StatsMakers
 
             htmlWriter.WriteLine("Funds Data");
 
-            var totals = portfolio.GeneratePortfolioStatistics();
-            var properties = totals.GetType().GetProperties();
+            SecurityStatistics totals = portfolio.GeneratePortfolioStatistics();
+            System.Reflection.PropertyInfo[] properties = totals.GetType().GetProperties();
 
             WriteHeader(htmlWriter, properties, options.SecurityDataToExport, maxNameLength, maxCompanyLength, maxNumLength);
 
@@ -90,14 +90,14 @@ namespace FinancialStructures.StatsMakers
             companies.Sort();
             foreach (string compName in companies)
             {
-                var securities = portfolio.GenerateCompanyFundsStatistics(compName);
+                List<SecurityStatistics> securities = portfolio.GenerateCompanyFundsStatistics(compName);
                 int linesWritten = 0;
-                foreach (var sec in securities)
+                foreach (SecurityStatistics sec in securities)
                 {
                     if ((options.DisplayValueFunds && sec.LatestVal > 0) || !options.DisplayValueFunds)
                     {
                         string line = string.Empty;
-                        foreach (var props in properties)
+                        foreach (System.Reflection.PropertyInfo props in properties)
                         {
                             if (options.SecurityDataToExport.Contains(props.Name))
                             {
@@ -134,7 +134,7 @@ namespace FinancialStructures.StatsMakers
             {
                 htmlWriter.WriteLine("");
                 string fundTotalLine = string.Empty;
-                foreach (var props in properties)
+                foreach (System.Reflection.PropertyInfo props in properties)
                 {
                     if (options.SecurityDataToExport.Contains(props.Name))
                     {
@@ -161,7 +161,7 @@ namespace FinancialStructures.StatsMakers
             }
 
             DayValue_Named bankTotals = new DayValue_Named(string.Empty, "Totals,", DateTime.Today, portfolio.TotalValue(AccountType.BankAccount));
-            var bankProperties = bankTotals.GetType().GetProperties();
+            System.Reflection.PropertyInfo[] bankProperties = bankTotals.GetType().GetProperties();
 
             WriteHeader(htmlWriter, bankProperties, options.BankAccDataToExport, maxNameLength, maxCompanyLength, maxNumLength);
 
@@ -169,14 +169,14 @@ namespace FinancialStructures.StatsMakers
             BankCompanies.Sort();
             foreach (string compName in BankCompanies)
             {
-                var bankAccounts = portfolio.GenerateCompanyBankAccountStatistics(compName, options.DisplayValueFunds);
+                List<DayValue_Named> bankAccounts = portfolio.GenerateCompanyBankAccountStatistics(compName, options.DisplayValueFunds);
                 int linesWritten = 0;
-                foreach (var acc in bankAccounts)
+                foreach (DayValue_Named acc in bankAccounts)
                 {
                     if ((options.DisplayValueFunds && acc.Value > 0) || !options.DisplayValueFunds)
                     {
                         string line = string.Empty;
-                        foreach (var prop in bankProperties)
+                        foreach (System.Reflection.PropertyInfo prop in bankProperties)
                         {
                             if (options.BankAccDataToExport.Contains(prop.Name))
                             {
@@ -215,7 +215,7 @@ namespace FinancialStructures.StatsMakers
             if ((options.DisplayValueFunds && bankTotals.Value > 0) || !options.DisplayValueFunds)
             {
                 string totalAccountsLine = string.Empty;
-                foreach (var prop in bankProperties)
+                foreach (System.Reflection.PropertyInfo prop in bankProperties)
                 {
                     if (options.BankAccDataToExport.Contains(prop.Name))
                     {
@@ -247,10 +247,10 @@ namespace FinancialStructures.StatsMakers
             WriteSpacing(htmlWriter, options.Spacing);
 
             DayValue_Named portfolioTotals = new DayValue_Named("Portfolio", "Total", DateTime.Today, portfolio.Value(DateTime.Today));
-            var portfolioProperties = bankTotals.GetType().GetProperties();
+            System.Reflection.PropertyInfo[] portfolioProperties = bankTotals.GetType().GetProperties();
 
             string totalLine = string.Empty;
-            foreach (var prop in portfolioProperties)
+            foreach (System.Reflection.PropertyInfo prop in portfolioProperties)
             {
                 if (Double.TryParse(prop.GetValue(portfolioTotals).ToString(), out double result))
                 {
@@ -285,7 +285,7 @@ namespace FinancialStructures.StatsMakers
         {
             string header = string.Empty;
 
-            foreach (var props in info)
+            foreach (System.Reflection.PropertyInfo props in info)
             {
                 if (names.Contains(props.Name))
                 {

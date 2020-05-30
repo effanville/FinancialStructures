@@ -1,13 +1,14 @@
-﻿using FinancialStructures.FinanceInterfaces;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Controls;
+using System.Windows.Input;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using StructureCommon.DataStructures;
 using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Input;
 using UICommon.Commands;
 using UICommon.Services;
 using UICommon.ViewModelBases;
@@ -16,7 +17,7 @@ namespace FinanceCommonViewModels
 {
     internal class SelectedSingleDataViewModel : TabViewModelBase<IPortfolio>
     {
-        private AccountType TypeOfAccount;
+        private readonly AccountType TypeOfAccount;
 
         public override bool Closable
         {
@@ -98,6 +99,7 @@ namespace FinanceCommonViewModels
 
             EditDataCommand = new RelayCommand(ExecuteEditDataCommand);
             DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);
+            AddDefaultDataCommand = new RelayCommand<AddingNewItemEventArgs>(e => DataGrid_AddingNewItem(null, e));
             AddCsvData = new RelayCommand(ExecuteAddCsvData);
             ExportCsvData = new RelayCommand(ExecuteExportCsvData);
             UpdateDataCallback = updateDataCallback;
@@ -132,6 +134,19 @@ namespace FinanceCommonViewModels
             UpdateData(portfolio, null);
         }
 
+        public ICommand AddDefaultDataCommand
+        {
+            get; set;
+        }
+
+        private void DataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        {
+            e.NewItem = new DailyValuation()
+            {
+                Day = DateTime.Today,
+                Value = 0
+            };
+        }
 
         public ICommand EditDataCommand
         {
@@ -185,9 +200,9 @@ namespace FinanceCommonViewModels
         {
             if (fSelectedName != null)
             {
-                var result = fFileService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
+                FileInteractionResult result = fFileService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
                 List<object> outputs = null;
-                bool exists = DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out var account);
+                bool exists = DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out ISingleValueDataList account);
                 if (result.Success != null && (bool)result.Success && exists)
                 {
                     outputs = CsvReaderWriter.ReadFromCsv(account, result.FilePath, ReportLogger);
@@ -218,10 +233,10 @@ namespace FinanceCommonViewModels
         {
             if (fSelectedName != null)
             {
-                var result = fFileService.SaveFile("csv", string.Empty, DataStore.Directory, "Csv Files|*.csv|All Files|*.*");
+                FileInteractionResult result = fFileService.SaveFile("csv", string.Empty, DataStore.Directory, "Csv Files|*.csv|All Files|*.*");
                 if (result.Success != null && (bool)result.Success)
                 {
-                    if (DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out var account))
+                    if (DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out ISingleValueDataList account))
                     {
                         CsvReaderWriter.WriteToCSVFile(account, result.FilePath, ReportLogger);
                     }

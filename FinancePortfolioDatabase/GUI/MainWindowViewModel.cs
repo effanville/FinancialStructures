@@ -1,10 +1,10 @@
-﻿using FinanceCommonViewModels;
+﻿using System;
+using System.Collections.Generic;
+using FinanceCommonViewModels;
 using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.PortfolioAPI;
 using StructureCommon.Reporting;
-using System;
-using System.Collections.Generic;
 using UICommon.Services;
 using UICommon.ViewModelBases;
 
@@ -66,7 +66,7 @@ namespace FinanceWindowsViewModels
 
         private void AllData_portfolioChanged(object sender, EventArgs e)
         {
-            foreach (var tab in Tabs)
+            foreach (object tab in Tabs)
             {
                 if (tab is ViewModelBase<IPortfolio> vm)
                 {

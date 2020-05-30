@@ -1,11 +1,11 @@
-﻿using FinancialStructures.NamingStructures;
-using StructureCommon.FileAccess;
-using StructureCommon.Reporting;
-using StructureCommon.WebAccess;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using FinancialStructures.NamingStructures;
+using StructureCommon.FileAccess;
+using StructureCommon.Reporting;
+using StructureCommon.WebAccess;
 
 namespace FinancialStructures.StockStructures
 {
@@ -23,7 +23,7 @@ namespace FinancialStructures.StockStructures
 
         public double GetValue(NameData name, DateTime date, DataStream datatype = DataStream.Close)
         {
-            foreach (var stock in Stocks)
+            foreach (Stock stock in Stocks)
             {
                 if (stock.Name.IsEqualTo(name))
                 {
@@ -40,7 +40,7 @@ namespace FinancialStructures.StockStructures
 
             for (int stockIndex = 1; stockIndex < Stocks.Count; stockIndex++)
             {
-                var stockEarliest = Stocks[stockIndex].EarliestTime();
+                DateTime stockEarliest = Stocks[stockIndex].EarliestTime();
                 if (stockEarliest < earliest)
                 {
                     earliest = stockEarliest;
@@ -56,7 +56,7 @@ namespace FinancialStructures.StockStructures
 
             for (int stockIndex = 1; stockIndex < Stocks.Count; stockIndex++)
             {
-                var stockLast = Stocks[stockIndex].LastTime();
+                DateTime stockLast = Stocks[stockIndex].LastTime();
                 if (stockLast < last)
                 {
                     last = stockLast;
@@ -93,7 +93,7 @@ namespace FinancialStructures.StockStructures
         {
             if (File.Exists(filePath))
             {
-                var database = XmlFileAccess.ReadFromXmlFile<ExchangeStocks>(filePath, out string error);
+                ExchangeStocks database = XmlFileAccess.ReadFromXmlFile<ExchangeStocks>(filePath, out string error);
                 if (database != null)
                 {
                     Stocks = database.Stocks;
@@ -116,7 +116,7 @@ namespace FinancialStructures.StockStructures
 
         public void Download(DownloadType downloadType, DateTime startDate, DateTime endDate, IReportLogger reportLogger = null)
         {
-            foreach (var stock in Stocks)
+            foreach (Stock stock in Stocks)
             {
                 Uri downloadUrl;
                 if (downloadType == DownloadType.All)
@@ -188,7 +188,7 @@ namespace FinancialStructures.StockStructures
             {
                 double close = FindAndGetSingleValue(websiteHtml, "<span class=\"Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)\" data-reactid=\"34\">");
                 double open = FindAndGetSingleValue(websiteHtml, "data-test=\"OPEN-value\" data-reactid=\"46\"><span class=\"Trsdu(0.3s) \" data-reactid=\"47\">");
-                var range = FindAndGetDoubleValues(websiteHtml, "data-test=\"DAYS_RANGE-value\" data-reactid=\"61\">");
+                Tuple<double, double> range = FindAndGetDoubleValues(websiteHtml, "data-test=\"DAYS_RANGE-value\" data-reactid=\"61\">");
                 double volume = FindAndGetSingleValue(websiteHtml, "data-test=\"TD_VOLUME-value\" data-reactid=\"69\"><span class=\"Trsdu(0.3s) \" data-reactid=\"70\">");
 
                 DateTime date = DateTime.Now.TimeOfDay > new DateTime(2010, 1, 1, 16, 30, 0).TimeOfDay ? DateTime.Today : DateTime.Today.AddDays(-1);
@@ -214,9 +214,9 @@ namespace FinancialStructures.StockStructures
             int lengthToSearch = Math.Min(containedWithin, searchString.Length - index - findString.Length);
             string value = searchString.Substring(index + findString.Length, lengthToSearch);
 
-            var digits = value.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
+            char[] digits = value.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
 
-            var str = new string(digits);
+            string str = new string(digits);
             if (string.IsNullOrEmpty(str))
             {
                 return double.NaN;
@@ -240,17 +240,17 @@ namespace FinancialStructures.StockStructures
             int lengthToSearch = Math.Min(containedWithin, searchString.Length - index - findString.Length);
             string value = searchString.Substring(index + findString.Length, lengthToSearch);
 
-            var digits = value.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
+            char[] digits = value.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
 
-            var str = new string(digits);
+            string str = new string(digits);
             if (string.IsNullOrEmpty(str))
             {
                 return new Tuple<double, double>(double.NaN, double.NaN);
             }
             double value1 = double.Parse(str);
             int separator = value.IndexOf("-");
-            var secondDigits = value.Substring(separator).SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
-            var str2 = new string(secondDigits);
+            char[] secondDigits = value.Substring(separator).SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
+            string str2 = new string(secondDigits);
             double value2 = double.Parse(str2);
             return new Tuple<double, double>(value1, value2);
         }
@@ -274,7 +274,7 @@ namespace FinancialStructures.StockStructures
 
             foreach (string line in fileContents)
             {
-                var inputs = line.Split(',');
+                string[] inputs = line.Split(',');
                 AddStock(inputs);
             }
         }

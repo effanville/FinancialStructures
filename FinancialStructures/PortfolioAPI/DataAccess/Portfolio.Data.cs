@@ -1,9 +1,9 @@
-﻿using FinancialStructures.DataStructures;
+﻿using System.Collections.Generic;
+using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 using StructureCommon.Reporting;
-using System.Collections.Generic;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -60,7 +60,7 @@ namespace FinancialStructures.PortfolioAPI
 
         private static List<DailyValuation> SingleDataListDataObtainer<T>(List<T> objects, AccountType elementType, NameData name, IReportLogger reportLogger = null) where T : ISingleValueDataList
         {
-            foreach (var account in objects)
+            foreach (T account in objects)
             {
                 if (name.IsEqualTo(account.Names))
                 {

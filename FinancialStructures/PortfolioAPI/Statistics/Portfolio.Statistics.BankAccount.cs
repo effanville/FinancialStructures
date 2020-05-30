@@ -1,7 +1,7 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceInterfaces;
 
 namespace FinancialStructures.PortfolioAPI
 {
@@ -9,7 +9,7 @@ namespace FinancialStructures.PortfolioAPI
     {
         public static List<DayValue_Named> GenerateCompanyBankAccountStatistics(this IPortfolio portfolio, string company, bool DisplayValueFunds)
         {
-            var namesAndCompanies = new List<DayValue_Named>();
+            List<DayValue_Named> namesAndCompanies = new List<DayValue_Named>();
 
             foreach (ICashAccount account in portfolio.BankAccounts)
             {
@@ -17,7 +17,7 @@ namespace FinancialStructures.PortfolioAPI
                 {
                     if ((DisplayValueFunds && account.LatestValue().Value != 0) || !DisplayValueFunds)
                     {
-                        var currency = PortfolioValues.Currency(portfolio, AccountType.BankAccount, account);
+                        ICurrency currency = PortfolioValues.Currency(portfolio, AccountType.BankAccount, account);
                         namesAndCompanies.Add(new DayValue_Named(account.Company, account.Name, account.LatestValue(currency).Day, account.LatestValue(currency).Value));
                     }
                 }
@@ -35,14 +35,14 @@ namespace FinancialStructures.PortfolioAPI
         {
             if (portfolio != null)
             {
-                var namesAndCompanies = new List<DayValue_Named>();
+                List<DayValue_Named> namesAndCompanies = new List<DayValue_Named>();
 
                 foreach (ICashAccount acc in portfolio.BankAccounts)
                 {
                     if ((DisplayValueFunds && acc.LatestValue().Value != 0) || !DisplayValueFunds)
                     {
-                        var currency = PortfolioValues.Currency(portfolio, AccountType.BankAccount, acc);
-                        var latest = new DayValue_Named(acc.Company, acc.Name, acc.LatestValue(currency));
+                        ICurrency currency = PortfolioValues.Currency(portfolio, AccountType.BankAccount, acc);
+                        DayValue_Named latest = new DayValue_Named(acc.Company, acc.Name, acc.LatestValue(currency));
                         namesAndCompanies.Add(latest);
                     }
                 }

@@ -1,6 +1,6 @@
-﻿using StructureCommon.Mathematics;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using StructureCommon.Mathematics;
 
 namespace FinancialStructures.StockStructures
 {
@@ -44,7 +44,7 @@ namespace FinancialStructures.StockStructures
 
         public double Stochastic(DateTime day, int length, int innerLength = 3)
         {
-            var KValues = K(day, length, 2 * innerLength);
+            List<double> KValues = K(day, length, 2 * innerLength);
             double sum = 0.0;
             for (int index1 = 0; index1 < innerLength; index1++)
             {

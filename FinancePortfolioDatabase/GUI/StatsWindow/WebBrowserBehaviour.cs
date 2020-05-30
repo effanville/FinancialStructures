@@ -23,13 +23,15 @@ namespace WebBrowserWindow
         {
             WebBrowser browser = o as WebBrowser;
             if (browser == null)
+            {
                 return;
+            }
 
             Uri uri = null;
 
             if (e.NewValue is string)
             {
-                var uriString = e.NewValue as string;
+                string uriString = e.NewValue as string;
                 uri = string.IsNullOrWhiteSpace(uriString) ? null : new Uri(uriString);
             }
             else if (e.NewValue is Uri)

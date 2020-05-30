@@ -1,12 +1,12 @@
-﻿using FinanceCommonViewModels;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using FinanceCommonViewModels;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using StructureCommon.Reporting;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using UICommon.Services;
 using UICommon.ViewModelBases;
 
@@ -47,7 +47,7 @@ namespace FinanceWindowsViewModels
                 }
                 if (removableTabs.Any())
                 {
-                    foreach (var tab in removableTabs)
+                    foreach (object tab in removableTabs)
                     {
                         _ = Tabs.Remove(tab);
                     }

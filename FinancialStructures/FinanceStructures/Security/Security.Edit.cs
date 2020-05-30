@@ -1,11 +1,11 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.NamingStructures;
-using StructureCommon.DataStructures;
-using StructureCommon.Reporting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using FinancialStructures.DataStructures;
+using FinancialStructures.NamingStructures;
+using StructureCommon.DataStructures;
+using StructureCommon.Reporting;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -31,8 +31,8 @@ namespace FinancialStructures.FinanceStructures
 
         public List<object> CreateDataFromCsv(List<string[]> valuationsToRead, IReportLogger reportLogger = null)
         {
-            var dailyValuations = new List<object>();
-            foreach (var dayValuation in valuationsToRead)
+            List<object> dailyValuations = new List<object>();
+            foreach (string[] dayValuation in valuationsToRead)
             {
                 if (dayValuation.Length != 4)
                 {
@@ -40,7 +40,7 @@ namespace FinancialStructures.FinanceStructures
                     break;
                 }
 
-                var line = new SecurityDayData(DateTime.Parse(dayValuation[0]), double.Parse(dayValuation[1]), double.Parse(dayValuation[2]), double.Parse(dayValuation[3]));
+                SecurityDayData line = new SecurityDayData(DateTime.Parse(dayValuation[0]), double.Parse(dayValuation[1]), double.Parse(dayValuation[2]), double.Parse(dayValuation[3]));
                 dailyValuations.Add(line);
             }
 
@@ -133,7 +133,7 @@ namespace FinancialStructures.FinanceStructures
         {
             if (Names.Sectors != null && Names.Sectors.Any())
             {
-                foreach (var name in Names.Sectors)
+                foreach (string name in Names.Sectors)
                 {
                     if (name == sectorName)
                     {
@@ -187,7 +187,7 @@ namespace FinancialStructures.FinanceStructures
             // return true;
             for (int index = 0; index < fInvestments.Count(); index++)
             {
-                var investmentValue = fInvestments[index];
+                DailyValuation investmentValue = fInvestments[index];
                 if (investmentValue.Value != 0)
                 {
                     DailyValuation sharesCurrentValue = fShares.NearestEarlierValue(investmentValue.Day);

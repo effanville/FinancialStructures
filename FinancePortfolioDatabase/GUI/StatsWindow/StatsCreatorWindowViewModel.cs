@@ -1,10 +1,13 @@
-﻿using FinanceViewModels.StatsViewModels;
-using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.StatsMakers;
-using StructureCommon.Reporting;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using FinanceViewModels.StatsViewModels;
+using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.PortfolioAPI;
+using FinancialStructures.StatisticStructures;
+using FinancialStructures.StatsMakers;
+using StructureCommon.Reporting;
 using UICommon.Commands;
 using UICommon.Services;
 using UICommon.ViewModelBases;
@@ -33,7 +36,7 @@ namespace FinanceWindowsViewModels
         public int HistoryGapDays
         {
             get; set;
-        }
+        } = 20;
 
         private readonly IReportLogger ReportLogger;
         private readonly IFileInteractionService fFileService;
@@ -76,13 +79,13 @@ namespace FinanceWindowsViewModels
         private void ExecuteExportToCSVCommand()
         {
             Action<string> StatsOptionFeedback = (filePath) => StatsFeedback(filePath);
-            var context = new StatsOptionsViewModel(DataStore, ExportType.CSV, ReportLogger, StatsOptionFeedback, fFileService, fDialogCreationService);
+            StatsOptionsViewModel context = new StatsOptionsViewModel(DataStore, ExportType.CSV, ReportLogger, StatsOptionFeedback, fFileService, fDialogCreationService);
             fDialogCreationService.DisplayCustomDialog(context);
         }
 
         private void ExecuteInvestmentListCommand()
         {
-            var result = fFileService.SaveFile(".csv", DataStore.DatabaseName + "-CSVStats.csv", DataStore.Directory, "CSV file|*.csv|All files|*.*");
+            FileInteractionResult result = fFileService.SaveFile(".csv", DataStore.DatabaseName + "-CSVStats.csv", DataStore.Directory, "CSV file|*.csv|All files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
                 if (!result.FilePath.EndsWith(".csv"))
@@ -98,9 +101,9 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private void ExecuteCreateHistory()
+        private async void ExecuteCreateHistory()
         {
-            var result = fFileService.SaveFile(".csv", DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + DataStore.DatabaseName + "-History.csv", DataStore.Directory, "CSV file|*.csv|All files|*.*");
+            FileInteractionResult result = fFileService.SaveFile(".csv", DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + DataStore.DatabaseName + "-History.csv", DataStore.Directory, "CSV file|*.csv|All files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
                 if (!result.FilePath.EndsWith(".csv"))
@@ -108,7 +111,8 @@ namespace FinanceWindowsViewModels
                     result.FilePath += ".csv";
                 }
 
-                CSVHistoryWriter.WriteHistoryToCSV(DataStore, result.FilePath, HistoryGapDays, ReportLogger);
+                List<PortfolioDaySnapshot> historyStatistics = await DataStore.GenerateHistoryStats(HistoryGapDays).ConfigureAwait(false);
+                CSVHistoryWriter.WriteToCSV(historyStatistics, result.FilePath, ReportLogger);
             }
             else
             {
@@ -119,7 +123,7 @@ namespace FinanceWindowsViewModels
         private void ExecuteCreateHTMLCommand()
         {
             Action<string> StatsOptionFeedback = (filePath => StatsFeedback(filePath));
-            var context = new StatsOptionsViewModel(DataStore, ExportType.HTML, ReportLogger, StatsOptionFeedback, fFileService, fDialogCreationService);
+            StatsOptionsViewModel context = new StatsOptionsViewModel(DataStore, ExportType.HTML, ReportLogger, StatsOptionFeedback, fFileService, fDialogCreationService);
             fDialogCreationService.DisplayCustomDialog(context);
         }
 
@@ -132,7 +136,7 @@ namespace FinanceWindowsViewModels
         {
             base.UpdateData(portfolio);
 
-            foreach (var tab in StatsTabs)
+            foreach (object tab in StatsTabs)
             {
                 if (tab is TabViewModelBase vmBase)
                 {

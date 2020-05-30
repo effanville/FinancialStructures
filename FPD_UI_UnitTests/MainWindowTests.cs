@@ -15,9 +15,9 @@ namespace FPD_UI_UnitTests
         [Test]
         public void CanSuccessfullyCreateMainViewModel()
         {
-            var fileMock = TestingGUICode.CreateFileMock("testFilePath");
-            var dialogMock = TestingGUICode.CreateDialogMock();
-            var viewModel = new MainWindowViewModel(fileMock.Object, dialogMock.Object);
+            Moq.Mock<UICommon.Services.IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("testFilePath");
+            Moq.Mock<UICommon.Services.IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
+            MainWindowViewModel viewModel = new MainWindowViewModel(fileMock.Object, dialogMock.Object);
 
             Assert.AreEqual(6, viewModel.Tabs.Count);
         }

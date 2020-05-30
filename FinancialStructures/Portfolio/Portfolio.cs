@@ -1,10 +1,10 @@
-﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.PortfolioAPI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
+using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.FinanceStructures;
+using FinancialStructures.PortfolioAPI;
 
 namespace FinancialStructures.Database
 {
@@ -207,25 +207,25 @@ namespace FinancialStructures.Database
         /// <inheritdoc/>
         public void WireDataChangedEvents()
         {
-            foreach (var security in Funds)
+            foreach (Security security in Funds)
             {
                 security.DataEdit += OnPortfolioChanged;
                 security.SetupEventListening();
             }
 
-            foreach (var bankAccount in BankAccounts)
+            foreach (CashAccount bankAccount in BankAccounts)
             {
                 bankAccount.DataEdit += OnPortfolioChanged;
                 bankAccount.SetupEventListening();
             }
 
-            foreach (var sector in BenchMarks)
+            foreach (Sector sector in BenchMarks)
             {
                 sector.DataEdit += OnPortfolioChanged;
                 sector.SetupEventListening();
             }
 
-            foreach (var currency in Currencies)
+            foreach (Currency currency in Currencies)
             {
                 currency.DataEdit += OnPortfolioChanged;
                 currency.SetupEventListening();

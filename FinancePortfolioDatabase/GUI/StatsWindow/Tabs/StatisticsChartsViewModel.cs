@@ -1,19 +1,19 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.PortfolioAPI;
-using FinancialStructures.StatisticStructures;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls.DataVisualization.Charting;
 using System.Windows.Media;
+using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.PortfolioAPI;
+using FinancialStructures.StatisticStructures;
 
 namespace FinanceViewModels.StatsViewModels
 {
     internal class StatisticsChartsViewModel : TabViewModelBase
     {
-        private Random rnd = new Random();
+        private readonly Random rnd = new Random();
         private int fHistoryGapDays = 25;
         public int HistoryGapDays
         {
@@ -118,7 +118,7 @@ namespace FinanceViewModels.StatsViewModels
                 {
                     if (HistoryStats[HistoryStats.Count - 1].SectorValues[sectorIndex].Value > 5000)
                     {
-                        var pc = new List<KeyValuePair<DateTime, double>>();
+                        List<KeyValuePair<DateTime, double>> pc = new List<KeyValuePair<DateTime, double>>();
                         for (int time = 0; time < HistoryStats.Count; time++)
                         {
                             pc.Add(new KeyValuePair<DateTime, double>(HistoryStats[time].SectorCar[sectorIndex].Day, HistoryStats[time].SectorCar[sectorIndex].Value));
