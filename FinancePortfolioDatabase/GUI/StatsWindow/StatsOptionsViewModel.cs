@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
 using FinancialStructures.DataStructures;
@@ -62,6 +63,20 @@ namespace FinanceWindowsViewModels
             }
         }
 
+        private string fSecuritySortingField;
+        public string SecuritySortingField
+        {
+            get
+            {
+                return fSecuritySortingField;
+            }
+            set
+            {
+                fSecuritySortingField = value;
+                OnPropertyChanged(nameof(SecuritySortingField));
+            }
+        }
+
         private List<VisibleName> fSecurityColumnNames = new List<VisibleName>();
 
         public List<VisibleName> SecurityColumnNames
@@ -106,6 +121,20 @@ namespace FinanceWindowsViewModels
             }
         }
 
+        private string fSectorSortingField;
+        public string SectorSortingField
+        {
+            get
+            {
+                return fSectorSortingField;
+            }
+            set
+            {
+                fSectorSortingField = value;
+                OnPropertyChanged(nameof(SectorSortingField));
+            }
+        }
+
         private List<VisibleName> fSectorColumnNames = new List<VisibleName>();
 
         public List<VisibleName> SectorColumnNames
@@ -118,6 +147,22 @@ namespace FinanceWindowsViewModels
             {
                 fSectorColumnNames = value;
                 OnPropertyChanged();
+            }
+        }
+
+        public List<string> SecurityFieldNames
+        {
+            get
+            {
+                return new SecurityStatistics().GetType().GetProperties().Select(property => property.Name).ToList();
+            }
+        }
+
+        public List<string> BankFieldNames
+        {
+            get
+            {
+                return new DayValue_Named().GetType().GetProperties().Select(property => property.Name).ToList();
             }
         }
 
@@ -160,7 +205,7 @@ namespace FinanceWindowsViewModels
                     }
                 }
 
-                UserOptions options = new UserOptions(securitySelected, BankSelected, sectorSelected, DisplayConditions, bankSortingField: BankSortingField);
+                UserOptions options = new UserOptions(securitySelected, BankSelected, sectorSelected, DisplayConditions, SecuritySortingField, BankSortingField, SectorSortingField);
                 var stats = new PortfolioStatistics(Portfolio);
                 string extension = Path.GetExtension(result.FilePath).Trim('.');
                 ExportType type = extension.ToEnum<ExportType>();
@@ -192,16 +237,14 @@ namespace FinanceWindowsViewModels
             CloseWindowAction = CloseWindow;
             ExportCommand = new RelayCommand<ICloseable>(ExecuteExportCommand);
 
-            SecurityStatistics totals = new SecurityStatistics();
-            PropertyInfo[] properties = totals.GetType().GetProperties();
+            PropertyInfo[] properties = new SecurityStatistics().GetType().GetProperties();
             foreach (PropertyInfo info in properties)
             {
                 SecurityColumnNames.Add(new VisibleName(info.Name, true));
                 SectorColumnNames.Add(new VisibleName(info.Name, true));
             }
 
-            DayValue_Named BankNames = new DayValue_Named();
-            PropertyInfo[] props = BankNames.GetType().GetProperties();
+            PropertyInfo[] props = new DayValue_Named().GetType().GetProperties();
             foreach (PropertyInfo info in props)
             {
                 if (info.Name == "Day")

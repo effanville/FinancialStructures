@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.StatsMakers;
 using StructureCommon.Extensions;
 
 namespace FinancialStructures.StatisticStructures
@@ -14,6 +15,64 @@ namespace FinancialStructures.StatisticStructures
     /// </summary>
     public static class SecurityStatsGenerator
     {
+        public static Comparison<SecurityStatistics> GetComparison(string fieldToSortWith)
+        {
+            switch (fieldToSortWith)
+            {
+                case ("Company"):
+                case ("Name"):
+                case ("Names"):
+                case "FundsFraction":
+                case "FundCompanyFraction":
+                case "Number":
+                default:
+                {
+                    return (a, b) => a.CompareTo(b);
+                }
+                case ("LatestVal"):
+                {
+                    return (a, b) => b.LatestVal.CompareTo(a.LatestVal);
+                }
+                case "SharePrice":
+                {
+                    return (a, b) => b.SharePrice.CompareTo(a.SharePrice);
+                }
+                case "RecentChange":
+                {
+                    return (a, b) => b.RecentChange.CompareTo(a.RecentChange);
+                }
+                case "Profit":
+                {
+                    return (a, b) => b.Profit.CompareTo(a.Profit);
+                }
+                case "CAR3M":
+                {
+                    return (a, b) => b.CAR3M.CompareTo(a.CAR3M);
+                }
+                case "CAR6M":
+                {
+                    return (a, b) => b.CAR6M.CompareTo(a.CAR6M);
+                }
+                case "CAR1Y":
+                {
+                    return (a, b) => b.CAR1Y.CompareTo(a.CAR1Y);
+                }
+                case "CAR5Y":
+                {
+                    return (a, b) => b.CAR5Y.CompareTo(a.CAR5Y);
+                }
+                case "CARTotal":
+                {
+                    return (a, b) => b.CARTotal.CompareTo(a.CARTotal);
+                }
+            }
+        }
+
+        public static void SortSecurityStatistics(List<SecurityStatistics> statsToSort, string fieldToSortUnder)
+        {
+            statsToSort.Sort(GetComparison(fieldToSortUnder));
+        }
+
         public static void AddSecurityStats(this IPortfolio portfolio, SecurityStatistics securityStats, DateTime date)
         {
 
@@ -107,61 +166,6 @@ namespace FinancialStructures.StatisticStructures
         public StatisticsType StatsType;
 
         /// <summary>
-        /// Returns the property names with suitable html tags surrounding to place in a table header.
-        /// </summary>
-        public string HtmlTableData(UserOptions options, List<string> names)
-        {
-            System.Reflection.PropertyInfo[] properties = GetType().GetProperties();
-            string htmlData = "<th scope=\"row\">";
-
-            for (int i = 0; i < properties.Length; i++)
-            {
-                bool isDouble = double.TryParse(properties[i].GetValue(this).ToString(), out double value);
-
-                if (names.Contains(properties[i].Name))
-                {
-                    if (i != 0)
-                    {
-                        if (value < 0)
-                        {
-                            htmlData += "<td data-negative>";
-                        }
-                        else
-                        {
-                            htmlData += "<td>";
-                        }
-                    }
-
-                    htmlData += properties[i].GetValue(this).ToString();
-                    htmlData += "</td>";
-                }
-            }
-
-            return htmlData;
-        }
-
-        /// <summary>
-        /// Returns the property names with suitable html tags surrounding to place in a table header.
-        /// </summary>
-        /// <returns></returns>
-        public string HtmlTableHeader(UserOptions options, List<string> names)
-        {
-            System.Reflection.PropertyInfo[] properties = GetType().GetProperties();
-            string htmlHeader = string.Empty;
-            foreach (System.Reflection.PropertyInfo property in properties)
-            {
-                if (names.Contains(property.Name))
-                {
-                    htmlHeader += "<th scope=\"col\">";
-                    htmlHeader += property.Name;
-                    htmlHeader += "</th>";
-                }
-            }
-
-            return htmlHeader;
-        }
-
-        /// <summary>
         /// Default comparison of SecurityStatistics, comparing by name. 
         /// </summary>
         public int CompareTo(object obj)
@@ -200,6 +204,9 @@ namespace FinancialStructures.StatisticStructures
             return 0;
         }
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public SecurityStatistics()
         {
         }
@@ -211,6 +218,7 @@ namespace FinancialStructures.StatisticStructures
         }
 
         public TwoName Names;
+
         public string Company
         {
             get
@@ -218,6 +226,7 @@ namespace FinancialStructures.StatisticStructures
                 return Names.Company;
             }
         }
+
         public string Name
         {
             get

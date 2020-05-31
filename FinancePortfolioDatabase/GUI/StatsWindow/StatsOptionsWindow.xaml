@@ -7,7 +7,7 @@
               xmlns:vm="clr-namespace:FinancialStructures.StatsMakers;assembly=FinancialStructures"
               mc:Ignorable="d"
               Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}"
-              Height="400"
+              Height="450"
               Width="350"
               MinHeight="200"
               MinWidth="200">
@@ -28,6 +28,19 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="5"
+                       Grid.Column="0"
+                       Text="Securities Sorting Field" />
+            <ComboBox Grid.Column="1"
+                      Margin="5"
+                      ItemsSource="{Binding SecurityFieldNames}"
+                      SelectedItem="{Binding SecuritySortingField}" />
+        </Grid>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -56,6 +69,19 @@
             </Grid.ColumnDefinitions>
             <TextBlock Margin="5"
                        Grid.Column="0"
+                       Text="BankAccount Sorting Field" />
+            <ComboBox Grid.Column="1"
+                      Margin="5"
+                      ItemsSource="{Binding  BankFieldNames}"
+                      SelectedItem="{Binding BankSortingField}" />
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="5"
+                       Grid.Column="0"
                        Text="BankAccounts Columns" />
             <ComboBox Grid.Column="1"
                       Margin="5"
@@ -70,6 +96,19 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="5"
+                       Grid.Column="0"
+                       Text="Sector Sorting Field" />
+            <ComboBox Grid.Column="1"
+                      Margin="5"
+                      ItemsSource="{Binding SecurityFieldNames}"
+                      SelectedItem="{Binding SectorSortingField}" />
         </Grid>
         <Grid>
             <Grid.ColumnDefinitions>

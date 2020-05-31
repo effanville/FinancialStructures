@@ -4,6 +4,7 @@ using System.IO;
 using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.StatisticStructures;
 using StructureCommon.Extensions;
@@ -16,7 +17,7 @@ namespace FinancialStructures.StatsMakers
     /// </summary>
     public class PortfolioStatistics
     {
-        private string fDatabaseName;
+        private readonly string fDatabaseName;
 
         /// <summary>
         /// Totals of different types held in portfolio.
@@ -82,7 +83,6 @@ namespace FinancialStructures.StatsMakers
         /// <summary>
         /// Constructor from a portfolio.
         /// </summary>
-        /// <param name="portfolio"></param>
         public PortfolioStatistics(IPortfolio portfolio)
         {
             fDatabaseName = portfolio.DatabaseName;
@@ -144,10 +144,10 @@ namespace FinancialStructures.StatsMakers
 
                     if (options.DisplayValueFunds)
                     {
-                        securityDataToWrite.RemoveAll(entry => entry.LatestVal.Equals(0));
+                        _ = securityDataToWrite.RemoveAll(entry => entry.LatestVal.Equals(0));
                     }
 
-                    securityDataToWrite.Sort();
+                    SecurityStatsGenerator.SortSecurityStatistics(securityDataToWrite, options.SecuritySortingField);
                     fileWriter.WriteTable(exportType, options.SecurityDataToExport, securityDataToWrite);
                 }
 
@@ -159,10 +159,22 @@ namespace FinancialStructures.StatsMakers
 
                     if (options.DisplayValueFunds)
                     {
-                        bankAccountDataToWrite.RemoveAll(entry => entry.Value.Equals(0));
+                        _ = bankAccountDataToWrite.RemoveAll(entry => entry.Value.Equals(0));
                     }
 
-                    bankAccountDataToWrite.Sort();
+                    if (options.BankAccountSortingField == "Value")
+                    {
+                        bankAccountDataToWrite.Sort((a, b) => b.Value.CompareTo(a.Value));
+                    }
+                    else if (options.BankAccountSortingField == "Day")
+                    {
+                        bankAccountDataToWrite.Sort((a, b) => b.Day.CompareTo(a.Day));
+                    }
+                    else
+                    {
+                        bankAccountDataToWrite.Sort();
+                    }
+
                     fileWriter.WriteTable(exportType, options.BankAccDataToExport, bankAccountDataToWrite);
                 }
 
@@ -173,10 +185,10 @@ namespace FinancialStructures.StatsMakers
 
                     if (options.DisplayValueFunds)
                     {
-                        sectorDataToWrite.RemoveAll(entry => entry.LatestVal.Equals(0));
+                        _ = sectorDataToWrite.RemoveAll(entry => entry.LatestVal.Equals(0));
                     }
 
-                    sectorDataToWrite.Sort();
+                    SecurityStatsGenerator.SortSecurityStatistics(sectorDataToWrite, options.SectorSortingField);
                     fileWriter.WriteTable(exportType, options.SectorDataToExport, sectorDataToWrite);
                 }
 
