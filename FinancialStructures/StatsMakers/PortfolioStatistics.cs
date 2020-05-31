@@ -4,7 +4,6 @@ using System.IO;
 using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.StatisticStructures;
 using StructureCommon.Extensions;

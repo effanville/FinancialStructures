@@ -2,50 +2,63 @@
 
 namespace Colouring
 {
+    /// <summary>
+    /// Stores the colours and brushes used in the program.
+    /// </summary>
     public static class Colours
     {
-        public static Color BackgroundMainColour { get; set; } = Colors.AliceBlue;
+        /// <summary>
+        /// The colour used for the background
+        /// </summary>
+        public static Color BackgroundMainColour
+        {
+            get;
+            set;
+        } = Colors.AliceBlue;
 
-        private static Brush fBackgroundBrush = new SolidColorBrush(BackgroundMainColour);
+        /// <summary>
+        /// A bruch with the same colour as <see cref="BackgroundMainColour"/>.
+        /// </summary>
         public static Brush BackgroundBrush
         {
-            get
-            {
-                return fBackgroundBrush;
-            }
-            set
-            {
-                fBackgroundBrush = value;
-            }
-        }
+            get;
+            set;
+        } = new SolidColorBrush(BackgroundMainColour);
 
-        public static Color BackgroundSecondColour { get; set; } = Colors.LightBlue;
+        /// <summary>
+        /// A secondary background colour.
+        /// </summary>
+        public static Color BackgroundSecondColour
+        {
+            get;
+            set;
+        } = Colors.LightBlue;
 
-        private static Brush fBackgroundSecondaryBrush = new SolidColorBrush(BackgroundSecondColour);
+        /// <summary>
+        /// A brush with colour of <see cref="BackgroundSecondColour"/>
+        /// </summary>
         public static Brush BackgroundSecondaryBrush
         {
-            get
-            {
-                return fBackgroundSecondaryBrush;
-            }
-            set
-            {
-                fBackgroundSecondaryBrush = value;
-            }
-        }
-        public static Color ButtonColour { get; set; } = Colors.Lavender;
+            get;
+            set;
+        } = new SolidColorBrush(BackgroundSecondColour);
 
-        private static Brush fDefaultButtonBrush = new SolidColorBrush(ButtonColour);
+        /// <summary>
+        /// The colour used on buttons.
+        /// </summary>
+        public static Color ButtonColour
+        {
+            get;
+            set;
+        } = Colors.Lavender;
+
+        /// <summary>
+        /// A brush with the same colour as <see cref="ButtonColour"/>.
+        /// </summary>
         public static Brush DefaultButtonBrush
         {
-            get
-            {
-                return fDefaultButtonBrush;
-            }
-            set
-            {
-                fDefaultButtonBrush = value;
-            }
-        }
+            get;
+            set;
+        } = new SolidColorBrush(ButtonColour);
     }
 }

@@ -8,6 +8,9 @@ namespace FinanceWindows
     /// </summary>
     public partial class StatsCreatorWindow : Grid
     {
+        /// <summary>
+        /// Construct an instance.
+        /// </summary>
         public StatsCreatorWindow()
         {
             InitializeComponent();

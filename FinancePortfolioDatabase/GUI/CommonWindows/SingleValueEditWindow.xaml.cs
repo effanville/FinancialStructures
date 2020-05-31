@@ -8,6 +8,9 @@ namespace FinanceWindows
     /// </summary>
     public partial class SingleValueEditWindow : Grid
     {
+        /// <summary>
+        /// Construct an instance.
+        /// </summary>
         public SingleValueEditWindow()
         {
             InitializeComponent();

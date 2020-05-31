@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
@@ -15,6 +13,11 @@ namespace FinancialStructures.StatisticStructures
     /// </summary>
     public static class SecurityStatsGenerator
     {
+        /// <summary>
+        /// Provides a comparer based on a provided field
+        /// </summary>
+        /// <param name="fieldToSortWith">The field one wishes to compare the statistics with.</param>
+        /// <returns></returns>
         public static Comparison<SecurityStatistics> GetComparison(string fieldToSortWith)
         {
             switch (fieldToSortWith)
@@ -68,11 +71,19 @@ namespace FinancialStructures.StatisticStructures
             }
         }
 
+        /// <summary>
+        /// Enacts a comparison of a list given a field to sort with.
+        /// </summary>
+        /// <param name="statsToSort"></param>
+        /// <param name="fieldToSortUnder"></param>
         public static void SortSecurityStatistics(List<SecurityStatistics> statsToSort, string fieldToSortUnder)
         {
             statsToSort.Sort(GetComparison(fieldToSortUnder));
         }
 
+        /// <summary>
+        /// Adds statistics.
+        /// </summary>
         public static void AddSecurityStats(this IPortfolio portfolio, SecurityStatistics securityStats, DateTime date)
         {
 
@@ -123,6 +134,9 @@ namespace FinancialStructures.StatisticStructures
             }
         }
 
+        /// <summary>
+        /// Adds statistics for a sector.
+        /// </summary>
         public static void AddSectorStats(this IPortfolio portfolio, SecurityStatistics securityStats, DateTime date)
         {
             if (securityStats.StatsType == StatisticsType.BenchMarkTotal)
@@ -163,6 +177,9 @@ namespace FinancialStructures.StatisticStructures
     /// </summary>
     public class SecurityStatistics : IComparable
     {
+        /// <summary>
+        /// The type of statistics stored in this class.
+        /// </summary>
         public StatisticsType StatsType;
 
         /// <summary>
@@ -211,14 +228,25 @@ namespace FinancialStructures.StatisticStructures
         {
         }
 
+        /// <summary>
+        /// Constructor giving a type and a name.
+        /// </summary>
+        /// <param name="statsType"></param>
+        /// <param name="names"></param>
         public SecurityStatistics(StatisticsType statsType, TwoName names)
         {
             StatsType = statsType;
             Names = names;
         }
 
+        /// <summary>
+        /// The names of this statistics.
+        /// </summary>
         public TwoName Names;
 
+        /// <summary>
+        /// The company these statistics are associated to.
+        /// </summary>
         public string Company
         {
             get
@@ -227,6 +255,9 @@ namespace FinancialStructures.StatisticStructures
             }
         }
 
+        /// <summary>
+        /// The given name for these statistics.
+        /// </summary>
         public string Name
         {
             get
@@ -234,55 +265,122 @@ namespace FinancialStructures.StatisticStructures
                 return Names.Name;
             }
         }
+
+        /// <summary>
+        /// The latest value of the object.
+        /// </summary>
         public double LatestVal
         {
-            get; set;
+            get;
+            set;
         }
+
+        /// <summary>
+        /// The Share price of the object (if relevant).
+        /// </summary>
         public double SharePrice
         {
-            get; set;
+            get;
+            set;
         }
+
+        /// <summary>
+        /// The change between the two most recent valuations.
+        /// </summary>
         public double RecentChange
         {
-            get; set;
+            get;
+            set;
         }
+
+        /// <summary>
+        /// The current fraction this object has out of all securities.
+        /// </summary>
         public double FundsFraction
         {
-            get; set;
+            get;
+            set;
         }
+
+        /// <summary>
+        /// The current fraction this object has out of all objects under company name.
+        /// </summary>
         public double FundCompanyFraction
         {
             get;
             set;
         }
+
+        /// <summary>
+        /// Some miscellaneous field. Usually used for the number of sectors associated to this object.
+        /// </summary>
         public int Number
         {
-            get; set;
+            get;
+            set;
         }
+
+        /// <summary>
+        /// The profit gained from this object.
+        /// </summary>
         public double Profit
         {
-            get; set;
+            get;
+            set;
         }
+
+        /// <summary>
+        /// The IRR of this object over the past 3 months.
+        /// </summary>
         public double CAR3M
         {
-            get; set;
+            get;
+            set;
         }
+
+        /// <summary>
+        /// The IRR of this object over the past 6 months.
+        /// </summary>
         public double CAR6M
         {
-            get; set;
+            get;
+            set;
         }
+
+        /// <summary>
+        /// The IRR of this object over the past 1 year.
+        /// </summary>
         public double CAR1Y
         {
-            get; set;
+            get;
+            set;
         }
+
+        /// <summary>
+        /// The IRR of this object over the past 5 years.
+        /// </summary>
         public double CAR5Y
         {
-            get; set;
+            get;
+            set;
         }
+
+        /// <summary>
+        /// The IRR of this object over the entire history of holding it.
+        /// </summary>
         public double CARTotal
         {
-            get; set;
+            get;
+            set;
         }
-        public string Sectors { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Any sectors this object is associated to.
+        /// </summary>
+        public string Sectors
+        {
+            get;
+            set;
+        } = string.Empty;
     }
 }

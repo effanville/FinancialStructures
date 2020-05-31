@@ -15,6 +15,9 @@ namespace FinanceWindows
         private readonly IFileInteractionService fFileInteractionService;
         private readonly IDialogCreationService fDialogCreationService;
 
+        /// <summary>
+        /// Construct an instance of the main window.
+        /// </summary>
         public MainWindow()
         {
             fFileInteractionService = new FileInteractionService(this);

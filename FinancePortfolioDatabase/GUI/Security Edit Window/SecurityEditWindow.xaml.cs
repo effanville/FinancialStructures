@@ -9,6 +9,9 @@ namespace FinanceWindows
     /// </summary>
     public partial class SecurityEditWindow : Grid
     {
+        /// <summary>
+        /// Construct an instance.
+        /// </summary>
         public SecurityEditWindow()
         {
             InitializeComponent();
