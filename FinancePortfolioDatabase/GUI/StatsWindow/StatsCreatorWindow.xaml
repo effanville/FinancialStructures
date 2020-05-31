@@ -24,12 +24,9 @@
         <StackPanel Grid.Row="0"
                     Height="40"
                     Orientation="Horizontal">
-            <Button Content="Create CSV stats"
+            <Button Content="Create stats"
                     Style="{StaticResource ResourceKey=defaultButton}"
-                    Command="{Binding CreateCSVStatsCommand}" />
-            <Button Content="Create HTML stats"
-                    Style="{StaticResource ResourceKey=defaultButton}"
-                    Command="{Binding CreateHTMLCommand}" />
+                    Command="{Binding CreateStatsCommand}" />
             <Button Content="Investment list"
                     Style="{StaticResource ResourceKey=defaultButton}"
                     Command="{Binding  CreateInvestmentListCommand}" />

@@ -25,6 +25,10 @@ namespace FinanceViewModels.StatsViewModels
         {
             DisplayValueFunds = displayValueFunds;
             BankAccountStats = fPortfolio.GenerateBankAccountStatistics(DisplayValueFunds);
+            if (BankAccountStats.Count > 0)
+            {
+                BankAccountStats.Add(fPortfolio.GenerateBankAccountTotalStatistics());
+            }
         }
 
         public BankAccStatsViewModel(IPortfolio portfolio, bool displayValueFunds)

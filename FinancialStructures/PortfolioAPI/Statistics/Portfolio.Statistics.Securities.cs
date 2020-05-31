@@ -8,7 +8,7 @@ using FinancialStructures.StatisticStructures;
 
 namespace FinancialStructures.PortfolioAPI
 {
-    public static partial class PortfolioStatistics
+    public static partial class PortfolioStatisticGenerators
     {
         /// <summary>
         /// returns a sorted list of all funds in portfolio, ordering by company then by fund name.
@@ -69,6 +69,27 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// returns the securities under the company name.
         /// </summary>
+        public static List<SecurityStatistics> GenerateFundsStatistics(this IPortfolio portfolio)
+        {
+            List<SecurityStatistics> namesAndCompanies = new List<SecurityStatistics>();
+            if (portfolio != null)
+            {
+                foreach (ISecurity security in portfolio.Funds)
+                {
+                    SecurityStatistics latest = new SecurityStatistics(StatisticsType.Individual, security.Names);
+                    portfolio.AddSecurityStats(latest, DateTime.Today);
+                    namesAndCompanies.Add(latest);
+                }
+
+                namesAndCompanies.Sort();
+            }
+
+            return namesAndCompanies;
+        }
+
+        /// <summary>
+        /// returns the securities under the company name.
+        /// </summary>
         public static List<SecurityStatistics> GenerateCompanyFundsStatistics(this IPortfolio portfolio, string company)
         {
             if (portfolio != null)
@@ -97,6 +118,26 @@ namespace FinancialStructures.PortfolioAPI
             }
 
             return new List<SecurityStatistics>();
+        }
+
+        /// <summary>
+        /// returns the securities under the company name.
+        /// </summary>
+        public static List<SecurityStatistics> GenerateCompanyOverviewStatistics(this IPortfolio portfolio)
+        {
+            List<SecurityStatistics> namesAndCompanies = new List<SecurityStatistics>();
+            if (portfolio != null)
+            {
+                var companies = portfolio.Companies(AccountType.Security);
+                foreach (string company in companies)
+                {
+                    SecurityStatistics totals = new SecurityStatistics(StatisticsType.CompanyTotal, new TwoName(company, "Totals"));
+                    portfolio.AddSecurityStats(totals, DateTime.Today);
+                    namesAndCompanies.Add(totals);
+                }
+            }
+
+            return namesAndCompanies;
         }
 
         /// <summary>

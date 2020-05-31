@@ -24,11 +24,14 @@ namespace FinancialStructures.StatsMakers
         {
         }
 
-        public UserOptions(List<string> securities, List<string> bankaccs, List<string> sectors, List<VisibleName> conditions)
+        public UserOptions(List<string> securities, List<string> bankaccs, List<string> sectors, List<VisibleName> conditions, string securitySortingField = null, string bankSortingField = null, string sectorSortingField = null)
         {
             SecurityDataToExport = securities;
             BankAccDataToExport = bankaccs;
             SectorDataToExport = sectors;
+            BankAccountSortingField = bankSortingField;
+            SecuritySortingField = securitySortingField;
+            SectorSortingField = sectorSortingField;
             DisplayValueFunds = NameGetter.GetData(conditions, nameof(DisplayValueFunds));
             Spacing = NameGetter.GetData(conditions, nameof(Spacing));
             Colours = NameGetter.GetData(conditions, nameof(Colours));
@@ -37,19 +40,76 @@ namespace FinancialStructures.StatsMakers
             ShowBankAccounts = NameGetter.GetData(conditions, nameof(ShowBankAccounts));
             ShowSectors = NameGetter.GetData(conditions, nameof(ShowSectors));
         }
-        public List<string> SecurityDataToExport { get; set; } = new List<string>();
+        public string SecuritySortingField
+        {
+            get;
+            set;
+        }
 
-        public List<string> BankAccDataToExport { get; set; } = new List<string>();
+        public List<string> SecurityDataToExport
+        {
+            get;
+            set;
+        } = new List<string>();
 
-        public List<string> SectorDataToExport { get; set; } = new List<string>();
-        public bool DisplayValueFunds { get; set; } = false;
-        public bool Spacing { get; set; } = false;
+        public string BankAccountSortingField
+        {
+            get;
+            set;
+        }
 
-        public bool Colours { get; set; } = false;
+        public List<string> BankAccDataToExport
+        {
+            get;
+            set;
+        } = new List<string>();
 
-        public bool ShowSecurites { get; set; } = true;
-        public bool ShowBankAccounts { get; set; } = true;
+        public string SectorSortingField
+        {
+            get;
+            set;
+        }
 
-        public bool ShowSectors { get; set; } = true;
+        public List<string> SectorDataToExport
+        {
+            get;
+            set;
+        } = new List<string>();
+
+        public bool DisplayValueFunds
+        {
+            get;
+            set;
+        } = false;
+
+        public bool Spacing
+        {
+            get;
+            set;
+        } = false;
+
+        public bool Colours
+        {
+            get;
+            set;
+        } = false;
+
+        public bool ShowSecurites
+        {
+            get;
+            set;
+        } = true;
+
+        public bool ShowBankAccounts
+        {
+            get;
+            set;
+        } = true;
+
+        public bool ShowSectors
+        {
+            get;
+            set;
+        } = true;
     }
 }

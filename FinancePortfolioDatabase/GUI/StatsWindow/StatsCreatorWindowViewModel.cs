@@ -51,22 +51,16 @@ namespace FinanceWindowsViewModels
             StatsTabs.Add(new MainTabViewModel(openTab));
             StatsTabs.Add(new SecuritiesStatisticsViewModel(portfolio, DisplayValueFunds));
 
-            CreateCSVStatsCommand = new RelayCommand(ExecuteExportToCSVCommand);
             CreateInvestmentListCommand = new RelayCommand(ExecuteInvestmentListCommand);
-            CreateHTMLCommand = new RelayCommand(ExecuteCreateHTMLCommand);
+            CreateStatsCommand = new RelayCommand(ExecuteCreateStatsCommand);
             ExportHistoryCommand = new RelayCommand(ExecuteCreateHistory);
-        }
-
-        public ICommand CreateCSVStatsCommand
-        {
-            get;
         }
 
         public ICommand CreateInvestmentListCommand
         {
             get;
         }
-        public ICommand CreateHTMLCommand
+        public ICommand CreateStatsCommand
         {
             get;
         }
@@ -74,13 +68,6 @@ namespace FinanceWindowsViewModels
         public ICommand ExportHistoryCommand
         {
             get;
-        }
-
-        private void ExecuteExportToCSVCommand()
-        {
-            Action<string> StatsOptionFeedback = (filePath) => StatsFeedback(filePath);
-            StatsOptionsViewModel context = new StatsOptionsViewModel(DataStore, ExportType.CSV, ReportLogger, StatsOptionFeedback, fFileService, fDialogCreationService);
-            fDialogCreationService.DisplayCustomDialog(context);
         }
 
         private void ExecuteInvestmentListCommand()
@@ -120,10 +107,10 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private void ExecuteCreateHTMLCommand()
+        private void ExecuteCreateStatsCommand()
         {
             Action<string> StatsOptionFeedback = (filePath => StatsFeedback(filePath));
-            StatsOptionsViewModel context = new StatsOptionsViewModel(DataStore, ExportType.HTML, ReportLogger, StatsOptionFeedback, fFileService, fDialogCreationService);
+            StatsOptionsViewModel context = new StatsOptionsViewModel(DataStore, ReportLogger, StatsOptionFeedback, fFileService, fDialogCreationService);
             fDialogCreationService.DisplayCustomDialog(context);
         }
 

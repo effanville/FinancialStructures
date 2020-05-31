@@ -4,7 +4,7 @@ using FinancialStructures.StatisticStructures;
 
 namespace FinancialStructures.PortfolioAPI
 {
-    public static partial class PortfolioStatistics
+    public static partial class PortfolioStatisticGenerators
     {
         /// <summary>
         /// returns the securities under the company name.

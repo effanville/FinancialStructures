@@ -8,7 +8,7 @@
               mc:Ignorable="d"
               Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}"
               Height="400"
-              Width="400"
+              Width="350"
               MinHeight="200"
               MinWidth="200">
     <StackPanel>
@@ -38,7 +38,7 @@
                        Text="Securities Columns" />
             <ComboBox Grid.Column="1"
                       Margin="5"
-                      ItemsSource="{Binding ColumnNames}">
+                      ItemsSource="{Binding SecurityColumnNames}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <CheckBox Content="{Binding Path=Name}"
@@ -61,6 +61,27 @@
                       Margin="5"
                       ItemsSource="{Binding BankColumnNames}"
                       Text="BankAccount Columns">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox Content="{Binding Path=Name}"
+                                  IsChecked="{Binding Path=Visible, Mode=TwoWay}"
+                                  Tag="{RelativeSource FindAncestor, 
+                  AncestorType={x:Type ComboBox}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="5"
+                       Grid.Column="0"
+                       Text="Sectors Columns" />
+            <ComboBox Grid.Column="1"
+                      Margin="5"
+                      ItemsSource="{Binding SectorColumnNames}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <CheckBox Content="{Binding Path=Name}"

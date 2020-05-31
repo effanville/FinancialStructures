@@ -9,7 +9,7 @@ using StructureCommon.FinanceFunctions;
 
 namespace FinancialStructures.PortfolioAPI
 {
-    public static partial class PortfolioStatistics
+    public static partial class PortfolioStatisticGenerators
     {
         public static int LongestName(this IPortfolio portfolio)
         {

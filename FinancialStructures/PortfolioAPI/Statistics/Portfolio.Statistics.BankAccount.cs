@@ -5,7 +5,7 @@ using FinancialStructures.FinanceInterfaces;
 
 namespace FinancialStructures.PortfolioAPI
 {
-    public static partial class PortfolioStatistics
+    public static partial class PortfolioStatisticGenerators
     {
         public static List<DayValue_Named> GenerateCompanyBankAccountStatistics(this IPortfolio portfolio, string company, bool DisplayValueFunds)
         {
@@ -31,6 +31,23 @@ namespace FinancialStructures.PortfolioAPI
             return namesAndCompanies;
         }
 
+        /// <summary>
+        /// Produces a list of all companies holding bank accounts in the portfolio.
+        /// </summary>
+        public static List<DayValue_Named> BankAccountCompanyStatistics(this IPortfolio portfolio)
+        {
+            List<DayValue_Named> namesAndCompanies = new List<DayValue_Named>();
+            if (portfolio != null)
+            {
+                foreach (string company in portfolio.Companies(AccountType.BankAccount))
+                {
+                    namesAndCompanies.Add(new DayValue_Named(company, "Totals", DateTime.Today, portfolio.CompanyValue(AccountType.BankAccount, company, DateTime.Today)));
+                }
+            }
+
+            return namesAndCompanies;
+        }
+
         public static List<DayValue_Named> GenerateBankAccountStatistics(this IPortfolio portfolio, bool DisplayValueFunds)
         {
             if (portfolio != null)
@@ -48,14 +65,15 @@ namespace FinancialStructures.PortfolioAPI
                 }
 
                 namesAndCompanies.Sort();
-                if (namesAndCompanies.Count > 1)
-                {
-                    namesAndCompanies.Add(new DayValue_Named("", "Totals", DateTime.Today, portfolio.TotalValue(AccountType.BankAccount)));
-                }
                 return namesAndCompanies;
             }
 
             return new List<DayValue_Named>();
+        }
+
+        public static DayValue_Named GenerateBankAccountTotalStatistics(this IPortfolio portfolio)
+        {
+            return new DayValue_Named("", "Totals", DateTime.Today, portfolio.TotalValue(AccountType.BankAccount));
         }
     }
 }

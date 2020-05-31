@@ -105,6 +105,7 @@ namespace FinancialStructures.StatisticStructures
     public class SecurityStatistics : IComparable
     {
         public StatisticsType StatsType;
+
         /// <summary>
         /// Returns the property names with suitable html tags surrounding to place in a table header.
         /// </summary>
@@ -160,10 +161,39 @@ namespace FinancialStructures.StatisticStructures
             return htmlHeader;
         }
 
+        /// <summary>
+        /// Default comparison of SecurityStatistics, comparing by name. 
+        /// </summary>
         public int CompareTo(object obj)
         {
             if (obj is SecurityStatistics value)
             {
+                if (StatsType == StatisticsType.PortfolioTotal)
+                {
+                    return 1;
+                }
+                if (value.StatsType == StatisticsType.PortfolioTotal)
+                {
+                    return -1;
+                }
+
+                if (StatsType == StatisticsType.CompanyTotal || value.StatsType == StatisticsType.CompanyTotal)
+                {
+                    if (Company.Equals(value.Company))
+                    {
+                        if (StatsType == StatisticsType.CompanyTotal)
+                        {
+                            return 1;
+                        }
+                        else
+                        {
+                            return -1;
+                        }
+                    }
+
+                    return Company.CompareTo(value.Company);
+                }
+
                 return Names.CompareTo(value.Names);
             }
 
