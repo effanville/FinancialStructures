@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Windows.Input;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.StatisticStructures;
 using FinancialStructures.StatsMakers;
 using StructureCommon.Extensions;
@@ -77,6 +78,20 @@ namespace FinanceWindowsViewModels
             }
         }
 
+        private SortDirection fSecurityDirection;
+        public SortDirection SecurityDirection
+        {
+            get
+            {
+                return fSecurityDirection;
+            }
+            set
+            {
+                fSecurityDirection = value;
+                OnPropertyChanged(nameof(SecurityDirection));
+            }
+        }
+
         private List<VisibleName> fSecurityColumnNames = new List<VisibleName>();
 
         public List<VisibleName> SecurityColumnNames
@@ -103,6 +118,20 @@ namespace FinanceWindowsViewModels
             {
                 fBankSortingField = value;
                 OnPropertyChanged(nameof(BankSortingField));
+            }
+        }
+
+        private SortDirection fBankDirection;
+        public SortDirection BankDirection
+        {
+            get
+            {
+                return fBankDirection;
+            }
+            set
+            {
+                fBankDirection = value;
+                OnPropertyChanged(nameof(BankDirection));
             }
         }
 
@@ -135,6 +164,21 @@ namespace FinanceWindowsViewModels
             }
         }
 
+
+        private SortDirection fSectorDirection;
+        public SortDirection SectorDirection
+        {
+            get
+            {
+                return fSectorDirection;
+            }
+            set
+            {
+                fSectorDirection = value;
+                OnPropertyChanged(nameof(SectorDirection));
+            }
+        }
+
         private List<VisibleName> fSectorColumnNames = new List<VisibleName>();
 
         public List<VisibleName> SectorColumnNames
@@ -163,6 +207,14 @@ namespace FinanceWindowsViewModels
             get
             {
                 return new DayValue_Named().GetType().GetProperties().Select(property => property.Name).ToList();
+            }
+        }
+
+        public List<SortDirection> SortDirections
+        {
+            get
+            {
+                return Enum.GetValues(typeof(SortDirection)).Cast<SortDirection>().ToList();
             }
         }
 
@@ -205,7 +257,12 @@ namespace FinanceWindowsViewModels
                     }
                 }
 
-                UserOptions options = new UserOptions(securitySelected, BankSelected, sectorSelected, DisplayConditions, SecuritySortingField, BankSortingField, SectorSortingField);
+                UserOptions options = new UserOptions(securitySelected, BankSelected, sectorSelected, DisplayConditions, SecuritySortingField, BankSortingField, SectorSortingField)
+                {
+                    BankSortDirection = BankDirection,
+                    SectorSortDirection = SectorDirection,
+                    SecuritySortDirection = SecurityDirection
+                };
                 var stats = new PortfolioStatistics(Portfolio);
                 string extension = Path.GetExtension(result.FilePath).Trim('.');
                 ExportType type = extension.ToEnum<ExportType>();

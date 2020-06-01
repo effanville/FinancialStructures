@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FinancialStructures.StatisticStructures;
 
 namespace FinancialStructures.StatsMakers
 {
@@ -46,6 +47,12 @@ namespace FinancialStructures.StatsMakers
             set;
         }
 
+        public SortDirection SecuritySortDirection
+        {
+            get;
+            set;
+        } = SortDirection.Descending;
+
         public List<string> SecurityDataToExport
         {
             get;
@@ -58,6 +65,12 @@ namespace FinancialStructures.StatsMakers
             set;
         }
 
+        public SortDirection BankSortDirection
+        {
+            get;
+            set;
+        } = SortDirection.Descending;
+
         public List<string> BankAccDataToExport
         {
             get;
@@ -69,6 +82,12 @@ namespace FinancialStructures.StatsMakers
             get;
             set;
         }
+
+        public SortDirection SectorSortDirection
+        {
+            get;
+            set;
+        } = SortDirection.Descending;
 
         public List<string> SectorDataToExport
         {

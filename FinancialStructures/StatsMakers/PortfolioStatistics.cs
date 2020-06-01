@@ -4,6 +4,7 @@ using System.IO;
 using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.StatisticStructures;
 using StructureCommon.Extensions;
@@ -146,7 +147,7 @@ namespace FinancialStructures.StatsMakers
                         _ = securityDataToWrite.RemoveAll(entry => entry.LatestVal.Equals(0));
                     }
 
-                    SecurityStatsGenerator.SortSecurityStatistics(securityDataToWrite, options.SecuritySortingField);
+                    securityDataToWrite.SortSecurityStatistics( options.SecuritySortingField, options.SecuritySortDirection);
                     fileWriter.WriteTable(exportType, options.SecurityDataToExport, securityDataToWrite);
                 }
 
@@ -161,18 +162,7 @@ namespace FinancialStructures.StatsMakers
                         _ = bankAccountDataToWrite.RemoveAll(entry => entry.Value.Equals(0));
                     }
 
-                    if (options.BankAccountSortingField == "Value")
-                    {
-                        bankAccountDataToWrite.Sort((a, b) => b.Value.CompareTo(a.Value));
-                    }
-                    else if (options.BankAccountSortingField == "Day")
-                    {
-                        bankAccountDataToWrite.Sort((a, b) => b.Day.CompareTo(a.Day));
-                    }
-                    else
-                    {
-                        bankAccountDataToWrite.Sort();
-                    }
+                    bankAccountDataToWrite.SortName(options.BankAccountSortingField, options.BankSortDirection);
 
                     fileWriter.WriteTable(exportType, options.BankAccDataToExport, bankAccountDataToWrite);
                 }
@@ -187,7 +177,7 @@ namespace FinancialStructures.StatsMakers
                         _ = sectorDataToWrite.RemoveAll(entry => entry.LatestVal.Equals(0));
                     }
 
-                    SecurityStatsGenerator.SortSecurityStatistics(sectorDataToWrite, options.SectorSortingField);
+                    sectorDataToWrite.SortSecurityStatistics(options.SectorSortingField, options.SectorSortDirection);
                     fileWriter.WriteTable(exportType, options.SectorDataToExport, sectorDataToWrite);
                 }
 

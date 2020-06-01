@@ -17,8 +17,8 @@ namespace FinancialStructures.StatisticStructures
         /// Provides a comparer based on a provided field
         /// </summary>
         /// <param name="fieldToSortWith">The field one wishes to compare the statistics with.</param>
-        /// <returns></returns>
-        public static Comparison<SecurityStatistics> GetComparison(string fieldToSortWith)
+        /// <param name="direction">Whether to sort ascending or descending.</param>
+        public static Comparison<SecurityStatistics> GetComparison(string fieldToSortWith, SortDirection direction)
         {
             switch (fieldToSortWith)
             {
@@ -30,43 +30,113 @@ namespace FinancialStructures.StatisticStructures
                 case "Number":
                 default:
                 {
-                    return (a, b) => a.CompareTo(b);
+                    if (direction == SortDirection.Descending)
+                    {
+                        return (a, b) => b.CompareTo(a);
+                    }
+                    else
+                    {
+                        return (a, b) => a.CompareTo(b);
+                    }
                 }
                 case ("LatestVal"):
                 {
-                    return (a, b) => b.LatestVal.CompareTo(a.LatestVal);
+                    if (direction == SortDirection.Descending)
+                    {
+                        return (a, b) => b.LatestVal.CompareTo(a.LatestVal);
+                    }
+                    else
+                    {
+                        return (a, b) => a.LatestVal.CompareTo(b.LatestVal);
+                    }
                 }
                 case "SharePrice":
                 {
-                    return (a, b) => b.SharePrice.CompareTo(a.SharePrice);
+                    if (direction == SortDirection.Descending)
+                    {
+                        return (a, b) => b.SharePrice.CompareTo(a.SharePrice);
+                    }
+                    else
+                    {
+                        return (a, b) => a.SharePrice.CompareTo(b.SharePrice);
+                    }
                 }
                 case "RecentChange":
                 {
-                    return (a, b) => b.RecentChange.CompareTo(a.RecentChange);
+                    if (direction == SortDirection.Descending)
+                    {
+                        return (a, b) => b.RecentChange.CompareTo(a.RecentChange);
+                    }
+                    else
+                    {
+                        return (a, b) => a.RecentChange.CompareTo(b.RecentChange);
+                    }
                 }
                 case "Profit":
                 {
-                    return (a, b) => b.Profit.CompareTo(a.Profit);
+                    if (direction == SortDirection.Descending)
+                    {
+                        return (a, b) => b.Profit.CompareTo(a.Profit);
+                    }
+                    else
+                    {
+                        return (a, b) => a.Profit.CompareTo(b.Profit);
+                    }
                 }
                 case "CAR3M":
                 {
-                    return (a, b) => b.CAR3M.CompareTo(a.CAR3M);
+                    if (direction == SortDirection.Descending)
+                    {
+                        return (a, b) => b.CAR3M.CompareTo(a.CAR3M);
+                    }
+                    else
+                    {
+                        return (a, b) => a.CAR3M.CompareTo(b.CAR3M);
+                    }
                 }
                 case "CAR6M":
                 {
-                    return (a, b) => b.CAR6M.CompareTo(a.CAR6M);
+                    if (direction == SortDirection.Descending)
+                    {
+                        return (a, b) => b.CAR6M.CompareTo(a.CAR6M);
+                    }
+                    else
+                    {
+                        return (a, b) => a.CAR6M.CompareTo(b.CAR6M);
+                    }
                 }
                 case "CAR1Y":
                 {
-                    return (a, b) => b.CAR1Y.CompareTo(a.CAR1Y);
+                    if (direction == SortDirection.Descending)
+                    {
+                        return (a, b) => b.CAR1Y.CompareTo(a.CAR1Y);
+                    }
+                    else
+                    {
+                        return (a, b) => a.CAR1Y.CompareTo(b.CAR1Y);
+                    }
                 }
                 case "CAR5Y":
                 {
-                    return (a, b) => b.CAR5Y.CompareTo(a.CAR5Y);
+                    if (direction == SortDirection.Descending)
+                    {
+                        return (a, b) => b.CAR5Y.CompareTo(a.CAR5Y);
+                    }
+                    else
+                    {
+                        return (a, b) => a.CAR5Y.CompareTo(b.CAR5Y);
+                    }
                 }
                 case "CARTotal":
                 {
-                    return (a, b) => b.CARTotal.CompareTo(a.CARTotal);
+                    if (direction == SortDirection.Descending)
+                    {
+                        return (a, b) => b.CARTotal.CompareTo(a.CARTotal);
+                    }
+                    else
+                    {
+                        return (a, b) => a.CARTotal.CompareTo(b.CARTotal);
+                    }
                 }
             }
         }
@@ -75,10 +145,11 @@ namespace FinancialStructures.StatisticStructures
         /// Enacts a comparison of a list given a field to sort with.
         /// </summary>
         /// <param name="statsToSort"></param>
-        /// <param name="fieldToSortUnder"></param>
-        public static void SortSecurityStatistics(List<SecurityStatistics> statsToSort, string fieldToSortUnder)
+        /// <param name="fieldToSortUnder"></param>       
+        /// <param name="direction">Whether to sort ascending or descending.</param>
+        public static void SortSecurityStatistics(this List<SecurityStatistics> statsToSort, string fieldToSortUnder, SortDirection direction)
         {
-            statsToSort.Sort(GetComparison(fieldToSortUnder));
+            statsToSort.Sort(GetComparison(fieldToSortUnder, direction));
         }
 
         /// <summary>
