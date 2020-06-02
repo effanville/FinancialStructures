@@ -1,10 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Input;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.StatisticStructures;
 using FinancialStructures.StatsMakers;
+using StructureCommon.Extensions;
+using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
 using UICommon.Commands;
 using UICommon.Interfaces;
@@ -59,18 +64,74 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private List<VisibleName> fColumnNames = new List<VisibleName>();
-
-        public List<VisibleName> ColumnNames
+        private string fSecuritySortingField;
+        public string SecuritySortingField
         {
             get
             {
-                return fColumnNames;
+                return fSecuritySortingField;
             }
             set
             {
-                fColumnNames = value;
+                fSecuritySortingField = value;
+                OnPropertyChanged(nameof(SecuritySortingField));
+            }
+        }
+
+        private SortDirection fSecurityDirection;
+        public SortDirection SecurityDirection
+        {
+            get
+            {
+                return fSecurityDirection;
+            }
+            set
+            {
+                fSecurityDirection = value;
+                OnPropertyChanged(nameof(SecurityDirection));
+            }
+        }
+
+        private List<VisibleName> fSecurityColumnNames = new List<VisibleName>();
+
+        public List<VisibleName> SecurityColumnNames
+        {
+            get
+            {
+                return fSecurityColumnNames;
+            }
+            set
+            {
+                fSecurityColumnNames = value;
                 OnPropertyChanged();
+            }
+        }
+
+        private string fBankSortingField;
+        public string BankSortingField
+        {
+            get
+            {
+                return fBankSortingField;
+            }
+            set
+            {
+                fBankSortingField = value;
+                OnPropertyChanged(nameof(BankSortingField));
+            }
+        }
+
+        private SortDirection fBankDirection;
+        public SortDirection BankDirection
+        {
+            get
+            {
+                return fBankDirection;
+            }
+            set
+            {
+                fBankDirection = value;
+                OnPropertyChanged(nameof(BankDirection));
             }
         }
 
@@ -89,6 +150,74 @@ namespace FinanceWindowsViewModels
             }
         }
 
+        private string fSectorSortingField;
+        public string SectorSortingField
+        {
+            get
+            {
+                return fSectorSortingField;
+            }
+            set
+            {
+                fSectorSortingField = value;
+                OnPropertyChanged(nameof(SectorSortingField));
+            }
+        }
+
+
+        private SortDirection fSectorDirection;
+        public SortDirection SectorDirection
+        {
+            get
+            {
+                return fSectorDirection;
+            }
+            set
+            {
+                fSectorDirection = value;
+                OnPropertyChanged(nameof(SectorDirection));
+            }
+        }
+
+        private List<VisibleName> fSectorColumnNames = new List<VisibleName>();
+
+        public List<VisibleName> SectorColumnNames
+        {
+            get
+            {
+                return fSectorColumnNames;
+            }
+            set
+            {
+                fSectorColumnNames = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public List<string> SecurityFieldNames
+        {
+            get
+            {
+                return new SecurityStatistics().GetType().GetProperties().Select(property => property.Name).ToList();
+            }
+        }
+
+        public List<string> BankFieldNames
+        {
+            get
+            {
+                return new DayValue_Named().GetType().GetProperties().Select(property => property.Name).ToList();
+            }
+        }
+
+        public List<SortDirection> SortDirections
+        {
+            get
+            {
+                return Enum.GetValues(typeof(SortDirection)).Cast<SortDirection>().ToList();
+            }
+        }
+
         public ICommand ExportCommand
         {
             get;
@@ -96,18 +225,18 @@ namespace FinanceWindowsViewModels
 
         private void ExecuteExportCommand(ICloseable window)
         {
-            FileInteractionResult result = fFileService.SaveFile(fFileExtension, Portfolio.DatabaseName + "-" + fExtension + "HTMLStats" + fFileExtension, Portfolio.Directory, fExtension + " file|*" + fFileExtension + "|All files|*.*");
+            FileInteractionResult result = fFileService.SaveFile(ExportType.Html.ToString(), Portfolio.DatabaseName + "-" + ExportType.Html, Portfolio.Directory, "Html Files|*.html|CSV Files|*.csv|All Files|*.*");
             string path = null;
 
             if (result.Success != null && (bool)result.Success)
             {
                 path = result.FilePath;
-                List<string> selected = new List<string>();
-                foreach (VisibleName column in ColumnNames)
+                List<string> securitySelected = new List<string>();
+                foreach (VisibleName column in SecurityColumnNames)
                 {
                     if (column.Visible || column.Name == "Name" || column.Name == "Company")
                     {
-                        selected.Add(column.Name);
+                        securitySelected.Add(column.Name);
                     }
                 }
                 List<string> BankSelected = new List<string>();
@@ -118,21 +247,33 @@ namespace FinanceWindowsViewModels
                         BankSelected.Add(column.Name);
                     }
                 }
-                UserOptions options = new UserOptions(selected, BankSelected, selected, DisplayConditions);
-                if (windowType == ExportType.HTML)
+
+                List<string> sectorSelected = new List<string>();
+                foreach (VisibleName column in SectorColumnNames)
                 {
-                    PortfolioStatsCreators.CreateHTMLPageCustom(Portfolio, result.FilePath, options);
-                }
-                else
-                {
-                    CSVStatsCreator.CreateCSVPageCustom(Portfolio, result.FilePath, options);
+                    if (column.Visible || column.Name == "Name" || column.Name == "Company")
+                    {
+                        sectorSelected.Add(column.Name);
+                    }
                 }
 
-                ReportLogger.LogUsefulWithStrings("Report", "StatisticsPage", "Created statistics page");
+                UserOptions options = new UserOptions(securitySelected, BankSelected, sectorSelected, DisplayConditions, SecuritySortingField, BankSortingField, SectorSortingField)
+                {
+                    BankSortDirection = BankDirection,
+                    SectorSortDirection = SectorDirection,
+                    SecuritySortDirection = SecurityDirection
+                };
+                PortfolioStatistics stats = new PortfolioStatistics(Portfolio);
+                string extension = Path.GetExtension(result.FilePath).Trim('.');
+                ExportType type = extension.ToEnum<ExportType>();
+
+                stats.ExportToFile(result.FilePath, type, options, ReportLogger);
+
+                _ = ReportLogger.LogUsefulWithStrings("Report", "StatisticsPage", "Created statistics page");
             }
             else
             {
-                ReportLogger.LogWithStrings("Critical", "Error", "StatisticsPage", "Was not able to create " + fExtension + " page in place specified.");
+                _ = ReportLogger.LogWithStrings("Critical", "Error", "StatisticsPage", "Was not able to create page in place specified.");
             }
 
             CloseWindowAction(path);
@@ -143,24 +284,9 @@ namespace FinanceWindowsViewModels
         private readonly IDialogCreationService fDialogCreationService;
         private readonly IReportLogger ReportLogger;
         private readonly Action<string> CloseWindowAction;
-        private readonly ExportType windowType;
-        private string fExtension
+
+        public StatsOptionsViewModel(IPortfolio portfolio, IReportLogger reportLogger, Action<string> CloseWindow, IFileInteractionService fileService, IDialogCreationService dialogCreation)
         {
-            get
-            {
-                return windowType == ExportType.HTML ? "html" : "csv";
-            }
-        }
-        private string fFileExtension
-        {
-            get
-            {
-                return "." + fExtension;
-            }
-        }
-        public StatsOptionsViewModel(IPortfolio portfolio, ExportType exportType, IReportLogger reportLogger, Action<string> CloseWindow, IFileInteractionService fileService, IDialogCreationService dialogCreation)
-        {
-            windowType = exportType;
             Portfolio = portfolio;
             ReportLogger = reportLogger;
             fFileService = fileService;
@@ -168,16 +294,15 @@ namespace FinanceWindowsViewModels
             CloseWindowAction = CloseWindow;
             ExportCommand = new RelayCommand<ICloseable>(ExecuteExportCommand);
 
-            SecurityStatistics totals = new SecurityStatistics();
-            System.Reflection.PropertyInfo[] properties = totals.GetType().GetProperties();
-            foreach (System.Reflection.PropertyInfo info in properties)
+            PropertyInfo[] properties = new SecurityStatistics().GetType().GetProperties();
+            foreach (PropertyInfo info in properties)
             {
-                ColumnNames.Add(new VisibleName(info.Name, true));
+                SecurityColumnNames.Add(new VisibleName(info.Name, true));
+                SectorColumnNames.Add(new VisibleName(info.Name, true));
             }
 
-            DayValue_Named BankNames = new DayValue_Named();
-            System.Reflection.PropertyInfo[] props = BankNames.GetType().GetProperties();
-            foreach (System.Reflection.PropertyInfo info in props)
+            PropertyInfo[] props = new DayValue_Named().GetType().GetProperties();
+            foreach (PropertyInfo info in props)
             {
                 if (info.Name == "Day")
                 {
@@ -190,8 +315,8 @@ namespace FinanceWindowsViewModels
             }
 
             UserOptions fish = new UserOptions();
-            System.Reflection.PropertyInfo[] optionsInfo = fish.GetType().GetProperties();
-            foreach (System.Reflection.PropertyInfo info in optionsInfo)
+            PropertyInfo[] optionsInfo = fish.GetType().GetProperties();
+            foreach (PropertyInfo info in optionsInfo)
             {
                 if (info.PropertyType == typeof(bool))
                 {

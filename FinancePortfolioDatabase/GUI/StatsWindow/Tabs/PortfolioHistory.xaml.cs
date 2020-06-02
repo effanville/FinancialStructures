@@ -7,6 +7,9 @@ namespace FinanceWindows.StatsWindow
     /// </summary>
     public partial class PortfolioHistory : UserControl
     {
+        /// <summary>
+        /// Construct an instance.
+        /// </summary>
         public PortfolioHistory()
         {
             InitializeComponent();

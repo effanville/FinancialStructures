@@ -7,44 +7,82 @@
               xmlns:vm="clr-namespace:FinancialStructures.StatsMakers;assembly=FinancialStructures"
               mc:Ignorable="d"
               Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}"
-              Height="400"
-              Width="400"
+              Height="450"
+              Width="350"
               MinHeight="200"
               MinWidth="200">
     <StackPanel>
-        <TextBlock Margin="5"
+        <TextBlock Margin="2"
                    Text="Choose the options desired for the export."
                    TextWrapping="Wrap" />
-        <ItemsControl ItemsSource="{Binding DisplayConditions}">
-            <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="{x:Type vm:VisibleName}">
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Margin="5"
-                                  IsChecked="{Binding Visible}">
-                            <TextBlock Text="{Binding Name}"
-                                       TextWrapping="Wrap" />
-                        </CheckBox>
-                    </StackPanel>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock Margin="5"
+            <ItemsControl Grid.Column="0"
+                          ItemsSource="{Binding DisplayConditions}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type vm:VisibleName}">
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox IsChecked="{Binding Visible}">
+                                <TextBlock Text="{Binding Name}"
+                                           TextWrapping="Wrap" />
+                            </CheckBox>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <Button Margin="2"
+                    Grid.Column="1"
+                    Content="Export Statistics"
+                    Style="{StaticResource ResourceKey=defaultButton}"
+                    Command="{Binding ExportCommand}"
+                    CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="2"
+                       Grid.Column="0"
+                       Text="Securities Sorting Field" />
+            <ComboBox Grid.Column="1"
+                      Margin="2"
+                      ItemsSource="{Binding SecurityFieldNames}"
+                      SelectedItem="{Binding SecuritySortingField}" />
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="2"
+                       Grid.Column="0"
+                       Text="Securities Sorting Direction" />
+            <ComboBox Grid.Column="1"
+                      Margin="2"
+                      ItemsSource="{Binding SortDirections}"
+                      SelectedItem="{Binding SecurityDirection}" />
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="2"
                        Grid.Column="0"
                        Text="Securities Columns" />
             <ComboBox Grid.Column="1"
-                      Margin="5"
-                      ItemsSource="{Binding ColumnNames}">
+                      Margin="2"
+                      ItemsSource="{Binding SecurityColumnNames}">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <CheckBox Content="{Binding Path=Name}"
+                        <CheckBox Margin="1"
+                                  Content="{Binding Path=Name}"
                                   IsChecked="{Binding Path=Visible, Mode=TwoWay}"
-                                  Tag="{RelativeSource FindAncestor, 
-                  AncestorType={x:Type ComboBox}}" />
+                                  Tag="{RelativeSource FindAncestor, AncestorType={x:Type ComboBox}}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
@@ -54,11 +92,37 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <TextBlock Margin="5"
+            <TextBlock Margin="2"
+                       Grid.Column="0"
+                       Text="BankAccount Sorting Field" />
+            <ComboBox Grid.Column="1"
+                      Margin="2"
+                      ItemsSource="{Binding  BankFieldNames}"
+                      SelectedItem="{Binding BankSortingField}" />
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="2"
+                       Grid.Column="0"
+                       Text="BankAccount Sorting Direction" />
+            <ComboBox Grid.Column="1"
+                      Margin="2"
+                      ItemsSource="{Binding SortDirections}"
+                      SelectedItem="{Binding BankDirection}" />
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="2"
                        Grid.Column="0"
                        Text="BankAccounts Columns" />
             <ComboBox Grid.Column="1"
-                      Margin="5"
+                      Margin="2"
                       ItemsSource="{Binding BankColumnNames}"
                       Text="BankAccount Columns">
                 <ComboBox.ItemTemplate>
@@ -71,10 +135,52 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </Grid>
-        <Button Margin="5"
-                Content="Export Statistics"
-                Style="{StaticResource ResourceKey=defaultButton}"
-                Command="{Binding ExportCommand}"
-                CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="2"
+                       Grid.Column="0"
+                       Text="Sector Sorting Field" />
+            <ComboBox Grid.Column="1"
+                      Margin="2"
+                      ItemsSource="{Binding SecurityFieldNames}"
+                      SelectedItem="{Binding SectorSortingField}" />
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="2"
+                       Grid.Column="0"
+                       Text="Sectors Sorting Direction" />
+            <ComboBox Grid.Column="1"
+                      Margin="2"
+                      ItemsSource="{Binding SortDirections}"
+                      SelectedItem="{Binding SectorDirection}" />
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Margin="2"
+                       Grid.Column="0"
+                       Text="Sectors Columns" />
+            <ComboBox Grid.Column="1"
+                      Margin="2"
+                      ItemsSource="{Binding SectorColumnNames}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <CheckBox Content="{Binding Path=Name}"
+                                  IsChecked="{Binding Path=Visible, Mode=TwoWay}"
+                                  Tag="{RelativeSource FindAncestor, 
+                  AncestorType={x:Type ComboBox}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Grid>
     </StackPanel>
 </ItemsControl>

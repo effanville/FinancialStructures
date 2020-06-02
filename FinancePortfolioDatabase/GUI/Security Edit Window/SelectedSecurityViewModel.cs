@@ -48,7 +48,7 @@ namespace FinanceWindowsViewModels
         private SecurityDayData fSelectedValues;
         private SecurityDayData fOldSelectedValues;
         private int selectedIndex;
-        public SecurityDayData selectedValues
+        public SecurityDayData SelectedValues
         {
             get
             {
@@ -132,7 +132,7 @@ namespace FinanceWindowsViewModels
                         }
                         else
                         {
-                            ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", "Have the wrong type of thing");
+                            _ = ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", "Have the wrong type of thing");
                         }
                     }
                 }
@@ -157,7 +157,7 @@ namespace FinanceWindowsViewModels
                     }
                     else
                     {
-                        ReportLogger.LogWithStrings("Critical", "Error", "Saving", "Could not find security.");
+                        _ = ReportLogger.LogWithStrings("Critical", "Error", "Saving", "Could not find security.");
                     }
                 }
             }
@@ -191,19 +191,19 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null)
             {
-                DataStore.TryGetSecurity(fSelectedName, out ISecurity desired);
+                _ = DataStore.TryGetSecurity(fSelectedName, out ISecurity desired);
                 if (desired.Count() != SelectedSecurityData.Count)
                 {
-                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(fSelectedName, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment, ReportLogger));
+                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(fSelectedName, SelectedValues.Date, SelectedValues.ShareNo, SelectedValues.UnitPrice, SelectedValues.NewInvestment, ReportLogger));
                 }
                 else
                 {
                     bool edited = false;
-                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditSecurityData(fSelectedName, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment, ReportLogger));
+                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditSecurityData(fSelectedName, fOldSelectedValues.Date, SelectedValues.Date, SelectedValues.ShareNo, SelectedValues.UnitPrice, SelectedValues.NewInvestment, ReportLogger));
 
                     if (!edited)
                     {
-                        ReportLogger.LogUsefulWithStrings("Error", "EditingData", "Was not able to edit security data.");
+                        _ = ReportLogger.LogUsefulWithStrings("Error", "EditingData", "Was not able to edit security data.");
                     }
                 }
             }
@@ -238,8 +238,8 @@ namespace FinanceWindowsViewModels
         {
             if (SelectedSecurityData != null && SelectedSecurityData.Count > 0)
             {
-                selectedValues = SelectedSecurityData[SelectedSecurityData.Count - 1];
-                fOldSelectedValues = selectedValues.Copy();
+                SelectedValues = SelectedSecurityData[SelectedSecurityData.Count - 1];
+                fOldSelectedValues = SelectedValues.Copy();
             }
         }
     }

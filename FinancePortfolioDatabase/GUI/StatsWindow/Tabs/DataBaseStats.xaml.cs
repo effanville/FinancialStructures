@@ -7,6 +7,9 @@ namespace FinanceWindows.StatsWindow
     /// </summary>
     public partial class DataBaseStats : UserControl
     {
+        /// <summary>
+        /// Construct an instance.
+        /// </summary>
         public DataBaseStats()
         {
             InitializeComponent();

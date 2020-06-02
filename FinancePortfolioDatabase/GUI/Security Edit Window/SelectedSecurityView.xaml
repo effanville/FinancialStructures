@@ -40,7 +40,7 @@
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding Path=SelectedSecurityData, Mode=TwoWay}"
-                  SelectedItem="{Binding Path=selectedValues, Mode=TwoWay}"
+                  SelectedItem="{Binding Path=SelectedValues, Mode=TwoWay}"
                   ScrollViewer.VerticalScrollBarVisibility="Visible">
             <DataGrid.Resources>
                 <uic:StringToUKDateConverter x:Key="StringToUKDate" />

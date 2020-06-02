@@ -7,6 +7,9 @@ namespace FinanceWindows.StatsWindow
     /// </summary>
     public partial class HtmlStatsViewer : UserControl
     {
+        /// <summary>
+        /// Construct an instance.
+        /// </summary>
         public HtmlStatsViewer()
         {
             InitializeComponent();

@@ -4,6 +4,9 @@ using System.Windows.Controls;
 
 namespace WebBrowserWindow
 {
+    /// <summary>
+    /// Class to assist with web browser to set a binding source.
+    /// </summary>
     public static class WebBrowserBehaviours
     {
         public static readonly DependencyProperty BindableSourceProperty =
@@ -21,8 +24,7 @@ namespace WebBrowserWindow
 
         public static void BindableSourcePropertyChanged(DependencyObject o, DependencyPropertyChangedEventArgs e)
         {
-            WebBrowser browser = o as WebBrowser;
-            if (browser == null)
+            if (!(o is WebBrowser browser))
             {
                 return;
             }

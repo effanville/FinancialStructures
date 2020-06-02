@@ -30,7 +30,7 @@ namespace FinanceCommonViewModels
         private NameData fSelectedName;
 
         /// <summary>
-        /// Name and Company data of the selected security in the list <see cref="AccountNames"/>
+        /// Name and Company data of the selected security in the list
         /// </summary>
         public NameData SelectedName
         {

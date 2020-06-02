@@ -12,6 +12,9 @@ namespace FinancePortfolioDatabase
     /// </summary>
     public partial class App : Application
     {
+        /// <summary>
+        /// Constructor for the application.
+        /// </summary>
         public App()
         {
             Timeline.DesiredFrameRateProperty.OverrideMetadata(
@@ -20,6 +23,9 @@ namespace FinancePortfolioDatabase
                 );
         }
 
+        /// <summary>
+        /// This fires on startup of the application. Used to set the culture of the program.
+        /// </summary>
         public void Application_Startup(object sender, StartupEventArgs e)
         {
             if (CultureInfo.CurrentUICulture.IetfLanguageTag == "en-US")
@@ -41,6 +47,9 @@ namespace FinancePortfolioDatabase
             }
         }
 
+        /// <summary>
+        /// Fires when unhandled exceptions occur. Opens a dialog box, and hopefully the program continues.
+        /// </summary>
         public void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             //Handling the exception within the UnhandledExcpeiton handler.

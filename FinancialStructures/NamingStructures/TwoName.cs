@@ -66,8 +66,8 @@ namespace FinancialStructures.NamingStructures
 
         public override int GetHashCode()
         {
-            var companyVal = Company != null ? Company.GetHashCode() * 365 : 0;
-            var nameVal = Name != null ? Name.GetHashCode() : 0;
+            int companyVal = Company != null ? Company.GetHashCode() * 365 : 0;
+            int nameVal = Name != null ? Name.GetHashCode() : 0;
             return companyVal + nameVal;
         }
 

@@ -7,6 +7,9 @@ namespace FinanceWindows
     /// </summary>
     public partial class ReportingWindow : Grid
     {
+        /// <summary>
+        /// Construct an instance.
+        /// </summary>
         public ReportingWindow()
         {
             InitializeComponent();

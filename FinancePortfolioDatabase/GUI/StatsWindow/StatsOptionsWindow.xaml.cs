@@ -7,6 +7,9 @@ namespace FinanceWindows.StatsWindows
     /// </summary>
     public partial class StatsOptionsWindow : ItemsControl
     {
+        /// <summary>
+        /// Construct an instance.
+        /// </summary>
         public StatsOptionsWindow()
         {
             InitializeComponent();

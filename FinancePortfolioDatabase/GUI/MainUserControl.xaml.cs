@@ -7,6 +7,9 @@ namespace FinanceWindows
     /// </summary>
     public partial class MainUserControl : UserControl
     {
+        /// <summary>
+        /// Construct an instance.
+        /// </summary>
         public MainUserControl()
         {
             InitializeComponent();

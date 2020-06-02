@@ -91,9 +91,9 @@ namespace FinancialStructures.NamingStructures
 
         public override int GetHashCode()
         {
-            var currencyVal = Currency != null ? Currency.GetHashCode() : 0;
-            var urlVal = Url != null ? Url.GetHashCode() : 0;
-            var sectorVal = Sectors != null ? Sectors.GetHashCode() : 0;
+            int currencyVal = Currency != null ? Currency.GetHashCode() : 0;
+            int urlVal = Url != null ? Url.GetHashCode() : 0;
+            int sectorVal = Sectors != null ? Sectors.GetHashCode() : 0;
             return currencyVal + urlVal + sectorVal + base.GetHashCode();
         }
 

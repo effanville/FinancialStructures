@@ -7,6 +7,9 @@ namespace FinanceWindows
     /// </summary>
     public partial class SelectedSecurityView : UserControl
     {
+        /// <summary>
+        /// Construct an instance.
+        /// </summary>
         public SelectedSecurityView()
         {
             InitializeComponent();

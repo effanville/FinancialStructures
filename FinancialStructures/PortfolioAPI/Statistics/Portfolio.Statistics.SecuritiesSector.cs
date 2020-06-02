@@ -7,7 +7,7 @@ using StructureCommon.FinanceFunctions;
 
 namespace FinancialStructures.PortfolioAPI
 {
-    public static partial class PortfolioStatistics
+    public static partial class PortfolioStatisticGenerators
     {
         public static DateTime SectorFirstDate(this IPortfolio portfolio, string sector)
         {

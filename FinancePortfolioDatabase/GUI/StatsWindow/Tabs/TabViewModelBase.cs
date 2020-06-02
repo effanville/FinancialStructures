@@ -19,6 +19,7 @@ namespace FinanceViewModels.StatsViewModels
                 fDisplayValueFunds = value;
             }
         }
+
         public string Header
         {
             get; set;
