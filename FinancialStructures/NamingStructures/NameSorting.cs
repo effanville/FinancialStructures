@@ -20,7 +20,7 @@ namespace FinancialStructures.NamingStructures
                 }
                 else
                 {
-                    nameList.Sort((a, b) => a.Names.CompareTo(b.Names));
+                    nameList.Sort((a, b) => b.Names.CompareTo(a.Names));
                 }
             }
             else
@@ -35,7 +35,7 @@ namespace FinancialStructures.NamingStructures
                 }
                 else
                 {
-                    nameList.Sort((a, b) => b.Names.CompareTo(a.Names));
+                    nameList.Sort((a, b) => a.Names.CompareTo(b.Names));
                 }
             }
         }

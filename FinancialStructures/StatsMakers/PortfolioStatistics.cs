@@ -8,6 +8,7 @@ using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
 using FinancialStructures.StatisticStructures;
 using StructureCommon.Extensions;
+using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
 
 namespace FinancialStructures.StatsMakers
@@ -119,18 +120,18 @@ namespace FinancialStructures.StatsMakers
         /// <param name="exportType">The type of export.</param>
         /// <param name="options">Various options the user has specified.</param>
         /// <param name="LogReporter">Returns information on success or failure.</param>
+        /// <remarks>
+        /// It would be nice if this didnt output a totals line when one was only displaying one single entry for that company,
+        /// as this is essentially repeating information. Hard to do currently.
+        /// </remarks>
         public void ExportToFile(string filePath, ExportType exportType, UserOptions options, IReportLogger LogReporter)
         {
-            // Still to do.
-            // Put in a break when each company finishes, if options.Spacing==true
-            // writer.WriteLine($"<tr><td><br/></td></tr>");
-            // Dont put in totals line if only one thing for company written.
             try
             {
                 StreamWriter fileWriter = new StreamWriter(filePath);
                 if (exportType == ExportType.Html)
                 {
-                    fileWriter.CreateHTMLHeader($"Statement for funds as of {DateTime.Today.ToShortDateString()}", options);
+                    fileWriter.CreateHTMLHeader($"Statement for funds as of {DateTime.Today.ToShortDateString()}", options.Colours);
                     fileWriter.WriteLine($"<h1>{fDatabaseName} - Statement on {DateTime.Today.ToShortDateString()}</h1>");
                 }
 
@@ -139,7 +140,7 @@ namespace FinancialStructures.StatsMakers
                 if (options.ShowSecurites)
                 {
                     fileWriter.WriteTitle(exportType, "Funds Data", HtmlTag.h2);
-                    var securityDataToWrite = IndividualSecurityStats;
+                    List<SecurityStatistics> securityDataToWrite = IndividualSecurityStats;
                     securityDataToWrite.AddRange(CompanyTotalsStats);
 
                     if (options.DisplayValueFunds)
@@ -147,14 +148,32 @@ namespace FinancialStructures.StatsMakers
                         _ = securityDataToWrite.RemoveAll(entry => entry.LatestVal.Equals(0));
                     }
 
-                    securityDataToWrite.SortSecurityStatistics( options.SecuritySortingField, options.SecuritySortDirection);
+                    securityDataToWrite.SortSecurityStatistics(options.SecuritySortingField, options.SecuritySortDirection);
+                    if (options.Spacing)
+                    {
+                        if (options.SecuritySortingField == "Names" || options.SecuritySortingField == "Name" || options.SecuritySortingField == "Company" || string.IsNullOrEmpty(options.SecuritySortingField))
+                        {
+                            int index = 0;
+                            while (index < securityDataToWrite.Count - 1)
+                            {
+                                if (securityDataToWrite[index].Names.Company != securityDataToWrite[index + 1].Names.Company)
+                                {
+
+                                    securityDataToWrite.Insert(index + 1, null);
+                                    index++;
+                                }
+                                index++;
+                            }
+                        }
+                    }
+
                     fileWriter.WriteTable(exportType, options.SecurityDataToExport, securityDataToWrite);
                 }
 
                 if (options.ShowBankAccounts)
                 {
                     fileWriter.WriteTitle(exportType, "Bank Accounts Data", HtmlTag.h2);
-                    var bankAccountDataToWrite = BankAccountStats;
+                    List<DayValue_Named> bankAccountDataToWrite = BankAccountStats;
                     bankAccountDataToWrite.AddRange(BankAccountCompanyStats);
 
                     if (options.DisplayValueFunds)
@@ -164,13 +183,30 @@ namespace FinancialStructures.StatsMakers
 
                     bankAccountDataToWrite.SortName(options.BankAccountSortingField, options.BankSortDirection);
 
+                    if (options.Spacing)
+                    {
+                        if (options.BankAccountSortingField == "Names" || string.IsNullOrEmpty(options.BankAccountSortingField))
+                        {
+                            int index = 0;
+                            while (index < bankAccountDataToWrite.Count - 1)
+                            {
+                                if (bankAccountDataToWrite[index].Names.Company != bankAccountDataToWrite[index + 1].Names.Company)
+                                {
+                                    bankAccountDataToWrite.Insert(index + 1, null);
+                                    index++;
+                                }
+                                index++;
+                            }
+                        }
+                    }
+
                     fileWriter.WriteTable(exportType, options.BankAccDataToExport, bankAccountDataToWrite);
                 }
 
                 if (options.ShowSectors)
                 {
                     fileWriter.WriteTitle(exportType, "Analysis By Sector", HtmlTag.h2);
-                    var sectorDataToWrite = SectorStats;
+                    List<SecurityStatistics> sectorDataToWrite = SectorStats;
 
                     if (options.DisplayValueFunds)
                     {
@@ -178,6 +214,24 @@ namespace FinancialStructures.StatsMakers
                     }
 
                     sectorDataToWrite.SortSecurityStatistics(options.SectorSortingField, options.SectorSortDirection);
+                    if (options.Spacing)
+                    {
+                        if (options.SectorSortingField == "Names" || options.SectorSortingField == "Name" || options.SectorSortingField == "Company" || string.IsNullOrEmpty(options.SectorSortingField))
+                        {
+                            sectorDataToWrite.Sort((a, b) => a.Name.CompareTo(b.Name));
+                            int i = 0;
+                            while (i < sectorDataToWrite.Count - 1)
+                            {
+                                if (sectorDataToWrite[i].Names.Name != sectorDataToWrite[i + 1].Names.Name)
+                                {
+                                    sectorDataToWrite.Insert(i + 1, null);
+                                    i++;
+                                }
+                                i++;
+                            }
+                        }
+                    }
+
                     fileWriter.WriteTable(exportType, options.SectorDataToExport, sectorDataToWrite);
                 }
 

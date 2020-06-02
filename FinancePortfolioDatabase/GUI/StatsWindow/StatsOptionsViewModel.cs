@@ -6,10 +6,10 @@ using System.Reflection;
 using System.Windows.Input;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.StatisticStructures;
 using FinancialStructures.StatsMakers;
 using StructureCommon.Extensions;
+using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
 using UICommon.Commands;
 using UICommon.Interfaces;
@@ -263,7 +263,7 @@ namespace FinanceWindowsViewModels
                     SectorSortDirection = SectorDirection,
                     SecuritySortDirection = SecurityDirection
                 };
-                var stats = new PortfolioStatistics(Portfolio);
+                PortfolioStatistics stats = new PortfolioStatistics(Portfolio);
                 string extension = Path.GetExtension(result.FilePath).Trim('.');
                 ExportType type = extension.ToEnum<ExportType>();
 
