@@ -294,12 +294,15 @@ namespace FinanceWindowsViewModels
             CloseWindowAction = CloseWindow;
             ExportCommand = new RelayCommand<ICloseable>(ExecuteExportCommand);
 
-            PropertyInfo[] properties = new SecurityStatistics().GetType().GetProperties();
-            foreach (PropertyInfo info in properties)
+            PropertyInfo[] securityStatsInfo = new SecurityStatistics().GetType().GetProperties();
+            foreach (PropertyInfo info in securityStatsInfo)
             {
                 SecurityColumnNames.Add(new VisibleName(info.Name, true));
                 SectorColumnNames.Add(new VisibleName(info.Name, true));
             }
+
+            SecuritySortingField = securityStatsInfo.First().Name;
+            SectorSortingField = SecuritySortingField;
 
             PropertyInfo[] props = new DayValue_Named().GetType().GetProperties();
             foreach (PropertyInfo info in props)
@@ -314,8 +317,9 @@ namespace FinanceWindowsViewModels
                 }
             }
 
-            UserOptions fish = new UserOptions();
-            PropertyInfo[] optionsInfo = fish.GetType().GetProperties();
+            BankSortingField = props.First().Name;
+
+            PropertyInfo[] optionsInfo = new UserOptions().GetType().GetProperties();
             foreach (PropertyInfo info in optionsInfo)
             {
                 if (info.PropertyType == typeof(bool))

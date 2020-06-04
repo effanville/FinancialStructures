@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
@@ -120,10 +121,6 @@ namespace FinancialStructures.StatsMakers
         /// <param name="exportType">The type of export.</param>
         /// <param name="options">Various options the user has specified.</param>
         /// <param name="LogReporter">Returns information on success or failure.</param>
-        /// <remarks>
-        /// It would be nice if this didnt output a totals line when one was only displaying one single entry for that company,
-        /// as this is essentially repeating information. Hard to do currently.
-        /// </remarks>
         public void ExportToFile(string filePath, ExportType exportType, UserOptions options, IReportLogger LogReporter)
         {
             try
@@ -141,11 +138,19 @@ namespace FinancialStructures.StatsMakers
                 {
                     fileWriter.WriteTitle(exportType, "Funds Data", HtmlTag.h2);
                     List<SecurityStatistics> securityDataToWrite = IndividualSecurityStats;
-                    securityDataToWrite.AddRange(CompanyTotalsStats);
 
                     if (options.DisplayValueFunds)
                     {
                         _ = securityDataToWrite.RemoveAll(entry => entry.LatestVal.Equals(0));
+                    }
+
+                    foreach (var companyStatistic in CompanyTotalsStats)
+                    {
+                        int number = securityDataToWrite.Count(datum => datum.Company.Equals(companyStatistic.Company));
+                        if (number > 1)
+                        {
+                            securityDataToWrite.Add(companyStatistic);
+                        }
                     }
 
                     securityDataToWrite.SortSecurityStatistics(options.SecuritySortingField, options.SecuritySortDirection);
@@ -174,11 +179,19 @@ namespace FinancialStructures.StatsMakers
                 {
                     fileWriter.WriteTitle(exportType, "Bank Accounts Data", HtmlTag.h2);
                     List<DayValue_Named> bankAccountDataToWrite = BankAccountStats;
-                    bankAccountDataToWrite.AddRange(BankAccountCompanyStats);
 
                     if (options.DisplayValueFunds)
                     {
                         _ = bankAccountDataToWrite.RemoveAll(entry => entry.Value.Equals(0));
+                    }
+
+                    foreach (var companyStatistic in BankAccountCompanyStats)
+                    {
+                        int number = bankAccountDataToWrite.Count(datum => datum.Names.Company.Equals(companyStatistic.Names.Company));
+                        if (number > 1)
+                        {
+                            bankAccountDataToWrite.Add(companyStatistic);
+                        }
                     }
 
                     bankAccountDataToWrite.SortName(options.BankAccountSortingField, options.BankSortDirection);
