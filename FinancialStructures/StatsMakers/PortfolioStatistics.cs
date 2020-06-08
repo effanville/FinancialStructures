@@ -132,7 +132,7 @@ namespace FinancialStructures.StatsMakers
                     fileWriter.WriteLine($"<h1>{fDatabaseName} - Statement on {DateTime.Today.ToShortDateString()}</h1>");
                 }
 
-                fileWriter.WriteTable(exportType, options.BankAccDataToExport, Totals);
+                fileWriter.WriteTable(exportType, options.BankAccDataToExport, Totals, false);
 
                 if (options.ShowSecurites)
                 {
@@ -144,7 +144,7 @@ namespace FinancialStructures.StatsMakers
                         _ = securityDataToWrite.RemoveAll(entry => entry.LatestVal.Equals(0));
                     }
 
-                    foreach (var companyStatistic in CompanyTotalsStats)
+                    foreach (SecurityStatistics companyStatistic in CompanyTotalsStats)
                     {
                         int number = securityDataToWrite.Count(datum => datum.Company.Equals(companyStatistic.Company));
                         if (number > 1)
@@ -172,7 +172,7 @@ namespace FinancialStructures.StatsMakers
                         }
                     }
 
-                    fileWriter.WriteTable(exportType, options.SecurityDataToExport, securityDataToWrite);
+                    fileWriter.WriteTable(exportType, options.SecurityDataToExport, securityDataToWrite, true);
                 }
 
                 if (options.ShowBankAccounts)
@@ -185,7 +185,7 @@ namespace FinancialStructures.StatsMakers
                         _ = bankAccountDataToWrite.RemoveAll(entry => entry.Value.Equals(0));
                     }
 
-                    foreach (var companyStatistic in BankAccountCompanyStats)
+                    foreach (DayValue_Named companyStatistic in BankAccountCompanyStats)
                     {
                         int number = bankAccountDataToWrite.Count(datum => datum.Names.Company.Equals(companyStatistic.Names.Company));
                         if (number > 1)
@@ -213,7 +213,7 @@ namespace FinancialStructures.StatsMakers
                         }
                     }
 
-                    fileWriter.WriteTable(exportType, options.BankAccDataToExport, bankAccountDataToWrite);
+                    fileWriter.WriteTable(exportType, options.BankAccDataToExport, bankAccountDataToWrite, true);
                 }
 
                 if (options.ShowSectors)
@@ -245,7 +245,7 @@ namespace FinancialStructures.StatsMakers
                         }
                     }
 
-                    fileWriter.WriteTable(exportType, options.SectorDataToExport, sectorDataToWrite);
+                    fileWriter.WriteTable(exportType, options.SectorDataToExport, sectorDataToWrite, true);
                 }
 
                 if (exportType == ExportType.Html)
