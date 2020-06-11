@@ -37,6 +37,7 @@
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding Path=DataNames, Mode=TwoWay}"
                   SelectedItem="{Binding Path=SelectedName, Mode=TwoWay}"
+                  SelectedIndex="{Binding Path=SelectedIndex, Mode=TwoWay}"
                   ScrollViewer.VerticalScrollBarVisibility="Visible"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <DataGrid.Resources>

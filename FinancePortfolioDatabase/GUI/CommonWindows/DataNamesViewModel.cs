@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
@@ -58,7 +59,7 @@ namespace FinanceCommonViewModels
             {
                 if (SelectedName != null && !SelectedName.Equals(value))
                 {
-                    fPreEditSelectedName = fSelectedName.Copy();
+                    fPreEditSelectedName = value?.Copy();
                 }
                 if (SelectedName == null)
                 {
@@ -66,7 +67,21 @@ namespace FinanceCommonViewModels
                 }
 
                 fSelectedName = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedName));
+            }
+        }
+
+        private int fSelectedIndex;
+        public int SelectedIndex
+        {
+            get
+            {
+                return fSelectedIndex;
+            }
+            set
+            {
+                fSelectedIndex = value;
+                OnPropertyChanged(nameof(SelectedIndex));
             }
         }
 
@@ -117,18 +132,20 @@ namespace FinanceCommonViewModels
         public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)
         {
             base.UpdateData(portfolio);
-            NameCompDate currentSelectedName = SelectedName;
+            DataNames = null;
             DataNames = portfolio.NameData(TypeOfAccount);
             DataNames.Sort();
 
             for (int i = 0; i < DataNames.Count; i++)
             {
-                if (DataNames[i].Equals(currentSelectedName))
+                if (DataNames[i].IsEqualTo(SelectedName))
                 {
-                    SelectedName = DataNames[i];
+                    SelectedIndex = i;
                     return;
                 }
             }
+
+            SelectedIndex = 0;
         }
 
         /// <summary>
@@ -165,21 +182,18 @@ namespace FinanceCommonViewModels
         private void ExecuteCreateEdit()
         {
             bool edited = false;
-            if (DataStore.NameData(TypeOfAccount).Count != DataNames.Count)
+            if (!DataStore.NameData(TypeOfAccount).Any(item => item.Name == SelectedName.Name && item.Company == SelectedName.Company))
             {
-                UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAdd(TypeOfAccount, SelectedName.Copy(), ReportLogger));
-
-                if (!edited)
-                {
-                    _ = ReportLogger.LogWithStrings("Critical", "Error", "AddingData", "No Name provided on creation.");
-                }
+                NameData name = new NameData(SelectedName.Company, SelectedName.Name, SelectedName.Currency, SelectedName.Url, SelectedName.Sectors);
+                UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAdd(TypeOfAccount, name, ReportLogger));
             }
             else
             {
                 // maybe fired from editing stuff. Try that
                 if (!string.IsNullOrEmpty(SelectedName.Name) || !string.IsNullOrEmpty(SelectedName.Company))
                 {
-                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditName(TypeOfAccount, fPreEditSelectedName, SelectedName.Copy(), ReportLogger));
+                    NameData name = new NameData(SelectedName.Company, SelectedName.Name, SelectedName.Currency, SelectedName.Url, SelectedName.Sectors);
+                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditName(TypeOfAccount, fPreEditSelectedName, name, ReportLogger));
                 }
                 if (!edited)
                 {
