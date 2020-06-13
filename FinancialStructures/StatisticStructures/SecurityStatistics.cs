@@ -233,6 +233,7 @@ namespace FinancialStructures.StatisticStructures
                 securityStats.LatestVal = portfolio.SectorValue(name, date).Truncate();
                 securityStats.FundsFraction = portfolio.SectorFraction(name, date).Truncate(4);
                 securityStats.FundCompanyFraction = 0.0;
+                securityStats.Number = portfolio.NumberSecuritiesInSector(name);
                 securityStats.Profit = portfolio.SectorProfit(name).Truncate();
                 securityStats.CAR3M = (100 * portfolio.IRRSector(name, date.AddMonths(-3), date)).Truncate();
                 securityStats.CAR6M = (100 * portfolio.IRRSector(name, date.AddMonths(-6), date)).Truncate();
