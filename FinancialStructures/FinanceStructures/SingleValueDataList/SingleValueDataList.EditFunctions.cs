@@ -69,6 +69,20 @@ namespace FinancialStructures.FinanceStructures
             return fValues.TryAddValue(date, value, reportLogger);
         }
 
+        /// <summary>
+        /// Adds <param name="value"/> to amounts on <param name="date"/> if data doesnt exist.
+        /// </summary>
+        public bool TryAddOrEditData(DateTime date, double value, IReportLogger reportLogger = null)
+        {
+            if (fValues.ValueExists(date, out _))
+            {
+                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, "Data already exists.");
+                return fValues.TryEditData(date, value);
+            }
+
+            return fValues.TryAddValue(date, value, reportLogger);
+        }
+
         public List<object> CreateDataFromCsv(List<string[]> valuationsToRead, IReportLogger reportLogger = null)
         {
             List<object> dailyValuations = new List<object>();
