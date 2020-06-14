@@ -27,7 +27,7 @@ namespace FinancialStructures.StockStructures
             {
                 if (stock.Name.IsEqualTo(name))
                 {
-                    return stock.Value(date);
+                    return stock.Value(date, datatype);
                 }
             }
 
@@ -42,6 +42,22 @@ namespace FinancialStructures.StockStructures
             {
                 DateTime stockEarliest = Stocks[stockIndex].EarliestTime();
                 if (stockEarliest < earliest)
+                {
+                    earliest = stockEarliest;
+                }
+            }
+
+            return earliest;
+        }
+
+        public DateTime LatestEarliestDate()
+        {
+            DateTime earliest = Stocks[0].EarliestTime();
+
+            for (int stockIndex = 1; stockIndex < Stocks.Count; stockIndex++)
+            {
+                DateTime stockEarliest = Stocks[stockIndex].EarliestTime();
+                if (stockEarliest > earliest)
                 {
                     earliest = stockEarliest;
                 }
@@ -65,19 +81,12 @@ namespace FinancialStructures.StockStructures
 
             return last;
         }
-        private List<Stock> fStocks = new List<Stock>();
 
         public List<Stock> Stocks
         {
-            get
-            {
-                return fStocks;
-            }
-            set
-            {
-                fStocks = value;
-            }
-        }
+            get;
+            set;
+        } = new List<Stock>();
 
         public bool CheckValidity()
         {
@@ -98,10 +107,14 @@ namespace FinancialStructures.StockStructures
                 {
                     Stocks = database.Stocks;
                 }
+                else
+                {
+                    _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.Loading, $"No Database Loaded from {filePath}. Error {error}.");
+                }
                 return;
             }
 
-            reportLogger?.LogUseful(ReportType.Report, ReportLocation.Loading, "Loaded Empty New Database.");
+            _ = reportLogger?.LogUseful(ReportType.Report, ReportLocation.Loading, "Loaded Empty New Database.");
             Stocks = new List<Stock>();
         }
 
@@ -110,7 +123,7 @@ namespace FinancialStructures.StockStructures
             XmlFileAccess.WriteToXmlFile<ExchangeStocks>(filePath, this, out string error);
             if (error != null)
             {
-                reportLogger?.LogUseful(ReportType.Error, ReportLocation.Saving, error);
+                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.Saving, error);
             }
         }
 
@@ -128,7 +141,7 @@ namespace FinancialStructures.StockStructures
                     downloadUrl = new Uri(stock.Name.Url);
                 }
                 string stockWebsite = WebDownloader.DownloadFromURLasync(downloadUrl.ToString(), reportLogger).Result;
-                ProcessAndAddData(downloadType, stock, stockWebsite);
+                ProcessAndAddData(downloadType, stock, stockWebsite, reportLogger);
             }
         }
 
@@ -145,7 +158,7 @@ namespace FinancialStructures.StockStructures
 
 
 
-        private void ProcessAndAddData(DownloadType download, Stock stock, string websiteHtml)
+        private void ProcessAndAddData(DownloadType download, Stock stock, string websiteHtml, IReportLogger reportLogger = null)
         {
             if (download == DownloadType.All)
             {
@@ -155,6 +168,7 @@ namespace FinancialStructures.StockStructures
                 string dataLeft = websiteHtml.Substring(historyStartIndex + findString.Length);
                 // data is of form {"date":1582907959,"open":150.4199981689453,"high":152.3000030517578,"low":146.60000610351562,"close":148.74000549316406,"volume":120763559,"adjclose":148.74000549316406}. 
                 // Iterate through these until stop.
+                int numberEntriesAdded = 0;
                 while (dataLeft.Length > 0)
                 {
                     int dayFirstIndex = dataLeft.IndexOf('{');
@@ -176,12 +190,15 @@ namespace FinancialStructures.StockStructures
                         double volume = FindAndGetSingleValue(dayValues, "volume", false);
                         stock.AddValue(date, open, high, low, close, volume);
                         dataLeft = dataLeft.Substring(dayEndIndex);
+                        numberEntriesAdded++;
                     }
                     else
                     {
                         break;
                     }
                 }
+
+                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Downloading, $"Added {numberEntriesAdded} to stock {stock.Name}");
             }
 
             if (download == DownloadType.Latest)
@@ -269,7 +286,7 @@ namespace FinancialStructures.StockStructures
 
             if (fileContents.Length == 0)
             {
-                Console.WriteLine("Nothing in file selected.");
+                Console.WriteLine("Nothing in file selected, but expected stock company, name, url data.");
             }
 
             foreach (string line in fileContents)
