@@ -35,7 +35,7 @@ namespace FinanceCommonViewModels
             set
             {
                 fDataNames = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(DataNames));
             }
         }
 
@@ -57,17 +57,20 @@ namespace FinanceCommonViewModels
             }
             set
             {
-                if (SelectedName != null && !SelectedName.Equals(value))
+                if (fSelectedName != value)
                 {
-                    fPreEditSelectedName = value?.Copy();
-                }
-                if (SelectedName == null)
-                {
-                    fPreEditSelectedName = value?.Copy();
-                }
+                    if (SelectedName != null && !SelectedName.Equals(value))
+                    {
+                        fPreEditSelectedName = value?.Copy();
+                    }
+                    if (SelectedName == null)
+                    {
+                        fPreEditSelectedName = value?.Copy();
+                    }
 
-                fSelectedName = value;
-                OnPropertyChanged(nameof(SelectedName));
+                    fSelectedName = value;
+                    OnPropertyChanged(nameof(SelectedName));
+                }
             }
         }
 
@@ -80,8 +83,15 @@ namespace FinanceCommonViewModels
             }
             set
             {
-                fSelectedIndex = value;
-                OnPropertyChanged(nameof(SelectedIndex));
+                if (fSelectedIndex != value)
+                {
+                    fSelectedIndex = value;
+                    if (fSelectedIndex > -1 && fSelectedIndex < DataNames.Count)
+                    {
+                        SelectedName = DataNames[fSelectedIndex];
+                    }
+                    OnPropertyChanged(nameof(SelectedIndex));
+                }
             }
         }
 
@@ -111,7 +121,6 @@ namespace FinanceCommonViewModels
             DeleteCommand = new RelayCommand(ExecuteDelete);
             DownloadCommand = new RelayCommand(ExecuteDownloadCommand);
             OpenTabCommand = new RelayCommand(OpenTab);
-            fPreEditSelectedName = SelectedName?.Copy();
         }
 
         /// <summary>
@@ -132,20 +141,14 @@ namespace FinanceCommonViewModels
         public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)
         {
             base.UpdateData(portfolio);
-            DataNames = null;
-            DataNames = portfolio.NameData(TypeOfAccount);
-            DataNames.Sort();
 
-            for (int i = 0; i < DataNames.Count; i++)
+            var values = portfolio.NameData(TypeOfAccount);
+            if (values.Count != DataNames.Count)
             {
-                if (DataNames[i].IsEqualTo(SelectedName))
-                {
-                    SelectedIndex = i;
-                    return;
-                }
+                DataNames = null;
+                DataNames = values;
+                DataNames.Sort();
             }
-
-            SelectedIndex = 0;
         }
 
         /// <summary>

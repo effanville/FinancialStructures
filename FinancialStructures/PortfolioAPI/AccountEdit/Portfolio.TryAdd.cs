@@ -1,4 +1,5 @@
-﻿using FinancialStructures.FinanceInterfaces;
+﻿using System;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using StructureCommon.Reporting;
@@ -29,6 +30,7 @@ namespace FinancialStructures.PortfolioAPI
             if (portfolio.Exists(elementType, name))
             {
                 _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"{elementType} `{name.Company}'-`{name.Name}' already exists.");
+                portfolio.OnPortfolioChanged(null, new EventArgs());
                 return false;
             }
 
@@ -39,7 +41,7 @@ namespace FinancialStructures.PortfolioAPI
                     Security toAdd = new Security(name);
                     toAdd.DataEdit += portfolio.OnPortfolioChanged;
                     portfolio.Funds.Add(toAdd);
-                    portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());
+                    portfolio.OnPortfolioChanged(toAdd, new EventArgs());
                     break;
                 }
                 case (AccountType.Currency):
@@ -51,7 +53,7 @@ namespace FinancialStructures.PortfolioAPI
                     Currency toAdd = new Currency(name);
                     toAdd.DataEdit += portfolio.OnPortfolioChanged;
                     portfolio.Currencies.Add(toAdd);
-                    portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());
+                    portfolio.OnPortfolioChanged(toAdd, new EventArgs());
                     break;
                 }
                 case (AccountType.BankAccount):
@@ -59,7 +61,7 @@ namespace FinancialStructures.PortfolioAPI
                     CashAccount toAdd = new CashAccount(name);
                     toAdd.DataEdit += portfolio.OnPortfolioChanged;
                     portfolio.BankAccounts.Add(toAdd);
-                    portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());
+                    portfolio.OnPortfolioChanged(toAdd, new EventArgs());
                     break;
                 }
                 case (AccountType.Sector):
@@ -67,7 +69,7 @@ namespace FinancialStructures.PortfolioAPI
                     Sector toAdd = new Sector(name);
                     toAdd.DataEdit += portfolio.OnPortfolioChanged;
                     portfolio.BenchMarks.Add(toAdd);
-                    portfolio.OnPortfolioChanged(toAdd, new System.EventArgs());
+                    portfolio.OnPortfolioChanged(toAdd, new EventArgs());
                     break;
                 }
                 default:

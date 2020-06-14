@@ -34,7 +34,7 @@ namespace FinancialStructures.FinanceStructures
             {
                 foreach (DailyValuation datevalue in fValues.GetValuesBetween(fValues.FirstDate(), fValues.LatestDate()))
                 {
-                    fValues.TryGetValue(datevalue.Day, out double UnitPrice);
+                    _ = fValues.TryGetValue(datevalue.Day, out double UnitPrice);
                     DailyValuation thisday = new DailyValuation(datevalue.Day, UnitPrice);
                     output.Add(thisday);
                 }
@@ -90,7 +90,7 @@ namespace FinancialStructures.FinanceStructures
             {
                 if (dayValuation.Length != 2)
                 {
-                    reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, "Line in Csv file has incomplete data.");
+                    _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, "Line in Csv file has incomplete data.");
                     break;
                 }
 
@@ -134,7 +134,7 @@ namespace FinancialStructures.FinanceStructures
         {
             if (IsSectorLinked(sectorName))
             {
-                Names.Sectors.Remove(sectorName);
+                _ = Names.Sectors.Remove(sectorName);
                 return true;
             }
 
