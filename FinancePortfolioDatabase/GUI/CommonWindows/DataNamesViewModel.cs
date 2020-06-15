@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
@@ -42,60 +43,6 @@ namespace FinanceCommonViewModels
         private NameCompDate fPreEditSelectedName;
 
         /// <summary>
-        /// Backing field for <see cref="SelectedName"/>.
-        /// </summary>
-        private NameCompDate fSelectedName;
-
-        /// <summary>
-        /// Name and Company data of the selected account in the list <see cref="DataNames"/>
-        /// </summary>
-        public NameCompDate SelectedName
-        {
-            get
-            {
-                return fSelectedName;
-            }
-            set
-            {
-                if (fSelectedName != value)
-                {
-                    if (SelectedName != null && !SelectedName.Equals(value))
-                    {
-                        fPreEditSelectedName = value?.Copy();
-                    }
-                    if (SelectedName == null)
-                    {
-                        fPreEditSelectedName = value?.Copy();
-                    }
-
-                    fSelectedName = value;
-                    OnPropertyChanged(nameof(SelectedName));
-                }
-            }
-        }
-
-        private int fSelectedIndex;
-        public int SelectedIndex
-        {
-            get
-            {
-                return fSelectedIndex;
-            }
-            set
-            {
-                if (fSelectedIndex != value)
-                {
-                    fSelectedIndex = value;
-                    if (fSelectedIndex > -1 && fSelectedIndex < DataNames.Count)
-                    {
-                        SelectedName = DataNames[fSelectedIndex];
-                    }
-                    OnPropertyChanged(nameof(SelectedIndex));
-                }
-            }
-        }
-
-        /// <summary>
         /// Function which updates the main data store.
         /// </summary>
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
@@ -117,7 +64,8 @@ namespace FinanceCommonViewModels
             DataNames = portfolio.NameData(accountType);
             DataNames.Sort();
 
-            CreateCommand = new RelayCommand(ExecuteCreateEdit);
+            CreateCommand = new RelayCommand<DataGridRowEditEndingEventArgs>(ExecuteCreateEdit);
+            SelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(ExecuteSelectionChanged);
             DeleteCommand = new RelayCommand(ExecuteDelete);
             DownloadCommand = new RelayCommand(ExecuteDownloadCommand);
             OpenTabCommand = new RelayCommand(OpenTab);
@@ -132,7 +80,7 @@ namespace FinanceCommonViewModels
         }
         private void OpenTab()
         {
-            LoadSelectedTab(SelectedName);
+            LoadSelectedTab(fPreEditSelectedName);
         }
 
         /// <summary>
@@ -168,10 +116,29 @@ namespace FinanceCommonViewModels
         }
         private void ExecuteDownloadCommand()
         {
-            if (SelectedName != null)
+            if (fPreEditSelectedName != null)
             {
-                NameData names = SelectedName;
+                NameData names = fPreEditSelectedName;
                 UpdateDataCallback(async programPortfolio => await PortfolioDataUpdater.DownloadOfType(TypeOfAccount, programPortfolio, names, ReportLogger).ConfigureAwait(false));
+            }
+        }
+
+        public ICommand SelectionChangedCommand
+        {
+            get;
+            set;
+        }
+        private void ExecuteSelectionChanged(SelectionChangedEventArgs e)
+        {
+            if (e.Source is DataGrid dg)
+            {
+                if (dg.SelectedItem != null)
+                {
+                    if (dg.SelectedItem is NameCompDate name)
+                    {
+                        fPreEditSelectedName = name.Copy();
+                    }
+                }
             }
         }
 
@@ -180,22 +147,24 @@ namespace FinanceCommonViewModels
         /// </summary>
         public ICommand CreateCommand
         {
-            get; set;
+            get;
+            set;
         }
-        private void ExecuteCreateEdit()
+        private void ExecuteCreateEdit(DataGridRowEditEndingEventArgs e)
         {
             bool edited = false;
-            if (!DataStore.NameData(TypeOfAccount).Any(item => item.Name == SelectedName.Name && item.Company == SelectedName.Company))
+            var originRowName = e.Row.DataContext as NameCompDate;
+            if (!DataStore.NameData(TypeOfAccount).Any(item => item.Name == fPreEditSelectedName.Name && item.Company == fPreEditSelectedName.Company))
             {
-                NameData name = new NameData(SelectedName.Company, SelectedName.Name, SelectedName.Currency, SelectedName.Url, SelectedName.Sectors);
+                NameData name = new NameData(originRowName.Company, originRowName.Name, originRowName.Currency, originRowName.Url, originRowName.Sectors);
                 UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAdd(TypeOfAccount, name, ReportLogger));
             }
             else
             {
                 // maybe fired from editing stuff. Try that
-                if (!string.IsNullOrEmpty(SelectedName.Name) || !string.IsNullOrEmpty(SelectedName.Company))
+                if (!string.IsNullOrEmpty(originRowName.Name) || !string.IsNullOrEmpty(originRowName.Company))
                 {
-                    NameData name = new NameData(SelectedName.Company, SelectedName.Name, SelectedName.Currency, SelectedName.Url, SelectedName.Sectors);
+                    NameData name = new NameData(originRowName.Company, originRowName.Name, originRowName.Currency, originRowName.Url, originRowName.Sectors);
                     UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditName(TypeOfAccount, fPreEditSelectedName, name, ReportLogger));
                 }
                 if (!edited)
@@ -214,9 +183,9 @@ namespace FinanceCommonViewModels
         }
         private void ExecuteDelete()
         {
-            if (SelectedName.Name != null)
+            if (fPreEditSelectedName.Name != null)
             {
-                UpdateDataCallback(programPortfolio => programPortfolio.TryRemove(TypeOfAccount, SelectedName, ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryRemove(TypeOfAccount, fPreEditSelectedName, ReportLogger));
             }
             else
             {

@@ -40,7 +40,6 @@
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding Path=DataNames, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                  SelectedIndex="{Binding Path=SelectedIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   ScrollViewer.VerticalScrollBarVisibility="Visible"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <DataGrid.Resources>
@@ -48,25 +47,30 @@
             </DataGrid.Resources>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="RowEditEnding">
-                    <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=CreateCommand}" />
+                    <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=CreateCommand}"
+                                           PassEventArgsToCommand="True" />
+                </i:EventTrigger>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=SelectionChangedCommand}"
+                                           PassEventArgsToCommand="True" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Company"
                                     MinWidth="70"
-                                    Binding="{Binding Path=Company,Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                                    Binding="{Binding Path=Company,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Name"
                                     MinWidth="70"
-                                    Binding="{Binding Path=Name,Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                                    Binding="{Binding Path=Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Currency"
                                     MinWidth="30"
-                                    Binding="{Binding Path=Currency,Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                                    Binding="{Binding Path=Currency,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Url"
                                     MinWidth="70"
-                                    Binding="{Binding Path=Url,Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                                    Binding="{Binding Path=Url,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Sectors"
                                     MinWidth="70"
-                                    Binding="{Binding Path=SectorsFlat,Mode=TwoWay, UpdateSourceTrigger=LostFocus}" />
+                                    Binding="{Binding Path=SectorsFlat,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Last Date"
                                     MaxWidth="200"
                                     MinWidth="50"
@@ -75,8 +79,9 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel DataContext="{Binding}">
-                                <Button Content="View Data"
-                                        Command="{Binding Path=DataContext.OpenTabCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"></Button>
+                                <Button x:Name="ThisButton"
+                                        Content="View Data"
+                                        Command="{Binding Path=DataContext.OpenTabCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
