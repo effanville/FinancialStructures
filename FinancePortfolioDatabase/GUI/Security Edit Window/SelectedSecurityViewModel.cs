@@ -45,7 +45,7 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private SecurityDayData fOldSelectedValues;
+        internal SecurityDayData fOldSelectedValues;
 
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
 

@@ -122,7 +122,7 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             {
                 Company = "Company"
             };
-            viewModel.SelectedName = newName;
+            viewModel.fPreEditSelectedName = newName;
             viewModel.DataNames.Add(newName);
             viewModel.CreateCommand.Execute(1);
             Assert.AreEqual(2, viewModel.DataNames.Count);
@@ -137,9 +137,9 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             FinancialStructures.Database.Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
             Action<Action<FinancialStructures.FinanceInterfaces.IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, AccountType.Security);
-            viewModel.SelectedName = viewModel.DataNames[0];
+            viewModel.fPreEditSelectedName = viewModel.DataNames[0];
 
-            viewModel.SelectedName.Company = "NewCompany";
+            viewModel.fPreEditSelectedName.Company = "NewCompany";
 
             viewModel.CreateCommand.Execute(1);
             Assert.AreEqual(1, viewModel.DataNames.Count);
@@ -158,7 +158,7 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             Action<Action<FinancialStructures.FinanceInterfaces.IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, AccountType.Security)
             {
-                SelectedName = new NameCompDate("Fidelity", "China")
+                fPreEditSelectedName = new NameCompDate("Fidelity", "China")
             };
             viewModel.DownloadCommand.Execute(1);
 
@@ -176,7 +176,7 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
 
             Assert.AreEqual(1, viewModel.DataStore.Funds.Count);
             Assert.AreEqual(1, portfolio.Funds.Count);
-            viewModel.SelectedName = new NameCompDate("Fidelity", "China");
+            viewModel.fPreEditSelectedName = new NameCompDate("Fidelity", "China");
             viewModel.DeleteCommand.Execute(1);
             Assert.AreEqual(0, viewModel.DataStore.Funds.Count);
             Assert.AreEqual(0, portfolio.Funds.Count);
@@ -209,7 +209,7 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             Assert.AreEqual(1, viewModel.SelectedSecurityData.Count);
             SecurityDayData newValue = new SecurityDayData(new DateTime(2002, 1, 1), 1, 1, 1);
             viewModel.SelectedSecurityData.Add(newValue);
-            viewModel.SelectedValues = newValue;
+            viewModel.fOldSelectedValues = newValue;
             viewModel.AddEditSecurityDataCommand.Execute(1);
             Assert.AreEqual(2, viewModel.SelectedSecurityData.Count);
             Assert.AreEqual(2, portfolio.Funds.Single().Count());
@@ -227,7 +227,7 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             Assert.AreEqual(1, viewModel.SelectedSecurityData.Count);
             SecurityDayData newValue = new SecurityDayData(new DateTime(2000, 1, 1), 1, 1, 1);
             viewModel.SelectedSecurityData[0] = newValue;
-            viewModel.SelectedValues = newValue;
+            viewModel.fOldSelectedValues = newValue;
             viewModel.AddEditSecurityDataCommand.Execute(1);
             Assert.AreEqual(1, viewModel.SelectedSecurityData.Count);
             Assert.AreEqual(1, portfolio.Funds.Single().Count());
@@ -268,7 +268,7 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
             FinancialStructures.Database.Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
             Action<Action<FinancialStructures.FinanceInterfaces.IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             SelectedSecurityViewModel viewModel = new SelectedSecurityViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Fidelity", "China"));
-            viewModel.SelectedValues = viewModel.SelectedSecurityData.Single();
+            viewModel.fOldSelectedValues = viewModel.SelectedSecurityData.Single();
             Assert.AreEqual(1, viewModel.SelectedSecurityData.Count);
 
             viewModel.DeleteValuationCommand.Execute(1);

@@ -59,7 +59,7 @@ namespace FinanceCommonViewModels
             }
         }
 
-        private DailyValuation fOldSelectedValue;
+        internal DailyValuation fOldSelectedValue;
 
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
 

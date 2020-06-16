@@ -40,7 +40,7 @@ namespace FinanceCommonViewModels
             }
         }
 
-        private NameCompDate fPreEditSelectedName;
+        internal NameCompDate fPreEditSelectedName;
 
         /// <summary>
         /// Function which updates the main data store.
