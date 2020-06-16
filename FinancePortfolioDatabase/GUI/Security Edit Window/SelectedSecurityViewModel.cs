@@ -45,31 +45,7 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private SecurityDayData fSelectedValues;
         private SecurityDayData fOldSelectedValues;
-        private int selectedIndex;
-        public SecurityDayData SelectedValues
-        {
-            get
-            {
-                return fSelectedValues;
-            }
-            set
-            {
-                fSelectedValues = value;
-                if (SelectedSecurityData != null)
-                {
-                    int index = SelectedSecurityData.IndexOf(value);
-                    if (selectedIndex != index)
-                    {
-                        selectedIndex = index;
-                        fOldSelectedValues = fSelectedValues?.Copy();
-                    }
-                }
-
-                OnPropertyChanged();
-            }
-        }
 
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
 
@@ -84,7 +60,8 @@ namespace FinanceWindowsViewModels
             DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);
             AddCsvData = new RelayCommand(ExecuteAddCsvData);
             ExportCsvData = new RelayCommand(ExecuteExportCsvData);
-            AddEditSecurityDataCommand = new RelayCommand(ExecuteAddEditSecData);
+            AddEditSecurityDataCommand = new RelayCommand<DataGridRowEditEndingEventArgs>(ExecuteAddEditSecData);
+            SelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(ExecuteSelectionChanged);
             AddDefaultDataCommand = new RelayCommand<AddingNewItemEventArgs>(e => DataGrid_AddingNewItem(null, e));
             UpdateData(portfolio, null);
             UpdateDataCallback = updateData;
@@ -100,9 +77,9 @@ namespace FinanceWindowsViewModels
 
         private void ExecuteDeleteValuation()
         {
-            if (fSelectedName != null && fSelectedValues != null)
+            if (fSelectedName != null && fOldSelectedValues != null)
             {
-                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(AccountType.Security, fSelectedName, new DailyValuation(fSelectedValues.Date, 0.0), ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(AccountType.Security, fSelectedName, new DailyValuation(fOldSelectedValues.Date, 0.0), ReportLogger));
             }
         }
 
@@ -165,41 +142,66 @@ namespace FinanceWindowsViewModels
 
         public ICommand AddDefaultDataCommand
         {
-            get; set;
+            get;
+            set;
         }
 
         private void DataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
         {
             double shareNo = 0;
+            double unitPrice = 0;
             if (SelectedSecurityData != null && SelectedSecurityData.Any())
             {
-                shareNo = SelectedSecurityData.Last().ShareNo;
+                var latest = SelectedSecurityData.Last();
+                shareNo = latest.ShareNo;
+                unitPrice = latest.UnitPrice;
             }
             e.NewItem = new SecurityDayData()
             {
-                UnitPrice = 0,
+                UnitPrice = unitPrice,
                 ShareNo = shareNo,
             };
         }
 
-        public ICommand AddEditSecurityDataCommand
+        public ICommand SelectionChangedCommand
         {
-            get; set;
+            get;
+            set;
+        }
+        private void ExecuteSelectionChanged(SelectionChangedEventArgs e)
+        {
+            if (e.Source is DataGrid dg)
+            {
+                if (dg.SelectedItem != null)
+                {
+                    if (dg.SelectedItem is SecurityDayData data)
+                    {
+                        fOldSelectedValues = data.Copy();
+                    }
+                }
+            }
         }
 
-        private void ExecuteAddEditSecData()
+        public ICommand AddEditSecurityDataCommand
+        {
+            get;
+            set;
+        }
+
+        private void ExecuteAddEditSecData(DataGridRowEditEndingEventArgs e)
         {
             if (fSelectedName != null)
             {
+                var originRowData = e.Row.DataContext as SecurityDayData;
                 _ = DataStore.TryGetSecurity(fSelectedName, out ISecurity desired);
                 if (desired.Count() != SelectedSecurityData.Count)
                 {
-                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(fSelectedName, SelectedValues.Date, SelectedValues.ShareNo, SelectedValues.UnitPrice, SelectedValues.NewInvestment, ReportLogger));
+                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(fSelectedName, originRowData.Date, originRowData.ShareNo, originRowData.UnitPrice, originRowData.NewInvestment, ReportLogger));
                 }
                 else
                 {
                     bool edited = false;
-                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditSecurityData(fSelectedName, fOldSelectedValues.Date, SelectedValues.Date, SelectedValues.ShareNo, SelectedValues.UnitPrice, SelectedValues.NewInvestment, ReportLogger));
+                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditSecurityData(fSelectedName, fOldSelectedValues.Date, originRowData.Date, originRowData.ShareNo, originRowData.UnitPrice, originRowData.NewInvestment, ReportLogger));
 
                     if (!edited)
                     {
@@ -221,25 +223,10 @@ namespace FinanceWindowsViewModels
                 }
 
                 SelectedSecurityData = DataStore.SecurityData(fSelectedName);
-                SelectLatestValue();
             }
             else
             {
                 SelectedSecurityData = null;
-            }
-        }
-
-        public override void UpdateData(IPortfolio portfolio)
-        {
-            UpdateData(portfolio, null);
-        }
-
-        private void SelectLatestValue()
-        {
-            if (SelectedSecurityData != null && SelectedSecurityData.Count > 0)
-            {
-                SelectedValues = SelectedSecurityData[SelectedSecurityData.Count - 1];
-                fOldSelectedValues = SelectedValues.Copy();
             }
         }
     }

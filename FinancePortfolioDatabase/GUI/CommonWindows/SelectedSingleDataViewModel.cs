@@ -59,30 +59,7 @@ namespace FinanceCommonViewModels
             }
         }
 
-        private DailyValuation fSelectedValues;
         private DailyValuation fOldSelectedValue;
-        private int SelectedIndex;
-        public DailyValuation SelectedValue
-        {
-            get
-            {
-                return fSelectedValues;
-            }
-            set
-            {
-                fSelectedValues = value;
-                if (SelectedData != null)
-                {
-                    int index = SelectedData.IndexOf(value);
-                    if (SelectedIndex != index)
-                    {
-                        SelectedIndex = index;
-                        fOldSelectedValue = fSelectedValues?.Copy();
-                    }
-                }
-                OnPropertyChanged();
-            }
-        }
 
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
 
@@ -97,8 +74,9 @@ namespace FinanceCommonViewModels
             TypeOfAccount = accountType;
             UpdateData(portfolio);
 
-            EditDataCommand = new RelayCommand(ExecuteEditDataCommand);
+            EditDataCommand = new RelayCommand<DataGridRowEditEndingEventArgs>(ExecuteEditDataCommand);
             DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);
+            SelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(ExecuteSelectionChanged);
             AddDefaultDataCommand = new RelayCommand<AddingNewItemEventArgs>(e => DataGrid_AddingNewItem(null, e));
             AddCsvData = new RelayCommand(ExecuteAddCsvData);
             ExportCsvData = new RelayCommand(ExecuteExportCsvData);
@@ -106,7 +84,6 @@ namespace FinanceCommonViewModels
             ReportLogger = reportLogger;
             fFileService = fileService;
             fDialogCreationService = dialogCreation;
-            fOldSelectedValue = SelectedValue?.Copy();
         }
 
         public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)
@@ -121,7 +98,6 @@ namespace FinanceCommonViewModels
                 }
 
                 SelectedData = DataStore.NumberData(TypeOfAccount, SelectedName, ReportLogger);
-                SelectLatestValue();
             }
             else
             {
@@ -136,7 +112,8 @@ namespace FinanceCommonViewModels
 
         public ICommand AddDefaultDataCommand
         {
-            get; set;
+            get;
+            set;
         }
 
         private void DataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
@@ -148,23 +125,44 @@ namespace FinanceCommonViewModels
             };
         }
 
-        public ICommand EditDataCommand
+        public ICommand SelectionChangedCommand
         {
-            get; set;
+            get;
+            set;
+        }
+        private void ExecuteSelectionChanged(SelectionChangedEventArgs e)
+        {
+            if (e.Source is DataGrid dg)
+            {
+                if (dg.SelectedItem != null)
+                {
+                    if (dg.SelectedItem is DailyValuation data)
+                    {
+                        fOldSelectedValue = data.Copy();
+                    }
+                }
+            }
         }
 
-        private void ExecuteEditDataCommand()
+        public ICommand EditDataCommand
+        {
+            get;
+            set;
+        }
+
+        private void ExecuteEditDataCommand(DataGridRowEditEndingEventArgs e)
         {
             if (SelectedName != null)
             {
+                var originRowData = e.Row.DataContext as DailyValuation;
                 if (DataStore.NumberData(TypeOfAccount, SelectedName, ReportLogger).Count() != SelectedData.Count)
                 {
-                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddData(TypeOfAccount, SelectedName, SelectedValue, ReportLogger));
+                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddData(TypeOfAccount, SelectedName, originRowData, ReportLogger));
                 }
                 else
                 {
                     bool edited = false;
-                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditData(TypeOfAccount, SelectedName, fOldSelectedValue, SelectedValue, ReportLogger));
+                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditData(TypeOfAccount, SelectedName, fOldSelectedValue, originRowData, ReportLogger));
 
                     if (!edited)
                     {
@@ -183,7 +181,7 @@ namespace FinanceCommonViewModels
         {
             if (SelectedName != null)
             {
-                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(TypeOfAccount, SelectedName, SelectedValue, ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(TypeOfAccount, SelectedName, fOldSelectedValue, ReportLogger));
             }
             else
             {
@@ -245,14 +243,6 @@ namespace FinanceCommonViewModels
                         _ = ReportLogger.LogWithStrings("Critical", "Error", "Saving", "Could not find security.");
                     }
                 }
-            }
-        }
-
-        private void SelectLatestValue()
-        {
-            if (SelectedData != null && SelectedData.Count > 0)
-            {
-                SelectedValue = SelectedData[SelectedData.Count - 1];
             }
         }
     }
