@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
 using FinanceWindowsViewModels;
 using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
@@ -58,6 +59,13 @@ namespace FPD_UI_UnitTests.TestConstruction
         private static void OpenTab(object obj)
         {
             return;
+        }
+
+        [STAThread]
+        public static DataGridRowEditEndingEventArgs CreateRowArgs<T>(T obj) where T : class
+        {
+            var dataGridrow = new DataGridRow() { DataContext = obj };
+            return new DataGridRowEditEndingEventArgs(dataGridrow, DataGridEditAction.Commit);
         }
 
         public static Portfolio CreateBasicDataBase()
