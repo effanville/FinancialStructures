@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:cl="clr-namespace:Colouring"
       mc:Ignorable="d"
+      MaxHeight="150"
       HorizontalAlignment="Stretch"
       VerticalAlignment="Stretch">
     <Grid HorizontalAlignment="Stretch"
@@ -27,6 +28,9 @@
                 <ComboBox Margin="5 5 5 5"
                           ItemsSource="{Binding EnumValues}"
                           SelectedValue="{Binding Path=ReportingSeverity}" />
+                <Button Content="Export to File"
+                        Style="{StaticResource ResourceKey=defaultButton}"
+                        Command="{Binding ExportReportsCommand}" />
             </StackPanel>
         </Grid>
         <DataGrid Name="SecBox"

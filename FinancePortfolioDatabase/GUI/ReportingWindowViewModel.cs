@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using StructureCommon.Reporting;
 using UICommon.Commands;
+using UICommon.Services;
 using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
@@ -12,7 +14,7 @@ namespace FinanceWindowsViewModels
     internal class ReportingWindowViewModel : PropertyChangedBase
     {
         private ObservableCollection<ErrorReport> fReportsToView;
-
+        private readonly IFileInteractionService fFileInteractionService;
         public ObservableCollection<ErrorReport> ReportsToView
         {
             get
@@ -80,12 +82,14 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public ReportingWindowViewModel()
+        public ReportingWindowViewModel(IFileInteractionService fileInteractionService)
         {
+            fFileInteractionService = fileInteractionService;
             Reports = new ErrorReports();
             ReportsToView = new ObservableCollection<ErrorReport>();
             ClearReportsCommand = new RelayCommand(ExecuteClearReports);
             ClearSingleReportCommand = new RelayCommand(ExecuteClearSelectedReport);
+            ExportReportsCommand = new RelayCommand(ExecuteExportReportsCommand);
             SyncReports();
         }
 
@@ -116,6 +120,33 @@ namespace FinanceWindowsViewModels
         {
             Reports.RemoveReport(IndexToDelete);
             SyncReports();
+        }
+
+        public ICommand ExportReportsCommand
+        {
+            get;
+        }
+
+        private void ExecuteExportReportsCommand()
+        {
+            try
+            {
+                var result = fFileInteractionService.SaveFile(".csv", "errorReports.csv");
+                if (result.Success != null && (bool)result.Success)
+                {
+                    StreamWriter writer = new StreamWriter(result.FilePath);
+                    writer.WriteLine("Severity,ErrorType,Location,Message");
+                    foreach (var report in Reports.GetReports())
+                    {
+                        writer.WriteLine(report.ErrorSeverity.ToString() + "," + report.ErrorType + "," + report.ErrorLocation.ToString() + "," + report.Message);
+                    }
+
+                    writer.Close();
+                }
+            }
+            catch (IOException exeption)
+            {
+            }
         }
 
         public void UpdateReport(ReportSeverity severity, ReportType type, ReportLocation location, string message)

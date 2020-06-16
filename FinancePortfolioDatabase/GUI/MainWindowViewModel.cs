@@ -51,7 +51,7 @@ namespace FinanceWindowsViewModels
 
         public MainWindowViewModel(IFileInteractionService fileInteractionService, IDialogCreationService dialogCreationService)
         {
-            ReportsViewModel = new ReportingWindowViewModel();
+            ReportsViewModel = new ReportingWindowViewModel(fileInteractionService);
             ReportLogger = new LogReporter(ReportsViewModel.UpdateReport);
 
             OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService);
