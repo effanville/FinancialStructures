@@ -191,6 +191,7 @@ namespace FinancialStructures.StatisticStructures
                 _ = portfolio.TryGetSecurity(names, out ISecurity des);
                 securityStats.Number = des.NumberSectors();
                 securityStats.LatestVal = portfolio.LatestValue(AccountType.Security, names).Truncate();
+                securityStats.NumberShares = portfolio.SecurityPrices(names, date, SecurityDataStream.NumberOfShares).Truncate(4);
                 securityStats.SharePrice = portfolio.SecurityPrices(names, date, SecurityDataStream.SharePrice).Truncate(4);
                 securityStats.RecentChange = portfolio.RecentChange(names).Truncate();
                 securityStats.FundsFraction = portfolio.SecurityFraction(names, date).Truncate(4);
@@ -351,6 +352,12 @@ namespace FinancialStructures.StatisticStructures
         /// The Share price of the object (if relevant).
         /// </summary>
         public double SharePrice
+        {
+            get;
+            set;
+        }
+
+        public double NumberShares
         {
             get;
             set;
