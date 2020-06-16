@@ -34,6 +34,7 @@ namespace FinancialStructures.Database
         public void SetFilePath(string path)
         {
             fDatabaseFilePath = path;
+            OnPortfolioChanged(fDatabaseFilePath, new EventArgs());
         }
 
         /// <summary>

@@ -41,7 +41,7 @@ namespace FinancialStructures.PortfolioAPI
                 case (AccountType.Sector):
                 {
                     _ = portfolio.TryGetAccount(accountType, names, out ISingleValueDataList acc);
-                    await DownloadLatestValue(acc.Names, value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                    await DownloadLatestValue(acc.Names, value => acc.TryAddOrEditData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
                     break;
                 }
             }

@@ -1,5 +1,6 @@
 using System.Linq;
 using FinanceWindowsViewModels;
+using FPD_UI_UnitTests.TestConstruction;
 using NUnit.Framework;
 using StructureCommon.Reporting;
 
@@ -16,10 +17,7 @@ namespace FPD_UI_UnitTests
         [Test]
         public void ReportsSync()
         {
-            ReportingWindowViewModel viewModel = new ReportingWindowViewModel
-            {
-                ReportingSeverity = ReportSeverity.Detailed
-            };
+            var viewModel = CreateViewModel("nothing");
             viewModel.Reports.AddErrorReport(ReportSeverity.Critical, ReportType.Error, ReportLocation.Unknown, "Is this added?");
             viewModel.SyncReports();
 
@@ -35,10 +33,7 @@ namespace FPD_UI_UnitTests
         [Test]
         public void CanAddReport()
         {
-            ReportingWindowViewModel viewModel = new ReportingWindowViewModel
-            {
-                ReportingSeverity = ReportSeverity.Detailed
-            };
+            var viewModel = CreateViewModel("nothing");
             viewModel.UpdateReport(ReportSeverity.Useful, ReportType.Error, ReportLocation.Unknown, "Is this added?");
 
             Assert.AreEqual(1, viewModel.Reports.GetReports().Count, "Reports should have a report added.");
@@ -54,10 +49,7 @@ namespace FPD_UI_UnitTests
         [Test]
         public void CanClearReports()
         {
-            ReportingWindowViewModel viewModel = new ReportingWindowViewModel
-            {
-                ReportingSeverity = ReportSeverity.Detailed
-            };
+            var viewModel = CreateViewModel("nothing");
             viewModel.UpdateReport(ReportSeverity.Useful, ReportType.Error, ReportLocation.Unknown, "Is this added?");
             viewModel.UpdateReport(ReportSeverity.Useful, ReportType.Error, ReportLocation.Unknown, "Is this also added?");
 
@@ -75,10 +67,8 @@ namespace FPD_UI_UnitTests
         [Test]
         public void CanClearSingleReport()
         {
-            ReportingWindowViewModel viewModel = new ReportingWindowViewModel
-            {
-                ReportingSeverity = ReportSeverity.Detailed
-            };
+            var viewModel = CreateViewModel("nothing");
+
             viewModel.UpdateReport(ReportSeverity.Useful, ReportType.Error, ReportLocation.Unknown, "Is this added?");
             viewModel.UpdateReport(ReportSeverity.Useful, ReportType.Error, ReportLocation.Unknown, "Is this also added?");
 
@@ -92,6 +82,16 @@ namespace FPD_UI_UnitTests
             Assert.AreEqual(ReportType.Error, viewModel.ReportsToView.Single().ErrorType);
             Assert.AreEqual(ReportLocation.Unknown, viewModel.ReportsToView.Single().ErrorLocation);
             Assert.AreEqual("Is this added?", viewModel.ReportsToView.Single().Message);
+        }
+
+        private ReportingWindowViewModel CreateViewModel(string filepath, ReportSeverity reportingSeverity = ReportSeverity.Detailed)
+        {
+            var mockFileService = TestingGUICode.CreateFileMock(filepath);
+            ReportingWindowViewModel viewModel = new ReportingWindowViewModel(mockFileService.Object)
+            {
+                ReportingSeverity = reportingSeverity
+            };
+            return viewModel;
         }
     }
 }

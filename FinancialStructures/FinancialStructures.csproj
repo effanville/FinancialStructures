@@ -18,8 +18,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="StructureCommon" Version="1.0.2" />
-    <PackageReference Include="UICommon" Version="1.0.2" />
+    <PackageReference Include="StructureCommon" Version="1.0.3" />
   </ItemGroup>
 
  <!-- Alternative locations for dlls, if Nuget links cannot be generated

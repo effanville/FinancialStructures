@@ -40,17 +40,21 @@
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding Path=SelectedSecurityData, Mode=TwoWay}"
-                  SelectedItem="{Binding Path=SelectedValues, Mode=TwoWay}"
                   ScrollViewer.VerticalScrollBarVisibility="Visible">
             <DataGrid.Resources>
                 <uic:StringToUKDateConverter x:Key="StringToUKDate" />
             </DataGrid.Resources>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="RowEditEnding">
-                    <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=AddEditSecurityDataCommand}" />
+                    <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=AddEditSecurityDataCommand}"
+                                           PassEventArgsToCommand="True" />
                 </i:EventTrigger>
                 <i:EventTrigger EventName="AddingNewItem">
                     <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=AddDefaultDataCommand}"
+                                           PassEventArgsToCommand="True" />
+                </i:EventTrigger>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=SelectionChangedCommand}"
                                            PassEventArgsToCommand="True" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>

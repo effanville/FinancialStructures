@@ -34,7 +34,7 @@ namespace FinancialStructures.FinanceStructures
             {
                 foreach (DailyValuation datevalue in fValues.GetValuesBetween(fValues.FirstDate(), fValues.LatestDate()))
                 {
-                    fValues.TryGetValue(datevalue.Day, out double UnitPrice);
+                    _ = fValues.TryGetValue(datevalue.Day, out double UnitPrice);
                     DailyValuation thisday = new DailyValuation(datevalue.Day, UnitPrice);
                     output.Add(thisday);
                 }
@@ -69,6 +69,20 @@ namespace FinancialStructures.FinanceStructures
             return fValues.TryAddValue(date, value, reportLogger);
         }
 
+        /// <summary>
+        /// Adds <param name="value"/> to amounts on <param name="date"/> if data doesnt exist.
+        /// </summary>
+        public bool TryAddOrEditData(DateTime date, double value, IReportLogger reportLogger = null)
+        {
+            if (fValues.ValueExists(date, out _))
+            {
+                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, "Data already exists.");
+                return fValues.TryEditData(date, value);
+            }
+
+            return fValues.TryAddValue(date, value, reportLogger);
+        }
+
         public List<object> CreateDataFromCsv(List<string[]> valuationsToRead, IReportLogger reportLogger = null)
         {
             List<object> dailyValuations = new List<object>();
@@ -76,7 +90,7 @@ namespace FinancialStructures.FinanceStructures
             {
                 if (dayValuation.Length != 2)
                 {
-                    reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, "Line in Csv file has incomplete data.");
+                    _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, "Line in Csv file has incomplete data.");
                     break;
                 }
 
@@ -120,7 +134,7 @@ namespace FinancialStructures.FinanceStructures
         {
             if (IsSectorLinked(sectorName))
             {
-                Names.Sectors.Remove(sectorName);
+                _ = Names.Sectors.Remove(sectorName);
                 return true;
             }
 

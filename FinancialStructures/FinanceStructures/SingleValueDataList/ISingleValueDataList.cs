@@ -47,6 +47,7 @@ namespace FinancialStructures.FinanceInterfaces
         List<DailyValuation> GetDataForDisplay();
         bool EditNameData(NameData newNames);
         bool TryAddData(DateTime date, double value, IReportLogger reportLogger = null);
+        bool TryAddOrEditData(DateTime date, double value, IReportLogger reportLogger = null);
         bool TryEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null);
         bool TryDeleteData(DateTime date, IReportLogger reportLogger = null);
         bool TryRemoveSector(string sectorName);

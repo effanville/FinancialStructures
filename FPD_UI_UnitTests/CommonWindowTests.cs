@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using FinanceCommonViewModels;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
@@ -14,6 +15,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
     /// Tests for window displaying single data stream data.
     /// </summary>
     [TestFixture]
+    [Apartment(ApartmentState.STA)]
     public class CommonWindowTests
     {
         [Test]
@@ -30,6 +32,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             DataNamesViewModel nameModel = tab as DataNamesViewModel;
             Assert.AreEqual(1, nameModel.DataNames.Count);
         }
+
         [Test]
         public void CanUpdateData()
         {
@@ -82,6 +85,8 @@ namespace FPD_UI_UnitTests.CommonWindowTests
         }
     }
 
+    [TestFixture]
+    [Apartment(ApartmentState.STA)]
     public class DataNamesTests
     {
         [Test]
@@ -123,14 +128,16 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             {
                 Company = "Company"
             };
-            viewModel.SelectedName = newName;
+            viewModel.fPreEditSelectedName = newName;
             viewModel.DataNames.Add(newName);
-            viewModel.CreateCommand.Execute(1);
+            var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames.Last());
+            viewModel.CreateCommand.Execute(dataGridArgs);
             Assert.AreEqual(2, viewModel.DataNames.Count);
             Assert.AreEqual(2, portfolio.BankAccounts.Count);
         }
 
         [Test]
+        [STAThread]
         public void CanEditName()
         {
             Moq.Mock<UICommon.Services.IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
@@ -139,11 +146,10 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             Action<Action<FinancialStructures.FinanceInterfaces.IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
 
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, AccountType.BankAccount);
-            viewModel.SelectedName = viewModel.DataNames[0];
-
-            viewModel.SelectedName.Company = "NewCompany";
-
-            viewModel.CreateCommand.Execute(1);
+            viewModel.fPreEditSelectedName = viewModel.DataNames[0].Copy();
+            viewModel.DataNames[0].Company = "NewCompany";
+            var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[0]);
+            viewModel.CreateCommand.Execute(dataGridArgs);
             Assert.AreEqual(1, viewModel.DataNames.Count);
             Assert.AreEqual(1, portfolio.BankAccounts.Count);
 
@@ -161,7 +167,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
 
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, AccountType.BankAccount)
             {
-                SelectedName = new NameCompDate("Barclays", "currentAccount")
+                fPreEditSelectedName = new NameCompDate("Barclays", "currentAccount")
             };
             viewModel.DownloadCommand.Execute(1);
 
@@ -180,13 +186,15 @@ namespace FPD_UI_UnitTests.CommonWindowTests
 
             Assert.AreEqual(1, viewModel.DataStore.BankAccounts.Count);
             Assert.AreEqual(1, portfolio.BankAccounts.Count);
-            viewModel.SelectedName = new NameCompDate("Barclays", "currentAccount");
+            viewModel.fPreEditSelectedName = new NameCompDate("Barclays", "currentAccount");
             viewModel.DeleteCommand.Execute(1);
             Assert.AreEqual(0, viewModel.DataStore.BankAccounts.Count);
             Assert.AreEqual(0, portfolio.BankAccounts.Count);
         }
     }
 
+    [TestFixture]
+    [Apartment(ApartmentState.STA)]
     public class SelectedAccountDataTests
     {
 
@@ -214,8 +222,10 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             Assert.AreEqual(1, viewModel.SelectedData.Count);
             DailyValuation newValue = new DailyValuation(new DateTime(2002, 1, 1), 1);
             viewModel.SelectedData.Add(newValue);
-            viewModel.SelectedValue = newValue;
-            viewModel.EditDataCommand.Execute(1);
+            viewModel.fOldSelectedValue = newValue.Copy();
+
+            var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.SelectedData.Last());
+            viewModel.EditDataCommand.Execute(dataGridArgs);
             Assert.AreEqual(2, viewModel.SelectedData.Count);
             Assert.AreEqual(2, portfolio.BankAccounts.Single().Count());
         }
@@ -230,10 +240,12 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             SelectedSingleDataViewModel viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Barclays", "currentAccount"), AccountType.BankAccount);
 
             Assert.AreEqual(1, viewModel.SelectedData.Count);
+            viewModel.fOldSelectedValue = viewModel.SelectedData[0].Copy();
             DailyValuation newValue = new DailyValuation(new DateTime(2000, 1, 1), 1);
             viewModel.SelectedData[0] = newValue;
-            viewModel.SelectedValue = newValue;
-            viewModel.EditDataCommand.Execute(1);
+
+            var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.SelectedData.Last());
+            viewModel.EditDataCommand.Execute(dataGridArgs);
             Assert.AreEqual(1, viewModel.SelectedData.Count);
             Assert.AreEqual(1, portfolio.Funds.Single().Count());
             Assert.AreEqual(new DateTime(2000, 1, 1), portfolio.Funds.Single().FirstValue().Day);
@@ -274,7 +286,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             FinancialStructures.Database.Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
             Action<Action<FinancialStructures.FinanceInterfaces.IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             SelectedSingleDataViewModel viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Barclays", "currentAccount"), AccountType.BankAccount);
-            viewModel.SelectedValue = viewModel.SelectedData.Single();
+            viewModel.fOldSelectedValue = viewModel.SelectedData.Single();
             Assert.AreEqual(1, viewModel.SelectedData.Count);
 
             viewModel.DeleteValuationCommand.Execute(1);

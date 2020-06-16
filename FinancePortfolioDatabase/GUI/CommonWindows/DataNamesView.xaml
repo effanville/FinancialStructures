@@ -5,10 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:uic="clr-namespace:UICommon.Converters;assembly=UICommon"
+             xmlns:gui="clr-namespace:FinancePortfolioDatabase.GUI"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
     <Grid>
+        <Grid.Resources>
+            <gui:NameCompDateConverter x:Key="nameConverter" />
+        </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
@@ -35,8 +39,7 @@
                   CanUserAddRows="True"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False"
-                  ItemsSource="{Binding Path=DataNames, Mode=TwoWay}"
-                  SelectedItem="{Binding Path=SelectedName, Mode=TwoWay}"
+                  ItemsSource="{Binding Path=DataNames, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   ScrollViewer.VerticalScrollBarVisibility="Visible"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <DataGrid.Resources>
@@ -44,35 +47,41 @@
             </DataGrid.Resources>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="RowEditEnding">
-                    <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=CreateCommand}" />
+                    <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=CreateCommand}"
+                                           PassEventArgsToCommand="True" />
+                </i:EventTrigger>
+                <i:EventTrigger EventName="SelectionChanged">
+                    <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=SelectionChangedCommand}"
+                                           PassEventArgsToCommand="True" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Company"
                                     MinWidth="70"
-                                    Binding="{Binding Path=Company, UpdateSourceTrigger=LostFocus}" />
+                                    Binding="{Binding Path=Company,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Name"
                                     MinWidth="70"
-                                    Binding="{Binding Path=Name, UpdateSourceTrigger=LostFocus}" />
+                                    Binding="{Binding Path=Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Currency"
                                     MinWidth="30"
-                                    Binding="{Binding Path=Currency, UpdateSourceTrigger=LostFocus}" />
+                                    Binding="{Binding Path=Currency,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Url"
                                     MinWidth="70"
-                                    Binding="{Binding Path=Url, UpdateSourceTrigger=LostFocus}" />
+                                    Binding="{Binding Path=Url,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Sectors"
                                     MinWidth="70"
-                                    Binding="{Binding Path=SectorsFlat, UpdateSourceTrigger=LostFocus}" />
+                                    Binding="{Binding Path=SectorsFlat,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Last Date"
                                     MaxWidth="200"
                                     MinWidth="50"
-                                    Binding="{Binding Path=DateToRecord, Converter={StaticResource StringToUKDate} }" />
+                                    Binding="{Binding Path=DateToRecord,Mode=TwoWay, Converter={StaticResource StringToUKDate} }" />
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <StackPanel DataContext="{Binding}">
-                                <Button Content="View Data"
-                                        Command="{Binding Path=DataContext.OpenTabCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}"></Button>
+                                <Button x:Name="ThisButton"
+                                        Content="View Data"
+                                        Command="{Binding Path=DataContext.OpenTabCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
                             </StackPanel>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

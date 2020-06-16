@@ -1,4 +1,5 @@
 ﻿using System;
+using StructureCommon.Extensions;
 
 namespace FinancialStructures.StockData
 {
@@ -39,6 +40,11 @@ namespace FinancialStructures.StockData
             fNumberSharesTraded = numShares;
             fPricePerShare = price;
             fTradeCosts = costs;
+        }
+
+        public override string ToString()
+        {
+            return fDay.ToUkDateString() + "-" + fTradeType.ToString() + "-" + fCompany + "-" + fName + "-" + fTransactionValue + "-" + fNumberSharesTraded + "-" + fPricePerShare + "-" + fTradeCosts;
         }
     }
 }

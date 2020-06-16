@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using StructureCommon.Reporting;
@@ -27,6 +28,8 @@ namespace FinancialStructures.PortfolioAPI
                         if (oldName.IsEqualTo(portfolio.Funds[fundIndex].Names))
                         {
                             // now edit data
+                            _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Renaming {elementType} name {oldName} to {newName}.");
+                            portfolio.OnPortfolioChanged(portfolio.Funds[fundIndex], new EventArgs());
                             return portfolio.Funds[fundIndex].EditNameData(newName);
                         }
                     }
@@ -61,6 +64,7 @@ namespace FinancialStructures.PortfolioAPI
                 if (values[AccountIndex].Names.IsEqualTo(oldName))
                 {
                     // now edit data
+                    //_ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Renaming {elementType} name {oldName} to {newName}.");
                     return values[AccountIndex].EditNameData(newName);
                 }
             }

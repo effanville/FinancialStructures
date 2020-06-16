@@ -61,7 +61,7 @@ namespace FinancialStructures.StockStructures
 
         public List<double> Values(DateTime date, int numberValuesBefore, int numberValuesAfter = 0, DataStream data = DataStream.Close)
         {
-            DayData(date);
+            _ = DayData(date);
             List<double> desiredValues = new List<double>();
             for (int index = LastAccessedValuationIndex - numberValuesBefore + 1; index < LastAccessedValuationIndex + numberValuesAfter + 1; index++)
             {

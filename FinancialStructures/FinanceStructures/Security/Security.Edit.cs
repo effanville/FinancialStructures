@@ -22,8 +22,23 @@ namespace FinancialStructures.FinanceStructures
         {
             if (DoesDateSharesDataExist(date, out int _) || DoesDateInvestmentDataExist(date, out int _) || DoesDateUnitPriceDataExist(date, out int _))
             {
-                reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, $"Security {Names.ToString()} already has NumShares or UnitPrice or Investment data on {date.ToString("d")}.");
+                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, $"Security {Names.ToString()} already has NumShares or UnitPrice or Investment data on {date.ToString("d")}.");
                 return false;
+            }
+
+            return fShares.TryAddValue(date, shares, reportLogger) & fUnitPrice.TryAddValue(date, unitPrice, reportLogger) & fInvestments.TryAddValue(date, investment, reportLogger) && ComputeInvestments(reportLogger);
+        }
+
+        /// <summary>
+        /// Attempts to add data for the date specified.
+        /// If cannot add any value that one wants to, then doesn't add all the values chosen.
+        /// </summary>
+        public bool TryAddOrEditData(DateTime date, double unitPrice, double shares = 0, double investment = 0, IReportLogger reportLogger = null)
+        {
+            if (DoesDateSharesDataExist(date, out int _) || DoesDateInvestmentDataExist(date, out int _) || DoesDateUnitPriceDataExist(date, out int _))
+            {
+                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Security {Names.ToString()} data on {date.ToString("d")} edited.");
+                return TryEditData(date, date, shares, unitPrice, investment, reportLogger);
             }
 
             return fShares.TryAddValue(date, shares, reportLogger) & fUnitPrice.TryAddValue(date, unitPrice, reportLogger) & fInvestments.TryAddValue(date, investment, reportLogger) && ComputeInvestments(reportLogger);
@@ -36,7 +51,7 @@ namespace FinancialStructures.FinanceStructures
             {
                 if (dayValuation.Length != 4)
                 {
-                    reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, "Line in Csv file has incomplete data.");
+                    _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, "Line in Csv file has incomplete data.");
                     break;
                 }
 
@@ -67,7 +82,7 @@ namespace FinancialStructures.FinanceStructures
                 units = new DailyValuation(day, 0);
             }
 
-            TryAddData(day, value, units.Value, reportLogger: reportLogger);
+            _ = TryAddOrEditData(day, value, units.Value, reportLogger: reportLogger);
         }
 
 

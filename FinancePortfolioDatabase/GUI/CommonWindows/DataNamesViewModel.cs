@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
@@ -34,41 +36,11 @@ namespace FinanceCommonViewModels
             set
             {
                 fDataNames = value;
-                OnPropertyChanged();
+                OnPropertyChanged(nameof(DataNames));
             }
         }
 
-        private NameCompDate fPreEditSelectedName;
-
-        /// <summary>
-        /// Backing field for <see cref="SelectedName"/>.
-        /// </summary>
-        private NameCompDate fSelectedName;
-
-        /// <summary>
-        /// Name and Company data of the selected account in the list <see cref="DataNames"/>
-        /// </summary>
-        public NameCompDate SelectedName
-        {
-            get
-            {
-                return fSelectedName;
-            }
-            set
-            {
-                if (SelectedName != null && !SelectedName.Equals(value))
-                {
-                    fPreEditSelectedName = fSelectedName.Copy();
-                }
-                if (SelectedName == null)
-                {
-                    fPreEditSelectedName = value?.Copy();
-                }
-
-                fSelectedName = value;
-                OnPropertyChanged();
-            }
-        }
+        internal NameCompDate fPreEditSelectedName;
 
         /// <summary>
         /// Function which updates the main data store.
@@ -92,11 +64,11 @@ namespace FinanceCommonViewModels
             DataNames = portfolio.NameData(accountType);
             DataNames.Sort();
 
-            CreateCommand = new RelayCommand(ExecuteCreateEdit);
+            CreateCommand = new RelayCommand<DataGridRowEditEndingEventArgs>(ExecuteCreateEdit);
+            SelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(ExecuteSelectionChanged);
             DeleteCommand = new RelayCommand(ExecuteDelete);
             DownloadCommand = new RelayCommand(ExecuteDownloadCommand);
             OpenTabCommand = new RelayCommand(OpenTab);
-            fPreEditSelectedName = SelectedName?.Copy();
         }
 
         /// <summary>
@@ -108,7 +80,7 @@ namespace FinanceCommonViewModels
         }
         private void OpenTab()
         {
-            LoadSelectedTab(SelectedName);
+            LoadSelectedTab(fPreEditSelectedName);
         }
 
         /// <summary>
@@ -117,17 +89,13 @@ namespace FinanceCommonViewModels
         public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)
         {
             base.UpdateData(portfolio);
-            NameCompDate currentSelectedName = SelectedName;
-            DataNames = portfolio.NameData(TypeOfAccount);
-            DataNames.Sort();
 
-            for (int i = 0; i < DataNames.Count; i++)
+            var values = portfolio.NameData(TypeOfAccount);
+            if (values.Count != DataNames.Count)
             {
-                if (DataNames[i].Equals(currentSelectedName))
-                {
-                    SelectedName = DataNames[i];
-                    return;
-                }
+                DataNames = null;
+                DataNames = values;
+                DataNames.Sort();
             }
         }
 
@@ -148,10 +116,29 @@ namespace FinanceCommonViewModels
         }
         private void ExecuteDownloadCommand()
         {
-            if (SelectedName != null)
+            if (fPreEditSelectedName != null)
             {
-                NameData names = SelectedName;
+                NameData names = fPreEditSelectedName;
                 UpdateDataCallback(async programPortfolio => await PortfolioDataUpdater.DownloadOfType(TypeOfAccount, programPortfolio, names, ReportLogger).ConfigureAwait(false));
+            }
+        }
+
+        public ICommand SelectionChangedCommand
+        {
+            get;
+            set;
+        }
+        private void ExecuteSelectionChanged(SelectionChangedEventArgs e)
+        {
+            if (e.Source is DataGrid dg)
+            {
+                if (dg.SelectedItem != null)
+                {
+                    if (dg.SelectedItem is NameCompDate name)
+                    {
+                        fPreEditSelectedName = name.Copy();
+                    }
+                }
             }
         }
 
@@ -160,26 +147,25 @@ namespace FinanceCommonViewModels
         /// </summary>
         public ICommand CreateCommand
         {
-            get; set;
+            get;
+            set;
         }
-        private void ExecuteCreateEdit()
+        private void ExecuteCreateEdit(DataGridRowEditEndingEventArgs e)
         {
             bool edited = false;
-            if (DataStore.NameData(TypeOfAccount).Count != DataNames.Count)
+            var originRowName = e.Row.DataContext as NameCompDate;
+            if (!DataStore.NameData(TypeOfAccount).Any(item => item.Name == fPreEditSelectedName.Name && item.Company == fPreEditSelectedName.Company))
             {
-                UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAdd(TypeOfAccount, SelectedName.Copy(), ReportLogger));
-
-                if (!edited)
-                {
-                    _ = ReportLogger.LogWithStrings("Critical", "Error", "AddingData", "No Name provided on creation.");
-                }
+                NameData name = new NameData(originRowName.Company, originRowName.Name, originRowName.Currency, originRowName.Url, originRowName.Sectors);
+                UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAdd(TypeOfAccount, name, ReportLogger));
             }
             else
             {
                 // maybe fired from editing stuff. Try that
-                if (!string.IsNullOrEmpty(SelectedName.Name) || !string.IsNullOrEmpty(SelectedName.Company))
+                if (!string.IsNullOrEmpty(originRowName.Name) || !string.IsNullOrEmpty(originRowName.Company))
                 {
-                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditName(TypeOfAccount, fPreEditSelectedName, SelectedName.Copy(), ReportLogger));
+                    NameData name = new NameData(originRowName.Company, originRowName.Name, originRowName.Currency, originRowName.Url, originRowName.Sectors);
+                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditName(TypeOfAccount, fPreEditSelectedName, name, ReportLogger));
                 }
                 if (!edited)
                 {
@@ -197,9 +183,9 @@ namespace FinanceCommonViewModels
         }
         private void ExecuteDelete()
         {
-            if (SelectedName.Name != null)
+            if (fPreEditSelectedName.Name != null)
             {
-                UpdateDataCallback(programPortfolio => programPortfolio.TryRemove(TypeOfAccount, SelectedName, ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryRemove(TypeOfAccount, fPreEditSelectedName, ReportLogger));
             }
             else
             {
