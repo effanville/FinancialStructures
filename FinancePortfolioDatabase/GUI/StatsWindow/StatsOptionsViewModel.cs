@@ -225,7 +225,7 @@ namespace FinanceWindowsViewModels
 
         private void ExecuteExportCommand(ICloseable window)
         {
-            FileInteractionResult result = fFileService.SaveFile(ExportType.Html.ToString(), Portfolio.DatabaseName + "-" + ExportType.Html, Portfolio.Directory, "Html Files|*.html|CSV Files|*.csv|All Files|*.*");
+            FileInteractionResult result = fFileService.SaveFile(ExportType.Html.ToString(), Portfolio.DatabaseName, Portfolio.Directory, "Html Files|*.html|CSV Files|*.csv|All Files|*.*");
             string path = null;
 
             if (result.Success != null && (bool)result.Success)

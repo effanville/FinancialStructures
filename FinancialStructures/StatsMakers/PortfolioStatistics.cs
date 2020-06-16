@@ -49,6 +49,15 @@ namespace FinancialStructures.StatsMakers
         } = new List<SecurityStatistics>();
 
         /// <summary>
+        /// List of statistics of each company performance
+        /// </summary>
+        public SecurityStatistics PortfolioSecurityStats
+        {
+            get;
+            set;
+        } = new SecurityStatistics();
+
+        /// <summary>
         /// Each specified sectors performance.
         /// </summary>
         public List<SecurityStatistics> SectorStats
@@ -100,7 +109,7 @@ namespace FinancialStructures.StatsMakers
             IndividualSecurityStats = portfolio.GenerateFundsStatistics();
 
             CompanyTotalsStats = portfolio.GenerateCompanyOverviewStatistics();
-            CompanyTotalsStats.Add(portfolio.GeneratePortfolioStatistics());
+            PortfolioSecurityStats = portfolio.GeneratePortfolioStatistics();
 
             BankAccountStats = portfolio.GenerateBankAccountStatistics(false);
 
@@ -152,6 +161,8 @@ namespace FinancialStructures.StatsMakers
                             securityDataToWrite.Add(companyStatistic);
                         }
                     }
+
+                    securityDataToWrite.Add(PortfolioSecurityStats);
 
                     securityDataToWrite.SortSecurityStatistics(options.SecuritySortingField, options.SecuritySortDirection);
                     if (options.Spacing)
