@@ -59,7 +59,7 @@ namespace FinancialStructures.PortfolioAPI
         /// <param name="reportLogger">Callback to report information.</param>
         public static void SavePortfolio(this IPortfolio portfolio, string filePath, IReportLogger reportLogger)
         {
-            AllData toSave = new AllData(portfolio, portfolio.BenchMarks);
+            AllData toSave = new AllData(portfolio, null);
 
             if (filePath != null)
             {
