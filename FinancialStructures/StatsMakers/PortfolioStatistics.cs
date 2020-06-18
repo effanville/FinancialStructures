@@ -162,9 +162,9 @@ namespace FinancialStructures.StatsMakers
                         }
                     }
 
-                    securityDataToWrite.Add(PortfolioSecurityStats);
-
                     securityDataToWrite.SortSecurityStatistics(options.SecuritySortingField, options.SecuritySortDirection);
+
+                    securityDataToWrite.Add(PortfolioSecurityStats);
                     if (options.Spacing)
                     {
                         if (options.SecuritySortingField == "Names" || options.SecuritySortingField == "Name" || options.SecuritySortingField == "Company" || string.IsNullOrEmpty(options.SecuritySortingField))
