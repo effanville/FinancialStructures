@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.StatsMakers;
 using StructureCommon.DataStructures;
-using StructureCommon.Extensions;
 
 namespace FinancialStructures.DataStructures
 {
@@ -19,61 +16,6 @@ namespace FinancialStructures.DataStructures
             return 0;
         }
 
-        public string HTMLTableHeader(UserOptions options, List<string> names)
-        {
-            System.Reflection.PropertyInfo[] properties = GetType().GetProperties();
-            string htmlHeader = string.Empty;
-            foreach (System.Reflection.PropertyInfo property in properties)
-            {
-                if (names.Contains(property.Name))
-                {
-                    htmlHeader += "<th scope=\"col\">";
-                    htmlHeader += property.Name;
-                    htmlHeader += "</th>";
-                }
-            }
-
-            return htmlHeader;
-        }
-
-        public string HTMLTableData(UserOptions options, List<string> names)
-        {
-            System.Reflection.PropertyInfo[] properties = GetType().GetProperties();
-            string htmlData = "<th scope=\"row\">";
-
-            for (int i = 0; i < properties.Length; i++)
-            {
-                if (names.Contains(properties[i].Name))
-                {
-                    bool isDouble = double.TryParse(properties[i].GetValue(this).ToString(), out double value);
-                    if (i != 0)
-                    {
-                        if (value < 0)
-                        {
-                            htmlData += "<td data-negative>";
-                        }
-                        else
-                        {
-                            htmlData += "<td>";
-                        }
-                    }
-                    if (isDouble)
-                    {
-
-                        htmlData += value.TruncateToString();
-                    }
-                    else
-                    {
-                        htmlData += properties[i].GetValue(this);
-                    }
-
-                    htmlData += "</td>";
-                }
-            }
-            htmlData += "</th>";
-            return htmlData;
-        }
-
         /// <inheritdoc/>
         public override string ToString()
         {
@@ -85,7 +27,8 @@ namespace FinancialStructures.DataStructures
         /// </summary>
         public TwoName Names
         {
-            get; set;
+            get;
+            set;
         }
 
         /// <summary>
