@@ -9,7 +9,7 @@ namespace FinancialStructures.DataStructures
             return string.Concat(Date.Day.ToString().PadLeft(2, '0'), "/", Date.Month.ToString().PadLeft(2, '0'), "/", Date.Year, ", ", UnitPrice.ToString(), ", ", ShareNo.ToString(), ", ", NewInvestment.ToString());
         }
 
-        public int CompareTo(Object obj)
+        public int CompareTo(object obj)
         {
             if (obj is SecurityDayData dailyView)
             {
@@ -34,38 +34,64 @@ namespace FinancialStructures.DataStructures
             Date = date;
             UnitPrice = unitPrice;
             ShareNo = shareNo;
-            Value = UnitPrice * ShareNo;
             NewInvestment = newInvestment;
             NewValue = newValue;
         }
 
+        /// <summary>
+        /// Whether any alterations have been made to thsi.
+        /// </summary>
         public bool NewValue
         {
-            get; set;
+            get;
+            set;
         }
 
+        /// <summary>
+        /// The date of this valuation.
+        /// </summary>
         public DateTime Date
         {
-            get; set;
+            get;
+            set;
         }
+
+        /// <summary>
+        /// The unit price of on this day.
+        /// </summary>
         public double UnitPrice
         {
-            get; set;
+            get;
+            set;
         }
 
+        /// <summary>
+        /// The number of shares held on this day.
+        /// </summary>
         public double ShareNo
         {
-            get; set;
+            get;
+            set;
         }
 
+        /// <summary>
+        /// The total value of this security on this day.
+        /// </summary>
         public double Value
         {
-            get; set;
+            get
+            {
+                return UnitPrice * ShareNo;
+            }
         }
 
+        /// <summary>
+        /// The value of an investment made on this day.
+        /// </summary>
         public double NewInvestment
         {
-            get; set;
+            get;
+            set;
         }
     }
 }
