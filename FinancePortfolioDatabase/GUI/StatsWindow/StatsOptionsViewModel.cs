@@ -210,6 +210,14 @@ namespace FinanceWindowsViewModels
             }
         }
 
+        public List<string> SectorFieldNames
+        {
+            get
+            {
+                return new SectorStatistics().GetType().GetProperties().Select(property => property.Name).ToList();
+            }
+        }
+
         public List<SortDirection> SortDirections
         {
             get
@@ -298,7 +306,6 @@ namespace FinanceWindowsViewModels
             foreach (PropertyInfo info in securityStatsInfo)
             {
                 SecurityColumnNames.Add(new VisibleName(info.Name, true));
-                SectorColumnNames.Add(new VisibleName(info.Name, true));
             }
 
             SecuritySortingField = securityStatsInfo.First().Name;
@@ -318,6 +325,12 @@ namespace FinanceWindowsViewModels
             }
 
             BankSortingField = props.First().Name;
+
+            PropertyInfo[] sectorStatsInfo = new SectorStatistics().GetType().GetProperties();
+            foreach (PropertyInfo info in sectorStatsInfo)
+            {
+                SectorColumnNames.Add(new VisibleName(info.Name, true));
+            }
 
             PropertyInfo[] optionsInfo = new UserOptions().GetType().GetProperties();
             foreach (PropertyInfo info in optionsInfo)

@@ -9,16 +9,16 @@ namespace FinancialStructures.PortfolioAPI
         /// <summary>
         /// returns the securities under the company name.
         /// </summary>
-        public static SecurityStatistics GenerateBenchMarkStatistics(this IPortfolio portfolio, string sectorName)
+        public static SectorStatistics GenerateBenchMarkStatistics(this IPortfolio portfolio, string sectorName)
         {
             if (portfolio != null)
             {
-                SecurityStatistics totals = new SecurityStatistics(StatisticsType.BenchMarkTotal, new NamingStructures.TwoName("BenchMark", sectorName));
+                SectorStatistics totals = new SectorStatistics(StatisticsType.BenchMarkTotal, new NamingStructures.TwoName("BenchMark", sectorName));
                 portfolio.AddSectorStats(totals, DateTime.Today);
                 return totals;
             }
 
-            return new SecurityStatistics();
+            return new SectorStatistics();
         }
     }
 }

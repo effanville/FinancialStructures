@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
@@ -11,14 +10,14 @@ namespace FinancialStructures.StatisticStructures
     /// <summary>
     /// Generates the 
     /// </summary>
-    public static class SecurityStatsGenerator
+    public static class SectorStatsGenerator
     {
         /// <summary>
         /// Provides a comparer based on a provided field
         /// </summary>
         /// <param name="fieldToSortWith">The field one wishes to compare the statistics with.</param>
         /// <param name="direction">Whether to sort ascending or descending.</param>
-        public static Comparison<SecurityStatistics> GetComparison(string fieldToSortWith, SortDirection direction)
+        public static Comparison<SectorStatistics> GetComparison(string fieldToSortWith, SortDirection direction)
         {
             switch (fieldToSortWith)
             {
@@ -48,17 +47,6 @@ namespace FinancialStructures.StatisticStructures
                     else
                     {
                         return (a, b) => a.LatestVal.CompareTo(b.LatestVal);
-                    }
-                }
-                case "SharePrice":
-                {
-                    if (direction == SortDirection.Descending)
-                    {
-                        return (a, b) => b.SharePrice.CompareTo(a.SharePrice);
-                    }
-                    else
-                    {
-                        return (a, b) => a.SharePrice.CompareTo(b.SharePrice);
                     }
                 }
                 case "RecentChange":
@@ -147,61 +135,44 @@ namespace FinancialStructures.StatisticStructures
         /// <param name="statsToSort"></param>
         /// <param name="fieldToSortUnder"></param>       
         /// <param name="direction">Whether to sort ascending or descending.</param>
-        public static void SortSecurityStatistics(this List<SecurityStatistics> statsToSort, string fieldToSortUnder, SortDirection direction)
+        public static void SortSectorStatistics(this List<SectorStatistics> statsToSort, string fieldToSortUnder, SortDirection direction)
         {
             statsToSort.Sort(GetComparison(fieldToSortUnder, direction));
         }
 
         /// <summary>
-        /// Adds statistics.
+        /// Adds statistics for a sector.
         /// </summary>
-        public static void AddSecurityStats(this IPortfolio portfolio, SecurityStatistics securityStats, DateTime date)
+        public static void AddSectorStats(this IPortfolio portfolio, SectorStatistics sectorStats, DateTime date)
         {
-
-            if (securityStats.StatsType == StatisticsType.PortfolioTotal)
+            if (sectorStats.StatsType == StatisticsType.BenchMarkTotal)
             {
-                securityStats.LatestVal = portfolio.TotalValue(AccountType.Security, date).Truncate();
-                securityStats.RecentChange = portfolio.RecentChange().Truncate();
-                securityStats.FundsFraction = 1.0;
-                securityStats.FundCompanyFraction = 1.0;
-                securityStats.Profit = portfolio.TotalProfit().Truncate();
-                securityStats.CAR3M = (100 * portfolio.IRRPortfolio(date.AddMonths(-3), date)).Truncate();
-                securityStats.CAR6M = (100 * portfolio.IRRPortfolio(date.AddMonths(-6), date)).Truncate();
-                securityStats.CAR1Y = (100 * portfolio.IRRPortfolio(date.AddMonths(-12), date)).Truncate();
-                securityStats.CAR5Y = (100 * portfolio.IRRPortfolio(date.AddMonths(-60), date)).Truncate();
-                securityStats.CARTotal = (100 * portfolio.IRRPortfolio(portfolio.FirstValueDate(), date)).Truncate();
-            }
-            else if (securityStats.StatsType == StatisticsType.CompanyTotal)
-            {
-                string company = securityStats.Names.Company;
-                securityStats.LatestVal = portfolio.CompanyValue(AccountType.Security, company, date).Truncate();
-                securityStats.RecentChange = portfolio.CompanyRecentChange(company).Truncate();
-                securityStats.FundsFraction = portfolio.CompanyFraction(company, date).Truncate(4);
-                securityStats.FundCompanyFraction = 1.0;
-                securityStats.Profit = portfolio.CompanyProfit(company).Truncate();
-                securityStats.CAR3M = (100 * portfolio.IRRCompany(company, date.AddMonths(-3), date)).Truncate();
-                securityStats.CAR6M = (100 * portfolio.IRRCompany(company, date.AddMonths(-6), date)).Truncate();
-                securityStats.CAR1Y = (100 * portfolio.IRRCompany(company, date.AddMonths(-12), date)).Truncate();
-                securityStats.CAR5Y = (100 * portfolio.IRRCompany(company, date.AddMonths(-60), date)).Truncate();
-                securityStats.CARTotal = (100 * portfolio.IRRCompanyTotal(company)).Truncate();
+                _ = portfolio.TryGetAccount(AccountType.Sector, sectorStats.Names, out ISingleValueDataList chosenSector);
+                if (chosenSector != null)
+                {
+                    sectorStats.LatestVal = chosenSector.LatestValue().Value.Truncate();
+                    sectorStats.FundsFraction = 0.0;
+                    sectorStats.Profit = 0.0;
+                    sectorStats.Number = portfolio.NumberSecuritiesInSector(chosenSector.Name);
+                    sectorStats.CAR3M = (100 * chosenSector.CAR(date.AddMonths(-3), date)).Truncate();
+                    sectorStats.CAR6M = (100 * chosenSector.CAR(date.AddMonths(-6), date)).Truncate();
+                    sectorStats.CAR1Y = (100 * chosenSector.CAR(date.AddMonths(-12), date)).Truncate();
+                    sectorStats.CAR5Y = (100 * chosenSector.CAR(date.AddMonths(-60), date)).Truncate();
+                    sectorStats.CARTotal = (100 * chosenSector.CAR(portfolio.FirstValueDate(), date)).Truncate();
+                }
             }
             else
             {
-                TwoName names = securityStats.Names;
-                _ = portfolio.TryGetSecurity(names, out ISecurity des);
-                securityStats.LatestVal = portfolio.LatestValue(AccountType.Security, names).Truncate();
-                securityStats.NumberShares = portfolio.SecurityPrices(names, date, SecurityDataStream.NumberOfShares).Truncate(4);
-                securityStats.SharePrice = portfolio.SecurityPrices(names, date, SecurityDataStream.SharePrice).Truncate(4);
-                securityStats.RecentChange = portfolio.RecentChange(names).Truncate();
-                securityStats.FundsFraction = portfolio.SecurityFraction(names, date).Truncate(4);
-                securityStats.FundCompanyFraction = portfolio.SecurityCompanyFraction(names, date).Truncate(4);
-                securityStats.Profit = portfolio.Profit(names).Truncate();
-                securityStats.CAR3M = (100 * portfolio.IRR(names, date.AddMonths(-3), date)).Truncate();
-                securityStats.CAR6M = (100 * portfolio.IRR(names, date.AddMonths(-6), date)).Truncate();
-                securityStats.CAR1Y = (100 * portfolio.IRR(names, date.AddMonths(-12), date)).Truncate();
-                securityStats.CAR5Y = (100 * portfolio.IRR(names, date.AddMonths(-60), date)).Truncate();
-                securityStats.CARTotal = (100 * portfolio.IRR(names)).Truncate();
-                securityStats.Sectors = des.Names.SectorsFlat;
+                string name = sectorStats.Names.Name;
+                sectorStats.LatestVal = portfolio.SectorValue(name, date).Truncate();
+                sectorStats.FundsFraction = portfolio.SectorFraction(name, date).Truncate(4);
+                sectorStats.Number = portfolio.NumberSecuritiesInSector(name);
+                sectorStats.Profit = portfolio.SectorProfit(name).Truncate();
+                sectorStats.CAR3M = (100 * portfolio.IRRSector(name, date.AddMonths(-3), date)).Truncate();
+                sectorStats.CAR6M = (100 * portfolio.IRRSector(name, date.AddMonths(-6), date)).Truncate();
+                sectorStats.CAR1Y = (100 * portfolio.IRRSector(name, date.AddMonths(-12), date)).Truncate();
+                sectorStats.CAR5Y = (100 * portfolio.IRRSector(name, date.AddMonths(-60), date)).Truncate();
+                sectorStats.CARTotal = (100 * portfolio.IRRSector(name, portfolio.FirstValueDate(), date)).Truncate();
             }
         }
     }
@@ -209,7 +180,7 @@ namespace FinancialStructures.StatisticStructures
     /// <summary>
     /// Contains all statistics pertaining to a security.
     /// </summary>
-    public class SecurityStatistics : IComparable
+    public class SectorStatistics : IComparable
     {
         /// <summary>
         /// The type of statistics stored in this class.
@@ -258,7 +229,7 @@ namespace FinancialStructures.StatisticStructures
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public SecurityStatistics()
+        public SectorStatistics()
         {
         }
 
@@ -267,7 +238,7 @@ namespace FinancialStructures.StatisticStructures
         /// </summary>
         /// <param name="statsType"></param>
         /// <param name="names"></param>
-        public SecurityStatistics(StatisticsType statsType, TwoName names)
+        public SectorStatistics(StatisticsType statsType, TwoName names)
         {
             StatsType = statsType;
             Names = names;
@@ -310,21 +281,6 @@ namespace FinancialStructures.StatisticStructures
         }
 
         /// <summary>
-        /// The Share price of the object (if relevant).
-        /// </summary>
-        public double SharePrice
-        {
-            get;
-            set;
-        }
-
-        public double NumberShares
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// The change between the two most recent valuations.
         /// </summary>
         public double RecentChange
@@ -343,9 +299,9 @@ namespace FinancialStructures.StatisticStructures
         }
 
         /// <summary>
-        /// The current fraction this object has out of all objects under company name.
+        /// Some miscellaneous field. Usually used for the number of sectors associated to this object.
         /// </summary>
-        public double FundCompanyFraction
+        public int Number
         {
             get;
             set;
@@ -404,14 +360,5 @@ namespace FinancialStructures.StatisticStructures
             get;
             set;
         }
-
-        /// <summary>
-        /// Any sectors this object is associated to.
-        /// </summary>
-        public string Sectors
-        {
-            get;
-            set;
-        } = string.Empty;
     }
 }
