@@ -132,9 +132,9 @@ namespace FinanceCommonViewModels
         {
             if (e.Source is DataGrid dg)
             {
-                if (dg.SelectedItem != null)
+                if (dg.CurrentItem != null)
                 {
-                    if (dg.SelectedItem is NameCompDate name)
+                    if (dg.CurrentItem is NameCompDate name)
                     {
                         fPreEditSelectedName = name.Copy();
                     }

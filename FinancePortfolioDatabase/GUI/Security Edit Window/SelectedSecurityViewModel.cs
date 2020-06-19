@@ -172,9 +172,9 @@ namespace FinanceWindowsViewModels
         {
             if (e.Source is DataGrid dg)
             {
-                if (dg.SelectedItem != null)
+                if (dg.CurrentItem != null)
                 {
-                    if (dg.SelectedItem is SecurityDayData data)
+                    if (dg.CurrentItem is SecurityDayData data)
                     {
                         fOldSelectedValues = data.Copy();
                     }

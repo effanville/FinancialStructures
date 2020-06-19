@@ -120,7 +120,7 @@
         <ComboBox Grid.Column="0"
                   Grid.Row="7"
                   Margin="5"
-                  ItemsSource="{Binding SecurityFieldNames}"
+                  ItemsSource="{Binding SectorFieldNames}"
                   SelectedItem="{Binding SectorSortingField}" />
         <ComboBox Grid.Column="1"
                   Grid.Row="7"

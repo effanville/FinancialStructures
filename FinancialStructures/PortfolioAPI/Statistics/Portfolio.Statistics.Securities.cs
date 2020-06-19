@@ -141,18 +141,18 @@ namespace FinancialStructures.PortfolioAPI
         }
 
         /// <summary>
-        /// returns the securities under the company name.
+        /// returns the securities under the given sector name.
         /// </summary>
-        public static SecurityStatistics GenerateSectorFundsStatistics(this IPortfolio portfolio, string sectorName)
+        public static SectorStatistics GenerateSectorFundsStatistics(this IPortfolio portfolio, string sectorName)
         {
             if (portfolio != null)
             {
-                SecurityStatistics totals = new SecurityStatistics(StatisticsType.SectorTotal, new TwoName("Totals", sectorName));
+                SectorStatistics totals = new SectorStatistics(StatisticsType.SectorTotal, new TwoName("Totals", sectorName));
                 portfolio.AddSectorStats(totals, DateTime.Today);
                 return totals;
             }
 
-            return new SecurityStatistics();
+            return new SectorStatistics();
         }
 
         /// <summary>

@@ -60,11 +60,11 @@ namespace FinancialStructures.StatsMakers
         /// <summary>
         /// Each specified sectors performance.
         /// </summary>
-        public List<SecurityStatistics> SectorStats
+        public List<SectorStatistics> SectorStats
         {
             get;
             set;
-        } = new List<SecurityStatistics>();
+        } = new List<SectorStatistics>();
 
         /// <summary>
         /// Value held in each bank account.
@@ -162,9 +162,9 @@ namespace FinancialStructures.StatsMakers
                         }
                     }
 
-                    securityDataToWrite.Add(PortfolioSecurityStats);
-
                     securityDataToWrite.SortSecurityStatistics(options.SecuritySortingField, options.SecuritySortDirection);
+
+                    securityDataToWrite.Add(PortfolioSecurityStats);
                     if (options.Spacing)
                     {
                         if (options.SecuritySortingField == "Names" || options.SecuritySortingField == "Name" || options.SecuritySortingField == "Company" || string.IsNullOrEmpty(options.SecuritySortingField))
@@ -230,14 +230,14 @@ namespace FinancialStructures.StatsMakers
                 if (options.ShowSectors)
                 {
                     fileWriter.WriteTitle(exportType, "Analysis By Sector", HtmlTag.h2);
-                    List<SecurityStatistics> sectorDataToWrite = SectorStats;
+                    List<SectorStatistics> sectorDataToWrite = SectorStats;
 
                     if (options.DisplayValueFunds)
                     {
                         _ = sectorDataToWrite.RemoveAll(entry => entry.LatestVal.Equals(0));
                     }
 
-                    sectorDataToWrite.SortSecurityStatistics(options.SectorSortingField, options.SectorSortDirection);
+                    sectorDataToWrite.SortSectorStatistics(options.SectorSortingField, options.SectorSortDirection);
                     if (options.Spacing)
                     {
                         if (options.SectorSortingField == "Names" || options.SectorSortingField == "Name" || options.SectorSortingField == "Company" || string.IsNullOrEmpty(options.SectorSortingField))

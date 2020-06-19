@@ -118,10 +118,11 @@ namespace FinanceCommonViewModels
 
         private void DataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
         {
+            double latestValue = SelectedData.Last().Value;
             e.NewItem = new DailyValuation()
             {
                 Day = DateTime.Today,
-                Value = 0
+                Value = latestValue
             };
         }
 
@@ -134,9 +135,9 @@ namespace FinanceCommonViewModels
         {
             if (e.Source is DataGrid dg)
             {
-                if (dg.SelectedItem != null)
+                if (dg.CurrentItem != null)
                 {
-                    if (dg.SelectedItem is DailyValuation data)
+                    if (dg.CurrentItem is DailyValuation data)
                     {
                         fOldSelectedValue = data.Copy();
                     }
