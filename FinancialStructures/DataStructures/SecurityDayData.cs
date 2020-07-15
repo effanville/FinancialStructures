@@ -41,6 +41,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Whether any alterations have been made to thsi.
         /// </summary>
+        [Obsolete("This method will soon be deprecated.")]
         public bool NewValue
         {
             get;
