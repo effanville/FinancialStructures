@@ -18,20 +18,20 @@ namespace FinancialStructures.Database
         /// </summary>
         public static List<string> GetSecuritiesSectors(this IPortfolio portfolio)
         {
-            List<string> companies = new List<string>();
+            List<string> sectors = new List<string>();
             foreach (ISecurity security in portfolio.Funds)
             {
                 foreach (string sector in security.Sectors)
                 {
-                    if (companies.IndexOf(sector) == -1)
+                    if (sectors.IndexOf(sector) == -1)
                     {
-                        companies.Add(sector);
+                        sectors.Add(sector);
                     }
                 }
             }
-            companies.Sort();
+            sectors.Sort();
 
-            return companies;
+            return sectors;
         }
 
         public static double SecurityPrices(this IPortfolio portfolio, TwoName names, DateTime date, SecurityDataStream dataStream = SecurityDataStream.NumberOfShares)
