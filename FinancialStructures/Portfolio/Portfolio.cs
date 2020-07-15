@@ -13,6 +13,8 @@ namespace FinancialStructures.Database
     /// </summary>
     public partial class Portfolio : IPortfolio
     {
+        private string fDatabaseFilePath;
+
         [XmlIgnoreAttribute]
         public bool IsAlteredSinceSave
         {
@@ -20,26 +22,7 @@ namespace FinancialStructures.Database
             private set;
         }
 
-        public void Saving()
-        {
-            IsAlteredSinceSave = false;
-        }
-
-        private string fDatabaseFilePath;
-
-        /// <summary>
-        /// Set the path where the database will be stored.
-        /// </summary>
-        /// <param name="path"></param>
-        public void SetFilePath(string path)
-        {
-            fDatabaseFilePath = path;
-            OnPortfolioChanged(fDatabaseFilePath, new EventArgs());
-        }
-
-        /// <summary>
-        /// Access of the databse path.
-        /// </summary>
+        /// <inheritdoc/>
         public string FilePath
         {
             get
@@ -48,9 +31,7 @@ namespace FinancialStructures.Database
             }
         }
 
-        /// <summary>
-        /// The file extension of the path.
-        /// </summary>
+        /// <inheritdoc/>
         public string Extension
         {
             get
@@ -59,9 +40,7 @@ namespace FinancialStructures.Database
             }
         }
 
-        /// <summary>
-        /// The directory where the database is stored.
-        /// </summary>
+        /// <inheritdoc/>
         public string Directory
         {
             get
@@ -70,9 +49,7 @@ namespace FinancialStructures.Database
             }
         }
 
-        /// <summary>
-        /// The non-extension part of the filename, considered to be the databse name.
-        /// </summary>
+        /// <inheritdoc/>
         public string DatabaseName
         {
             get
@@ -81,45 +58,35 @@ namespace FinancialStructures.Database
             }
         }
 
-        /// <summary>
-        /// The default currency for the portfolio.
-        /// </summary>
+        /// <inheritdoc/>
         public string BaseCurrency
         {
             get;
             set;
         }
 
-        /// <summary>
-        /// Securities stored in this database.
-        /// </summary>
+        /// <inheritdoc/>
         public List<Security> Funds
         {
             get;
             private set;
         } = new List<Security>();
 
-        /// <summary>
-        /// Bank accounts stored in this database.
-        /// </summary>
+        /// <inheritdoc/>
         public List<CashAccount> BankAccounts
         {
             get;
             private set;
         } = new List<CashAccount>();
 
-        /// <summary>
-        /// The currencies other objects are held in.
-        /// </summary>
+        /// <inheritdoc/>
         public List<Currency> Currencies
         {
             get;
             private set;
         } = new List<Currency>();
 
-        /// <summary>
-        /// Sector benchmarks for comparison of held data.
-        /// </summary>
+        /// <inheritdoc/>
         public List<Sector> BenchMarks
         {
             get;
@@ -133,9 +100,7 @@ namespace FinancialStructures.Database
         {
         }
 
-        /// <summary>
-        /// Copies references of other portfolio to this portfolio.
-        /// </summary>
+        /// <inheritdoc/>
         public void CopyData(IPortfolio portfolio)
         {
             BaseCurrency = portfolio.BaseCurrency;
@@ -145,10 +110,7 @@ namespace FinancialStructures.Database
             BenchMarks = portfolio.BenchMarks;
         }
 
-        /// <summary>
-        /// Sets the benchmark parts of this portfolio.
-        /// </summary>
-        /// <param name="sectors"></param>
+        /// <inheritdoc/>
         public void SetBenchMarks(List<Sector> sectors)
         {
             BenchMarks.Clear();
@@ -173,11 +135,20 @@ namespace FinancialStructures.Database
             }
         }
 
-        /// <summary>
-        /// Number of type in the database.
-        /// </summary>
-        /// <param name="elementType">The type to search for.</param>
-        /// <returns>The number of type in the database.</returns>
+        /// <inheritdoc/>
+        public void Saving()
+        {
+            IsAlteredSinceSave = false;
+        }
+
+        /// <inheritdoc/>
+        public void SetFilePath(string path)
+        {
+            fDatabaseFilePath = path;
+            OnPortfolioChanged(fDatabaseFilePath, new EventArgs());
+        }
+
+        /// <inheritdoc/>
         public int NumberOf(AccountType elementType)
         {
             switch (elementType)

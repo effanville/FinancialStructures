@@ -9,51 +9,103 @@ namespace FinancialStructures.FinanceInterfaces
     /// Interface for portfolio.
     /// </summary>
     public interface IPortfolio
-    {
-        void SetFilePath(string path);
+    {        
+        /// <summary>
+        /// Access of the databse path.
+        /// </summary>
         string FilePath
         {
             get;
         }
+
+        /// <summary>
+        /// The file extension of the path.
+        /// </summary>
         string Extension
         {
             get;
         }
 
+        /// <summary>
+        /// The directory where the database is stored.
+        /// </summary>
         string Directory
         {
             get;
         }
+
+        /// <summary>
+        /// The non-extension part of the filename, considered to be the databse name.
+        /// </summary>
         string DatabaseName
         {
             get;
         }
-        string BaseCurrency
+
+        /// <summary>
+        /// Whether the user has changed the database since last save.
+        /// </summary>
+        bool IsAlteredSinceSave
         {
-            get; set;
+            get;
         }
 
+        /// <summary>
+        /// The default currency for the portfolio.
+        /// </summary>
+        string BaseCurrency
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Securities stored in this database.
+        /// </summary>
         List<Security> Funds
         {
             get;
         }
+
+        /// <summary>
+        /// Bank accounts stored in this database.
+        /// </summary>
         List<CashAccount> BankAccounts
         {
             get;
         }
+
+        /// <summary>
+        /// The currencies other objects are held in.
+        /// </summary>
         List<Currency> Currencies
         {
             get;
         }
+
+        /// <summary>
+        /// Sector benchmarks for comparison of held data.
+        /// </summary>
         List<Sector> BenchMarks
         {
             get;
         }
 
+        /// <summary>
+        /// Copies references of other portfolio to this portfolio.
+        /// </summary>
         void CopyData(IPortfolio portfolio);
 
+        /// <summary>
+        /// Sets the benchmark parts of this portfolio.
+        /// </summary>
         void SetBenchMarks(List<Sector> sectors);
 
+        /// <summary>
+        /// Number of type in the database.
+        /// </summary>
+        /// <param name="elementType">The type to search for.</param>
+        /// <returns>The number of type in the database.</returns>
         int NumberOf(AccountType accountType);
 
         /// <summary>
@@ -72,12 +124,9 @@ namespace FinancialStructures.FinanceInterfaces
         void WireDataChangedEvents();
 
         /// <summary>
-        /// Whether the user has changed the database since last save.
+        /// Set the path where the database will be stored.
         /// </summary>
-        bool IsAlteredSinceSave
-        {
-            get;
-        }
+        void SetFilePath(string path);
 
         /// <summary>
         /// Enacts internal things in the portfolio when it is being saved.
