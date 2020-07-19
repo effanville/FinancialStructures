@@ -2,7 +2,7 @@
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.StatisticStructures;
 
-namespace FinancialStructures.PortfolioAPI
+namespace FinancialStructures.Database.Statistics
 {
     public static partial class PortfolioStatisticGenerators
     {

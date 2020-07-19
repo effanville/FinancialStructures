@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.PortfolioAPI
+﻿namespace FinancialStructures.FinanceInterfaces
 {
     /// <summary>
     /// The type of an account

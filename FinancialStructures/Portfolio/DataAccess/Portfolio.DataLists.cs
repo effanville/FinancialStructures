@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
 
-namespace FinancialStructures.PortfolioAPI
+namespace FinancialStructures.Database
 {
-    public static partial class PortfolioData
+    public partial class Portfolio
     {
         /// <summary>
         /// Returns a copy of the currently held portfolio. 
@@ -15,23 +14,23 @@ namespace FinancialStructures.PortfolioAPI
         /// This is in theory dangerous. I know thought that a security copied 
         /// returns a genuine security, so I can case without trouble.
         /// </remarks>
-        public static IPortfolio CopyPortfolio(this IPortfolio portfolio)
+        public IPortfolio Copy()
         {
             Portfolio PortfoCopy = new Portfolio();
 
-            foreach (Security security in portfolio.Funds)
+            foreach (Security security in Funds)
             {
                 PortfoCopy.Funds.Add((Security)security.Copy());
             }
-            foreach (CashAccount bankAcc in portfolio.BankAccounts)
+            foreach (CashAccount bankAcc in BankAccounts)
             {
                 PortfoCopy.BankAccounts.Add((CashAccount)bankAcc.Copy());
             }
-            foreach (Currency currency in portfolio.Currencies)
+            foreach (Currency currency in Currencies)
             {
                 PortfoCopy.Currencies.Add((Currency)currency.Copy());
             }
-            foreach (Sector sector in portfolio.BenchMarks)
+            foreach (Sector sector in BenchMarks)
             {
                 PortfoCopy.BenchMarks.Add((Sector)sector.Copy());
             }
@@ -39,13 +38,11 @@ namespace FinancialStructures.PortfolioAPI
             return PortfoCopy;
         }
 
-        /// <summary>
-        /// Returns a copy of all securities with the company as specified.
-        /// </summary>
-        public static List<ISecurity> CompanySecurities(this IPortfolio portfolio, string company)
+        /// <inheritdoc/>
+        public List<ISecurity> CompanySecurities(string company)
         {
             List<ISecurity> securities = new List<ISecurity>();
-            foreach (ISecurity sec in portfolio.Funds)
+            foreach (ISecurity sec in Funds)
             {
                 if (sec.Company == company)
                 {
@@ -56,12 +53,11 @@ namespace FinancialStructures.PortfolioAPI
             return securities;
         }
 
-
-
-        public static List<ICashAccount> CompanyBankAccounts(this IPortfolio portfolio, string company)
+        /// <inheritdoc/>
+        public List<ICashAccount> CompanyBankAccounts(string company)
         {
             List<ICashAccount> accounts = new List<ICashAccount>();
-            foreach (ICashAccount acc in portfolio.BankAccounts)
+            foreach (ICashAccount acc in BankAccounts)
             {
                 if (acc.Company == company)
                 {

@@ -5,8 +5,8 @@ using System.Threading;
 using FinanceCommonViewModels;
 using FinanceWindowsViewModels;
 using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
 using FPD_UI_UnitTests.TestConstruction;
 using NUnit.Framework;
 

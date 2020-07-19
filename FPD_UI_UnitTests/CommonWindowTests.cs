@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using FinanceCommonViewModels;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
 using FPD_UI_UnitTests.TestConstruction;
 using NUnit.Framework;
 using StructureCommon.DataStructures;
@@ -24,7 +24,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             Moq.Mock<UICommon.Services.IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
             Moq.Mock<UICommon.Services.IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
             FinancialStructures.Database.Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<FinancialStructures.FinanceInterfaces.IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
+            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             SingleValueEditWindowViewModel viewModel = new SingleValueEditWindowViewModel("Dummy", portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, AccountType.BankAccount);
 
             Assert.AreEqual(1, viewModel.Tabs.Count);
@@ -39,7 +39,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             Moq.Mock<UICommon.Services.IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
             Moq.Mock<UICommon.Services.IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
             FinancialStructures.Database.Portfolio portfolio = TestingGUICode.CreateEmptyDataBase();
-            Action<Action<FinancialStructures.FinanceInterfaces.IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
+            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             SingleValueEditWindowViewModel viewModel = new SingleValueEditWindowViewModel("Dummy", portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, AccountType.BankAccount);
             FinancialStructures.Database.Portfolio newData = TestingGUICode.CreateBasicDataBase();
             viewModel.UpdateData(newData);
@@ -54,7 +54,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             Moq.Mock<UICommon.Services.IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
             Moq.Mock<UICommon.Services.IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
             FinancialStructures.Database.Portfolio portfolio = TestingGUICode.CreateEmptyDataBase();
-            Action<Action<FinancialStructures.FinanceInterfaces.IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
+            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             SingleValueEditWindowViewModel viewModel = new SingleValueEditWindowViewModel("Dummy", portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, AccountType.BankAccount);
 
             NameData newNameData = new NameData("Fidelity", "Europe");
@@ -75,7 +75,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             Moq.Mock<UICommon.Services.IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
             Moq.Mock<UICommon.Services.IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
             FinancialStructures.Database.Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<FinancialStructures.FinanceInterfaces.IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
+            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             SingleValueEditWindowViewModel viewModel = new SingleValueEditWindowViewModel("Dummy", portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, AccountType.BankAccount);
 
             NameData newData = new NameData("Fidelity", "China");
@@ -93,7 +93,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
         public void CanOpen()
         {
             FinancialStructures.Database.Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<FinancialStructures.FinanceInterfaces.IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
+            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, AccountType.BankAccount);
             Assert.AreEqual(1, viewModel.DataNames.Count);
         }
@@ -104,7 +104,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             Moq.Mock<UICommon.Services.IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
             Moq.Mock<UICommon.Services.IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
             FinancialStructures.Database.Portfolio portfolio = TestingGUICode.CreateEmptyDataBase();
-            Action<Action<FinancialStructures.FinanceInterfaces.IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
+            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
 
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, AccountType.BankAccount);
 

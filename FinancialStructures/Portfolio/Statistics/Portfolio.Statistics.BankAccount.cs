@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 
-namespace FinancialStructures.PortfolioAPI
+namespace FinancialStructures.Database.Statistics
 {
     public static partial class PortfolioStatisticGenerators
     {
@@ -17,7 +17,7 @@ namespace FinancialStructures.PortfolioAPI
                 {
                     if ((DisplayValueFunds && account.LatestValue().Value != 0) || !DisplayValueFunds)
                     {
-                        ICurrency currency = PortfolioValues.Currency(portfolio, AccountType.BankAccount, account);
+                        ICurrency currency = portfolio.Currency(AccountType.BankAccount, account);
                         namesAndCompanies.Add(new DayValue_Named(account.Company, account.Name, account.LatestValue(currency).Day, account.LatestValue(currency).Value));
                     }
                 }
@@ -58,7 +58,7 @@ namespace FinancialStructures.PortfolioAPI
                 {
                     if ((DisplayValueFunds && acc.LatestValue().Value != 0) || !DisplayValueFunds)
                     {
-                        ICurrency currency = PortfolioValues.Currency(portfolio, AccountType.BankAccount, acc);
+                        ICurrency currency = portfolio.Currency(AccountType.BankAccount, acc);
                         DayValue_Named latest = new DayValue_Named(acc.Company, acc.Name, acc.LatestValue(currency));
                         namesAndCompanies.Add(latest);
                     }

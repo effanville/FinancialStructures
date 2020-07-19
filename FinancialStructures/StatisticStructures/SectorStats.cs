@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using FinancialStructures.Database.Statistics;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
 using StructureCommon.Extensions;
 
 namespace FinancialStructures.StatisticStructures

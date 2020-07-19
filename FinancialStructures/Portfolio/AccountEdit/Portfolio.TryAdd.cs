@@ -4,22 +4,12 @@ using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using StructureCommon.Reporting;
 
-namespace FinancialStructures.PortfolioAPI
+namespace FinancialStructures.Database
 {
-    /// <summary>
-    /// Collection of methods to add to a database.
-    /// </summary>
-    public static class PortfolioAddMethods
+    public partial class Portfolio
     {
-        /// <summary>
-        /// Adds data to the portfolio, unless data already exists.
-        /// </summary>
-        /// <param name="portfolio">The database to add to.</param>
-        /// <param name="elementType">The type of data to add.</param>
-        /// <param name="name">The name data to add.</param>
-        /// <param name="reportLogger">Report callback action.</param>
-        /// <returns>Success or failure of adding.</returns>
-        public static bool TryAdd(this IPortfolio portfolio, AccountType elementType, NameData name, IReportLogger reportLogger = null)
+        /// <inheritdoc/>
+        public bool TryAdd(AccountType elementType, NameData name, IReportLogger reportLogger = null)
         {
             if (string.IsNullOrEmpty(name.Name) && string.IsNullOrEmpty(name.Company))
             {
@@ -27,10 +17,10 @@ namespace FinancialStructures.PortfolioAPI
                 return false;
             }
 
-            if (portfolio.Exists(elementType, name))
+            if (Exists(elementType, name))
             {
                 _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"{elementType} `{name.Company}'-`{name.Name}' already exists.");
-                portfolio.OnPortfolioChanged(null, new EventArgs());
+                OnPortfolioChanged(null, new EventArgs());
                 return false;
             }
 
@@ -39,9 +29,9 @@ namespace FinancialStructures.PortfolioAPI
                 case (AccountType.Security):
                 {
                     Security toAdd = new Security(name);
-                    toAdd.DataEdit += portfolio.OnPortfolioChanged;
-                    portfolio.Funds.Add(toAdd);
-                    portfolio.OnPortfolioChanged(toAdd, new EventArgs());
+                    toAdd.DataEdit += OnPortfolioChanged;
+                    Funds.Add(toAdd);
+                    OnPortfolioChanged(toAdd, new EventArgs());
                     break;
                 }
                 case (AccountType.Currency):
@@ -51,25 +41,25 @@ namespace FinancialStructures.PortfolioAPI
                         name.Company = "GBP";
                     }
                     Currency toAdd = new Currency(name);
-                    toAdd.DataEdit += portfolio.OnPortfolioChanged;
-                    portfolio.Currencies.Add(toAdd);
-                    portfolio.OnPortfolioChanged(toAdd, new EventArgs());
+                    toAdd.DataEdit += OnPortfolioChanged;
+                    Currencies.Add(toAdd);
+                    OnPortfolioChanged(toAdd, new EventArgs());
                     break;
                 }
                 case (AccountType.BankAccount):
                 {
                     CashAccount toAdd = new CashAccount(name);
-                    toAdd.DataEdit += portfolio.OnPortfolioChanged;
-                    portfolio.BankAccounts.Add(toAdd);
-                    portfolio.OnPortfolioChanged(toAdd, new EventArgs());
+                    toAdd.DataEdit += OnPortfolioChanged;
+                    BankAccounts.Add(toAdd);
+                    OnPortfolioChanged(toAdd, new EventArgs());
                     break;
                 }
                 case (AccountType.Sector):
                 {
                     Sector toAdd = new Sector(name);
-                    toAdd.DataEdit += portfolio.OnPortfolioChanged;
-                    portfolio.BenchMarks.Add(toAdd);
-                    portfolio.OnPortfolioChanged(toAdd, new EventArgs());
+                    toAdd.DataEdit += OnPortfolioChanged;
+                    BenchMarks.Add(toAdd);
+                    OnPortfolioChanged(toAdd, new EventArgs());
                     break;
                 }
                 default:

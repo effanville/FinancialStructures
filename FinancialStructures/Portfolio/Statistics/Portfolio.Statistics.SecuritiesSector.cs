@@ -5,7 +5,7 @@ using FinancialStructures.FinanceInterfaces;
 using StructureCommon.DataStructures;
 using StructureCommon.FinanceFunctions;
 
-namespace FinancialStructures.PortfolioAPI
+namespace FinancialStructures.Database.Statistics
 {
     public static partial class PortfolioStatisticGenerators
     {
@@ -85,7 +85,7 @@ namespace FinancialStructures.PortfolioAPI
 
         public static double SectorFraction(this IPortfolio portfolio, string sectorName, DateTime date)
         {
-            return portfolio.SectorValue(sectorName, date) / portfolio.Value(date);
+            return portfolio.SectorValue(sectorName, date) / portfolio.TotalValue(date);
         }
 
         /// <summary>

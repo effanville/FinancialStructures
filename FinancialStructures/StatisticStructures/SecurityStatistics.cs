@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using FinancialStructures.Database;
+using FinancialStructures.Database.Statistics;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
 using StructureCommon.Extensions;
 
 namespace FinancialStructures.StatisticStructures
@@ -176,7 +176,7 @@ namespace FinancialStructures.StatisticStructures
                 string company = securityStats.Names.Company;
                 securityStats.LatestVal = portfolio.CompanyValue(AccountType.Security, company, date).Truncate();
                 securityStats.RecentChange = portfolio.CompanyRecentChange(company).Truncate();
-                securityStats.FundsFraction = portfolio.CompanyFraction(company, date).Truncate(4);
+                securityStats.FundsFraction = portfolio.CompanyFraction(AccountType.Security, company, date).Truncate(4);
                 securityStats.FundCompanyFraction = 1.0;
                 securityStats.Profit = portfolio.CompanyProfit(company).Truncate();
                 securityStats.CAR3M = (100 * portfolio.IRRCompany(company, date.AddMonths(-3), date)).Truncate();
@@ -192,9 +192,9 @@ namespace FinancialStructures.StatisticStructures
                 securityStats.LatestVal = portfolio.LatestValue(AccountType.Security, names).Truncate();
                 securityStats.NumberShares = portfolio.SecurityPrices(names, date, SecurityDataStream.NumberOfShares).Truncate(4);
                 securityStats.SharePrice = portfolio.SecurityPrices(names, date, SecurityDataStream.SharePrice).Truncate(4);
-                securityStats.RecentChange = portfolio.RecentChange(names).Truncate();
-                securityStats.FundsFraction = portfolio.SecurityFraction(names, date).Truncate(4);
-                securityStats.FundCompanyFraction = portfolio.SecurityCompanyFraction(names, date).Truncate(4);
+                securityStats.RecentChange = portfolio.RecentChange(AccountType.Security, names).Truncate();
+                securityStats.FundsFraction = portfolio.Fraction(AccountType.Security, names, date).Truncate(4);
+                securityStats.FundCompanyFraction = portfolio.AccountInCompanyFraction(AccountType.Security, names, date).Truncate(4);
                 securityStats.Profit = portfolio.Profit(names).Truncate();
                 securityStats.CAR3M = (100 * portfolio.IRR(names, date.AddMonths(-3), date)).Truncate();
                 securityStats.CAR6M = (100 * portfolio.IRR(names, date.AddMonths(-6), date)).Truncate();

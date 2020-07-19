@@ -3,19 +3,12 @@ using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using StructureCommon.Reporting;
 
-namespace FinancialStructures.PortfolioAPI
+namespace FinancialStructures.Database
 {
-    public static class PortfolioDeleteMethods
+    public partial class Portfolio
     {
-        /// <summary>
-        /// Removes the account from the database if it can.
-        /// </summary>
-        /// <param name="portfolio">The database to query.</param>
-        /// <param name="elementType">The type of account to remove.</param>
-        /// <param name="name">The name of the account to remove.</param>
-        /// <param name="reportLogger">(optional) A report callback.</param>
-        /// <returns>Success or failure.</returns>
-        public static bool TryRemove(this IPortfolio portfolio, AccountType elementType, NameData name, IReportLogger reportLogger = null)
+        /// <inheritdoc/>
+        public bool TryRemove(AccountType elementType, TwoName name, IReportLogger reportLogger = null)
         {
             if (string.IsNullOrEmpty(name.Name) && string.IsNullOrEmpty(name.Company))
             {
@@ -27,13 +20,13 @@ namespace FinancialStructures.PortfolioAPI
             {
                 case (AccountType.Security):
                 {
-                    foreach (Security sec in portfolio.Funds)
+                    foreach (Security sec in Funds)
                     {
                         if (name.IsEqualTo(sec.Names))
                         {
-                            _ = portfolio.Funds.Remove(sec);
-                            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Security `{name.Company}'-`{name}' removed from the database.");
-                            portfolio.OnPortfolioChanged(portfolio.Funds, new System.EventArgs());
+                            _ = Funds.Remove(sec);
+                            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Security {name} removed from the database.");
+                            OnPortfolioChanged(Funds, new System.EventArgs());
                             return true;
                         }
                     }
@@ -42,13 +35,13 @@ namespace FinancialStructures.PortfolioAPI
                 }
                 case (AccountType.Currency):
                 {
-                    foreach (Currency currency in portfolio.Currencies)
+                    foreach (Currency currency in Currencies)
                     {
                         if (name.IsEqualTo(currency.Names))
                         {
-                            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted sector {currency.Name}");
-                            _ = portfolio.Currencies.Remove(currency);
-                            portfolio.OnPortfolioChanged(portfolio.Currencies, new System.EventArgs());
+                            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted currency {currency.Name}");
+                            _ = Currencies.Remove(currency);
+                            OnPortfolioChanged(Currencies, new System.EventArgs());
                             return true;
                         }
                     }
@@ -57,13 +50,13 @@ namespace FinancialStructures.PortfolioAPI
                 }
                 case (AccountType.BankAccount):
                 {
-                    foreach (CashAccount acc in portfolio.BankAccounts)
+                    foreach (CashAccount acc in BankAccounts)
                     {
                         if (name.IsEqualTo(acc.Names))
                         {
-                            _ = portfolio.BankAccounts.Remove(acc);
-                            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleting Bank Account: Deleted `{name.Company}'-`{name.Name}'.");
-                            portfolio.OnPortfolioChanged(portfolio.BankAccounts, new System.EventArgs());
+                            _ = BankAccounts.Remove(acc);
+                            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleting Bank Account: Deleted {name}.");
+                            OnPortfolioChanged(BankAccounts, new System.EventArgs());
                             return true;
                         }
                     }
@@ -72,13 +65,13 @@ namespace FinancialStructures.PortfolioAPI
                 }
                 case (AccountType.Sector):
                 {
-                    foreach (Sector sector in portfolio.BenchMarks)
+                    foreach (Sector sector in BenchMarks)
                     {
                         if (name.IsEqualTo(sector.Names))
                         {
                             _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted sector {sector.Name}");
-                            _ = portfolio.BenchMarks.Remove(sector);
-                            portfolio.OnPortfolioChanged(portfolio.BenchMarks, new System.EventArgs());
+                            _ = BenchMarks.Remove(sector);
+                            OnPortfolioChanged(BenchMarks, new System.EventArgs());
                             return true;
                         }
                     }

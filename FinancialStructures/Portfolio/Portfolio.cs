@@ -4,7 +4,6 @@ using System.IO;
 using System.Xml.Serialization;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
-using FinancialStructures.PortfolioAPI;
 
 namespace FinancialStructures.Database
 {

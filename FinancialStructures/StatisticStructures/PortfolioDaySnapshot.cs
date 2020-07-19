@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using FinancialStructures.Database;
+using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.PortfolioAPI;
 using StructureCommon.DataStructures;
 using StructureCommon.Extensions;
 
@@ -110,7 +110,7 @@ namespace FinancialStructures.StatisticStructures
         /// <param name="portfolio"></param>
         public PortfolioDaySnapshot(DateTime date, IPortfolio portfolio)
         {
-            TotalValue = new DailyValuation(date, portfolio.Value(date).Truncate());
+            TotalValue = new DailyValuation(date, portfolio.TotalValue(date).Truncate());
             BankAccValue = new DailyValuation(date, portfolio.TotalValue(AccountType.BankAccount, date).Truncate());
             SecurityValue = new DailyValuation(date, portfolio.TotalValue(AccountType.Security, date).Truncate());
 

@@ -2,7 +2,6 @@
 using System.Reflection;
 using System.Windows;
 using FinanceWindowsViewModels;
-using FinancialStructures.PortfolioAPI;
 using UICommon.Services;
 
 namespace FinanceWindows

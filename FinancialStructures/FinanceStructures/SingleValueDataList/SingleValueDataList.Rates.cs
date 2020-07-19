@@ -57,5 +57,16 @@ namespace FinancialStructures.FinanceStructures
         {
             return fValues.NearestLaterValue(date);
         }
+
+        public DailyValuation LastEarlierValuation(DateTime date)
+        {
+            DailyValuation val = fValues.RecentPreviousValue(date);
+            if (val == null)
+            {
+                return new DailyValuation(date, 0.0);
+            }
+
+            return val;
+        }
     }
 }

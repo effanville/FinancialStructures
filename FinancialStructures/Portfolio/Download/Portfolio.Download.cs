@@ -6,21 +6,10 @@ using FinancialStructures.NamingStructures;
 using StructureCommon.Reporting;
 using StructureCommon.WebAccess;
 
-namespace FinancialStructures.PortfolioAPI
+namespace FinancialStructures.Database.Download
 {
     public static class PortfolioDataUpdater
     {
-        private enum WebsiteType
-        {
-            Morningstar,
-            Yahoo,
-            Google,
-            Bloomberg,
-            TrustNet,
-            FT,
-            NotImplemented
-        }
-
         public static async Task Downloader(IPortfolio portfolio, IReportLogger reportLogger)
         {
             await DownloadPortfolioLatest(portfolio, reportLogger).ConfigureAwait(false);
@@ -41,7 +30,7 @@ namespace FinancialStructures.PortfolioAPI
                 case (AccountType.Sector):
                 {
                     _ = portfolio.TryGetAccount(accountType, names, out ISingleValueDataList acc);
-                    await DownloadLatestValue(acc.Names, value => acc.TryAddOrEditData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                    await DownloadLatestValue(acc.Names, value => acc.TryAddOrEditData(DateTime.Today, DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
                     break;
                 }
             }

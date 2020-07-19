@@ -1,16 +1,14 @@
 ﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.PortfolioAPI
+namespace FinancialStructures.Database
 {
-    public static partial class PortfolioData
+    public partial class Portfolio
     {
-        /// <summary>
-        /// Outputs a copy of the security if it exists.
-        /// </summary>
-        public static bool TryGetSecurity(this IPortfolio portfolio, TwoName names, out ISecurity desired)
+        /// <inheritdoc/>
+        public bool TryGetSecurity(TwoName names, out ISecurity desired)
         {
-            foreach (ISecurity sec in portfolio.Funds)
+            foreach (ISecurity sec in Funds)
             {
                 if (names.IsEqualTo(sec.Names))
                 {
@@ -22,10 +20,8 @@ namespace FinancialStructures.PortfolioAPI
             return false;
         }
 
-        /// <summary>
-        /// Outputs a copy of the account if it exists.
-        /// </summary>
-        public static bool TryGetAccount(this IPortfolio portfolio, AccountType accountType, TwoName names, out ISingleValueDataList desired)
+        /// <inheritdoc/>
+        public bool TryGetAccount(AccountType accountType, TwoName names, out ISingleValueDataList desired)
         {
             bool success = false;
             desired = null;
@@ -33,11 +29,11 @@ namespace FinancialStructures.PortfolioAPI
             {
                 case (AccountType.BankAccount):
                 {
-                    foreach (ICashAccount sec in portfolio.BankAccounts)
+                    foreach (ICashAccount sec in BankAccounts)
                     {
                         if (names.IsEqualTo(sec.Names))
                         {
-                            desired = sec.Copy();
+                            desired = sec;
                             success = true;
                         }
                     }
@@ -45,11 +41,11 @@ namespace FinancialStructures.PortfolioAPI
                 }
                 case (AccountType.Currency):
                 {
-                    foreach (ICurrency currency in portfolio.Currencies)
+                    foreach (ICurrency currency in Currencies)
                     {
                         if (names.IsEqualTo(currency.Names))
                         {
-                            desired = currency.Copy();
+                            desired = currency;
                             success = true;
                         }
                     }
@@ -57,11 +53,11 @@ namespace FinancialStructures.PortfolioAPI
                 }
                 case (AccountType.Sector):
                 {
-                    foreach (ISector sector in portfolio.BenchMarks)
+                    foreach (ISector sector in BenchMarks)
                     {
                         if (sector.Name == names.Name)
                         {
-                            desired = sector.Copy();
+                            desired = sector;
                             success = true;
                         }
                     }

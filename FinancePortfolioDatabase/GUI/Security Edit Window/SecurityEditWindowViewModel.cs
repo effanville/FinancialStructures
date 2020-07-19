@@ -5,7 +5,6 @@ using System.Linq;
 using FinanceCommonViewModels;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
 using StructureCommon.Reporting;
 using UICommon.Services;
 using UICommon.ViewModelBases;

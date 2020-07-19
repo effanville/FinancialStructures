@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using FinanceCommonViewModels;
 using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.PortfolioAPI;
 using StructureCommon.Reporting;
 using UICommon.Services;
 using UICommon.ViewModelBases;

@@ -1,7 +1,7 @@
 ﻿using System.IO;
+using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.PortfolioAPI;
 using StructureCommon.Reporting;
 
 namespace FinancialStructures.StatsMakers
@@ -20,7 +20,7 @@ namespace FinancialStructures.StatsMakers
                 statsWriter.WriteLine(securitiesData);
             }
 
-            reportLogger?.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Saving, $"Created Investment list page at {filePath}.");
+            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Saving, $"Created Investment list page at {filePath}.");
             statsWriter.Close();
         }
     }

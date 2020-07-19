@@ -5,7 +5,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
 using StructureCommon.DataStructures;
 using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
@@ -158,12 +157,12 @@ namespace FinanceCommonViewModels
                 var originRowData = e.Row.DataContext as DailyValuation;
                 if (DataStore.NumberData(TypeOfAccount, SelectedName, ReportLogger).Count() != SelectedData.Count)
                 {
-                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddData(TypeOfAccount, SelectedName, originRowData, ReportLogger));
+                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditData(TypeOfAccount, SelectedName, fOldSelectedValue, originRowData, ReportLogger));
                 }
                 else
                 {
                     bool edited = false;
-                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditData(TypeOfAccount, SelectedName, fOldSelectedValue, originRowData, ReportLogger));
+                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAddOrEditData(TypeOfAccount, SelectedName, fOldSelectedValue, originRowData, ReportLogger));
 
                     if (!edited)
                     {
@@ -182,7 +181,7 @@ namespace FinanceCommonViewModels
         {
             if (SelectedName != null)
             {
-                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(TypeOfAccount, SelectedName, fOldSelectedValue, ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(TypeOfAccount, SelectedName, fOldSelectedValue.Day, ReportLogger));
             }
             else
             {
@@ -212,7 +211,7 @@ namespace FinanceCommonViewModels
                     {
                         if (objec is DailyValuation view)
                         {
-                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddData(TypeOfAccount, SelectedName, view, ReportLogger));
+                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditData(TypeOfAccount, SelectedName, view, view, ReportLogger));
                         }
                         else
                         {

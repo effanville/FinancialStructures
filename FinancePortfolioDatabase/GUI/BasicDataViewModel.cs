@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
 using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels

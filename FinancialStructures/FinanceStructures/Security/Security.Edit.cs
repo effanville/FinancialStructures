@@ -33,12 +33,12 @@ namespace FinancialStructures.FinanceStructures
         /// Attempts to add data for the date specified.
         /// If cannot add any value that one wants to, then doesn't add all the values chosen.
         /// </summary>
-        public bool TryAddOrEditData(DateTime date, double unitPrice, double shares = 0, double investment = 0, IReportLogger reportLogger = null)
+        public bool TryAddOrEditData(DateTime oldDate, DateTime date, double unitPrice, double shares = 0, double investment = 0, IReportLogger reportLogger = null)
         {
-            if (DoesDateSharesDataExist(date, out int _) || DoesDateInvestmentDataExist(date, out int _) || DoesDateUnitPriceDataExist(date, out int _))
+            if (DoesDateSharesDataExist(oldDate, out int _) || DoesDateInvestmentDataExist(oldDate, out int _) || DoesDateUnitPriceDataExist(oldDate, out int _))
             {
                 _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Security {Names.ToString()} data on {date.ToString("d")} edited.");
-                return TryEditData(date, date, shares, unitPrice, investment, reportLogger);
+                return TryEditData(oldDate, date, shares, unitPrice, investment, reportLogger);
             }
 
             return fShares.TryAddValue(date, shares, reportLogger) & fUnitPrice.TryAddValue(date, unitPrice, reportLogger) & fInvestments.TryAddValue(date, investment, reportLogger) && ComputeInvestments(reportLogger);
@@ -76,13 +76,13 @@ namespace FinancialStructures.FinanceStructures
         public void UpdateSecurityData(DateTime day, double value, IReportLogger reportLogger = null)
         {
             // best approximation for number of units is last known number of units.
-            TryGetEarlierData(day, out DailyValuation _, out DailyValuation units, out DailyValuation _);
+            _ = TryGetEarlierData(day, out DailyValuation _, out DailyValuation units, out DailyValuation _);
             if (units == null)
             {
                 units = new DailyValuation(day, 0);
             }
 
-            _ = TryAddOrEditData(day, value, units.Value, reportLogger: reportLogger);
+            _ = TryAddOrEditData(day, day, value, units.Value, reportLogger: reportLogger);
         }
 
 

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 using FinanceViewModels.StatsViewModels;
+using FinancialStructures.Database.Statistics;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.PortfolioAPI;
 using FinancialStructures.StatisticStructures;
 using FinancialStructures.StatsMakers;
 using StructureCommon.Reporting;
@@ -48,7 +48,7 @@ namespace FinanceWindowsViewModels
             ReportLogger = reportLogger;
             fFileService = fileService;
             fDialogCreationService = dialogCreation;
-            StatsTabs.Add(new MainTabViewModel(openTab));
+            StatsTabs.Add(new MainTabViewModel(OpenTab));
             StatsTabs.Add(new SecuritiesStatisticsViewModel(portfolio, DisplayValueFunds));
 
             CreateInvestmentListCommand = new RelayCommand(ExecuteInvestmentListCommand);
@@ -84,7 +84,7 @@ namespace FinanceWindowsViewModels
             }
             else
             {
-                ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", $"Was not able to create Investment list page at {result.FilePath}");
+                _ = ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", $"Was not able to create Investment list page at {result.FilePath}");
             }
         }
 
@@ -103,7 +103,7 @@ namespace FinanceWindowsViewModels
             }
             else
             {
-                ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", $"Was not able to create Investment list page at {result.FilePath}");
+                _ = ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", $"Was not able to create Investment list page at {result.FilePath}");
             }
         }
 
@@ -132,7 +132,7 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private Action<TabType, string> openTab
+        private Action<TabType, string> OpenTab
         {
             get
             {
@@ -145,7 +145,7 @@ namespace FinanceWindowsViewModels
             switch (tabType)
             {
                 case (TabType.Main):
-                    StatsTabs.Add(new MainTabViewModel(openTab));
+                    StatsTabs.Add(new MainTabViewModel(OpenTab));
                     return;
                 case (TabType.SecurityStats):
                     StatsTabs.Add(new SecuritiesStatisticsViewModel(DataStore, DisplayValueFunds));
