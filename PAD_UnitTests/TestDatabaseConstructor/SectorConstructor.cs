@@ -12,7 +12,7 @@ namespace FinancialStructures_UnitTests.TestDatabaseConstructor
         public SectorConstructor(string company, string name, string currency = null, string url = null)
         {
             var names = new NameData(company, name, currency, url);
-            item = new Security(names);
+            item = new Sector(names);
         }
 
         public SectorConstructor WithData(DateTime date, double valueToAdd)

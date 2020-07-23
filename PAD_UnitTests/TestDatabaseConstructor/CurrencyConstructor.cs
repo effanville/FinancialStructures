@@ -13,7 +13,7 @@ namespace FinancialStructures_UnitTests.TestDatabaseConstructor
         {
             var names = new NameData(company, name, currency, url);
             names.SectorsFlat = sectors;
-            item = new CashAccount(names);
+            item = new Currency(names);
         }
 
         public CurrencyConstructor WithData(DateTime date, double price)

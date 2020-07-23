@@ -1,4 +1,6 @@
-﻿using FinancialStructures.Database;
+﻿using System;
+using FinancialStructures.Database;
+using FinancialStructures.NamingStructures;
 using FinancialStructures_UnitTests.TestDatabaseConstructor;
 using NUnit.Framework;
 
@@ -30,10 +32,17 @@ namespace FinancialStructures_UnitTests.Database
             }
         }
 
-        [Test]
-        [Ignore("Have not yet implemented adding data in a test.")]
-        public void TestSecurityPrices()
+        [TestCase(SecurityDataStream.NumberOfShares, 12)]
+        [TestCase(SecurityDataStream.SharePrice, 101)]
+        public void TestSecurityPrices(SecurityDataStream stream, double expected)
         {
+            var constructor = new DatabaseConstructor();
+            constructor = constructor.WithSecurityFromNameAndDataPoint("company1", "name1", date: new DateTime(2000, 1, 1), sharePrice: 101, numberUnits: 12).WithSecurityFromNameAndDataPoint("company2", "name2", date: new DateTime(2000, 1, 1), sharePrice: 202, numberUnits: 52);
+            var database = constructor.database;
+
+            var value = database.SecurityPrices(new TwoName("company1", "name1"), new DateTime(2000, 2, 1), stream);
+
+            Assert.AreEqual(expected, value);
         }
     }
 }
