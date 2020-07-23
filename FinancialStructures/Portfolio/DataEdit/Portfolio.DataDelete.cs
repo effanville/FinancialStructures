@@ -34,7 +34,7 @@ namespace FinancialStructures.Database
                 {
                     return TryDeleteSingleListData(BankAccounts, elementType, name, date, reportLogger);
                 }
-                case (AccountType.Sector):
+                case (AccountType.Benchmark):
                 {
                     return TryDeleteSingleListData(BenchMarks, elementType, name, date, reportLogger);
                 }

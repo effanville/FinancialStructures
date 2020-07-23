@@ -26,9 +26,25 @@ namespace FinancialStructures.Database
                     ICurrency currency = Currency(AccountType.Security, desired);
                     return desired.Value(date, currency).Value;
                 }
+                case (AccountType.Sector):
+                {
+                    double sum = 0;
+                    if (Funds != null)
+                    {
+                        foreach (ISecurity fund in Funds)
+                        {
+                            if (fund.IsSectorLinked(name.Company))
+                            {
+                                sum += fund.NearestEarlierValuation(date).Value;
+                            }
+                        }
+                    }
+
+                    return sum;
+                }
                 case (AccountType.Currency):
                 case (AccountType.BankAccount):
-                case (AccountType.Sector):
+                case (AccountType.Benchmark):
                 {
                     if (!TryGetAccount(elementType, name, out ISingleValueDataList desired))
                     {

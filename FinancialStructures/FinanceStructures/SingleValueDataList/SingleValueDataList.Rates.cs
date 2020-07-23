@@ -20,7 +20,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Returns the first valuation of the CashAccount.
         /// </summary>
-        internal DailyValuation FirstValue()
+        public DailyValuation FirstValue()
         {
             return fValues.FirstValuation();
         }

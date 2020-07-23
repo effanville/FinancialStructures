@@ -260,6 +260,8 @@ namespace FinancialStructures.FinanceInterfaces
 
         List<ICashAccount> CompanyBankAccounts(string company);
 
+        List<ISecurity> SectorSecurities(string sectorName);
+
         /// <summary>
         /// Returns a copy of the currently held portfolio. 
         /// Note one cannot use this portfolio to edit as it makes a copy.
@@ -279,7 +281,7 @@ namespace FinancialStructures.FinanceInterfaces
         double LatestValue(AccountType elementType, TwoName name);
 
         /// <summary>
-        /// Get the value of the selected element on the date provided.
+        /// Get the value of the selected element on the date provided. For a sector the name is only the surname
         /// </summary>
         /// <param name="elementType">The type of element to find.</param>
         /// <param name="name">The name of the element to find.</param>

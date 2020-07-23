@@ -48,7 +48,7 @@ namespace FinancialStructures.Database
                 {
                     return SingleDataNameObtainer(BankAccounts);
                 }
-                case (AccountType.Sector):
+                case (AccountType.Benchmark):
                 {
                     return SingleDataNameObtainer(BenchMarks);
                 }

@@ -63,7 +63,7 @@ namespace FinancialStructures.Database
 
                     break;
                 }
-                case (AccountType.Sector):
+                case (AccountType.Benchmark):
                 {
                     foreach (Sector sector in BenchMarks)
                     {

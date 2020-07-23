@@ -11,21 +11,53 @@ namespace FinancialStructures.Database.Statistics
         /// <summary>
         /// Returns the earliest date held in the portfolio.
         /// </summary>
-        public static DateTime FirstValueDate(this IPortfolio portfolio)
+        public static DateTime FirstValueDate(this IPortfolio portfolio, AccountType elementType, string sectorName = null)
         {
             DateTime output = DateTime.Today;
-            foreach (ISecurity sec in portfolio.Funds)
+            switch (elementType)
             {
-                if (sec.Any())
+                case AccountType.Security:
                 {
-                    ICurrency currency = portfolio.Currencies.Find(cur => cur.Name == sec.Currency);
-                    DateTime securityEarliest = sec.FirstValue(currency).Day;
-                    if (securityEarliest < output)
+                    foreach (ISecurity sec in portfolio.Funds)
                     {
-                        output = securityEarliest;
+                        if (sec.Any())
+                        {
+                            DateTime securityEarliest = sec.FirstValue().Day;
+                            if (securityEarliest < output)
+                            {
+                                output = securityEarliest;
+                            }
+                        }
                     }
+                    break;
+                }
+                case AccountType.Sector:
+                {
+                    foreach (ISecurity sec in portfolio.SectorSecurities(sectorName))
+                    {
+                        if (sec.FirstValue().Day < output)
+                        {
+                            output = sec.FirstValue().Day;
+                        }
+                    }
+                    break;
                 }
             }
+
+            return output;
+        }
+
+        public static DateTime CompanyFirstDate(this IPortfolio portfolio, string company)
+        {
+            DateTime output = DateTime.Today;
+            foreach (ISecurity sec in portfolio.CompanySecurities(company))
+            {
+                if (sec.FirstValue().Day < output)
+                {
+                    output = sec.FirstValue().Day;
+                }
+            }
+
             return output;
         }
 
@@ -49,7 +81,7 @@ namespace FinancialStructures.Database.Statistics
             List<PortfolioDaySnapshot> outputs = new List<PortfolioDaySnapshot>();
             if (!daysGap.Equals(0))
             {
-                DateTime calculationDate = portfolio.FirstValueDate();
+                DateTime calculationDate = portfolio.FirstValueDate(AccountType.Security);
                 await Task.Run(() => BackGroundTask(calculationDate, portfolio, outputs, daysGap));
             }
             return outputs;

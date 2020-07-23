@@ -35,7 +35,7 @@ namespace FinancialStructures.Database
                 {
                     return TryEditNameSingleList(BankAccounts, elementType, oldName, newName, reportLogger);
                 }
-                case (AccountType.Sector):
+                case (AccountType.Benchmark):
                 {
                     return TryEditNameSingleList(BenchMarks, elementType, oldName, newName, reportLogger);
                 }

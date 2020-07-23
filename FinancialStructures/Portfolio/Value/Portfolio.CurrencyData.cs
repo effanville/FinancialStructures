@@ -38,7 +38,7 @@ namespace FinancialStructures.Database
 
                     return Currencies.Find(cur => cur.BaseCurrency == BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted();
                 }
-                case (AccountType.Sector):
+                case (AccountType.Benchmark):
                 {
                     return new Currency();
                 }

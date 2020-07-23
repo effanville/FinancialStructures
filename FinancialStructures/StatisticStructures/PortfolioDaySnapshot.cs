@@ -4,6 +4,7 @@ using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 using StructureCommon.Extensions;
 
@@ -160,17 +161,17 @@ namespace FinancialStructures.StatisticStructures
             List<string> sectorNames = portfolio.GetSecuritiesSectors();
             foreach (string sectorName in sectorNames)
             {
-                DayValue_Named sectorValue = new DayValue_Named(sectorName, null, date, portfolio.SectorValue(sectorName, date).Truncate());
+                DayValue_Named sectorValue = new DayValue_Named(sectorName, null, date, portfolio.Value(AccountType.Sector, new TwoName(sectorName), date).Truncate());
                 SectorValues.Add(sectorValue);
 
                 DayValue_Named sectorCar;
-                if (date < portfolio.SectorFirstDate(sectorName))
+                if (date < portfolio.FirstValueDate(AccountType.Sector, sectorName))
                 {
                     sectorCar = new DayValue_Named(sectorName, null, date, 0.0);
                 }
                 else
                 {
-                    sectorCar = new DayValue_Named(sectorName, null, date, portfolio.IRRSector(sectorName, portfolio.SectorFirstDate(sectorName), date).Truncate());
+                    sectorCar = new DayValue_Named(sectorName, null, date, portfolio.IRRSector(sectorName, portfolio.FirstValueDate(AccountType.Sector, sectorName), date).Truncate());
                 }
                 SectorCar.Add(sectorCar);
             }

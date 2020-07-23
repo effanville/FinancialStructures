@@ -27,7 +27,7 @@ namespace FinancialStructures.Database.Download
                 }
                 case (AccountType.BankAccount):
                 case (AccountType.Currency):
-                case (AccountType.Sector):
+                case (AccountType.Benchmark):
                 {
                     _ = portfolio.TryGetAccount(accountType, names, out ISingleValueDataList acc);
                     await DownloadLatestValue(acc.Names, value => acc.TryAddOrEditData(DateTime.Today, DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);

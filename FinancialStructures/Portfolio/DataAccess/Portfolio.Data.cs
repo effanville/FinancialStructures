@@ -37,7 +37,7 @@ namespace FinancialStructures.Database
                 {
                     return SingleDataListDataObtainer(BankAccounts, elementType, name, reportLogger);
                 }
-                case (AccountType.Sector):
+                case (AccountType.Benchmark):
                 {
                     return SingleDataListDataObtainer(BenchMarks, elementType, name, reportLogger);
                 }

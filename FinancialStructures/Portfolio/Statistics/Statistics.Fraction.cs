@@ -55,14 +55,18 @@ namespace FinancialStructures.Database.Statistics
                             }
                         }
                     }
+
                     return double.NaN;
+                }
+                case AccountType.Sector:
+                {
+                    return portfolio.Value(AccountType.Sector, names, date) / portfolio.TotalValue(date);
                 }
                 default:
                 {
                     return double.NaN;
                 }
             }
-
         }
     }
 }

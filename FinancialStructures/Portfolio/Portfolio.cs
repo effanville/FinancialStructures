@@ -164,7 +164,7 @@ namespace FinancialStructures.Database
                 {
                     return BankAccounts.Count;
                 }
-                case (AccountType.Sector):
+                case (AccountType.Benchmark):
                 {
                     break;
                 }

@@ -75,7 +75,7 @@ namespace FinanceWindowsViewModels
             FundNames.Sort();
             AccountNames = portfolio.NameData(AccountType.BankAccount);
             AccountNames.Sort();
-            SectorNames = portfolio.NameData(AccountType.Sector);
+            SectorNames = portfolio.NameData(AccountType.Benchmark);
             SectorNames.Sort();
             CurrencyNames = portfolio.NameData(AccountType.Currency);
             CurrencyNames.Sort();

@@ -47,7 +47,7 @@ namespace FinancialStructures.Database
                 }
                 default:
                 case (AccountType.Currency):
-                case (AccountType.Sector):
+                case (AccountType.Benchmark):
                 {
                     return 0.0;
                 }

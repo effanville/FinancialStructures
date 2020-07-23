@@ -54,7 +54,7 @@ namespace FinancialStructures.Database
                     OnPortfolioChanged(toAdd, new EventArgs());
                     break;
                 }
-                case (AccountType.Sector):
+                case (AccountType.Benchmark):
                 {
                     Sector toAdd = new Sector(name);
                     toAdd.DataEdit += OnPortfolioChanged;

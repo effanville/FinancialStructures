@@ -8,7 +8,7 @@ namespace FinancialStructures.Database
         /// <inheritdoc/>
         public double TotalValue(DateTime date)
         {
-            return TotalValue(AccountType.Security, date) + TotalValue(AccountType.BankAccount, date);
+            return TotalValue(AccountType.All, DateTime.Today);
         }
 
         /// <inheritdoc/>
@@ -51,9 +51,13 @@ namespace FinancialStructures.Database
 
                     return sum;
                 }
-                case (AccountType.Sector):
+                case (AccountType.Benchmark):
                 {
                     break;
+                }
+                case (AccountType.All):
+                {
+                    return TotalValue(AccountType.Security, date) + TotalValue(AccountType.BankAccount, date);
                 }
                 default:
                     break;

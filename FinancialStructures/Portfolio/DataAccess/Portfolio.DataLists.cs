@@ -68,5 +68,19 @@ namespace FinancialStructures.Database
             accounts.Sort();
             return accounts;
         }
+
+        public List<ISecurity> SectorSecurities(string sectorName)
+        {
+            List<ISecurity> securities = new List<ISecurity>();
+            foreach (ISecurity security in Funds)
+            {
+                if (security.IsSectorLinked(sectorName))
+                {
+                    securities.Add(security);
+                }
+            }
+            securities.Sort();
+            return securities;
+        }
     }
 }

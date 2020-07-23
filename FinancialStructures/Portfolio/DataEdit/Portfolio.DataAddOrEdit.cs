@@ -41,7 +41,7 @@ namespace FinancialStructures.Database
                 {
                     return SingleListAddOrEdit(BankAccounts, name, oldData, data, reportLogger);
                 }
-                case (AccountType.Sector):
+                case (AccountType.Benchmark):
                 {
                     return SingleListAddOrEdit(BenchMarks, name, oldData, data, reportLogger);
                 }

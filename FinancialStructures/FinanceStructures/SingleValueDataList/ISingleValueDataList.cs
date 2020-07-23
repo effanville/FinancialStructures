@@ -41,6 +41,7 @@ namespace FinancialStructures.FinanceInterfaces
         bool Any();
         int Count();
         DailyValuation LatestValue();
+        DailyValuation FirstValue();
         double CAR(DateTime earlierTime, DateTime laterTime);
 
         DailyValuation Value(DateTime date);
