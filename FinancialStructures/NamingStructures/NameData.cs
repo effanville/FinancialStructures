@@ -13,34 +13,46 @@ namespace FinancialStructures.NamingStructures
             {
                 if (string.IsNullOrEmpty(Currency) && string.IsNullOrEmpty(Url) && string.IsNullOrEmpty(SectorsFlat))
                 {
-                    return base.Equals(otherName);
+                    if (string.IsNullOrEmpty(otherName.Currency) && string.IsNullOrEmpty(otherName.Url) && string.IsNullOrEmpty(otherName.SectorsFlat))
+                    {
+
+                        return base.Equals(otherName);
+                    }
+
+                    return false;
                 }
 
                 if (string.IsNullOrEmpty(Url) && string.IsNullOrEmpty(SectorsFlat))
                 {
-                    if (Currency.Equals(otherName.Currency))
+                    if (string.IsNullOrEmpty(otherName.Url) && string.IsNullOrEmpty(otherName.SectorsFlat))
                     {
-                        return base.Equals(otherName);
+                        if (Currency.Equals(otherName.Currency))
+                        {
+                            return base.Equals(otherName);
+                        }
                     }
-
                     return false;
                 }
                 if (string.IsNullOrEmpty(Currency) && string.IsNullOrEmpty(SectorsFlat))
                 {
-                    if (Url.Equals(otherName.Url))
+                    if (string.IsNullOrEmpty(otherName.Currency) && string.IsNullOrEmpty(otherName.SectorsFlat))
                     {
-                        return base.Equals(otherName);
+                        if (Url.Equals(otherName.Url))
+                        {
+                            return base.Equals(otherName);
+                        }
                     }
-
                     return false;
                 }
                 if (string.IsNullOrEmpty(Currency) && string.IsNullOrEmpty(Url))
                 {
-                    if (SectorsFlat.Equals(otherName.SectorsFlat))
+                    if (string.IsNullOrEmpty(otherName.Currency) && string.IsNullOrEmpty(otherName.Url))
                     {
-                        return base.Equals(otherName);
+                        if (SectorsFlat.Equals(otherName.SectorsFlat))
+                        {
+                            return base.Equals(otherName);
+                        }
                     }
-
                     return false;
                 }
 
@@ -201,7 +213,7 @@ namespace FinancialStructures.NamingStructures
         {
             get
             {
-                return string.Join(",", fSectors);
+                return fSectors != null ? string.Join(",", fSectors) : null;
             }
             set
             {

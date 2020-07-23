@@ -13,7 +13,10 @@ namespace FinancialStructures.NamingStructures
         /// <returns></returns>
         public override string ToString()
         {
-            //both name and company cannot be null so this is all cases.
+            if (string.IsNullOrEmpty(Company) && string.IsNullOrEmpty(Name))
+            {
+                return string.Empty;
+            }
             if (string.IsNullOrEmpty(Company) && !string.IsNullOrEmpty(Name))
             {
                 return Name;
