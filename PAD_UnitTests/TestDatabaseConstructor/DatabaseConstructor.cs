@@ -5,7 +5,6 @@ using FinancialStructures.FinanceStructures;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.PortfolioAPI;
-using FinancialStructures.DataStructures;
 
 namespace FinancialStructures_UnitTests.TestDatabaseConstructor
 {
@@ -56,6 +55,30 @@ namespace FinancialStructures_UnitTests.TestDatabaseConstructor
         {
             var bAConstructor = new BankAccountConstructor(company, name, currency, url, sectors);
             database.BankAccounts.Add(bAConstructor.item);
+            return this;
+        }
+
+        public DatabaseConstructor WithBankAccountFromNameAndDataPoint(string company, string name, string currency = null, string url = null, string sectors = null, DateTime date = new DateTime(), double value = 0)
+        {
+            var bankConstructor = new BankAccountConstructor(company, name, currency, url, sectors);
+            bankConstructor.WithData(date, value);
+            database.BankAccounts.Add(bankConstructor.item);
+            return this;
+        }
+
+        public DatabaseConstructor WithBankAccountFromNameAndData(string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] date = null, double[] value = null)
+        {
+            var bankConstructor = new BankAccountConstructor(company, name, currency, url, sectors);
+            if (date != null)
+            {
+                for (int i = 0; i < date.Length; i++)
+                {
+
+                    bankConstructor.WithData(date[i], value[i]);
+                }
+            }
+
+            database.BankAccounts.Add(bankConstructor.item);
             return this;
         }
 
