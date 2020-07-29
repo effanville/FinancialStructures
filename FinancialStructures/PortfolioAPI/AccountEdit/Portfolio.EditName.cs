@@ -64,7 +64,7 @@ namespace FinancialStructures.PortfolioAPI
                 if (values[AccountIndex].Names.IsEqualTo(oldName))
                 {
                     // now edit data
-                    //_ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Renaming {elementType} name {oldName} to {newName}.");
+                    _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Renaming {elementType} name {oldName} to {newName}.");
                     return values[AccountIndex].EditNameData(newName);
                 }
             }

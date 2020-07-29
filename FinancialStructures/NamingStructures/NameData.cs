@@ -129,30 +129,12 @@ namespace FinancialStructures.NamingStructures
         /// <summary>
         /// Set all name type values.
         /// </summary>
-        public NameData(string company, string name, string currency, string url, HashSet<string> sectors)
+        public NameData(string company, string name, string currency = null, string url = null, HashSet<string> sectors = null)
             : base(company, name)
         {
             Currency = currency;
             Url = url;
             Sectors = sectors;
-        }
-
-        /// <summary>
-        /// Set data without sectors.
-        /// </summary>
-        public NameData(string company, string name, string currency, string url)
-             : base(company, name)
-        {
-            Currency = currency;
-            Url = url;
-        }
-
-        /// <summary>
-        /// Set minimal naming
-        /// </summary>
-        public NameData(string company, string name)
-             : base(company, name)
-        {
         }
 
         private string fUrl;
