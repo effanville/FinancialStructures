@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
