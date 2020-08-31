@@ -51,7 +51,7 @@ namespace FinancialStructures.PortfolioAPI
                     foreach (ICashAccount acc in portfolio.BankAccounts)
                     {
                         ICurrency currency = Currency(portfolio, elementType, acc);
-                        sum += acc.Value(date, currency).Value;
+                        sum += acc.NearestEarlierValuation(date, currency).Value;
                     }
 
                     return sum;
