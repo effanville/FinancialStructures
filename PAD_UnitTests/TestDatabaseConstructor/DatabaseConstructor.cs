@@ -93,5 +93,21 @@ namespace FinancialStructures_UnitTests.TestDatabaseConstructor
             database.BenchMarks.Add(new Sector(new NameData(company, name, currency, url)));
             return this;
         }
+
+        public DatabaseConstructor WithSectorFromNameAndData(string company, string name, string currency = null, string url = null, DateTime[] date = null, double[] value = null)
+        {
+            var bankConstructor = new SectorConstructor(company, name, currency, url);
+            if (date != null)
+            {
+                for (int i = 0; i < date.Length; i++)
+                {
+
+                    bankConstructor.WithData(date[i], value[i]);
+                }
+            }
+
+            database.BenchMarks.Add(bankConstructor.item);
+            return this;
+        }
     }
 }
