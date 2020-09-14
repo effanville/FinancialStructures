@@ -84,19 +84,31 @@ namespace FinancialStructures.PortfolioAPI
         {
             foreach (ISecurity sec in portfo.Funds)
             {
-                await DownloadLatestValue(sec.Names, value => sec.UpdateSecurityData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                if (!string.IsNullOrEmpty(sec.Url))
+                {
+                    await DownloadLatestValue(sec.Names, value => sec.UpdateSecurityData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                }
             }
             foreach (ICashAccount acc in portfo.BankAccounts)
             {
-                await DownloadLatestValue(acc.Names, value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                if (!string.IsNullOrEmpty(acc.Url))
+                {
+                    await DownloadLatestValue(acc.Names, value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                }
             }
             foreach (ICurrency currency in portfo.Currencies)
             {
-                await DownloadLatestValue(currency.Names, value => currency.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                if (!string.IsNullOrEmpty(currency.Url))
+                {
+                    await DownloadLatestValue(currency.Names, value => currency.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                }
             }
             foreach (ISector sector in portfo.BenchMarks)
             {
-                await DownloadLatestValue(sector.Names, value => sector.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                if (!string.IsNullOrEmpty(sector.Url))
+                {
+                    await DownloadLatestValue(sector.Names, value => sector.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                }
             }
         }
 
