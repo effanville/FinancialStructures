@@ -20,6 +20,54 @@ namespace FinancialStructures_UnitTests.TestDatabaseConstructor
             return this;
         }
 
+        public const string DefaultSecurityName = "UK Stock";
+        public const string DefaultSecurityCompany = "BlackRock";
+        public readonly DateTime[] DefaultSecurityDates = new DateTime[] { new DateTime(2010, 1, 1), new DateTime(2011, 1, 1), new DateTime(2012, 5, 1), new DateTime(2015, 4, 3), new DateTime(2018, 5, 6), new DateTime(2020, 1, 1) };
+        public readonly double[] DefaultSecurityShareValues = new double[] { 2.0, 1.5, 17.3, 4, 5.7, 5.5 };
+        public readonly double[] DefaultSecurityUnitPrices = new double[] { 100.0, 100.0, 125.2, 90.6, 77.7, 101.1 };
+        public readonly double[] DefaultSecurityInvestments = new double[] { 1, 0.0, 0.0, 0.0, 0.0, 0.0 };
+
+        public TwoName DefaultNameQuery(AccountType acctype)
+        {
+            switch (acctype)
+            {
+                case AccountType.Security:
+                    return new TwoName(DefaultSecurityCompany, DefaultSecurityName);
+                case AccountType.BankAccount:
+                    return new TwoName(DefaultBankAccountCompany, DefaultBankAccountName);
+                default:
+                    return null;
+            }
+        }
+
+        public DatabaseConstructor WithDefaultFromType(AccountType acctype)
+        {
+            switch (acctype)
+            {
+                case AccountType.Security:
+                    return WithDefaultSecurity();
+                case AccountType.BankAccount:
+                    return WithDefaultBankAccount();
+                default:
+                    return null;
+            }
+        }
+
+        public DatabaseConstructor WithDefaultSecurity()
+        {
+            return WithSecurityFromNameAndData(DefaultSecurityCompany, DefaultSecurityName, dates: DefaultSecurityDates, sharePrice: DefaultSecurityUnitPrices, numberUnits: DefaultSecurityShareValues, investment: DefaultSecurityInvestments);
+        }
+
+        public string DefaultBankAccountName = "Current";
+        public string DefaultBankAccountCompany = "Santander";
+        public DateTime[] DefaultBankAccountDates = new DateTime[] { new DateTime(2010, 1, 1), new DateTime(2011, 1, 1), new DateTime(2012, 5, 1), new DateTime(2015, 4, 3), new DateTime(2018, 5, 6), new DateTime(2020, 1, 1) };
+        public double[] DefaultBankAccountValues = new double[] { 100.0, 100.0, 125.2, 90.6, 77.7, 101.1 };
+
+        public DatabaseConstructor WithDefaultBankAccount()
+        {
+            return WithBankAccountFromNameAndData(DefaultBankAccountCompany, DefaultBankAccountName, date: DefaultBankAccountDates, value: DefaultBankAccountValues);
+        }
+
         public DatabaseConstructor WithSecurityFromName(string company, string name, string currency = null, string url = null, string sectors = null)
         {
             var securityConstructor = new SecurityConstructor(company, name, currency, url, sectors);

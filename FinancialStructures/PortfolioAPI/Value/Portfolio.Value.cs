@@ -58,7 +58,7 @@ namespace FinancialStructures.PortfolioAPI
                         return double.NaN;
                     }
 
-                    return desired.LatestValue().Value;
+                    return desired.Value(date).Value;
                 }
                 case (AccountType.Sector):
                 {
