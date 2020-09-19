@@ -104,6 +104,23 @@ namespace FinancialStructures_UnitTests.TestDatabaseConstructor
             return WithBankAccountFromNameAndData(SecondaryBankAccountCompany, SecondaryBankAccountName, date: SecondaryBankAccountDates, value: SecondaryBankAccountValues);
         }
 
+        public DatabaseConstructor WithAccountFromNameAndData(AccountType accType, string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] dates = null, double[] sharePrice = null, double[] numberUnits = null, double[] investment = null)
+        {
+            switch (accType)
+            {
+                case AccountType.Security:
+                {
+                    return WithSecurityFromNameAndData(company, name, currency, url, sectors, dates, sharePrice, numberUnits, investment);
+                }
+                case AccountType.BankAccount:
+                {
+                    return WithBankAccountFromNameAndData(company, name, currency, url, sectors, dates, numberUnits);
+                }
+                default:
+                    return null;
+            }
+        }
+
         public DatabaseConstructor WithSecurityFromName(string company, string name, string currency = null, string url = null, string sectors = null)
         {
             var securityConstructor = new SecurityConstructor(company, name, currency, url, sectors);
