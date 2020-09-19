@@ -1,6 +1,7 @@
 ﻿using System;
-using FinancialStructures.PortfolioAPI;
+using FinancialStructures.Database.Statistics;
 using FinancialStructures.Tests.TestDatabaseConstructor;
+using FinancialStructures.FinanceInterfaces;
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.PortfolioAPI.Statistics
@@ -8,30 +9,6 @@ namespace FinancialStructures.Tests.PortfolioAPI.Statistics
     [TestFixture]
     public sealed class StatisticsTests
     {
-        [Test]
-        public void LongestNameTests()
-        {
-            var constructor = new DatabaseConstructor();
-            constructor.WithDefaultBankAccount();
-            constructor.WithSecondaryBankAccount();
-            constructor.WithSecondarySecurity();
-            constructor.WithDefaultSecurity();
-            var portfolio = constructor.database;
-            Assert.AreEqual(8, portfolio.LongestName());
-        }
-
-        [Test]
-        public void LongestCompanyTests()
-        {
-            var constructor = new DatabaseConstructor();
-            constructor.WithDefaultBankAccount();
-            constructor.WithDefaultSecurity();
-            constructor.WithSecondaryBankAccount();
-            constructor.WithSecondarySecurity();
-            var portfolio = constructor.database;
-            Assert.AreEqual(10, portfolio.LongestCompany());
-        }
-
         [Test]
         public void FirstValueDateTests()
         {
@@ -41,7 +18,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.Statistics
             constructor.WithSecondaryBankAccount();
             constructor.WithSecondarySecurity();
             var portfolio = constructor.database;
-            Assert.AreEqual(new DateTime(2010, 1, 1), portfolio.FirstValueDate());
+            Assert.AreEqual(new DateTime(2010, 1, 1), portfolio.FirstValueDate(AccountType.All));
         }
 
         [Test]
@@ -53,7 +30,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.Statistics
             constructor.WithSecondaryBankAccount();
             constructor.WithSecondarySecurity();
             var portfolio = constructor.database;
-            Assert.AreEqual(26081.099999999999, portfolio.TotalProfit());
+            Assert.AreEqual(26081.099999999999, portfolio.TotalProfit(AccountType.All));
         }
 
         [Test]
@@ -82,22 +59,6 @@ namespace FinancialStructures.Tests.PortfolioAPI.Statistics
             constructor.WithSecondarySecurity();
             var portfolio = constructor.database;
             Assert.AreEqual(expected, portfolio.IRRPortfolio(earlier, later));
-        }
-
-        [TestCase("2010/1/1", 1400)]
-        [TestCase("2015/5/1", 18220.028512967812)]
-        [TestCase("2010/5/1", 3479.1836734693879)]
-        [TestCase("2020/1/1", 27186.299999999999)]
-        [TestCase("2018/10/23", 37785.153651090215)]
-        public void ValueTests(DateTime date, double expected)
-        {
-            var constructor = new DatabaseConstructor();
-            constructor.WithDefaultBankAccount();
-            constructor.WithDefaultSecurity();
-            constructor.WithSecondaryBankAccount();
-            constructor.WithSecondarySecurity();
-            var portfolio = constructor.database;
-            Assert.AreEqual(expected, portfolio.Value(date));
         }
     }
 }

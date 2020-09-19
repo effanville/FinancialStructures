@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Linq;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
-using StructureCommon.DataStructures;
 
 namespace FinancialStructures.Tests.PortfolioAPI.DataEdit
 {
@@ -18,7 +17,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.DataEdit
 
             var portfolio = constructor.database;
 
-            bool success = portfolio.TryDeleteData(AccountType.Security, new NameData("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 5), null);
+            bool success = portfolio.TryDeleteData(AccountType.Security, new NameData("Company", "Name"), new DateTime(2010, 1, 1), null);
 
             Assert.AreEqual(0, portfolio.Funds.Single().Count());
 
@@ -34,7 +33,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.DataEdit
 
             var portfolio = constructor.database;
 
-            bool success = portfolio.TryDeleteData(AccountType.Sector, new NameData("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 2.0), null);
+            bool success = portfolio.TryDeleteData(AccountType.Benchmark, new NameData("Company", "Name"), new DateTime(2010, 1, 1), null);
 
             Assert.IsTrue(success);
             Assert.AreEqual(0, portfolio.BenchMarks.Single().Count());

@@ -1,4 +1,4 @@
-﻿using FinancialStructures.PortfolioAPI;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
@@ -46,7 +46,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.DataAccess
 
             var portfolio = constructor.database;
 
-            bool result = portfolio.TryGetAccount(AccountType.Sector, new TwoName("Company", "name"), out var desired);
+            bool result = portfolio.TryGetAccount(AccountType.Benchmark, new TwoName("Company", "name"), out var desired);
 
             Assert.AreEqual(true, result);
             Assert.IsNotNull(desired);
@@ -62,7 +62,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.DataAccess
 
             var portfolio = constructor.database;
 
-            bool result = portfolio.TryGetAccount(AccountType.Sector, new TwoName("NewCompany", "NewName"), out var desired);
+            bool result = portfolio.TryGetAccount(AccountType.Benchmark, new TwoName("NewCompany", "NewName"), out var desired);
 
             Assert.AreEqual(false, result);
             Assert.IsNull(desired);

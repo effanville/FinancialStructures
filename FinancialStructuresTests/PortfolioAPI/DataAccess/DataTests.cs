@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 using StructureCommon.Reporting;

@@ -2,7 +2,7 @@
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
+using FinancialStructures.FinanceInterfaces;
 
 namespace FinancialStructures.Tests.TestDatabaseConstructor
 {

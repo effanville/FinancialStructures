@@ -1,5 +1,5 @@
 ﻿using System;
-using FinancialStructures.PortfolioAPI;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 
@@ -99,6 +99,22 @@ namespace FinancialStructures.Tests.PortfolioAPI.Value
             constructor.WithDefaultBankAccount();
             var portfolio = constructor.database;
             Assert.AreEqual(portfolio.TotalValue(AccountType.BankAccount, date), portfolio.Value(AccountType.BankAccount, constructor.DefaultNameQuery(AccountType.BankAccount), date));
+        }
+
+        [TestCase("2010/1/1", 1400)]
+        [TestCase("2015/5/1", 18220.028512967812)]
+        [TestCase("2010/5/1", 3479.1836734693879)]
+        [TestCase("2020/1/1", 27186.299999999999)]
+        [TestCase("2018/10/23", 37785.153651090215)]
+        public void ValueTests(DateTime date, double expected)
+        {
+            var constructor = new DatabaseConstructor();
+            constructor.WithDefaultBankAccount();
+            constructor.WithDefaultSecurity();
+            constructor.WithSecondaryBankAccount();
+            constructor.WithSecondarySecurity();
+            var portfolio = constructor.database;
+            Assert.AreEqual(expected, portfolio.TotalValue(AccountType.All, date));
         }
     }
 }

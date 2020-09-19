@@ -69,7 +69,7 @@ namespace FinancialStructures.Database
                     {
                         if (name.IsEqualTo(sector.Names))
                         {
-                            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted sector {sector.Name}");
+                            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted benchmark {sector.Name}");
                             _ = BenchMarks.Remove(sector);
                             OnPortfolioChanged(BenchMarks, new System.EventArgs());
                             return true;

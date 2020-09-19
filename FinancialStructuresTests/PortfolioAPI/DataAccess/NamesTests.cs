@@ -1,4 +1,4 @@
-﻿using FinancialStructures.PortfolioAPI;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 
@@ -49,7 +49,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.DataAccess
         }
 
         [TestCase(AccountType.Security, "company1", "name1", "company2", "name2", "company3", "name3")]
-        [TestCase(AccountType.Sector, "company1", "name1", "company2", "name2", "company3", "name3")]
+        [TestCase(AccountType.Benchmark, "company1", "name1", "company2", "name2", "company3", "name3")]
         [TestCase(AccountType.BankAccount, "company1", "name1", "company2", "name2", "company3", "name3")]
         [TestCase(AccountType.Currency, "company1", "name1", "company2", "name2", "company3", "name3")]
         public void NameDataTests(AccountType elementType, string company1, string name1, string company2, string name2, string company3, string name3)
@@ -70,7 +70,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.DataAccess
         }
 
         [TestCase(AccountType.Security, "company1", "name1", "company2", "name2", "company3", "name3")]
-        [TestCase(AccountType.Sector, "company1", "name1", "company2", "name2", "company3", "name3")]
+        [TestCase(AccountType.Benchmark, "company1", "name1", "company2", "name2", "company3", "name3")]
         [TestCase(AccountType.BankAccount, "company1", "name1", "company2", "name2", "company3", "name3")]
         [TestCase(AccountType.Currency, "company1", "name1", "company2", "name2", "company3", "name3")]
         public void NamesTests(AccountType elementType, string company1, string name1, string company2, string name2, string company3, string name3)
@@ -87,7 +87,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.DataAccess
         }
 
         [TestCase(AccountType.Security, "company1", "name1", "company2", "name2", "company3", "name3")]
-        [TestCase(AccountType.Sector, "company1", "name1", "company2", "name2", "company3", "name3")]
+        [TestCase(AccountType.Benchmark, "company1", "name1", "company2", "name2", "company3", "name3")]
         [TestCase(AccountType.BankAccount, "company1", "name1", "company2", "name2", "company3", "name3")]
         [TestCase(AccountType.Currency, "company1", "name1", "company2", "name2", "company3", "name3")]
         public void CompaniesTests(AccountType elementType, string company1, string name1, string company2, string name2, string company3, string name3)

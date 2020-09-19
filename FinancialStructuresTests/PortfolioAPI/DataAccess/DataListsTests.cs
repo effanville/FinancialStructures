@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 

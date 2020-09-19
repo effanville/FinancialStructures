@@ -106,7 +106,7 @@ namespace FinancialStructures.Database.Download
             string data = await WebDownloader.DownloadFromURLasync(names.Url, reportLogger).ConfigureAwait(false);
             if (string.IsNullOrEmpty(data))
             {
-                reportLogger.LogUseful(ReportType.Error, ReportLocation.Downloading, $"{names.Company}-{names.Name}: could not download data from {names.Url}");
+                reportLogger?.LogUseful(ReportType.Error, ReportLocation.Downloading, $"{names.Company}-{names.Name}: could not download data from {names.Url}");
                 return;
             }
             if (!ProcessDownloadString(names.Url, data, reportLogger, out double value))
@@ -127,7 +127,7 @@ namespace FinancialStructures.Database.Download
                     value = ProcessFromFT(data);
                     if (double.IsNaN(value))
                     {
-                        reportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from FT url: {url}");
+                        reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from FT url: {url}");
                         return false;
                     }
                     return true;
@@ -137,17 +137,26 @@ namespace FinancialStructures.Database.Download
                     value = ProcessFromYahoo(data);
                     if (double.IsNaN(value))
                     {
-                        reportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from Yahoo url: {url}");
+                        reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from Yahoo url: {url}");
                         return false;
                     }
                     return true;
                 }
                 default:
                 case WebsiteType.Morningstar:
+                {
+                    value = ProcessFromMorningstar(data);
+                    if (double.IsNaN(value))
+                    {
+                        reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from Morningstar url: {url}");
+                        return false;
+                    }
+                    return true;
+                }
                 case WebsiteType.Google:
                 case WebsiteType.TrustNet:
                 case WebsiteType.Bloomberg:
-                    reportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Url not of a currently implemented downloadable type: {url}");
+                    reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Url not of a currently implemented downloadable type: {url}");
                     return false;
             }
         }

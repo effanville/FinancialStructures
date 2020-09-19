@@ -74,7 +74,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public bool TryAddOrEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null)
         {
-            if (fValues.ValueExists(date, out _))
+            if (fValues.ValueExists(oldDate, out _))
             {
                 return fValues.TryEditData(oldDate, date, value, reportLogger);
             }

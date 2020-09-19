@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 using StructureCommon.Reporting;
@@ -36,7 +36,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.AccountEdit
 
             var database = constructor.database;
 
-            _ = database.TryAdd(AccountType.Sector, new NameData(BaseCompanyName, BaseName));
+            _ = database.TryAdd(AccountType.Benchmark, new NameData(BaseCompanyName, BaseName));
 
             Assert.AreEqual(1, database.BenchMarks.Count);
             NameData accountNames = database.BenchMarks.First().Names;
@@ -120,7 +120,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.AccountEdit
             var reports = new List<ErrorReport>();
             var database = constructor.database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
-            _ = database.TryAdd(AccountType.Sector, new NameData(BaseCompanyName, BaseName), logging);
+            _ = database.TryAdd(AccountType.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
 
             Assert.AreEqual(1, reports.Count);
 
@@ -128,7 +128,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.AccountEdit
             Assert.AreEqual(ReportType.Report, report.ErrorType);
             Assert.AreEqual(ReportLocation.AddingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Detailed, report.ErrorSeverity);
-            Assert.AreEqual($"Sector `{BaseCompanyName}'-`{BaseName}' added to database.", report.Message);
+            Assert.AreEqual($"Benchmark `{BaseCompanyName}'-`{BaseName}' added to database.", report.Message);
         }
 
         [Test]
@@ -139,7 +139,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.AccountEdit
             var reports = new List<ErrorReport>();
             var database = constructor.database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
-            _ = database.TryAdd(AccountType.Sector, new NameData(BaseCompanyName, BaseName), logging);
+            _ = database.TryAdd(AccountType.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
 
             Assert.AreEqual(1, reports.Count);
 
@@ -147,7 +147,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.AccountEdit
             Assert.AreEqual(ReportType.Error, report.ErrorType);
             Assert.AreEqual(ReportLocation.AddingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Critical, report.ErrorSeverity);
-            Assert.AreEqual($"Sector `{BaseCompanyName}'-`{BaseName}' already exists.", report.Message);
+            Assert.AreEqual($"Benchmark `{BaseCompanyName}'-`{BaseName}' already exists.", report.Message);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 using StructureCommon.Reporting;
@@ -97,7 +97,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.AccountEdit
 
             var database = constructor.database;
 
-            _ = database.TryEditName(AccountType.Sector, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
+            _ = database.TryEditName(AccountType.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
             NameData accountNames = database.BenchMarks.First().Names;
             Assert.AreEqual(NewName, accountNames.Name);
@@ -206,13 +206,13 @@ namespace FinancialStructures.Tests.PortfolioAPI.AccountEdit
             Assert.AreEqual(NewName, accountNames.Name);
             Assert.AreEqual(NewCompanyName, accountNames.Company);
 
-            Assert.AreEqual(1, reports.Count);
+            Assert.AreEqual(0, reports.Count);
 
-            var report = reports.First();
+            /*var report = reports.First();
             Assert.AreEqual(ReportType.Error, report.ErrorType);
             Assert.AreEqual(ReportLocation.EditingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Useful, report.ErrorSeverity);
-            Assert.AreEqual($"Renaming Security name {BaseCompanyName}-{BaseName} to {NewCompanyName}-{NewName}.", report.Message);
+            Assert.AreEqual($"Renaming Security name {BaseCompanyName}-{BaseName} to {NewCompanyName}-{NewName}.", report.Message);*/
         }
 
         [Test]
@@ -241,19 +241,19 @@ namespace FinancialStructures.Tests.PortfolioAPI.AccountEdit
             var reports = new List<ErrorReport>();
             var database = constructor.database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
-            _ = database.TryEditName(AccountType.Sector, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
+            _ = database.TryEditName(AccountType.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
             NameData accountNames = database.BenchMarks.First().Names;
             Assert.AreEqual(NewName, accountNames.Name);
             Assert.AreEqual(NewCompanyName, accountNames.Company);
 
-            Assert.AreEqual(1, reports.Count);
+            Assert.AreEqual(0, reports.Count);
 
-            var report = reports.First();
+            /*var report = reports.First();
             Assert.AreEqual(ReportType.Error, report.ErrorType);
             Assert.AreEqual(ReportLocation.EditingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Useful, report.ErrorSeverity);
-            Assert.AreEqual($"Renaming Sector name {BaseCompanyName}-{BaseName} to {NewCompanyName}-newName.", report.Message);
+            Assert.AreEqual($"Renaming Sector name {BaseCompanyName}-{BaseName} to {NewCompanyName}-newName.", report.Message);*/
         }
 
         [Test]
@@ -263,7 +263,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.AccountEdit
             var reports = new List<ErrorReport>();
             var database = constructor.database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
-            _ = database.TryEditName(AccountType.Sector, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
+            _ = database.TryEditName(AccountType.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
             Assert.AreEqual(1, reports.Count);
 
@@ -271,7 +271,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.AccountEdit
             Assert.AreEqual(ReportType.Error, report.ErrorType);
             Assert.AreEqual(ReportLocation.EditingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Useful, report.ErrorSeverity);
-            Assert.AreEqual($"Renaming Sector: Could not find Sector with name {BaseCompanyName}-{BaseName}.", report.Message);
+            Assert.AreEqual($"Renaming Benchmark: Could not find Benchmark with name {BaseCompanyName}-{BaseName}.", report.Message);
         }
     }
 }

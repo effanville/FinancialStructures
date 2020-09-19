@@ -1,5 +1,5 @@
-﻿using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
+﻿using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.NamingStructures;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 
@@ -47,7 +47,7 @@ namespace FinancialStructures.Tests.PortfolioAPI
 
             var portfolio = constructor.database;
 
-            bool exists = portfolio.Exists(AccountType.Sector, new TwoName(company, name));
+            bool exists = portfolio.Exists(AccountType.Benchmark, new TwoName(company, name));
 
             Assert.AreEqual(true, exists);
         }

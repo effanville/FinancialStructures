@@ -41,7 +41,7 @@ namespace FinancialStructures.Database
                 }
                 default:
                 {
-                    _ = reportLogger.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Editing an Unknown type.");
+                    _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Editing an Unknown type.");
                     return false;
                 }
             }

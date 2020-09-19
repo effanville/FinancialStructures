@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 using StructureCommon.Reporting;
@@ -35,7 +35,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.AccountEdit
 
             var database = constructor.database;
 
-            _ = database.TryRemove(AccountType.Sector, new NameData(BaseCompanyName, BaseName));
+            _ = database.TryRemove(AccountType.Benchmark, new NameData(BaseCompanyName, BaseName));
 
             Assert.AreEqual(0, database.BenchMarks.Count);
         }
@@ -82,7 +82,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.AccountEdit
             Assert.AreEqual(ReportType.Report, report.ErrorType);
             Assert.AreEqual(ReportLocation.DeletingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Detailed, report.ErrorSeverity);
-            Assert.AreEqual($"Security `{BaseCompanyName}'-`{BaseCompanyName}-{BaseName}' removed from the database.", report.Message);
+            Assert.AreEqual($"Security {BaseCompanyName}-{BaseName} removed from the database.", report.Message);
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.AccountEdit
             var reports = new List<ErrorReport>();
             var database = constructor.database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
-            _ = database.TryRemove(AccountType.Sector, new NameData(BaseCompanyName, BaseName), logging);
+            _ = database.TryRemove(AccountType.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
 
             Assert.AreEqual(1, reports.Count);
 
@@ -119,7 +119,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.AccountEdit
             Assert.AreEqual(ReportType.Report, report.ErrorType);
             Assert.AreEqual(ReportLocation.DeletingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Detailed, report.ErrorSeverity);
-            Assert.AreEqual($"Deleted sector {BaseName}", report.Message);
+            Assert.AreEqual($"Deleted benchmark {BaseName}", report.Message);
         }
 
         [Test]
@@ -129,7 +129,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.AccountEdit
             var reports = new List<ErrorReport>();
             var database = constructor.database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
-            _ = database.TryRemove(AccountType.Sector, new NameData(BaseCompanyName, BaseName), logging);
+            _ = database.TryRemove(AccountType.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
 
             Assert.AreEqual(1, reports.Count);
 
@@ -137,7 +137,7 @@ namespace FinancialStructures.Tests.PortfolioAPI.AccountEdit
             Assert.AreEqual(ReportType.Error, report.ErrorType);
             Assert.AreEqual(ReportLocation.AddingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Useful, report.ErrorSeverity);
-            Assert.AreEqual($"Sector - {BaseCompanyName}-{BaseName} could not be found in the database.", report.Message);
+            Assert.AreEqual($"Benchmark - {BaseCompanyName}-{BaseName} could not be found in the database.", report.Message);
         }
     }
 }

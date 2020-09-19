@@ -1,6 +1,5 @@
-﻿using System;
+﻿using FinancialStructures.Database.Download;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.PortfolioAPI
@@ -12,7 +11,7 @@ namespace FinancialStructures.Tests.PortfolioAPI
         public void CanDownload(string url)
         {
             double value = 0;
-            Action<double> getValue = v => value = v;
+            void getValue(double v) => value = v;
             PortfolioDataUpdater.DownloadLatestValue(new NameData("company", "name", url: url), getValue, null).Wait();
 
             Assert.AreNotEqual(0, value);
