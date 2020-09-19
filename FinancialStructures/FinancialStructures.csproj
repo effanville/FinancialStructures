@@ -5,15 +5,7 @@
     <Deterministic>false</Deterministic>
     <Platforms>AnyCPU;x64</Platforms>
     <Configurations>Debug;Release</Configurations>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>bin\FinancialStructures.xml</DocumentationFile>
-    <OutputPath>bin\</OutputPath>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <DocumentationFile></DocumentationFile>
+    <DocumentationFile>..\bin\FinancialStructures.xml</DocumentationFile>
     <OutputPath>..\bin\</OutputPath>
   </PropertyGroup>
 
