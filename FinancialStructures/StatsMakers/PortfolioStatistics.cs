@@ -84,6 +84,12 @@ namespace FinancialStructures.StatsMakers
             set;
         } = new List<DayValue_Named>();
 
+        public DayValue_Named BankAccountTotalStats
+        {
+            get;
+            set;
+        } = new DayValue_Named();
+
         /// <summary>
         /// Default empty constructor.
         /// </summary>
@@ -114,6 +120,7 @@ namespace FinancialStructures.StatsMakers
             BankAccountStats = portfolio.GenerateBankAccountStatistics(false);
 
             BankAccountCompanyStats = portfolio.BankAccountCompanyStatistics();
+            BankAccountTotalStats = portfolio.GenerateBankAccountTotalStatistics();
 
             List<string> sectorNames = portfolio.GetSecuritiesSectors();
             foreach (string sectorName in sectorNames)
@@ -206,6 +213,7 @@ namespace FinancialStructures.StatsMakers
                     }
 
                     bankAccountDataToWrite.SortName(options.BankAccountSortingField, options.BankSortDirection);
+                    bankAccountDataToWrite.Add(BankAccountTotalStats);
 
                     if (options.Spacing)
                     {
