@@ -116,7 +116,8 @@ namespace FinanceViewModels.StatsViewModels
             {
                 for (int sectorIndex = 0; sectorIndex < HistoryStats[0].SectorCar.Count; sectorIndex++)
                 {
-                    if (HistoryStats[HistoryStats.Count - 1].SectorValues[sectorIndex].Value > 5000)
+                    var total = HistoryStats[HistoryStats.Count - 1].TotalValue;
+                    if (HistoryStats[HistoryStats.Count - 1].SectorValues[sectorIndex].Value > 0.1 * total.Value)
                     {
                         List<KeyValuePair<DateTime, double>> pc = new List<KeyValuePair<DateTime, double>>();
                         for (int time = 0; time < HistoryStats.Count; time++)
