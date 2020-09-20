@@ -6,7 +6,7 @@ using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 using StructureCommon.DataStructures;
 
-namespace FinancialStructures.Tests.PortfolioAPI.DataEdit
+namespace FinancialStructures.Tests.Database.DataEdit
 {
     [TestFixture]
     public sealed class DataAddorEditTests

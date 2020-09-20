@@ -2,7 +2,7 @@
 using FinancialStructures.NamingStructures;
 using NUnit.Framework;
 
-namespace FinancialStructures.Tests.PortfolioAPI
+namespace FinancialStructures.Tests.Database
 {
     public sealed class DownloadTests
     {

@@ -2,7 +2,7 @@
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 
-namespace FinancialStructures.Tests.PortfolioAPI.DataAccess
+namespace FinancialStructures.Tests.Database.DataAccess
 {
     [TestFixture]
     public sealed class NameTests

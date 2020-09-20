@@ -5,7 +5,7 @@ using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 
-namespace FinancialStructures.Tests.PortfolioAPI.DataEdit
+namespace FinancialStructures.Tests.Database.DataEdit
 {
     public sealed class DataDeleteTests
     {

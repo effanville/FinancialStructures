@@ -7,7 +7,7 @@ using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 using StructureCommon.Reporting;
 
-namespace FinancialStructures.Tests.PortfolioAPI.DataAccess
+namespace FinancialStructures.Tests.Database.DataAccess
 {
     [TestFixture]
     public sealed class DataTests

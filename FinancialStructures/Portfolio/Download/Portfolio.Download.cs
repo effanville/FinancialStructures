@@ -8,14 +8,31 @@ using StructureCommon.WebAccess;
 
 namespace FinancialStructures.Database.Download
 {
+    /// <summary>
+    /// Contains download routines to update portfolio.
+    /// </summary>
     public static class PortfolioDataUpdater
     {
-        public static async Task Downloader(IPortfolio portfolio, IReportLogger reportLogger)
+        /// <summary>
+        /// Generic update routine to update all objects held in the portfolio.
+        /// </summary>
+        /// <param name="portfolio">The database to update all</param>
+        /// <param name="reportLogger">Optional report callback</param>
+        /// <returns></returns>
+        public static async Task Downloader(IPortfolio portfolio, IReportLogger reportLogger = null)
         {
             await DownloadPortfolioLatest(portfolio, reportLogger).ConfigureAwait(false);
         }
 
-        public static async Task DownloadOfType(AccountType accountType, IPortfolio portfolio, TwoName names, IReportLogger reportLogger)
+        /// <summary>
+        /// Updates specific object.
+        /// </summary>
+        /// <param name="accountType">The type of the object to update</param>
+        /// <param name="portfolio">The database storing the object</param>
+        /// <param name="names">The name of the object.</param>
+        /// <param name="reportLogger">An optional update logger.</param>
+        /// <returns></returns>
+        public static async Task DownloadOfType(AccountType accountType, IPortfolio portfolio, TwoName names, IReportLogger reportLogger = null)
         {
             switch (accountType)
             {
@@ -101,12 +118,15 @@ namespace FinancialStructures.Database.Download
             }
         }
 
-        public static async Task DownloadLatestValue(NameData names, Action<double> updateValue, IReportLogger reportLogger)
+        /// <summary>
+        /// Downloads the latest value from the website stored in <paramref name="names"/> url field.
+        /// </summary>
+        internal static async Task DownloadLatestValue(NameData names, Action<double> updateValue, IReportLogger reportLogger = null)
         {
             string data = await WebDownloader.DownloadFromURLasync(names.Url, reportLogger).ConfigureAwait(false);
             if (string.IsNullOrEmpty(data))
             {
-                reportLogger?.LogUseful(ReportType.Error, ReportLocation.Downloading, $"{names.Company}-{names.Name}: could not download data from {names.Url}");
+                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.Downloading, $"{names.Company}-{names.Name}: could not download data from {names.Url}");
                 return;
             }
             if (!ProcessDownloadString(names.Url, data, reportLogger, out double value))
@@ -127,7 +147,7 @@ namespace FinancialStructures.Database.Download
                     value = ProcessFromFT(data);
                     if (double.IsNaN(value))
                     {
-                        reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from FT url: {url}");
+                        _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from FT url: {url}");
                         return false;
                     }
                     return true;
@@ -137,7 +157,7 @@ namespace FinancialStructures.Database.Download
                     value = ProcessFromYahoo(data);
                     if (double.IsNaN(value))
                     {
-                        reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from Yahoo url: {url}");
+                        _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from Yahoo url: {url}");
                         return false;
                     }
                     return true;
@@ -148,7 +168,7 @@ namespace FinancialStructures.Database.Download
                     value = ProcessFromMorningstar(data);
                     if (double.IsNaN(value))
                     {
-                        reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from Morningstar url: {url}");
+                        _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from Morningstar url: {url}");
                         return false;
                     }
                     return true;
@@ -156,7 +176,7 @@ namespace FinancialStructures.Database.Download
                 case WebsiteType.Google:
                 case WebsiteType.TrustNet:
                 case WebsiteType.Bloomberg:
-                    reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Url not of a currently implemented downloadable type: {url}");
+                    _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Url not of a currently implemented downloadable type: {url}");
                     return false;
             }
         }

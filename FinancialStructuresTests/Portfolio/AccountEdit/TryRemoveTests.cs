@@ -6,7 +6,7 @@ using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 using StructureCommon.Reporting;
 
-namespace FinancialStructures.Tests.PortfolioAPI.AccountEdit
+namespace FinancialStructures.Tests.Database.AccountEdit
 {
     [TestFixture]
     public sealed class TryRemoveTests

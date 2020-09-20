@@ -45,6 +45,10 @@ namespace FinancialStructures.Database
 
                     return value;
                 }
+                case (AccountType.All):
+                {
+                    return CompanyValue(AccountType.BankAccount, company, date) + CompanyValue(AccountType.Security, company, date);
+                }
                 default:
                 case (AccountType.Currency):
                 case (AccountType.Benchmark):

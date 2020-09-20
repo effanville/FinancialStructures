@@ -3,7 +3,7 @@ using FinancialStructures.NamingStructures;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 
-namespace FinancialStructures.Tests.PortfolioAPI
+namespace FinancialStructures.Tests.Database
 {
     public sealed class ExistsTests
     {
@@ -13,7 +13,7 @@ namespace FinancialStructures.Tests.PortfolioAPI
             string company = "Company";
             string name = "Name";
             var constructor = new DatabaseConstructor();
-            constructor.WithSecurityFromName(company, name);
+            _ = constructor.WithSecurityFromName(company, name);
 
             var portfolio = constructor.database;
 
@@ -28,7 +28,7 @@ namespace FinancialStructures.Tests.PortfolioAPI
             string company = "Company";
             string name = "Name";
             var constructor = new DatabaseConstructor();
-            constructor.WithSecurityFromName(company, name);
+            _ = constructor.WithSecurityFromName(company, name);
 
             var portfolio = constructor.database;
 
@@ -43,7 +43,7 @@ namespace FinancialStructures.Tests.PortfolioAPI
             string company = "Company";
             string name = "Name";
             var constructor = new DatabaseConstructor();
-            constructor.WithSectorFromName(company, name);
+            _ = constructor.WithSectorFromName(company, name);
 
             var portfolio = constructor.database;
 
@@ -58,7 +58,7 @@ namespace FinancialStructures.Tests.PortfolioAPI
             string company = "Company";
             string name = "Name";
             var constructor = new DatabaseConstructor();
-            constructor.WithSectorFromName(company, name);
+            _ = constructor.WithSectorFromName(company, name);
 
             var portfolio = constructor.database;
 

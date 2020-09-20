@@ -3,7 +3,7 @@ using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 
-namespace FinancialStructures.Tests.PortfolioAPI.Value
+namespace FinancialStructures.Tests.Database.Value
 {
     [TestFixture]
     public sealed class ValueTests
