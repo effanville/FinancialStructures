@@ -19,7 +19,12 @@ namespace FinancialStructures.Database.Statistics
         /// </summary>
         public static double AccountInCompanyFraction(this IPortfolio portfolio, AccountType elementType, TwoName names, DateTime date)
         {
-            return portfolio.Fraction(elementType, names, date) / portfolio.CompanyFraction(elementType, names.Company, date);
+            double companyFraction = portfolio.CompanyFraction(elementType, names.Company, date);
+            if (companyFraction.Equals(0.0))
+            {
+                return 0.0;
+            }
+            return portfolio.Fraction(elementType, names, date) / companyFraction;
         }
 
         /// <summary>
