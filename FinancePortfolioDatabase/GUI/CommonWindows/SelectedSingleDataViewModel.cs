@@ -117,12 +117,15 @@ namespace FinanceCommonViewModels
 
         private void DataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
         {
-            double latestValue = SelectedData.Last().Value;
-            e.NewItem = new DailyValuation()
+            if (SelectedData != null && SelectedData.Any())
             {
-                Day = DateTime.Today,
-                Value = latestValue
-            };
+                double latestValue = SelectedData.Last().Value;
+                e.NewItem = new DailyValuation()
+                {
+                    Day = DateTime.Today,
+                    Value = latestValue
+                };
+            }
         }
 
         public ICommand SelectionChangedCommand
