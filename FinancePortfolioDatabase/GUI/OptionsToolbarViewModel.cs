@@ -154,7 +154,7 @@ namespace FinanceWindowsViewModels
         }
         private void ExecuteUpdateData()
         {
-            DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.Downloader(programPortfolio, fReportLogger).ConfigureAwait(false));
+            DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.Download(AccountType.All, programPortfolio, null, fReportLogger).ConfigureAwait(false));
         }
 
         public ICommand RefreshCommand

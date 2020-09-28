@@ -102,7 +102,7 @@ namespace FinancialStructures.FinanceInterfaces
         /// <summary>
         /// Number of type in the database.
         /// </summary>
-        /// <param name="elementType">The type to search for.</param>
+        /// <param name="accountType">The type to search for.</param>
         /// <returns>The number of type in the database.</returns>
         int NumberOf(AccountType accountType);
 
@@ -189,6 +189,7 @@ namespace FinancialStructures.FinanceInterfaces
         /// </summary>
         /// <param name="elementType">The type of data to add to.</param>
         /// <param name="name">The name to add to.</param>
+        /// <param name="oldData"> The old data to edit.</param>
         /// <param name="data">The data to add.</param>
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
@@ -200,7 +201,7 @@ namespace FinancialStructures.FinanceInterfaces
         /// </summary>
         /// <param name="elementType">The type of data to remove from.</param>
         /// <param name="name">The name to remove from.</param>
-        /// <param name="data">The data to remove.</param>
+        /// <param name="date">The date on which to remove data.</param>
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
         bool TryDeleteData(AccountType elementType, TwoName name, DateTime date, IReportLogger reportLogger = null);
@@ -249,8 +250,9 @@ namespace FinancialStructures.FinanceInterfaces
         /// <summary>
         /// Outputs the account if it exists.
         /// </summary>
-        /// <param name="elementType">The type of element to find.</param>
+        /// <param name="accountType">The type of element to find.</param>
         /// <param name="name">The name of the element to find.</param>
+        /// <param name="desired">The account if it exists.</param>
         bool TryGetAccount(AccountType accountType, TwoName name, out ISingleValueDataList desired);
 
         /// <summary>
@@ -258,8 +260,18 @@ namespace FinancialStructures.FinanceInterfaces
         /// </summary>
         List<ISecurity> CompanySecurities(string company);
 
+        /// <summary>
+        /// Returns a copy of all Bank Accounts listed with the specified company.
+        /// </summary>
+        /// <param name="company">The company to return all bank accounts for.</param>
+        /// <returns></returns>
         List<ICashAccount> CompanyBankAccounts(string company);
 
+        /// <summary>
+        /// Returns all Securities related to the given benchmark.
+        /// </summary>
+        /// <param name="sectorName"></param>
+        /// <returns></returns>
         List<ISecurity> SectorSecurities(string sectorName);
 
         /// <summary>
@@ -307,7 +319,7 @@ namespace FinancialStructures.FinanceInterfaces
         /// <summary>
         /// Total value of all accounts of all types on date given.
         /// </summary>
-        /// <param name="elementType">The type to find the total of.</param>
+        /// <param name="accountType">The type to find the total of.</param>
         /// <param name="date">The date to find the total on.</param>
         /// <returns>The total value held.</returns>
         double TotalValue(DateTime date);

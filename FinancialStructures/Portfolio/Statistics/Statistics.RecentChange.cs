@@ -27,21 +27,46 @@ namespace FinancialStructures.Database.Statistics
 
             return total;
         }
+
         /// <summary>
         /// returns the total profit in the portfolio.
         /// </summary>
         public static double RecentChange(this IPortfolio portfolio, AccountType elementType = AccountType.Security)
         {
-            double total = 0;
-            foreach (ISecurity desired in portfolio.Funds)
+            switch (elementType)
             {
-                if (desired.Any())
+                case AccountType.All:
                 {
-                    total += portfolio.RecentChange(elementType, desired.Names);
+                    return portfolio.RecentChange(AccountType.Security) + portfolio.RecentChange(AccountType.BankAccount);
+                }
+                case (AccountType.Security):
+                {
+                    double total = 0;
+                    foreach (ISecurity desired in portfolio.Funds)
+                    {
+                        if (desired.Any())
+                        {
+                            total += portfolio.RecentChange(elementType, desired.Names);
+                        }
+                    }
+
+                    return total;
+                }
+                case AccountType.BankAccount:
+                {
+                    double total = 0.0;
+                    foreach (ICashAccount cashAccount in portfolio.BankAccounts)
+                    {
+                        total += portfolio.RecentChange(elementType, cashAccount.Names);
+                    }
+
+                    return total;
+                }
+                default:
+                {
+                    return 0.0;
                 }
             }
-
-            return total;
         }
 
         /// <summary>

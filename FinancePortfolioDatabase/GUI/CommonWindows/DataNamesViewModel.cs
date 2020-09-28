@@ -119,7 +119,7 @@ namespace FinanceCommonViewModels
             if (fPreEditSelectedName != null)
             {
                 NameData names = fPreEditSelectedName;
-                UpdateDataCallback(async programPortfolio => await PortfolioDataUpdater.DownloadOfType(TypeOfAccount, programPortfolio, names, ReportLogger).ConfigureAwait(false));
+                UpdateDataCallback(async programPortfolio => await PortfolioDataUpdater.Download(TypeOfAccount, programPortfolio, names, ReportLogger).ConfigureAwait(false));
             }
         }
 
