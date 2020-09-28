@@ -11,6 +11,21 @@
         All,
 
         /// <summary>
+        /// A company comprising of a collection of securities
+        /// </summary>
+        SecurityCompany,
+
+        /// <summary>
+        /// A company comprising of a collection of bank accounts.
+        /// </summary>
+        BankAccountCompany,
+
+        /// <summary>
+        /// A company that comprises of securities or bank accounts, or both.
+        /// </summary>
+        Company,
+
+        /// <summary>
         /// The security type.
         /// </summary>
         Security,
