@@ -183,7 +183,7 @@ namespace FinancialStructures.StatisticStructures
                 securityStats.CAR6M = (100 * portfolio.IRRCompany(company, date.AddMonths(-6), date)).Truncate();
                 securityStats.CAR1Y = (100 * portfolio.IRRCompany(company, date.AddMonths(-12), date)).Truncate();
                 securityStats.CAR5Y = (100 * portfolio.IRRCompany(company, date.AddMonths(-60), date)).Truncate();
-                securityStats.CARTotal = (100 * portfolio.IRRCompanyTotal(company)).Truncate();
+                securityStats.CARTotal = (100 * portfolio.IRRCompany(company)).Truncate();
             }
             else
             {

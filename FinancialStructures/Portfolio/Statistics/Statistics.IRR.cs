@@ -94,7 +94,7 @@ namespace FinancialStructures.Database.Statistics
         /// <summary>
         /// Gives total return of all securities in the portfolio with given company
         /// </summary>
-        public static double IRRCompanyTotal(this IPortfolio portfolio, string company)
+        public static double IRRCompany(this IPortfolio portfolio, string company)
         {
             DateTime earlierTime = DateTime.Today;
             DateTime laterTime = DateTime.Today;
