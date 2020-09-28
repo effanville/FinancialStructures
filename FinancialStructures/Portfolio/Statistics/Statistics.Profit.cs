@@ -9,7 +9,7 @@ namespace FinancialStructures.Database.Statistics
         /// <summary>
         /// returns the total profit in the portfolio.
         /// </summary>
-        public static double TotalProfit(this IPortfolio portfolio, AccountType elementType)
+        public static double TotalProfit(this IPortfolio portfolio, AccountType elementType, TwoName names = null)
         {
             double total = 0;
             switch (elementType)
@@ -57,6 +57,21 @@ namespace FinancialStructures.Database.Statistics
                         }
                     }
                     break;
+                }
+                case AccountType.Sector:
+                {
+                    foreach (ISecurity security in portfolio.SectorSecurities(names.Name))
+                    {
+                        if (security.Any())
+                        {
+                            total += security.LatestValue().Value - security.TotalInvestment();
+                        }
+                    }
+                    break;
+                }
+                case AccountType.All:
+                {
+                    return portfolio.TotalProfit(AccountType.Security) + portfolio.TotalProfit(AccountType.BankAccount);
                 }
                 default:
                     break;
@@ -132,20 +147,6 @@ namespace FinancialStructures.Database.Statistics
                 {
                     ICurrency currency = portfolio.Currency(AccountType.Security, security);
                     value += security.LatestValue(currency).Value - security.TotalInvestment(currency);
-                }
-            }
-
-            return value;
-        }
-
-        public static double SectorProfit(this IPortfolio portfolio, string sectorName)
-        {
-            double value = 0;
-            foreach (ISecurity security in portfolio.SectorSecurities(sectorName))
-            {
-                if (security.Any())
-                {
-                    value += security.LatestValue().Value - security.TotalInvestment();
                 }
             }
 

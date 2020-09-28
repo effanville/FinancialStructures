@@ -167,7 +167,7 @@ namespace FinancialStructures.StatisticStructures
                 sectorStats.LatestVal = portfolio.Value(AccountType.Sector, new TwoName(name), date).Truncate();
                 sectorStats.FundsFraction = portfolio.Fraction(AccountType.Sector, new TwoName(name), date).Truncate(4);
                 sectorStats.Number = portfolio.SectorSecurities(name).Count;
-                sectorStats.Profit = portfolio.SectorProfit(name).Truncate();
+                sectorStats.Profit = portfolio.Profit(AccountType.Sector, sectorStats.Names).Truncate();
                 sectorStats.CAR3M = (100 * portfolio.IRRSector(name, date.AddMonths(-3), date)).Truncate();
                 sectorStats.CAR6M = (100 * portfolio.IRRSector(name, date.AddMonths(-6), date)).Truncate();
                 sectorStats.CAR1Y = (100 * portfolio.IRRSector(name, date.AddMonths(-12), date)).Truncate();

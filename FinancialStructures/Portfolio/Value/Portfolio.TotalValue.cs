@@ -46,7 +46,7 @@ namespace FinancialStructures.Database
                     foreach (ICashAccount acc in BankAccounts)
                     {
                         ICurrency currency = Currency(elementType, acc);
-                        sum += acc.Value(date, currency).Value;
+                        sum += acc.NearestEarlierValuation(date, currency).Value;
                     }
 
                     return sum;

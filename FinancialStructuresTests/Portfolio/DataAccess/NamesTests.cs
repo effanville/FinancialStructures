@@ -19,7 +19,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
                     _ = constructor.WithSecurityFromName(company3, name3);
                     return constructor;
                 }
-                case AccountType.Sector:
+                case AccountType.Benchmark:
                 {
                     var constructor = new DatabaseConstructor();
                     _ = constructor.WithSectorFromName(company1, name1);

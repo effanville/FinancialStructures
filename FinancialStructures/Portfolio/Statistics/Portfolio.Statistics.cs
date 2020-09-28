@@ -6,61 +6,11 @@ using FinancialStructures.StatisticStructures;
 
 namespace FinancialStructures.Database.Statistics
 {
+    /// <summary>
+    /// Holds static extension classes generating statistics for the portfolio.
+    /// </summary>
     public static partial class PortfolioStatisticGenerators
     {
-        /// <summary>
-        /// Returns the earliest date held in the portfolio.
-        /// </summary>
-        public static DateTime FirstValueDate(this IPortfolio portfolio, AccountType elementType, string sectorName = null)
-        {
-            DateTime output = DateTime.Today;
-            switch (elementType)
-            {
-                case AccountType.Security:
-                {
-                    foreach (ISecurity sec in portfolio.Funds)
-                    {
-                        if (sec.Any())
-                        {
-                            DateTime securityEarliest = sec.FirstValue().Day;
-                            if (securityEarliest < output)
-                            {
-                                output = securityEarliest;
-                            }
-                        }
-                    }
-                    break;
-                }
-                case AccountType.Sector:
-                {
-                    foreach (ISecurity sec in portfolio.SectorSecurities(sectorName))
-                    {
-                        if (sec.FirstValue().Day < output)
-                        {
-                            output = sec.FirstValue().Day;
-                        }
-                    }
-                    break;
-                }
-            }
-
-            return output;
-        }
-
-        public static DateTime CompanyFirstDate(this IPortfolio portfolio, string company)
-        {
-            DateTime output = DateTime.Today;
-            foreach (ISecurity sec in portfolio.CompanySecurities(company))
-            {
-                if (sec.FirstValue().Day < output)
-                {
-                    output = sec.FirstValue().Day;
-                }
-            }
-
-            return output;
-        }
-
         public static List<DatabaseStatistics> GenerateDatabaseStatistics(this IPortfolio portfolio)
         {
             List<DatabaseStatistics> names = new List<DatabaseStatistics>();
