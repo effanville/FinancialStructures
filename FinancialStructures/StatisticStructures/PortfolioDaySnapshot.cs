@@ -171,7 +171,7 @@ namespace FinancialStructures.StatisticStructures
                 }
                 else
                 {
-                    sectorCar = new DayValue_Named(sectorName, null, date, portfolio.IRRSector(sectorName, portfolio.FirstValueDate(AccountType.Sector, sectorName), date).Truncate());
+                    sectorCar = new DayValue_Named(sectorName, null, date, portfolio.IRRTotal(AccountType.Sector, portfolio.FirstValueDate(AccountType.Sector, sectorName), date, sectorName).Truncate());
                 }
                 SectorCar.Add(sectorCar);
             }

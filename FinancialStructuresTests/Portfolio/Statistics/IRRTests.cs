@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using FinancialStructures.Database.Statistics;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 
@@ -23,7 +24,7 @@ namespace FinancialStructuresTests.Portfolio.Statistics
             constructor.WithSecondaryBankAccount();
             constructor.WithSecondarySecurity();
             var portfolio = constructor.database;
-            Assert.AreEqual(expected, portfolio.IRRPortfolio(earlier, later));
+            Assert.AreEqual(expected, portfolio.IRRTotal(AccountType.All, earlier, later));
         }
     }
 }
