@@ -25,7 +25,7 @@ namespace FinanceViewModels.StatsViewModels
         public override void GenerateStatistics(bool displayValueFunds)
         {
             DisplayValueFunds = displayValueFunds;
-            SecuritiesInvestments = fPortfolio.AllSecuritiesInvestments();
+            SecuritiesInvestments = fPortfolio.TotalInvestments(AccountType.Security);
         }
         public SecurityInvestmentViewModel(IPortfolio portfolio, bool displayValueFunds)
             : base(portfolio, displayValueFunds)

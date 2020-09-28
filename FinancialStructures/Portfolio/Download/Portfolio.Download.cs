@@ -14,17 +14,6 @@ namespace FinancialStructures.Database.Download
     public static class PortfolioDataUpdater
     {
         /// <summary>
-        /// Generic update routine to update all objects held in the portfolio.
-        /// </summary>
-        /// <param name="portfolio">The database to update all</param>
-        /// <param name="reportLogger">Optional report callback</param>
-        /// <returns></returns>
-        public static async Task Downloader(IPortfolio portfolio, IReportLogger reportLogger = null)
-        {
-            await DownloadPortfolioLatest(portfolio, reportLogger).ConfigureAwait(false);
-        }
-
-        /// <summary>
         /// Updates specific object.
         /// </summary>
         /// <param name="accountType">The type of the object to update</param>
@@ -32,7 +21,7 @@ namespace FinancialStructures.Database.Download
         /// <param name="names">The name of the object.</param>
         /// <param name="reportLogger">An optional update logger.</param>
         /// <returns></returns>
-        public static async Task DownloadOfType(AccountType accountType, IPortfolio portfolio, TwoName names, IReportLogger reportLogger = null)
+        public static async Task Download(AccountType accountType, IPortfolio portfolio, TwoName names, IReportLogger reportLogger = null)
         {
             switch (accountType)
             {
@@ -48,6 +37,11 @@ namespace FinancialStructures.Database.Download
                 {
                     _ = portfolio.TryGetAccount(accountType, names, out ISingleValueDataList acc);
                     await DownloadLatestValue(acc.Names, value => acc.TryAddOrEditData(DateTime.Today, DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                    break;
+                }
+                case (AccountType.All):
+                {
+                    await DownloadPortfolioLatest(portfolio, reportLogger);
                     break;
                 }
             }
