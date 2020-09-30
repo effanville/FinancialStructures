@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Statistics
 {
@@ -26,7 +27,7 @@ namespace FinancialStructures.Database.Statistics
             namesAndCompanies.Sort();
             if (namesAndCompanies.Count > 1)
             {
-                namesAndCompanies.Add(new DayValue_Named(company, "Totals", DateTime.Today, portfolio.CompanyValue(Account.BankAccount, company, DateTime.Today)));
+                namesAndCompanies.Add(new DayValue_Named(company, "Totals", DateTime.Today, portfolio.TotalValue(Totals.BankAccountCompany, DateTime.Today, new TwoName(company))));
             }
             return namesAndCompanies;
         }
@@ -41,7 +42,7 @@ namespace FinancialStructures.Database.Statistics
             {
                 foreach (string company in portfolio.Companies(Account.BankAccount))
                 {
-                    namesAndCompanies.Add(new DayValue_Named(company, "Totals", DateTime.Today, portfolio.CompanyValue(Account.BankAccount, company, DateTime.Today)));
+                    namesAndCompanies.Add(new DayValue_Named(company, "Totals", DateTime.Today, portfolio.TotalValue(Totals.BankAccountCompany, DateTime.Today, new TwoName(company))));
                 }
             }
 
@@ -73,7 +74,7 @@ namespace FinancialStructures.Database.Statistics
 
         public static DayValue_Named GenerateBankAccountTotalStatistics(this IPortfolio portfolio)
         {
-            return new DayValue_Named("", "Totals", DateTime.Today, portfolio.TotalValue(Account.BankAccount));
+            return new DayValue_Named("", "Totals", DateTime.Today, portfolio.TotalValue(Totals.BankAccount));
         }
     }
 }

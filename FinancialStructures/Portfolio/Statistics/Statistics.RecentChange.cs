@@ -7,57 +7,56 @@ namespace FinancialStructures.Database.Statistics
 {
     public static partial class Statistics
     {
-        public static double CompanyRecentChange(this IPortfolio portfolio, string company)
-        {
-            double total = 0;
-
-            List<ISecurity> securities = portfolio.CompanySecurities(company);
-            if (securities.Count == 0)
-            {
-                return double.NaN;
-            }
-
-            foreach (ISecurity desired in securities)
-            {
-                if (desired.Any())
-                {
-                    total += portfolio.RecentChange(Account.Security, desired.Names);
-                }
-            }
-
-            return total;
-        }
-
         /// <summary>
         /// returns the total profit in the portfolio.
         /// </summary>
-        public static double RecentChange(this IPortfolio portfolio, Account elementType = Account.Security)
+        public static double RecentChange(this IPortfolio portfolio, Totals elementType = Totals.Security, string company = null)
         {
             switch (elementType)
             {
-                case Account.All:
+                case Totals.All:
                 {
-                    return portfolio.RecentChange(Account.Security) + portfolio.RecentChange(Account.BankAccount);
+                    return portfolio.RecentChange(Totals.Security) + portfolio.RecentChange(Totals.BankAccount);
                 }
-                case (Account.Security):
+                case (Totals.Security):
                 {
                     double total = 0;
                     foreach (ISecurity desired in portfolio.Funds)
                     {
                         if (desired.Any())
                         {
-                            total += portfolio.RecentChange(elementType, desired.Names);
+                            total += portfolio.RecentChange(AccountToTotalsConverter.ConvertTotalToAccount(elementType), desired.Names);
                         }
                     }
 
                     return total;
                 }
-                case Account.BankAccount:
+                case (Totals.SecurityCompany):
+                {
+                    double total = 0;
+
+                    List<ISecurity> securities = portfolio.CompanySecurities(company);
+                    if (securities.Count == 0)
+                    {
+                        return double.NaN;
+                    }
+
+                    foreach (ISecurity desired in securities)
+                    {
+                        if (desired.Any())
+                        {
+                            total += portfolio.RecentChange(AccountToTotalsConverter.ConvertTotalToAccount(elementType), desired.Names);
+                        }
+                    }
+
+                    return total;
+                }
+                case Totals.BankAccount:
                 {
                     double total = 0.0;
                     foreach (ICashAccount cashAccount in portfolio.BankAccounts)
                     {
-                        total += portfolio.RecentChange(elementType, cashAccount.Names);
+                        total += portfolio.RecentChange(AccountToTotalsConverter.ConvertTotalToAccount(elementType), cashAccount.Names);
                     }
 
                     return total;

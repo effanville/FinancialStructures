@@ -62,7 +62,7 @@ namespace FinancialStructures.Tests.Database
 
             var portfolio = constructor.database;
 
-            bool exists = portfolio.Exists(Account.Sector, new TwoName("Man", name));
+            bool exists = portfolio.Exists(Account.Benchmark, new TwoName("Man", name));
 
             Assert.AreEqual(false, exists);
         }

@@ -306,7 +306,7 @@ namespace FinancialStructures.FinanceInterfaces
         /// </summary>
         /// <param name="elementType">The type to find the total of.</param>
         /// <returns>The total value held on today.</returns>
-        double TotalValue(Account elementType);
+        double TotalValue(Totals elementType, TwoName names = null);
 
         /// <summary>
         /// Total value of all accounts of type specified on date given.
@@ -314,24 +314,14 @@ namespace FinancialStructures.FinanceInterfaces
         /// <param name="elementType">The type to find the total of.</param>
         /// <param name="date">The date to find the total on.</param>
         /// <returns>The total value held.</returns>
-        double TotalValue(Account elementType, DateTime date);
+        double TotalValue(Totals elementType, DateTime date, TwoName names = null);
 
         /// <summary>
         /// Total value of all accounts of all types on date given.
         /// </summary>
-        /// <param name="accountType">The type to find the total of.</param>
         /// <param name="date">The date to find the total on.</param>
         /// <returns>The total value held.</returns>
-        double TotalValue(DateTime date);
-
-        /// <summary>
-        /// Calculates the value held in the company.
-        /// </summary>
-        /// <param name="elementType">The type of account to find.</param>
-        /// <param name="company">The company name to search for.</param>
-        /// <param name="date">The date to calculate value on.</param>
-        /// <returns>The value held in the company.</returns>
-        double CompanyValue(Account elementType, string company, DateTime date);
+        double TotalValue(DateTime date, TwoName names = null);
 
         /// <summary>
         /// returns the currency associated to the account.

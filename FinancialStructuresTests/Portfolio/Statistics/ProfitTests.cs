@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using FinancialStructures.Database.Statistics;
+﻿using FinancialStructures.Database.Statistics;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
@@ -9,9 +6,8 @@ using NUnit.Framework;
 namespace FinancialStructuresTests.Portfolio.Statistics
 {
     [TestFixture]
-    class ProfitTests
+    public sealed class ProfitTests
     {
-
         [Test]
         public void TotalProfitTests()
         {
@@ -21,7 +17,7 @@ namespace FinancialStructuresTests.Portfolio.Statistics
             constructor.WithSecondaryBankAccount();
             constructor.WithSecondarySecurity();
             var portfolio = constructor.database;
-            Assert.AreEqual(25983.299999999999, portfolio.TotalProfit(Account.All));
+            Assert.AreEqual(25983.299999999999, portfolio.TotalProfit(Totals.All));
         }
     }
 }

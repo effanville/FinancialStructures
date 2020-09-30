@@ -108,8 +108,8 @@ namespace FinancialStructures.StatsMakers
 
         private void GenerateStatistics(IPortfolio portfolio)
         {
-            Totals.Add(new DayValue_Named("Securities", string.Empty, DateTime.Today, portfolio.TotalValue(Account.Security).Truncate()));
-            Totals.Add(new DayValue_Named("Bank Accounts", string.Empty, DateTime.Today, portfolio.TotalValue(Account.BankAccount).Truncate()));
+            Totals.Add(new DayValue_Named("Securities", string.Empty, DateTime.Today, portfolio.TotalValue(FinanceInterfaces.Totals.Security).Truncate()));
+            Totals.Add(new DayValue_Named("Bank Accounts", string.Empty, DateTime.Today, portfolio.TotalValue(FinanceInterfaces.Totals.BankAccount).Truncate()));
             Totals.Add(new DayValue_Named("Portfolio", string.Empty, DateTime.Today, portfolio.TotalValue(DateTime.Today).Truncate()));
 
             IndividualSecurityStats = portfolio.GenerateFundsStatistics();

@@ -9,56 +9,71 @@ namespace FinancialStructures.Database.Statistics
         /// <summary>
         /// returns the total profit in the portfolio.
         /// </summary>
-        public static double TotalProfit(this IPortfolio portfolio, Account elementType, TwoName names = null)
+        public static double TotalProfit(this IPortfolio portfolio, Totals elementType, TwoName names = null)
         {
             double total = 0;
             switch (elementType)
             {
-                case (Account.Security):
+                case (Totals.Security):
                 {
                     foreach (ISecurity security in portfolio.Funds)
                     {
                         if (security.Any())
                         {
-                            total += portfolio.Profit(elementType, security.Names);
+                            total += portfolio.Profit(AccountToTotalsConverter.ConvertTotalToAccount(elementType), security.Names);
                         }
                     }
                     break;
                 }
-                case (Account.BankAccount):
+                case (Totals.SecurityCompany):
+                {
+                    List<ISecurity> securities = portfolio.CompanySecurities(names.Company);
+                    double value = 0;
+                    foreach (ISecurity security in securities)
+                    {
+                        if (security.Any())
+                        {
+                            ICurrency currency = portfolio.Currency(Account.Security, security);
+                            value += security.LatestValue(currency).Value - security.TotalInvestment(currency);
+                        }
+                    }
+
+                    return value;
+                }
+                case (Totals.BankAccount):
                 {
                     foreach (var account in portfolio.BankAccounts)
                     {
                         if (account.Any())
                         {
-                            total += portfolio.Profit(elementType, account.Names);
+                            total += portfolio.Profit(AccountToTotalsConverter.ConvertTotalToAccount(elementType), account.Names);
                         }
                     }
                     break;
                 }
-                case (Account.Benchmark):
+                case (Totals.Benchmark):
                 {
                     foreach (var benchmark in portfolio.BenchMarks)
                     {
                         if (benchmark.Any())
                         {
-                            total += portfolio.Profit(elementType, benchmark.Names);
+                            total += portfolio.Profit(AccountToTotalsConverter.ConvertTotalToAccount(elementType), benchmark.Names);
                         }
                     }
                     break;
                 }
-                case (Account.Currency):
+                case (Totals.Currency):
                 {
                     foreach (var currency in portfolio.Currencies)
                     {
                         if (currency.Any())
                         {
-                            total += portfolio.Profit(elementType, currency.Names);
+                            total += portfolio.Profit(AccountToTotalsConverter.ConvertTotalToAccount(elementType), currency.Names);
                         }
                     }
                     break;
                 }
-                case Account.Sector:
+                case Totals.Sector:
                 {
                     foreach (ISecurity security in portfolio.SectorSecurities(names.Name))
                     {
@@ -69,9 +84,9 @@ namespace FinancialStructures.Database.Statistics
                     }
                     break;
                 }
-                case Account.All:
+                case Totals.All:
                 {
-                    return portfolio.TotalProfit(Account.Security) + portfolio.TotalProfit(Account.BankAccount);
+                    return portfolio.TotalProfit(Totals.Security) + portfolio.TotalProfit(Totals.BankAccount);
                 }
                 default:
                     break;
@@ -132,25 +147,6 @@ namespace FinancialStructures.Database.Statistics
                 default:
                     return double.NaN;
             }
-        }
-
-        /// <summary>
-        /// returns the profit in the company.
-        /// </summary>
-        public static double CompanyProfit(this IPortfolio portfolio, string company)
-        {
-            List<ISecurity> securities = portfolio.CompanySecurities(company);
-            double value = 0;
-            foreach (ISecurity security in securities)
-            {
-                if (security.Any())
-                {
-                    ICurrency currency = portfolio.Currency(Account.Security, security);
-                    value += security.LatestValue(currency).Value - security.TotalInvestment(currency);
-                }
-            }
-
-            return value;
         }
     }
 }

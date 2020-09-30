@@ -7,19 +7,12 @@ namespace FinancialStructures.Database.Statistics
     public static partial class Statistics
     {
         /// <summary>
-        /// The fraction of money held in the company out of the portfolio.
-        /// </summary>
-        public static double CompanyFraction(this IPortfolio portfolio, Account elementType, string company, DateTime date)
-        {
-            return portfolio.CompanyValue(elementType, company, date) / portfolio.TotalValue(elementType, date);
-        }
-
-        /// <summary>
         /// returns the fraction a held in the account has out of its company.
         /// </summary>
-        public static double AccountInCompanyFraction(this IPortfolio portfolio, Account elementType, TwoName names, DateTime date)
+        [Obsolete("This function is currently broken. Requires fixing.")]
+        public static double AccountInCompanyFraction(this IPortfolio portfolio, Totals elementType, TwoName names, DateTime date)
         {
-            double companyFraction = portfolio.CompanyFraction(elementType, names.Company, date);
+            double companyFraction = portfolio.Fraction(elementType, names, date);
             if (companyFraction.Equals(0.0))
             {
                 return 0.0;
@@ -30,24 +23,24 @@ namespace FinancialStructures.Database.Statistics
         /// <summary>
         /// Returns the fraction of investments in the account out of the portfolio.
         /// </summary>
-        public static double Fraction(this IPortfolio portfolio, Account elementType, TwoName names, DateTime date)
+        public static double Fraction(this IPortfolio portfolio, Totals elementType, TwoName names, DateTime date)
         {
             switch (elementType)
             {
-                case Account.Security:
+                case Totals.Security:
                 {
                     if (portfolio.TryGetSecurity(names, out ISecurity desired))
                     {
                         if (desired.Any())
                         {
                             ICurrency currency = portfolio.Currency(Account.Security, desired);
-                            return desired.Value(date, currency).Value / portfolio.TotalValue(Account.Security, date);
+                            return desired.Value(date, currency).Value / portfolio.TotalValue(Totals.Security, date);
                         }
                     }
 
                     return double.NaN;
                 }
-                case Account.BankAccount:
+                case Totals.BankAccount:
                 {
                     if (portfolio.TryGetAccount(Account.BankAccount, names, out ISingleValueDataList desired))
                     {
@@ -56,16 +49,22 @@ namespace FinancialStructures.Database.Statistics
                             if (cashAcc.Any())
                             {
                                 ICurrency currency = portfolio.Currency(Account.BankAccount, cashAcc);
-                                return cashAcc.Value(date, currency).Value / portfolio.TotalValue(Account.BankAccount, date);
+                                return cashAcc.Value(date, currency).Value / portfolio.TotalValue(Totals.BankAccount, date);
                             }
                         }
                     }
 
                     return double.NaN;
                 }
-                case Account.Sector:
+                case Totals.Sector:
                 {
-                    return portfolio.Value(Account.Sector, names, date) / portfolio.TotalValue(date);
+                    return portfolio.TotalValue(Totals.Sector, date, names) / portfolio.TotalValue(date);
+                }
+                case Totals.SecurityCompany:
+                case Totals.BankAccountCompany:
+                case Totals.Company:
+                {
+                    return portfolio.TotalValue(elementType, date, names) / portfolio.TotalValue(Totals.All, date);
                 }
                 default:
                 {

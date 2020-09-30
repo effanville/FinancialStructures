@@ -1,64 +1,86 @@
 ﻿using System;
+using System.Collections.Generic;
 using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database
 {
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public double TotalValue(DateTime date)
+        public double TotalValue(DateTime date, TwoName names)
         {
-            return TotalValue(Account.All, DateTime.Today);
+            return TotalValue(Totals.All, date, names);
         }
 
         /// <inheritdoc/>
-        public double TotalValue(Account elementType)
+        public double TotalValue(Totals elementType, TwoName names = null)
         {
-            return TotalValue(elementType, DateTime.Today);
+            return TotalValue(elementType, DateTime.Today, names);
         }
 
         /// <inheritdoc/>
-        public double TotalValue(Account elementType, DateTime date)
+        public double TotalValue(Totals elementType, DateTime date, TwoName names = null)
         {
             switch (elementType)
             {
-                case (Account.Security):
+                case (Totals.Security):
                 {
                     double total = 0;
                     foreach (ISecurity sec in Funds)
                     {
                         if (sec.Any())
                         {
-                            ICurrency currency = Currency(elementType, sec);
+                            ICurrency currency = Currency(Account.Security, sec);
                             total += sec.Value(date, currency).Value;
                         }
                     }
 
                     return total;
                 }
-                case (Account.Currency):
+                case (Totals.Currency):
                 {
-                    return 0.0;
+                    double total = 0;
+                    foreach (ISecurity sec in Funds)
+                    {
+                        if (sec.Any() && sec.Currency == names.Name)
+                        {
+                            ICurrency currency = Currency(Account.Security, sec);
+                            total += sec.Value(date, currency).Value;
+                        }
+                    }
+                    foreach (ICashAccount acc in BankAccounts)
+                    {
+                        if (acc.Any() && acc.Currency == names.Name)
+                        {
+                            ICurrency currency = Currency(Account.BankAccount, acc);
+                            total += acc.NearestEarlierValuation(date, currency).Value;
+                        }
+                    }
+                    return total;
                 }
-                case (Account.BankAccount):
+                case (Totals.BankAccount):
                 {
                     double sum = 0;
                     foreach (ICashAccount acc in BankAccounts)
                     {
-                        ICurrency currency = Currency(elementType, acc);
-                        sum += acc.NearestEarlierValuation(date, currency).Value;
+                        if (acc.Any())
+                        {
+                            ICurrency currency = Currency(Account.BankAccount, acc);
+                            sum += acc.NearestEarlierValuation(date, currency).Value;
+                        }
                     }
 
                     return sum;
                 }
-                case (Account.Sector):
+                case (Totals.Sector):
                 {
                     double sum = 0;
                     if (Funds != null)
                     {
                         foreach (ISecurity fund in Funds)
                         {
-                            if (fund.IsSectorLinked(name.Company))
+                            if (fund.IsSectorLinked(names?.Company))
                             {
                                 sum += fund.NearestEarlierValuation(date).Value;
                             }
@@ -67,14 +89,49 @@ namespace FinancialStructures.Database
 
                     return sum;
                 }
-                case (Account.Benchmark):
+                case (Totals.All):
                 {
-                    break;
+                    return TotalValue(Totals.Security, date) + TotalValue(Totals.BankAccount, date);
                 }
-                case (Account.All):
+                case Totals.SecurityCompany:
                 {
-                    return TotalValue(Account.Security, date) + TotalValue(Account.BankAccount, date);
+                    List<ISecurity> securities = CompanySecurities(names.Company);
+                    double value = 0;
+                    foreach (ISecurity security in securities)
+                    {
+                        if (security.Any())
+                        {
+                            ICurrency currency = Currency(Account.Security, security);
+                            value += security.Value(date, currency).Value;
+                        }
+                    }
+
+                    return value;
                 }
+                case Totals.BankAccountCompany:
+                {
+                    List<ICashAccount> bankAccounts = CompanyBankAccounts(names.Company);
+                    if (bankAccounts.Count == 0)
+                    {
+                        return double.NaN;
+                    }
+                    double value = 0;
+                    foreach (ICashAccount account in bankAccounts)
+                    {
+                        if (account != null && account.Any())
+                        {
+                            ICurrency currency = Currency(Account.BankAccount, account);
+                            value += account.NearestEarlierValuation(date, currency).Value;
+                        }
+                    }
+
+                    return value;
+                }
+                case Totals.Company:
+                {
+                    return TotalValue(Totals.BankAccount, date, names) + TotalValue(Totals.Security, date, names);
+                }
+                case (Totals.Benchmark):
                 default:
                     break;
             }

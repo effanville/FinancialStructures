@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Tests.TestDatabaseConstructor;
@@ -8,9 +6,8 @@ using NUnit.Framework;
 
 namespace FinancialStructuresTests.Portfolio.Statistics
 {
-    class IRRTests
+    public sealed class IRRTests
     {
-
         [TestCase("2010/1/1", "2019/1/1", 0.79150390625)]
         [TestCase("2011/1/1", "2019/1/1", 0.41650390625)]
         [TestCase("2012/1/1", "2019/1/1", 0.42822265625)]
@@ -24,7 +21,7 @@ namespace FinancialStructuresTests.Portfolio.Statistics
             constructor.WithSecondaryBankAccount();
             constructor.WithSecondarySecurity();
             var portfolio = constructor.database;
-            Assert.AreEqual(expected, portfolio.IRRTotal(Account.All, earlier, later));
+            Assert.AreEqual(expected, portfolio.IRRTotal(Totals.All, earlier, later));
         }
     }
 }

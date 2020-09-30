@@ -14,7 +14,7 @@ namespace FinancialStructures.Tests.Database.Value
             var constructor = new DatabaseConstructor();
             constructor.WithDefaultFromType(accountType);
             var portfolio = constructor.database;
-            Assert.AreEqual(expectedValue, portfolio.TotalValue(accountType));
+            Assert.AreEqual(expectedValue, portfolio.TotalValue(AccountToTotalsConverter.ConvertAccountToTotal(accountType)));
         }
 
         [TestCase(Account.Security, 26084.099999999999)]
@@ -25,7 +25,7 @@ namespace FinancialStructures.Tests.Database.Value
             constructor.WithDefaultFromType(accountType);
             constructor.WithSecondaryFromType(accountType);
             var portfolio = constructor.database;
-            Assert.AreEqual(expectedValue, portfolio.TotalValue(accountType));
+            Assert.AreEqual(expectedValue, portfolio.TotalValue(AccountToTotalsConverter.ConvertAccountToTotal(accountType)));
         }
 
 
@@ -44,7 +44,7 @@ namespace FinancialStructures.Tests.Database.Value
             constructor.WithDefaultSecurity();
             constructor.WithSecondarySecurity();
             var portfolio = constructor.database;
-            Assert.AreEqual(expectedValue, portfolio.TotalValue(Account.Security, date));
+            Assert.AreEqual(expectedValue, portfolio.TotalValue(Totals.Security, date));
         }
 
         [TestCase("2009/1/2", 0.0)]
@@ -61,7 +61,7 @@ namespace FinancialStructures.Tests.Database.Value
             var constructor = new DatabaseConstructor();
             constructor.WithDefaultSecurity();
             var portfolio = constructor.database;
-            Assert.AreEqual(portfolio.Value(Account.Security, constructor.DefaultNameQuery(Account.Security), date), portfolio.TotalValue(Account.Security, date));
+            Assert.AreEqual(portfolio.Value(Account.Security, constructor.DefaultNameQuery(Account.Security), date), portfolio.TotalValue(Totals.Security, date));
         }
 
         [TestCase("2009/1/2", 0.0)]
@@ -79,7 +79,7 @@ namespace FinancialStructures.Tests.Database.Value
             constructor.WithDefaultBankAccount();
             constructor.WithSecondaryBankAccount();
             var portfolio = constructor.database;
-            Assert.AreEqual(expectedValue, portfolio.TotalValue(Account.BankAccount, date));
+            Assert.AreEqual(expectedValue, portfolio.TotalValue(Totals.BankAccount, date));
         }
 
         //Value and TotalValue use different methods to create the value. TotalValue for bank accounts uses
@@ -98,7 +98,7 @@ namespace FinancialStructures.Tests.Database.Value
             var constructor = new DatabaseConstructor();
             constructor.WithDefaultBankAccount();
             var portfolio = constructor.database;
-            Assert.AreEqual(portfolio.TotalValue(Account.BankAccount, date), portfolio.Value(Account.BankAccount, constructor.DefaultNameQuery(Account.BankAccount), date));
+            Assert.AreEqual(portfolio.TotalValue(Totals.BankAccount, date), portfolio.Value(Account.BankAccount, constructor.DefaultNameQuery(Account.BankAccount), date));
         }
 
         [TestCase("2010/1/1", 1400)]
@@ -114,7 +114,7 @@ namespace FinancialStructures.Tests.Database.Value
             constructor.WithSecondaryBankAccount();
             constructor.WithSecondarySecurity();
             var portfolio = constructor.database;
-            Assert.AreEqual(expected, portfolio.TotalValue(Account.All, date));
+            Assert.AreEqual(expected, portfolio.TotalValue(Totals.All, date));
         }
     }
 }

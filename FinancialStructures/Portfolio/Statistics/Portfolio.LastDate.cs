@@ -6,13 +6,13 @@ namespace FinancialStructures.Database.Statistics
     public static partial class PortfolioStatisticGenerators
     {
         /// <summary>
-        /// Returns the earliest date held in the portfolio.
+        /// Returns the latest date held in the portfolio.
         /// </summary>
         /// <param name="portfolio">The database to query</param>
         /// <param name="elementType">The type of element to search for. All searches for Bank accounts and securities.</param>
         /// <param name="name">An ancillary name to use in the case of Sectors</param>
         /// <returns></returns>
-        public static DateTime FirstValueDate(this IPortfolio portfolio, Totals elementType, string name = null)
+        public static DateTime LatestDate(this IPortfolio portfolio, Totals elementType, string name = null)
         {
             DateTime output = DateTime.Today;
             switch (elementType)
@@ -23,8 +23,8 @@ namespace FinancialStructures.Database.Statistics
                     {
                         if (sec.Any())
                         {
-                            DateTime securityEarliest = sec.FirstValue().Day;
-                            if (securityEarliest < output)
+                            DateTime securityEarliest = sec.LatestValue().Day;
+                            if (securityEarliest > output)
                             {
                                 output = securityEarliest;
                             }
@@ -36,9 +36,9 @@ namespace FinancialStructures.Database.Statistics
                 {
                     foreach (ISecurity sec in portfolio.CompanySecurities(name))
                     {
-                        if (sec.FirstValue().Day < output)
+                        if (sec.LatestValue().Day > output)
                         {
-                            output = sec.FirstValue().Day;
+                            output = sec.LatestValue().Day;
                         }
                     }
 
@@ -48,9 +48,9 @@ namespace FinancialStructures.Database.Statistics
                 {
                     foreach (ISecurity sec in portfolio.SectorSecurities(name))
                     {
-                        if (sec.FirstValue().Day < output)
+                        if (sec.LatestValue().Day > output)
                         {
-                            output = sec.FirstValue().Day;
+                            output = sec.LatestValue().Day;
                         }
                     }
                     break;
@@ -59,9 +59,9 @@ namespace FinancialStructures.Database.Statistics
                 {
                     foreach (ICashAccount cashAccount in portfolio.BankAccounts)
                     {
-                        if (cashAccount.FirstValue().Day < output)
+                        if (cashAccount.LatestValue().Day > output)
                         {
-                            output = cashAccount.FirstValue().Day;
+                            output = cashAccount.LatestValue().Day;
                         }
                     }
 
@@ -71,9 +71,9 @@ namespace FinancialStructures.Database.Statistics
                 {
                     foreach (ICashAccount cashAccount in portfolio.BenchMarks)
                     {
-                        if (cashAccount.FirstValue().Day < output)
+                        if (cashAccount.LatestValue().Day > output)
                         {
-                            output = cashAccount.FirstValue().Day;
+                            output = cashAccount.LatestValue().Day;
                         }
                     }
 
@@ -83,9 +83,9 @@ namespace FinancialStructures.Database.Statistics
                 {
                     foreach (ICashAccount cashAccount in portfolio.Currencies)
                     {
-                        if (cashAccount.FirstValue().Day < output)
+                        if (cashAccount.LatestValue().Day > output)
                         {
-                            output = cashAccount.FirstValue().Day;
+                            output = cashAccount.LatestValue().Day;
                         }
                     }
 
@@ -95,7 +95,7 @@ namespace FinancialStructures.Database.Statistics
                 {
                     var earlySecurity = portfolio.FirstValueDate(Totals.Security);
                     var earlyBank = portfolio.FirstValueDate(Totals.BankAccount);
-                    output = earlySecurity < earlyBank ? earlySecurity : earlyBank;
+                    output = earlySecurity > earlyBank ? earlySecurity : earlyBank;
                     break;
                 }
             }
