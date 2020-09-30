@@ -77,7 +77,7 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null && fOldSelectedValues != null)
             {
-                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(AccountType.Security, fSelectedName, fOldSelectedValues.Date, ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(Account.Security, fSelectedName, fOldSelectedValues.Date, ReportLogger));
             }
         }
 
@@ -214,7 +214,7 @@ namespace FinanceWindowsViewModels
             base.UpdateData(portfolio);
             if (fSelectedName != null)
             {
-                if (!portfolio.Exists(AccountType.Security, fSelectedName))
+                if (!portfolio.Exists(Account.Security, fSelectedName))
                 {
                     removeTab?.Invoke(this);
                     return;

@@ -50,7 +50,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
             generator.WithBankAccountFromNameAndDataPoint(bankCompany, "AccountName", date: new DateTime(2000, 1, 1), value: 53);
             var database = generator.database;
 
-            var data = database.NumberData(AccountType.BankAccount, new NameData(bankCompany, "AccountName"));
+            var data = database.NumberData(Account.BankAccount, new NameData(bankCompany, "AccountName"));
 
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(53, data.Single().Value);
@@ -65,7 +65,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
             generator.WithBankAccountFromNameAndDataPoint(bankCompany, "AccountName", date: new DateTime(2000, 1, 1), value: 53);
             var database = generator.database;
 
-            var data = database.NumberData(AccountType.BankAccount, new NameData(bankCompany, "name"));
+            var data = database.NumberData(Account.BankAccount, new NameData(bankCompany, "name"));
 
             Assert.AreEqual(0, data.Count);
         }
@@ -81,7 +81,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
             generator.WithBankAccountFromNameAndDataPoint(bankCompany, "AccountName", date: new DateTime(2000, 1, 1), value: 53);
             var database = generator.database;
 
-            var data = database.NumberData(AccountType.BankAccount, new NameData(bankCompany, "name"), logging);
+            var data = database.NumberData(Account.BankAccount, new NameData(bankCompany, "name"), logging);
 
             Assert.AreEqual(0, data.Count);
             Assert.AreEqual(1, reports.Count);

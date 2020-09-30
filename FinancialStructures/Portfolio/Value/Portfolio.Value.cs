@@ -7,48 +7,32 @@ namespace FinancialStructures.Database
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public double LatestValue(AccountType elementType, TwoName name)
+        public double LatestValue(Account elementType, TwoName name)
         {
             return Value(elementType, name, DateTime.Today);
         }
 
         /// <inheritdoc/>
-        public double Value(AccountType elementType, TwoName name, DateTime date)
+        public double Value(Account elementType, TwoName name, DateTime date)
         {
             switch (elementType)
             {
-                case (AccountType.Security):
+                case (Account.Security):
                 {
                     if (!TryGetSecurity(name, out ISecurity desired) || !desired.Any())
                     {
                         return double.NaN;
                     }
-                    ICurrency currency = Currency(AccountType.Security, desired);
+                    ICurrency currency = Currency(Account.Security, desired);
                     return desired.Value(date, currency).Value;
                 }
-                case (AccountType.Sector):
-                {
-                    double sum = 0;
-                    if (Funds != null)
-                    {
-                        foreach (ISecurity fund in Funds)
-                        {
-                            if (fund.IsSectorLinked(name.Company))
-                            {
-                                sum += fund.NearestEarlierValuation(date).Value;
-                            }
-                        }
-                    }
-
-                    return sum;
-                }
-                case (AccountType.Currency):
-                case (AccountType.BankAccount):
-                case (AccountType.Benchmark):
+                case (Account.Currency):
+                case (Account.BankAccount):
+                case (Account.Benchmark):
                 {
                     if (!TryGetAccount(elementType, name, out ISingleValueDataList desired))
                     {
-                        if (elementType == AccountType.BankAccount)
+                        if (elementType == Account.BankAccount)
                         {
 
                             return double.NaN;

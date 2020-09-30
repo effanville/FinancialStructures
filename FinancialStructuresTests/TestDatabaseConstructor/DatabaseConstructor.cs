@@ -27,39 +27,39 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
         public readonly double[] DefaultSecurityUnitPrices = new double[] { 100.0, 100.0, 125.2, 90.6, 77.7, 101.1 };
         public readonly double[] DefaultSecurityInvestments = new double[] { 1, 0.0, 0.0, 0.0, 0.0, 0.0 };
 
-        public TwoName DefaultNameQuery(AccountType acctype)
+        public TwoName DefaultNameQuery(Account acctype)
         {
             switch (acctype)
             {
-                case AccountType.Security:
+                case Account.Security:
                     return new TwoName(DefaultSecurityCompany, DefaultSecurityName);
-                case AccountType.BankAccount:
+                case Account.BankAccount:
                     return new TwoName(DefaultBankAccountCompany, DefaultBankAccountName);
                 default:
                     return null;
             }
         }
 
-        public DatabaseConstructor WithDefaultFromType(AccountType acctype)
+        public DatabaseConstructor WithDefaultFromType(Account acctype)
         {
             switch (acctype)
             {
-                case AccountType.Security:
+                case Account.Security:
                     return WithDefaultSecurity();
-                case AccountType.BankAccount:
+                case Account.BankAccount:
                     return WithDefaultBankAccount();
                 default:
                     return null;
             }
         }
 
-        public DatabaseConstructor WithSecondaryFromType(AccountType acctype)
+        public DatabaseConstructor WithSecondaryFromType(Account acctype)
         {
             switch (acctype)
             {
-                case AccountType.Security:
+                case Account.Security:
                     return WithSecondarySecurity();
-                case AccountType.BankAccount:
+                case Account.BankAccount:
                     return WithSecondaryBankAccount();
                 default:
                     return null;
@@ -104,15 +104,15 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             return WithBankAccountFromNameAndData(SecondaryBankAccountCompany, SecondaryBankAccountName, date: SecondaryBankAccountDates, value: SecondaryBankAccountValues);
         }
 
-        public DatabaseConstructor WithAccountFromNameAndData(AccountType accType, string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] dates = null, double[] sharePrice = null, double[] numberUnits = null, double[] investment = null)
+        public DatabaseConstructor WithAccountFromNameAndData(Account accType, string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] dates = null, double[] sharePrice = null, double[] numberUnits = null, double[] investment = null)
         {
             switch (accType)
             {
-                case AccountType.Security:
+                case Account.Security:
                 {
                     return WithSecurityFromNameAndData(company, name, currency, url, sectors, dates, sharePrice, numberUnits, investment);
                 }
-                case AccountType.BankAccount:
+                case Account.BankAccount:
                 {
                     return WithBankAccountFromNameAndData(company, name, currency, url, sectors, dates, numberUnits);
                 }

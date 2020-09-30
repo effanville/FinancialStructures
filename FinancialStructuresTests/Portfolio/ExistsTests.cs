@@ -17,7 +17,7 @@ namespace FinancialStructures.Tests.Database
 
             var portfolio = constructor.database;
 
-            bool exists = portfolio.Exists(AccountType.Security, new TwoName(company, name));
+            bool exists = portfolio.Exists(Account.Security, new TwoName(company, name));
 
             Assert.AreEqual(true, exists);
         }
@@ -32,7 +32,7 @@ namespace FinancialStructures.Tests.Database
 
             var portfolio = constructor.database;
 
-            bool exists = portfolio.Exists(AccountType.Security, new TwoName("Man", name));
+            bool exists = portfolio.Exists(Account.Security, new TwoName("Man", name));
 
             Assert.AreEqual(false, exists);
         }
@@ -47,7 +47,7 @@ namespace FinancialStructures.Tests.Database
 
             var portfolio = constructor.database;
 
-            bool exists = portfolio.Exists(AccountType.Benchmark, new TwoName(company, name));
+            bool exists = portfolio.Exists(Account.Benchmark, new TwoName(company, name));
 
             Assert.AreEqual(true, exists);
         }
@@ -62,7 +62,7 @@ namespace FinancialStructures.Tests.Database
 
             var portfolio = constructor.database;
 
-            bool exists = portfolio.Exists(AccountType.Sector, new TwoName("Man", name));
+            bool exists = portfolio.Exists(Account.Sector, new TwoName("Man", name));
 
             Assert.AreEqual(false, exists);
         }

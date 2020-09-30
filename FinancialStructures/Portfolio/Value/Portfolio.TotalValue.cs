@@ -8,21 +8,21 @@ namespace FinancialStructures.Database
         /// <inheritdoc/>
         public double TotalValue(DateTime date)
         {
-            return TotalValue(AccountType.All, DateTime.Today);
+            return TotalValue(Account.All, DateTime.Today);
         }
 
         /// <inheritdoc/>
-        public double TotalValue(AccountType elementType)
+        public double TotalValue(Account elementType)
         {
             return TotalValue(elementType, DateTime.Today);
         }
 
         /// <inheritdoc/>
-        public double TotalValue(AccountType elementType, DateTime date)
+        public double TotalValue(Account elementType, DateTime date)
         {
             switch (elementType)
             {
-                case (AccountType.Security):
+                case (Account.Security):
                 {
                     double total = 0;
                     foreach (ISecurity sec in Funds)
@@ -36,11 +36,11 @@ namespace FinancialStructures.Database
 
                     return total;
                 }
-                case (AccountType.Currency):
+                case (Account.Currency):
                 {
                     return 0.0;
                 }
-                case (AccountType.BankAccount):
+                case (Account.BankAccount):
                 {
                     double sum = 0;
                     foreach (ICashAccount acc in BankAccounts)
@@ -51,13 +51,29 @@ namespace FinancialStructures.Database
 
                     return sum;
                 }
-                case (AccountType.Benchmark):
+                case (Account.Sector):
+                {
+                    double sum = 0;
+                    if (Funds != null)
+                    {
+                        foreach (ISecurity fund in Funds)
+                        {
+                            if (fund.IsSectorLinked(name.Company))
+                            {
+                                sum += fund.NearestEarlierValuation(date).Value;
+                            }
+                        }
+                    }
+
+                    return sum;
+                }
+                case (Account.Benchmark):
                 {
                     break;
                 }
-                case (AccountType.All):
+                case (Account.All):
                 {
-                    return TotalValue(AccountType.Security, date) + TotalValue(AccountType.BankAccount, date);
+                    return TotalValue(Account.Security, date) + TotalValue(Account.BankAccount, date);
                 }
                 default:
                     break;

@@ -9,12 +9,12 @@ namespace FinancialStructures.Database.Statistics
         /// <summary>
         /// returns the total profit in the portfolio.
         /// </summary>
-        public static double TotalProfit(this IPortfolio portfolio, AccountType elementType, TwoName names = null)
+        public static double TotalProfit(this IPortfolio portfolio, Account elementType, TwoName names = null)
         {
             double total = 0;
             switch (elementType)
             {
-                case (AccountType.Security):
+                case (Account.Security):
                 {
                     foreach (ISecurity security in portfolio.Funds)
                     {
@@ -25,7 +25,7 @@ namespace FinancialStructures.Database.Statistics
                     }
                     break;
                 }
-                case (AccountType.BankAccount):
+                case (Account.BankAccount):
                 {
                     foreach (var account in portfolio.BankAccounts)
                     {
@@ -36,7 +36,7 @@ namespace FinancialStructures.Database.Statistics
                     }
                     break;
                 }
-                case (AccountType.Benchmark):
+                case (Account.Benchmark):
                 {
                     foreach (var benchmark in portfolio.BenchMarks)
                     {
@@ -47,7 +47,7 @@ namespace FinancialStructures.Database.Statistics
                     }
                     break;
                 }
-                case (AccountType.Currency):
+                case (Account.Currency):
                 {
                     foreach (var currency in portfolio.Currencies)
                     {
@@ -58,7 +58,7 @@ namespace FinancialStructures.Database.Statistics
                     }
                     break;
                 }
-                case AccountType.Sector:
+                case Account.Sector:
                 {
                     foreach (ISecurity security in portfolio.SectorSecurities(names.Name))
                     {
@@ -69,9 +69,9 @@ namespace FinancialStructures.Database.Statistics
                     }
                     break;
                 }
-                case AccountType.All:
+                case Account.All:
                 {
-                    return portfolio.TotalProfit(AccountType.Security) + portfolio.TotalProfit(AccountType.BankAccount);
+                    return portfolio.TotalProfit(Account.Security) + portfolio.TotalProfit(Account.BankAccount);
                 }
                 default:
                     break;
@@ -83,24 +83,24 @@ namespace FinancialStructures.Database.Statistics
         /// <summary>
         /// Returns the profit of the company over its lifetime in the portfolio.
         /// </summary>
-        public static double Profit(this IPortfolio portfolio, AccountType elementType, TwoName names)
+        public static double Profit(this IPortfolio portfolio, Account elementType, TwoName names)
         {
             switch (elementType)
             {
-                case (AccountType.Security):
+                case (Account.Security):
                 {
                     if (portfolio.TryGetSecurity(names, out ISecurity desired))
                     {
                         if (desired.Any())
                         {
-                            ICurrency currency = portfolio.Currency(AccountType.Security, desired);
+                            ICurrency currency = portfolio.Currency(Account.Security, desired);
                             return desired.LatestValue(currency).Value - desired.TotalInvestment(currency);
                         }
                     }
 
                     return double.NaN;
                 }
-                case AccountType.BankAccount:
+                case Account.BankAccount:
                 {
                     if (portfolio.TryGetAccount(elementType, names, out ISingleValueDataList desired))
                     {
@@ -116,8 +116,8 @@ namespace FinancialStructures.Database.Statistics
 
                     return double.NaN;
                 }
-                case AccountType.Currency:
-                case AccountType.Benchmark:
+                case Account.Currency:
+                case Account.Benchmark:
                 {
                     if (portfolio.TryGetAccount(elementType, names, out ISingleValueDataList desired))
                     {
@@ -145,7 +145,7 @@ namespace FinancialStructures.Database.Statistics
             {
                 if (security.Any())
                 {
-                    ICurrency currency = portfolio.Currency(AccountType.Security, security);
+                    ICurrency currency = portfolio.Currency(Account.Security, security);
                     value += security.LatestValue(currency).Value - security.TotalInvestment(currency);
                 }
             }

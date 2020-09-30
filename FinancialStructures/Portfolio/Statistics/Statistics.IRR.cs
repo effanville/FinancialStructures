@@ -18,14 +18,14 @@ namespace FinancialStructures.Database.Statistics
         /// <param name="laterTime"></param>
         /// <param name="sectorName"></param>
         /// <returns></returns>
-        public static double IRRTotal(this IPortfolio portfolio, AccountType accountType, DateTime earlierTime, DateTime laterTime, string sectorName = null)
+        public static double IRRTotal(this IPortfolio portfolio, Account accountType, DateTime earlierTime, DateTime laterTime, string sectorName = null)
         {
             switch (accountType)
             {
-                case AccountType.All:
-                case AccountType.Security:
+                case Account.All:
+                case Account.Security:
                 {
-                    if (portfolio.NumberOf(AccountType.Security) == 0)
+                    if (portfolio.NumberOf(Account.Security) == 0)
                     {
                         return double.NaN;
                     }
@@ -46,7 +46,7 @@ namespace FinancialStructures.Database.Statistics
 
                     return FinancialFunctions.IRRTime(new DailyValuation(earlierTime, earlierValue), Investments, new DailyValuation(laterTime, laterValue));
                 }
-                case AccountType.Sector:
+                case Account.Sector:
                 {
                     List<ISecurity> securities = portfolio.SectorSecurities(sectorName);
                     if (securities.Count == 0)
@@ -136,17 +136,17 @@ namespace FinancialStructures.Database.Statistics
             return portfolio.IRRCompany(company, earlierTime, laterTime);
         }
 
-        public static double IRR(this IPortfolio portfolio, AccountType accountType, TwoName names)
+        public static double IRR(this IPortfolio portfolio, Account accountType, TwoName names)
         {
             switch (accountType)
             {
-                case AccountType.Security:
+                case Account.Security:
                 {
                     if (portfolio.TryGetSecurity(names, out ISecurity desired))
                     {
                         if (desired.Any())
                         {
-                            ICurrency currency = portfolio.Currency(AccountType.Security, desired);
+                            ICurrency currency = portfolio.Currency(Account.Security, desired);
                             return desired.IRR(currency);
                         }
                     }
@@ -160,17 +160,17 @@ namespace FinancialStructures.Database.Statistics
             }
         }
 
-        public static double IRR(this IPortfolio portfolio, AccountType accountType, TwoName names, DateTime earlierTime, DateTime laterTime)
+        public static double IRR(this IPortfolio portfolio, Account accountType, TwoName names, DateTime earlierTime, DateTime laterTime)
         {
             switch (accountType)
             {
-                case AccountType.Security:
+                case Account.Security:
                 {
                     if (portfolio.TryGetSecurity(names, out ISecurity desired))
                     {
                         if (desired.Any())
                         {
-                            ICurrency currency = portfolio.Currency(AccountType.Security, desired);
+                            ICurrency currency = portfolio.Currency(Account.Security, desired);
                             return desired.IRRTime(earlierTime, laterTime, currency);
                         }
                     }

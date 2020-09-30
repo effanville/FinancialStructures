@@ -46,7 +46,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
 
             var portfolio = constructor.database;
 
-            bool result = portfolio.TryGetAccount(AccountType.Benchmark, new TwoName("Company", "name"), out var desired);
+            bool result = portfolio.TryGetAccount(Account.Benchmark, new TwoName("Company", "name"), out var desired);
 
             Assert.AreEqual(true, result);
             Assert.IsNotNull(desired);
@@ -62,7 +62,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
 
             var portfolio = constructor.database;
 
-            bool result = portfolio.TryGetAccount(AccountType.Benchmark, new TwoName("NewCompany", "NewName"), out var desired);
+            bool result = portfolio.TryGetAccount(Account.Benchmark, new TwoName("NewCompany", "NewName"), out var desired);
 
             Assert.AreEqual(false, result);
             Assert.IsNull(desired);

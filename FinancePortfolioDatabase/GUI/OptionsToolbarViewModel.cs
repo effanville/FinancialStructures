@@ -78,7 +78,7 @@ namespace FinanceWindowsViewModels
             base.UpdateData(portfolio);
             fFileName = portfolio.DatabaseName + portfolio.Extension;
             fDirectory = portfolio.Directory;
-            Currencies = portfolio.Names(AccountType.Currency).Concat(portfolio.Companies(AccountType.Currency)).Distinct().ToList();
+            Currencies = portfolio.Names(Account.Currency).Concat(portfolio.Companies(Account.Currency)).Distinct().ToList();
             if (!Currencies.Contains(portfolio.BaseCurrency))
             {
                 Currencies.Add(portfolio.BaseCurrency);
@@ -154,7 +154,7 @@ namespace FinanceWindowsViewModels
         }
         private void ExecuteUpdateData()
         {
-            DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.Download(AccountType.All, programPortfolio, null, fReportLogger).ConfigureAwait(false));
+            DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.Download(Account.All, programPortfolio, null, fReportLogger).ConfigureAwait(false));
         }
 
         public ICommand RefreshCommand

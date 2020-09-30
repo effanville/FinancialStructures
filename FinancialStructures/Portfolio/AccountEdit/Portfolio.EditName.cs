@@ -9,13 +9,13 @@ namespace FinancialStructures.Database
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public bool TryEditName(AccountType elementType, NameData oldName, NameData newName, IReportLogger reportLogger = null)
+        public bool TryEditName(Account elementType, NameData oldName, NameData newName, IReportLogger reportLogger = null)
         {
             switch (elementType)
             {
-                case (AccountType.Security):
+                case (Account.Security):
                 {
-                    for (int fundIndex = 0; fundIndex < NumberOf(AccountType.Security); fundIndex++)
+                    for (int fundIndex = 0; fundIndex < NumberOf(Account.Security); fundIndex++)
                     {
                         if (oldName.IsEqualTo(Funds[fundIndex].Names))
                         {
@@ -27,15 +27,15 @@ namespace FinancialStructures.Database
                     _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Renaming {elementType}: Could not find {elementType} with name {oldName}.");
                     return false;
                 }
-                case (AccountType.Currency):
+                case (Account.Currency):
                 {
                     return TryEditNameSingleList(Currencies, elementType, oldName, newName, reportLogger);
                 }
-                case (AccountType.BankAccount):
+                case (Account.BankAccount):
                 {
                     return TryEditNameSingleList(BankAccounts, elementType, oldName, newName, reportLogger);
                 }
-                case (AccountType.Benchmark):
+                case (Account.Benchmark):
                 {
                     return TryEditNameSingleList(BenchMarks, elementType, oldName, newName, reportLogger);
                 }
@@ -47,7 +47,7 @@ namespace FinancialStructures.Database
             }
         }
 
-        private bool TryEditNameSingleList<T>(List<T> values, AccountType elementType, NameData oldName, NameData newName, IReportLogger reportLogger = null) where T : ISingleValueDataList
+        private bool TryEditNameSingleList<T>(List<T> values, Account elementType, NameData oldName, NameData newName, IReportLogger reportLogger = null) where T : ISingleValueDataList
         {
             for (int AccountIndex = 0; AccountIndex < values.Count; AccountIndex++)
             {

@@ -17,7 +17,7 @@ namespace FinancialStructures.Tests.Database.DataEdit
 
             var portfolio = constructor.database;
 
-            bool success = portfolio.TryDeleteData(AccountType.Security, new NameData("Company", "Name"), new DateTime(2010, 1, 1), null);
+            bool success = portfolio.TryDeleteData(Account.Security, new NameData("Company", "Name"), new DateTime(2010, 1, 1), null);
 
             Assert.AreEqual(0, portfolio.Funds.Single().Count());
 
@@ -33,7 +33,7 @@ namespace FinancialStructures.Tests.Database.DataEdit
 
             var portfolio = constructor.database;
 
-            bool success = portfolio.TryDeleteData(AccountType.Benchmark, new NameData("Company", "Name"), new DateTime(2010, 1, 1), null);
+            bool success = portfolio.TryDeleteData(Account.Benchmark, new NameData("Company", "Name"), new DateTime(2010, 1, 1), null);
 
             Assert.IsTrue(success);
             Assert.AreEqual(0, portfolio.BenchMarks.Single().Count());

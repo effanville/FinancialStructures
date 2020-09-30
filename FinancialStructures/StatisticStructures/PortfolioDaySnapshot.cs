@@ -112,8 +112,8 @@ namespace FinancialStructures.StatisticStructures
         public PortfolioDaySnapshot(DateTime date, IPortfolio portfolio)
         {
             TotalValue = new DailyValuation(date, portfolio.TotalValue(date).Truncate());
-            BankAccValue = new DailyValuation(date, portfolio.TotalValue(AccountType.BankAccount, date).Truncate());
-            SecurityValue = new DailyValuation(date, portfolio.TotalValue(AccountType.Security, date).Truncate());
+            BankAccValue = new DailyValuation(date, portfolio.TotalValue(Account.BankAccount, date).Truncate());
+            SecurityValue = new DailyValuation(date, portfolio.TotalValue(Account.Security, date).Truncate());
 
             AddSecurityValues(date, portfolio);
             AddBankAccountValues(date, portfolio);
@@ -122,11 +122,11 @@ namespace FinancialStructures.StatisticStructures
 
         private void AddSecurityValues(DateTime date, IPortfolio portfolio)
         {
-            List<string> companyNames = portfolio.Companies(AccountType.Security);
+            List<string> companyNames = portfolio.Companies(Account.Security);
             companyNames.Sort();
             foreach (string companyName in companyNames)
             {
-                DayValue_Named companyValue = new DayValue_Named(companyName, null, date, portfolio.CompanyValue(AccountType.Security, companyName, date).Truncate());
+                DayValue_Named companyValue = new DayValue_Named(companyName, null, date, portfolio.CompanyValue(Account.Security, companyName, date).Truncate());
                 SecurityValues.Add(companyValue);
 
                 DayValue_Named yearCar = new DayValue_Named(companyName, null, date, portfolio.IRRCompany(companyName, date.AddDays(-365), date).Truncate());
@@ -147,11 +147,11 @@ namespace FinancialStructures.StatisticStructures
 
         private void AddBankAccountValues(DateTime date, IPortfolio portfolio)
         {
-            List<string> companyBankNames = portfolio.Companies(AccountType.BankAccount);
+            List<string> companyBankNames = portfolio.Companies(Account.BankAccount);
             companyBankNames.Sort();
             foreach (string companyName in companyBankNames)
             {
-                DayValue_Named companyValue = new DayValue_Named(companyName, null, date, portfolio.CompanyValue(AccountType.BankAccount, companyName, date).Truncate());
+                DayValue_Named companyValue = new DayValue_Named(companyName, null, date, portfolio.CompanyValue(Account.BankAccount, companyName, date).Truncate());
                 BankAccValues.Add(companyValue);
             }
         }
@@ -161,17 +161,17 @@ namespace FinancialStructures.StatisticStructures
             List<string> sectorNames = portfolio.GetSecuritiesSectors();
             foreach (string sectorName in sectorNames)
             {
-                DayValue_Named sectorValue = new DayValue_Named(sectorName, null, date, portfolio.Value(AccountType.Sector, new TwoName(sectorName), date).Truncate());
+                DayValue_Named sectorValue = new DayValue_Named(sectorName, null, date, portfolio.Value(Account.Sector, new TwoName(sectorName), date).Truncate());
                 SectorValues.Add(sectorValue);
 
                 DayValue_Named sectorCar;
-                if (date < portfolio.FirstValueDate(AccountType.Sector, sectorName))
+                if (date < portfolio.FirstValueDate(Account.Sector, sectorName))
                 {
                     sectorCar = new DayValue_Named(sectorName, null, date, 0.0);
                 }
                 else
                 {
-                    sectorCar = new DayValue_Named(sectorName, null, date, portfolio.IRRTotal(AccountType.Sector, portfolio.FirstValueDate(AccountType.Sector, sectorName), date, sectorName).Truncate());
+                    sectorCar = new DayValue_Named(sectorName, null, date, portfolio.IRRTotal(Account.Sector, portfolio.FirstValueDate(Account.Sector, sectorName), date, sectorName).Truncate());
                 }
                 SectorCar.Add(sectorCar);
             }

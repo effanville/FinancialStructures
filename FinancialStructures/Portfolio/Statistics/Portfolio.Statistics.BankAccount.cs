@@ -17,7 +17,7 @@ namespace FinancialStructures.Database.Statistics
                 {
                     if ((DisplayValueFunds && account.LatestValue().Value != 0) || !DisplayValueFunds)
                     {
-                        ICurrency currency = portfolio.Currency(AccountType.BankAccount, account);
+                        ICurrency currency = portfolio.Currency(Account.BankAccount, account);
                         namesAndCompanies.Add(new DayValue_Named(account.Company, account.Name, account.LatestValue(currency).Day, account.LatestValue(currency).Value));
                     }
                 }
@@ -26,7 +26,7 @@ namespace FinancialStructures.Database.Statistics
             namesAndCompanies.Sort();
             if (namesAndCompanies.Count > 1)
             {
-                namesAndCompanies.Add(new DayValue_Named(company, "Totals", DateTime.Today, portfolio.CompanyValue(AccountType.BankAccount, company, DateTime.Today)));
+                namesAndCompanies.Add(new DayValue_Named(company, "Totals", DateTime.Today, portfolio.CompanyValue(Account.BankAccount, company, DateTime.Today)));
             }
             return namesAndCompanies;
         }
@@ -39,9 +39,9 @@ namespace FinancialStructures.Database.Statistics
             List<DayValue_Named> namesAndCompanies = new List<DayValue_Named>();
             if (portfolio != null)
             {
-                foreach (string company in portfolio.Companies(AccountType.BankAccount))
+                foreach (string company in portfolio.Companies(Account.BankAccount))
                 {
-                    namesAndCompanies.Add(new DayValue_Named(company, "Totals", DateTime.Today, portfolio.CompanyValue(AccountType.BankAccount, company, DateTime.Today)));
+                    namesAndCompanies.Add(new DayValue_Named(company, "Totals", DateTime.Today, portfolio.CompanyValue(Account.BankAccount, company, DateTime.Today)));
                 }
             }
 
@@ -58,7 +58,7 @@ namespace FinancialStructures.Database.Statistics
                 {
                     if ((DisplayValueFunds && acc.LatestValue().Value != 0) || !DisplayValueFunds)
                     {
-                        ICurrency currency = portfolio.Currency(AccountType.BankAccount, acc);
+                        ICurrency currency = portfolio.Currency(Account.BankAccount, acc);
                         DayValue_Named latest = new DayValue_Named(acc.Company, acc.Name, acc.LatestValue(currency));
                         namesAndCompanies.Add(latest);
                     }
@@ -73,7 +73,7 @@ namespace FinancialStructures.Database.Statistics
 
         public static DayValue_Named GenerateBankAccountTotalStatistics(this IPortfolio portfolio)
         {
-            return new DayValue_Named("", "Totals", DateTime.Today, portfolio.TotalValue(AccountType.BankAccount));
+            return new DayValue_Named("", "Totals", DateTime.Today, portfolio.TotalValue(Account.BankAccount));
         }
     }
 }

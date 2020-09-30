@@ -7,11 +7,11 @@ namespace FinancialStructures.Tests.Database.DataAccess
     [TestFixture]
     public sealed class NameTests
     {
-        private DatabaseConstructor CreateThreeAccounts(AccountType elementType, string company1, string name1, string company2, string name2, string company3, string name3)
+        private DatabaseConstructor CreateThreeAccounts(Account elementType, string company1, string name1, string company2, string name2, string company3, string name3)
         {
             switch (elementType)
             {
-                case AccountType.Security:
+                case Account.Security:
                 {
                     var constructor = new DatabaseConstructor();
                     _ = constructor.WithSecurityFromName(company1, name1);
@@ -19,7 +19,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
                     _ = constructor.WithSecurityFromName(company3, name3);
                     return constructor;
                 }
-                case AccountType.Benchmark:
+                case Account.Benchmark:
                 {
                     var constructor = new DatabaseConstructor();
                     _ = constructor.WithSectorFromName(company1, name1);
@@ -27,7 +27,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
                     _ = constructor.WithSectorFromName(company3, name3);
                     return constructor;
                 }
-                case AccountType.BankAccount:
+                case Account.BankAccount:
                 {
                     var constructor = new DatabaseConstructor();
                     _ = constructor.WithBankAccountFromName(company1, name1);
@@ -35,7 +35,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
                     _ = constructor.WithBankAccountFromName(company3, name3);
                     return constructor;
                 }
-                case AccountType.Currency:
+                case Account.Currency:
                 {
                     var constructor = new DatabaseConstructor();
                     _ = constructor.WithCurrencyFromName(company1, name1);
@@ -48,11 +48,11 @@ namespace FinancialStructures.Tests.Database.DataAccess
             }
         }
 
-        [TestCase(AccountType.Security, "company1", "name1", "company2", "name2", "company3", "name3")]
-        [TestCase(AccountType.Benchmark, "company1", "name1", "company2", "name2", "company3", "name3")]
-        [TestCase(AccountType.BankAccount, "company1", "name1", "company2", "name2", "company3", "name3")]
-        [TestCase(AccountType.Currency, "company1", "name1", "company2", "name2", "company3", "name3")]
-        public void NameDataTests(AccountType elementType, string company1, string name1, string company2, string name2, string company3, string name3)
+        [TestCase(Account.Security, "company1", "name1", "company2", "name2", "company3", "name3")]
+        [TestCase(Account.Benchmark, "company1", "name1", "company2", "name2", "company3", "name3")]
+        [TestCase(Account.BankAccount, "company1", "name1", "company2", "name2", "company3", "name3")]
+        [TestCase(Account.Currency, "company1", "name1", "company2", "name2", "company3", "name3")]
+        public void NameDataTests(Account elementType, string company1, string name1, string company2, string name2, string company3, string name3)
         {
             var constructor = CreateThreeAccounts(elementType, company1, name1, company2, name2, company3, name3);
             var database = constructor.database;
@@ -69,11 +69,11 @@ namespace FinancialStructures.Tests.Database.DataAccess
             Assert.AreEqual(name3, names[2].Name);
         }
 
-        [TestCase(AccountType.Security, "company1", "name1", "company2", "name2", "company3", "name3")]
-        [TestCase(AccountType.Benchmark, "company1", "name1", "company2", "name2", "company3", "name3")]
-        [TestCase(AccountType.BankAccount, "company1", "name1", "company2", "name2", "company3", "name3")]
-        [TestCase(AccountType.Currency, "company1", "name1", "company2", "name2", "company3", "name3")]
-        public void NamesTests(AccountType elementType, string company1, string name1, string company2, string name2, string company3, string name3)
+        [TestCase(Account.Security, "company1", "name1", "company2", "name2", "company3", "name3")]
+        [TestCase(Account.Benchmark, "company1", "name1", "company2", "name2", "company3", "name3")]
+        [TestCase(Account.BankAccount, "company1", "name1", "company2", "name2", "company3", "name3")]
+        [TestCase(Account.Currency, "company1", "name1", "company2", "name2", "company3", "name3")]
+        public void NamesTests(Account elementType, string company1, string name1, string company2, string name2, string company3, string name3)
         {
             var constructor = CreateThreeAccounts(elementType, company1, name1, company2, name2, company3, name3);
             var database = constructor.database;
@@ -86,11 +86,11 @@ namespace FinancialStructures.Tests.Database.DataAccess
             Assert.AreEqual(name3, names[2]);
         }
 
-        [TestCase(AccountType.Security, "company1", "name1", "company2", "name2", "company3", "name3")]
-        [TestCase(AccountType.Benchmark, "company1", "name1", "company2", "name2", "company3", "name3")]
-        [TestCase(AccountType.BankAccount, "company1", "name1", "company2", "name2", "company3", "name3")]
-        [TestCase(AccountType.Currency, "company1", "name1", "company2", "name2", "company3", "name3")]
-        public void CompaniesTests(AccountType elementType, string company1, string name1, string company2, string name2, string company3, string name3)
+        [TestCase(Account.Security, "company1", "name1", "company2", "name2", "company3", "name3")]
+        [TestCase(Account.Benchmark, "company1", "name1", "company2", "name2", "company3", "name3")]
+        [TestCase(Account.BankAccount, "company1", "name1", "company2", "name2", "company3", "name3")]
+        [TestCase(Account.Currency, "company1", "name1", "company2", "name2", "company3", "name3")]
+        public void CompaniesTests(Account elementType, string company1, string name1, string company2, string name2, string company3, string name3)
         {
             var constructor = CreateThreeAccounts(elementType, company1, name1, company2, name2, company3, name3);
             var database = constructor.database;

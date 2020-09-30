@@ -17,14 +17,14 @@ namespace FinancialStructures.Database.Statistics
         /// <param name="accountType"></param>
         /// <param name="sectorName"></param>
         /// <returns></returns>
-        public static List<DayValue_Named> TotalInvestments(this IPortfolio portfolio, AccountType accountType, TwoName sectorName = null)
+        public static List<DayValue_Named> TotalInvestments(this IPortfolio portfolio, Account accountType, TwoName sectorName = null)
         {
             switch (accountType)
             {
-                case AccountType.Security:
+                case Account.Security:
                 {
                     List<DayValue_Named> output = new List<DayValue_Named>();
-                    List<string> companies = portfolio.Companies(AccountType.Security);
+                    List<string> companies = portfolio.Companies(Account.Security);
                     companies.Sort();
                     foreach (string comp in companies)
                     {
@@ -33,7 +33,7 @@ namespace FinancialStructures.Database.Statistics
                     output.Sort();
                     return output;
                 }
-                case AccountType.Sector:
+                case Account.Sector:
                 {
                     List<DayValue_Named> output = new List<DayValue_Named>();
                     foreach (ISecurity security in portfolio.SectorSecurities(sectorName.Name))
@@ -43,9 +43,9 @@ namespace FinancialStructures.Database.Statistics
 
                     return output;
                 }
-                case AccountType.All:
+                case Account.All:
                 {
-                    return portfolio.TotalInvestments(AccountType.Security);
+                    return portfolio.TotalInvestments(Account.Security);
                 }
                 default:
                 {
@@ -61,17 +61,17 @@ namespace FinancialStructures.Database.Statistics
         /// <param name="accountType">The type of account to look for.</param>
         /// <param name="names">The name of the account.</param>
         /// <returns></returns>
-        public static List<DayValue_Named> Investments(this IPortfolio portfolio, AccountType accountType, TwoName names)
+        public static List<DayValue_Named> Investments(this IPortfolio portfolio, Account accountType, TwoName names)
         {
             switch (accountType)
             {
-                case AccountType.Security:
+                case Account.Security:
                 {
                     if (portfolio.TryGetSecurity(names, out ISecurity desired))
                     {
                         if (desired.Any())
                         {
-                            ICurrency currency = portfolio.Currency(AccountType.Security, desired);
+                            ICurrency currency = portfolio.Currency(Account.Security, desired);
                             return desired.AllInvestmentsNamed(currency);
                         }
                     }
@@ -93,7 +93,7 @@ namespace FinancialStructures.Database.Statistics
             List<DayValue_Named> output = new List<DayValue_Named>();
             foreach (ISecurity sec in portfolio.CompanySecurities(company))
             {
-                ICurrency currency = portfolio.Currency(AccountType.Security, sec);
+                ICurrency currency = portfolio.Currency(Account.Security, sec);
                 output.AddRange(sec.AllInvestmentsNamed(currency));
             }
 

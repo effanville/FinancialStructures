@@ -9,24 +9,24 @@ namespace FinancialStructures.Database
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public List<string> Companies(AccountType elementType)
+        public List<string> Companies(Account elementType)
         {
             return NameData(elementType).Select(NameData => NameData.Company).Distinct().ToList();
         }
 
         /// <inheritdoc/>
-        public List<string> Names(AccountType elementType)
+        public List<string> Names(Account elementType)
         {
             return NameData(elementType).Select(NameData => NameData.Name).ToList();
         }
 
         /// <inheritdoc/>
-        public List<NameCompDate> NameData(AccountType elementType)
+        public List<NameCompDate> NameData(Account elementType)
         {
             List<NameCompDate> namesAndCompanies = new List<NameCompDate>();
             switch (elementType)
             {
-                case (AccountType.Security):
+                case (Account.Security):
                 {
                     foreach (ISecurity security in Funds)
                     {
@@ -40,15 +40,15 @@ namespace FinancialStructures.Database
                     }
                     break;
                 }
-                case (AccountType.Currency):
+                case (Account.Currency):
                 {
                     return SingleDataNameObtainer(Currencies);
                 }
-                case (AccountType.BankAccount):
+                case (Account.BankAccount):
                 {
                     return SingleDataNameObtainer(BankAccounts);
                 }
-                case (AccountType.Benchmark):
+                case (Account.Benchmark):
                 {
                     return SingleDataNameObtainer(BenchMarks);
                 }

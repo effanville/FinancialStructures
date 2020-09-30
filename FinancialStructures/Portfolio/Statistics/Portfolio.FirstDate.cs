@@ -12,12 +12,12 @@ namespace FinancialStructures.Database.Statistics
         /// <param name="elementType">The type of element to search for. All searches for Bank accounts and securities.</param>
         /// <param name="sectorName">An ancillary name to use in the case of Sectors</param>
         /// <returns></returns>
-        public static DateTime FirstValueDate(this IPortfolio portfolio, AccountType elementType, string sectorName = null)
+        public static DateTime FirstValueDate(this IPortfolio portfolio, Account elementType, string sectorName = null)
         {
             DateTime output = DateTime.Today;
             switch (elementType)
             {
-                case AccountType.Security:
+                case Account.Security:
                 {
                     foreach (ISecurity sec in portfolio.Funds)
                     {
@@ -32,7 +32,7 @@ namespace FinancialStructures.Database.Statistics
                     }
                     break;
                 }
-                case AccountType.Sector:
+                case Account.Sector:
                 {
                     foreach (ISecurity sec in portfolio.SectorSecurities(sectorName))
                     {
@@ -43,7 +43,7 @@ namespace FinancialStructures.Database.Statistics
                     }
                     break;
                 }
-                case AccountType.BankAccount:
+                case Account.BankAccount:
                 {
                     foreach (ICashAccount cashAccount in portfolio.BankAccounts)
                     {
@@ -55,7 +55,7 @@ namespace FinancialStructures.Database.Statistics
 
                     break;
                 }
-                case AccountType.Benchmark:
+                case Account.Benchmark:
                 {
                     foreach (ICashAccount cashAccount in portfolio.BenchMarks)
                     {
@@ -67,7 +67,7 @@ namespace FinancialStructures.Database.Statistics
 
                     break;
                 }
-                case AccountType.Currency:
+                case Account.Currency:
                 {
                     foreach (ICashAccount cashAccount in portfolio.Currencies)
                     {
@@ -79,10 +79,10 @@ namespace FinancialStructures.Database.Statistics
 
                     break;
                 }
-                case AccountType.All:
+                case Account.All:
                 {
-                    var earlySecurity = portfolio.FirstValueDate(AccountType.Security);
-                    var earlyBank = portfolio.FirstValueDate(AccountType.BankAccount);
+                    var earlySecurity = portfolio.FirstValueDate(Account.Security);
+                    var earlyBank = portfolio.FirstValueDate(Account.BankAccount);
                     output = earlySecurity < earlyBank ? earlySecurity : earlyBank;
                     break;
                 }

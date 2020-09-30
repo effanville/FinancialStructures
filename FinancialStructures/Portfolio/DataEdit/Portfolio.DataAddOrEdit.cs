@@ -12,7 +12,7 @@ namespace FinancialStructures.Database
         /// <inheritdoc/>
         public bool TryAddOrEditDataToSecurity(TwoName names, DateTime oldDate, DateTime date, double shares, double unitPrice, double Investment, IReportLogger reportLogger = null)
         {
-            for (int fundIndex = 0; fundIndex < NumberOf(AccountType.Security); fundIndex++)
+            for (int fundIndex = 0; fundIndex < NumberOf(Account.Security); fundIndex++)
             {
                 if (names.IsEqualTo(Funds[fundIndex].Names))
                 {
@@ -25,23 +25,23 @@ namespace FinancialStructures.Database
         }
 
         /// <inheritdoc/>
-        public bool TryAddOrEditData(AccountType elementType, TwoName name, DailyValuation oldData, DailyValuation data, IReportLogger reportLogger = null)
+        public bool TryAddOrEditData(Account elementType, TwoName name, DailyValuation oldData, DailyValuation data, IReportLogger reportLogger = null)
         {
             switch (elementType)
             {
-                case (AccountType.Security):
+                case (Account.Security):
                 {
                     return false;
                 }
-                case (AccountType.Currency):
+                case (Account.Currency):
                 {
                     return SingleListAddOrEdit(Currencies, name, oldData, data, reportLogger);
                 }
-                case (AccountType.BankAccount):
+                case (Account.BankAccount):
                 {
                     return SingleListAddOrEdit(BankAccounts, name, oldData, data, reportLogger);
                 }
-                case (AccountType.Benchmark):
+                case (Account.Benchmark):
                 {
                     return SingleListAddOrEdit(BenchMarks, name, oldData, data, reportLogger);
                 }

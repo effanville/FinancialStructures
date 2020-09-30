@@ -9,13 +9,13 @@ namespace FinancialStructures.Database
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public bool TryDeleteData(AccountType elementType, TwoName name, DateTime date, IReportLogger reportLogger = null)
+        public bool TryDeleteData(Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null)
         {
             switch (elementType)
             {
-                case (AccountType.Security):
+                case (Account.Security):
                 {
-                    for (int fundIndex = 0; fundIndex < NumberOf(AccountType.Security); fundIndex++)
+                    for (int fundIndex = 0; fundIndex < NumberOf(Account.Security); fundIndex++)
                     {
                         if (name.IsEqualTo(Funds[fundIndex].Names))
                         {
@@ -26,15 +26,15 @@ namespace FinancialStructures.Database
 
                     break;
                 }
-                case (AccountType.Currency):
+                case (Account.Currency):
                 {
                     return TryDeleteSingleListData(Currencies, elementType, name, date, reportLogger);
                 }
-                case (AccountType.BankAccount):
+                case (Account.BankAccount):
                 {
                     return TryDeleteSingleListData(BankAccounts, elementType, name, date, reportLogger);
                 }
-                case (AccountType.Benchmark):
+                case (Account.Benchmark):
                 {
                     return TryDeleteSingleListData(BenchMarks, elementType, name, date, reportLogger);
                 }
@@ -48,7 +48,7 @@ namespace FinancialStructures.Database
             return false;
         }
 
-        private bool TryDeleteSingleListData<T>(List<T> values, AccountType elementType, TwoName name, DateTime date, IReportLogger reportLogger = null) where T : ISingleValueDataList
+        private bool TryDeleteSingleListData<T>(List<T> values, Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null) where T : ISingleValueDataList
         {
             foreach (T account in values)
             {

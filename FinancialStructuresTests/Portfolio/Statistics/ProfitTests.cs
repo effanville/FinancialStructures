@@ -21,7 +21,7 @@ namespace FinancialStructuresTests.Portfolio.Statistics
             constructor.WithSecondaryBankAccount();
             constructor.WithSecondarySecurity();
             var portfolio = constructor.database;
-            Assert.AreEqual(25983.299999999999, portfolio.TotalProfit(AccountType.All));
+            Assert.AreEqual(25983.299999999999, portfolio.TotalProfit(Account.All));
         }
     }
 }

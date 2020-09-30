@@ -21,7 +21,7 @@ namespace FinancialStructures.Database.Statistics
             {
                 if (desired.Any())
                 {
-                    total += portfolio.RecentChange(AccountType.Security, desired.Names);
+                    total += portfolio.RecentChange(Account.Security, desired.Names);
                 }
             }
 
@@ -31,15 +31,15 @@ namespace FinancialStructures.Database.Statistics
         /// <summary>
         /// returns the total profit in the portfolio.
         /// </summary>
-        public static double RecentChange(this IPortfolio portfolio, AccountType elementType = AccountType.Security)
+        public static double RecentChange(this IPortfolio portfolio, Account elementType = Account.Security)
         {
             switch (elementType)
             {
-                case AccountType.All:
+                case Account.All:
                 {
-                    return portfolio.RecentChange(AccountType.Security) + portfolio.RecentChange(AccountType.BankAccount);
+                    return portfolio.RecentChange(Account.Security) + portfolio.RecentChange(Account.BankAccount);
                 }
-                case (AccountType.Security):
+                case (Account.Security):
                 {
                     double total = 0;
                     foreach (ISecurity desired in portfolio.Funds)
@@ -52,7 +52,7 @@ namespace FinancialStructures.Database.Statistics
 
                     return total;
                 }
-                case AccountType.BankAccount:
+                case Account.BankAccount:
                 {
                     double total = 0.0;
                     foreach (ICashAccount cashAccount in portfolio.BankAccounts)
@@ -72,17 +72,17 @@ namespace FinancialStructures.Database.Statistics
         /// <summary>
         /// returns the change between the most recent two valuations of the security.
         /// </summary>
-        public static double RecentChange(this IPortfolio portfolio, AccountType elementType, TwoName names)
+        public static double RecentChange(this IPortfolio portfolio, Account elementType, TwoName names)
         {
             switch (elementType)
             {
-                case (AccountType.Security):
+                case (Account.Security):
                 {
                     if (portfolio.TryGetSecurity(names, out ISecurity desired))
                     {
                         if (desired.Any())
                         {
-                            ICurrency currency = portfolio.Currency(AccountType.Security, desired);
+                            ICurrency currency = portfolio.Currency(Account.Security, desired);
                             DailyValuation needed = desired.LatestValue(currency);
                             if (needed.Value > 0)
                             {
@@ -95,7 +95,7 @@ namespace FinancialStructures.Database.Statistics
 
                     break;
                 }
-                case (AccountType.BankAccount):
+                case (Account.BankAccount):
                 {
                     if (portfolio.TryGetAccount(elementType, names, out ISingleValueDataList desired))
                     {

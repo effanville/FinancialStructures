@@ -8,9 +8,9 @@ namespace FinancialStructures.Tests.Database.Value
     [TestFixture]
     public sealed class ValueTests
     {
-        [TestCase(AccountType.Security, 556.04999999999995)]
-        [TestCase(AccountType.BankAccount, 101.1)]
-        public void LatestValueTests(AccountType accountType, double expectedValue)
+        [TestCase(Account.Security, 556.04999999999995)]
+        [TestCase(Account.BankAccount, 101.1)]
+        public void LatestValueTests(Account accountType, double expectedValue)
         {
             var constructor = new DatabaseConstructor();
             constructor.WithDefaultFromType(accountType);
@@ -33,7 +33,7 @@ namespace FinancialStructures.Tests.Database.Value
             var constructor = new DatabaseConstructor();
             constructor.WithDefaultSecurity();
             var portfolio = constructor.database;
-            Assert.AreEqual(expectedValue, portfolio.Value(AccountType.Security, constructor.DefaultNameQuery(AccountType.Security), date));
+            Assert.AreEqual(expectedValue, portfolio.Value(Account.Security, constructor.DefaultNameQuery(Account.Security), date));
         }
 
         [TestCase("2009/1/2", 100.0)]
@@ -50,7 +50,7 @@ namespace FinancialStructures.Tests.Database.Value
             var constructor = new DatabaseConstructor();
             constructor.WithDefaultBankAccount();
             var portfolio = constructor.database;
-            Assert.AreEqual(expectedValue, portfolio.Value(AccountType.BankAccount, constructor.DefaultNameQuery(AccountType.BankAccount), date));
+            Assert.AreEqual(expectedValue, portfolio.Value(Account.BankAccount, constructor.DefaultNameQuery(Account.BankAccount), date));
         }
     }
 }

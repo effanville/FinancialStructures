@@ -7,7 +7,7 @@ namespace FinancialStructures.Database
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public bool CompanyExists(AccountType elementType, string company)
+        public bool CompanyExists(Account elementType, string company)
         {
             foreach (string comp in Companies(elementType))
             {
@@ -21,7 +21,7 @@ namespace FinancialStructures.Database
         }
 
         /// <inheritdoc/>
-        public bool Exists(AccountType elementType, TwoName name)
+        public bool Exists(Account elementType, TwoName name)
         {
             foreach (TwoName sec in NameData(elementType))
             {

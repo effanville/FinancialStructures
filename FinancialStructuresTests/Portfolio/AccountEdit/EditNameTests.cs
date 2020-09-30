@@ -24,7 +24,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
 
             var database = constructor.database;
 
-            _ = database.TryEditName(AccountType.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
+            _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
             NameData accountNames = database.Funds.First().Names;
             Assert.AreEqual(NewName, accountNames.Name);
@@ -40,7 +40,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var database = constructor.database;
 
             string newUrl = "http://www.amazon.com";
-            _ = database.TryEditName(AccountType.Security, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, url: newUrl));
+            _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, url: newUrl));
 
             NameData accountNames = database.Funds.First().Names;
             Assert.AreEqual(BaseName, accountNames.Name);
@@ -57,7 +57,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var database = constructor.database;
 
             string newCurrency = "Dollars";
-            _ = database.TryEditName(AccountType.Security, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, currency: newCurrency));
+            _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, currency: newCurrency));
 
             NameData accountNames = database.Funds.First().Names;
             Assert.AreEqual(BaseName, accountNames.Name);
@@ -74,7 +74,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var database = constructor.database;
 
             var sectorValues = new HashSet<string>() { "Cats", "Dogs" };
-            _ = database.TryEditName(AccountType.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName, sectors: sectorValues));
+            _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName, sectors: sectorValues));
 
             NameData accountNames = database.Funds.First().Names;
             Assert.AreEqual(NewName, accountNames.Name);
@@ -97,7 +97,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
 
             var database = constructor.database;
 
-            _ = database.TryEditName(AccountType.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
+            _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
             NameData accountNames = database.BenchMarks.First().Names;
             Assert.AreEqual(NewName, accountNames.Name);
@@ -112,7 +112,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
 
             var database = constructor.database;
 
-            _ = database.TryEditName(AccountType.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
+            _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
             NameData accountNames = database.BankAccounts.First().Names;
             Assert.AreEqual(NewName, accountNames.Name);
@@ -128,7 +128,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var database = constructor.database;
 
             string newUrl = "http://www.amazon.com";
-            _ = database.TryEditName(AccountType.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, url: newUrl));
+            _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, url: newUrl));
 
             NameData accountNames = database.BankAccounts.First().Names;
             Assert.AreEqual(BaseName, accountNames.Name);
@@ -145,7 +145,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var database = constructor.database;
 
             string newCurrency = "Dollars";
-            _ = database.TryEditName(AccountType.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, currency: newCurrency));
+            _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, currency: newCurrency));
 
             NameData accountNames = database.BankAccounts.First().Names;
             Assert.AreEqual(BaseName, accountNames.Name);
@@ -162,7 +162,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var database = constructor.database;
 
             var sectorValues = new HashSet<string>() { "Cats", "Dogs" };
-            _ = database.TryEditName(AccountType.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName, sectors: sectorValues));
+            _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName, sectors: sectorValues));
 
             NameData accountNames = database.BankAccounts.First().Names;
             Assert.AreEqual(NewName, accountNames.Name);
@@ -185,7 +185,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
 
             var database = constructor.database;
 
-            _ = database.TryEditName(AccountType.Currency, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
+            _ = database.TryEditName(Account.Currency, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
             NameData accountNames = database.Currencies.First().Names;
             Assert.AreEqual(NewName, accountNames.Name);
@@ -200,7 +200,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var reports = new List<ErrorReport>();
             var database = constructor.database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
-            _ = database.TryEditName(AccountType.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
+            _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
             NameData accountNames = database.Funds.First().Names;
             Assert.AreEqual(NewName, accountNames.Name);
@@ -222,7 +222,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var reports = new List<ErrorReport>();
             var database = constructor.database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
-            _ = database.TryEditName(AccountType.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
+            _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
             Assert.AreEqual(1, reports.Count);
 
@@ -241,7 +241,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var reports = new List<ErrorReport>();
             var database = constructor.database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
-            _ = database.TryEditName(AccountType.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
+            _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
             NameData accountNames = database.BenchMarks.First().Names;
             Assert.AreEqual(NewName, accountNames.Name);
@@ -263,7 +263,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var reports = new List<ErrorReport>();
             var database = constructor.database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
-            _ = database.TryEditName(AccountType.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
+            _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
             Assert.AreEqual(1, reports.Count);
 

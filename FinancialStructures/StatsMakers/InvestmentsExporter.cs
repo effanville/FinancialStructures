@@ -14,7 +14,7 @@ namespace FinancialStructures.StatsMakers
             // write in column headers
             statsWriter.WriteLine("Securities Investments");
             statsWriter.WriteLine("Date, Company, Name, Investment Amount");
-            foreach (DayValue_Named stats in portfolio.TotalInvestments(AccountType.Security))
+            foreach (DayValue_Named stats in portfolio.TotalInvestments(Account.Security))
             {
                 string securitiesData = stats.Day.ToShortDateString() + ", " + stats.Names.Company + ", " + stats.Names.Name + ", " + stats.Value.ToString();
                 statsWriter.WriteLine(securitiesData);

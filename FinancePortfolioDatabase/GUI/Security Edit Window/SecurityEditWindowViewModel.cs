@@ -28,7 +28,7 @@ namespace FinanceWindowsViewModels
             ReportLogger = reportLogger;
             fFileService = fileService;
             fDialogCreationService = dialogCreation;
-            Tabs.Add(new DataNamesViewModel(DataStore, updateData, ReportLogger, (name) => LoadTabFunc(name), AccountType.Security));
+            Tabs.Add(new DataNamesViewModel(DataStore, updateData, ReportLogger, (name) => LoadTabFunc(name), Account.Security));
         }
 
         public override void UpdateData(IPortfolio portfolio)

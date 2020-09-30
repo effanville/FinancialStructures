@@ -31,7 +31,7 @@ namespace FinancialStructures.Database.Statistics
             List<PortfolioDaySnapshot> outputs = new List<PortfolioDaySnapshot>();
             if (!daysGap.Equals(0))
             {
-                DateTime calculationDate = portfolio.FirstValueDate(AccountType.Security);
+                DateTime calculationDate = portfolio.FirstValueDate(Account.Security);
                 await Task.Run(() => BackGroundTask(calculationDate, portfolio, outputs, daysGap));
             }
             return outputs;

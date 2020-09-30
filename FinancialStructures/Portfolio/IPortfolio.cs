@@ -104,7 +104,7 @@ namespace FinancialStructures.FinanceInterfaces
         /// </summary>
         /// <param name="accountType">The type to search for.</param>
         /// <returns>The number of type in the database.</returns>
-        int NumberOf(AccountType accountType);
+        int NumberOf(Account accountType);
 
         /// <summary>
         /// Handler for the event that data stored in the portfolio has changed.
@@ -129,7 +129,7 @@ namespace FinancialStructures.FinanceInterfaces
         /// <param name="newName">The new name of the data.</param>
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure of editing.</returns>
-        bool TryEditName(AccountType elementType, NameData oldName, NameData newName, IReportLogger reportLogger = null);
+        bool TryEditName(Account elementType, NameData oldName, NameData newName, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Adds data to the portfolio, unless data already exists.
@@ -138,7 +138,7 @@ namespace FinancialStructures.FinanceInterfaces
         /// <param name="name">The name data to add.</param>
         /// <param name="reportLogger">Report callback action.</param>
         /// <returns>Success or failure of adding.</returns>
-        bool TryAdd(AccountType elementType, NameData name, IReportLogger reportLogger = null);
+        bool TryAdd(Account elementType, NameData name, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Removes the account from the database if it can.
@@ -147,7 +147,7 @@ namespace FinancialStructures.FinanceInterfaces
         /// <param name="name">The name of the account to remove.</param>
         /// <param name="reportLogger">(optional) A report callback.</param>
         /// <returns>Success or failure.</returns>
-        bool TryRemove(AccountType elementType, TwoName name, IReportLogger reportLogger = null);
+        bool TryRemove(Account elementType, TwoName name, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Queries whether database contains item.
@@ -155,7 +155,7 @@ namespace FinancialStructures.FinanceInterfaces
         /// <param name="elementType">The type of item to search for.</param>
         /// <param name="name">The names of the item to find.</param>
         /// <returns>Whether exists or not.</returns>
-        bool Exists(AccountType elementType, TwoName name);
+        bool Exists(Account elementType, TwoName name);
 
         /// <summary>
         /// Queries whether database contains item.
@@ -163,7 +163,7 @@ namespace FinancialStructures.FinanceInterfaces
         /// <param name="elementType">The type of item to search for.</param>
         /// <param name="company">The company of the item to find.</param>
         /// <returns>Whether exists or not.</returns>
-        bool CompanyExists(AccountType elementType, string company);
+        bool CompanyExists(Account elementType, string company);
 
         /// <summary>
         /// Load database from xml file.
@@ -194,7 +194,7 @@ namespace FinancialStructures.FinanceInterfaces
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
         /// <remarks> This cannot currently be used to add to securities due to different type of data.</remarks>
-        bool TryAddOrEditData(AccountType elementType, TwoName name, DailyValuation oldData, DailyValuation data, IReportLogger reportLogger = null);
+        bool TryAddOrEditData(Account elementType, TwoName name, DailyValuation oldData, DailyValuation data, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Attempts to remove data from the account.
@@ -204,14 +204,14 @@ namespace FinancialStructures.FinanceInterfaces
         /// <param name="date">The date on which to remove data.</param>
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
-        bool TryDeleteData(AccountType elementType, TwoName name, DateTime date, IReportLogger reportLogger = null);
+        bool TryDeleteData(Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Returns a list of all companes of the desired type in the databse.
         /// </summary>
         /// <param name="elementType">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        List<string> Companies(AccountType elementType);
+        List<string> Companies(Account elementType);
 
 
         /// <summary>
@@ -219,14 +219,14 @@ namespace FinancialStructures.FinanceInterfaces
         /// </summary>
         /// <param name="elementType">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        List<string> Names(AccountType elementType);
+        List<string> Names(Account elementType);
 
         /// <summary>
         /// Returns a list of all namedata in the databse.
         /// </summary>
         /// <param name="elementType">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        List<NameCompDate> NameData(AccountType elementType);
+        List<NameCompDate> NameData(Account elementType);
 
         /// <summary>
         /// Queries for data for the security of name and company. 
@@ -240,7 +240,7 @@ namespace FinancialStructures.FinanceInterfaces
         /// <param name="name"></param>
         /// <param name="reportLogger"></param>
         /// <returns></returns>
-        List<DailyValuation> NumberData(AccountType elementType, TwoName name, IReportLogger reportLogger = null);
+        List<DailyValuation> NumberData(Account elementType, TwoName name, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Outputs a copy of the security if it exists.
@@ -253,7 +253,7 @@ namespace FinancialStructures.FinanceInterfaces
         /// <param name="accountType">The type of element to find.</param>
         /// <param name="name">The name of the element to find.</param>
         /// <param name="desired">The account if it exists.</param>
-        bool TryGetAccount(AccountType accountType, TwoName name, out ISingleValueDataList desired);
+        bool TryGetAccount(Account accountType, TwoName name, out ISingleValueDataList desired);
 
         /// <summary>
         /// Returns a copy of all securities with the company as specified.
@@ -290,7 +290,7 @@ namespace FinancialStructures.FinanceInterfaces
         /// <param name="elementType">The type of element to find.</param>
         /// <param name="name">The name of the element to find.</param>
         /// <returns>The latest value if it exists.</returns>
-        double LatestValue(AccountType elementType, TwoName name);
+        double LatestValue(Account elementType, TwoName name);
 
         /// <summary>
         /// Get the value of the selected element on the date provided. For a sector the name is only the surname
@@ -299,14 +299,14 @@ namespace FinancialStructures.FinanceInterfaces
         /// <param name="name">The name of the element to find.</param>
         /// <param name="date">The date on which to find the value.</param>
         /// <returns>The  value if it exists.</returns>
-        double Value(AccountType elementType, TwoName name, DateTime date);
+        double Value(Account elementType, TwoName name, DateTime date);
 
         /// <summary>
         /// Total value of all accounts of type specified today.
         /// </summary>
         /// <param name="elementType">The type to find the total of.</param>
         /// <returns>The total value held on today.</returns>
-        double TotalValue(AccountType elementType);
+        double TotalValue(Account elementType);
 
         /// <summary>
         /// Total value of all accounts of type specified on date given.
@@ -314,7 +314,7 @@ namespace FinancialStructures.FinanceInterfaces
         /// <param name="elementType">The type to find the total of.</param>
         /// <param name="date">The date to find the total on.</param>
         /// <returns>The total value held.</returns>
-        double TotalValue(AccountType elementType, DateTime date);
+        double TotalValue(Account elementType, DateTime date);
 
         /// <summary>
         /// Total value of all accounts of all types on date given.
@@ -331,11 +331,11 @@ namespace FinancialStructures.FinanceInterfaces
         /// <param name="company">The company name to search for.</param>
         /// <param name="date">The date to calculate value on.</param>
         /// <returns>The value held in the company.</returns>
-        double CompanyValue(AccountType elementType, string company, DateTime date);
+        double CompanyValue(Account elementType, string company, DateTime date);
 
         /// <summary>
         /// returns the currency associated to the account.
         /// </summary>
-        ICurrency Currency(AccountType elementType, object account);
+        ICurrency Currency(Account elementType, object account);
     }
 }

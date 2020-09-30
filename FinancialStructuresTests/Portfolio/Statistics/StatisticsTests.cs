@@ -18,10 +18,10 @@ namespace FinancialStructures.Tests.Database.Statistics
             constructor.WithSecondaryBankAccount();
             constructor.WithSecondarySecurity();
             var portfolio = constructor.database;
-            Assert.AreEqual(new DateTime(2010, 1, 1), portfolio.FirstValueDate(AccountType.All));
+            Assert.AreEqual(new DateTime(2010, 1, 1), portfolio.FirstValueDate(Account.All));
 
-            Assert.AreEqual(new DateTime(2010, 1, 1), portfolio.FirstValueDate(AccountType.Security));
-            Assert.AreEqual(new DateTime(2010, 1, 1), portfolio.FirstValueDate(AccountType.BankAccount));
+            Assert.AreEqual(new DateTime(2010, 1, 1), portfolio.FirstValueDate(Account.Security));
+            Assert.AreEqual(new DateTime(2010, 1, 1), portfolio.FirstValueDate(Account.BankAccount));
         }
 
         [Test]

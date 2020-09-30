@@ -126,7 +126,7 @@ namespace FinancialStructures.Database.Statistics
             List<SecurityStatistics> namesAndCompanies = new List<SecurityStatistics>();
             if (portfolio != null)
             {
-                List<string> companies = portfolio.Companies(AccountType.Security);
+                List<string> companies = portfolio.Companies(Account.Security);
                 foreach (string company in companies)
                 {
                     SecurityStatistics totals = new SecurityStatistics(StatisticsType.CompanyTotal, new TwoName(company, "Totals"));

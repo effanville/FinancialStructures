@@ -32,7 +32,7 @@ namespace FinancialStructures.Tests.Database.DataEdit
 
             var portfolio = constructor.database;
             var data = new DailyValuation(new DateTime(2010, 1, 1), 1);
-            bool success = portfolio.TryAddOrEditData(AccountType.Benchmark, new TwoName("Company", "Name"), data, data);
+            bool success = portfolio.TryAddOrEditData(Account.Benchmark, new TwoName("Company", "Name"), data, data);
 
             Assert.IsTrue(success);
             Assert.AreEqual(1, portfolio.BenchMarks.Single().Count());
@@ -59,7 +59,7 @@ namespace FinancialStructures.Tests.Database.DataEdit
             constructor.WithSectorFromNameAndData("Company", "Name", date: new DateTime[] { new DateTime(2010, 1, 1) }, value: new double[] { 2.0 });
 
             var portfolio = constructor.database;
-            bool success = portfolio.TryAddOrEditData(AccountType.Benchmark, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 2), new DailyValuation(new DateTime(2010, 1, 1), 1));
+            bool success = portfolio.TryAddOrEditData(Account.Benchmark, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 2), new DailyValuation(new DateTime(2010, 1, 1), 1));
 
             Assert.IsTrue(success);
             Assert.AreEqual(1, portfolio.BenchMarks.Single().Count());
@@ -90,7 +90,7 @@ namespace FinancialStructures.Tests.Database.DataEdit
 
             var portfolio = constructor.database;
 
-            bool success = portfolio.TryAddOrEditData(AccountType.Benchmark, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 1), new DailyValuation(new DateTime(2010, 1, 1), 1));
+            bool success = portfolio.TryAddOrEditData(Account.Benchmark, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 1), new DailyValuation(new DateTime(2010, 1, 1), 1));
 
             Assert.IsTrue(success);
             Assert.AreEqual(1, portfolio.BenchMarks.Single().Count());
@@ -118,7 +118,7 @@ namespace FinancialStructures.Tests.Database.DataEdit
 
             var portfolio = constructor.database;
 
-            bool success = portfolio.TryAddOrEditData(AccountType.Benchmark, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 2.0), new DailyValuation(new DateTime(2011, 1, 1), 1));
+            bool success = portfolio.TryAddOrEditData(Account.Benchmark, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 2.0), new DailyValuation(new DateTime(2011, 1, 1), 1));
 
             Assert.IsTrue(success);
             Assert.AreEqual(1, portfolio.BenchMarks.Single().Count());

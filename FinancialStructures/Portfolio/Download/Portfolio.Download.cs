@@ -21,25 +21,25 @@ namespace FinancialStructures.Database.Download
         /// <param name="names">The name of the object.</param>
         /// <param name="reportLogger">An optional update logger.</param>
         /// <returns></returns>
-        public static async Task Download(AccountType accountType, IPortfolio portfolio, TwoName names, IReportLogger reportLogger = null)
+        public static async Task Download(Account accountType, IPortfolio portfolio, TwoName names, IReportLogger reportLogger = null)
         {
             switch (accountType)
             {
-                case (AccountType.Security):
+                case (Account.Security):
                 {
                     _ = portfolio.TryGetSecurity(names, out ISecurity sec);
                     await DownloadLatestValue(sec.Names, value => sec.UpdateSecurityData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
                     break;
                 }
-                case (AccountType.BankAccount):
-                case (AccountType.Currency):
-                case (AccountType.Benchmark):
+                case (Account.BankAccount):
+                case (Account.Currency):
+                case (Account.Benchmark):
                 {
                     _ = portfolio.TryGetAccount(accountType, names, out ISingleValueDataList acc);
                     await DownloadLatestValue(acc.Names, value => acc.TryAddOrEditData(DateTime.Today, DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
                     break;
                 }
-                case (AccountType.All):
+                case (Account.All):
                 {
                     await DownloadPortfolioLatest(portfolio, reportLogger);
                     break;

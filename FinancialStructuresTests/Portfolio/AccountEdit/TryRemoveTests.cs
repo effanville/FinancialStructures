@@ -22,7 +22,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
 
             var database = constructor.database;
 
-            _ = database.TryRemove(AccountType.Security, new NameData(BaseCompanyName, BaseName));
+            _ = database.TryRemove(Account.Security, new NameData(BaseCompanyName, BaseName));
 
             Assert.AreEqual(0, database.Funds.Count);
         }
@@ -35,7 +35,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
 
             var database = constructor.database;
 
-            _ = database.TryRemove(AccountType.Benchmark, new NameData(BaseCompanyName, BaseName));
+            _ = database.TryRemove(Account.Benchmark, new NameData(BaseCompanyName, BaseName));
 
             Assert.AreEqual(0, database.BenchMarks.Count);
         }
@@ -48,7 +48,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
 
             var database = constructor.database;
 
-            _ = database.TryRemove(AccountType.BankAccount, new NameData(BaseCompanyName, BaseName));
+            _ = database.TryRemove(Account.BankAccount, new NameData(BaseCompanyName, BaseName));
 
             Assert.AreEqual(0, database.BankAccounts.Count);
         }
@@ -61,7 +61,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
 
             var database = constructor.database;
 
-            _ = database.TryRemove(AccountType.Currency, new NameData(BaseCompanyName, BaseName));
+            _ = database.TryRemove(Account.Currency, new NameData(BaseCompanyName, BaseName));
 
             Assert.AreEqual(0, database.Currencies.Count);
         }
@@ -74,7 +74,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var reports = new List<ErrorReport>();
             var database = constructor.database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
-            _ = database.TryRemove(AccountType.Security, new NameData(BaseCompanyName, BaseName), logging);
+            _ = database.TryRemove(Account.Security, new NameData(BaseCompanyName, BaseName), logging);
 
             Assert.AreEqual(1, reports.Count);
 
@@ -92,7 +92,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var reports = new List<ErrorReport>();
             var database = constructor.database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
-            _ = database.TryRemove(AccountType.Security, new NameData(BaseCompanyName, BaseName), logging);
+            _ = database.TryRemove(Account.Security, new NameData(BaseCompanyName, BaseName), logging);
 
             Assert.AreEqual(1, reports.Count);
 
@@ -111,7 +111,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var reports = new List<ErrorReport>();
             var database = constructor.database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
-            _ = database.TryRemove(AccountType.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
+            _ = database.TryRemove(Account.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
 
             Assert.AreEqual(1, reports.Count);
 
@@ -129,7 +129,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var reports = new List<ErrorReport>();
             var database = constructor.database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
-            _ = database.TryRemove(AccountType.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
+            _ = database.TryRemove(Account.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
 
             Assert.AreEqual(1, reports.Count);
 

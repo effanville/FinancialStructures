@@ -20,36 +20,36 @@ namespace FinancialStructures.Database
                 }
             }
 
-            _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.DatabaseAccess, $"Could not find {AccountType.Security} - {name.ToString()}");
+            _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.DatabaseAccess, $"Could not find {Account.Security} - {name.ToString()}");
             return new List<SecurityDayData>();
         }
 
         /// <inheritdoc/>
-        public List<DailyValuation> NumberData(AccountType elementType, TwoName name, IReportLogger reportLogger = null)
+        public List<DailyValuation> NumberData(Account elementType, TwoName name, IReportLogger reportLogger = null)
         {
             switch (elementType)
             {
-                case (AccountType.Currency):
+                case (Account.Currency):
                 {
                     return SingleDataListDataObtainer(Currencies, elementType, name, reportLogger);
                 }
-                case (AccountType.BankAccount):
+                case (Account.BankAccount):
                 {
                     return SingleDataListDataObtainer(BankAccounts, elementType, name, reportLogger);
                 }
-                case (AccountType.Benchmark):
+                case (Account.Benchmark):
                 {
                     return SingleDataListDataObtainer(BenchMarks, elementType, name, reportLogger);
                 }
                 default:
-                case (AccountType.Security):
+                case (Account.Security):
                 {
                     return new List<DailyValuation>();
                 }
             }
         }
 
-        private List<DailyValuation> SingleDataListDataObtainer<T>(List<T> objects, AccountType elementType, TwoName name, IReportLogger reportLogger = null) where T : ISingleValueDataList
+        private List<DailyValuation> SingleDataListDataObtainer<T>(List<T> objects, Account elementType, TwoName name, IReportLogger reportLogger = null) where T : ISingleValueDataList
         {
             foreach (T account in objects)
             {

@@ -148,23 +148,23 @@ namespace FinancialStructures.Database
         }
 
         /// <inheritdoc/>
-        public int NumberOf(AccountType elementType)
+        public int NumberOf(Account elementType)
         {
             switch (elementType)
             {
-                case (AccountType.Security):
+                case (Account.Security):
                 {
                     return Funds.Count;
                 }
-                case (AccountType.Currency):
+                case (Account.Currency):
                 {
                     return Currencies.Count;
                 }
-                case (AccountType.BankAccount):
+                case (Account.BankAccount):
                 {
                     return BankAccounts.Count;
                 }
-                case (AccountType.Benchmark):
+                case (Account.Benchmark):
                 {
                     break;
                 }

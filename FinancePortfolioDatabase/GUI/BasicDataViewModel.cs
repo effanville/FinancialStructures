@@ -71,13 +71,13 @@ namespace FinanceWindowsViewModels
 
         public override void UpdateData(IPortfolio portfolio)
         {
-            FundNames = portfolio.NameData(AccountType.Security);
+            FundNames = portfolio.NameData(Account.Security);
             FundNames.Sort();
-            AccountNames = portfolio.NameData(AccountType.BankAccount);
+            AccountNames = portfolio.NameData(Account.BankAccount);
             AccountNames.Sort();
-            SectorNames = portfolio.NameData(AccountType.Benchmark);
+            SectorNames = portfolio.NameData(Account.Benchmark);
             SectorNames.Sort();
-            CurrencyNames = portfolio.NameData(AccountType.Currency);
+            CurrencyNames = portfolio.NameData(Account.Currency);
             CurrencyNames.Sort();
         }
     }

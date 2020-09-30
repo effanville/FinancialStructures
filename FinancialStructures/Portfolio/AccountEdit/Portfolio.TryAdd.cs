@@ -9,7 +9,7 @@ namespace FinancialStructures.Database
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public bool TryAdd(AccountType elementType, NameData name, IReportLogger reportLogger = null)
+        public bool TryAdd(Account elementType, NameData name, IReportLogger reportLogger = null)
         {
             if (string.IsNullOrEmpty(name.Name) && string.IsNullOrEmpty(name.Company))
             {
@@ -26,7 +26,7 @@ namespace FinancialStructures.Database
 
             switch (elementType)
             {
-                case (AccountType.Security):
+                case (Account.Security):
                 {
                     Security toAdd = new Security(name);
                     toAdd.DataEdit += OnPortfolioChanged;
@@ -34,7 +34,7 @@ namespace FinancialStructures.Database
                     OnPortfolioChanged(toAdd, new EventArgs());
                     break;
                 }
-                case (AccountType.Currency):
+                case (Account.Currency):
                 {
                     if (string.IsNullOrEmpty(name.Company))
                     {
@@ -46,7 +46,7 @@ namespace FinancialStructures.Database
                     OnPortfolioChanged(toAdd, new EventArgs());
                     break;
                 }
-                case (AccountType.BankAccount):
+                case (Account.BankAccount):
                 {
                     CashAccount toAdd = new CashAccount(name);
                     toAdd.DataEdit += OnPortfolioChanged;
@@ -54,7 +54,7 @@ namespace FinancialStructures.Database
                     OnPortfolioChanged(toAdd, new EventArgs());
                     break;
                 }
-                case (AccountType.Benchmark):
+                case (Account.Benchmark):
                 {
                     Sector toAdd = new Sector(name);
                     toAdd.DataEdit += OnPortfolioChanged;

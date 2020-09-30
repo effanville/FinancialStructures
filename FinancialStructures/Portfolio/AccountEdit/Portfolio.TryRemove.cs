@@ -8,7 +8,7 @@ namespace FinancialStructures.Database
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public bool TryRemove(AccountType elementType, TwoName name, IReportLogger reportLogger = null)
+        public bool TryRemove(Account elementType, TwoName name, IReportLogger reportLogger = null)
         {
             if (string.IsNullOrEmpty(name.Name) && string.IsNullOrEmpty(name.Company))
             {
@@ -18,7 +18,7 @@ namespace FinancialStructures.Database
 
             switch (elementType)
             {
-                case (AccountType.Security):
+                case (Account.Security):
                 {
                     foreach (Security sec in Funds)
                     {
@@ -33,7 +33,7 @@ namespace FinancialStructures.Database
 
                     break;
                 }
-                case (AccountType.Currency):
+                case (Account.Currency):
                 {
                     foreach (Currency currency in Currencies)
                     {
@@ -48,7 +48,7 @@ namespace FinancialStructures.Database
 
                     break;
                 }
-                case (AccountType.BankAccount):
+                case (Account.BankAccount):
                 {
                     foreach (CashAccount acc in BankAccounts)
                     {
@@ -63,7 +63,7 @@ namespace FinancialStructures.Database
 
                     break;
                 }
-                case (AccountType.Benchmark):
+                case (Account.Benchmark):
                 {
                     foreach (Sector sector in BenchMarks)
                     {

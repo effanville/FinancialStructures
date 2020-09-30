@@ -8,9 +8,9 @@ namespace FinancialStructures.Tests.Database.Value
     [TestFixture]
     public sealed class CompanyValueTests
     {
-        [TestCase(AccountType.Security, 556.04999999999995)]
-        [TestCase(AccountType.BankAccount, 101.1)]
-        public void LatestCompanyValueOneAccountTests(AccountType accountType, double expectedValue)
+        [TestCase(Account.Security, 556.04999999999995)]
+        [TestCase(Account.BankAccount, 101.1)]
+        public void LatestCompanyValueOneAccountTests(Account accountType, double expectedValue)
         {
             var constructor = new DatabaseConstructor();
             constructor.WithDefaultFromType(accountType);
@@ -18,9 +18,9 @@ namespace FinancialStructures.Tests.Database.Value
             Assert.AreEqual(expectedValue, portfolio.CompanyValue(accountType, constructor.DefaultNameQuery(accountType).Company, DateTime.Today));
         }
 
-        [TestCase(AccountType.Security, 556.04999999999995)]
-        [TestCase(AccountType.BankAccount, 101.1)]
-        public void LatestCompanyValueTwoAccountTests(AccountType accountType, double expectedValue)
+        [TestCase(Account.Security, 556.04999999999995)]
+        [TestCase(Account.BankAccount, 101.1)]
+        public void LatestCompanyValueTwoAccountTests(Account accountType, double expectedValue)
         {
             var constructor = new DatabaseConstructor();
             constructor.WithDefaultFromType(accountType);
@@ -29,9 +29,9 @@ namespace FinancialStructures.Tests.Database.Value
             Assert.AreEqual(expectedValue, portfolio.CompanyValue(accountType, constructor.DefaultNameQuery(accountType).Company, DateTime.Today));
         }
 
-        [TestCase(AccountType.Security, 5556.04999999999995)]
-        [TestCase(AccountType.BankAccount, 201.1)]
-        public void LatestCompanyValueAccountTests(AccountType accountType, double expectedValue)
+        [TestCase(Account.Security, 5556.04999999999995)]
+        [TestCase(Account.BankAccount, 201.1)]
+        public void LatestCompanyValueAccountTests(Account accountType, double expectedValue)
         {
             var constructor = new DatabaseConstructor();
             constructor.WithDefaultFromType(accountType);

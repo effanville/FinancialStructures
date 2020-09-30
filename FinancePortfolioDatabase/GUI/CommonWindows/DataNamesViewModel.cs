@@ -17,7 +17,7 @@ namespace FinanceCommonViewModels
     /// </summary>
     internal class DataNamesViewModel : TabViewModelBase<IPortfolio>
     {
-        private readonly AccountType TypeOfAccount;
+        private readonly Account TypeOfAccount;
 
         /// <summary>
         /// Backing field for <see cref="DataNames"/>.
@@ -55,7 +55,7 @@ namespace FinanceCommonViewModels
         /// <summary>
         /// Construct an instance.
         /// </summary>
-        public DataNamesViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, Action<object> loadSelectedData, AccountType accountType)
+        public DataNamesViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, Action<object> loadSelectedData, Account accountType)
             : base("Accounts", portfolio, loadSelectedData)
         {
             UpdateDataCallback = updateDataCallback;

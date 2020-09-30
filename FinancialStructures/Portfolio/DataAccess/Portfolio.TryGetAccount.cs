@@ -21,13 +21,13 @@ namespace FinancialStructures.Database
         }
 
         /// <inheritdoc/>
-        public bool TryGetAccount(AccountType accountType, TwoName names, out ISingleValueDataList desired)
+        public bool TryGetAccount(Account accountType, TwoName names, out ISingleValueDataList desired)
         {
             bool success = false;
             desired = null;
             switch (accountType)
             {
-                case (AccountType.BankAccount):
+                case (Account.BankAccount):
                 {
                     foreach (ICashAccount sec in BankAccounts)
                     {
@@ -39,7 +39,7 @@ namespace FinancialStructures.Database
                     }
                     break;
                 }
-                case (AccountType.Currency):
+                case (Account.Currency):
                 {
                     foreach (ICurrency currency in Currencies)
                     {
@@ -51,7 +51,7 @@ namespace FinancialStructures.Database
                     }
                     break;
                 }
-                case (AccountType.Benchmark):
+                case (Account.Benchmark):
                 {
                     foreach (ISector sector in BenchMarks)
                     {
