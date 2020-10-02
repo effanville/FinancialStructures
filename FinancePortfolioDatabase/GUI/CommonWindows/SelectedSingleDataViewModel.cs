@@ -90,7 +90,7 @@ namespace FinanceCommonViewModels
             base.UpdateData(portfolio);
             if (SelectedName != null)
             {
-                if (!portfolio.NameData(TypeOfAccount).Exists(name => name.IsEqualTo(SelectedName)))
+                if (!portfolio.Exists(TypeOfAccount, SelectedName))
                 {
                     removeTab?.Invoke(this);
                     return;

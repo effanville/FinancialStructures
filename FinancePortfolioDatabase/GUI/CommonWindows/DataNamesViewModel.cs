@@ -91,12 +91,9 @@ namespace FinanceCommonViewModels
             base.UpdateData(portfolio);
 
             var values = portfolio.NameData(TypeOfAccount);
-            if (values.Count != DataNames.Count)
-            {
-                DataNames = null;
-                DataNames = values;
-                DataNames.Sort();
-            }
+            DataNames = null;
+            DataNames = values;
+            DataNames.Sort();
         }
 
         /// <summary>
