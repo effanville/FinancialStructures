@@ -9,10 +9,10 @@ namespace FinancialStructures.Database.Statistics
         /// <summary>
         /// returns the fraction a held in the account has out of its company.
         /// </summary>
-        [Obsolete("This function is currently broken. Requires fixing.")]
         public static double AccountInCompanyFraction(this IPortfolio portfolio, Totals elementType, TwoName names, DateTime date)
         {
-            double companyFraction = portfolio.Fraction(elementType, names, date);
+            Totals companyTotals = AccountToTotalsConverter.ConvertTotalToCompanyTotal(elementType);
+            double companyFraction = portfolio.Fraction(companyTotals, names, date);
             if (companyFraction.Equals(0.0))
             {
                 return 0.0;

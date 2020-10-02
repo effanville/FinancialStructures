@@ -82,5 +82,48 @@ namespace FinancialStructures.FinanceInterfaces
                 }
             }
         }
+
+
+        /// <summary>
+        /// Converts a Account enum to a Totals enum.
+        /// </summary>
+        /// <param name="element"></param>
+        /// <returns></returns>
+        public static Totals ConvertTotalToCompanyTotal(Totals element)
+        {
+            switch (element)
+            {
+                case Totals.All:
+                case Totals.Sector:
+                case Totals.Company:
+                case Totals.CurrencySector:
+                default:
+                {
+                    return Totals.All;
+                }
+                case Totals.Security:
+                case Totals.SecurityCompany:
+                case Totals.SecuritySector:
+                case Totals.SecurityCurrency:
+                {
+                    return Totals.SecurityCompany;
+                }
+                case Totals.BankAccount:
+                case Totals.BankAccountCompany:
+                case Totals.BankAccountSector:
+                case Totals.BankAccountCurrency:
+                {
+                    return Totals.BankAccount;
+                }
+                case Totals.Benchmark:
+                {
+                    return Totals.Benchmark;
+                }
+                case Totals.Currency:
+                {
+                    return Totals.Currency;
+                }
+            }
+        }
     }
 }
