@@ -180,6 +180,11 @@ namespace FinancialStructures.FinanceInterfaces
         void SavePortfolio(string filePath, IReportLogger reportLogger = null);
 
         /// <summary>
+        /// Clears all data in the portfolio.
+        /// </summary>
+        void Clear();
+
+        /// <summary>
         /// Adds the desired data to the security if it can.
         /// </summary>
         bool TryAddOrEditDataToSecurity(TwoName names, DateTime oldDate, DateTime date, double shares, double unitPrice, double Investment, IReportLogger reportLogger = null);

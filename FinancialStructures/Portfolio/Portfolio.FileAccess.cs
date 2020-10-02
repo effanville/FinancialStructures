@@ -9,6 +9,18 @@ namespace FinancialStructures.Database
 {
     public partial class Portfolio
     {
+        /// <inheritdoc />
+        public void Clear()
+        {
+            SetFilePath("");
+            BaseCurrency = "";
+            IsAlteredSinceSave = false;
+            Funds.Clear();
+            BenchMarks.Clear();
+            Currencies.Clear();
+            BankAccounts.Clear();
+        }
+
         /// <inheritdoc/>
         public void LoadPortfolio(string filePath, IReportLogger reportLogger = null)
         {

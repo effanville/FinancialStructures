@@ -144,6 +144,7 @@ namespace FinanceWindowsViewModels
             if (result.Success != null && (bool)result.Success)
             {
                 DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(result.FilePath));
+                DataUpdateCallback(programPortfolio => programPortfolio.Clear());
                 DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio(result.FilePath, fReportLogger));
             }
         }
