@@ -143,8 +143,8 @@ namespace FinanceWindowsViewModels
             FileInteractionResult result = fFileService.OpenFile("xml", filter: "XML Files|*.xml|All Files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
-                DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(result.FilePath));
                 DataUpdateCallback(programPortfolio => programPortfolio.Clear());
+                DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(result.FilePath));
                 DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio(result.FilePath, fReportLogger));
             }
         }
