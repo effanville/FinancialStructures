@@ -191,20 +191,11 @@ namespace FinanceWindowsViewModels
             if (fSelectedName != null)
             {
                 var originRowData = e.Row.DataContext as SecurityDayData;
-                _ = DataStore.TryGetSecurity(fSelectedName, out ISecurity desired);
-                if (desired.Count() != SelectedSecurityData.Count)
+                bool edited = false;
+                UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditDataToSecurity(fSelectedName, fOldSelectedValues.Date, originRowData.Date, originRowData.ShareNo, originRowData.UnitPrice, originRowData.NewInvestment, ReportLogger));
+                if (!edited)
                 {
-                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditDataToSecurity(fSelectedName, fOldSelectedValues.Date, originRowData.Date, originRowData.ShareNo, originRowData.UnitPrice, originRowData.NewInvestment, ReportLogger));
-                }
-                else
-                {
-                    bool edited = false;
-                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAddOrEditDataToSecurity(fSelectedName, fOldSelectedValues.Date, originRowData.Date, originRowData.ShareNo, originRowData.UnitPrice, originRowData.NewInvestment, ReportLogger));
-
-                    if (!edited)
-                    {
-                        _ = ReportLogger.LogUsefulWithStrings("Error", "EditingData", "Was not able to edit security data.");
-                    }
+                    _ = ReportLogger.LogUsefulWithStrings("Error", "EditingData", "Was not able to add or edit security data.");
                 }
             }
         }

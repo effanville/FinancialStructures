@@ -158,19 +158,11 @@ namespace FinanceCommonViewModels
             if (SelectedName != null)
             {
                 var originRowData = e.Row.DataContext as DailyValuation;
-                if (DataStore.NumberData(TypeOfAccount, SelectedName, ReportLogger).Count() != SelectedData.Count)
+                bool edited = false;
+                UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditData(TypeOfAccount, SelectedName, fOldSelectedValue, originRowData, ReportLogger));
+                if (!edited)
                 {
-                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditData(TypeOfAccount, SelectedName, fOldSelectedValue, originRowData, ReportLogger));
-                }
-                else
-                {
-                    bool edited = false;
-                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAddOrEditData(TypeOfAccount, SelectedName, fOldSelectedValue, originRowData, ReportLogger));
-
-                    if (!edited)
-                    {
-                        _ = ReportLogger.LogWithStrings("Critical", "Error", "EditingData", "Was not able to edit data.");
-                    }
+                    _ = ReportLogger.LogWithStrings("Critical", "Error", "EditingData", "Was not able to add or edit data.");
                 }
             }
         }
