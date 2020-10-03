@@ -1,7 +1,7 @@
-﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.PortfolioAPI;
+﻿using System.Collections.Generic;
+using FinancialStructures.Database.Statistics;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.StatisticStructures;
-using System.Collections.Generic;
 
 namespace FinanceViewModels.StatsViewModels
 {
@@ -11,8 +11,15 @@ namespace FinanceViewModels.StatsViewModels
         private List<DatabaseStatistics> fDatabaseStats;
         public List<DatabaseStatistics> DatabaseStats
         {
-            get { return fDatabaseStats; }
-            set { fDatabaseStats = value; OnPropertyChanged(); }
+            get
+            {
+                return fDatabaseStats;
+            }
+            set
+            {
+                fDatabaseStats = value;
+                OnPropertyChanged();
+            }
         }
 
         public override void GenerateStatistics(bool displayValueFunds)

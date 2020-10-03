@@ -1,22 +1,51 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.NamingStructures;
-using FinancialStructures.Reporting;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using FinancialStructures.DataStructures;
+using FinancialStructures.NamingStructures;
+using StructureCommon.DataStructures;
+using StructureCommon.FileAccess;
+using StructureCommon.Reporting;
 
 namespace FinancialStructures.FinanceInterfaces
 {
-    public interface ISecurity
+    public interface ISecurity : ICSVAccess
     {
-        NameData Names { get; }
-        string Name { get; }
-        string Company { get; }
-        string Url { get; }
-        string Currency { get; }
-        HashSet<string> Sectors { get; }
-        TimeList Shares { get; }
-        TimeList UnitPrice { get; }
-        TimeList Investments { get; }
+        NameData Names
+        {
+            get;
+        }
+        string Name
+        {
+            get;
+        }
+        string Company
+        {
+            get;
+        }
+        string Url
+        {
+            get;
+        }
+        string Currency
+        {
+            get;
+        }
+        HashSet<string> Sectors
+        {
+            get;
+        }
+        TimeList Shares
+        {
+            get;
+        }
+        TimeList UnitPrice
+        {
+            get;
+        }
+        TimeList Investments
+        {
+            get;
+        }
         bool IsEqualTo(ISecurity otherSecurity);
         bool SameName(TwoName otherNames);
         bool SameName(string company, string name);

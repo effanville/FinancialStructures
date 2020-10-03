@@ -1,8 +1,11 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.NamingStructures;
-using FinancialStructures.Reporting;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using FinancialStructures.DataStructures;
+using FinancialStructures.NamingStructures;
+using StructureCommon.DataStructures;
+using StructureCommon.Reporting;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -19,11 +22,52 @@ namespace FinancialStructures.FinanceStructures
         {
             if (DoesDateSharesDataExist(date, out int _) || DoesDateInvestmentDataExist(date, out int _) || DoesDateUnitPriceDataExist(date, out int _))
             {
-                reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, $"Security {Names.ToString()} already has NumShares or UnitPrice or Investment data on {date.ToString("d")}.");
+                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, $"Security {Names.ToString()} already has NumShares or UnitPrice or Investment data on {date.ToString("d")}.");
                 return false;
             }
 
             return fShares.TryAddValue(date, shares, reportLogger) & fUnitPrice.TryAddValue(date, unitPrice, reportLogger) & fInvestments.TryAddValue(date, investment, reportLogger) && ComputeInvestments(reportLogger);
+        }
+
+        /// <summary>
+        /// Attempts to add data for the date specified.
+        /// If cannot add any value that one wants to, then doesn't add all the values chosen.
+        /// </summary>
+        public bool TryAddOrEditData(DateTime oldDate, DateTime date, double unitPrice, double shares = 0, double investment = 0, IReportLogger reportLogger = null)
+        {
+            if (DoesDateSharesDataExist(oldDate, out int _) || DoesDateInvestmentDataExist(oldDate, out int _) || DoesDateUnitPriceDataExist(oldDate, out int _))
+            {
+                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Security {Names.ToString()} data on {date.ToString("d")} edited.");
+                return TryEditData(oldDate, date, shares, unitPrice, investment, reportLogger);
+            }
+
+            return fShares.TryAddValue(date, shares, reportLogger) & fUnitPrice.TryAddValue(date, unitPrice, reportLogger) & fInvestments.TryAddValue(date, investment, reportLogger) && ComputeInvestments(reportLogger);
+        }
+
+        public List<object> CreateDataFromCsv(List<string[]> valuationsToRead, IReportLogger reportLogger = null)
+        {
+            List<object> dailyValuations = new List<object>();
+            foreach (string[] dayValuation in valuationsToRead)
+            {
+                if (dayValuation.Length != 4)
+                {
+                    _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, "Line in Csv file has incomplete data.");
+                    break;
+                }
+
+                SecurityDayData line = new SecurityDayData(DateTime.Parse(dayValuation[0]), double.Parse(dayValuation[1]), double.Parse(dayValuation[2]), double.Parse(dayValuation[3]));
+                dailyValuations.Add(line);
+            }
+
+            return dailyValuations;
+        }
+
+        public void WriteDataToCsv(TextWriter writer, IReportLogger reportLogger)
+        {
+            foreach (SecurityDayData value in GetDataForDisplay())
+            {
+                writer.WriteLine(value.ToString());
+            }
         }
 
         /// <summary>
@@ -32,13 +76,13 @@ namespace FinancialStructures.FinanceStructures
         public void UpdateSecurityData(DateTime day, double value, IReportLogger reportLogger = null)
         {
             // best approximation for number of units is last known number of units.
-            TryGetEarlierData(day, out DailyValuation _, out DailyValuation units, out DailyValuation _);
+            _ = TryGetEarlierData(day, out DailyValuation _, out DailyValuation units, out DailyValuation _);
             if (units == null)
             {
                 units = new DailyValuation(day, 0);
             }
 
-            TryAddData(day, value, units.Value, reportLogger: reportLogger);
+            _ = TryAddOrEditData(day, day, value, units.Value, reportLogger: reportLogger);
         }
 
 
@@ -72,6 +116,7 @@ namespace FinancialStructures.FinanceStructures
         public bool EditNameData(NameData name)
         {
             Names = name;
+            OnDataEdit(this, new EventArgs());
             return true;
         }
 
@@ -79,7 +124,8 @@ namespace FinancialStructures.FinanceStructures
         {
             if (IsSectorLinked(sectorName))
             {
-                Names.Sectors.Remove(sectorName);
+                _ = Names.Sectors.Remove(sectorName);
+                OnDataEdit(this, new EventArgs());
                 return true;
             }
 
@@ -90,7 +136,8 @@ namespace FinancialStructures.FinanceStructures
         {
             if (!IsSectorLinked(sectorName))
             {
-                Names.Sectors.Add(sectorName);
+                _ = Names.Sectors.Add(sectorName);
+                OnDataEdit(this, new EventArgs());
                 return true;
             }
 
@@ -101,7 +148,7 @@ namespace FinancialStructures.FinanceStructures
         {
             if (Names.Sectors != null && Names.Sectors.Any())
             {
-                foreach (var name in Names.Sectors)
+                foreach (string name in Names.Sectors)
                 {
                     if (name == sectorName)
                     {
@@ -155,7 +202,7 @@ namespace FinancialStructures.FinanceStructures
             // return true;
             for (int index = 0; index < fInvestments.Count(); index++)
             {
-                var investmentValue = fInvestments[index];
+                DailyValuation investmentValue = fInvestments[index];
                 if (investmentValue.Value != 0)
                 {
                     DailyValuation sharesCurrentValue = fShares.NearestEarlierValue(investmentValue.Day);

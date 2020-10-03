@@ -1,6 +1,6 @@
-﻿using FinanceWindowsViewModels;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
+using FinanceWindowsViewModels;
 
 namespace FinanceWindows
 {
@@ -9,6 +9,9 @@ namespace FinanceWindows
     /// </summary>
     public partial class SecurityEditWindow : Grid
     {
+        /// <summary>
+        /// Construct an instance.
+        /// </summary>
         public SecurityEditWindow()
         {
             InitializeComponent();
@@ -16,7 +19,7 @@ namespace FinanceWindows
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            var VM = this.DataContext as SecurityEditWindowViewModel;
+            SecurityEditWindowViewModel VM = DataContext as SecurityEditWindowViewModel;
             if (TabMain.SelectedIndex != 0)
             {
                 VM.Tabs.RemoveAt(TabMain.SelectedIndex);

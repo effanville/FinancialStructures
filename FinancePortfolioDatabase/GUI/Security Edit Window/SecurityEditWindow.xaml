@@ -3,36 +3,48 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:cl="clr-namespace:GUISupport"
+      xmlns:cl="clr-namespace:Colouring"
       mc:Ignorable="d">
-
     <Grid.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
         <Style TargetType="TabItem">
             <Setter Property="HeaderTemplate">
                 <Setter.Value>
                     <DataTemplate>
-                        <TextBlock Text="{Binding Header,Mode=OneWay}" FontSize="18" FontWeight="Bold" Foreground="DarkBlue" Width="Auto"/>
+                        <TextBlock Text="{Binding Header,Mode=OneWay}"
+                                   FontSize="18"
+                                   FontWeight="Bold"
+                                   Foreground="DarkBlue"
+                                   Width="Auto" />
                     </DataTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
     </Grid.Resources>
-    
     <Grid x:Name="parent">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-        <TabControl x:Name="TabMain"  Grid.Row="0" Grid.Column="0" ItemsSource="{Binding Tabs}" Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
+        <TabControl x:Name="TabMain"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    ItemsSource="{Binding Tabs}"
+                    Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Header}"/>
-                        <Button Background="Transparent" BorderThickness="0" Visibility="{Binding Closable, Converter={StaticResource BoolToVis}}" Height="12" Width="12" Margin="2 2 0 0" Click="Button_Click">
-                            <Image Source="../GuiSupport/close.png" />
+                        <TextBlock Text="{Binding Header}" />
+                        <Button Background="Transparent"
+                                BorderThickness="0"
+                                Visibility="{Binding Closable, Converter={StaticResource BoolToVis}}"
+                                Height="12"
+                                Width="12"
+                                Margin="2 2 0 0"
+                                Click="Button_Click">
+                            <Image Source="../TemplatesAndStyles/close.png" />
                         </Button>
                     </StackPanel>
                 </DataTemplate>

@@ -1,6 +1,6 @@
-﻿using FinancialStructures.NamingStructures;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.StockStructures
 {
@@ -15,8 +15,15 @@ namespace FinancialStructures.StockStructures
         /// </summary>
         public List<StockDayPrices> Valuations
         {
-            get { return fValuations; }
-            set { fValuations = value; fValuations.Sort(); }
+            get
+            {
+                return fValuations;
+            }
+            set
+            {
+                fValuations = value;
+                fValuations.Sort();
+            }
         }
 
         internal int LastAccessedValuationIndex = 0;

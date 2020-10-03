@@ -1,6 +1,6 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceFunctions;
-using System;
+﻿using System;
+using StructureCommon.DataStructures;
+using StructureCommon.FinanceFunctions;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -20,7 +20,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Returns the first valuation of the CashAccount.
         /// </summary>
-        internal DailyValuation FirstValue()
+        public DailyValuation FirstValue()
         {
             return fValues.FirstValuation();
         }
@@ -56,6 +56,17 @@ namespace FinancialStructures.FinanceStructures
         internal DailyValuation NearestLaterValuation(DateTime date)
         {
             return fValues.NearestLaterValue(date);
+        }
+
+        public DailyValuation LastEarlierValuation(DateTime date)
+        {
+            DailyValuation val = fValues.RecentPreviousValue(date);
+            if (val == null)
+            {
+                return new DailyValuation(date, 0.0);
+            }
+
+            return val;
         }
     }
 }

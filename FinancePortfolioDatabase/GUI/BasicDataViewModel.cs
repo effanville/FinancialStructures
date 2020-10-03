@@ -1,39 +1,66 @@
-﻿using FinanceCommonViewModels;
+﻿using System.Collections.Generic;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
-using System.Collections.Generic;
+using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
-    internal class BasicDataViewModel : ViewModelBase
+    internal class BasicDataViewModel : ViewModelBase<IPortfolio>
     {
         private List<NameCompDate> fFundNames;
         public List<NameCompDate> FundNames
         {
-            get { return fFundNames; }
-            set { fFundNames = value; OnPropertyChanged(); }
+            get
+            {
+                return fFundNames;
+            }
+            set
+            {
+                fFundNames = value;
+                OnPropertyChanged();
+            }
         }
 
         private List<NameCompDate> fAccountNames;
         public List<NameCompDate> AccountNames
         {
-            get { return fAccountNames; }
-            set { fAccountNames = value; OnPropertyChanged(); }
+            get
+            {
+                return fAccountNames;
+            }
+            set
+            {
+                fAccountNames = value;
+                OnPropertyChanged();
+            }
         }
 
         private List<NameCompDate> fSectorNames;
         public List<NameCompDate> SectorNames
         {
-            get { return fSectorNames; }
-            set { fSectorNames = value; OnPropertyChanged(); }
+            get
+            {
+                return fSectorNames;
+            }
+            set
+            {
+                fSectorNames = value;
+                OnPropertyChanged();
+            }
         }
 
         private List<NameCompDate> fCurrencyNames;
         public List<NameCompDate> CurrencyNames
         {
-            get { return fCurrencyNames; }
-            set { fCurrencyNames = value; OnPropertyChanged(); }
+            get
+            {
+                return fCurrencyNames;
+            }
+            set
+            {
+                fCurrencyNames = value;
+                OnPropertyChanged();
+            }
         }
 
         public BasicDataViewModel(IPortfolio portfolio)
@@ -44,13 +71,13 @@ namespace FinanceWindowsViewModels
 
         public override void UpdateData(IPortfolio portfolio)
         {
-            FundNames = portfolio.NameData(AccountType.Security);
+            FundNames = portfolio.NameData(Account.Security);
             FundNames.Sort();
-            AccountNames = portfolio.NameData(AccountType.BankAccount);
+            AccountNames = portfolio.NameData(Account.BankAccount);
             AccountNames.Sort();
-            SectorNames = portfolio.NameData(AccountType.Sector);
+            SectorNames = portfolio.NameData(Account.Benchmark);
             SectorNames.Sort();
-            CurrencyNames = portfolio.NameData(AccountType.Currency);
+            CurrencyNames = portfolio.NameData(Account.Currency);
             CurrencyNames.Sort();
         }
     }

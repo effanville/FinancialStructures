@@ -1,11 +1,11 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.NamingStructures;
+﻿using FinancialStructures.NamingStructures;
+using StructureCommon.DataStructures;
 
 namespace FinancialStructures.FinanceStructures
 {
     public class DoubleValueDataList : SingleValueDataList
     {
-        private TimeList fSecondValues = new TimeList();
+        private readonly TimeList fSecondValues = new TimeList();
 
         public DoubleValueDataList()
             : base()

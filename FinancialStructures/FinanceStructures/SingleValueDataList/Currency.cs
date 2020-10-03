@@ -1,6 +1,6 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
+using StructureCommon.DataStructures;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -50,13 +50,15 @@ namespace FinancialStructures.FinanceStructures
 
         private Currency(NameData name, TimeList values)
             : base(name, values)
-        { }
+        {
+        }
 
         /// <summary>
         /// default constructor.
         /// </summary>
-        internal Currency()
+        public Currency()
             : base()
-        { }
+        {
+        }
     }
 }

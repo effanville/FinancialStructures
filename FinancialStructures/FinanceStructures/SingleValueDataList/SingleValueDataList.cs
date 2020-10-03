@@ -1,7 +1,7 @@
-﻿using FinancialStructures.DataStructures;
+﻿using System;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using System;
+using StructureCommon.DataStructures;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -13,9 +13,27 @@ namespace FinancialStructures.FinanceStructures
     /// </example>
     public partial class SingleValueDataList : IComparable, ISingleValueDataList
     {
+        /// <summary>
+        /// Event that controls when data is edited.
+        /// </summary>
+        public event EventHandler DataEdit;
+
+        internal void OnDataEdit(object edited, EventArgs e)
+        {
+            DataEdit?.Invoke(edited, e);
+        }
+
+        public void SetupEventListening()
+        {
+            Values.DataEdit += OnDataEdit;
+        }
+
+        /// <summary>
+        /// The string representation of this list.
+        /// </summary>
         public override string ToString()
         {
-            return Names.Company + " - " + Names.Name;
+            return Names.ToString();
         }
 
         /// <summary>
@@ -38,8 +56,14 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public NameData Names
         {
-            get { return fNames; }
-            set { fNames = value; }
+            get
+            {
+                return fNames;
+            }
+            set
+            {
+                fNames = value;
+            }
         }
 
         /// <summary>
@@ -47,8 +71,15 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public virtual string Name
         {
-            get => Names.Name;
-            set => Names.Name = value;
+            get
+            {
+                return Names.Name;
+            }
+
+            set
+            {
+                Names.Name = value;
+            }
         }
 
         /// <summary>
@@ -56,20 +87,40 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public string Company
         {
-            get => Names.Company;
-            set => Names.Company = value;
+            get
+            {
+                return Names.Company;
+            }
+
+            set
+            {
+                Names.Company = value;
+            }
         }
 
         public string Url
         {
-            get => Names.Url;
-            set => Names.Url = value;
+            get
+            {
+                return Names.Url;
+            }
+
+            set
+            {
+                Names.Url = value;
+            }
         }
 
         public string Currency
         {
-            get { return Names.Currency; }
-            set { Names.Currency = value; }
+            get
+            {
+                return Names.Currency;
+            }
+            set
+            {
+                Names.Currency = value;
+            }
         }
 
         /// <summary>
@@ -82,8 +133,15 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public TimeList Values
         {
-            get => fValues;
-            set => fValues = value;
+            get
+            {
+                return fValues;
+            }
+
+            set
+            {
+                fValues = value;
+            }
         }
 
         /// <summary>
@@ -92,6 +150,7 @@ namespace FinancialStructures.FinanceStructures
         public SingleValueDataList()
         {
             Names = new NameData();
+            SetupEventListening();
         }
 
         /// <summary>
@@ -100,6 +159,7 @@ namespace FinancialStructures.FinanceStructures
         public SingleValueDataList(NameData names)
         {
             Names = names;
+            SetupEventListening();
         }
 
         /// <summary>
@@ -109,6 +169,7 @@ namespace FinancialStructures.FinanceStructures
         {
             Names = names;
             fValues = values;
+            SetupEventListening();
         }
 
         public ISingleValueDataList Copy()

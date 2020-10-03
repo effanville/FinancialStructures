@@ -1,10 +1,12 @@
-﻿using FinancialStructures.Database;
+﻿using System;
+using System.Collections.Generic;
+using FinancialStructures.Database;
+using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.Mathematics;
-using FinancialStructures.PortfolioAPI;
-using System;
-using System.Collections.Generic;
+using FinancialStructures.NamingStructures;
+using StructureCommon.DataStructures;
+using StructureCommon.Extensions;
 
 namespace FinancialStructures.StatisticStructures
 {
@@ -25,15 +27,15 @@ namespace FinancialStructures.StatisticStructures
 
             outputCSVStyle += string.Concat("SecurityTotal", ",");
 
-            foreach (var value in SecurityValues)
+            foreach (DayValue_Named value in SecurityValues)
             {
                 outputCSVStyle += string.Concat(value.Names.Company, ",");
             }
-            foreach (var value in BankAccValues)
+            foreach (DayValue_Named value in BankAccValues)
             {
                 outputCSVStyle += string.Concat(value.Names.Company, ",");
             }
-            foreach (var value in SectorValues)
+            foreach (DayValue_Named value in SectorValues)
             {
                 outputCSVStyle += string.Concat(value.Names.Company, ",");
             }
@@ -53,15 +55,15 @@ namespace FinancialStructures.StatisticStructures
 
             outputCSVStyle += string.Concat(SecurityValue.Value, ",");
 
-            foreach (var value in SecurityValues)
+            foreach (DayValue_Named value in SecurityValues)
             {
                 outputCSVStyle += string.Concat(value.Value, ",");
             }
-            foreach (var value in BankAccValues)
+            foreach (DayValue_Named value in BankAccValues)
             {
                 outputCSVStyle += string.Concat(value.Value, ",");
             }
-            foreach (var value in SectorValues)
+            foreach (DayValue_Named value in SectorValues)
             {
                 outputCSVStyle += string.Concat(value.Value, ",");
             }
@@ -69,11 +71,20 @@ namespace FinancialStructures.StatisticStructures
             return outputCSVStyle;
         }
 
-        public DailyValuation TotalValue { get; }
+        public DailyValuation TotalValue
+        {
+            get;
+        }
 
-        public DailyValuation BankAccValue { get; }
+        public DailyValuation BankAccValue
+        {
+            get;
+        }
 
-        public DailyValuation SecurityValue { get; }
+        public DailyValuation SecurityValue
+        {
+            get;
+        }
 
         public List<DayValue_Named> SecurityValues { get; } = new List<DayValue_Named>();
 
@@ -90,7 +101,8 @@ namespace FinancialStructures.StatisticStructures
         /// Default Constructor.
         /// </summary>
         public PortfolioDaySnapshot()
-        { }
+        {
+        }
 
         /// <summary>
         /// Constructor which generates the snapshot.
@@ -99,9 +111,9 @@ namespace FinancialStructures.StatisticStructures
         /// <param name="portfolio"></param>
         public PortfolioDaySnapshot(DateTime date, IPortfolio portfolio)
         {
-            TotalValue = new DailyValuation(date, MathSupport.Truncate(portfolio.Value(date)));
-            BankAccValue = new DailyValuation(date, MathSupport.Truncate(portfolio.TotalValue(AccountType.BankAccount, date)));
-            SecurityValue = new DailyValuation(date, MathSupport.Truncate(portfolio.TotalValue(AccountType.Security, date)));
+            TotalValue = new DailyValuation(date, portfolio.TotalValue(date).Truncate());
+            BankAccValue = new DailyValuation(date, portfolio.TotalValue(Totals.BankAccount, date).Truncate());
+            SecurityValue = new DailyValuation(date, portfolio.TotalValue(Totals.Security, date).Truncate());
 
             AddSecurityValues(date, portfolio);
             AddBankAccountValues(date, portfolio);
@@ -110,24 +122,24 @@ namespace FinancialStructures.StatisticStructures
 
         private void AddSecurityValues(DateTime date, IPortfolio portfolio)
         {
-            var companyNames = portfolio.Companies(AccountType.Security);
+            List<string> companyNames = portfolio.Companies(Account.Security);
             companyNames.Sort();
-            foreach (var companyName in companyNames)
+            foreach (string companyName in companyNames)
             {
-                var companyValue = new DayValue_Named(companyName, null, date, MathSupport.Truncate(portfolio.CompanyValue(AccountType.Security, companyName, date)));
+                DayValue_Named companyValue = new DayValue_Named(companyName, null, date, portfolio.TotalValue(Totals.SecurityCompany, date, new TwoName(companyName)).Truncate());
                 SecurityValues.Add(companyValue);
 
-                var yearCar = new DayValue_Named(companyName, null, date, MathSupport.Truncate(portfolio.IRRCompany(companyName, date.AddDays(-365), date)));
+                DayValue_Named yearCar = new DayValue_Named(companyName, null, date, portfolio.IRRTotal(Totals.SecurityCompany, date.AddDays(-365), date, companyName).Truncate());
                 Security1YrCar.Add(yearCar);
 
                 DayValue_Named totalCar;
-                if (date < portfolio.CompanyFirstDate(companyName))
+                if (date < portfolio.FirstValueDate(Totals.SecurityCompany, companyName))
                 {
                     totalCar = new DayValue_Named(companyName, null, date, 0.0);
                 }
                 else
                 {
-                    totalCar = new DayValue_Named(companyName, null, date, MathSupport.Truncate(portfolio.IRRCompany(companyName, portfolio.CompanyFirstDate(companyName), date)));
+                    totalCar = new DayValue_Named(companyName, null, date, portfolio.IRRTotal(Totals.SecurityCompany, portfolio.FirstValueDate(Totals.SecurityCompany, companyName), date, companyName).Truncate());
                 }
                 SecurityTotalCar.Add(totalCar);
             }
@@ -135,31 +147,31 @@ namespace FinancialStructures.StatisticStructures
 
         private void AddBankAccountValues(DateTime date, IPortfolio portfolio)
         {
-            var companyBankNames = portfolio.Companies(AccountType.BankAccount);
+            List<string> companyBankNames = portfolio.Companies(Account.BankAccount);
             companyBankNames.Sort();
-            foreach (var companyName in companyBankNames)
+            foreach (string companyName in companyBankNames)
             {
-                var companyValue = new DayValue_Named(companyName, null, date, MathSupport.Truncate(portfolio.CompanyValue(AccountType.BankAccount, companyName, date)));
+                DayValue_Named companyValue = new DayValue_Named(companyName, null, date, portfolio.TotalValue(Totals.BankAccountCompany, date, new TwoName(companyName)).Truncate());
                 BankAccValues.Add(companyValue);
             }
         }
 
         private void AddSectorTotalValues(DateTime date, IPortfolio portfolio)
         {
-            var sectorNames = portfolio.GetSecuritiesSectors();
-            foreach (var sectorName in sectorNames)
+            List<string> sectorNames = portfolio.GetSecuritiesSectors();
+            foreach (string sectorName in sectorNames)
             {
-                var sectorValue = new DayValue_Named(sectorName, null, date, MathSupport.Truncate(portfolio.SectorValue(sectorName, date)));
+                DayValue_Named sectorValue = new DayValue_Named(sectorName, null, date, portfolio.TotalValue(Totals.Sector, date, new TwoName(sectorName)).Truncate());
                 SectorValues.Add(sectorValue);
 
                 DayValue_Named sectorCar;
-                if (date < portfolio.SectorFirstDate(sectorName))
+                if (date < portfolio.FirstValueDate(Totals.Sector, sectorName))
                 {
                     sectorCar = new DayValue_Named(sectorName, null, date, 0.0);
                 }
                 else
                 {
-                    sectorCar = new DayValue_Named(sectorName, null, date, MathSupport.Truncate(portfolio.IRRSector(sectorName, portfolio.SectorFirstDate(sectorName), date)));
+                    sectorCar = new DayValue_Named(sectorName, null, date, portfolio.IRRTotal(Totals.Sector, portfolio.FirstValueDate(Totals.Sector, sectorName), date, sectorName).Truncate());
                 }
                 SectorCar.Add(sectorCar);
             }

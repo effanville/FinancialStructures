@@ -1,8 +1,6 @@
-﻿using FinancialStructures.Mathematics;
+﻿using System;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.StatsMakers;
-using System;
-using System.Collections.Generic;
+using StructureCommon.DataStructures;
 
 namespace FinancialStructures.DataStructures
 {
@@ -18,52 +16,6 @@ namespace FinancialStructures.DataStructures
             return 0;
         }
 
-        public string HTMLTableHeader(UserOptions options, List<string> names)
-        {
-            var properties = this.GetType().GetProperties();
-            string htmlHeader = string.Empty;
-            foreach (var property in properties)
-            {
-                if (names.Contains(property.Name))
-                {
-                    htmlHeader += "<th scope=\"col\">";
-                    htmlHeader += property.Name;
-                    htmlHeader += "</th>";
-                }
-            }
-
-            return htmlHeader;
-        }
-
-        public string HTMLTableData(UserOptions options, List<string> names)
-        {
-            var properties = this.GetType().GetProperties();
-            string htmlData = "<th scope=\"row\">";
-
-            for (int i = 0; i < properties.Length; i++)
-            {
-                if (names.Contains(properties[i].Name))
-                {
-                    if (i != 0)
-                    {
-                        htmlData += "<td>";
-                    }
-                    if (double.TryParse(properties[i].GetValue(this).ToString(), out double value))
-                    {
-                        htmlData += MathSupport.Trunc(value);
-                    }
-                    else
-                    {
-                        htmlData += properties[i].GetValue(this);
-                    }
-
-                    htmlData += "</td>";
-                }
-            }
-            htmlData += "</th>";
-            return htmlData;
-        }
-
         /// <inheritdoc/>
         public override string ToString()
         {
@@ -73,7 +25,11 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Names associated to the values.
         /// </summary>
-        public TwoName Names { get; set; }
+        public TwoName Names
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Empty constructor.

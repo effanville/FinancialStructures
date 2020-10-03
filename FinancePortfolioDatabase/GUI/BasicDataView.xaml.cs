@@ -7,6 +7,9 @@ namespace FinanceWindows
     /// </summary>
     public partial class BasicDataView : Grid
     {
+        /// <summary>
+        /// Construct an instance.
+        /// </summary>
         public BasicDataView()
         {
             InitializeComponent();

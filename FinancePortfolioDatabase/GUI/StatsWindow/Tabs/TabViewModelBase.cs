@@ -1,5 +1,5 @@
 ﻿using FinancialStructures.FinanceInterfaces;
-using GUISupport;
+using UICommon.ViewModelBases;
 
 namespace FinanceViewModels.StatsViewModels
 {
@@ -10,12 +10,28 @@ namespace FinanceViewModels.StatsViewModels
         private bool fDisplayValueFunds = true;
         public bool DisplayValueFunds
         {
-            get { return fDisplayValueFunds; }
-            set { fDisplayValueFunds = value; }
+            get
+            {
+                return fDisplayValueFunds;
+            }
+            set
+            {
+                fDisplayValueFunds = value;
+            }
         }
-        public string Header { get; set; }
 
-        public virtual bool Closable { get { return true; } }
+        public string Header
+        {
+            get; set;
+        }
+
+        public virtual bool Closable
+        {
+            get
+            {
+                return true;
+            }
+        }
 
         public virtual void GenerateStatistics(bool displayValueFunds)
         {

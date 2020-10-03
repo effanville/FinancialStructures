@@ -1,18 +1,18 @@
-﻿using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
+﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
+using StructureCommon.DataStructures;
 
 namespace FinancialStructures.FinanceStructures
 {
     public class Sector : SingleValueDataList, ISector
     {
-
         /// <summary>
         /// default constructor.
         /// </summary>
         public Sector()
             : base()
-        { }
+        {
+        }
 
         public Sector(NameData names)
             : base(names)

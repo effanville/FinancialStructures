@@ -1,15 +1,15 @@
-﻿using FinanceWindowsViewModels;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
+using FinanceWindowsViewModels;
 using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
-using FinancialStructures.Reporting;
-using GUISupport.Services;
 using Moq;
-using System;
-using System.Windows;
-using System.Collections.Generic;
-using FinancialStructures.DataStructures;
+using StructureCommon.DataStructures;
+using StructureCommon.Reporting;
+using UICommon.Services;
 
 namespace FPD_UI_UnitTests.TestConstruction
 {
@@ -20,7 +20,7 @@ namespace FPD_UI_UnitTests.TestConstruction
 
         public static Mock<IFileInteractionService> CreateFileMock(string expectedFilePath)
         {
-            var mockfileinteraction = new Mock<IFileInteractionService>();
+            Mock<IFileInteractionService> mockfileinteraction = new Mock<IFileInteractionService>();
             mockfileinteraction.Setup(x => x.OpenFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInteractionResult(true, expectedFilePath));
             mockfileinteraction.Setup(x => x.SaveFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInteractionResult(true, expectedFilePath));
             return mockfileinteraction;
@@ -28,7 +28,7 @@ namespace FPD_UI_UnitTests.TestConstruction
 
         public static Mock<IDialogCreationService> CreateDialogMock(MessageBoxResult result = MessageBoxResult.OK)
         {
-            var mockfileinteraction = new Mock<IDialogCreationService>();
+            Mock<IDialogCreationService> mockfileinteraction = new Mock<IDialogCreationService>();
             mockfileinteraction.Setup(x => x.ShowMessageBox(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<MessageBoxButton>(), It.IsAny<MessageBoxImage>())).Returns(result);
             return mockfileinteraction;
         }
@@ -47,23 +47,29 @@ namespace FPD_UI_UnitTests.TestConstruction
             return DummyDataUpdater;
         }
 
-        internal static Action<NameData> DummyOpenTab => action => OpenTab(action);
+        internal static Action<object> DummyOpenTab
+        {
+            get
+            {
+                return action => OpenTab();
+            }
+        }
 
-        private static void OpenTab(object obj)
+        private static void OpenTab()
         {
             return;
         }
 
-        public static EditMethods GetMethodsForTesting(AccountType accountType)
+        [STAThread]
+        public static DataGridRowEditEndingEventArgs CreateRowArgs<T>(T obj) where T : class
         {
-            return EditMethods.GenerateEditMethods(accountType);
+            var dataGridrow = new DataGridRow() { DataContext = obj };
+            return new DataGridRowEditEndingEventArgs(dataGridrow, DataGridEditAction.Commit);
         }
-
-        internal static EditMethods DummyEditMethods = EditMethods.GenerateEditMethods(AccountType.BankAccount);
 
         public static Portfolio CreateBasicDataBase()
         {
-            var portfolio = new Portfolio();
+            Portfolio portfolio = new Portfolio();
             UpdatePortfolio(portfolio);
             return portfolio;
         }
@@ -71,13 +77,13 @@ namespace FPD_UI_UnitTests.TestConstruction
         public static void UpdatePortfolio(Portfolio portfolio)
         {
             portfolio.SetFilePath("TestFilePath");
-            portfolio.TryAdd(AccountType.Security, new NameData("Fidelity", "China", "GBP", "http://www.fidelity.co.uk", new HashSet<string>() { "Bonds", "UK" }), TestingGUICode.DummyReportLogger);
-            portfolio.TryAddDataToSecurity(new TwoName("Fidelity", "China"), new DateTime(2000, 1, 1), 1, 1, 1);
-            portfolio.TryAdd(AccountType.BankAccount, new NameData("Barclays", "currentAccount"), TestingGUICode.DummyReportLogger);
-            portfolio.TryAddData(AccountType.BankAccount, new NameData("Barclays", "currentAccount"), new DayValue_ChangeLogged(new DateTime(2000, 1, 1), 1));
-            portfolio.TryAdd(AccountType.Currency, new NameData(string.Empty, "GBP"), TestingGUICode.DummyReportLogger);
+            portfolio.TryAdd(Account.Security, new NameData("Fidelity", "China", "GBP", "http://www.fidelity.co.uk", new HashSet<string>() { "Bonds", "UK" }), TestingGUICode.DummyReportLogger);
+            portfolio.TryAddOrEditDataToSecurity(new TwoName("Fidelity", "China"), new DateTime(2000, 1, 1), new DateTime(2000, 1, 1), 1, 1, 1);
+            portfolio.TryAdd(Account.BankAccount, new NameData("Barclays", "currentAccount"), TestingGUICode.DummyReportLogger);
+            portfolio.TryAddOrEditData(Account.BankAccount, new NameData("Barclays", "currentAccount"), new DailyValuation(new DateTime(2000, 1, 1), 1), new DailyValuation(new DateTime(2000, 1, 1), 1));
+            portfolio.TryAdd(Account.Currency, new NameData(string.Empty, "GBP"), TestingGUICode.DummyReportLogger);
 
-            portfolio.TryAdd(AccountType.Sector, new NameData(string.Empty, "UK", string.Empty, "http://www.hi.com"), TestingGUICode.DummyReportLogger);
+            portfolio.TryAdd(Account.Benchmark, new NameData(string.Empty, "UK", string.Empty, "http://www.hi.com"), TestingGUICode.DummyReportLogger);
         }
 
         public static Portfolio CreateEmptyDataBase()
@@ -87,10 +93,12 @@ namespace FPD_UI_UnitTests.TestConstruction
 
         internal static MainWindowViewModel SetupWindow(Portfolio portfolio)
         {
-            var fileMock = CreateFileMock("filepath");
-            var dialogMock = CreateDialogMock(MessageBoxResult.OK);
-            var viewModel = new MainWindowViewModel(fileMock.Object, dialogMock.Object);
-            viewModel.ProgramPortfolio = portfolio;
+            Mock<IFileInteractionService> fileMock = CreateFileMock("filepath");
+            Mock<IDialogCreationService> dialogMock = CreateDialogMock(MessageBoxResult.OK);
+            MainWindowViewModel viewModel = new MainWindowViewModel(fileMock.Object, dialogMock.Object)
+            {
+                ProgramPortfolio = portfolio
+            };
             return viewModel;
         }
     }

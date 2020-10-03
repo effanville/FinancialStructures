@@ -1,73 +1,78 @@
-﻿using FinanceCommonViewModels;
-using FinanceViewModels.StatsViewModels;
-using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.Reporting;
-using FinancialStructures.StatsMakers;
-using GUISupport;
-using GUISupport.Services;
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using FinanceViewModels.StatsViewModels;
+using FinancialStructures.Database.Statistics;
+using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.StatisticStructures;
+using FinancialStructures.StatsMakers;
+using StructureCommon.Reporting;
+using UICommon.Commands;
+using UICommon.Services;
+using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
-    internal class StatsCreatorWindowViewModel : ViewModelBase
+    internal class StatsCreatorWindowViewModel : ViewModelBase<IPortfolio>
     {
-        private IPortfolio fPortfolio;
-
         public ObservableCollection<object> StatsTabs { get; set; } = new ObservableCollection<object>();
 
         private bool fDisplayValueFunds = true;
         public bool DisplayValueFunds
         {
-            get { return fDisplayValueFunds; }
-            set { fDisplayValueFunds = value; OnPropertyChanged(); UpdateData(); }
+            get
+            {
+                return fDisplayValueFunds;
+            }
+            set
+            {
+                fDisplayValueFunds = value;
+                OnPropertyChanged();
+                UpdateData();
+            }
         }
 
-        public int HistoryGapDays { get; set; }
+        public int HistoryGapDays
+        {
+            get; set;
+        } = 20;
 
         private readonly IReportLogger ReportLogger;
         private readonly IFileInteractionService fFileService;
         private readonly IDialogCreationService fDialogCreationService;
 
         public StatsCreatorWindowViewModel(IPortfolio portfolio, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation)
-            : base("Stats Creator")
+            : base("Stats Creator", portfolio)
         {
             ReportLogger = reportLogger;
             fFileService = fileService;
             fDialogCreationService = dialogCreation;
-            StatsTabs.Add(new MainTabViewModel(openTab));
+            StatsTabs.Add(new MainTabViewModel(OpenTab));
             StatsTabs.Add(new SecuritiesStatisticsViewModel(portfolio, DisplayValueFunds));
 
-            if (portfolio != null)
-            {
-                fPortfolio = portfolio;
-            }
-
-
-            CreateCSVStatsCommand = new BasicCommand(ExecuteExportToCSVCommand);
-            CreateInvestmentListCommand = new BasicCommand(ExecuteInvestmentListCommand);
-            CreateHTMLCommand = new BasicCommand(ExecuteCreateHTMLCommand);
-            ExportHistoryCommand = new BasicCommand(ExecuteCreateHistory);
+            CreateInvestmentListCommand = new RelayCommand(ExecuteInvestmentListCommand);
+            CreateStatsCommand = new RelayCommand(ExecuteCreateStatsCommand);
+            ExportHistoryCommand = new RelayCommand(ExecuteCreateHistory);
         }
 
-        public ICommand CreateCSVStatsCommand { get; }
-
-        public ICommand CreateInvestmentListCommand { get; }
-        public ICommand CreateHTMLCommand { get; }
-
-        public ICommand ExportHistoryCommand { get; }
-
-        private void ExecuteExportToCSVCommand(Object obj)
+        public ICommand CreateInvestmentListCommand
         {
-            Action<string> StatsOptionFeedback = (filePath) => StatsFeedback(filePath);
-            var context = new StatsOptionsViewModel(fPortfolio, ExportType.CSV, ReportLogger, StatsOptionFeedback, fFileService, fDialogCreationService);
-            fDialogCreationService.DisplayCustomDialog(context);
+            get;
+        }
+        public ICommand CreateStatsCommand
+        {
+            get;
         }
 
-        private void ExecuteInvestmentListCommand(Object obj)
+        public ICommand ExportHistoryCommand
         {
-            var result = fFileService.SaveFile(".csv", fPortfolio.DatabaseName + "-CSVStats.csv", fPortfolio.Directory, "CSV file|*.csv|All files|*.*");
+            get;
+        }
+
+        private void ExecuteInvestmentListCommand()
+        {
+            FileInteractionResult result = fFileService.SaveFile(".csv", DataStore.DatabaseName + "-CSVStats.csv", DataStore.Directory, "CSV file|*.csv|All files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
                 if (!result.FilePath.EndsWith(".csv"))
@@ -75,17 +80,17 @@ namespace FinanceWindowsViewModels
                     result.FilePath += ".csv";
                 }
 
-                InvestmentsExporter.Export(fPortfolio, result.FilePath, ReportLogger);
+                InvestmentsExporter.Export(DataStore, result.FilePath, ReportLogger);
             }
             else
             {
-                ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", $"Was not able to create Investment list page at {result.FilePath}");
+                _ = ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", $"Was not able to create Investment list page at {result.FilePath}");
             }
         }
 
-        private void ExecuteCreateHistory(Object obj)
+        private async void ExecuteCreateHistory()
         {
-            var result = fFileService.SaveFile(".csv", DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + fPortfolio.DatabaseName + "-History.csv", fPortfolio.Directory, "CSV file|*.csv|All files|*.*");
+            FileInteractionResult result = fFileService.SaveFile(".csv", DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + DataStore.DatabaseName + "-History.csv", DataStore.Directory, "CSV file|*.csv|All files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
                 if (!result.FilePath.EndsWith(".csv"))
@@ -93,18 +98,19 @@ namespace FinanceWindowsViewModels
                     result.FilePath += ".csv";
                 }
 
-                CSVHistoryWriter.WriteHistoryToCSV(fPortfolio, result.FilePath, HistoryGapDays, ReportLogger);
+                List<PortfolioDaySnapshot> historyStatistics = await DataStore.GenerateHistoryStats(HistoryGapDays).ConfigureAwait(false);
+                CSVHistoryWriter.WriteToCSV(historyStatistics, result.FilePath, ReportLogger);
             }
             else
             {
-                ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", $"Was not able to create Investment list page at {result.FilePath}");
+                _ = ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", $"Was not able to create Investment list page at {result.FilePath}");
             }
         }
 
-        private void ExecuteCreateHTMLCommand(Object obj)
+        private void ExecuteCreateStatsCommand()
         {
             Action<string> StatsOptionFeedback = (filePath => StatsFeedback(filePath));
-            var context = new StatsOptionsViewModel(fPortfolio, ExportType.HTML, ReportLogger, StatsOptionFeedback, fFileService, fDialogCreationService);
+            StatsOptionsViewModel context = new StatsOptionsViewModel(DataStore, ReportLogger, StatsOptionFeedback, fFileService, fDialogCreationService);
             fDialogCreationService.DisplayCustomDialog(context);
         }
 
@@ -115,7 +121,9 @@ namespace FinanceWindowsViewModels
 
         public override void UpdateData(IPortfolio portfolio = null)
         {
-            foreach (var tab in StatsTabs)
+            base.UpdateData(portfolio);
+
+            foreach (object tab in StatsTabs)
             {
                 if (tab is TabViewModelBase vmBase)
                 {
@@ -124,35 +132,41 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        Action<TabType, string> openTab => (tabtype, filepath) => LoadTab(tabtype, filepath);
+        private Action<TabType, string> OpenTab
+        {
+            get
+            {
+                return (tabtype, filepath) => LoadTab(tabtype, filepath);
+            }
+        }
 
         private void LoadTab(TabType tabType, string filepath)
         {
             switch (tabType)
             {
                 case (TabType.Main):
-                    StatsTabs.Add(new MainTabViewModel(openTab));
+                    StatsTabs.Add(new MainTabViewModel(OpenTab));
                     return;
                 case (TabType.SecurityStats):
-                    StatsTabs.Add(new SecuritiesStatisticsViewModel(fPortfolio, DisplayValueFunds));
+                    StatsTabs.Add(new SecuritiesStatisticsViewModel(DataStore, DisplayValueFunds));
                     return;
                 case (TabType.SecurityInvestment):
-                    StatsTabs.Add(new SecurityInvestmentViewModel(fPortfolio, DisplayValueFunds));
+                    StatsTabs.Add(new SecurityInvestmentViewModel(DataStore, DisplayValueFunds));
                     return;
                 case (TabType.BankAccountStats):
-                    StatsTabs.Add(new BankAccStatsViewModel(fPortfolio, DisplayValueFunds));
+                    StatsTabs.Add(new BankAccStatsViewModel(DataStore, DisplayValueFunds));
                     return;
                 case (TabType.DatabaseStats):
-                    StatsTabs.Add(new DataBaseStatsViewModel(fPortfolio, DisplayValueFunds));
+                    StatsTabs.Add(new DataBaseStatsViewModel(DataStore, DisplayValueFunds));
                     return;
                 case (TabType.PortfolioHistory):
-                    StatsTabs.Add(new PortfolioHistoryViewModel(fPortfolio, DisplayValueFunds));
+                    StatsTabs.Add(new PortfolioHistoryViewModel(DataStore, DisplayValueFunds));
                     return;
                 case (TabType.StatsCharts):
-                    StatsTabs.Add(new StatisticsChartsViewModel(fPortfolio, DisplayValueFunds));
+                    StatsTabs.Add(new StatisticsChartsViewModel(DataStore, DisplayValueFunds));
                     return;
                 case (TabType.StatsViewer):
-                    StatsTabs.Add(new HtmlStatsViewerViewModel(fPortfolio, DisplayValueFunds, filepath));
+                    StatsTabs.Add(new HtmlStatsViewerViewModel(DataStore, DisplayValueFunds, filepath));
                     return;
             }
         }

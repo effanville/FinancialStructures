@@ -1,25 +1,30 @@
-﻿using FinanceCommonViewModels;
-using FinancialStructures.DataReader;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Controls;
+using System.Windows.Input;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
-using FinancialStructures.Reporting;
-using GUISupport;
-using GUISupport.Services;
-using System;
-using System.Collections.Generic;
-using System.Windows.Input;
+using StructureCommon.FileAccess;
+using StructureCommon.Reporting;
+using UICommon.Commands;
+using UICommon.Services;
+using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
-    internal class SelectedSecurityViewModel : ViewModelBase
+    internal class SelectedSecurityViewModel : TabViewModelBase<IPortfolio>
     {
-        private IPortfolio Portfolio;
+        public override bool Closable
+        {
+            get
+            {
+                return true;
+            }
+        }
 
-        public override bool Closable { get { return true; } }
-
-        private readonly NameData_ChangeLogged fSelectedName;
+        private readonly NameData fSelectedName;
 
         /// <summary>
         /// The pricing data of the selected security.
@@ -27,35 +32,18 @@ namespace FinanceWindowsViewModels
         private List<SecurityDayData> fSelectedSecurityData = new List<SecurityDayData>();
         public List<SecurityDayData> SelectedSecurityData
         {
-            get { return fSelectedSecurityData; }
-            set { fSelectedSecurityData = value; OnPropertyChanged(); }
-        }
-
-        private SecurityDayData fSelectedValues;
-        private SecurityDayData fOldSelectedValues;
-        private int selectedIndex;
-        public SecurityDayData selectedValues
-        {
             get
             {
-                return fSelectedValues;
+                return fSelectedSecurityData;
             }
             set
             {
-                fSelectedValues = value;
-                if (SelectedSecurityData != null)
-                {
-                    int index = SelectedSecurityData.IndexOf(value);
-                    if (selectedIndex != index)
-                    {
-                        selectedIndex = index;
-                        fOldSelectedValues = fSelectedValues?.Copy();
-                    }
-                }
-
+                fSelectedSecurityData = value;
                 OnPropertyChanged();
             }
         }
+
+        internal SecurityDayData fOldSelectedValues;
 
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
 
@@ -63,14 +51,16 @@ namespace FinanceWindowsViewModels
         private readonly IFileInteractionService fFileService;
         private readonly IDialogCreationService fDialogCreationService;
 
-        public SelectedSecurityViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, NameData_ChangeLogged selectedName)
-            : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name")
+        public SelectedSecurityViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, NameData selectedName)
+            : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name", portfolio)
         {
             fSelectedName = selectedName;
-            DeleteValuationCommand = new BasicCommand(ExecuteDeleteValuation);
-            AddCsvData = new BasicCommand(ExecuteAddCsvData);
-            ExportCsvData = new BasicCommand(ExecuteExportCsvData);
-            AddEditSecurityDataCommand = new BasicCommand(ExecuteAddEditSecData);
+            DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);
+            AddCsvData = new RelayCommand(ExecuteAddCsvData);
+            ExportCsvData = new RelayCommand(ExecuteExportCsvData);
+            AddEditSecurityDataCommand = new RelayCommand<DataGridRowEditEndingEventArgs>(ExecuteAddEditSecData);
+            SelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(ExecuteSelectionChanged);
+            AddDefaultDataCommand = new RelayCommand<AddingNewItemEventArgs>(e => DataGrid_AddingNewItem(null, e));
             UpdateData(portfolio, null);
             UpdateDataCallback = updateData;
             ReportLogger = reportLogger;
@@ -78,131 +68,154 @@ namespace FinanceWindowsViewModels
             fDialogCreationService = dialogCreation;
         }
 
-        public ICommand DeleteValuationCommand { get; }
-
-        private void ExecuteDeleteValuation(Object obj)
+        public ICommand DeleteValuationCommand
         {
-            if (fSelectedName != null && fSelectedValues != null)
+            get;
+        }
+
+        private void ExecuteDeleteValuation()
+        {
+            if (fSelectedName != null && fOldSelectedValues != null)
             {
-                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(AccountType.Security, fSelectedName, new DayValue_ChangeLogged(fSelectedValues.Date, 0.0), ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(Account.Security, fSelectedName, fOldSelectedValues.Date, ReportLogger));
             }
         }
 
-        public ICommand AddCsvData { get; }
+        public ICommand AddCsvData
+        {
+            get;
+        }
 
-        private void ExecuteAddCsvData(Object obj)
+        private void ExecuteAddCsvData()
         {
             if (fSelectedName != null)
             {
-                var result = fFileService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
+                FileInteractionResult result = fFileService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
                 List<object> outputs = null;
-
-                if (result.Success != null && (bool)result.Success)
+                bool exists = DataStore.TryGetSecurity(fSelectedName, out ISecurity security);
+                if (result.Success != null && (bool)result.Success && exists)
                 {
-                    outputs = CsvDataRead.ReadFromCsv(result.FilePath, AccountType.Security, ReportLogger);
+                    outputs = CsvReaderWriter.ReadFromCsv(security, result.FilePath, ReportLogger);
                 }
                 if (outputs != null)
                 {
-                    foreach (var objec in outputs)
+                    foreach (object objec in outputs)
                     {
                         if (objec is SecurityDayData view)
                         {
-                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(fSelectedName, view.Date, view.ShareNo, view.UnitPrice, view.NewInvestment, ReportLogger));
+                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditDataToSecurity(fSelectedName, view.Date, view.Date, view.ShareNo, view.UnitPrice, view.NewInvestment, ReportLogger));
                         }
                         else
                         {
-                            ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", "Have the wrong type of thing");
+                            _ = ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", "Have the wrong type of thing");
                         }
                     }
                 }
             }
         }
 
-        public ICommand ExportCsvData { get; }
+        public ICommand ExportCsvData
+        {
+            get;
+        }
 
-        private void ExecuteExportCsvData(Object obj)
+        private void ExecuteExportCsvData()
         {
             if (fSelectedName != null)
             {
-                var result = fFileService.SaveFile("csv", string.Empty, Portfolio.Directory, "Csv Files|*.csv|All Files|*.*");
+                FileInteractionResult result = fFileService.SaveFile("csv", string.Empty, DataStore.Directory, "Csv Files|*.csv|All Files|*.*");
                 if (result.Success != null && (bool)result.Success)
                 {
-                    if (Portfolio.TryGetSecurity(fSelectedName, out var security))
+                    if (DataStore.TryGetSecurity(fSelectedName, out ISecurity security))
                     {
-                        CsvDataRead.WriteToCSVFile(result.FilePath, AccountType.Security, security, ReportLogger);
+                        CsvReaderWriter.WriteToCSVFile(security, result.FilePath, ReportLogger);
                     }
                     else
                     {
-                        ReportLogger.LogWithStrings("Critical", "Error", "Saving", "Could not find security.");
+                        _ = ReportLogger.LogWithStrings("Critical", "Error", "Saving", "Could not find security.");
                     }
                 }
             }
         }
 
-        public ICommand AddEditSecurityDataCommand { get; set; }
+        public ICommand AddDefaultDataCommand
+        {
+            get;
+            set;
+        }
 
-        private void ExecuteAddEditSecData(Object obj)
+        private void DataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        {
+            double shareNo = 0;
+            double unitPrice = 0;
+            if (SelectedSecurityData != null && SelectedSecurityData.Any())
+            {
+                var latest = SelectedSecurityData.Last();
+                shareNo = latest.ShareNo;
+                unitPrice = latest.UnitPrice;
+            }
+            e.NewItem = new SecurityDayData()
+            {
+                UnitPrice = unitPrice,
+                ShareNo = shareNo,
+            };
+        }
+
+        public ICommand SelectionChangedCommand
+        {
+            get;
+            set;
+        }
+        private void ExecuteSelectionChanged(SelectionChangedEventArgs e)
+        {
+            if (e.Source is DataGrid dg)
+            {
+                if (dg.CurrentItem != null)
+                {
+                    if (dg.CurrentItem is SecurityDayData data)
+                    {
+                        fOldSelectedValues = data.Copy();
+                    }
+                }
+            }
+        }
+
+        public ICommand AddEditSecurityDataCommand
+        {
+            get;
+            set;
+        }
+
+        private void ExecuteAddEditSecData(DataGridRowEditEndingEventArgs e)
         {
             if (fSelectedName != null)
             {
-                Portfolio.TryGetSecurity(fSelectedName, out var desired);
-                if (desired.Count() != SelectedSecurityData.Count)
+                var originRowData = e.Row.DataContext as SecurityDayData;
+                bool edited = false;
+                UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditDataToSecurity(fSelectedName, fOldSelectedValues.Date, originRowData.Date, originRowData.ShareNo, originRowData.UnitPrice, originRowData.NewInvestment, ReportLogger));
+                if (!edited)
                 {
-                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(fSelectedName, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment, ReportLogger));
-                    fSelectedName.NewValue = false;
-                }
-                else
-                {
-                    bool edited = false;
-                    for (int i = 0; i < SelectedSecurityData.Count; i++)
-                    {
-                        var name = SelectedSecurityData[i];
-
-                        if (name.NewValue)
-                        {
-                            edited = true;
-                            name.NewValue = false;
-                            UpdateDataCallback(programPortfolio => programPortfolio.TryEditSecurityData(fSelectedName, fOldSelectedValues.Date, selectedValues.Date, selectedValues.ShareNo, selectedValues.UnitPrice, selectedValues.NewInvestment, ReportLogger));
-                        }
-                    }
-                    if (!edited)
-                    {
-                        ReportLogger.LogUsefulWithStrings("Error", "EditingData", "Was not able to edit security data.");
-                    }
+                    _ = ReportLogger.LogUsefulWithStrings("Error", "EditingData", "Was not able to add or edit security data.");
                 }
             }
         }
 
         public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)
         {
-            Portfolio = portfolio;
+            base.UpdateData(portfolio);
             if (fSelectedName != null)
             {
-                if (!portfolio.TryGetSecurity(fSelectedName, out _))
+                if (!portfolio.Exists(Account.Security, fSelectedName))
                 {
                     removeTab?.Invoke(this);
                     return;
                 }
 
-                SelectedSecurityData = Portfolio.SecurityData(fSelectedName);
-                SelectLatestValue();
+                SelectedSecurityData = DataStore.SecurityData(fSelectedName);
             }
             else
             {
                 SelectedSecurityData = null;
-            }
-        }
-
-        public override void UpdateData(IPortfolio portfolio)
-        {
-            UpdateData(portfolio, null);
-        }
-
-        private void SelectLatestValue()
-        {
-            if (SelectedSecurityData != null && SelectedSecurityData.Count > 0)
-            {
-                selectedValues = SelectedSecurityData[SelectedSecurityData.Count - 1];
             }
         }
     }

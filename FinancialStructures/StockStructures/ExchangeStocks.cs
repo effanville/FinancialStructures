@@ -1,11 +1,11 @@
-﻿using FinancialStructures.FileAccess;
-using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
-using FinancialStructures.Reporting;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using FinancialStructures.NamingStructures;
+using StructureCommon.FileAccess;
+using StructureCommon.Reporting;
+using StructureCommon.WebAccess;
 
 namespace FinancialStructures.StockStructures
 {
@@ -18,15 +18,16 @@ namespace FinancialStructures.StockStructures
     public class ExchangeStocks
     {
         public ExchangeStocks()
-        { }
+        {
+        }
 
         public double GetValue(NameData name, DateTime date, DataStream datatype = DataStream.Close)
         {
-            foreach (var stock in Stocks)
+            foreach (Stock stock in Stocks)
             {
                 if (stock.Name.IsEqualTo(name))
                 {
-                    return stock.Value(date);
+                    return stock.Value(date, datatype);
                 }
             }
 
@@ -39,8 +40,24 @@ namespace FinancialStructures.StockStructures
 
             for (int stockIndex = 1; stockIndex < Stocks.Count; stockIndex++)
             {
-                var stockEarliest = Stocks[stockIndex].EarliestTime();
+                DateTime stockEarliest = Stocks[stockIndex].EarliestTime();
                 if (stockEarliest < earliest)
+                {
+                    earliest = stockEarliest;
+                }
+            }
+
+            return earliest;
+        }
+
+        public DateTime LatestEarliestDate()
+        {
+            DateTime earliest = Stocks[0].EarliestTime();
+
+            for (int stockIndex = 1; stockIndex < Stocks.Count; stockIndex++)
+            {
+                DateTime stockEarliest = Stocks[stockIndex].EarliestTime();
+                if (stockEarliest > earliest)
                 {
                     earliest = stockEarliest;
                 }
@@ -55,7 +72,7 @@ namespace FinancialStructures.StockStructures
 
             for (int stockIndex = 1; stockIndex < Stocks.Count; stockIndex++)
             {
-                var stockLast = Stocks[stockIndex].LastTime();
+                DateTime stockLast = Stocks[stockIndex].LastTime();
                 if (stockLast < last)
                 {
                     last = stockLast;
@@ -64,13 +81,12 @@ namespace FinancialStructures.StockStructures
 
             return last;
         }
-        private List<Stock> fStocks = new List<Stock>();
 
         public List<Stock> Stocks
         {
-            get { return fStocks; }
-            set { fStocks = value; }
-        }
+            get;
+            set;
+        } = new List<Stock>();
 
         public bool CheckValidity()
         {
@@ -86,15 +102,19 @@ namespace FinancialStructures.StockStructures
         {
             if (File.Exists(filePath))
             {
-                var database = XmlFileAccess.ReadFromXmlFile<ExchangeStocks>(filePath, out string error);
+                ExchangeStocks database = XmlFileAccess.ReadFromXmlFile<ExchangeStocks>(filePath, out string error);
                 if (database != null)
                 {
                     Stocks = database.Stocks;
                 }
+                else
+                {
+                    _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.Loading, $"No Database Loaded from {filePath}. Error {error}.");
+                }
                 return;
             }
 
-            reportLogger?.LogUseful(ReportType.Report, ReportLocation.Loading, "Loaded Empty New Database.");
+            _ = reportLogger?.LogUseful(ReportType.Report, ReportLocation.Loading, "Loaded Empty New Database.");
             Stocks = new List<Stock>();
         }
 
@@ -103,13 +123,13 @@ namespace FinancialStructures.StockStructures
             XmlFileAccess.WriteToXmlFile<ExchangeStocks>(filePath, this, out string error);
             if (error != null)
             {
-                reportLogger?.LogUseful(ReportType.Error, ReportLocation.Saving, error);
+                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.Saving, error);
             }
         }
 
         public void Download(DownloadType downloadType, DateTime startDate, DateTime endDate, IReportLogger reportLogger = null)
         {
-            foreach (var stock in Stocks)
+            foreach (Stock stock in Stocks)
             {
                 Uri downloadUrl;
                 if (downloadType == DownloadType.All)
@@ -120,8 +140,8 @@ namespace FinancialStructures.StockStructures
                 {
                     downloadUrl = new Uri(stock.Name.Url);
                 }
-                string stockWebsite = PortfolioDataUpdater.DownloadFromURL(downloadUrl.ToString(), reportLogger).Result;
-                ProcessAndAddData(downloadType, stock, stockWebsite);
+                string stockWebsite = WebDownloader.DownloadFromURLasync(downloadUrl.ToString(), reportLogger).Result;
+                ProcessAndAddData(downloadType, stock, stockWebsite, reportLogger);
             }
         }
 
@@ -138,7 +158,7 @@ namespace FinancialStructures.StockStructures
 
 
 
-        private void ProcessAndAddData(DownloadType download, Stock stock, string websiteHtml)
+        private void ProcessAndAddData(DownloadType download, Stock stock, string websiteHtml, IReportLogger reportLogger = null)
         {
             if (download == DownloadType.All)
             {
@@ -148,6 +168,7 @@ namespace FinancialStructures.StockStructures
                 string dataLeft = websiteHtml.Substring(historyStartIndex + findString.Length);
                 // data is of form {"date":1582907959,"open":150.4199981689453,"high":152.3000030517578,"low":146.60000610351562,"close":148.74000549316406,"volume":120763559,"adjclose":148.74000549316406}. 
                 // Iterate through these until stop.
+                int numberEntriesAdded = 0;
                 while (dataLeft.Length > 0)
                 {
                     int dayFirstIndex = dataLeft.IndexOf('{');
@@ -169,19 +190,22 @@ namespace FinancialStructures.StockStructures
                         double volume = FindAndGetSingleValue(dayValues, "volume", false);
                         stock.AddValue(date, open, high, low, close, volume);
                         dataLeft = dataLeft.Substring(dayEndIndex);
+                        numberEntriesAdded++;
                     }
                     else
                     {
                         break;
                     }
                 }
+
+                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Downloading, $"Added {numberEntriesAdded} to stock {stock.Name}");
             }
 
             if (download == DownloadType.Latest)
             {
                 double close = FindAndGetSingleValue(websiteHtml, "<span class=\"Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)\" data-reactid=\"34\">");
                 double open = FindAndGetSingleValue(websiteHtml, "data-test=\"OPEN-value\" data-reactid=\"46\"><span class=\"Trsdu(0.3s) \" data-reactid=\"47\">");
-                var range = FindAndGetDoubleValues(websiteHtml, "data-test=\"DAYS_RANGE-value\" data-reactid=\"61\">");
+                Tuple<double, double> range = FindAndGetDoubleValues(websiteHtml, "data-test=\"DAYS_RANGE-value\" data-reactid=\"61\">");
                 double volume = FindAndGetSingleValue(websiteHtml, "data-test=\"TD_VOLUME-value\" data-reactid=\"69\"><span class=\"Trsdu(0.3s) \" data-reactid=\"70\">");
 
                 DateTime date = DateTime.Now.TimeOfDay > new DateTime(2010, 1, 1, 16, 30, 0).TimeOfDay ? DateTime.Today : DateTime.Today.AddDays(-1);
@@ -207,9 +231,9 @@ namespace FinancialStructures.StockStructures
             int lengthToSearch = Math.Min(containedWithin, searchString.Length - index - findString.Length);
             string value = searchString.Substring(index + findString.Length, lengthToSearch);
 
-            var digits = value.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
+            char[] digits = value.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
 
-            var str = new string(digits);
+            string str = new string(digits);
             if (string.IsNullOrEmpty(str))
             {
                 return double.NaN;
@@ -233,17 +257,17 @@ namespace FinancialStructures.StockStructures
             int lengthToSearch = Math.Min(containedWithin, searchString.Length - index - findString.Length);
             string value = searchString.Substring(index + findString.Length, lengthToSearch);
 
-            var digits = value.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
+            char[] digits = value.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
 
-            var str = new string(digits);
+            string str = new string(digits);
             if (string.IsNullOrEmpty(str))
             {
                 return new Tuple<double, double>(double.NaN, double.NaN);
             }
             double value1 = double.Parse(str);
             int separator = value.IndexOf("-");
-            var secondDigits = value.Substring(separator).SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
-            var str2 = new string(secondDigits);
+            char[] secondDigits = value.Substring(separator).SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
+            string str2 = new string(secondDigits);
             double value2 = double.Parse(str2);
             return new Tuple<double, double>(value1, value2);
         }
@@ -262,12 +286,12 @@ namespace FinancialStructures.StockStructures
 
             if (fileContents.Length == 0)
             {
-                Console.WriteLine("Nothing in file selected.");
+                Console.WriteLine("Nothing in file selected, but expected stock company, name, url data.");
             }
 
             foreach (string line in fileContents)
             {
-                var inputs = line.Split(',');
+                string[] inputs = line.Split(',');
                 AddStock(inputs);
             }
         }

@@ -1,9 +1,9 @@
-﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.PortfolioAPI;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Xml.Serialization;
+using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.FinanceStructures;
 
 namespace FinancialStructures.Database
 {
@@ -15,17 +15,17 @@ namespace FinancialStructures.Database
         private string fDatabaseFilePath;
 
         /// <summary>
-        /// Set the path where the database will be stored.
+        /// Flag to state when the user has altered values in the portfolio
+        /// after the last save.
         /// </summary>
-        /// <param name="path"></param>
-        public void SetFilePath(string path)
+        [XmlIgnoreAttribute]
+        public bool IsAlteredSinceSave
         {
-            fDatabaseFilePath = path;
+            get;
+            private set;
         }
 
-        /// <summary>
-        /// Access of the databse path.
-        /// </summary>
+        /// <inheritdoc/>
         public string FilePath
         {
             get
@@ -34,9 +34,7 @@ namespace FinancialStructures.Database
             }
         }
 
-        /// <summary>
-        /// The file extension of the path.
-        /// </summary>
+        /// <inheritdoc/>
         public string Extension
         {
             get
@@ -45,9 +43,7 @@ namespace FinancialStructures.Database
             }
         }
 
-        /// <summary>
-        /// The directory where the database is stored.
-        /// </summary>
+        /// <inheritdoc/>
         public string Directory
         {
             get
@@ -56,9 +52,7 @@ namespace FinancialStructures.Database
             }
         }
 
-        /// <summary>
-        /// The non-extension part of the filename, considered to be the databse name.
-        /// </summary>
+        /// <inheritdoc/>
         public string DatabaseName
         {
             get
@@ -67,132 +61,155 @@ namespace FinancialStructures.Database
             }
         }
 
-        private string fBaseCurrency;
-
+        /// <inheritdoc/>
         public string BaseCurrency
         {
-            get { return fBaseCurrency; }
-            set { fBaseCurrency = value; }
+            get;
+            set;
         }
 
-        private List<Security> fFunds = new List<Security>();
-
-        /// <summary>
-        /// Securities stored in this database.
-        /// </summary>
+        /// <inheritdoc/>
         public List<Security> Funds
         {
-            get { return fFunds; }
-            private set { fFunds = value; }
-        }
+            get;
+            private set;
+        } = new List<Security>();
 
-        private List<CashAccount> fBankAccounts = new List<CashAccount>();
-
-        /// <summary>
-        /// Bank accounts stored in this database.
-        /// </summary>
+        /// <inheritdoc/>
         public List<CashAccount> BankAccounts
         {
-            get { return fBankAccounts; }
-            private set { fBankAccounts = value; }
-        }
+            get;
+            private set;
+        } = new List<CashAccount>();
 
-        private List<Currency> fCurrencies = new List<Currency>();
-
-        /// <summary>
-        /// The currencies other objects are held in.
-        /// </summary>
+        /// <inheritdoc/>
         public List<Currency> Currencies
         {
-            get { return fCurrencies; }
-            private set { fCurrencies = value; }
-        }
+            get;
+            private set;
+        } = new List<Currency>();
 
-        private List<Sector> fBenchMarks = new List<Sector>();
-
-        /// <summary>
-        /// Sector benchmarks for comparison of held data.
-        /// </summary>
+        /// <inheritdoc/>
         public List<Sector> BenchMarks
         {
-            get => fBenchMarks;
-            set => fBenchMarks = value;
-        }
+            get;
+            set;
+        } = new List<Sector>();
 
+        /// <summary>
+        /// Default parameterless constructor.
+        /// </summary>
         public Portfolio()
         {
         }
 
-        /// <summary>
-        /// Copies references of other portfolio to this portfolio.
-        /// </summary>
+        /// <inheritdoc/>
         public void CopyData(IPortfolio portfolio)
         {
-            this.BaseCurrency = portfolio.BaseCurrency;
-            this.Funds = portfolio.Funds;
-            this.BankAccounts = portfolio.BankAccounts;
-            this.Currencies = portfolio.Currencies;
-            this.BenchMarks = portfolio.BenchMarks;
+            BaseCurrency = portfolio.BaseCurrency;
+            Funds = portfolio.Funds;
+            BankAccounts = portfolio.BankAccounts;
+            Currencies = portfolio.Currencies;
+            BenchMarks = portfolio.BenchMarks;
         }
 
-        /// <summary>
-        /// Sets the benchmark parts of this portfolio.
-        /// </summary>
-        /// <param name="sectors"></param>
+        /// <inheritdoc/>
         public void SetBenchMarks(List<Sector> sectors)
         {
-            fBenchMarks.Clear();
-            fBenchMarks.AddRange(sectors);
+            BenchMarks.Clear();
+            BenchMarks.AddRange(sectors);
         }
 
         /// <summary>
         /// Event to be raised when elements are changed.
         /// </summary>
-        public static event EventHandler portfolioChanged;
+        public event EventHandler PortfolioChanged;
 
         /// <summary>
         /// handle the events raised in the above.
         /// </summary>
-        protected void OnPortfolioChanged(EventArgs e)
+        public void OnPortfolioChanged(object obj, EventArgs e)
         {
-            EventHandler handler = portfolioChanged;
+            IsAlteredSinceSave = true;
+            EventHandler handler = PortfolioChanged;
             if (handler != null)
             {
-                handler?.Invoke(this, e);
+                handler?.Invoke(obj, e);
+            }
+
+            if (obj is bool noChange)
+            {
+                IsAlteredSinceSave = false;
             }
         }
 
-        /// <summary>
-        /// Number of type in the database.
-        /// </summary>
-        /// <param name="portfolio">The database to query.</param>
-        /// <param name="elementType">The type to search for.</param>
-        /// <returns>The number of type in the database.</returns>
-        public int NumberOf(AccountType elementType)
+        /// <inheritdoc/>
+        public void Saving()
+        {
+            IsAlteredSinceSave = false;
+        }
+
+        /// <inheritdoc/>
+        public void SetFilePath(string path)
+        {
+            fDatabaseFilePath = path;
+            OnPortfolioChanged(fDatabaseFilePath, new EventArgs());
+        }
+
+        /// <inheritdoc/>
+        public int NumberOf(Account elementType)
         {
             switch (elementType)
             {
-                case (AccountType.Security):
-                    {
-                        return Funds.Count;
-                    }
-                case (AccountType.Currency):
-                    {
-                        return Currencies.Count;
-                    }
-                case (AccountType.BankAccount):
-                    {
-                        return BankAccounts.Count;
-                    }
-                case (AccountType.Sector):
-                    {
-                        break;
-                    }
+                case (Account.Security):
+                {
+                    return Funds.Count;
+                }
+                case (Account.Currency):
+                {
+                    return Currencies.Count;
+                }
+                case (Account.BankAccount):
+                {
+                    return BankAccounts.Count;
+                }
+                case (Account.Benchmark):
+                {
+                    break;
+                }
                 default:
                     break;
             }
 
             return 0;
+        }
+
+        /// <inheritdoc/>
+        public void WireDataChangedEvents()
+        {
+            foreach (Security security in Funds)
+            {
+                security.DataEdit += OnPortfolioChanged;
+                security.SetupEventListening();
+            }
+
+            foreach (CashAccount bankAccount in BankAccounts)
+            {
+                bankAccount.DataEdit += OnPortfolioChanged;
+                bankAccount.SetupEventListening();
+            }
+
+            foreach (Sector sector in BenchMarks)
+            {
+                sector.DataEdit += OnPortfolioChanged;
+                sector.SetupEventListening();
+            }
+
+            foreach (Currency currency in Currencies)
+            {
+                currency.DataEdit += OnPortfolioChanged;
+                currency.SetupEventListening();
+            }
         }
     }
 }

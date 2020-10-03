@@ -7,6 +7,9 @@ namespace FinanceCommonWindows
     /// </summary>
     public partial class DataNamesView : UserControl
     {
+        /// <summary>
+        /// Construct an instance.
+        /// </summary>
         public DataNamesView()
         {
             InitializeComponent();

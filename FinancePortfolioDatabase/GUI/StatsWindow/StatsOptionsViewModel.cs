@@ -1,141 +1,318 @@
-﻿using FinancialStructures.DataStructures;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Windows.Input;
+using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.Reporting;
 using FinancialStructures.StatisticStructures;
 using FinancialStructures.StatsMakers;
-using GUISupport;
-using GUISupport.Services;
-using System;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Input;
+using StructureCommon.Extensions;
+using StructureCommon.FileAccess;
+using StructureCommon.Reporting;
+using UICommon.Commands;
+using UICommon.Interfaces;
+using UICommon.Services;
+using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
     internal class StatsOptionsViewModel : PropertyChangedBase
     {
-        private IPortfolio Portfolio;
+        private readonly IPortfolio Portfolio;
         private bool fDisplayValueFunds = true;
         public bool displayValueFunds
         {
-            get { return fDisplayValueFunds; }
-            set { fDisplayValueFunds = value; OnPropertyChanged(); }
+            get
+            {
+                return fDisplayValueFunds;
+            }
+            set
+            {
+                fDisplayValueFunds = value;
+                OnPropertyChanged();
+            }
         }
         private UserOptions fSelectOptions;
 
         public UserOptions SelectOptions
         {
-            get { return fSelectOptions; }
-            set { fSelectOptions = value; OnPropertyChanged(); }
+            get
+            {
+                return fSelectOptions;
+            }
+            set
+            {
+                fSelectOptions = value;
+                OnPropertyChanged();
+            }
         }
 
         private List<VisibleName> fDisplayConditions = new List<VisibleName>();
 
         public List<VisibleName> DisplayConditions
         {
-            get { return fDisplayConditions; }
-            set { fDisplayConditions = value; OnPropertyChanged(); }
+            get
+            {
+                return fDisplayConditions;
+            }
+            set
+            {
+                fDisplayConditions = value;
+                OnPropertyChanged();
+            }
         }
 
-        private List<VisibleName> fColumnNames = new List<VisibleName>();
-
-        public List<VisibleName> ColumnNames
+        private string fSecuritySortingField;
+        public string SecuritySortingField
         {
-            get { return fColumnNames; }
-            set { fColumnNames = value; OnPropertyChanged(); }
+            get
+            {
+                return fSecuritySortingField;
+            }
+            set
+            {
+                fSecuritySortingField = value;
+                OnPropertyChanged(nameof(SecuritySortingField));
+            }
+        }
+
+        private SortDirection fSecurityDirection;
+        public SortDirection SecurityDirection
+        {
+            get
+            {
+                return fSecurityDirection;
+            }
+            set
+            {
+                fSecurityDirection = value;
+                OnPropertyChanged(nameof(SecurityDirection));
+            }
+        }
+
+        private List<VisibleName> fSecurityColumnNames = new List<VisibleName>();
+
+        public List<VisibleName> SecurityColumnNames
+        {
+            get
+            {
+                return fSecurityColumnNames;
+            }
+            set
+            {
+                fSecurityColumnNames = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private string fBankSortingField;
+        public string BankSortingField
+        {
+            get
+            {
+                return fBankSortingField;
+            }
+            set
+            {
+                fBankSortingField = value;
+                OnPropertyChanged(nameof(BankSortingField));
+            }
+        }
+
+        private SortDirection fBankDirection;
+        public SortDirection BankDirection
+        {
+            get
+            {
+                return fBankDirection;
+            }
+            set
+            {
+                fBankDirection = value;
+                OnPropertyChanged(nameof(BankDirection));
+            }
         }
 
         private List<VisibleName> fBankColumnNames = new List<VisibleName>();
 
         public List<VisibleName> BankColumnNames
         {
-            get { return fBankColumnNames; }
-            set { fBankColumnNames = value; OnPropertyChanged(); }
+            get
+            {
+                return fBankColumnNames;
+            }
+            set
+            {
+                fBankColumnNames = value;
+                OnPropertyChanged();
+            }
         }
 
-        public ICommand ExportCommand { get; }
-
-        private void ExecuteExportCommand(Object obj)
+        private string fSectorSortingField;
+        public string SectorSortingField
         {
-            var result = fFileService.SaveFile(fFileExtension, Portfolio.DatabaseName + "-" + fExtension + "HTMLStats" + fFileExtension, Portfolio.Directory, fExtension + " file|*" + fFileExtension + "|All files|*.*");
+            get
+            {
+                return fSectorSortingField;
+            }
+            set
+            {
+                fSectorSortingField = value;
+                OnPropertyChanged(nameof(SectorSortingField));
+            }
+        }
+
+
+        private SortDirection fSectorDirection;
+        public SortDirection SectorDirection
+        {
+            get
+            {
+                return fSectorDirection;
+            }
+            set
+            {
+                fSectorDirection = value;
+                OnPropertyChanged(nameof(SectorDirection));
+            }
+        }
+
+        private List<VisibleName> fSectorColumnNames = new List<VisibleName>();
+
+        public List<VisibleName> SectorColumnNames
+        {
+            get
+            {
+                return fSectorColumnNames;
+            }
+            set
+            {
+                fSectorColumnNames = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public List<string> SecurityFieldNames
+        {
+            get
+            {
+                return new SecurityStatistics().GetType().GetProperties().Select(property => property.Name).ToList();
+            }
+        }
+
+        public List<string> BankFieldNames
+        {
+            get
+            {
+                return new DayValue_Named().GetType().GetProperties().Select(property => property.Name).ToList();
+            }
+        }
+
+        public List<string> SectorFieldNames
+        {
+            get
+            {
+                return new SectorStatistics().GetType().GetProperties().Select(property => property.Name).ToList();
+            }
+        }
+
+        public List<SortDirection> SortDirections
+        {
+            get
+            {
+                return Enum.GetValues(typeof(SortDirection)).Cast<SortDirection>().ToList();
+            }
+        }
+
+        public ICommand ExportCommand
+        {
+            get;
+        }
+
+        private void ExecuteExportCommand(ICloseable window)
+        {
+            FileInteractionResult result = fFileService.SaveFile(ExportType.Html.ToString(), Portfolio.DatabaseName, Portfolio.Directory, "Html Files|*.html|CSV Files|*.csv|All Files|*.*");
             string path = null;
 
             if (result.Success != null && (bool)result.Success)
             {
                 path = result.FilePath;
-                var selected = new List<string>();
-                foreach (var column in ColumnNames)
+                List<string> securitySelected = new List<string>();
+                foreach (VisibleName column in SecurityColumnNames)
                 {
                     if (column.Visible || column.Name == "Name" || column.Name == "Company")
                     {
-                        selected.Add(column.Name);
+                        securitySelected.Add(column.Name);
                     }
                 }
-                var BankSelected = new List<string>();
-                foreach (var column in BankColumnNames)
+                List<string> BankSelected = new List<string>();
+                foreach (VisibleName column in BankColumnNames)
                 {
                     if (column.Visible || column.Name == "Name" || column.Name == "Company")
                     {
                         BankSelected.Add(column.Name);
                     }
                 }
-                var options = new UserOptions(selected, BankSelected, selected, DisplayConditions);
-                if (windowType == ExportType.HTML)
+
+                List<string> sectorSelected = new List<string>();
+                foreach (VisibleName column in SectorColumnNames)
                 {
-                    PortfolioStatsCreators.CreateHTMLPageCustom(Portfolio, result.FilePath, options);
-                }
-                else
-                {
-                    CSVStatsCreator.CreateCSVPageCustom(Portfolio, result.FilePath, options);
+                    if (column.Visible || column.Name == "Name" || column.Name == "Company")
+                    {
+                        sectorSelected.Add(column.Name);
+                    }
                 }
 
-                ReportLogger.LogUsefulWithStrings("Report", "StatisticsPage", "Created statistics page");
+                UserOptions options = new UserOptions(securitySelected, BankSelected, sectorSelected, DisplayConditions, SecuritySortingField, BankSortingField, SectorSortingField)
+                {
+                    BankSortDirection = BankDirection,
+                    SectorSortDirection = SectorDirection,
+                    SecuritySortDirection = SecurityDirection
+                };
+                PortfolioStatistics stats = new PortfolioStatistics(Portfolio);
+                string extension = Path.GetExtension(result.FilePath).Trim('.');
+                ExportType type = extension.ToEnum<ExportType>();
+
+                stats.ExportToFile(result.FilePath, type, options, ReportLogger);
+
+                _ = ReportLogger.LogUsefulWithStrings("Report", "StatisticsPage", "Created statistics page");
             }
             else
             {
-                ReportLogger.LogWithStrings("Critical", "Error", "StatisticsPage", "Was not able to create " + fExtension + " page in place specified.");
+                _ = ReportLogger.LogWithStrings("Critical", "Error", "StatisticsPage", "Was not able to create page in place specified.");
             }
 
             CloseWindowAction(path);
-            if (obj is ICloseable window)
-            {
-                window.Close();
-            }
+            window.Close();
         }
 
         private readonly IFileInteractionService fFileService;
         private readonly IDialogCreationService fDialogCreationService;
         private readonly IReportLogger ReportLogger;
-        private Action<string> CloseWindowAction;
-        private ExportType windowType;
-        private string fExtension
+        private readonly Action<string> CloseWindowAction;
+
+        public StatsOptionsViewModel(IPortfolio portfolio, IReportLogger reportLogger, Action<string> CloseWindow, IFileInteractionService fileService, IDialogCreationService dialogCreation)
         {
-            get { return windowType == ExportType.HTML ? "html" : "csv"; }
-        }
-        private string fFileExtension
-        {
-            get { return "." + fExtension; }
-        }
-        public StatsOptionsViewModel(IPortfolio portfolio, ExportType exportType, IReportLogger reportLogger, Action<string> CloseWindow, IFileInteractionService fileService, IDialogCreationService dialogCreation)
-        {
-            windowType = exportType;
             Portfolio = portfolio;
             ReportLogger = reportLogger;
             fFileService = fileService;
             fDialogCreationService = dialogCreation;
             CloseWindowAction = CloseWindow;
-            ExportCommand = new BasicCommand(ExecuteExportCommand);
+            ExportCommand = new RelayCommand<ICloseable>(ExecuteExportCommand);
 
-            var totals = new SecurityStatistics();
-            var properties = totals.GetType().GetProperties();
-            foreach (var info in properties)
+            PropertyInfo[] securityStatsInfo = new SecurityStatistics().GetType().GetProperties();
+            foreach (PropertyInfo info in securityStatsInfo)
             {
-                ColumnNames.Add(new VisibleName(info.Name, true));
+                SecurityColumnNames.Add(new VisibleName(info.Name, true));
             }
 
-            var BankNames = new DayValue_Named();
-            var props = BankNames.GetType().GetProperties();
-            foreach (var info in props)
+            SecuritySortingField = securityStatsInfo.First().Name;
+            SectorSortingField = SecuritySortingField;
+
+            PropertyInfo[] props = new DayValue_Named().GetType().GetProperties();
+            foreach (PropertyInfo info in props)
             {
                 if (info.Name == "Day")
                 {
@@ -147,9 +324,16 @@ namespace FinanceWindowsViewModels
                 }
             }
 
-            var fish = new UserOptions();
-            var optionsInfo = fish.GetType().GetProperties();
-            foreach (var info in optionsInfo)
+            BankSortingField = props.First().Name;
+
+            PropertyInfo[] sectorStatsInfo = new SectorStatistics().GetType().GetProperties();
+            foreach (PropertyInfo info in sectorStatsInfo)
+            {
+                SectorColumnNames.Add(new VisibleName(info.Name, true));
+            }
+
+            PropertyInfo[] optionsInfo = new UserOptions().GetType().GetProperties();
+            foreach (PropertyInfo info in optionsInfo)
             {
                 if (info.PropertyType == typeof(bool))
                 {

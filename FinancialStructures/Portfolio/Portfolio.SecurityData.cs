@@ -1,7 +1,7 @@
-﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.NamingStructures;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database
 {
@@ -18,27 +18,27 @@ namespace FinancialStructures.Database
         /// </summary>
         public static List<string> GetSecuritiesSectors(this IPortfolio portfolio)
         {
-            var companies = new List<string>();
+            List<string> sectors = new List<string>();
             foreach (ISecurity security in portfolio.Funds)
             {
-                foreach (var sector in security.Sectors)
+                foreach (string sector in security.Sectors)
                 {
-                    if (companies.IndexOf(sector) == -1)
+                    if (sectors.IndexOf(sector) == -1)
                     {
-                        companies.Add(sector);
+                        sectors.Add(sector);
                     }
                 }
             }
-            companies.Sort();
+            sectors.Sort();
 
-            return companies;
+            return sectors;
         }
 
         public static double SecurityPrices(this IPortfolio portfolio, TwoName names, DateTime date, SecurityDataStream dataStream = SecurityDataStream.NumberOfShares)
         {
             foreach (ISecurity sec in portfolio.Funds)
             {
-                if (sec.Names.Equals(names))
+                if (sec.Names.IsEqualTo(names))
                 {
                     if (dataStream.Equals(SecurityDataStream.NumberOfShares))
                     {

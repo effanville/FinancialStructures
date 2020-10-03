@@ -1,7 +1,7 @@
-﻿using FinancialStructures.DataStructures;
+﻿using System;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using System;
+using StructureCommon.DataStructures;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -14,8 +14,14 @@ namespace FinancialStructures.FinanceStructures
 
         public TimeList Amounts
         {
-            get { return Values; }
-            set { Values = value; }
+            get
+            {
+                return Values;
+            }
+            set
+            {
+                Values = value;
+            }
         }
 
         /// <summary>
@@ -61,13 +67,26 @@ namespace FinancialStructures.FinanceStructures
             DailyValuation latestDate = Values.LatestValuation();
             if (latestDate == null)
             {
-                return new DailyValuation(DateTime.Today, 0.0); ;
+                return new DailyValuation(DateTime.Today, 0.0);
+                ;
             }
 
             double currencyValue = currency == null ? 1.0 : currency.Value(latestDate.Day).Value;
             double latestValue = latestDate.Value * currencyValue;
 
             return new DailyValuation(latestDate.Day, latestValue);
+        }
+
+        public DailyValuation LastEarlierValuation(DateTime date, ICurrency currency = null)
+        {
+            DailyValuation val = Values.RecentPreviousValue(date);
+            double currencyValue = currency == null ? 1.0 : currency.Value(val.Day).Value;
+            if (val == null)
+            {
+                return new DailyValuation(date, 0.0);
+            }
+            val.Value *= currencyValue;
+            return val;
         }
 
         /// <summary>
@@ -78,7 +97,8 @@ namespace FinancialStructures.FinanceStructures
             DailyValuation firstDate = Values.FirstValuation();
             if (firstDate == null)
             {
-                return new DailyValuation(DateTime.Today, 0.0); ;
+                return new DailyValuation(DateTime.Today, 0.0);
+                ;
             }
 
             double currencyValue = currency == null ? 1.0 : currency.Value(firstDate.Day).Value;
@@ -92,7 +112,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public DailyValuation NearestEarlierValuation(DateTime date, ICurrency currency = null)
         {
-            var value = Values.NearestEarlierValue(date);
+            DailyValuation value = Values.NearestEarlierValue(date);
             double currencyValue = currency == null ? 1.0 : currency.Value(value.Day).Value;
             value.SetValue(value.Value * currencyValue);
             return value;

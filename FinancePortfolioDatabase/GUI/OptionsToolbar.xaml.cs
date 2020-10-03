@@ -7,6 +7,9 @@ namespace FinanceWindows
     /// </summary>
     public partial class OptionsToolbar : UserControl
     {
+        /// <summary>
+        /// Construct an instance.
+        /// </summary>
         public OptionsToolbar()
         {
             InitializeComponent();

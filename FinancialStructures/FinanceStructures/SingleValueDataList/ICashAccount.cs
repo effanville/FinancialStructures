@@ -1,5 +1,5 @@
-﻿using FinancialStructures.DataStructures;
-using System;
+﻿using System;
+using StructureCommon.DataStructures;
 
 namespace FinancialStructures.FinanceInterfaces
 {
@@ -10,5 +10,6 @@ namespace FinancialStructures.FinanceInterfaces
         DailyValuation LatestValue(ICurrency currency = null);
         DailyValuation FirstValue(ICurrency currency = null);
         DailyValuation NearestEarlierValuation(DateTime date, ICurrency currency = null);
+        DailyValuation LastEarlierValuation(DateTime date, ICurrency currency = null);
     }
 }

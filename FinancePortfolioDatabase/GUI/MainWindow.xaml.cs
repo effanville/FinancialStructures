@@ -1,9 +1,8 @@
-﻿using FinanceWindowsViewModels;
-using FinancialStructures.PortfolioAPI;
-using GUISupport.Services;
-using System;
+﻿using System;
 using System.Reflection;
 using System.Windows;
+using FinanceWindowsViewModels;
+using UICommon.Services;
 
 namespace FinanceWindows
 {
@@ -15,11 +14,14 @@ namespace FinanceWindows
         private readonly IFileInteractionService fFileInteractionService;
         private readonly IDialogCreationService fDialogCreationService;
 
+        /// <summary>
+        /// Construct an instance of the main window.
+        /// </summary>
         public MainWindow()
         {
             fFileInteractionService = new FileInteractionService(this);
             fDialogCreationService = new DialogCreationService(this);
-            var viewModel = new MainWindowViewModel(fFileInteractionService, fDialogCreationService);
+            MainWindowViewModel viewModel = new MainWindowViewModel(fFileInteractionService, fDialogCreationService);
             InitializeComponent();
 
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
@@ -37,15 +39,23 @@ namespace FinanceWindows
         /// </remarks>
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            MessageBoxResult result = fDialogCreationService.ShowMessageBox("Data may not be saved. Would you like to save before closing?", $"Closing {Title}.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
-            var VM = DataContext as MainWindowViewModel;
+            MainWindowViewModel VM = DataContext as MainWindowViewModel;
+            MessageBoxResult result;
+            if (VM.ProgramPortfolio.IsAlteredSinceSave)
+            {
+                result = fDialogCreationService.ShowMessageBox("Data has changed since last saved. Would you like to save changes before closing?", $"Closing {Title}.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+            }
+            else
+            {
+                result = fDialogCreationService.ShowMessageBox("There is a small chance that the data has changed since last save (due to neglect on my part). Would you like to save before closing?", $"Closing {Title}.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+            }
             if (result == MessageBoxResult.Yes)
             {
-                var savingResult = fFileInteractionService.SaveFile("xml", VM.ProgramPortfolio.DatabaseName + VM.ProgramPortfolio.Extension, VM.ProgramPortfolio.Directory, "XML Files|*.xml|All Files|*.*");
+                FileInteractionResult savingResult = fFileInteractionService.SaveFile("xml", VM.ProgramPortfolio.DatabaseName + VM.ProgramPortfolio.Extension, VM.ProgramPortfolio.Directory, "XML Files|*.xml|All Files|*.*");
                 if (savingResult.Success != null && (bool)savingResult.Success)
                 {
                     VM.ProgramPortfolio.SetFilePath(savingResult.FilePath);
-                    var vm = DataContext as MainWindowViewModel;
+                    MainWindowViewModel vm = DataContext as MainWindowViewModel;
                     vm.ProgramPortfolio.SavePortfolio(savingResult.FilePath, vm.ReportLogger);
                 }
             }

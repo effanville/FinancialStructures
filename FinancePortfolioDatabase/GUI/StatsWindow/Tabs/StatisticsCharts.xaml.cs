@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Controls;
+﻿using System.Windows.Controls;
 
 namespace FinanceWindows.StatsWindow
 {
@@ -8,11 +7,12 @@ namespace FinanceWindows.StatsWindow
     /// </summary>
     public partial class StatisticsCharts : UserControl
     {
+        /// <summary>
+        /// Construct an instance.
+        /// </summary>
         public StatisticsCharts()
         {
             InitializeComponent();
         }
-        private Random rnd = new Random();
-
     }
 }

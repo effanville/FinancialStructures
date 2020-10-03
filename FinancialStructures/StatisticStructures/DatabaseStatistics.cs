@@ -1,5 +1,5 @@
-﻿using FinancialStructures.NamingStructures;
-using System;
+﻿using System;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.StatisticStructures
 {
@@ -11,31 +11,55 @@ namespace FinancialStructures.StatisticStructures
         private DateTime fFirstDate;
         public DateTime FirstDate
         {
-            get { return fFirstDate; }
-            set { fFirstDate = value; }
+            get
+            {
+                return fFirstDate;
+            }
+            set
+            {
+                fFirstDate = value;
+            }
         }
 
         private DateTime fLatestDate;
         public DateTime LatestDate
         {
-            get { return fLatestDate; }
-            set { fLatestDate = value; }
+            get
+            {
+                return fLatestDate;
+            }
+            set
+            {
+                fLatestDate = value;
+            }
         }
 
         private int fNumEntries;
 
         public int NumEntries
         {
-            get { return fNumEntries; }
-            set { fNumEntries = value; }
+            get
+            {
+                return fNumEntries;
+            }
+            set
+            {
+                fNumEntries = value;
+            }
         }
 
         private double fEntryYearDensity;
 
         public double EntryYearDensity
         {
-            get { return fEntryYearDensity; }
-            set { fEntryYearDensity = value; }
+            get
+            {
+                return fEntryYearDensity;
+            }
+            set
+            {
+                fEntryYearDensity = value;
+            }
         }
 
 

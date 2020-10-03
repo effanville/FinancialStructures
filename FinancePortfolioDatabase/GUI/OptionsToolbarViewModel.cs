@@ -1,19 +1,19 @@
-﻿using FinanceCommonViewModels;
-using FinanceWindows;
-using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.PortfolioAPI;
-using FinancialStructures.Reporting;
-using GUISupport;
-using GUISupport.Services;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using FinanceWindows;
+using FinancialStructures.Database.Download;
+using FinancialStructures.FinanceInterfaces;
+using StructureCommon.Reporting;
+using UICommon.Commands;
+using UICommon.Services;
+using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
-    internal class OptionsToolbarViewModel : ViewModelBase
+    internal class OptionsToolbarViewModel : ViewModelBase<IPortfolio>
     {
         private string fFileName;
         private string fDirectory;
@@ -25,7 +25,10 @@ namespace FinanceWindowsViewModels
 
         public string BaseCurrency
         {
-            get { return fBaseCurrency; }
+            get
+            {
+                return fBaseCurrency;
+            }
             set
             {
                 if (fBaseCurrency != value)
@@ -41,12 +44,19 @@ namespace FinanceWindowsViewModels
 
         public List<string> Currencies
         {
-            get { return fCurrencies; }
-            set { fCurrencies = value; OnPropertyChanged(); }
+            get
+            {
+                return fCurrencies;
+            }
+            set
+            {
+                fCurrencies = value;
+                OnPropertyChanged();
+            }
         }
 
         public OptionsToolbarViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation)
-            : base("Options")
+            : base("Options", portfolio)
         {
             fReportLogger = reportLogger;
             fFileService = fileService;
@@ -54,38 +64,55 @@ namespace FinanceWindowsViewModels
             DataUpdateCallback = updateData;
             UpdateData(portfolio);
 
-            OpenHelpCommand = new BasicCommand(OpenHelpDocsCommand);
-            NewDatabaseCommand = new BasicCommand(ExecuteNewDatabase);
-            SaveDatabaseCommand = new BasicCommand(ExecuteSaveDatabase);
-            LoadDatabaseCommand = new BasicCommand(ExecuteLoadDatabase);
-            UpdateDataCommand = new BasicCommand(ExecuteUpdateData);
-            RefreshCommand = new BasicCommand(ExecuteRefresh);
+            OpenHelpCommand = new RelayCommand(OpenHelpDocsCommand);
+            NewDatabaseCommand = new RelayCommand(ExecuteNewDatabase);
+            SaveDatabaseCommand = new RelayCommand(ExecuteSaveDatabase);
+            LoadDatabaseCommand = new RelayCommand(ExecuteLoadDatabase);
+            UpdateDataCommand = new RelayCommand(ExecuteUpdateData);
+            RefreshCommand = new RelayCommand(ExecuteRefresh);
         }
 
 
         public override void UpdateData(IPortfolio portfolio)
         {
+            base.UpdateData(portfolio);
             fFileName = portfolio.DatabaseName + portfolio.Extension;
             fDirectory = portfolio.Directory;
-            Currencies = portfolio.Names(AccountType.Currency).Concat(portfolio.Companies(AccountType.Currency)).Distinct().ToList();
+            Currencies = portfolio.Names(Account.Currency).Concat(portfolio.Companies(Account.Currency)).Distinct().ToList();
             if (!Currencies.Contains(portfolio.BaseCurrency))
             {
                 Currencies.Add(portfolio.BaseCurrency);
             }
-            BaseCurrency = portfolio.BaseCurrency;
+
+            // We have just updated the portfolio, so shouldnt be setting BaseCurrency here.
+            fBaseCurrency = portfolio.BaseCurrency;
         }
 
-        public ICommand OpenHelpCommand { get; }
-        private void OpenHelpDocsCommand(Object obj)
+        public ICommand OpenHelpCommand
         {
-            var helpwindow = new HelpWindow(fReportLogger);
+            get;
+        }
+        private void OpenHelpDocsCommand()
+        {
+            HelpWindow helpwindow = new HelpWindow(fReportLogger);
             helpwindow.Show();
         }
 
-        public ICommand NewDatabaseCommand { get; }
-        private void ExecuteNewDatabase(Object obj)
+        public ICommand NewDatabaseCommand
         {
-            MessageBoxResult result = fDialogCreationService.ShowMessageBox("Do you want to load a new database?", "New Database?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            get;
+        }
+        private void ExecuteNewDatabase()
+        {
+            MessageBoxResult result;
+            if (DataStore.IsAlteredSinceSave)
+            {
+                result = fDialogCreationService.ShowMessageBox("Current database has unsaved alterations. Are you sure you want to load a new database?", "New Database?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            }
+            else
+            {
+                result = fDialogCreationService.ShowMessageBox("Do you want to load a new database?", "New Database?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            }
             if (result == MessageBoxResult.Yes)
             {
                 DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(""));
@@ -93,10 +120,13 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public ICommand SaveDatabaseCommand { get; }
-        private void ExecuteSaveDatabase(Object obj)
+        public ICommand SaveDatabaseCommand
         {
-            var result = fFileService.SaveFile("xml", fFileName, fDirectory, "XML Files|*.xml|All Files|*.*");
+            get;
+        }
+        private void ExecuteSaveDatabase()
+        {
+            FileInteractionResult result = fFileService.SaveFile("xml", fFileName, fDirectory, "XML Files|*.xml|All Files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
                 DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(result.FilePath));
@@ -104,28 +134,38 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public ICommand LoadDatabaseCommand { get; }
-        private void ExecuteLoadDatabase(Object obj)
+        public ICommand LoadDatabaseCommand
         {
-            var result = fFileService.OpenFile("xml", filter: "XML Files|*.xml|All Files|*.*");
+            get;
+        }
+        private void ExecuteLoadDatabase()
+        {
+            FileInteractionResult result = fFileService.OpenFile("xml", filter: "XML Files|*.xml|All Files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
+                DataUpdateCallback(programPortfolio => programPortfolio.Clear());
                 DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(result.FilePath));
                 DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio(result.FilePath, fReportLogger));
             }
         }
 
-        public ICommand UpdateDataCommand { get; }
-        private void ExecuteUpdateData(Object obj)
+        public ICommand UpdateDataCommand
         {
-            DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.Downloader(programPortfolio, fReportLogger).ConfigureAwait(false));
+            get;
+        }
+        private void ExecuteUpdateData()
+        {
+            DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.Download(Account.All, programPortfolio, null, fReportLogger).ConfigureAwait(false));
         }
 
-        public ICommand RefreshCommand { get; }
-
-        private void ExecuteRefresh(Object obj)
+        public ICommand RefreshCommand
         {
-            DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(fFileName));
+            get;
+        }
+
+        private void ExecuteRefresh()
+        {
+            DataUpdateCallback(programPortfolio => programPortfolio.OnPortfolioChanged(false, null));
         }
     }
 }
