@@ -77,6 +77,18 @@ namespace FinancialStructures.FinanceStructures
             return new DailyValuation(latestDate.Day, latestValue);
         }
 
+        public DailyValuation LastEarlierValuation(DateTime date, ICurrency currency = null)
+        {
+            DailyValuation val = Values.RecentPreviousValue(date);
+            double currencyValue = currency == null ? 1.0 : currency.Value(val.Day).Value;
+            if (val == null)
+            {
+                return new DailyValuation(date, 0.0);
+            }
+            val.Value *= currencyValue;
+            return val;
+        }
+
         /// <summary>
         /// Returns the first valuation of the OldCashAccount.
         /// </summary>

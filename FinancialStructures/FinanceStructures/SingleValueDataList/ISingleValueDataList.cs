@@ -41,14 +41,16 @@ namespace FinancialStructures.FinanceInterfaces
         bool Any();
         int Count();
         DailyValuation LatestValue();
+        DailyValuation FirstValue();
         double CAR(DateTime earlierTime, DateTime laterTime);
 
         DailyValuation Value(DateTime date);
         List<DailyValuation> GetDataForDisplay();
+
+        DailyValuation LastEarlierValuation(DateTime date);
         bool EditNameData(NameData newNames);
         bool TryAddData(DateTime date, double value, IReportLogger reportLogger = null);
-        bool TryAddOrEditData(DateTime date, double value, IReportLogger reportLogger = null);
-        bool TryEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null);
+        bool TryAddOrEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null);
         bool TryDeleteData(DateTime date, IReportLogger reportLogger = null);
         bool TryRemoveSector(string sectorName);
     }

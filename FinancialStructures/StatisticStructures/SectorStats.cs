@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using FinancialStructures.Database.Statistics;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
 using StructureCommon.Extensions;
 
 namespace FinancialStructures.StatisticStructures
@@ -147,32 +147,32 @@ namespace FinancialStructures.StatisticStructures
         {
             if (sectorStats.StatsType == StatisticsType.BenchMarkTotal)
             {
-                _ = portfolio.TryGetAccount(AccountType.Sector, sectorStats.Names, out ISingleValueDataList chosenSector);
+                _ = portfolio.TryGetAccount(Account.Benchmark, sectorStats.Names, out ISingleValueDataList chosenSector);
                 if (chosenSector != null)
                 {
                     sectorStats.LatestVal = chosenSector.LatestValue().Value.Truncate();
                     sectorStats.FundsFraction = 0.0;
                     sectorStats.Profit = 0.0;
-                    sectorStats.Number = portfolio.NumberSecuritiesInSector(chosenSector.Name);
+                    sectorStats.Number = portfolio.SectorSecurities(chosenSector.Name).Count;
                     sectorStats.CAR3M = (100 * chosenSector.CAR(date.AddMonths(-3), date)).Truncate();
                     sectorStats.CAR6M = (100 * chosenSector.CAR(date.AddMonths(-6), date)).Truncate();
                     sectorStats.CAR1Y = (100 * chosenSector.CAR(date.AddMonths(-12), date)).Truncate();
                     sectorStats.CAR5Y = (100 * chosenSector.CAR(date.AddMonths(-60), date)).Truncate();
-                    sectorStats.CARTotal = (100 * chosenSector.CAR(portfolio.FirstValueDate(), date)).Truncate();
+                    sectorStats.CARTotal = (100 * chosenSector.CAR(portfolio.FirstValueDate(Totals.Security), date)).Truncate();
                 }
             }
             else
             {
                 string name = sectorStats.Names.Name;
-                sectorStats.LatestVal = portfolio.SectorValue(name, date).Truncate();
-                sectorStats.FundsFraction = portfolio.SectorFraction(name, date).Truncate(4);
-                sectorStats.Number = portfolio.NumberSecuritiesInSector(name);
-                sectorStats.Profit = portfolio.SectorProfit(name).Truncate();
-                sectorStats.CAR3M = (100 * portfolio.IRRSector(name, date.AddMonths(-3), date)).Truncate();
-                sectorStats.CAR6M = (100 * portfolio.IRRSector(name, date.AddMonths(-6), date)).Truncate();
-                sectorStats.CAR1Y = (100 * portfolio.IRRSector(name, date.AddMonths(-12), date)).Truncate();
-                sectorStats.CAR5Y = (100 * portfolio.IRRSector(name, date.AddMonths(-60), date)).Truncate();
-                sectorStats.CARTotal = (100 * portfolio.IRRSector(name, portfolio.FirstValueDate(), date)).Truncate();
+                sectorStats.LatestVal = portfolio.TotalValue(Totals.Sector, date, new TwoName(name)).Truncate();
+                sectorStats.FundsFraction = portfolio.Fraction(Totals.Sector, new TwoName(name), date).Truncate(4);
+                sectorStats.Number = portfolio.SectorSecurities(name).Count;
+                sectorStats.Profit = portfolio.TotalProfit(Totals.Sector, sectorStats.Names).Truncate();
+                sectorStats.CAR3M = (100 * portfolio.IRRTotal(Totals.Sector, date.AddMonths(-3), date, name)).Truncate();
+                sectorStats.CAR6M = (100 * portfolio.IRRTotal(Totals.Sector, date.AddMonths(-6), date, name)).Truncate();
+                sectorStats.CAR1Y = (100 * portfolio.IRRTotal(Totals.Sector, date.AddMonths(-12), date, name)).Truncate();
+                sectorStats.CAR5Y = (100 * portfolio.IRRTotal(Totals.Sector, date.AddMonths(-60), date, name)).Truncate();
+                sectorStats.CARTotal = (100 * portfolio.IRRTotal(Totals.Sector, portfolio.FirstValueDate(Totals.Security), date, name)).Truncate();
             }
         }
     }

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
 using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
@@ -72,13 +71,13 @@ namespace FinanceWindowsViewModels
 
         public override void UpdateData(IPortfolio portfolio)
         {
-            FundNames = portfolio.NameData(AccountType.Security);
+            FundNames = portfolio.NameData(Account.Security);
             FundNames.Sort();
-            AccountNames = portfolio.NameData(AccountType.BankAccount);
+            AccountNames = portfolio.NameData(Account.BankAccount);
             AccountNames.Sort();
-            SectorNames = portfolio.NameData(AccountType.Sector);
+            SectorNames = portfolio.NameData(Account.Benchmark);
             SectorNames.Sort();
-            CurrencyNames = portfolio.NameData(AccountType.Currency);
+            CurrencyNames = portfolio.NameData(Account.Currency);
             CurrencyNames.Sort();
         }
     }

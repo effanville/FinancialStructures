@@ -4,7 +4,6 @@ using System.IO;
 using System.Xml.Serialization;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
-using FinancialStructures.PortfolioAPI;
 
 namespace FinancialStructures.Database
 {
@@ -15,6 +14,10 @@ namespace FinancialStructures.Database
     {
         private string fDatabaseFilePath;
 
+        /// <summary>
+        /// Flag to state when the user has altered values in the portfolio
+        /// after the last save.
+        /// </summary>
         [XmlIgnoreAttribute]
         public bool IsAlteredSinceSave
         {
@@ -133,6 +136,11 @@ namespace FinancialStructures.Database
             {
                 handler?.Invoke(obj, e);
             }
+
+            if (obj is bool noChange)
+            {
+                IsAlteredSinceSave = false;
+            }
         }
 
         /// <inheritdoc/>
@@ -149,23 +157,23 @@ namespace FinancialStructures.Database
         }
 
         /// <inheritdoc/>
-        public int NumberOf(AccountType elementType)
+        public int NumberOf(Account elementType)
         {
             switch (elementType)
             {
-                case (AccountType.Security):
+                case (Account.Security):
                 {
                     return Funds.Count;
                 }
-                case (AccountType.Currency):
+                case (Account.Currency):
                 {
                     return Currencies.Count;
                 }
-                case (AccountType.BankAccount):
+                case (Account.BankAccount):
                 {
                     return BankAccounts.Count;
                 }
-                case (AccountType.Sector):
+                case (Account.Benchmark):
                 {
                     break;
                 }

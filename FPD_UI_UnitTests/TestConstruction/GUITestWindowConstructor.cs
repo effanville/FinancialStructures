@@ -6,7 +6,6 @@ using FinanceWindowsViewModels;
 using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
 using Moq;
 using StructureCommon.DataStructures;
 using StructureCommon.Reporting;
@@ -52,11 +51,11 @@ namespace FPD_UI_UnitTests.TestConstruction
         {
             get
             {
-                return action => OpenTab(action);
+                return action => OpenTab();
             }
         }
 
-        private static void OpenTab(object obj)
+        private static void OpenTab()
         {
             return;
         }
@@ -78,13 +77,13 @@ namespace FPD_UI_UnitTests.TestConstruction
         public static void UpdatePortfolio(Portfolio portfolio)
         {
             portfolio.SetFilePath("TestFilePath");
-            portfolio.TryAdd(AccountType.Security, new NameData("Fidelity", "China", "GBP", "http://www.fidelity.co.uk", new HashSet<string>() { "Bonds", "UK" }), TestingGUICode.DummyReportLogger);
-            portfolio.TryAddDataToSecurity(new TwoName("Fidelity", "China"), new DateTime(2000, 1, 1), 1, 1, 1);
-            portfolio.TryAdd(AccountType.BankAccount, new NameData("Barclays", "currentAccount"), TestingGUICode.DummyReportLogger);
-            portfolio.TryAddData(AccountType.BankAccount, new NameData("Barclays", "currentAccount"), new DailyValuation(new DateTime(2000, 1, 1), 1));
-            portfolio.TryAdd(AccountType.Currency, new NameData(string.Empty, "GBP"), TestingGUICode.DummyReportLogger);
+            portfolio.TryAdd(Account.Security, new NameData("Fidelity", "China", "GBP", "http://www.fidelity.co.uk", new HashSet<string>() { "Bonds", "UK" }), TestingGUICode.DummyReportLogger);
+            portfolio.TryAddOrEditDataToSecurity(new TwoName("Fidelity", "China"), new DateTime(2000, 1, 1), new DateTime(2000, 1, 1), 1, 1, 1);
+            portfolio.TryAdd(Account.BankAccount, new NameData("Barclays", "currentAccount"), TestingGUICode.DummyReportLogger);
+            portfolio.TryAddOrEditData(Account.BankAccount, new NameData("Barclays", "currentAccount"), new DailyValuation(new DateTime(2000, 1, 1), 1), new DailyValuation(new DateTime(2000, 1, 1), 1));
+            portfolio.TryAdd(Account.Currency, new NameData(string.Empty, "GBP"), TestingGUICode.DummyReportLogger);
 
-            portfolio.TryAdd(AccountType.Sector, new NameData(string.Empty, "UK", string.Empty, "http://www.hi.com"), TestingGUICode.DummyReportLogger);
+            portfolio.TryAdd(Account.Benchmark, new NameData(string.Empty, "UK", string.Empty, "http://www.hi.com"), TestingGUICode.DummyReportLogger);
         }
 
         public static Portfolio CreateEmptyDataBase()

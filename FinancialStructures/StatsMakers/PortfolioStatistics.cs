@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FinancialStructures.Database;
+using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
 using FinancialStructures.StatisticStructures;
 using StructureCommon.Extensions;
 using StructureCommon.FileAccess;
@@ -108,9 +108,9 @@ namespace FinancialStructures.StatsMakers
 
         private void GenerateStatistics(IPortfolio portfolio)
         {
-            Totals.Add(new DayValue_Named("Securities", string.Empty, DateTime.Today, portfolio.TotalValue(AccountType.Security).Truncate()));
-            Totals.Add(new DayValue_Named("Bank Accounts", string.Empty, DateTime.Today, portfolio.TotalValue(AccountType.BankAccount).Truncate()));
-            Totals.Add(new DayValue_Named("Portfolio", string.Empty, DateTime.Today, portfolio.Value(DateTime.Today).Truncate()));
+            Totals.Add(new DayValue_Named("Securities", string.Empty, DateTime.Today, portfolio.TotalValue(FinanceInterfaces.Totals.Security).Truncate()));
+            Totals.Add(new DayValue_Named("Bank Accounts", string.Empty, DateTime.Today, portfolio.TotalValue(FinanceInterfaces.Totals.BankAccount).Truncate()));
+            Totals.Add(new DayValue_Named("Portfolio", string.Empty, DateTime.Today, portfolio.TotalValue(DateTime.Today).Truncate()));
 
             IndividualSecurityStats = portfolio.GenerateFundsStatistics();
 

@@ -6,8 +6,6 @@ using System.Windows.Input;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
-using StructureCommon.DataStructures;
 using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
 using UICommon.Commands;
@@ -79,7 +77,7 @@ namespace FinanceWindowsViewModels
         {
             if (fSelectedName != null && fOldSelectedValues != null)
             {
-                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(AccountType.Security, fSelectedName, new DailyValuation(fOldSelectedValues.Date, 0.0), ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(Account.Security, fSelectedName, fOldSelectedValues.Date, ReportLogger));
             }
         }
 
@@ -105,7 +103,7 @@ namespace FinanceWindowsViewModels
                     {
                         if (objec is SecurityDayData view)
                         {
-                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(fSelectedName, view.Date, view.ShareNo, view.UnitPrice, view.NewInvestment, ReportLogger));
+                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditDataToSecurity(fSelectedName, view.Date, view.Date, view.ShareNo, view.UnitPrice, view.NewInvestment, ReportLogger));
                         }
                         else
                         {
@@ -193,20 +191,11 @@ namespace FinanceWindowsViewModels
             if (fSelectedName != null)
             {
                 var originRowData = e.Row.DataContext as SecurityDayData;
-                _ = DataStore.TryGetSecurity(fSelectedName, out ISecurity desired);
-                if (desired.Count() != SelectedSecurityData.Count)
+                bool edited = false;
+                UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditDataToSecurity(fSelectedName, fOldSelectedValues.Date, originRowData.Date, originRowData.ShareNo, originRowData.UnitPrice, originRowData.NewInvestment, ReportLogger));
+                if (!edited)
                 {
-                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddDataToSecurity(fSelectedName, originRowData.Date, originRowData.ShareNo, originRowData.UnitPrice, originRowData.NewInvestment, ReportLogger));
-                }
-                else
-                {
-                    bool edited = false;
-                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditSecurityData(fSelectedName, fOldSelectedValues.Date, originRowData.Date, originRowData.ShareNo, originRowData.UnitPrice, originRowData.NewInvestment, ReportLogger));
-
-                    if (!edited)
-                    {
-                        _ = ReportLogger.LogUsefulWithStrings("Error", "EditingData", "Was not able to edit security data.");
-                    }
+                    _ = ReportLogger.LogUsefulWithStrings("Error", "EditingData", "Was not able to add or edit security data.");
                 }
             }
         }
@@ -216,7 +205,7 @@ namespace FinanceWindowsViewModels
             base.UpdateData(portfolio);
             if (fSelectedName != null)
             {
-                if (!portfolio.Exists(AccountType.Security, fSelectedName))
+                if (!portfolio.Exists(Account.Security, fSelectedName))
                 {
                     removeTab?.Invoke(this);
                     return;

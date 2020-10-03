@@ -5,7 +5,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
 using StructureCommon.DataStructures;
 using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
@@ -17,7 +16,7 @@ namespace FinanceCommonViewModels
 {
     internal class SelectedSingleDataViewModel : TabViewModelBase<IPortfolio>
     {
-        private readonly AccountType TypeOfAccount;
+        private readonly Account TypeOfAccount;
 
         public override bool Closable
         {
@@ -67,7 +66,7 @@ namespace FinanceCommonViewModels
         private readonly IFileInteractionService fFileService;
         private readonly IDialogCreationService fDialogCreationService;
 
-        public SelectedSingleDataViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, NameData selectedName, AccountType accountType)
+        public SelectedSingleDataViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, NameData selectedName, Account accountType)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name", portfolio)
         {
             SelectedName = selectedName;
@@ -91,7 +90,7 @@ namespace FinanceCommonViewModels
             base.UpdateData(portfolio);
             if (SelectedName != null)
             {
-                if (!portfolio.NameData(TypeOfAccount).Exists(name => name.IsEqualTo(SelectedName)))
+                if (!portfolio.Exists(TypeOfAccount, SelectedName))
                 {
                     removeTab?.Invoke(this);
                     return;
@@ -118,12 +117,15 @@ namespace FinanceCommonViewModels
 
         private void DataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
         {
-            double latestValue = SelectedData.Last().Value;
-            e.NewItem = new DailyValuation()
+            if (SelectedData != null && SelectedData.Any())
             {
-                Day = DateTime.Today,
-                Value = latestValue
-            };
+                double latestValue = SelectedData.Last().Value;
+                e.NewItem = new DailyValuation()
+                {
+                    Day = DateTime.Today,
+                    Value = latestValue
+                };
+            }
         }
 
         public ICommand SelectionChangedCommand
@@ -156,19 +158,11 @@ namespace FinanceCommonViewModels
             if (SelectedName != null)
             {
                 var originRowData = e.Row.DataContext as DailyValuation;
-                if (DataStore.NumberData(TypeOfAccount, SelectedName, ReportLogger).Count() != SelectedData.Count)
+                bool edited = false;
+                UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditData(TypeOfAccount, SelectedName, fOldSelectedValue, originRowData, ReportLogger));
+                if (!edited)
                 {
-                    UpdateDataCallback(programPortfolio => programPortfolio.TryAddData(TypeOfAccount, SelectedName, originRowData, ReportLogger));
-                }
-                else
-                {
-                    bool edited = false;
-                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditData(TypeOfAccount, SelectedName, fOldSelectedValue, originRowData, ReportLogger));
-
-                    if (!edited)
-                    {
-                        _ = ReportLogger.LogWithStrings("Critical", "Error", "EditingData", "Was not able to edit data.");
-                    }
+                    _ = ReportLogger.LogWithStrings("Critical", "Error", "EditingData", "Was not able to add or edit data.");
                 }
             }
         }
@@ -182,7 +176,7 @@ namespace FinanceCommonViewModels
         {
             if (SelectedName != null)
             {
-                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(TypeOfAccount, SelectedName, fOldSelectedValue, ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(TypeOfAccount, SelectedName, fOldSelectedValue.Day, ReportLogger));
             }
             else
             {
@@ -212,7 +206,7 @@ namespace FinanceCommonViewModels
                     {
                         if (objec is DailyValuation view)
                         {
-                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddData(TypeOfAccount, SelectedName, view, ReportLogger));
+                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditData(TypeOfAccount, SelectedName, view, view, ReportLogger));
                         }
                         else
                         {

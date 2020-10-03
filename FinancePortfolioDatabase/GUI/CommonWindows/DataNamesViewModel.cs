@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
+using FinancialStructures.Database.Download;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
 using StructureCommon.Reporting;
 using UICommon.Commands;
 using UICommon.ViewModelBases;
@@ -17,7 +17,7 @@ namespace FinanceCommonViewModels
     /// </summary>
     internal class DataNamesViewModel : TabViewModelBase<IPortfolio>
     {
-        private readonly AccountType TypeOfAccount;
+        private readonly Account TypeOfAccount;
 
         /// <summary>
         /// Backing field for <see cref="DataNames"/>.
@@ -55,7 +55,7 @@ namespace FinanceCommonViewModels
         /// <summary>
         /// Construct an instance.
         /// </summary>
-        public DataNamesViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, Action<object> loadSelectedData, AccountType accountType)
+        public DataNamesViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, Action<object> loadSelectedData, Account accountType)
             : base("Accounts", portfolio, loadSelectedData)
         {
             UpdateDataCallback = updateDataCallback;
@@ -91,12 +91,9 @@ namespace FinanceCommonViewModels
             base.UpdateData(portfolio);
 
             var values = portfolio.NameData(TypeOfAccount);
-            if (values.Count != DataNames.Count)
-            {
-                DataNames = null;
-                DataNames = values;
-                DataNames.Sort();
-            }
+            DataNames = null;
+            DataNames = values;
+            DataNames.Sort();
         }
 
         /// <summary>
@@ -119,7 +116,7 @@ namespace FinanceCommonViewModels
             if (fPreEditSelectedName != null)
             {
                 NameData names = fPreEditSelectedName;
-                UpdateDataCallback(async programPortfolio => await PortfolioDataUpdater.DownloadOfType(TypeOfAccount, programPortfolio, names, ReportLogger).ConfigureAwait(false));
+                UpdateDataCallback(async programPortfolio => await PortfolioDataUpdater.Download(TypeOfAccount, programPortfolio, names, ReportLogger).ConfigureAwait(false));
             }
         }
 

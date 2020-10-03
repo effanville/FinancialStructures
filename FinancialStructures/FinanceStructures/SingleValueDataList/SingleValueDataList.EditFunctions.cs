@@ -72,12 +72,11 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Adds <param name="value"/> to amounts on <param name="date"/> if data doesnt exist.
         /// </summary>
-        public bool TryAddOrEditData(DateTime date, double value, IReportLogger reportLogger = null)
+        public bool TryAddOrEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null)
         {
-            if (fValues.ValueExists(date, out _))
+            if (fValues.ValueExists(oldDate, out _))
             {
-                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, "Data already exists.");
-                return fValues.TryEditData(date, value);
+                return fValues.TryEditData(oldDate, date, value, reportLogger);
             }
 
             return fValues.TryAddValue(date, value, reportLogger);
@@ -107,14 +106,6 @@ namespace FinancialStructures.FinanceStructures
             {
                 writer.WriteLine(value.ToString());
             }
-        }
-
-        /// <summary>
-        /// Edits value if value exists. Does nothing if it doesn't exist.
-        /// </summary>
-        public bool TryEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null)
-        {
-            return fValues.TryEditData(oldDate, date, value, reportLogger);
         }
 
         /// <summary>

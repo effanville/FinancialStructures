@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.PortfolioAPI;
 using StructureCommon.Reporting;
 using UICommon.Services;
 using UICommon.ViewModelBases;
@@ -13,7 +12,7 @@ namespace FinanceCommonViewModels
 {
     internal class SingleValueEditWindowViewModel : ViewModelBase<IPortfolio>
     {
-        private readonly AccountType TypeOfAccount;
+        private readonly Account TypeOfAccount;
         public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
 
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
@@ -21,7 +20,7 @@ namespace FinanceCommonViewModels
         private readonly IFileInteractionService fFileService;
         private readonly IDialogCreationService fDialogCreationService;
 
-        public SingleValueEditWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, AccountType accountType)
+        public SingleValueEditWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, Account accountType)
             : base(title, portfolio)
         {
             UpdateDataCallback = updateDataCallback;

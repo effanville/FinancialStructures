@@ -4,8 +4,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using FinanceWindows;
+using FinancialStructures.Database.Download;
 using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.PortfolioAPI;
 using StructureCommon.Reporting;
 using UICommon.Commands;
 using UICommon.Services;
@@ -78,7 +78,7 @@ namespace FinanceWindowsViewModels
             base.UpdateData(portfolio);
             fFileName = portfolio.DatabaseName + portfolio.Extension;
             fDirectory = portfolio.Directory;
-            Currencies = portfolio.Names(AccountType.Currency).Concat(portfolio.Companies(AccountType.Currency)).Distinct().ToList();
+            Currencies = portfolio.Names(Account.Currency).Concat(portfolio.Companies(Account.Currency)).Distinct().ToList();
             if (!Currencies.Contains(portfolio.BaseCurrency))
             {
                 Currencies.Add(portfolio.BaseCurrency);
@@ -143,6 +143,7 @@ namespace FinanceWindowsViewModels
             FileInteractionResult result = fFileService.OpenFile("xml", filter: "XML Files|*.xml|All Files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
+                DataUpdateCallback(programPortfolio => programPortfolio.Clear());
                 DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(result.FilePath));
                 DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio(result.FilePath, fReportLogger));
             }
@@ -154,7 +155,7 @@ namespace FinanceWindowsViewModels
         }
         private void ExecuteUpdateData()
         {
-            DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.Downloader(programPortfolio, fReportLogger).ConfigureAwait(false));
+            DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.Download(Account.All, programPortfolio, null, fReportLogger).ConfigureAwait(false));
         }
 
         public ICommand RefreshCommand
@@ -164,7 +165,7 @@ namespace FinanceWindowsViewModels
 
         private void ExecuteRefresh()
         {
-            DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(fFileName));
+            DataUpdateCallback(programPortfolio => programPortfolio.OnPortfolioChanged(false, null));
         }
     }
 }
