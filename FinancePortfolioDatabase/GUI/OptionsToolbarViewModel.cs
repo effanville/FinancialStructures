@@ -165,7 +165,7 @@ namespace FinanceWindowsViewModels
 
         private void ExecuteRefresh()
         {
-            DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(fFileName));
+            DataUpdateCallback(programPortfolio => programPortfolio.OnPortfolioChanged(false, null));
         }
     }
 }

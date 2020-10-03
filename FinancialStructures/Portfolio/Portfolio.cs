@@ -14,6 +14,10 @@ namespace FinancialStructures.Database
     {
         private string fDatabaseFilePath;
 
+        /// <summary>
+        /// Flag to state when the user has altered values in the portfolio
+        /// after the last save.
+        /// </summary>
         [XmlIgnoreAttribute]
         public bool IsAlteredSinceSave
         {
@@ -131,6 +135,11 @@ namespace FinancialStructures.Database
             if (handler != null)
             {
                 handler?.Invoke(obj, e);
+            }
+
+            if (obj is bool noChange)
+            {
+                IsAlteredSinceSave = false;
             }
         }
 
