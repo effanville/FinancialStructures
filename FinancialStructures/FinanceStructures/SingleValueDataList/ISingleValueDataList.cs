@@ -47,7 +47,7 @@ namespace FinancialStructures.FinanceInterfaces
         DailyValuation Value(DateTime date);
         List<DailyValuation> GetDataForDisplay();
 
-        DailyValuation LastEarlierValuation(DateTime date);
+        DailyValuation RecentPreviousValue(DateTime date);
         bool EditNameData(NameData newNames);
         bool TryAddData(DateTime date, double value, IReportLogger reportLogger = null);
         bool TryAddOrEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null);

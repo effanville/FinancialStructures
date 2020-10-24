@@ -24,6 +24,7 @@ namespace FinancialStructures.FinanceStructures
             DataEdit?.Invoke(edited, args);
         }
 
+        /// <inheritdoc />
         public void SetupEventListening()
         {
             Values.DataEdit += OnDataEdit;
@@ -50,21 +51,13 @@ namespace FinancialStructures.FinanceStructures
             return 0;
         }
 
-        private NameData fNames;
-
         /// <summary>
         /// Any name type data associated to this security.
         /// </summary>
         public NameData Names
         {
-            get
-            {
-                return fNames;
-            }
-            set
-            {
-                fNames = value;
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -99,6 +92,9 @@ namespace FinancialStructures.FinanceStructures
             }
         }
 
+        /// <summary>
+        /// A url to retrieve data for this list.
+        /// </summary>
         public string Url
         {
             get
@@ -112,6 +108,9 @@ namespace FinancialStructures.FinanceStructures
             }
         }
 
+        /// <summary>
+        /// The currency the data in this list is associated with.
+        /// </summary>
         public string Currency
         {
             get
@@ -125,25 +124,13 @@ namespace FinancialStructures.FinanceStructures
         }
 
         /// <summary>
-        /// The values of the sector.
-        /// </summary>
-        private TimeList fValues = new TimeList();
-
-        /// <summary>
         /// This should only be used for serialisation.
         /// </summary>
         public TimeList Values
         {
-            get
-            {
-                return fValues;
-            }
-
-            set
-            {
-                fValues = value;
-            }
-        }
+            get;
+            set;
+        } = new TimeList();
 
         /// <summary>
         /// default constructor.
@@ -169,18 +156,24 @@ namespace FinancialStructures.FinanceStructures
         public SingleValueDataList(NameData names, TimeList values)
         {
             Names = names;
-            fValues = values;
+            Values = values;
             SetupEventListening();
         }
 
+        /// <summary>
+        /// Performs a copy of the list.
+        /// </summary>
         public ISingleValueDataList Copy()
         {
-            return new SingleValueDataList(Names, fValues);
+            return new SingleValueDataList(Names, Values);
         }
 
+        /// <summary>
+        /// Does the list contain any values?
+        /// </summary>
         public bool Any()
         {
-            return fValues != null && fValues.Any();
+            return Values != null && Values.Any();
         }
     }
 }

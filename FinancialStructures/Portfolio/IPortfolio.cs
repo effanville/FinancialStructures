@@ -310,6 +310,7 @@ namespace FinancialStructures.FinanceInterfaces
         /// Total value of all accounts of type specified today.
         /// </summary>
         /// <param name="elementType">The type to find the total of.</param>
+        /// <param name="names">Any name associated with this total, e.g. the Sector name</param>
         /// <returns>The total value held on today.</returns>
         double TotalValue(Totals elementType, TwoName names = null);
 
@@ -318,6 +319,7 @@ namespace FinancialStructures.FinanceInterfaces
         /// </summary>
         /// <param name="elementType">The type to find the total of.</param>
         /// <param name="date">The date to find the total on.</param>
+        /// <param name="names">Any name associated with this total, e.g. the Sector name</param>
         /// <returns>The total value held.</returns>
         double TotalValue(Totals elementType, DateTime date, TwoName names = null);
 
@@ -325,6 +327,7 @@ namespace FinancialStructures.FinanceInterfaces
         /// Total value of all accounts of all types on date given.
         /// </summary>
         /// <param name="date">The date to find the total on.</param>
+        /// <param name="names">Any name associated with this total, e.g. the Sector name</param>
         /// <returns>The total value held.</returns>
         double TotalValue(DateTime date, TwoName names = null);
 

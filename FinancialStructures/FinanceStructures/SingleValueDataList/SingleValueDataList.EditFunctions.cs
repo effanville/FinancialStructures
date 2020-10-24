@@ -22,19 +22,25 @@ namespace FinancialStructures.FinanceStructures
             return Names.IsEqualTo(otherAccount.Names);
         }
 
+        /// <summary>
+        /// Returns the number of data points held in the list.
+        /// </summary>
         public int Count()
         {
-            return fValues.Count();
+            return Values.Count();
         }
 
+        /// <summary>
+        /// Retrieves data in a list ordered by date.
+        /// </summary>
         public List<DailyValuation> GetDataForDisplay()
         {
             List<DailyValuation> output = new List<DailyValuation>();
-            if (fValues.Any())
+            if (Values.Any())
             {
-                foreach (DailyValuation datevalue in fValues.GetValuesBetween(fValues.FirstDate(), fValues.LatestDate()))
+                foreach (DailyValuation datevalue in Values.GetValuesBetween(Values.FirstDate(), Values.LatestDate()))
                 {
-                    _ = fValues.TryGetValue(datevalue.Day, out double UnitPrice);
+                    _ = Values.TryGetValue(datevalue.Day, out double UnitPrice);
                     DailyValuation thisday = new DailyValuation(datevalue.Day, UnitPrice);
                     output.Add(thisday);
                 }
@@ -58,30 +64,37 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Adds <param name="value"/> to amounts on <param name="date"/> if data doesnt exist.
         /// </summary>
+        /// <param name="reportLogger">The logger to report outcomes.</param>
         public bool TryAddData(DateTime date, double value, IReportLogger reportLogger = null)
         {
-            if (fValues.ValueExists(date, out _))
+            if (Values.ValueExists(date, out _))
             {
                 _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, "Data already exists.");
                 return false;
             }
 
-            return fValues.TryAddValue(date, value, reportLogger);
+            return Values.TryAddValue(date, value, reportLogger);
         }
 
         /// <summary>
-        /// Adds <param name="value"/> to amounts on <param name="date"/> if data doesnt exist.
+        /// Adds <param name="value"/> to amounts on <param name="date"/> if data with date <param name="oldDate"/> doesnt exist, otherwise edits on that date.
         /// </summary>
+        /// <param name="reportLogger">The logger to report outcomes.</param>
         public bool TryAddOrEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null)
         {
-            if (fValues.ValueExists(oldDate, out _))
+            if (Values.ValueExists(oldDate, out _))
             {
-                return fValues.TryEditData(oldDate, date, value, reportLogger);
+                return Values.TryEditData(oldDate, date, value, reportLogger);
             }
 
-            return fValues.TryAddValue(date, value, reportLogger);
+            return Values.TryAddValue(date, value, reportLogger);
         }
 
+        /// <summary>
+        /// Adds data input already read from a csv file to the 
+        /// </summary>
+        /// <param name="valuationsToRead">A list or array values of the data from the file.</param>
+        /// <param name="reportLogger">A logger to record outcomes.</param>
         public List<object> CreateDataFromCsv(List<string[]> valuationsToRead, IReportLogger reportLogger = null)
         {
             List<object> dailyValuations = new List<object>();
@@ -100,7 +113,12 @@ namespace FinancialStructures.FinanceStructures
             return dailyValuations;
         }
 
-        public void WriteDataToCsv(TextWriter writer, IReportLogger reportLogger)
+        /// <summary>
+        /// Writes the data held in the account to a csv file.
+        /// </summary>
+        /// <param name="writer">The writer holding the location of where to write.</param>
+        /// <param name="reportLogger">A logger to record outcomes.</param>
+        public void WriteDataToCsv(TextWriter writer, IReportLogger reportLogger = null)
         {
             foreach (DailyValuation value in GetDataForDisplay())
             {
@@ -113,14 +131,13 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public bool TryDeleteData(DateTime date, IReportLogger reportLogger = null)
         {
-            return fValues.TryDeleteValue(date, reportLogger);
+            return Values.TryDeleteValue(date, reportLogger);
         }
 
         /// <summary>
         /// Removes a sector associated to this OldCashAccount.
         /// </summary>
         /// <param name="sectorName"></param>
-        /// <returns></returns>
         public bool TryRemoveSector(string sectorName)
         {
             if (IsSectorLinked(sectorName))

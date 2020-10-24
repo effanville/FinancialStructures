@@ -11,8 +11,8 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public virtual DailyValuation LatestValue()
         {
-            DateTime latestDate = fValues.LatestDate();
-            double latestValue = fValues.LatestValue();
+            DateTime latestDate = Values.LatestDate();
+            double latestValue = Values.LatestValue();
 
             return new DailyValuation(latestDate, latestValue);
         }
@@ -22,7 +22,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public DailyValuation FirstValue()
         {
-            return fValues.FirstValuation();
+            return Values.FirstValuation();
         }
 
         /// <summary>
@@ -30,7 +30,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         public DailyValuation Value(DateTime date)
         {
-            return fValues.Value(date);
+            return Values.Value(date);
         }
 
 
@@ -47,7 +47,7 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         internal virtual DailyValuation NearestEarlierValuation(DateTime date)
         {
-            return fValues.NearestEarlierValue(date);
+            return Values.NearestEarlierValue(date);
         }
 
         /// <summary>
@@ -55,12 +55,15 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         internal DailyValuation NearestLaterValuation(DateTime date)
         {
-            return fValues.NearestLaterValue(date);
+            return Values.NearestLaterValue(date);
         }
 
-        public DailyValuation LastEarlierValuation(DateTime date)
+        /// <summary>
+        /// Returns the most recent value to <paramref name="date"/> that is prior to that date. 
+        /// </summary>
+        public DailyValuation RecentPreviousValue(DateTime date)
         {
-            DailyValuation val = fValues.RecentPreviousValue(date);
+            DailyValuation val = Values.RecentPreviousValue(date);
             if (val == null)
             {
                 return new DailyValuation(date, 0.0);

@@ -122,7 +122,7 @@ namespace FinancialStructures.Database.Statistics
                             DailyValuation needed = desired.LatestValue();
                             if (needed.Value > 0)
                             {
-                                return needed.Value - desired.LastEarlierValuation(needed.Day).Value;
+                                return needed.Value - desired.RecentPreviousValue(needed.Day).Value;
                             }
 
                             return 0.0;
