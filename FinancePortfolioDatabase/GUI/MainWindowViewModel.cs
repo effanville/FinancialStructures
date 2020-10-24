@@ -63,7 +63,7 @@ namespace FinanceWindowsViewModels
             ProgramPortfolio.PortfolioChanged += AllData_portfolioChanged;
         }
 
-        private void AllData_portfolioChanged(object sender, EventArgs e)
+        private void AllData_portfolioChanged(object sender, PortfolioEventArgs e)
         {
             foreach (object tab in Tabs)
             {

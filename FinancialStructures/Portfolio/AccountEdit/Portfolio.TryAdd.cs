@@ -20,7 +20,7 @@ namespace FinancialStructures.Database
             if (Exists(elementType, name))
             {
                 _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"{elementType} `{name.Company}'-`{name.Name}' already exists.");
-                OnPortfolioChanged(null, new EventArgs());
+                OnPortfolioChanged(null, new PortfolioEventArgs(elementType));
                 return false;
             }
 
@@ -31,7 +31,7 @@ namespace FinancialStructures.Database
                     Security toAdd = new Security(name);
                     toAdd.DataEdit += OnPortfolioChanged;
                     Funds.Add(toAdd);
-                    OnPortfolioChanged(toAdd, new EventArgs());
+                    OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
                     break;
                 }
                 case (Account.Currency):
@@ -43,7 +43,7 @@ namespace FinancialStructures.Database
                     Currency toAdd = new Currency(name);
                     toAdd.DataEdit += OnPortfolioChanged;
                     Currencies.Add(toAdd);
-                    OnPortfolioChanged(toAdd, new EventArgs());
+                    OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
                     break;
                 }
                 case (Account.BankAccount):
@@ -51,7 +51,7 @@ namespace FinancialStructures.Database
                     CashAccount toAdd = new CashAccount(name);
                     toAdd.DataEdit += OnPortfolioChanged;
                     BankAccounts.Add(toAdd);
-                    OnPortfolioChanged(toAdd, new EventArgs());
+                    OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
                     break;
                 }
                 case (Account.Benchmark):
@@ -59,7 +59,7 @@ namespace FinancialStructures.Database
                     Sector toAdd = new Sector(name);
                     toAdd.DataEdit += OnPortfolioChanged;
                     BenchMarks.Add(toAdd);
-                    OnPortfolioChanged(toAdd, new EventArgs());
+                    OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
                     break;
                 }
                 default:

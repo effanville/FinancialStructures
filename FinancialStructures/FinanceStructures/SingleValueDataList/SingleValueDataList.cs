@@ -16,11 +16,12 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Event that controls when data is edited.
         /// </summary>
-        public event EventHandler DataEdit;
+        public event EventHandler<PortfolioEventArgs> DataEdit;
 
-        internal void OnDataEdit(object edited, EventArgs e)
+        internal virtual void OnDataEdit(object edited, EventArgs e)
         {
-            DataEdit?.Invoke(edited, e);
+            var args = e is PortfolioEventArgs pe ? pe : new PortfolioEventArgs();
+            DataEdit?.Invoke(edited, args);
         }
 
         public void SetupEventListening()

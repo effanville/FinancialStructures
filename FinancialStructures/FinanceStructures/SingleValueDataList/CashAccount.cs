@@ -7,6 +7,11 @@ namespace FinancialStructures.FinanceStructures
 {
     public class CashAccount : SingleValueDataList, ICashAccount
     {
+        internal override void OnDataEdit(object edited, EventArgs e)
+        {
+            base.OnDataEdit(edited, new PortfolioEventArgs(Account.BankAccount));
+        }
+
         public new ICashAccount Copy()
         {
             return new CashAccount(Names, Values);

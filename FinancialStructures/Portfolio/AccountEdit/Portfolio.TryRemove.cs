@@ -26,7 +26,7 @@ namespace FinancialStructures.Database
                         {
                             _ = Funds.Remove(sec);
                             _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Security {name} removed from the database.");
-                            OnPortfolioChanged(Funds, new System.EventArgs());
+                            OnPortfolioChanged(Funds, new PortfolioEventArgs(elementType));
                             return true;
                         }
                     }
@@ -41,7 +41,7 @@ namespace FinancialStructures.Database
                         {
                             _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted currency {currency.Name}");
                             _ = Currencies.Remove(currency);
-                            OnPortfolioChanged(Currencies, new System.EventArgs());
+                            OnPortfolioChanged(Currencies, new PortfolioEventArgs(elementType));
                             return true;
                         }
                     }
@@ -56,7 +56,7 @@ namespace FinancialStructures.Database
                         {
                             _ = BankAccounts.Remove(acc);
                             _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleting Bank Account: Deleted {name}.");
-                            OnPortfolioChanged(BankAccounts, new System.EventArgs());
+                            OnPortfolioChanged(BankAccounts, new PortfolioEventArgs(elementType));
                             return true;
                         }
                     }
@@ -71,7 +71,7 @@ namespace FinancialStructures.Database
                         {
                             _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted benchmark {sector.Name}");
                             _ = BenchMarks.Remove(sector);
-                            OnPortfolioChanged(BenchMarks, new System.EventArgs());
+                            OnPortfolioChanged(BenchMarks, new PortfolioEventArgs(elementType));
                             return true;
                         }
                     }

@@ -1,4 +1,5 @@
-﻿using FinancialStructures.FinanceInterfaces;
+﻿using System;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 
@@ -9,6 +10,11 @@ namespace FinancialStructures.FinanceStructures
     /// </summary>
     public class Currency : SingleValueDataList, ICurrency
     {
+        internal override void OnDataEdit(object edited, EventArgs e)
+        {
+            base.OnDataEdit(edited, new PortfolioEventArgs(Account.Currency));
+        }
+
         /// <summary>
         /// The base currency the currency is derived from.
         /// E.g. in the pair GBP.HKD this is the GBP.
@@ -38,6 +44,10 @@ namespace FinancialStructures.FinanceStructures
             return new Currency(Names, Values);
         }
 
+        /// <summary>
+        /// This provides a currency with values given by the reciprocal of the current
+        /// currency values.
+        /// </summary>
         public ICurrency Inverted()
         {
             return new Currency(Names, Values.Inverted());

@@ -109,12 +109,12 @@ namespace FinancialStructures.FinanceInterfaces
         /// <summary>
         /// Handler for the event that data stored in the portfolio has changed.
         /// </summary>
-        event EventHandler PortfolioChanged;
+        event EventHandler<PortfolioEventArgs> PortfolioChanged;
 
         /// <summary>
         /// Raise event if something has changed.
         /// </summary>
-        void OnPortfolioChanged(object obj, EventArgs e);
+        void OnPortfolioChanged(object obj, PortfolioEventArgs e);
 
         /// <summary>
         /// Set the path where the database will be stored.

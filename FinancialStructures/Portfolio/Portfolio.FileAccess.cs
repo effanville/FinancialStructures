@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.SavingClasses;
 using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
@@ -36,7 +37,7 @@ namespace FinancialStructures.Database
                     }
 
                     WireDataChangedEvents();
-                    OnPortfolioChanged(this, new EventArgs());
+                    OnPortfolioChanged(this, new PortfolioEventArgs());
                     Saving();
                     _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Loading, $"Loaded new database from {filePath}");
                 }
@@ -52,7 +53,7 @@ namespace FinancialStructures.Database
 
             CopyData(new Portfolio());
             WireDataChangedEvents();
-            OnPortfolioChanged(this, new EventArgs());
+            OnPortfolioChanged(this, new PortfolioEventArgs());
             Saving();
         }
 

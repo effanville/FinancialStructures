@@ -123,15 +123,15 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Event to be raised when elements are changed.
         /// </summary>
-        public event EventHandler PortfolioChanged;
+        public event EventHandler<PortfolioEventArgs> PortfolioChanged;
 
         /// <summary>
         /// handle the events raised in the above.
         /// </summary>
-        public void OnPortfolioChanged(object obj, EventArgs e)
+        public void OnPortfolioChanged(object obj, PortfolioEventArgs e)
         {
             IsAlteredSinceSave = true;
-            EventHandler handler = PortfolioChanged;
+            EventHandler<PortfolioEventArgs> handler = PortfolioChanged;
             if (handler != null)
             {
                 handler?.Invoke(obj, e);
@@ -153,7 +153,7 @@ namespace FinancialStructures.Database
         public void SetFilePath(string path)
         {
             fDatabaseFilePath = path;
-            OnPortfolioChanged(fDatabaseFilePath, new EventArgs());
+            OnPortfolioChanged(fDatabaseFilePath, new PortfolioEventArgs());
         }
 
         /// <inheritdoc/>
