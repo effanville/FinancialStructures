@@ -10,9 +10,8 @@ using UICommon.ViewModelBases;
 
 namespace FinanceCommonViewModels
 {
-    internal class SingleValueEditWindowViewModel : ViewModelBase<IPortfolio>
+    internal class SingleValueEditWindowViewModel : DataDisplayViewModelBase
     {
-        private readonly Account TypeOfAccount;
         public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
 
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
@@ -21,13 +20,12 @@ namespace FinanceCommonViewModels
         private readonly IDialogCreationService fDialogCreationService;
 
         public SingleValueEditWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, Account accountType)
-            : base(title, portfolio)
+            : base(title, accountType, portfolio)
         {
             UpdateDataCallback = updateDataCallback;
             ReportLogger = reportLogger;
             fFileService = fileService;
             fDialogCreationService = dialogCreation;
-            TypeOfAccount = accountType;
             UpdateData(portfolio);
             Tabs.Add(new DataNamesViewModel(DataStore, updateDataCallback, reportLogger, (name) => LoadTabFunc(name), accountType));
         }
@@ -62,7 +60,7 @@ namespace FinanceCommonViewModels
         {
             if (obj is NameData name)
             {
-                Tabs.Add(new SelectedSingleDataViewModel(DataStore, UpdateDataCallback, ReportLogger, fFileService, fDialogCreationService, name, TypeOfAccount));
+                Tabs.Add(new SelectedSingleDataViewModel(DataStore, UpdateDataCallback, ReportLogger, fFileService, fDialogCreationService, name, DataType));
             }
         }
     }

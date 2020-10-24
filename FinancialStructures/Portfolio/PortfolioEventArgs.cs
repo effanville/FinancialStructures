@@ -76,5 +76,13 @@ namespace FinancialStructures.FinanceInterfaces
         {
             ChangedAccount = Account.All;
         }
+
+        /// <summary>
+        /// Should the type of account be updated or not.
+        /// </summary>
+        public bool ShouldUpdate(Account dataType)
+        {
+            return ChangedAccount == Account.All || dataType.Equals(ChangedAccount);
+        }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using FinanceCommonViewModels;
 using FinanceViewModels.StatsViewModels;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.FinanceInterfaces;
@@ -10,11 +11,10 @@ using FinancialStructures.StatsMakers;
 using StructureCommon.Reporting;
 using UICommon.Commands;
 using UICommon.Services;
-using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
-    internal class StatsCreatorWindowViewModel : ViewModelBase<IPortfolio>
+    internal class StatsCreatorWindowViewModel : DataDisplayViewModelBase
     {
         public ObservableCollection<object> StatsTabs { get; set; } = new ObservableCollection<object>();
 
@@ -43,7 +43,7 @@ namespace FinanceWindowsViewModels
         private readonly IDialogCreationService fDialogCreationService;
 
         public StatsCreatorWindowViewModel(IPortfolio portfolio, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation)
-            : base("Stats Creator", portfolio)
+            : base("Stats Creator", Account.All, portfolio)
         {
             ReportLogger = reportLogger;
             fFileService = fileService;

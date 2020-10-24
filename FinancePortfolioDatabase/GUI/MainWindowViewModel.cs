@@ -67,9 +67,12 @@ namespace FinanceWindowsViewModels
         {
             foreach (object tab in Tabs)
             {
-                if (tab is ViewModelBase<IPortfolio> vm)
+                if (tab is DataDisplayViewModelBase vm)
                 {
-                    vm.UpdateData(ProgramPortfolio);
+                    if (e.ShouldUpdate(vm.DataType))
+                    {
+                        vm.UpdateData(ProgramPortfolio);
+                    }
                 }
             }
 
