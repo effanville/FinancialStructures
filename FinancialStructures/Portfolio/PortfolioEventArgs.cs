@@ -60,6 +60,24 @@ namespace FinancialStructures.FinanceInterfaces
         }
 
         /// <summary>
+        /// Details how the account type has changed.
+        /// </summary>
+        public EventAction HowChanged
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Constructor taking an account type, and how the data was edited.
+        /// </summary>
+        public PortfolioEventArgs(Account type, EventAction eventAction)
+            : base()
+        {
+            HowChanged = eventAction;
+            ChangedAccount = type;
+        }
+
+        /// <summary>
         /// Constructor taking an account type.
         /// </summary>
         public PortfolioEventArgs(Account type)
