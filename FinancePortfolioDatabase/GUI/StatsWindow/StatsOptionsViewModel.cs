@@ -4,10 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
-using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.Statistics;
 using FinancialStructures.StatisticStructures;
 using FinancialStructures.StatsMakers;
+using StructureCommon.DisplayClasses;
 using StructureCommon.Extensions;
 using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
@@ -49,9 +50,9 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private List<VisibleName> fDisplayConditions = new List<VisibleName>();
+        private List<Selectable<string>> fDisplayConditions = new List<Selectable<string>>();
 
-        public List<VisibleName> DisplayConditions
+        public List<Selectable<string>> DisplayConditions
         {
             get
             {
@@ -64,8 +65,8 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private string fSecuritySortingField;
-        public string SecuritySortingField
+        private Statistic fSecuritySortingField;
+        public Statistic SecuritySortingField
         {
             get
             {
@@ -92,9 +93,9 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private List<VisibleName> fSecurityColumnNames = new List<VisibleName>();
+        private List<Selectable<Statistic>> fSecurityColumnNames = new List<Selectable<Statistic>>();
 
-        public List<VisibleName> SecurityColumnNames
+        public List<Selectable<Statistic>> SecurityColumnNames
         {
             get
             {
@@ -107,8 +108,8 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private string fBankSortingField;
-        public string BankSortingField
+        private Statistic fBankSortingField;
+        public Statistic BankSortingField
         {
             get
             {
@@ -135,9 +136,9 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private List<VisibleName> fBankColumnNames = new List<VisibleName>();
+        private List<Selectable<Statistic>> fBankColumnNames = new List<Selectable<Statistic>>();
 
-        public List<VisibleName> BankColumnNames
+        public List<Selectable<Statistic>> BankColumnNames
         {
             get
             {
@@ -150,8 +151,8 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private string fSectorSortingField;
-        public string SectorSortingField
+        private Statistic fSectorSortingField;
+        public Statistic SectorSortingField
         {
             get
             {
@@ -179,9 +180,9 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        private List<VisibleName> fSectorColumnNames = new List<VisibleName>();
+        private List<Selectable<Statistic>> fSectorColumnNames = new List<Selectable<Statistic>>();
 
-        public List<VisibleName> SectorColumnNames
+        public List<Selectable<Statistic>> SectorColumnNames
         {
             get
             {
@@ -194,27 +195,27 @@ namespace FinanceWindowsViewModels
             }
         }
 
-        public List<string> SecurityFieldNames
+        public List<Statistic> SecurityFieldNames
         {
             get
             {
-                return new SecurityStatistics().GetType().GetProperties().Select(property => property.Name).ToList();
+                return AccountStatisticsHelpers.AllStatistics().ToList();
             }
         }
 
-        public List<string> BankFieldNames
+        public List<Statistic> BankFieldNames
         {
             get
             {
-                return new DayValue_Named().GetType().GetProperties().Select(property => property.Name).ToList();
+                return AccountStatisticsHelpers.DefaultBankAccountStats().ToList();
             }
         }
 
-        public List<string> SectorFieldNames
+        public List<Statistic> SectorFieldNames
         {
             get
             {
-                return new SectorStatistics().GetType().GetProperties().Select(property => property.Name).ToList();
+                return AccountStatisticsHelpers.AllStatistics().ToList();
             }
         }
 
@@ -239,39 +240,37 @@ namespace FinanceWindowsViewModels
             if (result.Success != null && (bool)result.Success)
             {
                 path = result.FilePath;
-                List<string> securitySelected = new List<string>();
-                foreach (VisibleName column in SecurityColumnNames)
+
+                List<Statistic> securitySelected = new List<Statistic>();
+                foreach (var column in SecurityColumnNames)
                 {
-                    if (column.Visible || column.Name == "Name" || column.Name == "Company")
+                    if (column.Selected || column.Instance == Statistic.Company || column.Instance == Statistic.Name)
                     {
-                        securitySelected.Add(column.Name);
-                    }
-                }
-                List<string> BankSelected = new List<string>();
-                foreach (VisibleName column in BankColumnNames)
-                {
-                    if (column.Visible || column.Name == "Name" || column.Name == "Company")
-                    {
-                        BankSelected.Add(column.Name);
+                        securitySelected.Add(column.Instance);
                     }
                 }
 
-                List<string> sectorSelected = new List<string>();
-                foreach (VisibleName column in SectorColumnNames)
+                List<Statistic> BankSelected = new List<Statistic>();
+                foreach (var column in BankColumnNames)
                 {
-                    if (column.Visible || column.Name == "Name" || column.Name == "Company")
+                    if (column.Selected || column.Instance == Statistic.Company || column.Instance == Statistic.Name)
                     {
-                        sectorSelected.Add(column.Name);
+                        BankSelected.Add(column.Instance);
                     }
                 }
 
-                UserOptions options = new UserOptions(securitySelected, BankSelected, sectorSelected, DisplayConditions, SecuritySortingField, BankSortingField, SectorSortingField)
+                List<Statistic> sectorSelected = new List<Statistic>();
+                foreach (var column in SectorColumnNames)
                 {
-                    BankSortDirection = BankDirection,
-                    SectorSortDirection = SectorDirection,
-                    SecuritySortDirection = SecurityDirection
-                };
-                PortfolioStatistics stats = new PortfolioStatistics(Portfolio);
+                    if (column.Selected || column.Instance == Statistic.Company || column.Instance == Statistic.Name)
+                    {
+                        sectorSelected.Add(column.Instance);
+                    }
+                }
+
+                UserOptions options = new UserOptions(securitySelected, BankSelected, sectorSelected, DisplayConditions, SecuritySortingField, BankSortingField, SectorSortingField, SecurityDirection, BankDirection, SectorDirection);
+
+                PortfolioStatistics stats = new PortfolioStatistics(Portfolio, options);
                 string extension = Path.GetExtension(result.FilePath).Trim('.');
                 ExportType type = extension.ToEnum<ExportType>();
 
@@ -302,42 +301,28 @@ namespace FinanceWindowsViewModels
             CloseWindowAction = CloseWindow;
             ExportCommand = new RelayCommand<ICloseable>(ExecuteExportCommand);
 
-            PropertyInfo[] securityStatsInfo = new SecurityStatistics().GetType().GetProperties();
-            foreach (PropertyInfo info in securityStatsInfo)
+            foreach (var stat in AccountStatisticsHelpers.AllStatistics())
             {
-                SecurityColumnNames.Add(new VisibleName(info.Name, true));
+                SecurityColumnNames.Add(new Selectable<Statistic>(stat, true));
+                SectorColumnNames.Add(new Selectable<Statistic>(stat, true));
             }
 
-            SecuritySortingField = securityStatsInfo.First().Name;
-            SectorSortingField = SecuritySortingField;
+            SecuritySortingField = Statistic.Company;
+            SectorSortingField = Statistic.Name;
 
-            PropertyInfo[] props = new DayValue_Named().GetType().GetProperties();
-            foreach (PropertyInfo info in props)
+            foreach (var stat in AccountStatisticsHelpers.DefaultBankAccountStats())
             {
-                if (info.Name == "Day")
-                {
-                    BankColumnNames.Add(new VisibleName(info.Name, false));
-                }
-                else
-                {
-                    BankColumnNames.Add(new VisibleName(info.Name, true));
-                }
+                BankColumnNames.Add(new Selectable<Statistic>(stat, true));
             }
 
-            BankSortingField = props.First().Name;
-
-            PropertyInfo[] sectorStatsInfo = new SectorStatistics().GetType().GetProperties();
-            foreach (PropertyInfo info in sectorStatsInfo)
-            {
-                SectorColumnNames.Add(new VisibleName(info.Name, true));
-            }
+            BankSortingField = Statistic.Company;
 
             PropertyInfo[] optionsInfo = new UserOptions().GetType().GetProperties();
             foreach (PropertyInfo info in optionsInfo)
             {
                 if (info.PropertyType == typeof(bool))
                 {
-                    DisplayConditions.Add(new VisibleName(info.Name, true));
+                    DisplayConditions.Add(new Selectable<string>(info.Name, true));
                 }
             }
         }

@@ -24,8 +24,8 @@
   <ItemGroup>
     <PackageReference Include="DotNetProjects.WpfToolkit.DataVisualization" Version="6.0.79" />
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.19" />
-    <PackageReference Include="StructureCommon" Version="1.0.3" />
-    <PackageReference Include="UICommon" Version="1.0.2" />
+    <PackageReference Include="StructureCommon" Version="1.0.4" />
+    <PackageReference Include="UICommon" Version="1.0.3" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">

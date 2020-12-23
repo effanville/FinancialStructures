@@ -7,16 +7,12 @@
         <view:StatsWindowMainTab/>
     </DataTemplate>
 
-    <DataTemplate DataType="{x:Type vm:SecuritiesStatisticsViewModel}">
-        <view:SecuritiesStatistics/>
+    <DataTemplate DataType="{x:Type vm:AccountStatisticsViewModel}">
+        <view:AccountStatistics/>
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:SecurityInvestmentViewModel}">
-        <view:SecurityInvestments/>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:BankAccStatsViewModel}">
-        <view:BankAccountStats/>
+        <view:SecurityInvestments />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:HtmlStatsViewerViewModel}">
@@ -30,7 +26,7 @@
     <DataTemplate DataType="{x:Type vm:PortfolioHistoryViewModel}">
         <view:PortfolioHistory/>
     </DataTemplate>
-    
+
     <DataTemplate DataType="{x:Type vm:StatisticsChartsViewModel}">
         <view:StatisticsCharts/>
     </DataTemplate>
