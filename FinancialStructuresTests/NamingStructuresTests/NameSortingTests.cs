@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using FinancialStructures.DataStructures;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.StatisticStructures;
+using FinancialStructures.Statistics;
 using NUnit.Framework;
 using StructureCommon.DataStructures;
 

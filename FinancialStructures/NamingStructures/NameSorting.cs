@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using FinancialStructures.DataStructures;
-using FinancialStructures.StatisticStructures;
+using FinancialStructures.Statistics;
 
 namespace FinancialStructures.NamingStructures
 {

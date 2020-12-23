@@ -42,7 +42,7 @@ namespace FinancialStructures.Database.Statistics
                         }
                     }
 
-                    return double.NaN;
+                    return 1.0;
                 }
                 case Totals.BankAccount:
                 case Totals.Benchmark:

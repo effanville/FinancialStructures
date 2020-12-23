@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FinancialStructures.DataExporters.ExportOptions;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.StatisticStructures;
 
 namespace FinancialStructures.Statistics
 {
@@ -71,6 +71,14 @@ namespace FinancialStructures.Statistics
         public static void Sort(this List<AccountStatistics> stats, Statistic sortField, SortDirection direction)
         {
             stats.Sort(Comparer(sortField, direction));
+        }
+
+        /// <summary>
+        /// Sorts the list of statistics based upon the options provided.
+        /// </summary>
+        public static void Sort(this List<AccountStatistics> stats, StatisticTableOptions displayOptions)
+        {
+            stats.Sort(Comparer(displayOptions.SortingField, displayOptions.SortingDirection));
         }
 
         /// <summary>

@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Input;
+using FinancialStructures.DataExporters;
+using FinancialStructures.DataExporters.ExportOptions;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Statistics;
-using FinancialStructures.StatisticStructures;
-using FinancialStructures.StatsMakers;
 using StructureCommon.DisplayClasses;
 using StructureCommon.Extensions;
 using StructureCommon.FileAccess;
@@ -35,9 +34,9 @@ namespace FinanceWindowsViewModels
                 OnPropertyChanged();
             }
         }
-        private UserOptions fSelectOptions;
+        private UserDisplayOptions fSelectOptions;
 
-        public UserOptions SelectOptions
+        public UserDisplayOptions SelectOptions
         {
             get
             {
@@ -268,7 +267,7 @@ namespace FinanceWindowsViewModels
                     }
                 }
 
-                UserOptions options = new UserOptions(securitySelected, BankSelected, sectorSelected, DisplayConditions, SecuritySortingField, BankSortingField, SectorSortingField, SecurityDirection, BankDirection, SectorDirection);
+                UserDisplayOptions options = new UserDisplayOptions(securitySelected, BankSelected, sectorSelected, DisplayConditions, SecuritySortingField, BankSortingField, SectorSortingField, SecurityDirection, BankDirection, SectorDirection);
 
                 PortfolioStatistics stats = new PortfolioStatistics(Portfolio, options);
                 string extension = Path.GetExtension(result.FilePath).Trim('.');
@@ -317,14 +316,12 @@ namespace FinanceWindowsViewModels
 
             BankSortingField = Statistic.Company;
 
-            PropertyInfo[] optionsInfo = new UserOptions().GetType().GetProperties();
-            foreach (PropertyInfo info in optionsInfo)
-            {
-                if (info.PropertyType == typeof(bool))
-                {
-                    DisplayConditions.Add(new Selectable<string>(info.Name, true));
-                }
-            }
+            DisplayConditions.Add(new Selectable<string>("DisplayValueFunds", true));
+            DisplayConditions.Add(new Selectable<string>("Spacing", true));
+            DisplayConditions.Add(new Selectable<string>("Colours", true));
+            DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowSecurities, true));
+            DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowBankAccounts, true));
+            DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowSectors, true));
         }
     }
 }

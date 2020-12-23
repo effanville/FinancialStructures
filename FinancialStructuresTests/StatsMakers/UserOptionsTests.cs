@@ -1,5 +1,5 @@
-﻿using FinancialStructures.StatisticStructures;
-using FinancialStructures.StatsMakers;
+﻿using FinancialStructures.DataExporters.ExportOptions;
+using FinancialStructures.Statistics;
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.StatsMakers
@@ -10,17 +10,17 @@ namespace FinancialStructures.Tests.StatsMakers
         [Test]
         public void EnsureDefaults()
         {
-            var options = new UserOptions();
+            var options = new UserDisplayOptions();
 
-            Assert.AreEqual(SortDirection.Descending, options.SecuritySortDirection);
-            Assert.AreEqual(SortDirection.Descending, options.BankSortDirection);
-            Assert.AreEqual(SortDirection.Descending, options.SectorSortDirection);
+            Assert.AreEqual(SortDirection.Descending, options.SecurityDisplayOptions.SortingDirection);
+            Assert.AreEqual(SortDirection.Descending, options.BankAccountDisplayOptions.SortingDirection);
+            Assert.AreEqual(SortDirection.Descending, options.SectorDisplayOptions.SortingDirection);
             Assert.IsFalse(options.DisplayValueFunds);
             Assert.IsFalse(options.Spacing);
             Assert.IsFalse(options.Colours);
-            Assert.IsTrue(options.ShowSecurites);
-            Assert.IsTrue(options.ShowSectors);
-            Assert.IsTrue(options.ShowBankAccounts);
+            Assert.IsTrue(options.SecurityDisplayOptions.ShouldDisplay);
+            Assert.IsTrue(options.SectorDisplayOptions.ShouldDisplay);
+            Assert.IsTrue(options.BankAccountDisplayOptions.ShouldDisplay);
         }
     }
 }
