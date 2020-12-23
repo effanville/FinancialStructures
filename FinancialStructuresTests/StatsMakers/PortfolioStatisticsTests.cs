@@ -19,16 +19,16 @@ namespace FinancialStructures.Tests.StatsMakers
             string bankCompany = "Bank";
             generator.WithBankAccountFromNameAndDataPoint(bankCompany, "AccountName", date: new DateTime(2000, 1, 1), value: 53);
             var database = generator.database;
-            var stats = new PortfolioStatistics(database);
+            var stats = new PortfolioStatistics(database, new UserOptions());
 
             Assert.AreEqual(1, stats.IndividualSecurityStats.Count);
-            Assert.AreEqual(secCompany, stats.IndividualSecurityStats.First().Company);
+            Assert.AreEqual(secCompany, stats.IndividualSecurityStats.First().NameData.Company);
             Assert.AreEqual(1, stats.CompanyTotalsStats.Count);
-            Assert.AreEqual(secCompany, stats.CompanyTotalsStats.First().Company);
+            Assert.AreEqual(secCompany, stats.CompanyTotalsStats.First().NameData.Company);
             Assert.AreEqual(1, stats.BankAccountStats.Count);
-            Assert.AreEqual(bankCompany, stats.BankAccountStats.First().Names.Company);
+            Assert.AreEqual(bankCompany, stats.BankAccountStats.First().NameData.Company);
             Assert.AreEqual(1, stats.BankAccountCompanyStats.Count);
-            Assert.AreEqual(bankCompany, stats.BankAccountCompanyStats.First().Names.Company);
+            Assert.AreEqual(bankCompany, stats.BankAccountCompanyStats.First().NameData.Company);
         }
     }
 }

@@ -27,23 +27,28 @@ namespace FinancialStructures.Database
                     return desired.Value(date, currency).Value;
                 }
                 case (Account.Currency):
-                case (Account.BankAccount):
                 case (Account.Benchmark):
                 {
                     if (!TryGetAccount(elementType, name, out ISingleValueDataList desired))
                     {
-                        if (elementType == Account.BankAccount)
-                        {
+                        return 1.0;
 
-                            return double.NaN;
-                        }
-                        else
-                        {
-                            return 1.0;
-                        }
                     }
 
                     return desired.Value(date).Value;
+                }
+                case (Account.BankAccount):
+                {
+                    foreach (ICashAccount account in BankAccounts)
+                    {
+                        if (account.Names.IsEqualTo(name))
+                        {
+                            ICurrency currency = Currency(elementType, account);
+                            return account.Value(date, currency).Value;
+                        }
+                    }
+
+                    return double.NaN;
                 }
                 default:
                     break;

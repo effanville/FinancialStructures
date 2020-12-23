@@ -36,7 +36,7 @@ namespace FinancialStructures.Tests.Database.Value
             Assert.AreEqual(expectedValue, portfolio.Value(Account.Security, constructor.DefaultNameQuery(Account.Security), date));
         }
 
-        [TestCase("2009/1/2", 100.0)]
+        [TestCase("2009/1/2", 0.0)]
         [TestCase("2010/1/1", 100.0)]
         [TestCase("2010/1/2", 100.0)]
         [TestCase("2015/1/2", 93.550890346766636)]

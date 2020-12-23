@@ -1,31 +1,17 @@
 ﻿using System.Collections.Generic;
+using FinancialStructures.Statistics;
 using FinancialStructures.StatisticStructures;
+using StructureCommon.DisplayClasses;
 
 namespace FinancialStructures.StatsMakers
 {
-    public static class NameGetter
-    {
-        public static bool GetData(List<VisibleName> names, string nameToSearch)
-        {
-            foreach (VisibleName name in names)
-            {
-                if (name.Name == nameToSearch)
-                {
-                    return name.Visible;
-                }
-            }
-
-            return false;
-        }
-    }
-
     public class UserOptions
     {
         public UserOptions()
         {
         }
 
-        public UserOptions(List<string> securities, List<string> bankaccs, List<string> sectors, List<VisibleName> conditions, string securitySortingField = null, string bankSortingField = null, string sectorSortingField = null)
+        public UserOptions(List<Statistic> securities, List<Statistic> bankaccs, List<Statistic> sectors, List<Selectable<string>> conditions, Statistic securitySortingField = Statistic.Company, Statistic bankSortingField = Statistic.Company, Statistic sectorSortingField = Statistic.Company, SortDirection securitySortDirection = SortDirection.Descending, SortDirection bankAccountSortDirection = SortDirection.Descending, SortDirection sectorSortDirection = SortDirection.Descending)
         {
             SecurityDataToExport = securities;
             BankAccDataToExport = bankaccs;
@@ -33,51 +19,50 @@ namespace FinancialStructures.StatsMakers
             BankAccountSortingField = bankSortingField;
             SecuritySortingField = securitySortingField;
             SectorSortingField = sectorSortingField;
-            DisplayValueFunds = NameGetter.GetData(conditions, nameof(DisplayValueFunds));
-            Spacing = NameGetter.GetData(conditions, nameof(Spacing));
-            Colours = NameGetter.GetData(conditions, nameof(Colours));
+            DisplayValueFunds = SelectableHelpers.GetData(conditions, nameof(DisplayValueFunds));
+            Spacing = SelectableHelpers.GetData(conditions, nameof(Spacing));
+            Colours = SelectableHelpers.GetData(conditions, nameof(Colours));
 
-            ShowSecurites = NameGetter.GetData(conditions, nameof(ShowSecurites));
-            ShowBankAccounts = NameGetter.GetData(conditions, nameof(ShowBankAccounts));
-            ShowSectors = NameGetter.GetData(conditions, nameof(ShowSectors));
+            ShowSecurites = SelectableHelpers.GetData(conditions, nameof(ShowSecurites));
+            ShowBankAccounts = SelectableHelpers.GetData(conditions, nameof(ShowBankAccounts));
+            ShowSectors = SelectableHelpers.GetData(conditions, nameof(ShowSectors));
+
+            SecuritySortDirection = securitySortDirection;
+            BankSortDirection = bankAccountSortDirection;
+            SectorSortDirection = sectorSortDirection;
         }
-        public string SecuritySortingField
+
+        public Statistic SecuritySortingField
         {
             get;
-            set;
         }
 
         public SortDirection SecuritySortDirection
         {
             get;
-            set;
         } = SortDirection.Descending;
 
-        public List<string> SecurityDataToExport
+        public List<Statistic> SecurityDataToExport
         {
             get;
-            set;
-        } = new List<string>();
+        } = new List<Statistic>();
 
-        public string BankAccountSortingField
+        public Statistic BankAccountSortingField
         {
             get;
-            set;
         }
 
         public SortDirection BankSortDirection
         {
             get;
-            set;
         } = SortDirection.Descending;
 
-        public List<string> BankAccDataToExport
+        public List<Statistic> BankAccDataToExport
         {
             get;
-            set;
-        } = new List<string>();
+        } = new List<Statistic>();
 
-        public string SectorSortingField
+        public Statistic SectorSortingField
         {
             get;
             set;
@@ -89,11 +74,11 @@ namespace FinancialStructures.StatsMakers
             set;
         } = SortDirection.Descending;
 
-        public List<string> SectorDataToExport
+        public List<Statistic> SectorDataToExport
         {
             get;
             set;
-        } = new List<string>();
+        } = new List<Statistic>();
 
         public bool DisplayValueFunds
         {

@@ -27,6 +27,10 @@ namespace FinancialStructures.Database.Statistics
         {
             switch (elementType)
             {
+                case Totals.All:
+                {
+                    return 1.0;
+                }
                 case Totals.Security:
                 {
                     if (portfolio.TryGetSecurity(names, out ISecurity desired))
@@ -41,6 +45,8 @@ namespace FinancialStructures.Database.Statistics
                     return double.NaN;
                 }
                 case Totals.BankAccount:
+                case Totals.Benchmark:
+                case Totals.Currency:
                 {
                     if (portfolio.TryGetAccount(Account.BankAccount, names, out ISingleValueDataList desired))
                     {
@@ -57,9 +63,11 @@ namespace FinancialStructures.Database.Statistics
                     return double.NaN;
                 }
                 case Totals.Sector:
-                {
-                    return portfolio.TotalValue(Totals.Sector, date, names) / portfolio.TotalValue(date);
-                }
+                case Totals.CurrencySector:
+                case Totals.SecuritySector:
+                case Totals.BankAccountSector:
+                case Totals.SecurityCurrency:
+                case Totals.BankAccountCurrency:
                 case Totals.SecurityCompany:
                 case Totals.BankAccountCompany:
                 case Totals.Company:
