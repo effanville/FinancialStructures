@@ -4,7 +4,7 @@ using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceInterfaces;
 using StructureCommon.Reporting;
 
-namespace FinancialStructures.StatsMakers
+namespace FinancialStructures.DataExporters
 {
     public static class InvestmentsExporter
     {

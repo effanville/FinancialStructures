@@ -5,7 +5,7 @@ using System.Linq;
 using FinancialStructures.StatisticStructures;
 using StructureCommon.Reporting;
 
-namespace FinancialStructures.StatsMakers
+namespace FinancialStructures.DataExporters
 {
     /// <summary>
     /// Writer of history data to csv file.

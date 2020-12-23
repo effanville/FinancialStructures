@@ -50,8 +50,16 @@
         /// </summary>
         Sector,
 
+        /// <summary>
+        /// A sector comprising of a collection of securities.
+        /// </summary>
         SecuritySector,
+
+        /// <summary>
+        /// A sector comprising of a collection of bank accounts.
+        /// </summary>
         BankAccountSector,
+
         CurrencySector,
         SecurityCurrency,
         BankAccountCurrency

@@ -129,7 +129,7 @@ namespace FinancialStructures.StatisticStructures
                 DayValue_Named companyValue = new DayValue_Named(companyName, null, date, portfolio.TotalValue(Totals.SecurityCompany, date, new TwoName(companyName)).Truncate());
                 SecurityValues.Add(companyValue);
 
-                DayValue_Named yearCar = new DayValue_Named(companyName, null, date, portfolio.IRRTotal(Totals.SecurityCompany, date.AddDays(-365), date, companyName).Truncate());
+                DayValue_Named yearCar = new DayValue_Named(companyName, null, date, portfolio.IRRTotal(Totals.SecurityCompany, date.AddDays(-365), date, new TwoName(companyName)).Truncate());
                 Security1YrCar.Add(yearCar);
 
                 DayValue_Named totalCar;
@@ -139,7 +139,7 @@ namespace FinancialStructures.StatisticStructures
                 }
                 else
                 {
-                    totalCar = new DayValue_Named(companyName, null, date, portfolio.IRRTotal(Totals.SecurityCompany, portfolio.FirstValueDate(Totals.SecurityCompany, companyName), date, companyName).Truncate());
+                    totalCar = new DayValue_Named(companyName, null, date, portfolio.IRRTotal(Totals.SecurityCompany, portfolio.FirstValueDate(Totals.SecurityCompany, companyName), date, new TwoName(companyName)).Truncate());
                 }
                 SecurityTotalCar.Add(totalCar);
             }
@@ -171,7 +171,7 @@ namespace FinancialStructures.StatisticStructures
                 }
                 else
                 {
-                    sectorCar = new DayValue_Named(sectorName, null, date, portfolio.IRRTotal(Totals.Sector, portfolio.FirstValueDate(Totals.Sector, sectorName), date, sectorName).Truncate());
+                    sectorCar = new DayValue_Named(sectorName, null, date, portfolio.IRRTotal(Totals.Sector, portfolio.FirstValueDate(Totals.Sector, sectorName), date, new TwoName(null, sectorName)).Truncate());
                 }
                 SectorCar.Add(sectorCar);
             }

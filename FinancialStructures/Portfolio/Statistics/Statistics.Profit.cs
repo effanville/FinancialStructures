@@ -138,7 +138,7 @@ namespace FinancialStructures.Database.Statistics
                     {
                         if (desired.Any())
                         {
-                            return 1000 * (desired.LatestValue().Value - desired.FirstValue().Value);
+                            return desired.LatestValue().Value - desired.FirstValue().Value;
                         }
                     }
 

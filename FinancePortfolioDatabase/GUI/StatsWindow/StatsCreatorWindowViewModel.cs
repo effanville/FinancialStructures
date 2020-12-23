@@ -5,9 +5,9 @@ using System.Windows.Input;
 using FinanceCommonViewModels;
 using FinanceViewModels.StatsViewModels;
 using FinancialStructures.Database.Statistics;
+using FinancialStructures.DataExporters;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.StatisticStructures;
-using FinancialStructures.StatsMakers;
 using StructureCommon.Reporting;
 using UICommon.Commands;
 using UICommon.Services;
@@ -49,7 +49,7 @@ namespace FinanceWindowsViewModels
             fFileService = fileService;
             fDialogCreationService = dialogCreation;
             StatsTabs.Add(new MainTabViewModel(OpenTab));
-            StatsTabs.Add(new SecuritiesStatisticsViewModel(portfolio, DisplayValueFunds));
+            StatsTabs.Add(new AccountStatisticsViewModel(portfolio, Account.Security, DisplayValueFunds));
 
             CreateInvestmentListCommand = new RelayCommand(ExecuteInvestmentListCommand);
             CreateStatsCommand = new RelayCommand(ExecuteCreateStatsCommand);
@@ -148,13 +148,13 @@ namespace FinanceWindowsViewModels
                     StatsTabs.Add(new MainTabViewModel(OpenTab));
                     return;
                 case (TabType.SecurityStats):
-                    StatsTabs.Add(new SecuritiesStatisticsViewModel(DataStore, DisplayValueFunds));
+                    StatsTabs.Add(new AccountStatisticsViewModel(DataStore, Account.Security, DisplayValueFunds));
                     return;
                 case (TabType.SecurityInvestment):
                     StatsTabs.Add(new SecurityInvestmentViewModel(DataStore, DisplayValueFunds));
                     return;
                 case (TabType.BankAccountStats):
-                    StatsTabs.Add(new BankAccStatsViewModel(DataStore, DisplayValueFunds));
+                    StatsTabs.Add(new AccountStatisticsViewModel(DataStore, Account.BankAccount, DisplayValueFunds));
                     return;
                 case (TabType.DatabaseStats):
                     StatsTabs.Add(new DataBaseStatsViewModel(DataStore, DisplayValueFunds));

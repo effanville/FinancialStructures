@@ -4,7 +4,7 @@
               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
               xmlns:cl="clr-namespace:Colouring"
-              xmlns:vm="clr-namespace:FinancialStructures.StatsMakers;assembly=FinancialStructures"
+              xmlns:vm="clr-namespace:StructureCommon.DisplayClasses;assembly=StructureCommon"
               mc:Ignorable="d"
               Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}"
               Height="450"
@@ -38,11 +38,11 @@
                       Grid.Row="1"
                       ItemsSource="{Binding DisplayConditions}">
             <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="{x:Type vm:VisibleName}">
+                <DataTemplate>
                     <StackPanel Orientation="Horizontal"
                                 Margin="3">
-                        <CheckBox IsChecked="{Binding Visible}">
-                            <TextBlock Text="{Binding Name}"
+                        <CheckBox IsChecked="{Binding Selected}">
+                            <TextBlock Text="{Binding Instance}"
                                        TextWrapping="Wrap" />
                         </CheckBox>
                     </StackPanel>
@@ -77,8 +77,8 @@
                   ItemsSource="{Binding SecurityColumnNames}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <CheckBox Content="{Binding Path=Name}"
-                              IsChecked="{Binding Path=Visible, Mode=TwoWay}"
+                    <CheckBox Content="{Binding Path=Instance}"
+                              IsChecked="{Binding Path=Selected, Mode=TwoWay}"
                               Tag="{RelativeSource FindAncestor, AncestorType={x:Type ComboBox}}" />
                 </DataTemplate>
             </ComboBox.ItemTemplate>
@@ -105,9 +105,9 @@
                   Text="BankAccount Columns">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <CheckBox Content="{Binding Path=Name}"
-                              IsChecked="{Binding Path=Visible, Mode=TwoWay}"
-                              Tag="{RelativeSource FindAncestor, 
+                    <CheckBox Content="{Binding Path=Instance}"
+                              IsChecked="{Binding Path=Selected, Mode=TwoWay}"
+                              Tag="{RelativeSource FindAncestor,
                   AncestorType={x:Type ComboBox}}" />
                 </DataTemplate>
             </ComboBox.ItemTemplate>
@@ -133,9 +133,9 @@
                   ItemsSource="{Binding SectorColumnNames}">
             <ComboBox.ItemTemplate>
                 <DataTemplate>
-                    <CheckBox Content="{Binding Path=Name}"
-                              IsChecked="{Binding Path=Visible, Mode=TwoWay}"
-                              Tag="{RelativeSource FindAncestor, 
+                    <CheckBox Content="{Binding Path=Instance}"
+                              IsChecked="{Binding Path=Selected, Mode=TwoWay}"
+                              Tag="{RelativeSource FindAncestor,
                   AncestorType={x:Type ComboBox}}" />
                 </DataTemplate>
             </ComboBox.ItemTemplate>

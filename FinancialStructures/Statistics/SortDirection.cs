@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.StatisticStructures
+﻿namespace FinancialStructures.Statistics
 {
     public enum SortDirection
     {
