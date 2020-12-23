@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls.DataVisualization.Charting;
 using System.Windows.Media;
+using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.StatisticStructures;
 
 namespace FinanceViewModels.StatsViewModels

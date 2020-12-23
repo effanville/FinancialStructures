@@ -1,4 +1,4 @@
-﻿using FinancialStructures.Database;
+﻿using FinancialStructures.Database.Implementation;
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.Database

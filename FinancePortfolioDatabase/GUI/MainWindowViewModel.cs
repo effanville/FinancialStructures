@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using FinanceCommonViewModels;
 using FinancialStructures.Database;
-using FinancialStructures.FinanceInterfaces;
 using StructureCommon.Reporting;
 using UICommon.Services;
 using UICommon.ViewModelBases;
@@ -11,7 +10,7 @@ namespace FinanceWindowsViewModels
 {
     internal class MainWindowViewModel : PropertyChangedBase
     {
-        internal IPortfolio ProgramPortfolio = new Portfolio();
+        internal IPortfolio ProgramPortfolio = PortfolioFactory.GenerateEmpty();
 
         private OptionsToolbarViewModel fOptionsToolbarCommands;
 

@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.FinanceInterfaces
+﻿namespace FinancialStructures.Database
 {
     /// <summary>
     /// The admissible total types one can calculate

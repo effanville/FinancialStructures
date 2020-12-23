@@ -1,7 +1,7 @@
 ﻿using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
 
-namespace FinancialStructures.Database
+namespace FinancialStructures.Database.Implementation
 {
     public partial class Portfolio
     {

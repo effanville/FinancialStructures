@@ -42,6 +42,12 @@ namespace FinancialStructures.DataExporters.ExportOptions
             get;
         } = new List<Statistic>();
 
+        public StatisticTableOptions()
+        {
+            ShouldDisplay = true;
+            SortingDirection = SortDirection.Descending;
+        }
+
         /// <summary>
         /// Create an instance.
         /// </summary>

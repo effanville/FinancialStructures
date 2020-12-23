@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
-using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
 
-namespace FinancialStructures.Database
+namespace FinancialStructures.Database.Implementation
 {
     /// <summary>
     /// Data structure holding information about finances.

@@ -2,13 +2,13 @@
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.Database.Implementation;
 
 namespace FinancialStructures.Tests.TestDatabaseConstructor
 {
     public class DatabaseConstructor
     {
-        public Portfolio database;
+        internal Portfolio database;
         public DatabaseConstructor()
         {
             database = new Portfolio();

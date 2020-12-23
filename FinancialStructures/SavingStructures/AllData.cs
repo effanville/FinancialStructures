@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using FinancialStructures.Database;
-using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.Database.Implementation;
 using FinancialStructures.FinanceStructures;
 
 namespace FinancialStructures.SavingClasses

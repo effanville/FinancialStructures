@@ -1,7 +1,6 @@
-﻿using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.NamingStructures;
+﻿using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Database
+namespace FinancialStructures.Database.Implementation
 {
 
     public partial class Portfolio

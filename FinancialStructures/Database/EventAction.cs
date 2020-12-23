@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.FinanceInterfaces
+﻿namespace FinancialStructures.Database
 {
     public enum EventAction
     {

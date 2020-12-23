@@ -1,8 +1,8 @@
 ﻿using System;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.Tests.TestDatabaseConstructor;
-using FinancialStructures.FinanceInterfaces;
 using NUnit.Framework;
+using FinancialStructures.Database;
 
 namespace FinancialStructures.Tests.Database.Statistics
 {

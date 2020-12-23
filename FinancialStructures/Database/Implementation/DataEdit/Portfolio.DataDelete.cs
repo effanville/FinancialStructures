@@ -4,7 +4,7 @@ using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using StructureCommon.Reporting;
 
-namespace FinancialStructures.Database
+namespace FinancialStructures.Database.Implementation
 {
     public partial class Portfolio
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Linq;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
+using FinancialStructures.Database;
 
 namespace FinancialStructures.Tests.Database.DataEdit
 {

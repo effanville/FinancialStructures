@@ -1,6 +1,6 @@
 ﻿using System;
+using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
-using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Statistics

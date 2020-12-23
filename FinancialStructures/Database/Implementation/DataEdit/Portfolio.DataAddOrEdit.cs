@@ -5,7 +5,7 @@ using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 using StructureCommon.Reporting;
 
-namespace FinancialStructures.Database
+namespace FinancialStructures.Database.Implementation
 {
     public partial class Portfolio
     {

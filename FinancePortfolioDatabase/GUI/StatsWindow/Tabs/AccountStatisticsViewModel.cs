@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using FinancialStructures.Statistics;
-using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Database.Statistics;
 using UICommon.DisplayClasses;
+using FinancialStructures.Database;
 
 namespace FinanceViewModels.StatsViewModels
 {

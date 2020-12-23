@@ -2,16 +2,16 @@
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
 
-namespace FinancialStructures.Database
+namespace FinancialStructures.Database.Implementation
 {
     public partial class Portfolio
     {
         /// <summary>
-        /// Returns a copy of the currently held portfolio. 
+        /// Returns a copy of the currently held portfolio.
         /// Note one cannot use this portfolio to edit as it makes a copy.
         /// </summary>
-        /// <remarks> 
-        /// This is in theory dangerous. I know thought that a security copied 
+        /// <remarks>
+        /// This is in theory dangerous. I know thought that a security copied
         /// returns a genuine security, so I can case without trouble.
         /// </remarks>
         public IPortfolio Copy()

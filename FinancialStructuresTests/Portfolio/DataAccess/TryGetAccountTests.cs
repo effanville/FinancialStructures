@@ -1,4 +1,4 @@
-﻿using FinancialStructures.FinanceInterfaces;
+﻿using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;

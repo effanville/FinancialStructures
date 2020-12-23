@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FinancialStructures.FinanceInterfaces
+namespace FinancialStructures.Database
 {
     /// <summary>
     /// Contains <see cref="IPortfolio"/> specific event arguments.

@@ -60,6 +60,9 @@ namespace FinancialStructures.DataExporters.ExportOptions
         /// </summary>
         internal UserDisplayOptions()
         {
+            SecurityDisplayOptions = new StatisticTableOptions();
+            BankAccountDisplayOptions = new StatisticTableOptions();
+            SectorDisplayOptions = new StatisticTableOptions();
         }
 
         /// <summary>

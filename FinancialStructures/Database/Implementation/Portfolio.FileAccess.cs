@@ -1,11 +1,10 @@
 ﻿using System.IO;
 using System.Linq;
-using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.SavingClasses;
 using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
 
-namespace FinancialStructures.Database
+namespace FinancialStructures.Database.Implementation
 {
     public partial class Portfolio
     {

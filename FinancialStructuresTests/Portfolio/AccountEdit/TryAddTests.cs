@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 using StructureCommon.Reporting;
+using FinancialStructures.Database;
 
 namespace FinancialStructures.Tests.Database.AccountEdit
 {

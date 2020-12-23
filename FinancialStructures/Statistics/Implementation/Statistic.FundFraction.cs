@@ -1,6 +1,6 @@
 ﻿using System;
 using FinancialStructures.Database.Statistics;
-using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using StructureCommon.Extensions;
 

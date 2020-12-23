@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using FinanceWindowsViewModels;
 using FinancialStructures.Database;
-using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.Database.Implementation;
 using FinancialStructures.NamingStructures;
 using Moq;
 using StructureCommon.DataStructures;

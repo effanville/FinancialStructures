@@ -1,4 +1,4 @@
-﻿using FinancialStructures.FinanceInterfaces;
+﻿using FinancialStructures.Database;
 using UICommon.ViewModelBases;
 
 namespace FinanceCommonViewModels

@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 using StructureCommon.Reporting;
 
-namespace FinancialStructures.FinanceInterfaces
+namespace FinancialStructures.Database
 {
     /// <summary>
     /// Interface for portfolio.
@@ -234,12 +235,12 @@ namespace FinancialStructures.FinanceInterfaces
         List<NameCompDate> NameData(Account elementType);
 
         /// <summary>
-        /// Queries for data for the security of name and company. 
+        /// Queries for data for the security of name and company.
         /// </summary>
         List<SecurityDayData> SecurityData(TwoName name, IReportLogger reportLogger = null);
 
         /// <summary>
-        /// Returns the 
+        /// Returns the
         /// </summary>
         /// <param name="elementType"></param>
         /// <param name="name"></param>
@@ -280,11 +281,11 @@ namespace FinancialStructures.FinanceInterfaces
         List<ISecurity> SectorSecurities(string sectorName);
 
         /// <summary>
-        /// Returns a copy of the currently held portfolio. 
+        /// Returns a copy of the currently held portfolio.
         /// Note one cannot use this portfolio to edit as it makes a copy.
         /// </summary>
-        /// <remarks> 
-        /// This is in theory dangerous. I know thought that a security copied 
+        /// <remarks>
+        /// This is in theory dangerous. I know thought that a security copied
         /// returns a genuine security, so I can case without trouble.
         /// </remarks>
         IPortfolio Copy();

@@ -1,4 +1,5 @@
 ﻿using System;
+using FinancialStructures.Database;
 using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
@@ -28,7 +29,7 @@ namespace FinancialStructures.FinanceStructures
         }
 
         /// <summary>
-        /// The currency of the valuation.       
+        /// The currency of the valuation.
         /// E.g. in the pair GBP.HKD this is the HKD.
         /// </summary>
         public string QuoteCurrency
