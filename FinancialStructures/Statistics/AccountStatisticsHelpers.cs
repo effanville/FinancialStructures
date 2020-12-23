@@ -96,5 +96,13 @@ namespace FinancialStructures.Statistics
         {
             return new Statistic[] { Statistic.Company, Statistic.Name, Statistic.LatestValue };
         }
+
+        /// <summary>
+        /// Generates statistic types for database info.
+        /// </summary>
+        public static Statistic[] DefaultDatabaseStatistics()
+        {
+            return new Statistic[] { Statistic.Company, Statistic.Name, Statistic.FirstDate, Statistic.LatestDate, Statistic.NumberEntries, Statistic.EntryYearDensity };
+        }
     }
 }

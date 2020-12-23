@@ -22,11 +22,6 @@
                 Style="{StaticResource ResourceKey=defaultButton}"
                 Margin="5"
                 Width="200" />
-        <Button Content="Open Database Stats"
-                Command="{Binding OpenDatabaseTab}"
-                Style="{StaticResource ResourceKey=defaultButton}"
-                Margin="5"
-                Width="200" />
         <Button Content="Open Portfolio history"
                 Command="{Binding OpenHistoryTab}"
                 Style="{StaticResource ResourceKey=defaultButton}"

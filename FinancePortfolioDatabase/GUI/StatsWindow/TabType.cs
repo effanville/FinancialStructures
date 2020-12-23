@@ -8,7 +8,6 @@ namespace FinanceWindowsViewModels
         SecurityInvestment,
         BankAccountStats,
         SectorStats,
-        DatabaseStats,
         PortfolioHistory,
         StatsCharts,
         StatsViewer

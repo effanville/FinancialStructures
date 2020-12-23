@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.StatisticStructures;
 
 namespace FinancialStructures.Database.Statistics
@@ -11,21 +10,6 @@ namespace FinancialStructures.Database.Statistics
     /// </summary>
     public static partial class PortfolioStatisticGenerators
     {
-        public static List<DatabaseStatistics> GenerateDatabaseStatistics(this IPortfolio portfolio)
-        {
-            List<DatabaseStatistics> names = new List<DatabaseStatistics>();
-            foreach (ISecurity sec in portfolio.Funds)
-            {
-                names.Add(new DatabaseStatistics(sec.Company, sec.Name, sec.FirstValue().Day, sec.LatestValue().Day, sec.Count(), (sec.LatestValue().Day - sec.FirstValue().Day).Days / (365 * (double)sec.Count())));
-            }
-            foreach (ICashAccount bankAcc in portfolio.BankAccounts)
-            {
-                names.Add(new DatabaseStatistics(bankAcc.Name, bankAcc.Company, bankAcc.FirstValue().Day, bankAcc.LatestValue().Day, bankAcc.Count(), 365 * (double)bankAcc.Count() / (bankAcc.LatestValue().Day - bankAcc.FirstValue().Day).Days));
-            }
-
-            return names;
-        }
-
         public static async Task<List<PortfolioDaySnapshot>> GenerateHistoryStats(this IPortfolio portfolio, int daysGap)
         {
             List<PortfolioDaySnapshot> outputs = new List<PortfolioDaySnapshot>();

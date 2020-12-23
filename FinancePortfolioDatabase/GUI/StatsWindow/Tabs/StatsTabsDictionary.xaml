@@ -16,11 +16,7 @@
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:HtmlStatsViewerViewModel}">
-        <view:HtmlStatsViewer/>
-    </DataTemplate>
-
-    <DataTemplate DataType="{x:Type vm:DataBaseStatsViewModel}">
-        <view:DataBaseStats/>
+        <view:HtmlStatsViewer />
     </DataTemplate>
 
     <DataTemplate DataType="{x:Type vm:PortfolioHistoryViewModel}">

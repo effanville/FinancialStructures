@@ -1,6 +1,9 @@
 ﻿namespace FinancialStructures.Database.Download
 {
-    public enum WebsiteType
+    /// <summary>
+    /// Details the sort of website.
+    /// </summary>
+    public enum Website
     {
         Morningstar,
         Yahoo,

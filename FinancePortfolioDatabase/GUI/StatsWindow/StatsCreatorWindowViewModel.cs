@@ -7,6 +7,7 @@ using FinanceViewModels.StatsViewModels;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataExporters;
+using FinancialStructures.Statistics;
 using FinancialStructures.StatisticStructures;
 using StructureCommon.Reporting;
 using UICommon.Commands;
@@ -155,9 +156,6 @@ namespace FinanceWindowsViewModels
                     return;
                 case (TabType.BankAccountStats):
                     StatsTabs.Add(new AccountStatisticsViewModel(DataStore, Account.BankAccount, DisplayValueFunds));
-                    return;
-                case (TabType.DatabaseStats):
-                    StatsTabs.Add(new DataBaseStatsViewModel(DataStore, DisplayValueFunds));
                     return;
                 case (TabType.PortfolioHistory):
                     StatsTabs.Add(new PortfolioHistoryViewModel(DataStore, DisplayValueFunds));

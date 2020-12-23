@@ -49,6 +49,14 @@ namespace FinancialStructures.Statistics
                     return new StatisticSectors();
                 case Statistic.NumberOfAccounts:
                     return new StatisticNumberOfAccounts();
+                case Statistic.FirstDate:
+                    return new StatisticFirstDate();
+                case Statistic.LatestDate:
+                    return new StatisticLatestDate();
+                case Statistic.NumberEntries:
+                    return new StatisticNumberEntries();
+                case Statistic.EntryYearDensity:
+                    return new StatisticEntryYearDensity();
                 default:
                     return new StatisticCompany();
             }

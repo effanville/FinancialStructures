@@ -20,6 +20,10 @@
         IRR5Y,
         IRRTotal,
         Sectors,
-        NumberOfAccounts
+        NumberOfAccounts,
+        FirstDate,
+        LatestDate,
+        NumberEntries,
+        EntryYearDensity
     }
 }

@@ -50,34 +50,34 @@ namespace FinancialStructures.Database.Download
         private static readonly string Pence = "GBX";
         private static readonly string Pounds = "GBP";
 
-        private static WebsiteType AddressType(string address)
+        private static Website AddressType(string address)
         {
             if (address.Contains("morningstar"))
             {
-                return WebsiteType.Morningstar;
+                return Website.Morningstar;
             }
             if (address.Contains("yahoo"))
             {
-                return WebsiteType.Yahoo;
+                return Website.Yahoo;
             }
             if (address.Contains("google"))
             {
-                return WebsiteType.Google;
+                return Website.Google;
             }
             if (address.Contains("trustnet"))
             {
-                return WebsiteType.TrustNet;
+                return Website.TrustNet;
             }
             if (address.Contains("bloomberg"))
             {
-                return WebsiteType.Bloomberg;
+                return Website.Bloomberg;
             }
             if (address.Contains("markets.ft"))
             {
-                return WebsiteType.FT;
+                return Website.FT;
             }
 
-            return WebsiteType.NotImplemented;
+            return Website.NotImplemented;
         }
 
         private static async Task DownloadPortfolioLatest(IPortfolio portfo, IReportLogger reportLogger)
@@ -136,7 +136,7 @@ namespace FinancialStructures.Database.Download
             value = double.NaN;
             switch (AddressType(url))
             {
-                case WebsiteType.FT:
+                case Website.FT:
                 {
                     value = ProcessFromFT(data);
                     if (double.IsNaN(value))
@@ -146,7 +146,7 @@ namespace FinancialStructures.Database.Download
                     }
                     return true;
                 }
-                case WebsiteType.Yahoo:
+                case Website.Yahoo:
                 {
                     value = ProcessFromYahoo(data);
                     if (double.IsNaN(value))
@@ -157,7 +157,7 @@ namespace FinancialStructures.Database.Download
                     return true;
                 }
                 default:
-                case WebsiteType.Morningstar:
+                case Website.Morningstar:
                 {
                     value = ProcessFromMorningstar(data);
                     if (double.IsNaN(value))
@@ -167,9 +167,9 @@ namespace FinancialStructures.Database.Download
                     }
                     return true;
                 }
-                case WebsiteType.Google:
-                case WebsiteType.TrustNet:
-                case WebsiteType.Bloomberg:
+                case Website.Google:
+                case Website.TrustNet:
+                case Website.Bloomberg:
                     _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Url not of a currently implemented downloadable type: {url}");
                     return false;
             }
