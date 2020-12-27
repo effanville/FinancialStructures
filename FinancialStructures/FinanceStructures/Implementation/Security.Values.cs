@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 
-namespace FinancialStructures.FinanceStructures
+namespace FinancialStructures.FinanceStructures.Implementation
 {
     public partial class Security
     {

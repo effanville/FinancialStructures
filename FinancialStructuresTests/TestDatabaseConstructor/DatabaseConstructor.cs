@@ -1,8 +1,8 @@
 ﻿using System;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Database.Implementation;
+using FinancialStructures.FinanceStructures.Implementation;
 
 namespace FinancialStructures.Tests.TestDatabaseConstructor
 {

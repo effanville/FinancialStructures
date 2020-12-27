@@ -7,7 +7,7 @@ using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 using StructureCommon.Reporting;
 
-namespace FinancialStructures.FinanceStructures
+namespace FinancialStructures.FinanceStructures.Implementation
 {
     /// <summary>
     /// Contains data editing of a security class.

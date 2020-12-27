@@ -1,5 +1,5 @@
 ﻿using System;
-using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.FinanceStructures;
 
 namespace FinancialStructures.Database.Statistics
 {

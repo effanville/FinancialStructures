@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 using FinancialStructures.Database;
-using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 using StructureCommon.FileAccess;

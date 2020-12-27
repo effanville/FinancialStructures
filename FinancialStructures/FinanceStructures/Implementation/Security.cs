@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using FinancialStructures.Database;
-using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 
-namespace FinancialStructures.FinanceStructures
+namespace FinancialStructures.FinanceStructures.Implementation
 {
     /// <summary>
     /// Class to model a stock, or a unit trust.

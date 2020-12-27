@@ -1,7 +1,7 @@
 ﻿using System;
 using StructureCommon.DataStructures;
 
-namespace FinancialStructures.FinanceInterfaces
+namespace FinancialStructures.FinanceStructures
 {
     public interface ICashAccount : ISingleValueDataList
     {

@@ -5,7 +5,7 @@ using StructureCommon.DataStructures;
 using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
 
-namespace FinancialStructures.FinanceInterfaces
+namespace FinancialStructures.FinanceStructures
 {
     public interface ISingleValueDataList : ICSVAccess
     {

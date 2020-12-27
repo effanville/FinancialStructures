@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Implementation

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
+using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 using StructureCommon.Reporting;

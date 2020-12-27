@@ -1,10 +1,9 @@
 ﻿using System;
 using FinancialStructures.Database;
-using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 
-namespace FinancialStructures.FinanceStructures
+namespace FinancialStructures.FinanceStructures.Implementation
 {
     /// <summary>
     /// Acts as an overall change of an area of funds.

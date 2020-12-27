@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
 using StructureCommon.DataStructures;
 using StructureCommon.FinanceFunctions;
 
-namespace FinancialStructures.FinanceStructures
+namespace FinancialStructures.FinanceStructures.Implementation
 {
     public partial class Security
     {
@@ -66,7 +65,7 @@ namespace FinancialStructures.FinanceStructures
         }
 
         /// <summary>
-        /// Returns most recent valuation on or before the date specified. 
+        /// Returns most recent valuation on or before the date specified.
         /// </summary>
         public DailyValuation LastEarlierValuation(DateTime date, ICurrency currency = null)
         {
@@ -82,7 +81,7 @@ namespace FinancialStructures.FinanceStructures
         }
 
         /// <summary>
-        /// Returns most recent valuation on or before the date specified. 
+        /// Returns most recent valuation on or before the date specified.
         /// </summary>
         public DailyValuation NearestEarlierValuation(DateTime date, ICurrency currency = null)
         {
@@ -98,7 +97,7 @@ namespace FinancialStructures.FinanceStructures
         }
 
         /// <summary>
-        /// Returns earliest valuation after the date specified. 
+        /// Returns earliest valuation after the date specified.
         /// </summary>
         private DailyValuation NearestLaterValuation(DateTime date, ICurrency currency = null)
         {
@@ -114,7 +113,7 @@ namespace FinancialStructures.FinanceStructures
         }
 
         /// <summary>
-        /// Returns earliest valuation after the date specified. 
+        /// Returns earliest valuation after the date specified.
         /// </summary>
         public List<DailyValuation> InvestmentsBetween(DateTime earlierDate, DateTime laterDate, ICurrency currency = null)
         {

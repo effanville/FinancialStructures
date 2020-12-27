@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 using StructureCommon.Reporting;
 
-namespace FinancialStructures.FinanceStructures
+namespace FinancialStructures.FinanceStructures.Implementation
 {
     /// <summary>
     /// General edit functions for a sector.
@@ -91,7 +90,7 @@ namespace FinancialStructures.FinanceStructures
         }
 
         /// <summary>
-        /// Adds data input already read from a csv file to the 
+        /// Adds data input already read from a csv file to the
         /// </summary>
         /// <param name="valuationsToRead">A list or array values of the data from the file.</param>
         /// <param name="reportLogger">A logger to record outcomes.</param>

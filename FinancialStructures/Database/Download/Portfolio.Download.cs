@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using StructureCommon.Reporting;
 using StructureCommon.WebAccess;

@@ -2,7 +2,7 @@
 using StructureCommon.DataStructures;
 using StructureCommon.FinanceFunctions;
 
-namespace FinancialStructures.FinanceStructures
+namespace FinancialStructures.FinanceStructures.Implementation
 {
     public partial class SingleValueDataList
     {
@@ -51,7 +51,7 @@ namespace FinancialStructures.FinanceStructures
         }
 
         /// <summary>
-        /// Returns earliest valuation after the date specified. 
+        /// Returns earliest valuation after the date specified.
         /// </summary>
         internal DailyValuation NearestLaterValuation(DateTime date)
         {
@@ -59,7 +59,7 @@ namespace FinancialStructures.FinanceStructures
         }
 
         /// <summary>
-        /// Returns the most recent value to <paramref name="date"/> that is prior to that date. 
+        /// Returns the most recent value to <paramref name="date"/> that is prior to that date.
         /// </summary>
         public DailyValuation RecentPreviousValue(DateTime date)
         {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.FinanceStructures;
+using FinancialStructures.FinanceStructures.Implementation;
 
 namespace FinancialStructures.Database.Implementation
 {

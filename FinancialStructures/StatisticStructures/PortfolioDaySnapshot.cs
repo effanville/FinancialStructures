@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 using StructureCommon.Extensions;

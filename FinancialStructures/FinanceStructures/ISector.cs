@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.FinanceInterfaces
+﻿namespace FinancialStructures.FinanceStructures
 {
     public interface ISector : ISingleValueDataList
     {

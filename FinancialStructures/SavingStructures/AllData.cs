@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Implementation;
-using FinancialStructures.FinanceStructures;
+using FinancialStructures.FinanceStructures.Implementation;
 
 namespace FinancialStructures.SavingClasses
 {
