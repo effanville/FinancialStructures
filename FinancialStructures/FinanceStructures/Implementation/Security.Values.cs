@@ -1,21 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using FinancialStructures.DataStructures;
-using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {
     public partial class Security
     {
-        /// <summary>
-        /// Makes a copy of the security.
-        /// </summary>
-        public ISecurity Copy()
-        {
-            return new Security(Names, fShares, fUnitPrice, fInvestments);
-        }
-
         /// <summary>
         /// Checks if SharePrice data for the date specified exists. if so outputs index value
         /// </summary>
@@ -39,60 +30,38 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
             return fInvestments.ValueExists(date, out index);
         }
-        /// <summary>
-        /// Compares another security and determines if has same name and company.
-        /// </summary>
-        public bool IsEqualTo(ISecurity otherSecurity)
+
+        /// <inheritdoc/>
+        public bool IsEqualTo(IValueList otherList)
         {
-            if (otherSecurity.Name != Names.Name)
+            if (otherList is ISecurity otherSecurity)
             {
-                return false;
-            }
-
-            if (otherSecurity.Company != Names.Company)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        public bool SameName(TwoName otherNames)
-        {
-            return Names.IsEqualTo(otherNames);
-        }
-
-        public bool SameName(string company, string name)
-        {
-            if (name != Names.Name)
-            {
-                return false;
-            }
-
-            if (company != Names.Company)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        public int Count()
-        {
-            return fUnitPrice.Count();
-        }
-
-        /// <summary>
-        /// Returns true if shares and unit prices have an item or are not null.
-        /// </summary>
-        public bool Any()
-        {
-            if (fUnitPrice.Any() && fShares.Any())
-            {
-                return true;
+                return IsEqualTo(otherSecurity);
             }
 
             return false;
+        }
+
+        /// <inheritdoc/>
+        public bool IsEqualTo(ISecurity otherSecurity)
+        {
+            if (otherSecurity.Names.Name != Names.Name)
+            {
+                return false;
+            }
+
+            if (otherSecurity.Names.Company != Names.Company)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <inheritdoc/>
+        public int Count()
+        {
+            return fUnitPrice.Count();
         }
 
         public SecurityDayData DayData(DateTime day)

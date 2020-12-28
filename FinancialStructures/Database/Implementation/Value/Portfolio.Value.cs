@@ -29,7 +29,7 @@ namespace FinancialStructures.Database.Implementation
                 case (Account.Currency):
                 case (Account.Benchmark):
                 {
-                    if (!TryGetAccount(elementType, name, out ISingleValueDataList desired))
+                    if (!TryGetAccount(elementType, name, out IValueList desired))
                     {
                         return 1.0;
 

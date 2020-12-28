@@ -20,7 +20,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
             var data = database.CompanySecurities(secCompany);
 
             Assert.AreEqual(1, data.Count);
-            Assert.AreEqual("name1", data.Single().Name);
+            Assert.AreEqual("name1", data.Single().Names.Name);
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
             var data = database.CompanyBankAccounts(bankCompany);
 
             Assert.AreEqual(1, data.Count);
-            Assert.AreEqual(bankCompany, data.Single().Company);
+            Assert.AreEqual(bankCompany, data.Single().Names.Company);
         }
 
         [Test]

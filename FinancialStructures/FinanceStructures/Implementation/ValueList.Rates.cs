@@ -4,11 +4,9 @@ using StructureCommon.FinanceFunctions;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {
-    public partial class SingleValueDataList
+    public partial class ValueList
     {
-        /// <summary>
-        /// Returns the latest valuation of the CashAccount.
-        /// </summary>
+        /// <inheritdoc/>
         public virtual DailyValuation LatestValue()
         {
             DateTime latestDate = Values.LatestDate();
@@ -17,22 +15,17 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return new DailyValuation(latestDate, latestValue);
         }
 
-        /// <summary>
-        /// Returns the first valuation of the CashAccount.
-        /// </summary>
+        /// <inheritdoc/>
         public DailyValuation FirstValue()
         {
             return Values.FirstValuation();
         }
 
-        /// <summary>
-        /// Returns the latest earlier valuation of the CashAccount to <paramref name="date"/>.
-        /// </summary>
+        /// <inheritdoc/>
         public DailyValuation Value(DateTime date)
         {
             return Values.Value(date);
         }
-
 
         /// <summary>
         /// returns compound annual rate of security between the two times specified
@@ -42,25 +35,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return FinancialFunctions.CAR(Value(earlierTime), Value(laterTime));
         }
 
-        /// <summary>
-        /// Returns the latest earlier valuation of the OldCashAccount to <paramref name="date"/>.
-        /// </summary>
-        internal virtual DailyValuation NearestEarlierValuation(DateTime date)
-        {
-            return Values.NearestEarlierValue(date);
-        }
-
-        /// <summary>
-        /// Returns earliest valuation after the date specified.
-        /// </summary>
-        internal DailyValuation NearestLaterValuation(DateTime date)
-        {
-            return Values.NearestLaterValue(date);
-        }
-
-        /// <summary>
-        /// Returns the most recent value to <paramref name="date"/> that is prior to that date.
-        /// </summary>
+        /// <inheritdoc/>
         public DailyValuation RecentPreviousValue(DateTime date)
         {
             DailyValuation val = Values.RecentPreviousValue(date);

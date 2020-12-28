@@ -23,27 +23,14 @@ namespace FinancialStructures.Database.Download
         /// <returns></returns>
         public static async Task Download(Account accountType, IPortfolio portfolio, TwoName names, IReportLogger reportLogger = null)
         {
-            switch (accountType)
+            if (accountType == Account.All)
             {
-                case (Account.Security):
-                {
-                    _ = portfolio.TryGetSecurity(names, out ISecurity sec);
-                    await DownloadLatestValue(sec.Names, value => sec.UpdateSecurityData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
-                    break;
-                }
-                case (Account.BankAccount):
-                case (Account.Currency):
-                case (Account.Benchmark):
-                {
-                    _ = portfolio.TryGetAccount(accountType, names, out ISingleValueDataList acc);
-                    await DownloadLatestValue(acc.Names, value => acc.TryAddOrEditData(DateTime.Today, DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
-                    break;
-                }
-                case (Account.All):
-                {
-                    await DownloadPortfolioLatest(portfolio, reportLogger);
-                    break;
-                }
+                await DownloadPortfolioLatest(portfolio, reportLogger);
+            }
+            else
+            {
+                _ = portfolio.TryGetAccount(accountType, names, out IValueList acc);
+                await DownloadLatestValue(acc.Names, value => acc.TryAddOrEditData(DateTime.Today, DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
             }
         }
 
@@ -84,30 +71,30 @@ namespace FinancialStructures.Database.Download
         {
             foreach (ISecurity sec in portfo.Funds)
             {
-                if (!string.IsNullOrEmpty(sec.Url))
+                if (!string.IsNullOrEmpty(sec.Names.Url))
                 {
-                    await DownloadLatestValue(sec.Names, value => sec.UpdateSecurityData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                    await DownloadLatestValue(sec.Names, value => sec.TryAddOrEditData(DateTime.Today, DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
                 }
             }
             foreach (ICashAccount acc in portfo.BankAccounts)
             {
-                if (!string.IsNullOrEmpty(acc.Url))
+                if (!string.IsNullOrEmpty(acc.Names.Url))
                 {
-                    await DownloadLatestValue(acc.Names, value => acc.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                    await DownloadLatestValue(acc.Names, value => acc.TryAddOrEditData(DateTime.Today, DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
                 }
             }
             foreach (ICurrency currency in portfo.Currencies)
             {
-                if (!string.IsNullOrEmpty(currency.Url))
+                if (!string.IsNullOrEmpty(currency.Names.Url))
                 {
-                    await DownloadLatestValue(currency.Names, value => currency.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                    await DownloadLatestValue(currency.Names, value => currency.TryAddOrEditData(DateTime.Today, DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
                 }
             }
             foreach (ISector sector in portfo.BenchMarks)
             {
-                if (!string.IsNullOrEmpty(sector.Url))
+                if (!string.IsNullOrEmpty(sector.Names.Url))
                 {
-                    await DownloadLatestValue(sector.Names, value => sector.TryAddData(DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
+                    await DownloadLatestValue(sector.Names, value => sector.TryAddOrEditData(DateTime.Today, DateTime.Today, value, reportLogger), reportLogger).ConfigureAwait(false);
                 }
             }
         }

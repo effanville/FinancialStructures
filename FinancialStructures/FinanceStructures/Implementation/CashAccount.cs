@@ -5,7 +5,7 @@ using StructureCommon.DataStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {
-    public class CashAccount : SingleValueDataList, ICashAccount
+    public class CashAccount : ValueList, ICashAccount
     {
         internal override void OnDataEdit(object edited, EventArgs e)
         {
@@ -54,7 +54,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <summary>
-        /// Returns the interpolated value of the security on the date provided.
+        /// Returns the interpolated value of the security on the date provided,
+        /// with the value zero if date is before the first value.
         /// </summary>
         public DailyValuation Value(DateTime date, ICurrency currency = null)
         {
@@ -64,9 +65,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return new DailyValuation(date, value);
         }
 
-        /// <summary>
-        /// Returns the latest valuation of the OldCashAccount.
-        /// </summary>
+        /// <inheritdoc/>
         public DailyValuation LatestValue(ICurrency currency = null)
         {
             DailyValuation latestDate = Values.LatestValuation();

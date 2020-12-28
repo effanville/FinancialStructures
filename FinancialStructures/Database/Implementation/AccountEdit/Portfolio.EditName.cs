@@ -46,7 +46,7 @@ namespace FinancialStructures.Database.Implementation
             }
         }
 
-        private bool TryEditNameSingleList<T>(List<T> values, Account elementType, NameData oldName, NameData newName, IReportLogger reportLogger = null) where T : ISingleValueDataList
+        private bool TryEditNameSingleList<T>(List<T> values, Account elementType, NameData oldName, NameData newName, IReportLogger reportLogger = null) where T : IValueList
         {
             for (int AccountIndex = 0; AccountIndex < values.Count; AccountIndex++)
             {

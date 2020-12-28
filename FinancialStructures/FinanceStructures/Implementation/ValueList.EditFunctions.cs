@@ -11,19 +11,15 @@ namespace FinancialStructures.FinanceStructures.Implementation
     /// <summary>
     /// General edit functions for a sector.
     /// </summary>
-    public partial class SingleValueDataList
+    public partial class ValueList
     {
-        /// <summary>
-        /// Compares another security and determines if has same name and company.
-        /// </summary>
-        public bool IsEqualTo(ISingleValueDataList otherAccount)
+        /// <inheritdoc/>
+        public bool IsEqualTo(IValueList otherAccount)
         {
             return Names.IsEqualTo(otherAccount.Names);
         }
 
-        /// <summary>
-        /// Returns the number of data points held in the list.
-        /// </summary>
+        /// <inheritdoc/>
         public int Count()
         {
             return Values.Count();
@@ -48,11 +44,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return output;
         }
 
-        /// <summary>
-        /// Edits the associated nameData to the account.
-        /// </summary>
-        /// <param name="newNames"></param>
-        /// <returns></returns>
+        /// <inheritdoc/>
         public virtual bool EditNameData(NameData newNames)
         {
             Names = newNames;
@@ -64,7 +56,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// Adds <param name="value"/> to amounts on <param name="date"/> if data doesnt exist.
         /// </summary>
         /// <param name="reportLogger">The logger to report outcomes.</param>
-        public bool TryAddData(DateTime date, double value, IReportLogger reportLogger = null)
+        public virtual bool TryAddData(DateTime date, double value, IReportLogger reportLogger = null)
         {
             if (Values.ValueExists(date, out _))
             {
@@ -79,7 +71,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// Adds <param name="value"/> to amounts on <param name="date"/> if data with date <param name="oldDate"/> doesnt exist, otherwise edits on that date.
         /// </summary>
         /// <param name="reportLogger">The logger to report outcomes.</param>
-        public bool TryAddOrEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null)
+        public virtual bool TryAddOrEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null)
         {
             if (Values.ValueExists(oldDate, out _))
             {
@@ -94,7 +86,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// </summary>
         /// <param name="valuationsToRead">A list or array values of the data from the file.</param>
         /// <param name="reportLogger">A logger to record outcomes.</param>
-        public List<object> CreateDataFromCsv(List<string[]> valuationsToRead, IReportLogger reportLogger = null)
+        public virtual List<object> CreateDataFromCsv(List<string[]> valuationsToRead, IReportLogger reportLogger = null)
         {
             List<object> dailyValuations = new List<object>();
             foreach (string[] dayValuation in valuationsToRead)
@@ -117,7 +109,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// </summary>
         /// <param name="writer">The writer holding the location of where to write.</param>
         /// <param name="reportLogger">A logger to record outcomes.</param>
-        public void WriteDataToCsv(TextWriter writer, IReportLogger reportLogger = null)
+        public virtual void WriteDataToCsv(TextWriter writer, IReportLogger reportLogger = null)
         {
             foreach (DailyValuation value in GetDataForDisplay())
             {
@@ -128,7 +120,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Removes data on <paramref name="date"/> if it exists.
         /// </summary>
-        public bool TryDeleteData(DateTime date, IReportLogger reportLogger = null)
+        public virtual bool TryDeleteData(DateTime date, IReportLogger reportLogger = null)
         {
             return Values.TryDeleteValue(date, reportLogger);
         }
@@ -142,13 +134,15 @@ namespace FinancialStructures.FinanceStructures.Implementation
             if (IsSectorLinked(sectorName))
             {
                 _ = Names.Sectors.Remove(sectorName);
+                OnDataEdit(this, new EventArgs());
                 return true;
             }
 
             return false;
         }
 
-        internal bool IsSectorLinked(string sectorName)
+        /// <inheritdoc/>
+        public bool IsSectorLinked(string sectorName)
         {
             if (Names.Sectors != null && Names.Sectors.Any())
             {
@@ -162,6 +156,12 @@ namespace FinancialStructures.FinanceStructures.Implementation
             }
 
             return false;
+        }
+
+        /// <inheritdoc/>
+        public int NumberSectors()
+        {
+            return Names.Sectors.Count;
         }
     }
 }

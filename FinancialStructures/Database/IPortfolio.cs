@@ -259,7 +259,7 @@ namespace FinancialStructures.Database
         /// <param name="accountType">The type of element to find.</param>
         /// <param name="name">The name of the element to find.</param>
         /// <param name="desired">The account if it exists.</param>
-        bool TryGetAccount(Account accountType, TwoName name, out ISingleValueDataList desired);
+        bool TryGetAccount(Account accountType, TwoName name, out IValueList desired);
 
         /// <summary>
         /// Returns a copy of all securities with the company as specified.

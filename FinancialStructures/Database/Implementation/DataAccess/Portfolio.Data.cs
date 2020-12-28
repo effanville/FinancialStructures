@@ -49,7 +49,7 @@ namespace FinancialStructures.Database.Implementation
             }
         }
 
-        private List<DailyValuation> SingleDataListDataObtainer<T>(List<T> objects, Account elementType, TwoName name, IReportLogger reportLogger = null) where T : ISingleValueDataList
+        private List<DailyValuation> SingleDataListDataObtainer<T>(List<T> objects, Account elementType, TwoName name, IReportLogger reportLogger = null) where T : IValueList
         {
             foreach (T account in objects)
             {

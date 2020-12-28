@@ -43,7 +43,7 @@ namespace FinancialStructures.Database.Implementation
                     double total = 0;
                     foreach (ISecurity sec in Funds)
                     {
-                        if (sec.Any() && sec.Currency == names.Name)
+                        if (sec.Any() && sec.Names.Currency == names.Name)
                         {
                             ICurrency currency = Currency(Account.Security, sec);
                             total += sec.Value(date, currency).Value;
@@ -51,7 +51,7 @@ namespace FinancialStructures.Database.Implementation
                     }
                     foreach (ICashAccount acc in BankAccounts)
                     {
-                        if (acc.Any() && acc.Currency == names.Name)
+                        if (acc.Any() && acc.Names.Currency == names.Name)
                         {
                             ICurrency currency = Currency(Account.BankAccount, acc);
                             total += acc.NearestEarlierValuation(date, currency).Value;

@@ -51,7 +51,7 @@ namespace FinancialStructures.Database.Implementation
             }
         }
 
-        private bool SingleListAddOrEdit<T>(List<T> listToEdit, TwoName name, DailyValuation oldData, DailyValuation data, IReportLogger reportLogger = null) where T : ISingleValueDataList
+        private bool SingleListAddOrEdit<T>(List<T> listToEdit, TwoName name, DailyValuation oldData, DailyValuation data, IReportLogger reportLogger = null) where T : IValueList
         {
             for (int accountIndex = 0; accountIndex < listToEdit.Count; accountIndex++)
             {

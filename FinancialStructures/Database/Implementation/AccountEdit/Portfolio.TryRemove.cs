@@ -38,7 +38,7 @@ namespace FinancialStructures.Database.Implementation
                     {
                         if (name.IsEqualTo(currency.Names))
                         {
-                            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted currency {currency.Name}");
+                            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted currency {currency.Names.Name}");
                             _ = Currencies.Remove(currency);
                             OnPortfolioChanged(Currencies, new PortfolioEventArgs(elementType));
                             return true;
@@ -68,7 +68,7 @@ namespace FinancialStructures.Database.Implementation
                     {
                         if (name.IsEqualTo(sector.Names))
                         {
-                            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted benchmark {sector.Name}");
+                            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted benchmark {sector.Names.Name}");
                             _ = BenchMarks.Remove(sector);
                             OnPortfolioChanged(BenchMarks, new PortfolioEventArgs(elementType));
                             return true;

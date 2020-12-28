@@ -21,7 +21,7 @@ namespace FinancialStructures.Database
             List<string> sectors = new List<string>();
             foreach (ISecurity security in portfolio.Funds)
             {
-                foreach (string sector in security.Sectors)
+                foreach (string sector in security.Names.Sectors)
                 {
                     if (sectors.IndexOf(sector) == -1)
                     {

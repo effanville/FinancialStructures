@@ -19,10 +19,14 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return sum;
         }
 
-        /// <summary>
-        /// The date and latest value of the security
-        /// </summary>
-        public DailyValuation LatestValue(ICurrency currency = null)
+        /// <inheritdoc/>
+        public override DailyValuation LatestValue()
+        {
+            return LatestValue(null);
+        }
+
+        /// <inheritdoc/>
+        public DailyValuation LatestValue(ICurrency currency)
         {
             DailyValuation latestDate = fUnitPrice.LatestValuation();
             if (latestDate == null)
@@ -36,10 +40,14 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return new DailyValuation(latestDate.Day, latestValue);
         }
 
-        /// <summary>
-        /// The date and first value of the security
-        /// </summary>
-        public DailyValuation FirstValue(ICurrency currency = null)
+        /// <inheritdoc/>
+        public DailyValuation FirstValue()
+        {
+            return FirstValue(null);
+        }
+
+        /// <inheritdoc/>
+        public DailyValuation FirstValue(ICurrency currency)
         {
             DailyValuation firstDate = fUnitPrice.FirstValuation();
             if (firstDate == null)
@@ -53,10 +61,14 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return new DailyValuation(firstDate.Day, latestValue);
         }
 
-        /// <summary>
-        /// Returns the interpolated value of the security on the date provided.
-        /// </summary>
-        public DailyValuation Value(DateTime date, ICurrency currency = null)
+        /// <inheritdoc/>
+        public DailyValuation Value(DateTime date)
+        {
+            return Value(date, null);
+        }
+
+        /// <inheritdoc/>
+        public DailyValuation Value(DateTime date, ICurrency currency)
         {
             DailyValuation perSharePrice = fUnitPrice.Value(date);
             double currencyValue = currency == null ? 1.0 : currency.Value(date).Value;
@@ -64,10 +76,14 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return new DailyValuation(date, value);
         }
 
-        /// <summary>
-        /// Returns most recent valuation on or before the date specified.
-        /// </summary>
-        public DailyValuation LastEarlierValuation(DateTime date, ICurrency currency = null)
+        /// <inheritdoc/>
+        public DailyValuation RecentPreviousValue(DateTime date)
+        {
+            return RecentPreviousValue(date, null);
+        }
+
+        /// <inheritdoc/>
+        public DailyValuation RecentPreviousValue(DateTime date, ICurrency currency)
         {
             DailyValuation val = fUnitPrice.RecentPreviousValue(date);
             if (val == null)
@@ -83,7 +99,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Returns most recent valuation on or before the date specified.
         /// </summary>
-        public DailyValuation NearestEarlierValuation(DateTime date, ICurrency currency = null)
+        public DailyValuation NearestEarlierValuation(DateTime date, ICurrency currency)
         {
             DailyValuation val = fUnitPrice.NearestEarlierValue(date);
             if (val == null)
@@ -146,10 +162,14 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return namedValues;
         }
 
-        /// <summary>
-        /// returns compound annual rate of security between the two times specified
-        /// </summary>
-        internal double CAR(DateTime earlierTime, DateTime laterTime, ICurrency currency = null)
+        /// <inheritdoc/>
+        public double CAR(DateTime earlierTime, DateTime laterTime)
+        {
+            return CAR(earlierTime, laterTime, null);
+        }
+
+        /// <inheritdoc/>
+        public double CAR(DateTime earlierTime, DateTime laterTime, ICurrency currency = null)
         {
             return FinancialFunctions.CAR(Value(earlierTime, currency), Value(laterTime, currency));
         }

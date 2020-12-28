@@ -117,7 +117,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Account.BankAccount:
                 {
-                    if (portfolio.TryGetAccount(elementType, names, out ISingleValueDataList desired))
+                    if (portfolio.TryGetAccount(elementType, names, out IValueList desired))
                     {
                         if (desired is ICashAccount cashAcc)
                         {
@@ -134,7 +134,7 @@ namespace FinancialStructures.Database.Statistics
                 case Account.Currency:
                 case Account.Benchmark:
                 {
-                    if (portfolio.TryGetAccount(elementType, names, out ISingleValueDataList desired))
+                    if (portfolio.TryGetAccount(elementType, names, out IValueList desired))
                     {
                         if (desired.Any())
                         {

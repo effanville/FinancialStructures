@@ -1,6 +1,6 @@
 ﻿namespace FinancialStructures.FinanceStructures
 {
-    public interface ICurrency : ISingleValueDataList
+    public interface ICurrency : IValueList
     {
         /// <summary>
         /// The base currency the currency is derived from.
@@ -22,8 +22,8 @@
 
         /// <summary>
         /// Returns a currency where the values are given by the reciprocal of the current currency values.
+        /// Also inverts the names in the currency pair.
         /// </summary>
-        /// <returns></returns>
         ICurrency Inverted();
 
         /// <summary>

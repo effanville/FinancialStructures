@@ -1,76 +1,96 @@
 ﻿using System;
 using System.Collections.Generic;
 using FinancialStructures.DataStructures;
-using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
 
 namespace FinancialStructures.FinanceStructures
 {
-    public interface ISecurity : ICSVAccess
+    /// <summary>
+    /// A named entity with Share, unit price and investment lists to detail price history.
+    /// </summary>
+    public interface ISecurity : ICSVAccess, IValueList
     {
-        NameData Names
-        {
-            get;
-        }
-        string Name
-        {
-            get;
-        }
-        string Company
-        {
-            get;
-        }
-        string Url
-        {
-            get;
-        }
-        string Currency
-        {
-            get;
-        }
-        HashSet<string> Sectors
-        {
-            get;
-        }
+        /// <summary>
+        /// The Share data for this Security
+        /// </summary>
         TimeList Shares
         {
             get;
         }
+
+        /// <summary>
+        /// The unit price data for this fund.
+        /// </summary>
         TimeList UnitPrice
         {
             get;
         }
+
+        /// <summary>
+        /// The investments in this security.
+        /// </summary>
         TimeList Investments
         {
             get;
         }
+
+        /// <summary>
+        /// Compares another <see cref="ISecurity"/> and determines if they both have the same name and company.
+        /// </summary>
         bool IsEqualTo(ISecurity otherSecurity);
-        bool SameName(TwoName otherNames);
-        bool SameName(string company, string name);
-        int Count();
-        bool Any();
-        ISecurity Copy();
+
+        /// <summary>
+        /// Returns a copy of this <see cref="ISecurity"/>.
+        /// </summary>
+        new ISecurity Copy();
+
+        /// <summary>
+        /// The latest value and date stored in the value list.
+        /// </summary>
+        /// <param name="currency">An optional currency to transfer the value using.</param>
+        DailyValuation LatestValue(ICurrency currency);
+
+        /// <summary>
+        /// The first value and date stored in this security.
+        /// </summary>
+        /// <param name="currency">An optional currency to transfer the value using.</param>
+        DailyValuation FirstValue(ICurrency currency);
+
+        /// <summary>
+        /// Gets the value on the specific date specified. This
+        /// </summary>
+        /// <param name="date">The date to query the value on.</param>
+        /// <param name="currency">An optional currency to transfer the value using.</param>
+        DailyValuation Value(DateTime date, ICurrency currency);
+
+        /// <summary>
+        /// Returns the most recent value to <paramref name="date"/> that is prior to that date.
+        /// This value is strictly prior to <paramref name="date"/>.
+        /// </summary>
+        /// <param name="date">The date to query the value on.</param>
+        /// <param name="currency">An optional currency to transfer the value using.</param>
+        DailyValuation RecentPreviousValue(DateTime date, ICurrency currency);
+
+        DailyValuation NearestEarlierValuation(DateTime date, ICurrency currency = null);
+
+        /// <summary>
+        /// Retrieves data in a list ordered by date.
+        /// </summary>
         List<SecurityDayData> GetDataForDisplay();
-        int NumberSectors();
 
         double TotalInvestment(ICurrency currency = null);
-        DailyValuation LatestValue(ICurrency currency = null);
-        DailyValuation FirstValue(ICurrency currency = null);
-        DailyValuation Value(DateTime date, ICurrency currency = null);
-        DailyValuation LastEarlierValuation(DateTime date, ICurrency currency = null);
-        DailyValuation NearestEarlierValuation(DateTime date, ICurrency currency = null);
         List<DailyValuation> InvestmentsBetween(DateTime earlierDate, DateTime laterDate, ICurrency currency = null);
         List<DayValue_Named> AllInvestmentsNamed(ICurrency currency = null);
         double IRRTime(DateTime earlierDate, DateTime laterDate, ICurrency currency = null);
         double IRR(ICurrency currency = null);
 
+        /// <summary>
+        /// Attempts to add data for the date specified.
+        /// If cannot add any value that one wants to, then doesn't add all the values chosen.
+        /// </summary>
         bool TryAddData(DateTime date, double unitPrice, double shares, double investment, IReportLogger reportLogger);
-        void UpdateSecurityData(DateTime day, double value, IReportLogger reportLogger = null);
         bool TryEditData(DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment, IReportLogger reportLogger = null);
-        bool EditNameData(NameData name);
-        bool IsSectorLinked(string sectorName);
-        bool TryDeleteData(DateTime date, IReportLogger reportLogger = null);
     }
 }

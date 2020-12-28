@@ -81,7 +81,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             Assert.AreEqual(1, viewModel.DataNames.Count);
             Assert.AreEqual(1, portfolio.BankAccounts.Count);
 
-            Assert.AreEqual("NewCompany", portfolio.BankAccounts.Single().Company);
+            Assert.AreEqual("NewCompany", portfolio.BankAccounts.Single().Names.Company);
         }
 
         [Test]

@@ -85,7 +85,7 @@ namespace FinancialStructures.Database.Statistics
                             DailyValuation needed = desired.LatestValue(currency);
                             if (needed.Value > 0)
                             {
-                                return needed.Value - desired.LastEarlierValuation(needed.Day, currency).Value;
+                                return needed.Value - desired.RecentPreviousValue(needed.Day, currency).Value;
                             }
 
                             return 0.0;
@@ -96,7 +96,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case (Account.BankAccount):
                 {
-                    if (portfolio.TryGetAccount(elementType, names, out ISingleValueDataList desired))
+                    if (portfolio.TryGetAccount(elementType, names, out IValueList desired))
                     {
                         if (desired.Any())
                         {
@@ -115,7 +115,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 default:
                 {
-                    if (portfolio.TryGetAccount(elementType, names, out ISingleValueDataList desired))
+                    if (portfolio.TryGetAccount(elementType, names, out IValueList desired))
                     {
                         if (desired.Any())
                         {

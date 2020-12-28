@@ -5,55 +5,10 @@ using StructureCommon.DataStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {
-    /// <summary>
-    /// Acts as an overall change of an area of funds.
-    /// </summary>
-    /// <example>
-    /// e.g. FTSE100 or MSCI-Asia
-    /// </example>
-    public partial class SingleValueDataList : IComparable, ISingleValueDataList
+    /// <inheritdoc/>
+    public partial class ValueList : IValueList
     {
-        /// <summary>
-        /// Event that controls when data is edited.
-        /// </summary>
-        public event EventHandler<PortfolioEventArgs> DataEdit;
-
-        internal virtual void OnDataEdit(object edited, EventArgs e)
-        {
-            var args = e is PortfolioEventArgs pe ? pe : new PortfolioEventArgs();
-            DataEdit?.Invoke(edited, args);
-        }
-
-        /// <inheritdoc />
-        public void SetupEventListening()
-        {
-            Values.DataEdit += OnDataEdit;
-        }
-
-        /// <summary>
-        /// The string representation of this list.
-        /// </summary>
-        public override string ToString()
-        {
-            return Names.ToString();
-        }
-
-        /// <summary>
-        /// Method of comparison
-        /// </summary>
-        public int CompareTo(object obj)
-        {
-            if (obj is ICashAccount value)
-            {
-                return Names.CompareTo(value.Names);
-            }
-
-            return 0;
-        }
-
-        /// <summary>
-        /// Any name type data associated to this security.
-        /// </summary>
+        /// <inheritdoc/>
         public NameData Names
         {
             get;
@@ -63,7 +18,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// This should only be used for serialisation.
         /// </summary>
-        public virtual string Name
+        public string Name
         {
             get
             {
@@ -123,9 +78,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             }
         }
 
-        /// <summary>
-        /// This should only be used for serialisation.
-        /// </summary>
+        /// <inheritdoc />
         public TimeList Values
         {
             get;
@@ -135,7 +88,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// default constructor.
         /// </summary>
-        public SingleValueDataList()
+        public ValueList()
         {
             Names = new NameData();
             SetupEventListening();
@@ -144,7 +97,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// default constructor.
         /// </summary>
-        public SingleValueDataList(NameData names)
+        public ValueList(NameData names)
         {
             Names = names;
             SetupEventListening();
@@ -153,7 +106,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// default constructor.
         /// </summary>
-        public SingleValueDataList(NameData names, TimeList values)
+        public ValueList(NameData names, TimeList values)
         {
             Names = names;
             Values = values;
@@ -161,16 +114,40 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <summary>
-        /// Performs a copy of the list.
+        /// Event that controls when data is edited.
         /// </summary>
-        public ISingleValueDataList Copy()
+        public event EventHandler<PortfolioEventArgs> DataEdit;
+
+        /// <summary>
+        /// Raises the <see cref="DataEdit"/> event.
+        /// </summary>
+        internal virtual void OnDataEdit(object edited, EventArgs e)
         {
-            return new SingleValueDataList(Names, Values);
+            var args = e is PortfolioEventArgs pe ? pe : new PortfolioEventArgs();
+            DataEdit?.Invoke(edited, args);
         }
 
         /// <summary>
-        /// Does the list contain any values?
+        /// Ensures that events for data edit are subscribed to.
         /// </summary>
+        public void SetupEventListening()
+        {
+            Values.DataEdit += OnDataEdit;
+        }
+
+        /// <inheritdoc />
+        public override string ToString()
+        {
+            return Names.ToString();
+        }
+
+        /// <inheritdoc />
+        public IValueList Copy()
+        {
+            return new ValueList(Names, Values);
+        }
+
+        /// <inheritdoc />
         public bool Any()
         {
             return Values != null && Values.Any();

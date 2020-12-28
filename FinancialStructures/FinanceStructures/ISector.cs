@@ -1,6 +1,6 @@
 ﻿namespace FinancialStructures.FinanceStructures
 {
-    public interface ISector : ISingleValueDataList
+    public interface ISector : IValueList
     {
         new ISector Copy();
     }

@@ -36,7 +36,7 @@ namespace FinancialStructures.Database.Implementation
                             date = security.LatestValue().Day;
                         }
 
-                        namesAndCompanies.Add(new NameCompDate(security.Company, security.Name, security.Currency, security.Url, security.Sectors, date));
+                        namesAndCompanies.Add(new NameCompDate(security.Names.Company, security.Names.Name, security.Names.Currency, security.Names.Url, security.Names.Sectors, date));
                     }
                     break;
                 }
@@ -59,7 +59,7 @@ namespace FinancialStructures.Database.Implementation
             return namesAndCompanies;
         }
 
-        private List<NameCompDate> SingleDataNameObtainer<T>(List<T> objects) where T : ISingleValueDataList
+        private List<NameCompDate> SingleDataNameObtainer<T>(List<T> objects) where T : IValueList
         {
             List<NameCompDate> namesAndCompanies = new List<NameCompDate>();
             if (objects != null)
@@ -72,7 +72,7 @@ namespace FinancialStructures.Database.Implementation
                         date = dataList.LatestValue().Day;
                     }
 
-                    namesAndCompanies.Add(new NameCompDate(dataList.Company, dataList.Name, dataList.Currency, dataList.Url, dataList.Names.Sectors, date));
+                    namesAndCompanies.Add(new NameCompDate(dataList.Names.Company, dataList.Names.Name, dataList.Names.Currency, dataList.Names.Url, dataList.Names.Sectors, date));
                 }
             }
 

@@ -44,7 +44,7 @@ namespace FinancialStructures.Database.Implementation
             List<ISecurity> securities = new List<ISecurity>();
             foreach (ISecurity sec in Funds)
             {
-                if (sec.Company == company)
+                if (sec.Names.Company == company)
                 {
                     securities.Add(sec.Copy());
                 }
@@ -59,7 +59,7 @@ namespace FinancialStructures.Database.Implementation
             List<ICashAccount> accounts = new List<ICashAccount>();
             foreach (ICashAccount acc in BankAccounts)
             {
-                if (acc.Company == company)
+                if (acc.Names.Company == company)
                 {
                     accounts.Add(acc);
                 }

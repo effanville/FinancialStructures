@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using FinancialStructures.DataStructures;
-using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 using StructureCommon.Reporting;
 
@@ -14,10 +12,13 @@ namespace FinancialStructures.FinanceStructures.Implementation
     /// </summary>
     public partial class Security
     {
-        /// <summary>
-        /// Attempts to add data for the date specified.
-        /// If cannot add any value that one wants to, then doesn't add all the values chosen.
-        /// </summary>
+        /// <inheritdoc/>
+        public override bool TryAddData(DateTime date, double unitPrice, IReportLogger reportLogger = null)
+        {
+            return TryAddData(date, unitPrice, reportLogger: reportLogger);
+        }
+
+        /// <inheritdoc/>
         public bool TryAddData(DateTime date, double unitPrice, double shares = 0, double investment = 0, IReportLogger reportLogger = null)
         {
             if (DoesDateSharesDataExist(date, out int _) || DoesDateInvestmentDataExist(date, out int _) || DoesDateUnitPriceDataExist(date, out int _))
@@ -27,6 +28,12 @@ namespace FinancialStructures.FinanceStructures.Implementation
             }
 
             return fShares.TryAddValue(date, shares, reportLogger) & fUnitPrice.TryAddValue(date, unitPrice, reportLogger) & fInvestments.TryAddValue(date, investment, reportLogger) && ComputeInvestments(reportLogger);
+        }
+
+        /// <inheritdoc/>
+        public override bool TryAddOrEditData(DateTime oldDate, DateTime date, double unitPrice, IReportLogger reportLogger = null)
+        {
+            return TryAddOrEditData(oldDate, date, unitPrice, reportLogger: reportLogger);
         }
 
         /// <summary>
@@ -44,7 +51,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return fShares.TryAddValue(date, shares, reportLogger) & fUnitPrice.TryAddValue(date, unitPrice, reportLogger) & fInvestments.TryAddValue(date, investment, reportLogger) && ComputeInvestments(reportLogger);
         }
 
-        public List<object> CreateDataFromCsv(List<string[]> valuationsToRead, IReportLogger reportLogger = null)
+        /// <inheritdoc/>
+        public override List<object> CreateDataFromCsv(List<string[]> valuationsToRead, IReportLogger reportLogger = null)
         {
             List<object> dailyValuations = new List<object>();
             foreach (string[] dayValuation in valuationsToRead)
@@ -62,29 +70,14 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return dailyValuations;
         }
 
-        public void WriteDataToCsv(TextWriter writer, IReportLogger reportLogger)
+        /// <inheritdoc/>
+        public override void WriteDataToCsv(TextWriter writer, IReportLogger reportLogger)
         {
             foreach (SecurityDayData value in GetDataForDisplay())
             {
                 writer.WriteLine(value.ToString());
             }
         }
-
-        /// <summary>
-        /// Adds the value to the data with todays date and with the latest number of shares.
-        /// </summary>
-        public void UpdateSecurityData(DateTime day, double value, IReportLogger reportLogger = null)
-        {
-            // best approximation for number of units is last known number of units.
-            _ = TryGetEarlierData(day, out DailyValuation _, out DailyValuation units, out DailyValuation _);
-            if (units == null)
-            {
-                units = new DailyValuation(day, 0);
-            }
-
-            _ = TryAddOrEditData(day, day, value, units.Value, reportLogger: reportLogger);
-        }
-
 
         /// <summary>
         /// Try to edit data. If any dont have any relevant values, then do not edit
@@ -110,28 +103,6 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return editShares & editUnitPrice && ComputeInvestments(reportLogger);
         }
 
-        /// <summary>
-        /// Edits name and company data of security.
-        /// </summary>
-        public bool EditNameData(NameData name)
-        {
-            Names = name;
-            OnDataEdit(this, new EventArgs());
-            return true;
-        }
-
-        internal bool TryRemoveSector(string sectorName)
-        {
-            if (IsSectorLinked(sectorName))
-            {
-                _ = Names.Sectors.Remove(sectorName);
-                OnDataEdit(this, new EventArgs());
-                return true;
-            }
-
-            return false;
-        }
-
         internal bool TryAddSector(string sectorName)
         {
             if (!IsSectorLinked(sectorName))
@@ -142,35 +113,6 @@ namespace FinancialStructures.FinanceStructures.Implementation
             }
 
             return false;
-        }
-
-        public bool IsSectorLinked(string sectorName)
-        {
-            if (Names.Sectors != null && Names.Sectors.Any())
-            {
-                foreach (string name in Names.Sectors)
-                {
-                    if (name == sectorName)
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        public int NumberSectors()
-        {
-            return Names.Sectors.Count;
-        }
-
-        /// <summary>
-        /// Trys to get data on specific date. Only returns true if all data present.
-        /// </summary>
-        internal bool TryGetData(DateTime date, out double price, out double units, out double investment)
-        {
-            return fUnitPrice.TryGetValue(date, out price) & fShares.TryGetValue(date, out units) & fInvestments.TryGetValue(date, out investment);
         }
 
         /// <summary>
@@ -184,7 +126,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Tries to delete the data. If it can, it deletes all data specified, then returns true only if all data has been successfully deleted.
         /// </summary>
-        public bool TryDeleteData(DateTime date, IReportLogger reportLogger = null)
+        public override bool TryDeleteData(DateTime date, IReportLogger reportLogger = null)
         {
             return fUnitPrice.TryDeleteValue(date, reportLogger) & fShares.TryDeleteValue(date, reportLogger) & fInvestments.TryDeleteValue(date, reportLogger) && ComputeInvestments(reportLogger);
         }
@@ -209,7 +151,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                     DailyValuation sharesPreviousValue = fShares.RecentPreviousValue(investmentValue.Day) ?? new DailyValuation(DateTime.Today, 0);
                     if (sharesCurrentValue != null)
                     {
-                        fInvestments.TryEditData(investmentValue.Day, (sharesCurrentValue.Value - sharesPreviousValue.Value) * fUnitPrice.NearestEarlierValue(investmentValue.Day).Value, reportLogger);
+                        _ = fInvestments.TryEditData(investmentValue.Day, (sharesCurrentValue.Value - sharesPreviousValue.Value) * fUnitPrice.NearestEarlierValue(investmentValue.Day).Value, reportLogger);
                     }
                 }
                 if (investmentValue.Value == 0)

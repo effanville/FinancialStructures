@@ -20,8 +20,8 @@ namespace FinancialStructures.Tests.Database.DataAccess
 
             Assert.AreEqual(true, result);
             Assert.IsNotNull(desired);
-            Assert.AreEqual("Company", desired.Company);
-            Assert.AreEqual("name", desired.Name);
+            Assert.AreEqual("Company", desired.Names.Company);
+            Assert.AreEqual("name", desired.Names.Name);
         }
 
         [Test]
@@ -50,8 +50,8 @@ namespace FinancialStructures.Tests.Database.DataAccess
 
             Assert.AreEqual(true, result);
             Assert.IsNotNull(desired);
-            Assert.AreEqual("Company", desired.Company);
-            Assert.AreEqual("name", desired.Name);
+            Assert.AreEqual("Company", desired.Names.Company);
+            Assert.AreEqual("name", desired.Names.Name);
         }
 
         [Test]

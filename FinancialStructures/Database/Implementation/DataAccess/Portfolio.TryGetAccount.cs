@@ -21,12 +21,24 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
-        public bool TryGetAccount(Account accountType, TwoName names, out ISingleValueDataList desired)
+        public bool TryGetAccount(Account accountType, TwoName names, out IValueList desired)
         {
             bool success = false;
             desired = null;
             switch (accountType)
             {
+                case (Account.Security):
+                {
+                    foreach (ISecurity sec in Funds)
+                    {
+                        if (names.IsEqualTo(sec.Names))
+                        {
+                            desired = sec;
+                            success = true;
+                        }
+                    }
+                    break;
+                }
                 case (Account.BankAccount):
                 {
                     foreach (ICashAccount sec in BankAccounts)
@@ -55,7 +67,7 @@ namespace FinancialStructures.Database.Implementation
                 {
                     foreach (ISector sector in BenchMarks)
                     {
-                        if (sector.Name == names.Name)
+                        if (sector.Names.Name == names.Name)
                         {
                             desired = sector;
                             success = true;

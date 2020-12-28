@@ -48,7 +48,7 @@ namespace FinancialStructures.Database.Statistics
                 case Totals.Benchmark:
                 case Totals.Currency:
                 {
-                    if (portfolio.TryGetAccount(Account.BankAccount, names, out ISingleValueDataList desired))
+                    if (portfolio.TryGetAccount(Account.BankAccount, names, out IValueList desired))
                     {
                         if (desired is ICashAccount cashAcc)
                         {

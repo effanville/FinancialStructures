@@ -48,7 +48,7 @@ namespace FinancialStructures.Database.Implementation
             return false;
         }
 
-        private bool TryDeleteSingleListData<T>(List<T> values, Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null) where T : ISingleValueDataList
+        private bool TryDeleteSingleListData<T>(List<T> values, Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null) where T : IValueList
         {
             foreach (T account in values)
             {

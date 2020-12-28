@@ -41,7 +41,7 @@ namespace FinancialStructures.Database.Statistics
                     {
                         if (security.Any())
                         {
-                            ICurrency currency = portfolio.Currencies.Find(cur => cur.Name == security.Currency);
+                            ICurrency currency = portfolio.Currencies.Find(cur => cur.Names.Name == security.Names.Currency);
                             earlierValue += security.Value(earlierTime, currency).Value;
                             laterValue += security.Value(laterTime, currency).Value;
                             Investments.AddRange(security.InvestmentsBetween(earlierTime, laterTime, currency));
@@ -65,7 +65,7 @@ namespace FinancialStructures.Database.Statistics
                     {
                         if (security.Any())
                         {
-                            ICurrency currency = portfolio.Currencies.Find(cur => cur.Name == security.Currency);
+                            ICurrency currency = portfolio.Currencies.Find(cur => cur.Names.Name == security.Names.Currency);
                             earlierValue += security.Value(earlierTime, currency).Value;
                             laterValue += security.Value(laterTime, currency).Value;
                             Investments.AddRange(security.InvestmentsBetween(earlierTime, laterTime, currency));
@@ -105,7 +105,7 @@ namespace FinancialStructures.Database.Statistics
 
                     foreach (var bankAccount in portfolio.BankAccounts)
                     {
-                        ICurrency currency = portfolio.Currencies.Find(cur => cur.Name == bankAccount.Currency);
+                        ICurrency currency = portfolio.Currencies.Find(cur => cur.Names.Name == bankAccount.Names.Currency);
                         earlierValue += bankAccount.Value(earlierTime, currency).Value;
                         laterValue += bankAccount.Value(laterTime, currency).Value;
                     }
@@ -166,7 +166,7 @@ namespace FinancialStructures.Database.Statistics
                 case Account.Benchmark:
                 case Account.Currency:
                 {
-                    if (portfolio.TryGetAccount(accountType, names, out ISingleValueDataList desired))
+                    if (portfolio.TryGetAccount(accountType, names, out IValueList desired))
                     {
                         if (desired.Any())
                         {
@@ -205,7 +205,7 @@ namespace FinancialStructures.Database.Statistics
                 case Account.Benchmark:
                 case Account.Currency:
                 {
-                    if (portfolio.TryGetAccount(accountType, names, out ISingleValueDataList desired))
+                    if (portfolio.TryGetAccount(accountType, names, out IValueList desired))
                     {
                         if (desired.Any())
                         {

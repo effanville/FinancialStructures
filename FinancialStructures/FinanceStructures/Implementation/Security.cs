@@ -9,48 +9,17 @@ namespace FinancialStructures.FinanceStructures.Implementation
     /// <summary>
     /// Class to model a stock, or a unit trust.
     /// </summary>
-    public partial class Security : ISecurity, IComparable
+    public partial class Security : ValueList, ISecurity
     {
-        /// <summary>
-        /// Event that controls when data is edited.
-        /// </summary>
-        public event EventHandler<PortfolioEventArgs> DataEdit;
+        private TimeList fInvestments = new TimeList();
+        private TimeList fShares = new TimeList();
+        private TimeList fUnitPrice = new TimeList();
 
-        internal void OnDataEdit(object edited, EventArgs e)
-        {
-            DataEdit?.Invoke(edited, new PortfolioEventArgs(Account.Security));
-        }
-
-        public void SetupEventListening()
-        {
-            UnitPrice.DataEdit += OnDataEdit;
-            Shares.DataEdit += OnDataEdit;
-            Investments.DataEdit += OnDataEdit;
-        }
-
-        /// <summary>
-        /// Returns a string describing this security.
-        /// </summary>
-        public override string ToString()
-        {
-            return Names.ToString();
-        }
-
-        private NameData fNames;
-
-        /// <summary>
-        /// Any name type data associated to this security.
-        /// </summary>
+        /// <inheritdoc/>
         public NameData Names
         {
-            get
-            {
-                return fNames;
-            }
-            set
-            {
-                fNames = value;
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -114,13 +83,17 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <summary>
-        /// The number of shares held in this security.
+        /// For backwards compatibility with old systems where this was the true store of sectors.
         /// </summary>
-        private TimeList fShares = new TimeList();
+        public HashSet<string> Sectors
+        {
+            get
+            {
+                return Names.Sectors;
+            }
+        }
 
-        /// <summary>
-        /// This should only be used for serialisation.
-        /// </summary>
+        /// <inheritdoc/>
         public TimeList Shares
         {
             get
@@ -133,25 +106,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             }
         }
 
-        /// <summary>
-        /// For backwards compatibility with old systems where this was the true store of sectors.
-        /// </summary>
-        public HashSet<string> Sectors
-        {
-            get
-            {
-                return Names.Sectors;
-            }
-        }
-
-        /// <summary>
-        /// The data of the price per unit/share of this security.
-        /// </summary>
-        private TimeList fUnitPrice = new TimeList();
-
-        /// <summary>
-        /// This should only be used for serialisation.
-        /// </summary>
+        /// <inheritdoc/>
         public TimeList UnitPrice
         {
             get
@@ -164,14 +119,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             }
         }
 
-        /// <summary>
-        /// A list of investments made in this security.
-        /// </summary>
-        private TimeList fInvestments = new TimeList();
-
-        /// <summary>
-        /// This should only be used for serialisation.
-        /// </summary>
+        /// <inheritdoc/>
         public TimeList Investments
         {
             get
@@ -181,6 +129,19 @@ namespace FinancialStructures.FinanceStructures.Implementation
             set
             {
                 fInvestments = value;
+            }
+        }
+
+        /// <inheritdoc/>
+        public TimeList Values
+        {
+            get
+            {
+                throw new Exception();
+            }
+            set
+            {
+                throw new Exception();
             }
         }
 
@@ -220,16 +181,49 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <summary>
-        /// Method of comparison
+        /// Event that controls when data is edited.
         /// </summary>
-        public int CompareTo(object obj)
+        public event EventHandler<PortfolioEventArgs> DataEdit;
+
+        /// <summary>
+        /// Raises the <see cref="DataEdit"/> event.
+        /// </summary>
+        internal override void OnDataEdit(object edited, EventArgs e)
         {
-            if (obj is ISecurity value)
+            DataEdit?.Invoke(edited, new PortfolioEventArgs(Account.Security));
+        }
+
+        /// <summary>
+        /// Ensures that events for data edit are subscribed to.
+        /// </summary>
+        public void SetupEventListening()
+        {
+            UnitPrice.DataEdit += OnDataEdit;
+            Shares.DataEdit += OnDataEdit;
+            Investments.DataEdit += OnDataEdit;
+        }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return Names.ToString();
+        }
+
+        /// <inheritdoc/>
+        public ISecurity Copy()
+        {
+            return new Security(Names, fShares, fUnitPrice, fInvestments);
+        }
+
+        /// <inheritdoc/>
+        public bool Any()
+        {
+            if (fUnitPrice.Any() && fShares.Any())
             {
-                return Names.CompareTo(value.Names);
+                return true;
             }
 
-            return 0;
+            return false;
         }
     }
 }

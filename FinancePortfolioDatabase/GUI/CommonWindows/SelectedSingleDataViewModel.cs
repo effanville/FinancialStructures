@@ -196,7 +196,7 @@ namespace FinanceCommonViewModels
             {
                 FileInteractionResult result = fFileService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
                 List<object> outputs = null;
-                bool exists = DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out ISingleValueDataList account);
+                bool exists = DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out IValueList account);
                 if (result.Success != null && (bool)result.Success && exists)
                 {
                     outputs = CsvReaderWriter.ReadFromCsv(account, result.FilePath, ReportLogger);
@@ -230,7 +230,7 @@ namespace FinanceCommonViewModels
                 FileInteractionResult result = fFileService.SaveFile("csv", string.Empty, DataStore.Directory, "Csv Files|*.csv|All Files|*.*");
                 if (result.Success != null && (bool)result.Success)
                 {
-                    if (DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out ISingleValueDataList account))
+                    if (DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out IValueList account))
                     {
                         CsvReaderWriter.WriteToCSVFile(account, result.FilePath, ReportLogger);
                     }

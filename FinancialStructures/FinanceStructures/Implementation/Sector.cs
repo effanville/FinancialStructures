@@ -5,7 +5,7 @@ using StructureCommon.DataStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {
-    public class Sector : SingleValueDataList, ISector
+    public class Sector : ValueList, ISector
     {
         internal override void OnDataEdit(object edited, EventArgs e)
         {

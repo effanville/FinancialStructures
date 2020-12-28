@@ -14,14 +14,14 @@ namespace FinancialStructures.Database.Implementation
             {
                 case (Account.Security):
                 {
-                    string currencyName = ((ISecurity)account).Currency;
+                    string currencyName = ((ISecurity)account).Names.Currency;
                     ICurrency currency = Currencies.Find(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == BaseCurrency);
                     if (currency != null)
                     {
                         return currency;
                     }
 
-                    return Currencies.Find(cur => cur.Company == BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted();
+                    return Currencies.Find(cur => cur.Names.Company == BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted();
                 }
                 case (Account.Currency):
                 {
@@ -29,7 +29,7 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case (Account.BankAccount):
                 {
-                    string currencyName = ((ICashAccount)account).Currency;
+                    string currencyName = ((ICashAccount)account).Names.Currency;
                     ICurrency currency = Currencies.Find(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == BaseCurrency);
                     if (currency != null)
                     {
