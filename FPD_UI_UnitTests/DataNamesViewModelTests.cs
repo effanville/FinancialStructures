@@ -9,88 +9,13 @@ using FinancialStructures.NamingStructures;
 using FPD_UI_UnitTests.TestConstruction;
 using Moq;
 using NUnit.Framework;
-using StructureCommon.DataStructures;
 using UICommon.Services;
 
 namespace FPD_UI_UnitTests.CommonWindowTests
 {
-    /// <summary>
-    /// Tests for window displaying single data stream data.
-    /// </summary>
     [TestFixture]
     [Apartment(ApartmentState.STA)]
-    public class CommonWindowTests
-    {
-        [Test]
-        public void CanLoadSuccessfully()
-        {
-            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SingleValueEditWindowViewModel viewModel = new SingleValueEditWindowViewModel("Dummy", portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, Account.BankAccount);
-
-            Assert.AreEqual(1, viewModel.Tabs.Count);
-            object tab = viewModel.Tabs.Single();
-            DataNamesViewModel nameModel = tab as DataNamesViewModel;
-            Assert.AreEqual(1, nameModel.DataNames.Count);
-        }
-
-        [Test]
-        public void CanUpdateData()
-        {
-            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio portfolio = TestingGUICode.CreateEmptyDataBase();
-            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SingleValueEditWindowViewModel viewModel = new SingleValueEditWindowViewModel("Dummy", portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, Account.BankAccount);
-            Portfolio newData = TestingGUICode.CreateBasicDataBase();
-            viewModel.UpdateData(newData);
-
-            Assert.AreEqual("TestFilePath", viewModel.DataStore.FilePath);
-            Assert.AreEqual(1, viewModel.DataStore.BankAccounts.Count);
-        }
-
-        [Test]
-        public void CanUpdateDataAndRemoveOldTab()
-        {
-            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio portfolio = TestingGUICode.CreateEmptyDataBase();
-            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SingleValueEditWindowViewModel viewModel = new SingleValueEditWindowViewModel("Dummy", portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, Account.BankAccount);
-
-            NameData newNameData = new NameData("Fidelity", "Europe");
-            viewModel.LoadTabFunc(newNameData);
-
-            Assert.AreEqual(2, viewModel.Tabs.Count);
-
-            Portfolio newData = TestingGUICode.CreateBasicDataBase();
-            viewModel.UpdateData(newData);
-            Assert.AreEqual(1, viewModel.Tabs.Count);
-            Assert.AreEqual("TestFilePath", viewModel.DataStore.FilePath);
-            Assert.AreEqual(1, viewModel.DataStore.BankAccounts.Count);
-        }
-
-        [Test]
-        public void CanAddTab()
-        {
-            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SingleValueEditWindowViewModel viewModel = new SingleValueEditWindowViewModel("Dummy", portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, Account.BankAccount);
-
-            NameData newData = new NameData("Fidelity", "China");
-            viewModel.LoadTabFunc(newData);
-
-            Assert.AreEqual(2, viewModel.Tabs.Count);
-        }
-    }
-
-    [TestFixture]
-    [Apartment(ApartmentState.STA)]
-    public class DataNamesTests
+    public class DataNamesViewModelTests
     {
         [Test]
         public void CanOpen()
@@ -194,107 +119,126 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             Assert.AreEqual(0, viewModel.DataStore.BankAccounts.Count);
             Assert.AreEqual(0, portfolio.BankAccounts.Count);
         }
-    }
-
-    [TestFixture]
-    [Apartment(ApartmentState.STA)]
-    public class SelectedAccountDataTests
-    {
 
         [Test]
-        public void CanOpenWindow()
+        public void CanOpenSecurity()
         {
-            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
+            Portfolio output = TestingGUICode.CreateBasicDataBase();
             Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SelectedSingleDataViewModel viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Barclays", "currentAccount"), Account.BankAccount);
-
-            Assert.AreEqual(1, viewModel.SelectedData.Count);
+            DataNamesViewModel viewModel = new DataNamesViewModel(output, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.Security);
+            Assert.AreEqual(1, viewModel.DataNames.Count);
         }
 
         [Test]
-        public void CanAddValue()
+        public void CanUpdateSecurityData()
         {
             Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
             Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
+            Portfolio portfolio = TestingGUICode.CreateEmptyDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SelectedSingleDataViewModel viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Barclays", "currentAccount"), Account.BankAccount);
+            DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.Security);
+            Portfolio newData = TestingGUICode.CreateBasicDataBase();
+            viewModel.UpdateData(newData);
 
-            Assert.AreEqual(1, viewModel.SelectedData.Count);
-            DailyValuation newValue = new DailyValuation(new DateTime(2002, 1, 1), 1);
-            viewModel.SelectedData.Add(newValue);
-            viewModel.fOldSelectedValue = newValue.Copy();
-
-            var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.SelectedData.Last());
-            viewModel.EditDataCommand.Execute(dataGridArgs);
-            Assert.AreEqual(2, viewModel.SelectedData.Count);
-            Assert.AreEqual(2, portfolio.BankAccounts.Single().Count());
+            Assert.AreEqual(1, viewModel.DataNames.Count);
         }
 
         [Test]
-        public void CanEditValue()
+        public void CanCreateNewSecurity()
         {
             Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
             Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
             Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SelectedSingleDataViewModel viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Barclays", "currentAccount"), Account.BankAccount);
+            DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.Security);
+            NameCompDate newName = new NameCompDate("company", "name", "GBP", "someUrl", new HashSet<string>(), DateTime.Today)
+            {
+                Company = "Company"
+            };
+            viewModel.fPreEditSelectedName = newName;
+            viewModel.DataNames.Add(newName);
+            var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[1]);
+            viewModel.CreateCommand.Execute(dataGridArgs);
+            Assert.AreEqual(2, viewModel.DataNames.Count, "Bot enough in the view.");
+            Assert.AreEqual(2, portfolio.Funds.Count, "Not enough in portfolio");
+        }
 
-            Assert.AreEqual(1, viewModel.SelectedData.Count);
-            viewModel.fOldSelectedValue = viewModel.SelectedData[0].Copy();
-            DailyValuation newValue = new DailyValuation(new DateTime(2000, 1, 1), 1);
-            viewModel.SelectedData[0] = newValue;
+        [Test]
+        public void CanEditSecurityName()
+        {
+            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
+            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
+            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
+            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
+            DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.Security);
+            viewModel.fPreEditSelectedName = viewModel.DataNames[0].Copy();
 
-            var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.SelectedData.Last());
-            viewModel.EditDataCommand.Execute(dataGridArgs);
-            Assert.AreEqual(1, viewModel.SelectedData.Count);
-            Assert.AreEqual(1, portfolio.Funds.Single().Count());
-            Assert.AreEqual(new DateTime(2000, 1, 1), portfolio.Funds.Single().FirstValue().Day);
+            viewModel.DataNames[0].Company = "NewCompany";
+            var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[0]);
+            viewModel.CreateCommand.Execute(dataGridArgs);
+            Assert.AreEqual(1, viewModel.DataNames.Count);
+            Assert.AreEqual(1, portfolio.Funds.Count);
+
+            Assert.AreEqual("NewCompany", portfolio.Funds.Single().Company);
+        }
+
+        [Test]
+        public void CanEditSecurityNameAndUrl()
+        {
+            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
+            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
+            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
+            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
+            DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.Security);
+            viewModel.fPreEditSelectedName = viewModel.DataNames[0].Copy();
+
+            viewModel.DataNames[0].Company = "NewCompany";
+            var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[0]);
+
+            viewModel.DataNames[0].Url = "NewUrl";
+            dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[0]);
+            viewModel.CreateCommand.Execute(dataGridArgs);
+            Assert.AreEqual(1, viewModel.DataNames.Count);
+            Assert.AreEqual(1, portfolio.Funds.Count);
+
+            Assert.AreEqual("NewCompany", portfolio.Funds.Single().Company);
+            Assert.AreEqual("NewUrl", portfolio.Funds.Single().Url);
+        }
+
+        [Test]
+        [Ignore("IncompeteArchitecture - Downloader does not currently allow for use in test environment.")]
+        public void CanDownloadSecurity()
+        {
+            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
+            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
+            Portfolio portfolio = TestingGUICode.CreateEmptyDataBase();
+            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
+            DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.Security)
+            {
+                fPreEditSelectedName = new NameCompDate("Fidelity", "China")
+            };
+            viewModel.DownloadCommand.Execute(1);
+
+            Assert.AreEqual(1, viewModel.DataNames.Count);
         }
 
 
         [Test]
-        [Ignore("IncompeteArchitecture - FileInteraction does not currently allow for use in test environment.")]
-        public void CanAddFromCSV()
+        public void CanDeleteSecurity()
         {
             Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
             Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
             Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SelectedSingleDataViewModel viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Barclays", "currentAccount"), Account.BankAccount);
+            DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.Security);
 
-            Assert.AreEqual(1, viewModel.SelectedData.Count);
-        }
-
-        [Test]
-        [Ignore("IncompeteArchitecture - FileInteraction does not currently allow for use in test environment.")]
-        public void CanWriteToCSV()
-        {
-            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SelectedSingleDataViewModel viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Barclays", "currentAccount"), Account.BankAccount);
-
-            Assert.AreEqual(1, viewModel.SelectedData.Count);
-        }
-
-        [Test]
-        public void CanDeleteValue()
-        {
-            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SelectedSingleDataViewModel viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Barclays", "currentAccount"), Account.BankAccount);
-            viewModel.fOldSelectedValue = viewModel.SelectedData.Single();
-            Assert.AreEqual(1, viewModel.SelectedData.Count);
-
-            viewModel.DeleteValuationCommand.Execute(1);
-
-            Assert.AreEqual(0, portfolio.BankAccounts.Single().Count());
+            Assert.AreEqual(1, viewModel.DataStore.Funds.Count);
+            Assert.AreEqual(1, portfolio.Funds.Count);
+            viewModel.fPreEditSelectedName = new NameCompDate("Fidelity", "China");
+            viewModel.DeleteCommand.Execute(1);
+            Assert.AreEqual(0, viewModel.DataStore.Funds.Count);
+            Assert.AreEqual(0, portfolio.Funds.Count);
         }
     }
 }

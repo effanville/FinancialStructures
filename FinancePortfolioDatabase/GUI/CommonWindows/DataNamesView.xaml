@@ -36,6 +36,7 @@
         <DataGrid Grid.Row="1"
                   ToolTip="Lists all items currently in the database. Select one to edit data."
                   SelectionUnit="FullRow"
+                  SelectionMode="Single"
                   CanUserAddRows="True"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False"
@@ -72,9 +73,10 @@
                                     MinWidth="70"
                                     Binding="{Binding Path=SectorsFlat,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Last Date"
+                                    IsReadOnly="True"
                                     MaxWidth="200"
                                     MinWidth="50"
-                                    Binding="{Binding Path=DateToRecord,Mode=TwoWay, Converter={StaticResource StringToUKDate} }" />
+                                    Binding="{Binding Path=DateToRecord,Mode=OneWay, Converter={StaticResource StringToUKDate} }" />
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

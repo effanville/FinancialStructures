@@ -18,6 +18,7 @@ namespace FinanceCommonViewModels
     internal class DataNamesViewModel : TabViewModelBase<IPortfolio>
     {
         private readonly Account TypeOfAccount;
+        private int fSelectedRowIndex;
 
         /// <summary>
         /// Backing field for <see cref="DataNames"/>.
@@ -60,6 +61,7 @@ namespace FinanceCommonViewModels
         {
             UpdateDataCallback = updateDataCallback;
             TypeOfAccount = accountType;
+            fSelectedRowIndex = -1;
             ReportLogger = reportLogger;
             DataNames = portfolio.NameData(accountType);
             DataNames.Sort();
@@ -129,10 +131,12 @@ namespace FinanceCommonViewModels
         {
             if (e.Source is DataGrid dg)
             {
-                if (dg.CurrentItem != null)
+                if (dg.CurrentItem != null && dg.CurrentItem is NameCompDate name)
                 {
-                    if (dg.CurrentItem is NameCompDate name)
+                    int index = DataNames.FindIndex(x => x.IsEqualTo(name));
+                    if (fSelectedRowIndex == -1 || fSelectedRowIndex != index)
                     {
+                        fSelectedRowIndex = index;
                         fPreEditSelectedName = name.Copy();
                     }
                 }
