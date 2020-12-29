@@ -152,5 +152,16 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
             return Values != null && Values.Any();
         }
+
+        /// <inheritdoc />
+        public int CompareTo(object obj)
+        {
+            if (obj is IValueList otherList)
+            {
+                return Names.CompareTo(otherList.Names);
+            }
+
+            return 0;
+        }
     }
 }

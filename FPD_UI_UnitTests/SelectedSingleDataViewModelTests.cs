@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading;
 using FinanceCommonViewModels;
 using FinancialStructures.Database;
-using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.Database.Implementation;
 using FinancialStructures.NamingStructures;
 using FPD_UI_UnitTests.TestConstruction;
 using Moq;

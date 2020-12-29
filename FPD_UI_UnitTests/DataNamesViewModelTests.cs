@@ -173,7 +173,6 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.Security);
             viewModel.fPreEditSelectedName = viewModel.DataNames[0].Copy();
-
             viewModel.DataNames[0].Company = "NewCompany";
             var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[0]);
             viewModel.CreateCommand.Execute(dataGridArgs);
@@ -194,10 +193,9 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             viewModel.fPreEditSelectedName = viewModel.DataNames[0].Copy();
 
             viewModel.DataNames[0].Company = "NewCompany";
-            var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[0]);
 
             viewModel.DataNames[0].Url = "NewUrl";
-            dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[0]);
+            var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[0]);
             viewModel.CreateCommand.Execute(dataGridArgs);
             Assert.AreEqual(1, viewModel.DataNames.Count);
             Assert.AreEqual(1, portfolio.Funds.Count);

@@ -2,6 +2,8 @@
 using System.Linq;
 using FinanceCommonViewModels;
 using FinanceWindowsViewModels;
+using FinancialStructures.Database;
+using FinancialStructures.Database.Implementation;
 using FinancialStructures.NamingStructures;
 using FPD_UI_UnitTests.TestConstruction;
 using Moq;

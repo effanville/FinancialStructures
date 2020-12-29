@@ -2,10 +2,14 @@
 using System.Linq;
 using System.Threading;
 using FinanceWindowsViewModels;
+using FinancialStructures.Database;
+using FinancialStructures.Database.Implementation;
 using FinancialStructures.DataStructures;
 using FinancialStructures.NamingStructures;
 using FPD_UI_UnitTests.TestConstruction;
+using Moq;
 using NUnit.Framework;
+using UICommon.Services;
 
 namespace FPD_UI_UnitTests.SecurityWindowTests
 {
@@ -16,10 +20,10 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
         [Test]
         public void CanOpenWindow()
         {
-            Moq.Mock<UICommon.Services.IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Moq.Mock<UICommon.Services.IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            FinancialStructures.Database.Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<FinancialStructures.FinanceInterfaces.IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
+            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
+            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
+            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
+            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             SelectedSecurityViewModel viewModel = new SelectedSecurityViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Fidelity", "China"));
 
             Assert.AreEqual(1, viewModel.SelectedSecurityData.Count);
@@ -28,10 +32,10 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
         [Test]
         public void CanAddValue()
         {
-            Moq.Mock<UICommon.Services.IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Moq.Mock<UICommon.Services.IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            FinancialStructures.Database.Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<FinancialStructures.FinanceInterfaces.IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
+            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
+            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
+            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
+            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             SelectedSecurityViewModel viewModel = new SelectedSecurityViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Fidelity", "China"));
 
             Assert.AreEqual(1, viewModel.SelectedSecurityData.Count);
@@ -49,10 +53,10 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
         [Test]
         public void CanEditValue()
         {
-            Moq.Mock<UICommon.Services.IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Moq.Mock<UICommon.Services.IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            FinancialStructures.Database.Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<FinancialStructures.FinanceInterfaces.IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
+            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
+            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
+            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
+            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             SelectedSecurityViewModel viewModel = new SelectedSecurityViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Fidelity", "China"));
 
             Assert.AreEqual(1, viewModel.SelectedSecurityData.Count);
@@ -71,10 +75,10 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
         [Ignore("IncompeteArchitecture - FileInteraction does not currently allow for use in test environment.")]
         public void CanAddFromCSV()
         {
-            Moq.Mock<UICommon.Services.IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Moq.Mock<UICommon.Services.IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            FinancialStructures.Database.Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<FinancialStructures.FinanceInterfaces.IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
+            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
+            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
+            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
+            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             SelectedSecurityViewModel viewModel = new SelectedSecurityViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Fidelity", "China"));
 
             Assert.AreEqual(1, viewModel.SelectedSecurityData.Count);
@@ -84,10 +88,10 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
         [Ignore("IncompeteArchitecture - FileInteraction does not currently allow for use in test environment.")]
         public void CanWriteToCSV()
         {
-            Moq.Mock<UICommon.Services.IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Moq.Mock<UICommon.Services.IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            FinancialStructures.Database.Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<FinancialStructures.FinanceInterfaces.IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
+            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
+            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
+            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
+            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             SelectedSecurityViewModel viewModel = new SelectedSecurityViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Fidelity", "China"));
 
             Assert.AreEqual(1, viewModel.SelectedSecurityData.Count);
@@ -96,10 +100,10 @@ namespace FPD_UI_UnitTests.SecurityWindowTests
         [Test]
         public void CanDeleteValue()
         {
-            Moq.Mock<UICommon.Services.IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Moq.Mock<UICommon.Services.IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            FinancialStructures.Database.Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<FinancialStructures.FinanceInterfaces.IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
+            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
+            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
+            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
+            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             SelectedSecurityViewModel viewModel = new SelectedSecurityViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Fidelity", "China"));
             viewModel.fOldSelectedValues = viewModel.SelectedSecurityData.Single();
             Assert.AreEqual(1, viewModel.SelectedSecurityData.Count);

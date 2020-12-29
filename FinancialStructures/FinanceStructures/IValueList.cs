@@ -10,7 +10,7 @@ namespace FinancialStructures.FinanceStructures
     /// <summary>
     /// A named list containing values.
     /// </summary>
-    public interface IValueList : ICSVAccess
+    public interface IValueList : ICSVAccess, IComparable
     {
         /// <summary>
         /// The Name data for this list, including company, name and urls.
