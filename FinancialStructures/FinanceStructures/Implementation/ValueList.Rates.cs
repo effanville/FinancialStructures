@@ -9,20 +9,17 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public virtual DailyValuation LatestValue()
         {
-            DateTime latestDate = Values.LatestDate();
-            double latestValue = Values.LatestValue();
-
-            return new DailyValuation(latestDate, latestValue);
+            return Values.LatestValuation().Copy();
         }
 
         /// <inheritdoc/>
-        public DailyValuation FirstValue()
+        public virtual DailyValuation FirstValue()
         {
             return Values.FirstValuation();
         }
 
         /// <inheritdoc/>
-        public DailyValuation Value(DateTime date)
+        public virtual DailyValuation Value(DateTime date)
         {
             return Values.Value(date);
         }
@@ -30,13 +27,13 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// returns compound annual rate of security between the two times specified
         /// </summary>
-        public double CAR(DateTime earlierTime, DateTime laterTime)
+        public virtual double CAR(DateTime earlierTime, DateTime laterTime)
         {
             return FinancialFunctions.CAR(Value(earlierTime), Value(laterTime));
         }
 
         /// <inheritdoc/>
-        public DailyValuation RecentPreviousValue(DateTime date)
+        public virtual DailyValuation RecentPreviousValue(DateTime date)
         {
             DailyValuation val = Values.RecentPreviousValue(date);
             if (val == null)
@@ -45,6 +42,12 @@ namespace FinancialStructures.FinanceStructures.Implementation
             }
 
             return val;
+        }
+
+        /// <inheritdoc/>
+        public virtual DailyValuation NearestEarlierValuation(DateTime date)
+        {
+            return Values.NearestEarlierValue(date);
         }
     }
 }

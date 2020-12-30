@@ -195,7 +195,7 @@ namespace FinancialStructures.Database.Statistics
                         if (desired.Any())
                         {
                             ICurrency currency = portfolio.Currency(Account.Security, desired);
-                            return desired.IRRTime(earlierTime, laterTime, currency);
+                            return desired.IRR(earlierTime, laterTime, currency);
                         }
                     }
 

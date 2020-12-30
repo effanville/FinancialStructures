@@ -5,7 +5,9 @@ using StructureCommon.DataStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {
-    /// <inheritdoc/>
+    /// <summary>
+    /// A named list containing values.
+    /// </summary>
     public partial class ValueList : IValueList
     {
         /// <inheritdoc/>
@@ -116,7 +118,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Event that controls when data is edited.
         /// </summary>
-        public event EventHandler<PortfolioEventArgs> DataEdit;
+        public virtual event EventHandler<PortfolioEventArgs> DataEdit;
 
         /// <summary>
         /// Raises the <see cref="DataEdit"/> event.
@@ -130,7 +132,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Ensures that events for data edit are subscribed to.
         /// </summary>
-        public void SetupEventListening()
+        public virtual void SetupEventListening()
         {
             Values.DataEdit += OnDataEdit;
         }
@@ -142,15 +144,27 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc />
-        public IValueList Copy()
+        public virtual IValueList Copy()
         {
             return new ValueList(Names, Values);
         }
 
         /// <inheritdoc />
-        public bool Any()
+        public virtual bool Any()
         {
             return Values != null && Values.Any();
+        }
+
+        /// <inheritdoc/>
+        public virtual int Count()
+        {
+            return Values.Count();
+        }
+
+        /// <inheritdoc/>
+        public virtual bool IsEqualTo(IValueList otherAccount)
+        {
+            return Names.IsEqualTo(otherAccount.Names);
         }
 
         /// <inheritdoc />

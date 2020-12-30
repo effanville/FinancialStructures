@@ -5,6 +5,9 @@ using StructureCommon.DataStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {
+    /// <summary>
+    /// An account simulating a bank account.
+    /// </summary>
     public class CashAccount : ValueList, ICashAccount
     {
         internal override void OnDataEdit(object edited, EventArgs e)
@@ -12,11 +15,13 @@ namespace FinancialStructures.FinanceStructures.Implementation
             base.OnDataEdit(edited, new PortfolioEventArgs(Account.BankAccount));
         }
 
+        /// <inheritdoc/>
         public new ICashAccount Copy()
         {
             return new CashAccount(Names, Values);
         }
 
+        /// <inheritdoc/>
         public TimeList Amounts
         {
             get
@@ -53,10 +58,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
         }
 
-        /// <summary>
-        /// Returns the interpolated value of the security on the date provided,
-        /// with the value zero if date is before the first value.
-        /// </summary>
+        /// <inheritdoc/>
         public DailyValuation Value(DateTime date, ICurrency currency = null)
         {
             DailyValuation perSharePrice = Values.ValueZeroBefore(date);
@@ -66,13 +68,12 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public DailyValuation LatestValue(ICurrency currency = null)
+        public DailyValuation LatestValue(ICurrency currency)
         {
             DailyValuation latestDate = Values.LatestValuation();
             if (latestDate == null)
             {
                 return new DailyValuation(DateTime.Today, 0.0);
-                ;
             }
 
             double currencyValue = currency == null ? 1.0 : currency.Value(latestDate.Day).Value;
@@ -81,7 +82,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return new DailyValuation(latestDate.Day, latestValue);
         }
 
-        public DailyValuation LastEarlierValuation(DateTime date, ICurrency currency = null)
+        /// <inheritdoc/>
+        public DailyValuation RecentPreviousValue(DateTime date, ICurrency currency)
         {
             DailyValuation val = Values.RecentPreviousValue(date);
             double currencyValue = currency == null ? 1.0 : currency.Value(val.Day).Value;
@@ -93,10 +95,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return val;
         }
 
-        /// <summary>
-        /// Returns the first valuation of the OldCashAccount.
-        /// </summary>
-        public DailyValuation FirstValue(ICurrency currency = null)
+        /// <inheritdoc/>
+        public DailyValuation FirstValue(ICurrency currency)
         {
             DailyValuation firstDate = Values.FirstValuation();
             if (firstDate == null)
@@ -111,9 +111,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return new DailyValuation(firstDate.Day, latestValue);
         }
 
-        /// <summary>
-        /// Returns the latest earlier valuation of the OldCashAccount to <paramref name="date"/>.
-        /// </summary>
+        /// <inheritdoc/>
         public DailyValuation NearestEarlierValuation(DateTime date, ICurrency currency = null)
         {
             DailyValuation value = Values.NearestEarlierValue(date);

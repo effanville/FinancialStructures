@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using FinancialStructures.DataStructures;
 using StructureCommon.DataStructures;
 using StructureCommon.FinanceFunctions;
 
@@ -8,6 +7,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
 {
     public partial class Security
     {
+        /// <inheritdoc/>
         public double TotalInvestment(ICurrency currency = null)
         {
             List<DailyValuation> investments = InvestmentsBetween(FirstValue().Day, LatestValue().Day, currency);
@@ -17,6 +17,19 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 sum += investment.Value;
             }
             return sum;
+        }
+
+        /// <inheritdoc/>
+        public List<DailyValuation> InvestmentsBetween(DateTime earlierDate, DateTime laterDate, ICurrency currency = null)
+        {
+            List<DailyValuation> values = fInvestments.GetValuesBetween(earlierDate, laterDate);
+            foreach (DailyValuation value in values)
+            {
+                double currencyValue = currency == null ? 1.0 : currency.Value(value.Day).Value;
+                value.SetValue(value.Value * currencyValue);
+            }
+
+            return values;
         }
 
         /// <inheritdoc/>
@@ -41,7 +54,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public DailyValuation FirstValue()
+        public override DailyValuation FirstValue()
         {
             return FirstValue(null);
         }
@@ -62,7 +75,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public DailyValuation Value(DateTime date)
+        public override DailyValuation Value(DateTime date)
         {
             return Value(date, null);
         }
@@ -77,7 +90,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public DailyValuation RecentPreviousValue(DateTime date)
+        public override DailyValuation RecentPreviousValue(DateTime date)
         {
             return RecentPreviousValue(date, null);
         }
@@ -96,9 +109,13 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return new DailyValuation(date, latestValue);
         }
 
-        /// <summary>
-        /// Returns most recent valuation on or before the date specified.
-        /// </summary>
+        /// <inheritdoc/>
+        public override DailyValuation NearestEarlierValuation(DateTime date)
+        {
+            return NearestEarlierValuation(date, null);
+        }
+
+        /// <inheritdoc/>
         public DailyValuation NearestEarlierValuation(DateTime date, ICurrency currency)
         {
             DailyValuation val = fUnitPrice.NearestEarlierValue(date);
@@ -112,72 +129,20 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return new DailyValuation(date, latestValue);
         }
 
-        /// <summary>
-        /// Returns earliest valuation after the date specified.
-        /// </summary>
-        private DailyValuation NearestLaterValuation(DateTime date, ICurrency currency = null)
-        {
-            DailyValuation val = fUnitPrice.NearestLaterValue(date);
-            if (val == null)
-            {
-                return new DailyValuation(date, 0.0);
-            }
-            double currencyValue = currency == null ? 1.0 : currency.Value(val.Day).Value;
-            double latestValue = fShares.NearestLaterValue(date).Value * val.Value * currencyValue;
-
-            return new DailyValuation(date, latestValue);
-        }
-
-        /// <summary>
-        /// Returns earliest valuation after the date specified.
-        /// </summary>
-        public List<DailyValuation> InvestmentsBetween(DateTime earlierDate, DateTime laterDate, ICurrency currency = null)
-        {
-            List<DailyValuation> values = fInvestments.GetValuesBetween(earlierDate, laterDate);
-            foreach (DailyValuation value in values)
-            {
-                double currencyValue = currency == null ? 1.0 : currency.Value(value.Day).Value;
-                value.SetValue(value.Value * currencyValue);
-            }
-
-            return values;
-        }
-
-        /// <summary>
-        /// returns a list of all investments with the name of the security.
-        /// </summary>
-        public List<DayValue_Named> AllInvestmentsNamed(ICurrency currency = null)
-        {
-            List<DailyValuation> values = fInvestments.GetValuesBetween(fInvestments.FirstDate(), fInvestments.LatestDate());
-            List<DayValue_Named> namedValues = new List<DayValue_Named>();
-            foreach (DailyValuation value in values)
-            {
-                if (value != null && value.Value != 0)
-                {
-                    double currencyValue = currency == null ? 1.0 : currency.Value(value.Day).Value;
-                    value.SetValue(value.Value * currencyValue);
-                    namedValues.Add(new DayValue_Named(Names.Company, Names.Name, value));
-                }
-            }
-            return namedValues;
-        }
-
         /// <inheritdoc/>
-        public double CAR(DateTime earlierTime, DateTime laterTime)
+        public override double CAR(DateTime earlierTime, DateTime laterTime)
         {
             return CAR(earlierTime, laterTime, null);
         }
 
         /// <inheritdoc/>
-        public double CAR(DateTime earlierTime, DateTime laterTime, ICurrency currency = null)
+        public double CAR(DateTime earlierTime, DateTime laterTime, ICurrency currency)
         {
             return FinancialFunctions.CAR(Value(earlierTime, currency), Value(laterTime, currency));
         }
 
-        /// <summary>
-        /// Internal rate of return of the investment over the past timelength months
-        /// </summary>
-        public double IRRTime(DateTime earlierDate, DateTime laterDate, ICurrency currency = null)
+        /// <inheritdoc/>
+        public double IRR(DateTime earlierDate, DateTime laterDate, ICurrency currency = null)
         {
             if (Any())
             {
@@ -189,12 +154,10 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return double.NaN;
         }
 
-        /// <summary>
-        /// Internal rate of return of the investment over entire history
-        /// </summary>
+        /// <inheritdoc/>
         public double IRR(ICurrency currency = null)
         {
-            return IRRTime(FirstValue().Day, LatestValue().Day, currency);
+            return IRR(FirstValue().Day, LatestValue().Day, currency);
         }
     }
 }

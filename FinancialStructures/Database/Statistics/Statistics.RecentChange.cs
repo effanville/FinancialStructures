@@ -105,7 +105,7 @@ namespace FinancialStructures.Database.Statistics
                             DailyValuation needed = cashAcc.LatestValue(currency);
                             if (needed.Value > 0)
                             {
-                                return needed.Value - cashAcc.LastEarlierValuation(needed.Day, currency).Value;
+                                return needed.Value - cashAcc.RecentPreviousValue(needed.Day, currency).Value;
                             }
 
                             return 0.0;

@@ -15,73 +15,6 @@ namespace FinancialStructures.FinanceStructures.Implementation
         private TimeList fShares = new TimeList();
         private TimeList fUnitPrice = new TimeList();
 
-        /// <inheritdoc/>
-        public NameData Names
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// This should only be used for serialisation.
-        /// </summary>
-        public string Name
-        {
-            get
-            {
-                return Names.Name;
-            }
-            set
-            {
-                Names.Name = value;
-            }
-        }
-
-        /// <summary>
-        /// This should only be used for serialisation.
-        /// </summary>
-        public string Company
-        {
-            get
-            {
-                return Names.Company;
-            }
-            set
-            {
-                Names.Company = value;
-            }
-        }
-
-        /// <summary>
-        /// The url for this security.
-        /// </summary>
-        public string Url
-        {
-            get
-            {
-                return Names.Url;
-            }
-            set
-            {
-                Names.Url = value;
-            }
-        }
-
-        /// <summary>
-        /// The currency this security is valued in.
-        /// </summary>
-        public string Currency
-        {
-            get
-            {
-                return Names.Currency;
-            }
-            set
-            {
-                Names.Currency = value;
-            }
-        }
-
         /// <summary>
         /// For backwards compatibility with old systems where this was the true store of sectors.
         /// </summary>
@@ -132,19 +65,6 @@ namespace FinancialStructures.FinanceStructures.Implementation
             }
         }
 
-        /// <inheritdoc/>
-        public TimeList Values
-        {
-            get
-            {
-                throw new Exception();
-            }
-            set
-            {
-                throw new Exception();
-            }
-        }
-
         /// <summary>
         /// An empty constructor.
         /// </summary>
@@ -183,7 +103,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Event that controls when data is edited.
         /// </summary>
-        public event EventHandler<PortfolioEventArgs> DataEdit;
+        public override event EventHandler<PortfolioEventArgs> DataEdit;
 
         /// <summary>
         /// Raises the <see cref="DataEdit"/> event.
@@ -196,7 +116,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Ensures that events for data edit are subscribed to.
         /// </summary>
-        public void SetupEventListening()
+        public override void SetupEventListening()
         {
             UnitPrice.DataEdit += OnDataEdit;
             Shares.DataEdit += OnDataEdit;
@@ -210,13 +130,13 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public ISecurity Copy()
+        public new ISecurity Copy()
         {
             return new Security(Names, fShares, fUnitPrice, fInvestments);
         }
 
         /// <inheritdoc/>
-        public bool Any()
+        public override bool Any()
         {
             if (fUnitPrice.Any() && fShares.Any())
             {
@@ -224,6 +144,29 @@ namespace FinancialStructures.FinanceStructures.Implementation
             }
 
             return false;
+        }
+
+        /// <inheritdoc/>
+        public override int Count()
+        {
+            return fUnitPrice.Count();
+        }
+
+        /// <inheritdoc/>
+        public override bool IsEqualTo(IValueList otherList)
+        {
+            if (otherList is ISecurity otherSecurity)
+            {
+                return IsEqualTo(otherSecurity);
+            }
+
+            return false;
+        }
+
+        /// <inheritdoc/>
+        public bool IsEqualTo(ISecurity otherSecurity)
+        {
+            return base.IsEqualTo(otherSecurity);
         }
     }
 }

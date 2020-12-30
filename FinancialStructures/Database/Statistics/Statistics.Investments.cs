@@ -28,7 +28,7 @@ namespace FinancialStructures.Database.Statistics
                     companies.Sort();
                     foreach (string comp in companies)
                     {
-                        output.AddRange(portfolio.TotalInvestments(Totals.SecurityCompany, Name));
+                        output.AddRange(portfolio.TotalInvestments(Totals.SecurityCompany, new TwoName(comp)));
                     }
                     output.Sort();
                     return output;

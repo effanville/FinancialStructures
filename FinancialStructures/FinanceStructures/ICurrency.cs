@@ -1,5 +1,8 @@
 ﻿namespace FinancialStructures.FinanceStructures
 {
+    /// <summary>
+    /// Used to hold values to provide a currency exchange pair.
+    /// </summary>
     public interface ICurrency : IValueList
     {
         /// <summary>

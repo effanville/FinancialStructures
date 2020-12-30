@@ -13,33 +13,12 @@ namespace FinancialStructures.FinanceStructures.Implementation
     public partial class Security
     {
         /// <inheritdoc/>
-        public override bool TryAddData(DateTime date, double unitPrice, IReportLogger reportLogger = null)
-        {
-            return TryAddData(date, unitPrice, reportLogger: reportLogger);
-        }
-
-        /// <inheritdoc/>
-        public bool TryAddData(DateTime date, double unitPrice, double shares = 0, double investment = 0, IReportLogger reportLogger = null)
-        {
-            if (DoesDateSharesDataExist(date, out int _) || DoesDateInvestmentDataExist(date, out int _) || DoesDateUnitPriceDataExist(date, out int _))
-            {
-                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, $"Security {Names.ToString()} already has NumShares or UnitPrice or Investment data on {date.ToString("d")}.");
-                return false;
-            }
-
-            return fShares.TryAddValue(date, shares, reportLogger) & fUnitPrice.TryAddValue(date, unitPrice, reportLogger) & fInvestments.TryAddValue(date, investment, reportLogger) && ComputeInvestments(reportLogger);
-        }
-
-        /// <inheritdoc/>
         public override bool TryAddOrEditData(DateTime oldDate, DateTime date, double unitPrice, IReportLogger reportLogger = null)
         {
             return TryAddOrEditData(oldDate, date, unitPrice, reportLogger: reportLogger);
         }
 
-        /// <summary>
-        /// Attempts to add data for the date specified.
-        /// If cannot add any value that one wants to, then doesn't add all the values chosen.
-        /// </summary>
+        /// <inheritdoc/>
         public bool TryAddOrEditData(DateTime oldDate, DateTime date, double unitPrice, double shares = 0, double investment = 0, IReportLogger reportLogger = null)
         {
             if (DoesDateSharesDataExist(oldDate, out int _) || DoesDateInvestmentDataExist(oldDate, out int _) || DoesDateUnitPriceDataExist(oldDate, out int _))
@@ -80,11 +59,32 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <summary>
+        /// Trys to get latest data earlier than date requested. Only returns true if all data present.
+        /// </summary>
+        internal bool TryGetEarlierData(DateTime date, out DailyValuation price, out DailyValuation units, out DailyValuation investment)
+        {
+            return fUnitPrice.TryGetNearestEarlierValue(date, out price)
+                & fShares.TryGetNearestEarlierValue(date, out units)
+                & fInvestments.TryGetNearestEarlierValue(date, out investment);
+        }
+
+        /// <summary>
+        /// Tries to delete the data. If it can, it deletes all data specified, then returns true only if all data has been successfully deleted.
+        /// </summary>
+        public override bool TryDeleteData(DateTime date, IReportLogger reportLogger = null)
+        {
+            return fUnitPrice.TryDeleteValue(date, reportLogger)
+                & fShares.TryDeleteValue(date, reportLogger)
+                & fInvestments.TryDeleteValue(date, reportLogger)
+                && ComputeInvestments(reportLogger);
+        }
+
+        /// <summary>
         /// Try to edit data. If any dont have any relevant values, then do not edit
         /// If do have relevant values, then edit that value
         /// If investment value doesnt exist, then add that value.
         /// </summary>
-        public bool TryEditData(DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment, IReportLogger reportLogger = null)
+        private bool TryEditData(DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment, IReportLogger reportLogger = null)
         {
             bool editShares = false;
             bool editUnitPrice = false;
@@ -103,34 +103,6 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return editShares & editUnitPrice && ComputeInvestments(reportLogger);
         }
 
-        internal bool TryAddSector(string sectorName)
-        {
-            if (!IsSectorLinked(sectorName))
-            {
-                _ = Names.Sectors.Add(sectorName);
-                OnDataEdit(this, new EventArgs());
-                return true;
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Trys to get latest data earlier than date requested. Only returns true if all data present.
-        /// </summary>
-        internal bool TryGetEarlierData(DateTime date, out DailyValuation price, out DailyValuation units, out DailyValuation investment)
-        {
-            return fUnitPrice.TryGetNearestEarlierValue(date, out price) & fShares.TryGetNearestEarlierValue(date, out units) & fInvestments.TryGetNearestEarlierValue(date, out investment);
-        }
-
-        /// <summary>
-        /// Tries to delete the data. If it can, it deletes all data specified, then returns true only if all data has been successfully deleted.
-        /// </summary>
-        public override bool TryDeleteData(DateTime date, IReportLogger reportLogger = null)
-        {
-            return fUnitPrice.TryDeleteValue(date, reportLogger) & fShares.TryDeleteValue(date, reportLogger) & fInvestments.TryDeleteValue(date, reportLogger) && ComputeInvestments(reportLogger);
-        }
-
         /// <summary>
         /// Upon a new/edit investment, one needs to recompute the values of the investments
         /// One should not change Inv = 0 or Inv > 0  to ensure that dividend reivestments are not accidentally included in a new investment.
@@ -141,7 +113,6 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// </remarks>
         private bool ComputeInvestments(IReportLogger reportLogger = null)
         {
-            // return true;
             for (int index = 0; index < fInvestments.Count(); index++)
             {
                 DailyValuation investmentValue = fInvestments[index];

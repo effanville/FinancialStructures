@@ -13,36 +13,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
     /// </summary>
     public partial class ValueList
     {
-        /// <inheritdoc/>
-        public bool IsEqualTo(IValueList otherAccount)
-        {
-            return Names.IsEqualTo(otherAccount.Names);
-        }
 
-        /// <inheritdoc/>
-        public int Count()
-        {
-            return Values.Count();
-        }
-
-        /// <summary>
-        /// Retrieves data in a list ordered by date.
-        /// </summary>
-        public List<DailyValuation> GetDataForDisplay()
-        {
-            List<DailyValuation> output = new List<DailyValuation>();
-            if (Values.Any())
-            {
-                foreach (DailyValuation datevalue in Values.GetValuesBetween(Values.FirstDate(), Values.LatestDate()))
-                {
-                    _ = Values.TryGetValue(datevalue.Day, out double UnitPrice);
-                    DailyValuation thisday = new DailyValuation(datevalue.Day, UnitPrice);
-                    output.Add(thisday);
-                }
-            }
-
-            return output;
-        }
 
         /// <inheritdoc/>
         public virtual bool EditNameData(NameData newNames)
@@ -52,25 +23,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return true;
         }
 
-        /// <summary>
-        /// Adds <param name="value"/> to amounts on <param name="date"/> if data doesnt exist.
-        /// </summary>
-        /// <param name="reportLogger">The logger to report outcomes.</param>
-        public virtual bool TryAddData(DateTime date, double value, IReportLogger reportLogger = null)
-        {
-            if (Values.ValueExists(date, out _))
-            {
-                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, "Data already exists.");
-                return false;
-            }
-
-            return Values.TryAddValue(date, value, reportLogger);
-        }
-
-        /// <summary>
-        /// Adds <param name="value"/> to amounts on <param name="date"/> if data with date <param name="oldDate"/> doesnt exist, otherwise edits on that date.
-        /// </summary>
-        /// <param name="reportLogger">The logger to report outcomes.</param>
+        /// <inheritdoc/>
         public virtual bool TryAddOrEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null)
         {
             if (Values.ValueExists(oldDate, out _))
@@ -117,18 +70,13 @@ namespace FinancialStructures.FinanceStructures.Implementation
             }
         }
 
-        /// <summary>
-        /// Removes data on <paramref name="date"/> if it exists.
-        /// </summary>
+        /// <inheritdoc/>
         public virtual bool TryDeleteData(DateTime date, IReportLogger reportLogger = null)
         {
             return Values.TryDeleteValue(date, reportLogger);
         }
 
-        /// <summary>
-        /// Removes a sector associated to this OldCashAccount.
-        /// </summary>
-        /// <param name="sectorName"></param>
+        /// <inheritdoc/>
         public bool TryRemoveSector(string sectorName)
         {
             if (IsSectorLinked(sectorName))

@@ -179,7 +179,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             Assert.AreEqual(1, viewModel.DataNames.Count);
             Assert.AreEqual(1, portfolio.Funds.Count);
 
-            Assert.AreEqual("NewCompany", portfolio.Funds.Single().Company);
+            Assert.AreEqual("NewCompany", portfolio.Funds.Single().Names.Company);
         }
 
         [Test]
@@ -200,8 +200,8 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             Assert.AreEqual(1, viewModel.DataNames.Count);
             Assert.AreEqual(1, portfolio.Funds.Count);
 
-            Assert.AreEqual("NewCompany", portfolio.Funds.Single().Company);
-            Assert.AreEqual("NewUrl", portfolio.Funds.Single().Url);
+            Assert.AreEqual("NewCompany", portfolio.Funds.Single().Names.Company);
+            Assert.AreEqual("NewUrl", portfolio.Funds.Single().Names.Url);
         }
 
         [Test]

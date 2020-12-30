@@ -78,6 +78,17 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         DailyValuation RecentPreviousValue(DateTime date);
 
+        /// <summary>
+        /// Returns the latest valuation on or before the date <paramref name="date"/>.
+        /// </summary>
+        /// <param name="date">The date to query the value for.</param>
+        DailyValuation NearestEarlierValuation(DateTime date);
+
+        /// <summary>
+        /// Calculates the compound annual rate of the Value list.
+        /// </summary>
+        /// <param name="earlierTime">The start time.</param>
+        /// <param name="laterTime">The end time.</param>
         double CAR(DateTime earlierTime, DateTime laterTime);
 
         /// <summary>
@@ -91,11 +102,42 @@ namespace FinancialStructures.FinanceStructures
         /// <param name="newNames">The updated name to set.</param>
         /// <returns>Was updating name successful.</returns>
         bool EditNameData(NameData newNames);
-        bool TryAddData(DateTime date, double value, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Tries to add data for the date specified if it doesnt exist, or edits data if it exists.
+        /// If cannot add any value that one wants to, then doesn't add all the values chosen.
+        /// </summary>
+        /// <param name="oldDate">The existing date held.</param>
+        /// <param name="date">The date to add data to.</param>
+        /// <param name="value">The value data to add.</param>
+        /// <param name="reportLogger">An optional logger to log progress.</param>
+        /// <returns>Was adding or editing successful.</returns>
         bool TryAddOrEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Attempts to delete data on the date specified.
+        /// </summary>
+        /// <param name="date">The date to delete data on.</param>
+        /// <param name="reportLogger">An optional logger to log progress.</param>
+        /// <returns>Whether data was deleted or not.</returns>
         bool TryDeleteData(DateTime date, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Tries to remove a sector from the associated sectors.
+        /// </summary>
+        /// <param name="sectorName">The sector to remove.</param>
+        /// <returns>Whether removal was successful or not.</returns>
         bool TryRemoveSector(string sectorName);
+
+        /// <summary>
+        /// Is the sector listed in this <see cref="IValueList"/>
+        /// </summary>
+        /// <param name="sectorName">The sector to check.</param>
         bool IsSectorLinked(string sectorName);
+
+        /// <summary>
+        /// The total number of sectors associated to this <see cref="IValueList"/>
+        /// </summary>
         int NumberSectors();
     }
 }
