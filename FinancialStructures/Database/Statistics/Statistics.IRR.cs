@@ -145,14 +145,18 @@ namespace FinancialStructures.Database.Statistics
             }
         }
 
+        /// <summary>
+        /// Calculates the IRR for the account with specified account and name.
+        /// </summary>
         public static double IRR(this IPortfolio portfolio, Account accountType, TwoName names)
         {
             switch (accountType)
             {
                 case Account.Security:
                 {
-                    if (portfolio.TryGetSecurity(names, out ISecurity desired))
+                    if (portfolio.TryGetAccount(accountType, names, out IValueList account))
                     {
+                        var desired = account as ISecurity;
                         if (desired.Any())
                         {
                             ICurrency currency = portfolio.Currency(Account.Security, desired);
@@ -170,7 +174,6 @@ namespace FinancialStructures.Database.Statistics
                     {
                         if (desired.Any())
                         {
-                            // ICurrency currency = portfolio.Currency(accountType, desired);
                             return desired.CAR(desired.FirstValue().Day, desired.LatestValue().Day);
                         }
                     }
@@ -184,14 +187,18 @@ namespace FinancialStructures.Database.Statistics
             }
         }
 
+        /// <summary>
+        /// Calculates the IRR for the account with specified account and name between the times specified.
+        /// </summary>
         public static double IRR(this IPortfolio portfolio, Account accountType, TwoName names, DateTime earlierTime, DateTime laterTime)
         {
             switch (accountType)
             {
                 case Account.Security:
                 {
-                    if (portfolio.TryGetSecurity(names, out ISecurity desired))
+                    if (portfolio.TryGetAccount(accountType, names, out IValueList account))
                     {
+                        var desired = account as ISecurity;
                         if (desired.Any())
                         {
                             ICurrency currency = portfolio.Currency(Account.Security, desired);
@@ -209,7 +216,6 @@ namespace FinancialStructures.Database.Statistics
                     {
                         if (desired.Any())
                         {
-                            // ICurrency currency = portfolio.Currency(accountType, desired);
                             return desired.CAR(earlierTime, laterTime);
                         }
                     }

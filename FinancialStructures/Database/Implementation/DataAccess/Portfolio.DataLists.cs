@@ -69,6 +69,7 @@ namespace FinancialStructures.Database.Implementation
             return accounts;
         }
 
+        /// <inheritdoc/>
         public List<ISecurity> SectorSecurities(string sectorName)
         {
             List<ISecurity> securities = new List<ISecurity>();

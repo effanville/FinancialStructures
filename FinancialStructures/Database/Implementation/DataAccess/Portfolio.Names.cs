@@ -28,17 +28,7 @@ namespace FinancialStructures.Database.Implementation
             {
                 case (Account.Security):
                 {
-                    foreach (ISecurity security in Funds)
-                    {
-                        DateTime date = DateTime.MinValue;
-                        if (security.Any())
-                        {
-                            date = security.LatestValue().Day;
-                        }
-
-                        namesAndCompanies.Add(new NameCompDate(security.Names.Company, security.Names.Name, security.Names.Currency, security.Names.Url, security.Names.Sectors, date));
-                    }
-                    break;
+                    return SingleDataNameObtainer(Funds);
                 }
                 case (Account.Currency):
                 {

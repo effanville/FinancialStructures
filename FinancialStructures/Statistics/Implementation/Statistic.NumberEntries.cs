@@ -15,34 +15,12 @@ namespace FinancialStructures.Statistics
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
         {
-            switch (account)
+            if (!portfolio.TryGetAccount(account, name, out var desired))
             {
-                case Account.Security:
-                {
-                    if (!portfolio.TryGetSecurity(name, out var desired))
-                    {
-                        return;
-                    }
-
-                    Value = desired.Count();
-                    return;
-                }
-                case Account.Benchmark:
-                case Account.BankAccount:
-                case Account.Currency:
-                {
-                    if (!portfolio.TryGetAccount(account, name, out var desired))
-                    {
-                        return;
-                    }
-
-                    Value = desired.Count();
-                    return;
-                }
-                default:
-                    return;
+                return;
             }
 
+            Value = desired.Count();
         }
 
         /// <inheritdoc/>

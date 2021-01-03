@@ -33,31 +33,39 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Totals.Security:
                 {
-                    if (portfolio.TryGetSecurity(names, out ISecurity desired))
+                    if (portfolio.TryGetAccount(Account.Security, names, out IValueList desired))
                     {
                         if (desired.Any())
                         {
-                            ICurrency currency = portfolio.Currency(Account.Security, desired);
-                            return desired.Value(date, currency).Value / portfolio.TotalValue(Totals.Security, date);
+                            var security = desired as ISecurity;
+                            ICurrency currency = portfolio.Currency(Account.Security, security);
+                            return security.Value(date, currency).Value / portfolio.TotalValue(Totals.Security, date);
                         }
                     }
 
                     return 1.0;
                 }
                 case Totals.BankAccount:
+                {
+                    if (portfolio.TryGetAccount(AccountToTotalsConverter.ConvertTotalToAccount(elementType), names, out IValueList desired))
+                    {
+                        var cashAcc = desired as ICashAccount;
+
+                        if (cashAcc.Any())
+                        {
+                            ICurrency currency = portfolio.Currency(Account.BankAccount, cashAcc);
+                            return cashAcc.Value(date, currency).Value / portfolio.TotalValue(Totals.BankAccount, date);
+                        }
+                    }
+
+                    return double.NaN;
+                }
                 case Totals.Benchmark:
                 case Totals.Currency:
                 {
-                    if (portfolio.TryGetAccount(Account.BankAccount, names, out IValueList desired))
+                    if (portfolio.TryGetAccount(AccountToTotalsConverter.ConvertTotalToAccount(elementType), names, out IValueList desired))
                     {
-                        if (desired is ICashAccount cashAcc)
-                        {
-                            if (cashAcc.Any())
-                            {
-                                ICurrency currency = portfolio.Currency(Account.BankAccount, cashAcc);
-                                return cashAcc.Value(date, currency).Value / portfolio.TotalValue(Totals.BankAccount, date);
-                            }
-                        }
+                        return desired.Value(date).Value / portfolio.TotalValue(elementType, date);
                     }
 
                     return double.NaN;

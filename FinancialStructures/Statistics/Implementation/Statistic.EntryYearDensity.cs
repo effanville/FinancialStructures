@@ -16,34 +16,12 @@ namespace FinancialStructures.Statistics
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
         {
-            switch (account)
+            if (!portfolio.TryGetAccount(account, name, out var bankAcc))
             {
-                case Account.Security:
-                {
-                    if (!portfolio.TryGetSecurity(name, out var security))
-                    {
-                        return;
-                    }
-
-                    Value = (security.LatestValue().Day - security.FirstValue().Day).Days / ((double)365 * security.Count());
-                    return;
-                }
-                case Account.Benchmark:
-                case Account.BankAccount:
-                case Account.Currency:
-                {
-                    if (!portfolio.TryGetAccount(account, name, out var bankAcc))
-                    {
-                        return;
-                    }
-
-                    Value = ((bankAcc.LatestValue().Day - bankAcc.FirstValue().Day).Days) / ((double)365 * bankAcc.Count());
-                    return;
-                }
-                default:
-                    return;
+                return;
             }
 
+            Value = ((bankAcc.LatestValue().Day - bankAcc.FirstValue().Day).Days) / ((double)365 * bankAcc.Count());
         }
 
         /// <inheritdoc/>

@@ -54,15 +54,6 @@ namespace FinancialStructures.Statistics
             switch (account)
             {
                 case Account.Security:
-                {
-                    if (!portfolio.TryGetSecurity(name, out var desired))
-                    {
-                        return;
-                    }
-
-                    StringValue = desired.Names.SectorsFlat;
-                    return;
-                }
                 case Account.BankAccount:
                 case Account.Currency:
                 {
@@ -75,6 +66,7 @@ namespace FinancialStructures.Statistics
                     return;
                 }
                 default:
+                case Account.Benchmark:
                     return;
             }
         }

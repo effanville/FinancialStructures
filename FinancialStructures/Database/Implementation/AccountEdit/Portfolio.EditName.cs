@@ -14,17 +14,7 @@ namespace FinancialStructures.Database.Implementation
             {
                 case (Account.Security):
                 {
-                    for (int fundIndex = 0; fundIndex < NumberOf(Account.Security); fundIndex++)
-                    {
-                        if (oldName.IsEqualTo(Funds[fundIndex].Names))
-                        {
-                            OnPortfolioChanged(Funds[fundIndex], new PortfolioEventArgs(Account.Security));
-                            return Funds[fundIndex].EditNameData(newName);
-                        }
-                    }
-
-                    _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Renaming {elementType}: Could not find {elementType} with name {oldName}.");
-                    return false;
+                    return TryEditNameSingleList(Funds, elementType, oldName, newName, reportLogger);
                 }
                 case (Account.Currency):
                 {

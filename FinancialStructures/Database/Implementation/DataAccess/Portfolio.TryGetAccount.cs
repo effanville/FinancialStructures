@@ -6,21 +6,6 @@ namespace FinancialStructures.Database.Implementation
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public bool TryGetSecurity(TwoName names, out ISecurity desired)
-        {
-            foreach (ISecurity sec in Funds)
-            {
-                if (names.IsEqualTo(sec.Names))
-                {
-                    desired = sec.Copy();
-                    return true;
-                }
-            }
-            desired = null;
-            return false;
-        }
-
-        /// <inheritdoc/>
         public bool TryGetAccount(Account accountType, TwoName names, out IValueList desired)
         {
             bool success = false;

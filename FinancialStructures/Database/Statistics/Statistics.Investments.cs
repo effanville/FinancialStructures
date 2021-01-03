@@ -78,12 +78,13 @@ namespace FinancialStructures.Database.Statistics
             {
                 case Account.Security:
                 {
-                    if (portfolio.TryGetSecurity(names, out ISecurity desired))
+                    if (portfolio.TryGetAccount(Account.Security, names, out IValueList desired))
                     {
                         if (desired.Any())
                         {
-                            ICurrency currency = portfolio.Currency(Account.Security, desired);
-                            return desired.AllInvestmentsNamed(currency);
+                            var security = desired as ISecurity;
+                            ICurrency currency = portfolio.Currency(Account.Security, security);
+                            return security.AllInvestmentsNamed(currency);
                         }
                     }
 

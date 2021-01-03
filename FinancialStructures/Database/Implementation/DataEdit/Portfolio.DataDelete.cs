@@ -15,16 +15,7 @@ namespace FinancialStructures.Database.Implementation
             {
                 case (Account.Security):
                 {
-                    for (int fundIndex = 0; fundIndex < NumberOf(Account.Security); fundIndex++)
-                    {
-                        if (name.IsEqualTo(Funds[fundIndex].Names))
-                        {
-                            // now edit data
-                            return Funds[fundIndex].TryDeleteData(date, reportLogger);
-                        }
-                    }
-
-                    break;
+                    return TryDeleteSingleListData(Funds, elementType, name, date, reportLogger);
                 }
                 case (Account.Currency):
                 {
@@ -42,10 +33,6 @@ namespace FinancialStructures.Database.Implementation
                     _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.DeletingData, $"Editing an Unknown type.");
                     return false;
             }
-
-
-            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.DeletingData, $"Could not find {elementType.ToString()} - {name.ToString()}.");
-            return false;
         }
 
         private bool TryDeleteSingleListData<T>(List<T> values, Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null) where T : IValueList

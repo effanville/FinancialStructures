@@ -77,10 +77,11 @@ namespace FinancialStructures.Database.Statistics
             {
                 case (Account.Security):
                 {
-                    if (portfolio.TryGetSecurity(names, out ISecurity desired))
+                    if (portfolio.TryGetAccount(Account.Security, names, out IValueList security))
                     {
-                        if (desired.Any())
+                        if (security.Any())
                         {
+                            var desired = security as ISecurity;
                             ICurrency currency = portfolio.Currency(Account.Security, desired);
                             DailyValuation needed = desired.LatestValue(currency);
                             if (needed.Value > 0)

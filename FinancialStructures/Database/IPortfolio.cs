@@ -249,11 +249,6 @@ namespace FinancialStructures.Database
         List<DailyValuation> NumberData(Account elementType, TwoName name, IReportLogger reportLogger = null);
 
         /// <summary>
-        /// Outputs a copy of the security if it exists.
-        /// </summary>
-        bool TryGetSecurity(TwoName names, out ISecurity desired);
-
-        /// <summary>
         /// Outputs the account if it exists.
         /// </summary>
         /// <param name="accountType">The type of element to find.</param>

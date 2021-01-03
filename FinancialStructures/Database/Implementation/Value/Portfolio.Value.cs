@@ -19,12 +19,14 @@ namespace FinancialStructures.Database.Implementation
             {
                 case (Account.Security):
                 {
-                    if (!TryGetSecurity(name, out ISecurity desired) || !desired.Any())
+                    if (!TryGetAccount(Account.Security, name, out IValueList desired) || !desired.Any())
                     {
                         return double.NaN;
                     }
-                    ICurrency currency = Currency(Account.Security, desired);
-                    return desired.Value(date, currency).Value;
+
+                    var security = desired as ISecurity;
+                    ICurrency currency = Currency(Account.Security, security);
+                    return security.Value(date, currency).Value;
                 }
                 case (Account.Currency):
                 case (Account.Benchmark):
@@ -32,29 +34,25 @@ namespace FinancialStructures.Database.Implementation
                     if (!TryGetAccount(elementType, name, out IValueList desired))
                     {
                         return 1.0;
-
                     }
 
                     return desired.Value(date).Value;
                 }
                 case (Account.BankAccount):
                 {
-                    foreach (ICashAccount account in BankAccounts)
+                    if (!TryGetAccount(elementType, name, out IValueList account))
                     {
-                        if (account.Names.IsEqualTo(name))
-                        {
-                            ICurrency currency = Currency(elementType, account);
-                            return account.Value(date, currency).Value;
-                        }
+                        return double.NaN;
                     }
 
-                    return double.NaN;
+                    var bankAccount = account as ICashAccount;
+                    ICurrency currency = Currency(elementType, bankAccount);
+                    return bankAccount.Value(date, currency).Value;
+
                 }
                 default:
-                    break;
+                    return 0.0;
             }
-
-            return 0.0;
         }
     }
 }
