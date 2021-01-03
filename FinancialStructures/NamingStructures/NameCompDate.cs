@@ -5,6 +5,7 @@ namespace FinancialStructures.NamingStructures
 {
     public class NameCompDate : NameData
     {
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             if (obj is NameCompDate otherName)
@@ -18,6 +19,7 @@ namespace FinancialStructures.NamingStructures
             return false;
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             return DateToRecord.GetHashCode() * 356 + base.GetHashCode();

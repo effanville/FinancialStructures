@@ -7,6 +7,7 @@ namespace FinancialStructures.NamingStructures
     /// </summary>
     public class NameData : TwoName
     {
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             if (obj is NameData otherName)
@@ -101,6 +102,7 @@ namespace FinancialStructures.NamingStructures
             return false;
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             int currencyVal = Currency != null ? Currency.GetHashCode() : 0;

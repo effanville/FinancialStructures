@@ -4,13 +4,17 @@ using StructureCommon.DataStructures;
 
 namespace FinancialStructures.DataStructures
 {
+    /// <summary>
+    /// Wraps a <see cref="TwoName"/> around a <see cref="DailyValuation"/>.
+    /// </summary>
     public class DayValue_Named : DailyValuation
     {
+        /// <inheritdoc/>
         public override int CompareTo(object obj)
         {
             if (obj is DayValue_Named value)
             {
-                return Names.CompareTo(value.Names);
+                return Names.CompareTo(value.Names) + base.CompareTo(value);
             }
 
             return 0;

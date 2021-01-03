@@ -1,53 +1,13 @@
 ﻿using System;
+using FinancialStructures.FinanceStructures;
 
 namespace FinancialStructures.DataStructures
 {
+    /// <summary>
+    /// Contains a single day record of the data in a <see cref="ISecurity"/>.
+    /// </summary>
     public class SecurityDayData : IComparable
     {
-        public override string ToString()
-        {
-            return string.Concat(Date.Day.ToString().PadLeft(2, '0'), "/", Date.Month.ToString().PadLeft(2, '0'), "/", Date.Year, ", ", UnitPrice.ToString(), ", ", ShareNo.ToString(), ", ", NewInvestment.ToString());
-        }
-
-        public int CompareTo(object obj)
-        {
-            if (obj is SecurityDayData dailyView)
-            {
-                return DateTime.Compare(Date, dailyView.Date);
-            }
-            return 0;
-        }
-
-        public SecurityDayData Copy()
-        {
-            return new SecurityDayData(Date, UnitPrice, ShareNo, NewInvestment, NewValue);
-        }
-
-        public SecurityDayData()
-        {
-            NewValue = true;
-            Date = DateTime.Today;
-        }
-
-        public SecurityDayData(DateTime date, double unitPrice, double shareNo, double newInvestment, bool newValue = true)
-        {
-            Date = date;
-            UnitPrice = unitPrice;
-            ShareNo = shareNo;
-            NewInvestment = newInvestment;
-            NewValue = newValue;
-        }
-
-        /// <summary>
-        /// Whether any alterations have been made to thsi.
-        /// </summary>
-        [Obsolete("This method will soon be deprecated.")]
-        public bool NewValue
-        {
-            get;
-            set;
-        }
-
         /// <summary>
         /// The date of this valuation.
         /// </summary>
@@ -93,6 +53,49 @@ namespace FinancialStructures.DataStructures
         {
             get;
             set;
+        }
+
+        /// <summary>
+        /// Create an empty <see cref="SecurityDayData"/>
+        /// </summary>
+        public SecurityDayData()
+        {
+            Date = DateTime.Today;
+        }
+
+        /// <summary>
+        /// Create a <see cref="SecurityDayData"/> from the specified values.
+        /// </summary>
+        public SecurityDayData(DateTime date, double unitPrice, double shareNo, double newInvestment)
+        {
+            Date = date;
+            UnitPrice = unitPrice;
+            ShareNo = shareNo;
+            NewInvestment = newInvestment;
+        }
+
+        /// <summary>
+        /// Create a copy of this <see cref="SecurityDayData"/>
+        /// </summary>
+        public SecurityDayData Copy()
+        {
+            return new SecurityDayData(Date, UnitPrice, ShareNo, NewInvestment);
+        }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return string.Concat(Date.Day.ToString().PadLeft(2, '0'), "/", Date.Month.ToString().PadLeft(2, '0'), "/", Date.Year, ", ", UnitPrice.ToString(), ", ", ShareNo.ToString(), ", ", NewInvestment.ToString());
+        }
+
+        /// <inheritdoc/>
+        public int CompareTo(object obj)
+        {
+            if (obj is SecurityDayData dailyView)
+            {
+                return DateTime.Compare(Date, dailyView.Date);
+            }
+            return 0;
         }
     }
 }
