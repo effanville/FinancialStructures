@@ -12,7 +12,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
         public void TryGetSecurity()
         {
             var constructor = new DatabaseConstructor();
-            constructor.WithSecurityFromName("Company", "name");
+            _ = constructor.WithSecurityFromName("Company", "name");
 
             var portfolio = constructor.database;
 
@@ -28,7 +28,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
         public void TryGetNoSecurity()
         {
             var constructor = new DatabaseConstructor();
-            constructor.WithSecurityFromName("Company", "name");
+            _ = constructor.WithSecurityFromName("Company", "name");
 
             var portfolio = constructor.database;
 
@@ -42,7 +42,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
         public void TryGetSector()
         {
             var constructor = new DatabaseConstructor();
-            constructor.WithSectorFromName("Company", "name");
+            _ = constructor.WithSectorFromName("Company", "name");
 
             var portfolio = constructor.database;
 
@@ -58,7 +58,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
         public void TryGetNoSector()
         {
             var constructor = new DatabaseConstructor();
-            constructor.WithSectorFromName("Company", "name");
+            _ = constructor.WithSectorFromName("Company", "name");
 
             var portfolio = constructor.database;
 

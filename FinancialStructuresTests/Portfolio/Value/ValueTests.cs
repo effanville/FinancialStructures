@@ -13,7 +13,7 @@ namespace FinancialStructures.Tests.Database.Value
         public void LatestValueTests(Account accountType, double expectedValue)
         {
             var constructor = new DatabaseConstructor();
-            constructor.WithDefaultFromType(accountType);
+            _ = constructor.WithDefaultFromType(accountType);
             var portfolio = constructor.database;
             Assert.AreEqual(expectedValue, portfolio.LatestValue(accountType, constructor.DefaultNameQuery(accountType)));
 
@@ -31,7 +31,7 @@ namespace FinancialStructures.Tests.Database.Value
         public void ValueTest(DateTime date, double expectedValue)
         {
             var constructor = new DatabaseConstructor();
-            constructor.WithDefaultSecurity();
+            _ = constructor.WithDefaultSecurity();
             var portfolio = constructor.database;
             Assert.AreEqual(expectedValue, portfolio.Value(Account.Security, constructor.DefaultNameQuery(Account.Security), date));
         }
@@ -48,7 +48,7 @@ namespace FinancialStructures.Tests.Database.Value
         public void BankAccountValuesTest(DateTime date, double expectedValue)
         {
             var constructor = new DatabaseConstructor();
-            constructor.WithDefaultBankAccount();
+            _ = constructor.WithDefaultBankAccount();
             var portfolio = constructor.database;
             Assert.AreEqual(expectedValue, portfolio.Value(Account.BankAccount, constructor.DefaultNameQuery(Account.BankAccount), date));
         }

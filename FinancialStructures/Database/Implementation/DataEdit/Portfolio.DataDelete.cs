@@ -45,7 +45,7 @@ namespace FinancialStructures.Database.Implementation
                 }
             }
 
-            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.DeletingData, $"Could not find {elementType.ToString()} - {name.ToString()}.");
+            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.DeletingData, $"Could not find {elementType} - {name}.");
             return false;
         }
     }

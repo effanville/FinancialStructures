@@ -31,7 +31,7 @@ namespace FinancialStructures.Database.Implementation
             {
                 case (Account.Security):
                 {
-                    return false;
+                    return SingleListAddOrEdit(Funds, name, oldData, data, reportLogger);
                 }
                 case (Account.Currency):
                 {

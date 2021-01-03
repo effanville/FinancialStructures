@@ -1,12 +1,13 @@
 ﻿namespace FinancialStructures.Database
 {
+    /// <summary>
+    /// Provides conversions between <see cref="Account"/> and <see cref="Totals"/> enums.
+    /// </summary>
     public static class AccountToTotalsConverter
     {
         /// <summary>
         /// Converts a Account enum to a Totals enum.
         /// </summary>
-        /// <param name="element"></param>
-        /// <returns></returns>
         public static Totals ConvertAccountToTotal(Account element)
         {
             switch (element)
@@ -38,8 +39,6 @@
         /// <summary>
         /// Converts a Account enum to a Totals enum.
         /// </summary>
-        /// <param name="element"></param>
-        /// <returns></returns>
         public static Account ConvertTotalToAccount(Totals element)
         {
             switch (element)
@@ -81,8 +80,6 @@
         /// <summary>
         /// Converts a Account enum to a Totals enum.
         /// </summary>
-        /// <param name="element"></param>
-        /// <returns></returns>
         public static Totals ConvertTotalToCompanyTotal(Totals element)
         {
             switch (element)
