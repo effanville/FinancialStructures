@@ -152,8 +152,11 @@ namespace FinancialStructures.Database
         /// <inheritdoc/>
         public void SetFilePath(string path)
         {
-            fDatabaseFilePath = path;
-            OnPortfolioChanged(fDatabaseFilePath, new PortfolioEventArgs());
+            if (fDatabaseFilePath != path)
+            {
+                fDatabaseFilePath = path;
+                OnPortfolioChanged(fDatabaseFilePath, new PortfolioEventArgs());
+            }
         }
 
         /// <inheritdoc/>

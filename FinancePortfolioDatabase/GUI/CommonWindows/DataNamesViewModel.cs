@@ -133,11 +133,14 @@ namespace FinanceCommonViewModels
             {
                 if (dg.CurrentItem != null && dg.CurrentItem is NameCompDate name)
                 {
-                    int index = DataNames.FindIndex(x => x.IsEqualTo(name));
-                    if (fSelectedRowIndex == -1 || fSelectedRowIndex != index)
+                    if (DataNames != null)
                     {
-                        fSelectedRowIndex = index;
-                        fPreEditSelectedName = name.Copy();
+                        int index = DataNames.FindIndex(x => x.IsEqualTo(name));
+                        if (fSelectedRowIndex == -1 || fSelectedRowIndex != index)
+                        {
+                            fSelectedRowIndex = index;
+                            fPreEditSelectedName = name.Copy();
+                        }
                     }
                 }
             }
