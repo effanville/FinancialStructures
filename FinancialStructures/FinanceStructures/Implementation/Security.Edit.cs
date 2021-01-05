@@ -15,7 +15,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public override bool TryAddOrEditData(DateTime oldDate, DateTime date, double unitPrice, IReportLogger reportLogger = null)
         {
-            return TryAddOrEditData(oldDate, date, unitPrice, reportLogger: reportLogger);
+            double shares = Shares.Value(date).Value;
+            double investment = Investments.Value(date).Value;
+            return TryAddOrEditData(oldDate, date, unitPrice, shares, investment, reportLogger: reportLogger);
         }
 
         /// <inheritdoc/>
