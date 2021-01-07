@@ -9,23 +9,6 @@ namespace FinancialStructures.DataStructures
     /// </summary>
     public class DayValue_Named : DailyValuation
     {
-        /// <inheritdoc/>
-        public override int CompareTo(object obj)
-        {
-            if (obj is DayValue_Named value)
-            {
-                return Names.CompareTo(value.Names) + base.CompareTo(value);
-            }
-
-            return 0;
-        }
-
-        /// <inheritdoc/>
-        public override string ToString()
-        {
-            return Names.ToString() + "-" + base.ToString();
-        }
-
         /// <summary>
         /// Names associated to the values.
         /// </summary>
@@ -57,6 +40,23 @@ namespace FinancialStructures.DataStructures
         public DayValue_Named(string company, string name, DailyValuation toAddOnto)
             : this(company, name, toAddOnto.Day, toAddOnto.Value)
         {
+        }
+
+        /// <inheritdoc/>
+        public override int CompareTo(object obj)
+        {
+            if (obj is DayValue_Named value)
+            {
+                return Names.CompareTo(value.Names) + base.CompareTo(value);
+            }
+
+            return 0;
+        }
+
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return Names.ToString() + "-" + base.ToString();
         }
     }
 }
