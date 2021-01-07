@@ -3,8 +3,44 @@ using System.Collections.Generic;
 
 namespace FinancialStructures.NamingStructures
 {
+    /// <summary>
+    /// A display class for showing names together with a date.
+    /// Typically used to show the account information together with last known date.
+    /// </summary>
     public class NameCompDate : NameData
     {
+        /// <summary>
+        /// The date associated with this object.
+        /// </summary>
+        public DateTime DateToRecord
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// Constructor setting all parameters.
+        /// </summary>
+        public NameCompDate(string company, string name, string currency, string url, HashSet<string> sectors, DateTime date)
+            : base(company, name, currency, url, sectors)
+        {
+            DateToRecord = date;
+        }
+
+        internal NameCompDate(string company, string name)
+            : base(company, name)
+        {
+            DateToRecord = DateTime.MinValue;
+        }
+
+        /// <summary>
+        /// Provides an exact copy of the <see cref="NameCompDate"/>.
+        /// </summary>
+        public new NameCompDate Copy()
+        {
+            return new NameCompDate(Company, Name, Currency, Url, Sectors, DateToRecord);
+        }
+
         /// <inheritdoc/>
         public override bool Equals(object obj)
         {
@@ -23,43 +59,6 @@ namespace FinancialStructures.NamingStructures
         public override int GetHashCode()
         {
             return DateToRecord.GetHashCode() * 356 + base.GetHashCode();
-        }
-
-        private DateTime fDateToRecord;
-        public DateTime DateToRecord
-        {
-            get
-            {
-                return fDateToRecord;
-            }
-            set
-            {
-                fDateToRecord = value;
-            }
-        }
-
-        public NameCompDate() : base()
-        {
-        }
-
-        public NameCompDate(string company, string name, string currency, string url, HashSet<string> sectors, DateTime date) : base(company, name, currency, url, sectors)
-        {
-            fDateToRecord = date;
-        }
-
-        public NameCompDate(string company, string name, string currency, string url) : base(company, name, currency, url)
-        {
-            fDateToRecord = DateTime.MinValue;
-        }
-
-        public NameCompDate(string company, string name) : base(company, name)
-        {
-            fDateToRecord = DateTime.MinValue;
-        }
-
-        public new NameCompDate Copy()
-        {
-            return new NameCompDate(Company, Name, Currency, Url, Sectors, DateToRecord);
         }
     }
 }

@@ -7,6 +7,63 @@ namespace FinancialStructures.NamingStructures
     /// </summary>
     public class TwoName : IComparable
     {
+        private string fCompany;
+        private string fName;
+
+        /// <summary>
+        /// The primary name (the company name)
+        /// </summary>
+        public string Company
+        {
+            get
+            {
+                return fCompany;
+            }
+            set
+            {
+                fCompany = value;
+            }
+        }
+
+        /// <summary>
+        /// The secondary name.
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return fName;
+            }
+            set
+            {
+                fName = value;
+            }
+        }
+
+        /// <summary>
+        /// Constructor with both names.
+        /// </summary>
+        public TwoName(string primaryName, string secondaryName)
+        {
+            fCompany = primaryName;
+            fName = secondaryName;
+        }
+
+        /// <summary>
+        /// Allows for construction with just one name.
+        /// </summary>
+        public TwoName(string primaryName)
+        {
+            fCompany = primaryName;
+        }
+
+        /// <summary>
+        /// Parameterless constructor.
+        /// </summary>
+        public TwoName()
+        {
+        }
+
         /// <summary>
         /// Display of names.
         /// </summary>
@@ -58,15 +115,13 @@ namespace FinancialStructures.NamingStructures
             return 0;
         }
 
-        /// <summary>
-        /// Returns whether another object is the same as this one.
-        /// </summary>
+        /// <inheritdoc/>
         public override bool Equals(object obj)
         {
             return EqualityMethod(obj);
-
         }
 
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
             int companyVal = Company != null ? Company.GetHashCode() * 365 : 0;
@@ -127,64 +182,6 @@ namespace FinancialStructures.NamingStructures
             }
 
             return false;
-        }
-
-        private string fCompany;
-
-        /// <summary>
-        /// The primary name (the company name)
-        /// </summary>
-        public string Company
-        {
-            get
-            {
-                return fCompany;
-            }
-            set
-            {
-                fCompany = value;
-            }
-        }
-
-        private string fName;
-
-        /// <summary>
-        /// The secondary name.
-        /// </summary>
-        public string Name
-        {
-            get
-            {
-                return fName;
-            }
-            set
-            {
-                fName = value;
-            }
-        }
-
-        /// <summary>
-        /// Constructor with both names.
-        /// </summary>
-        public TwoName(string primaryName, string secondaryName)
-        {
-            fCompany = primaryName;
-            fName = secondaryName;
-        }
-
-        /// <summary>
-        /// Allows for construction with just one name.
-        /// </summary>
-        public TwoName(string primaryName)
-        {
-            fCompany = primaryName;
-        }
-
-        /// <summary>
-        /// Parameterless constructor.
-        /// </summary>
-        public TwoName()
-        {
         }
     }
 }
