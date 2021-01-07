@@ -1,98 +1,96 @@
 ﻿<UserControl x:Class="FinanceWindows.StatsWindow.StatisticsCharts"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:ucdo="clr-namespace:UICommon.DisplayObjects;assembly=UICommon" 
+             xmlns:ucdo="clr-namespace:UICommon.DisplayObjects;assembly=UICommon"
              xmlns:cht="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             mc:Ignorable="d"
+             d:DesignHeight="450"
+             d:DesignWidth="800">
     <Grid Height="Auto"
-                      VerticalAlignment="Stretch"
-                      HorizontalAlignment="Stretch"
-                      ScrollViewer.VerticalScrollBarVisibility="Visible">
+          VerticalAlignment="Stretch"
+          HorizontalAlignment="Stretch"
+          ScrollViewer.VerticalScrollBarVisibility="Visible">
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <cht:Chart Title="Total Invested Over Time"
-                               Style="{StaticResource ChartStyle1}"
-                               Height="Auto"
-                               Width="Auto"
-                               Grid.Row="0"
-                               Grid.Column="0">
+                   Style="{StaticResource ChartStyle1}"
+                   Height="Auto"
+                   Width="Auto"
+                   Grid.Row="0"
+                   Grid.Column="0">
             <cht:Chart.Series>
                 <cht:LineSeries Title="Total"
-                                            ItemsSource="{Binding Path=HistoryStats}"
-                                            DataPointStyle="{StaticResource InvisibleDataPointBlue}"
-                                            IndependentValueBinding="{Binding Path=TotalValue.Day}"
-                                            DependentValueBinding="{Binding Path=TotalValue.Value}">
-                </cht:LineSeries>
-                <cht:LineSeries Title="Total Securities" 
-                                            ItemsSource="{Binding Path=HistoryStats}"
-                                            DataPointStyle="{StaticResource InvisibleDataPointRed}"
-                                            IndependentValueBinding="{Binding Path=SecurityValue.Day}"
-                                            DependentValueBinding="{Binding Path=SecurityValue.Value}">
-                </cht:LineSeries>
-                <cht:LineSeries Title="Total BankAccounts" 
-                                            ItemsSource="{Binding Path=HistoryStats}"
-                                            DataPointStyle="{StaticResource InvisibleDataPointGreen}"
-                                            IndependentValueBinding="{Binding Path=BankAccValue.Day}"
-                                            DependentValueBinding="{Binding Path=BankAccValue.Value}">
-                </cht:LineSeries>
+                                ItemsSource="{Binding Path=HistoryStats}"
+                                DataPointStyle="{StaticResource InvisibleDataPointBlue}"
+                                IndependentValueBinding="{Binding Path=TotalValue.Day}"
+                                DependentValueBinding="{Binding Path=TotalValue.Value}"></cht:LineSeries>
+                <cht:LineSeries Title="Total Securities"
+                                ItemsSource="{Binding Path=HistoryStats}"
+                                DataPointStyle="{StaticResource InvisibleDataPointRed}"
+                                IndependentValueBinding="{Binding Path=SecurityValue.Day}"
+                                DependentValueBinding="{Binding Path=SecurityValue.Value}"></cht:LineSeries>
+                <cht:LineSeries Title="Total BankAccounts"
+                                ItemsSource="{Binding Path=HistoryStats}"
+                                DataPointStyle="{StaticResource InvisibleDataPointGreen}"
+                                IndependentValueBinding="{Binding Path=BankAccValue.Day}"
+                                DependentValueBinding="{Binding Path=BankAccValue.Value}"></cht:LineSeries>
             </cht:Chart.Series>
         </cht:Chart>
         <ucdo:BindableChart x:Name="securityCarChart"
-                               Title="Sector IRR over time"
-                               Style="{StaticResource ChartStyle1}"
-                               Height="Auto"
-                               Width="Auto"
-                               Grid.Row="0"
-                   SeriesSource="{Binding IRRLines}"
-                               Grid.Column="1">
-        </ucdo:BindableChart>
+                            Title="Sector IRR over time"
+                            Style="{StaticResource ChartStyle1}"
+                            Height="Auto"
+                            Width="Auto"
+                            Grid.Row="0"
+                            SeriesSource="{Binding IRRLines}"
+                            Grid.Column="1"></ucdo:BindableChart>
         <Grid Grid.Row="1"
-                          Grid.Column="0">
+              Grid.Column="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-
             <cht:Chart Title="Security by company"
-                                   Height="Auto"
-                                   Width="Auto"
-                                   Grid.Column="0">
+                       Height="Auto"
+                       Width="Auto"
+                       Grid.Column="0">
                 <cht:PieSeries Title="Distribution"
-                                           ItemsSource="{Binding Path=DistributionValues}"
-                                           IndependentValueBinding="{Binding Path=Company}"
-                                           DependentValueBinding="{Binding Path=Value}">
-                </cht:PieSeries>
+                               ItemsSource="{Binding Path=SecurityValues}"
+                               IndependentValueBinding="{Binding Path=Key}"
+                               DependentValueBinding="{Binding Path=Value.Value}"></cht:PieSeries>
             </cht:Chart>
             <cht:Chart Title="BankAccount By Company"
-                                   Height="Auto"
-                                   Width="Auto"
-                                   Grid.Column="1">
-                <cht:PieSeries 
-                                       ItemsSource="{Binding Path=DistributionValues2}"
-                                       IndependentValueBinding="{Binding Path=Company}"
-                                       DependentValueBinding="{Binding Path=Value}">
-                </cht:PieSeries>
+                       Height="Auto"
+                       Width="Auto"
+                       Grid.Column="1">
+                <cht:PieSeries ItemsSource="{Binding Path=BankAccountValues}"
+                               IndependentValueBinding="{Binding Path=Key}"
+                               DependentValueBinding="{Binding Path=Value.Value}"></cht:PieSeries>
             </cht:Chart>
         </Grid>
         <cht:Chart Title="Security By Sector"
-                               Height="Auto"
-                               Width="Auto"
-                               Grid.Row="1"
-                               Grid.Column="1">
-            <cht:ColumnSeries  Title=""
-                                   ItemsSource="{Binding Path=DistributionValues3}"
-                                   IndependentValueBinding="{Binding Path=Company}"
-                                   DependentValueBinding="{Binding Path=Value}">
-            </cht:ColumnSeries>
+                   Height="Auto"
+                   Width="Auto"
+                   Grid.Row="1"
+                   Grid.Column="1">
+            <cht:Chart.LegendStyle>
+                <Style TargetType="cht:Legend">
+                    <Setter Property="Width"
+                            Value="0" />
+                </Style>
+            </cht:Chart.LegendStyle>
+            <cht:ColumnSeries Title=""
+                              ItemsSource="{Binding Path=SectorValues}"
+                              IndependentValueBinding="{Binding Path=Key}"
+                              DependentValueBinding="{Binding Path=Value.Value}"></cht:ColumnSeries>
         </cht:Chart>
     </Grid>
 </UserControl>
