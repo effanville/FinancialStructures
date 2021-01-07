@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using FinancialStructures.StatisticStructures;
+using FinancialStructures.DataStructures;
 using StructureCommon.Reporting;
 
 namespace FinancialStructures.DataExporters

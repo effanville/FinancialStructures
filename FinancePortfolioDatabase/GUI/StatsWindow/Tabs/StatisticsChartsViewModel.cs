@@ -7,7 +7,7 @@ using System.Windows.Controls.DataVisualization.Charting;
 using System.Windows.Media;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
-using FinancialStructures.StatisticStructures;
+using FinancialStructures.DataStructures;
 using StructureCommon.DataStructures;
 
 namespace FinanceViewModels.StatsViewModels

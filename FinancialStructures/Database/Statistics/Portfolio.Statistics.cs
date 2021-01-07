@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using FinancialStructures.StatisticStructures;
+using FinancialStructures.DataStructures;
 
 namespace FinancialStructures.Database.Statistics
 {

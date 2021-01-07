@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
-using FinancialStructures.DataStructures;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 using StructureCommon.Extensions;
 
-namespace FinancialStructures.StatisticStructures
+namespace FinancialStructures.DataStructures
 {
     /// <summary>
     /// Stores all values and some IRRs of a portfolio on a given day
