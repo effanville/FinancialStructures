@@ -122,7 +122,8 @@ namespace FinanceViewModels.StatsViewModels
 
         public void UpdateChart()
         {
-            IRRLines.Clear();
+            IRRLines = null;
+            var newValues = new ObservableCollection<LineSeries>();
             if (HistoryStats.Count > 1)
             {
                 var sectorNames = fPortfolio.GetSecuritiesSectors();
@@ -152,9 +153,11 @@ namespace FinanceViewModels.StatsViewModels
                         style.Setters.Add(st1);
                         style.Setters.Add(back);
                         series1.DataPointStyle = style;
-                        IRRLines.Add(series1);
+                        newValues.Add(series1);
                     }
                 }
+
+                IRRLines = newValues;
             }
         }
 
