@@ -19,6 +19,14 @@ namespace FinancialStructures.NamingStructures
         }
 
         /// <summary>
+        /// Empty constructor. Required for DataGrids to show a new entry row.
+        /// </summary>
+        public NameCompDate()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Constructor setting all parameters.
         /// </summary>
         public NameCompDate(string company, string name, string currency, string url, HashSet<string> sectors, DateTime date)
