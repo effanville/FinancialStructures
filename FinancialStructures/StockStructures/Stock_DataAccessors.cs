@@ -5,7 +5,54 @@ namespace FinancialStructures.StockStructures
 {
     public partial class Stock
     {
-        private StockDayPrices DayData(DateTime date)
+        /// <summary>
+        /// The earliest time held in the stock.
+        /// </summary>
+        public DateTime EarliestTime()
+        {
+            return Valuations[0].Time;
+        }
+
+        /// <summary>
+        /// The latest time held in the Stock.
+        /// </summary>
+        public DateTime LastTime()
+        {
+            return Valuations[Valuations.Count - 1].Time;
+        }
+
+        /// <summary>
+        /// Calculates the value of the stock at the time specified.
+        /// </summary>
+        public double Value(DateTime date, StockDataStream data = StockDataStream.Close)
+        {
+            return DayData(date).Value(data);
+        }
+
+        /// <summary>
+        /// Calculates the value of the stock at the index in the list of values.
+        /// </summary>
+        public double Value(int index, StockDataStream data = StockDataStream.Close)
+        {
+            return Valuations[index].Value(data);
+        }
+
+        /// <summary>
+        /// Returns a collection of values before and after the date specified.
+        /// </summary>
+        public List<double> Values(DateTime date, int numberValuesBefore, int numberValuesAfter = 0, StockDataStream data = StockDataStream.Close)
+        {
+            _ = DayData(date);
+            List<double> desiredValues = new List<double>();
+            for (int index = LastAccessedValuationIndex - numberValuesBefore + 1; index < LastAccessedValuationIndex + numberValuesAfter + 1; index++)
+            {
+                desiredValues.Add(Valuations[index].Value(data));
+            }
+
+            return desiredValues;
+        }
+
+        private StockDay DayData(DateTime date)
         {
             int numberValues = Valuations.Count;
             int dayIndex = 0;
@@ -16,69 +63,6 @@ namespace FinancialStructures.StockStructures
 
             LastAccessedValuationIndex = dayIndex - 1;
             return Valuations[dayIndex - 1];
-        }
-
-        /// <summary>
-        /// Calculates the value of the stock at the time specified.
-        /// </summary>
-        public double Value(DateTime date, DataStream data = DataStream.Close)
-        {
-            return Value(DayData(date), data);
-        }
-
-
-        /// <summary>
-        /// Calculates the value of the stock at the time specified.
-        /// </summary>
-        public double Value(int index, DataStream data = DataStream.Close)
-        {
-            return Value(Valuations[index], data);
-        }
-
-        private double Value(StockDayPrices values, DataStream data)
-        {
-            switch (data)
-            {
-                case (DataStream.Open):
-                    return values.Open;
-                case (DataStream.High):
-                    return values.High;
-                case (DataStream.Low):
-                    return values.Low;
-                case (DataStream.CloseOpen):
-                    return values.Close / values.Open;
-                case (DataStream.HighOpen):
-                    return values.High / values.Open;
-                case (DataStream.LowOpen):
-                    return values.Low / values.Open;
-                case DataStream.Volume:
-                    return values.Volume;
-                case (DataStream.Close):
-                default:
-                    return values.Close;
-            }
-        }
-
-        public List<double> Values(DateTime date, int numberValuesBefore, int numberValuesAfter = 0, DataStream data = DataStream.Close)
-        {
-            _ = DayData(date);
-            List<double> desiredValues = new List<double>();
-            for (int index = LastAccessedValuationIndex - numberValuesBefore + 1; index < LastAccessedValuationIndex + numberValuesAfter + 1; index++)
-            {
-                desiredValues.Add(Value(Valuations[index], data));
-            }
-
-            return desiredValues;
-        }
-
-        public DateTime EarliestTime()
-        {
-            return Valuations[0].Time;
-        }
-
-        public DateTime LastTime()
-        {
-            return Valuations[Valuations.Count - 1].Time;
         }
     }
 }

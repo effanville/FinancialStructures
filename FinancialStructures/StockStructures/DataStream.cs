@@ -1,9 +1,12 @@
 ﻿namespace FinancialStructures.StockStructures
 {
-    public enum DataStream
+    /// <summary>
+    /// Possible streams of data to retrieve from a <see cref="Stock"/>.
+    /// </summary>
+    public enum StockDataStream
     {
         /// <summary>
-        /// The default value where a statistic has no special stream.
+        /// The default value.
         /// </summary>
         None,
         Open,

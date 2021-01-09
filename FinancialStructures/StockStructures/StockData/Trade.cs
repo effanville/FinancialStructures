@@ -8,7 +8,8 @@ namespace FinancialStructures.StockData
         Buy,
         Sell
     }
-    public class TradeDetails
+
+    public class Trade
     {
         private readonly string fTicker;
         private readonly string fName;
@@ -20,16 +21,16 @@ namespace FinancialStructures.StockData
         private readonly double fTradeCosts;
         private readonly TradeType fTradeType;
 
-        public TradeDetails()
+        public Trade()
         {
         }
 
-        public TradeDetails(TradeType type)
+        public Trade(TradeType type)
         {
             fTradeType = type;
         }
 
-        public TradeDetails(TradeType type, string ticker, string company, string name, DateTime day, double value, double numShares, double price, double costs)
+        public Trade(TradeType type, string ticker, string company, string name, DateTime day, double value, double numShares, double price, double costs)
         {
             fTradeType = type;
             fTicker = ticker;

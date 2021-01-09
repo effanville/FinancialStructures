@@ -21,7 +21,7 @@ namespace FinancialStructures.StockStructures
         {
         }
 
-        public double GetValue(NameData name, DateTime date, DataStream datatype = DataStream.Close)
+        public double GetValue(NameData name, DateTime date, StockDataStream datatype = StockDataStream.Close)
         {
             foreach (Stock stock in Stocks)
             {
