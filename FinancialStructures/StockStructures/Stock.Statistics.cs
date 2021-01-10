@@ -6,26 +6,25 @@ namespace FinancialStructures.StockStructures
 {
     public partial class Stock
     {
-
-        /// <summary>
-        /// Calculates moving average of <param name="length"/> previous values from the day <param name="day"/> for the stock <param name="stock"/>.
-        /// </summary>
+        /// <inheritdoc/>
         public double MovingAverage(DateTime day, int numberBefore, int numberAfter, StockDataStream data)
         {
             return VectorStats.Mean(Values(day, numberBefore, numberAfter, data), numberBefore + numberAfter);
         }
 
+        /// <inheritdoc/>
         public double Max(DateTime day, int numberBefore, int numberAfter, StockDataStream data)
         {
             return VectorStats.Max(Values(day, numberBefore, numberAfter, data), numberBefore + numberAfter);
         }
 
+        /// <inheritdoc/>
         public double Min(DateTime day, int numberBefore, int numberAfter, StockDataStream data)
         {
             return VectorStats.Min(Values(day, numberBefore, numberAfter, data), numberBefore + numberAfter);
         }
 
-        public List<double> K(DateTime day, int length, int number)
+        private List<double> K(DateTime day, int length, int number)
         {
             List<double> KValues = new List<double>();
             for (int offset = 0; offset < number; offset++)
@@ -42,6 +41,7 @@ namespace FinancialStructures.StockStructures
             return KValues;
         }
 
+        /// <inheritdoc/>
         public double Stochastic(DateTime day, int length, int innerLength = 3)
         {
             List<double> KValues = K(day, length, 2 * innerLength);
@@ -59,9 +59,9 @@ namespace FinancialStructures.StockStructures
 
         private double DMPlus(DateTime date)
         {
-            if (Value(date, StockDataStream.High) - Value(LastAccessedValuationIndex - 1, StockDataStream.High) > Value(date, StockDataStream.Low) - Value(LastAccessedValuationIndex - 1, StockDataStream.Low))
+            if (Value(date, StockDataStream.High) - Value(LastValueIndex - 1, StockDataStream.High) > Value(date, StockDataStream.Low) - Value(LastValueIndex - 1, StockDataStream.Low))
             {
-                return Math.Max(Value(date, StockDataStream.High) - Value(LastAccessedValuationIndex - 1, StockDataStream.High), 0.0);
+                return Math.Max(Value(date, StockDataStream.High) - Value(LastValueIndex - 1, StockDataStream.High), 0.0);
             }
 
             return 0.0;
@@ -69,9 +69,9 @@ namespace FinancialStructures.StockStructures
 
         private double DMMinus(DateTime date)
         {
-            if (Value(date, StockDataStream.High) - Value(LastAccessedValuationIndex - 1, StockDataStream.High) <= Value(date, StockDataStream.Low) - Value(LastAccessedValuationIndex - 1, StockDataStream.Low))
+            if (Value(date, StockDataStream.High) - Value(LastValueIndex - 1, StockDataStream.High) <= Value(date, StockDataStream.Low) - Value(LastValueIndex - 1, StockDataStream.Low))
             {
-                return Math.Max(Value(date, StockDataStream.Low) - Value(LastAccessedValuationIndex - 1, StockDataStream.Low), 0.0);
+                return Math.Max(Value(date, StockDataStream.Low) - Value(LastValueIndex - 1, StockDataStream.Low), 0.0);
             }
 
             return 0.0;
@@ -79,7 +79,7 @@ namespace FinancialStructures.StockStructures
 
         private double TR(DateTime date)
         {
-            return Math.Max(Value(date, StockDataStream.High), Value(LastAccessedValuationIndex - 1, StockDataStream.Close)) - Math.Min(Value(LastAccessedValuationIndex, StockDataStream.Low), Value(LastAccessedValuationIndex - 1, StockDataStream.Close));
+            return Math.Max(Value(date, StockDataStream.High), Value(LastValueIndex - 1, StockDataStream.Close)) - Math.Min(Value(LastValueIndex, StockDataStream.Low), Value(LastValueIndex - 1, StockDataStream.Close));
         }
 
         private double DIPlus(DateTime date)
@@ -100,9 +100,7 @@ namespace FinancialStructures.StockStructures
             return (DIPlus(day) - DIMinus(day)) / (DIPlus(day) + DIMinus(day));
         }
 
-        /// <summary>
-        /// Need to have a moving average of this.
-        /// </summary>
+        /// <inheritdoc/>
         public double ADX(DateTime day, int length = 14)
         {
             return 100 * DX(day, length);
