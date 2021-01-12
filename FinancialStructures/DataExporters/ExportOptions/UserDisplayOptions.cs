@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FinancialStructures.Statistics;
 using StructureCommon.DisplayClasses;
 
@@ -69,7 +70,16 @@ namespace FinancialStructures.DataExporters.ExportOptions
         /// Create an instance from all options.
         /// </summary>
         public UserDisplayOptions
-            (List<Statistic> securities, List<Statistic> bankAccounts, List<Statistic> sectors, List<Selectable<string>> conditions, Statistic securitySortingField = Statistic.Company, Statistic bankSortingField = Statistic.Company, Statistic sectorSortingField = Statistic.Company, SortDirection securitySortDirection = SortDirection.Descending, SortDirection bankAccountSortDirection = SortDirection.Descending, SortDirection sectorSortDirection = SortDirection.Descending)
+            (List<Statistic> securities,
+            List<Statistic> bankAccounts,
+            List<Statistic> sectors,
+            List<Selectable<string>> conditions,
+            Statistic securitySortingField = Statistic.Company,
+            Statistic bankSortingField = Statistic.Company,
+            Statistic sectorSortingField = Statistic.Company,
+            SortDirection securitySortDirection = SortDirection.Descending,
+            SortDirection bankAccountSortDirection = SortDirection.Descending,
+            SortDirection sectorSortDirection = SortDirection.Descending)
         {
             SecurityDisplayOptions = new StatisticTableOptions(SelectableHelpers.GetData(conditions, ShowSecurities), securitySortingField, securitySortDirection, securities);
             BankAccountDisplayOptions = new StatisticTableOptions(SelectableHelpers.GetData(conditions, ShowBankAccounts), bankSortingField, bankAccountSortDirection, bankAccounts);
@@ -78,6 +88,22 @@ namespace FinancialStructures.DataExporters.ExportOptions
             DisplayValueFunds = SelectableHelpers.GetData(conditions, nameof(DisplayValueFunds));
             Spacing = SelectableHelpers.GetData(conditions, nameof(Spacing));
             Colours = SelectableHelpers.GetData(conditions, nameof(Colours));
+        }
+
+        /// <summary>
+        /// Returns an
+        /// </summary>
+        /// <returns></returns>
+        public static UserDisplayOptions DefaultOptions()
+        {
+            var options = new List<Selectable<string>>();
+            options.Add(new Selectable<string>(nameof(DisplayValueFunds), true));
+            options.Add(new Selectable<string>(nameof(Spacing), true));
+            options.Add(new Selectable<string>(nameof(Colours), true));
+            options.Add(new Selectable<string>(ShowSecurities, true));
+            options.Add(new Selectable<string>(ShowBankAccounts, true));
+            options.Add(new Selectable<string>(ShowSectors, true));
+            return new UserDisplayOptions(AccountStatisticsHelpers.AllStatistics().ToList(), AccountStatisticsHelpers.DefaultBankAccountStats().ToList(), AccountStatisticsHelpers.AllStatistics().ToList(), options);
         }
     }
 }
