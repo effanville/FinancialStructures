@@ -1,17 +1,29 @@
 ﻿using System;
 using StructureCommon.Extensions;
 
-namespace FinancialStructures.StockData
+namespace FinancialStructures.StockStructures.StockData
 {
-    public enum TradeType
-    {
-        Buy,
-        Sell
-    }
-
+    /// <summary>
+    ///
+    /// </summary>
     public class Trade
     {
-        private readonly string fTicker;
+        /// <summary>
+        /// The type of this trade.
+        /// </summary>
+        public TradeType TradeType
+        {
+            get;
+        }
+
+        /// <summary>
+        /// The <see cref="Stock.Ticker"/>
+        /// </summary>
+        public string Ticker
+        {
+            get;
+        }
+
         private readonly string fName;
         private readonly string fCompany;
         private readonly DateTime fDay;
@@ -19,21 +31,29 @@ namespace FinancialStructures.StockData
         private readonly double fNumberSharesTraded;
         private readonly double fPricePerShare;
         private readonly double fTradeCosts;
-        private readonly TradeType fTradeType;
 
+        /// <summary>
+        /// Empty constructor.
+        /// </summary>
         public Trade()
         {
         }
 
+        /// <summary>
+        /// Construc an instance with only a <see cref="StockData.TradeType"/>
+        /// </summary>
         public Trade(TradeType type)
         {
-            fTradeType = type;
+            TradeType = type;
         }
 
+        /// <summary>
+        /// Create an instance filling in all data.
+        /// </summary>
         public Trade(TradeType type, string ticker, string company, string name, DateTime day, double value, double numShares, double price, double costs)
         {
-            fTradeType = type;
-            fTicker = ticker;
+            TradeType = type;
+            Ticker = ticker;
             fCompany = company;
             fName = name;
             fDay = day;
@@ -43,9 +63,10 @@ namespace FinancialStructures.StockData
             fTradeCosts = costs;
         }
 
+        /// <inheritdoc/>
         public override string ToString()
         {
-            return fDay.ToUkDateString() + "-" + fTradeType.ToString() + "-" + fCompany + "-" + fName + "-" + fTransactionValue + "-" + fNumberSharesTraded + "-" + fPricePerShare + "-" + fTradeCosts;
+            return fDay.ToUkDateString() + "-" + TradeType.ToString() + "-" + fCompany + "-" + fName + "-" + fTransactionValue + "-" + fNumberSharesTraded + "-" + fPricePerShare + "-" + fTradeCosts;
         }
     }
 }
