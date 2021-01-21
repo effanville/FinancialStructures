@@ -47,7 +47,7 @@ namespace FinancialStructures.Database.Implementation
 
                     var bankAccount = account as ICashAccount;
                     ICurrency currency = Currency(elementType, bankAccount);
-                    return bankAccount.Value(date, currency).Value;
+                    return bankAccount.NearestEarlierValuation(date, currency).Value;
 
                 }
                 default:

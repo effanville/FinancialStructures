@@ -2,20 +2,20 @@
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 
-namespace FinancialStructuresTests.Portfolio.Statistics
+namespace FinancialStructures.Tests.Database.Statistics
 {
     public class RecentChangeTest
     {
-        [Test]
-        public void RecentChangeTests()
+        [TestCase(TestDatabaseName.OneBank, 0.0)]
+        [TestCase(TestDatabaseName.OneSec, 113.15999999999991)]
+        [TestCase(TestDatabaseName.TwoBank, 0.0)]
+        [TestCase(TestDatabaseName.TwoSec, -14553.68)]
+        [TestCase(TestDatabaseName.OneSecOneBank, 113.15999999999991)]
+        [TestCase(TestDatabaseName.TwoSecTwoBank, -14553.68)]
+        public void RecentChangeTests(TestDatabaseName databaseName, double expectedValue)
         {
-            var constructor = new DatabaseConstructor();
-            constructor.WithDefaultBankAccount();
-            constructor.WithDefaultSecurity();
-            constructor.WithSecondaryBankAccount();
-            constructor.WithSecondarySecurity();
-            var portfolio = constructor.database;
-            Assert.AreEqual(-14553.68, portfolio.RecentChange());
+            var portfolio = TestDatabase.Databases[databaseName];
+            Assert.AreEqual(expectedValue, portfolio.RecentChange());
         }
     }
 }

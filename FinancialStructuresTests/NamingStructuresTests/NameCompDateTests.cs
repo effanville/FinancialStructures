@@ -14,7 +14,7 @@ namespace FinancialStructures.Tests.NamingStructuresTests
             var firstName = new NameCompDate("company", "name", "currency", "url", null, date);
             var secondName = new NameCompDate("company", "name", "currency", "url", null, otherDate);
 
-            Assert.AreEqual(equal, firstName.Equals(secondName));
+            Assert.AreEqual(equal, firstName.Equals(secondName), $"{firstName} not considered equal to {secondName}");
         }
     }
 }

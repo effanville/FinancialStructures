@@ -7,7 +7,7 @@ namespace FinancialStructures.NamingStructures
     /// A display class for showing names together with a date.
     /// Typically used to show the account information together with last known date.
     /// </summary>
-    public class NameCompDate : NameData
+    public class NameCompDate : NameData, IEquatable<NameCompDate>
     {
         /// <summary>
         /// The date associated with this object.
@@ -54,10 +54,18 @@ namespace FinancialStructures.NamingStructures
         {
             if (obj is NameCompDate otherName)
             {
-                if (DateToRecord.Equals(otherName.DateToRecord))
-                {
-                    return base.Equals(otherName);
-                }
+                return Equals(otherName);
+            }
+
+            return false;
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(NameCompDate otherName)
+        {
+            if (DateToRecord.Equals(otherName.DateToRecord))
+            {
+                return base.Equals(otherName);
             }
 
             return false;

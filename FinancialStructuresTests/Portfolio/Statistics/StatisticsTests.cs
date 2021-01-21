@@ -9,31 +9,14 @@ namespace FinancialStructures.Tests.Database.Statistics
     [TestFixture]
     public sealed class StatisticsTests
     {
-        [Test]
-        public void FirstValueDateTests()
+        [TestCase(TestDatabaseName.TwoSecTwoBank, Totals.All, null, "1/1/2010")]
+        [TestCase(TestDatabaseName.TwoSecTwoBank, Totals.Security, null, "1/1/2010")]
+        [TestCase(TestDatabaseName.TwoSecTwoBank, Totals.BankAccount, null, "1/1/2010")]
+        [TestCase(TestDatabaseName.TwoSecTwoBank, Totals.SecurityCompany, DatabaseConstructor.DefaultSecurityCompany, "1/1/2010")]
+        public void FirstValueDateTests(TestDatabaseName databaseName, Totals totals, string companyName, DateTime expectedDate)
         {
-            var constructor = new DatabaseConstructor();
-            constructor.WithDefaultBankAccount();
-            constructor.WithDefaultSecurity();
-            constructor.WithSecondaryBankAccount();
-            constructor.WithSecondarySecurity();
-            var portfolio = constructor.database;
-            Assert.AreEqual(new DateTime(2010, 1, 1), portfolio.FirstValueDate(Totals.All));
-
-            Assert.AreEqual(new DateTime(2010, 1, 1), portfolio.FirstValueDate(Totals.Security));
-            Assert.AreEqual(new DateTime(2010, 1, 1), portfolio.FirstValueDate(Totals.BankAccount));
-        }
-
-        [Test]
-        public void CompanyFirstDateTests()
-        {
-            var constructor = new DatabaseConstructor();
-            constructor.WithDefaultBankAccount();
-            constructor.WithDefaultSecurity();
-            constructor.WithSecondaryBankAccount();
-            constructor.WithSecondarySecurity();
-            var portfolio = constructor.database;
-            Assert.AreEqual(new DateTime(2010, 1, 1), portfolio.FirstValueDate(Totals.SecurityCompany, DatabaseConstructor.DefaultSecurityCompany));
+            var portfolio = TestDatabase.Databases[databaseName];
+            Assert.AreEqual(expectedDate, portfolio.FirstValueDate(totals, companyName));
         }
     }
 }

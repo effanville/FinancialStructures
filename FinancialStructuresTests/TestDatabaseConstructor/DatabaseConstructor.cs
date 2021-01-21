@@ -8,10 +8,18 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 {
     public class DatabaseConstructor
     {
+        public const string DefaultSecurityName = "UK Stock";
+        public const string DefaultSecurityCompany = "BlackRock";
+        public readonly DateTime[] DefaultSecurityDates = new DateTime[] { new DateTime(2010, 1, 1), new DateTime(2011, 1, 1), new DateTime(2012, 5, 1), new DateTime(2015, 4, 3), new DateTime(2018, 5, 6), new DateTime(2020, 1, 1) };
+        public readonly double[] DefaultSecurityShareValues = new double[] { 2.0, 1.5, 17.3, 4, 5.7, 5.5 };
+        public readonly double[] DefaultSecurityUnitPrices = new double[] { 100.0, 100.0, 125.2, 90.6, 77.7, 101.1 };
+        public readonly double[] DefaultSecurityInvestments = new double[] { 1, 0.0, 0.0, 0.0, 0.0, 0.0 };
+
         internal Portfolio database;
         public DatabaseConstructor()
         {
             database = new Portfolio();
+            database.BaseCurrency = DefaultCurrencyName;
         }
 
         public DatabaseConstructor LoadDatabaseFromFilepath(string filepath)
@@ -20,14 +28,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             return this;
         }
 
-        public const string DefaultSecurityName = "UK Stock";
-        public const string DefaultSecurityCompany = "BlackRock";
-        public readonly DateTime[] DefaultSecurityDates = new DateTime[] { new DateTime(2010, 1, 1), new DateTime(2011, 1, 1), new DateTime(2012, 5, 1), new DateTime(2015, 4, 3), new DateTime(2018, 5, 6), new DateTime(2020, 1, 1) };
-        public readonly double[] DefaultSecurityShareValues = new double[] { 2.0, 1.5, 17.3, 4, 5.7, 5.5 };
-        public readonly double[] DefaultSecurityUnitPrices = new double[] { 100.0, 100.0, 125.2, 90.6, 77.7, 101.1 };
-        public readonly double[] DefaultSecurityInvestments = new double[] { 1, 0.0, 0.0, 0.0, 0.0, 0.0 };
-
-        public TwoName DefaultNameQuery(Account acctype)
+        public TwoName DefaultName(Account acctype)
         {
             switch (acctype)
             {
@@ -35,6 +36,19 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
                     return new TwoName(DefaultSecurityCompany, DefaultSecurityName);
                 case Account.BankAccount:
                     return new TwoName(DefaultBankAccountCompany, DefaultBankAccountName);
+                default:
+                    return null;
+            }
+        }
+
+        public TwoName SecondaryName(Account account)
+        {
+            switch (account)
+            {
+                case Account.Security:
+                    return new TwoName(SecondarySecurityCompany, SecondarySecurityName);
+                case Account.BankAccount:
+                    return new TwoName(SecondaryBankAccountCompany, SecondaryBankAccountName);
                 default:
                     return null;
             }
@@ -80,7 +94,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 
         public DatabaseConstructor WithSecondarySecurity()
         {
-            return WithSecurityFromNameAndData(SecondarySecurityCompany, SecondarySecurityName, dates: SecondarySecurityDates, sharePrice: SecondarySecurityUnitPrices, numberUnits: SecondarySecurityShareValues, investment: SecondarySecurityInvestments);
+            return WithSecurityFromNameAndData(SecondarySecurityCompany, SecondarySecurityName, currency: DefaultCurrencyCompany, dates: SecondarySecurityDates, sharePrice: SecondarySecurityUnitPrices, numberUnits: SecondarySecurityShareValues, investment: SecondarySecurityInvestments);
         }
 
         public string DefaultBankAccountName = "Current";
@@ -93,7 +107,6 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             return WithBankAccountFromNameAndData(DefaultBankAccountCompany, DefaultBankAccountName, date: DefaultBankAccountDates, value: DefaultBankAccountValues);
         }
 
-
         public string SecondaryBankAccountName = "Current";
         public string SecondaryBankAccountCompany = "Halifax";
         public DateTime[] SecondaryBankAccountDates = new DateTime[] { new DateTime(2010, 1, 1), new DateTime(2011, 1, 1), new DateTime(2012, 5, 1), new DateTime(2015, 4, 3), new DateTime(2018, 5, 6), new DateTime(2020, 1, 1) };
@@ -101,7 +114,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 
         public DatabaseConstructor WithSecondaryBankAccount()
         {
-            return WithBankAccountFromNameAndData(SecondaryBankAccountCompany, SecondaryBankAccountName, date: SecondaryBankAccountDates, value: SecondaryBankAccountValues);
+            return WithBankAccountFromNameAndData(SecondaryBankAccountCompany, SecondaryBankAccountName, currency: DefaultCurrencyCompany, date: SecondaryBankAccountDates, value: SecondaryBankAccountValues);
         }
 
         public DatabaseConstructor WithAccountFromNameAndData(Account accType, string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] dates = null, double[] sharePrice = null, double[] numberUnits = null, double[] investment = null)
@@ -115,6 +128,10 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
                 case Account.BankAccount:
                 {
                     return WithBankAccountFromNameAndData(company, name, currency, url, sectors, dates, numberUnits);
+                }
+                case Account.Currency:
+                {
+                    return WithCurrencyFromNameAndData(company, name, currency, url, dates, numberUnits);
                 }
                 default:
                     return null;
@@ -181,11 +198,36 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             return this;
         }
 
+        public const string DefaultCurrencyCompany = "HKD";
+        public const string DefaultCurrencyName = "GBP";
+        public readonly DateTime[] DefaultCurrencyDateTimes = new DateTime[] { new DateTime(2011, 11, 1), new DateTime(2018, 1, 14), new DateTime(2020, 8, 3) };
+        public readonly double[] DefaultCurrencyValues = new double[] { 0.081, 0.09, 0.0987 };
+
+        public DatabaseConstructor WithDefaultCurrency()
+        {
+            return WithCurrencyFromNameAndData(DefaultCurrencyCompany, DefaultCurrencyName);
+        }
+
         public DatabaseConstructor WithCurrencyFromName(string company, string name, string url = null, string sectors = null)
         {
             var names = new NameData(company, name, null, url);
             names.SectorsFlat = sectors;
             database.Currencies.Add(new Currency(names));
+            return this;
+        }
+
+        public DatabaseConstructor WithCurrencyFromNameAndData(string company, string name, string currency = null, string url = null, DateTime[] date = null, double[] value = null)
+        {
+            var bankConstructor = new CurrencyConstructor(company, name, currency, url);
+            if (date != null)
+            {
+                for (int i = 0; i < date.Length; i++)
+                {
+                    bankConstructor.WithData(date[i], value[i]);
+                }
+            }
+
+            database.Currencies.Add(bankConstructor.item);
             return this;
         }
 
@@ -202,12 +244,17 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             {
                 for (int i = 0; i < date.Length; i++)
                 {
-
                     bankConstructor.WithData(date[i], value[i]);
                 }
             }
 
             database.BenchMarks.Add(bankConstructor.item);
+            return this;
+        }
+
+        public DatabaseConstructor ClearDatabase()
+        {
+            database.Clear();
             return this;
         }
     }
