@@ -10,7 +10,7 @@ namespace FinancialStructures.FinanceStructures
     /// <summary>
     /// A named entity with Share, unit price and investment lists to detail price history.
     /// </summary>
-    public interface ISecurity : ICSVAccess, IValueList
+    public interface ISecurity : ICSVAccess, IExchangableValueList, IValueList
     {
         /// <summary>
         /// The Share data for this Security

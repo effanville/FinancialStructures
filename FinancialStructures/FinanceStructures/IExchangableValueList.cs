@@ -28,5 +28,21 @@ namespace FinancialStructures.FinanceStructures
         /// <param name="date">The date to query the value on.</param>
         /// <param name="currency">An optional currency to transfer the value using.</param>
         DailyValuation Value(DateTime date, ICurrency currency);
+
+        /// <summary>
+        /// Returns the most recent value to <paramref name="date"/> that is prior to that date.
+        /// This value is strictly prior to <paramref name="date"/>.
+        /// </summary>
+        /// <param name="date">The date to query the value on.</param>
+        /// <param name="currency">An optional currency to transfer the value using.</param>
+        DailyValuation RecentPreviousValue(DateTime date, ICurrency currency);
+
+        /// <summary>
+        /// Returns the latest valuation on or before the date <paramref name="date"/>.
+        /// This value can be on the date <paramref name="date"/>.
+        /// </summary>
+        /// <param name="date">The date to query the value for.</param>
+        /// <param name="currency">An optional currency to exchange the value with.</param>
+        DailyValuation NearestEarlierValuation(DateTime date, ICurrency currency);
     }
 }
