@@ -7,7 +7,7 @@ using FinancialStructures.Database;
 namespace FinancialStructures.Tests.Database.Statistics
 {
     [TestFixture]
-    public sealed class StatisticsTests
+    public sealed class FirstDateTests
     {
         [TestCase(TestDatabaseName.TwoSecTwoBank, Totals.All, null, "1/1/2010")]
         [TestCase(TestDatabaseName.TwoSecTwoBank, Totals.Security, null, "1/1/2010")]

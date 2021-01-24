@@ -22,6 +22,10 @@ namespace FinancialStructures.Tests.Database.Value
         [TestCase(TestDatabaseName.TwoBank, Account.Security, NameOrder.Default, double.NaN)]
         [TestCase(TestDatabaseName.TwoBankCur, Account.BankAccount, NameOrder.Secondary, 96.799388079399137)]
         [TestCase(TestDatabaseName.TwoBankCur, Account.Security, NameOrder.Secondary, double.NaN)]
+        [TestCase(TestDatabaseName.TwoSecCur, Account.BankAccount, NameOrder.Secondary, double.NaN)]
+        [TestCase(TestDatabaseName.TwoSecCur, Account.Security, NameOrder.Secondary, 2519.6185349999996)]
+        [TestCase(TestDatabaseName.TwoSecTwoBankCur, Account.BankAccount, NameOrder.Secondary, 96.799388079399137)]
+        [TestCase(TestDatabaseName.TwoSecTwoBankCur, Account.Security, NameOrder.Secondary, 2519.6185349999996)]
         public void LatestValueTests(TestDatabaseName databaseName, Account account, NameOrder order, double expectedValue)
         {
             var portfolio = TestDatabase.Databases[databaseName];
@@ -86,6 +90,28 @@ namespace FinancialStructures.Tests.Database.Value
         {
             var portfolio = TestDatabase.Databases[databaseName];
             Assert.AreEqual(expectedValue, portfolio.Value(account, TestDatabase.Name(account, NameOrder.Default), date));
+        }
+
+        [TestCase(TestDatabaseName.TwoBankCur, Account.BankAccount, NameOrder.Secondary, "2009/1/2", 0.0)]
+        [TestCase(TestDatabaseName.TwoBankCur, Account.BankAccount, NameOrder.Secondary, "2010/1/1", 89.100000000000009)]
+        [TestCase(TestDatabaseName.TwoBankCur, Account.BankAccount, NameOrder.Secondary, "2010/1/2", 89.100000000000009)]
+        [TestCase(TestDatabaseName.TwoBankCur, Account.BankAccount, NameOrder.Secondary, "2015/1/2", 91.954561694616075)]
+        [TestCase(TestDatabaseName.TwoBankCur, Account.BankAccount, NameOrder.Secondary, "2018/1/1", 77.416227802294799)]
+        [TestCase(TestDatabaseName.TwoBankCur, Account.BankAccount, NameOrder.Secondary, "2018/5/5", 77.416227802294799)]
+        [TestCase(TestDatabaseName.TwoBankCur, Account.BankAccount, NameOrder.Secondary, "2018/5/6", 70.168761888412021)]
+        [TestCase(TestDatabaseName.TwoBankCur, Account.BankAccount, NameOrder.Secondary, "2018/5/7", 70.168761888412021)]
+        [TestCase(TestDatabaseName.TwoBankCur, Account.BankAccount, NameOrder.Secondary, "2020/5/1", 96.799388079399137)]
+        [TestCase(TestDatabaseName.TwoBankCur, Account.Security, NameOrder.Secondary, "2012/5/2",double.NaN)]
+        [TestCase(TestDatabaseName.TwoBankCur, Account.Security, NameOrder.Secondary, "2020/5/12", double.NaN)]
+        [TestCase(TestDatabaseName.TwoSecCur, Account.BankAccount, NameOrder.Secondary, "2012/5/2", double.NaN)]
+        [TestCase(TestDatabaseName.TwoSecCur, Account.BankAccount, NameOrder.Secondary,"2020/4/12", double.NaN)]
+        [TestCase(TestDatabaseName.TwoSecCur, Account.Security, NameOrder.Secondary, "2018/5/4", 3046.7771657689655)]
+        [TestCase(TestDatabaseName.TwoSecTwoBankCur, Account.BankAccount, NameOrder.Secondary, "2018/5/4", 77.416227802294799)]
+        [TestCase(TestDatabaseName.TwoSecTwoBankCur, Account.Security, NameOrder.Secondary, "2018/5/4", 3046.7771657689655)]
+        public void ValueWithCurrencyTest(TestDatabaseName databaseName, Account account, NameOrder order, DateTime date, double expectedValue)
+        {
+            var portfolio = TestDatabase.Databases[databaseName];
+            Assert.AreEqual(expectedValue, portfolio.Value(account, TestDatabase.Name(account, order), date));
         }
     }
 }
