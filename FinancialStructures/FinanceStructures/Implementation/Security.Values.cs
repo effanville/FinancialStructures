@@ -28,8 +28,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             {
                 if (value != null && value.Value != 0)
                 {
-                    double currencyValue = currency == null ? 1.0 : currency.Value(value.Day).Value;
-                    value.SetValue(value.Value * currencyValue);
+                    value.SetValue(value.Value * GetCurrencyValue(value.Day, currency));
                     namedValues.Add(new DayValue_Named(Names.Company, Names.Name, value));
                 }
             }
@@ -80,6 +79,11 @@ namespace FinancialStructures.FinanceStructures.Implementation
             }
             output.Sort();
             return output;
+        }
+
+        private double GetCurrencyValue(DateTime date, ICurrency currency)
+        {
+            return currency == null ? 1.0 : currency.Value(date)?.Value ?? 1.0;
         }
 
         /// <summary>

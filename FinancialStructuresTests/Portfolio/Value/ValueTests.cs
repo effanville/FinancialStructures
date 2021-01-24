@@ -20,7 +20,7 @@ namespace FinancialStructures.Tests.Database.Value
         [TestCase(TestDatabaseName.TwoSec, Account.BankAccount, NameOrder.Default, double.NaN)]
         [TestCase(TestDatabaseName.TwoBank, Account.BankAccount, NameOrder.Default, 101.1)]
         [TestCase(TestDatabaseName.TwoBank, Account.Security, NameOrder.Default, double.NaN)]
-        [TestCase(TestDatabaseName.TwoBankCur, Account.BankAccount, NameOrder.Secondary, 1001.1)]
+        [TestCase(TestDatabaseName.TwoBankCur, Account.BankAccount, NameOrder.Secondary, 96.799388079399137)]
         [TestCase(TestDatabaseName.TwoBankCur, Account.Security, NameOrder.Secondary, double.NaN)]
         public void LatestValueTests(TestDatabaseName databaseName, Account account, NameOrder order, double expectedValue)
         {

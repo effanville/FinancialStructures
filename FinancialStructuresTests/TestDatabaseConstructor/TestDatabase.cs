@@ -51,6 +51,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
                     constructor.WithSecondarySecurity();
 
                     fDatabases.Add(TestDatabaseName.TwoSecTwoBank, constructor.database.Copy());
+                    constructor.SetCurrencyAsGBP();
                     constructor.WithDefaultCurrency();
 
                     fDatabases.Add(TestDatabaseName.TwoSecTwoBankCur, constructor.database.Copy());
@@ -60,6 +61,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
                     constructor.WithSecondaryBankAccount();
 
                     fDatabases.Add(TestDatabaseName.TwoBank, constructor.database.Copy());
+                    constructor.SetCurrencyAsGBP();
                     constructor.WithDefaultCurrency();
 
                     fDatabases.Add(TestDatabaseName.TwoBankCur, constructor.database.Copy());
@@ -73,7 +75,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
                     constructor.WithSecondarySecurity();
 
                     fDatabases.Add(TestDatabaseName.TwoSec, constructor.database.Copy());
-
+                    constructor.SetCurrencyAsGBP();
                     constructor.WithDefaultCurrency();
 
                     fDatabases.Add(TestDatabaseName.TwoSecCur, constructor.database.Copy());

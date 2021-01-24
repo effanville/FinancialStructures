@@ -25,8 +25,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             List<DailyValuation> values = fInvestments.GetValuesBetween(earlierDate, laterDate);
             foreach (DailyValuation value in values)
             {
-                double currencyValue = currency == null ? 1.0 : currency.Value(value.Day).Value;
-                value.SetValue(value.Value * currencyValue);
+                value.SetValue(value.Value * GetCurrencyValue(value.Day, currency));
             }
 
             return values;
@@ -47,8 +46,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 return new DailyValuation(DateTime.Today, 0.0);
             }
 
-            double currencyValue = currency == null ? 1.0 : currency.Value(latestDate.Day).Value;
-            double latestValue = latestDate.Value * fShares.LatestValue() * currencyValue;
+            double latestValue = latestDate.Value * fShares.LatestValue() * GetCurrencyValue(latestDate.Day, currency);
 
             return new DailyValuation(latestDate.Day, latestValue);
         }
@@ -68,8 +66,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 return new DailyValuation(DateTime.MinValue, 0.0);
                 ;
             }
-            double currencyValue = currency == null ? 1.0 : currency.Value(firstDate.Day).Value;
-            double latestValue = firstDate.Value * fShares.FirstValue() * currencyValue;
+
+            double latestValue = firstDate.Value * fShares.FirstValue() * GetCurrencyValue(firstDate.Day, currency);
 
             return new DailyValuation(firstDate.Day, latestValue);
         }
@@ -84,8 +82,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         public DailyValuation Value(DateTime date, ICurrency currency)
         {
             DailyValuation perSharePrice = fUnitPrice.Value(date);
-            double currencyValue = currency == null ? 1.0 : currency.Value(date).Value;
-            double value = perSharePrice.Value * fShares.NearestEarlierValue(date).Value * currencyValue;
+            double value = perSharePrice.Value * fShares.NearestEarlierValue(date).Value * GetCurrencyValue(date, currency);
             return new DailyValuation(date, value);
         }
 
@@ -104,8 +101,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 return new DailyValuation(date, 0.0);
             }
 
-            double currencyValue = currency == null ? 1.0 : currency.Value(val.Day).Value;
-            double latestValue = fShares.RecentPreviousValue(date).Value * val.Value * currencyValue;
+            double latestValue = fShares.RecentPreviousValue(date).Value * val.Value * GetCurrencyValue(val.Day, currency);
             return new DailyValuation(date, latestValue);
         }
 
@@ -124,8 +120,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 return new DailyValuation(date, 0.0);
             }
 
-            double currencyValue = currency == null ? 1.0 : currency.Value(val.Day).Value;
-            double latestValue = fShares.NearestEarlierValue(date).Value * val.Value * currencyValue;
+            double latestValue = fShares.NearestEarlierValue(date).Value * val.Value * GetCurrencyValue(val.Day, currency);
             return new DailyValuation(date, latestValue);
         }
 

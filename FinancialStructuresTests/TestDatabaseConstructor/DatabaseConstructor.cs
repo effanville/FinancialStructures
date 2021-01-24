@@ -80,6 +80,17 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             }
         }
 
+        public DatabaseConstructor SetCurrencyAsGBP()
+        {
+            database.BaseCurrency = "GBP";
+            return this;
+        }
+        public DatabaseConstructor SetCurrency(string currency)
+        {
+            database.BaseCurrency = currency;
+            return this;
+        }
+
         public DatabaseConstructor WithDefaultSecurity()
         {
             return WithSecurityFromNameAndData(DefaultSecurityCompany, DefaultSecurityName, dates: DefaultSecurityDates, sharePrice: DefaultSecurityUnitPrices, numberUnits: DefaultSecurityShareValues, investment: DefaultSecurityInvestments);
@@ -205,7 +216,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 
         public DatabaseConstructor WithDefaultCurrency()
         {
-            return WithCurrencyFromNameAndData(DefaultCurrencyCompany, DefaultCurrencyName);
+            return WithCurrencyFromNameAndData(DefaultCurrencyCompany, DefaultCurrencyName, date: DefaultCurrencyDateTimes, value: DefaultCurrencyValues);
         }
 
         public DatabaseConstructor WithCurrencyFromName(string company, string name, string url = null, string sectors = null)

@@ -106,6 +106,7 @@ namespace FinancialStructures.Database.Implementation
         public void CopyData(IPortfolio portfolio)
         {
             BaseCurrency = portfolio.BaseCurrency;
+            fDatabaseFilePath = portfolio.FilePath;
             Funds = portfolio.Funds;
             BankAccounts = portfolio.BankAccounts;
             Currencies = portfolio.Currencies;
