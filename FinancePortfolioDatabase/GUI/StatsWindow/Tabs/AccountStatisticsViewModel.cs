@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using FinancialStructures.Statistics;
 using FinancialStructures.Database.Statistics;
-using UICommon.DisplayClasses;
 using FinancialStructures.Database;
+using StructureCommon.DisplayClasses;
 
 namespace FinanceViewModels.StatsViewModels
 {
