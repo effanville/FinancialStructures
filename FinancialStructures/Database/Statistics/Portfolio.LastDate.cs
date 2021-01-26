@@ -14,7 +14,7 @@ namespace FinancialStructures.Database.Statistics
         /// <returns></returns>
         public static DateTime LatestDate(this IPortfolio portfolio, Totals elementType, string name = null)
         {
-            DateTime output = DateTime.Today;
+            DateTime output = DateTime.MinValue;
             switch (elementType)
             {
                 case Totals.Security:
@@ -93,8 +93,8 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Totals.All:
                 {
-                    var earlySecurity = portfolio.FirstValueDate(Totals.Security);
-                    var earlyBank = portfolio.FirstValueDate(Totals.BankAccount);
+                    var earlySecurity = portfolio.LatestDate(Totals.Security);
+                    var earlyBank = portfolio.LatestDate(Totals.BankAccount);
                     output = earlySecurity > earlyBank ? earlySecurity : earlyBank;
                     break;
                 }
