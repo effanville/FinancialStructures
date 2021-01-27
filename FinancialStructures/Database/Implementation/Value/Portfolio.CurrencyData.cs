@@ -8,24 +8,14 @@ namespace FinancialStructures.Database.Implementation
         /// <summary>
         /// returns the currency associated to the account.
         /// </summary>
-        public ICurrency Currency(Account elementType, object account)
+        public ICurrency Currency(Account account, object valueList)
         {
-            switch (elementType)
+            switch (account)
             {
                 case (Account.Security):
-                {
-                    string currencyName = ((ISecurity)account).Names.Currency;
-                    ICurrency currency = Currencies.Find(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == BaseCurrency);
-                    if (currency != null)
-                    {
-                        return currency;
-                    }
-
-                    return Currencies.Find(cur => cur.BaseCurrency == BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted();
-                }
                 case (Account.BankAccount):
                 {
-                    string currencyName = ((ICashAccount)account).Names.Currency;
+                    string currencyName = ((IValueList)valueList).Names.Currency;
                     ICurrency currency = Currencies.Find(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == BaseCurrency);
                     if (currency != null)
                     {
@@ -36,7 +26,7 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case (Account.Currency):
                 {
-                    return (ICurrency)account;
+                    return (ICurrency)valueList;
                 }
                 case (Account.Benchmark):
                 default:
