@@ -3,8 +3,9 @@ using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Database.Implementation;
 using FinancialStructures.FinanceStructures.Implementation;
+using FinancialStructures.Tests.TestDatabaseConstructor;
 
-namespace FinancialStructures.Tests.TestDatabaseConstructor
+namespace FinancialStructures.Tests
 {
     public class DatabaseConstructor
     {

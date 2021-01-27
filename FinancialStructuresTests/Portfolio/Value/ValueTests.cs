@@ -1,6 +1,5 @@
 ﻿using System;
 using FinancialStructures.Database;
-using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.Database.Value

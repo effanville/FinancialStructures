@@ -1,6 +1,5 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
-using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.Database.Statistics

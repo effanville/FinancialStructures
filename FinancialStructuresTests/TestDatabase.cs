@@ -2,29 +2,8 @@
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Tests.TestDatabaseConstructor
+namespace FinancialStructures.Tests
 {
-    public enum TestDatabaseName
-    {
-        OneBank,
-        OneSecOneBank,
-        OneSecTwoBank,
-        TwoSecTwoBank,
-        TwoBank,
-        OneSec,
-        TwoSec,
-        TwoSecCur,
-        TwoBankCur,
-        TwoSecTwoBankCur
-    }
-
-    public enum NameOrder
-    {
-        Default,
-        Secondary,
-        Tertiary
-    }
-
     public static class TestDatabase
     {
         private static Dictionary<TestDatabaseName, IPortfolio> fDatabases;
