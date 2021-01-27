@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialStructuresTests", "FinancialStructuresTests\FinancialStructuresTests.csproj", "{709294DA-0BBE-4ACD-9C5E-29773FD18735}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialStructures.Tests", "FinancialStructuresTests\FinancialStructures.Tests.csproj", "{709294DA-0BBE-4ACD-9C5E-29773FD18735}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B86EADB1-3561-470B-9421-2E6992A25346} = {B86EADB1-3561-470B-9421-2E6992A25346}
 	EndProjectSection
