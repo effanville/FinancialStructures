@@ -21,11 +21,7 @@ namespace FinancialStructures.Database.Implementation
                         return currency;
                     }
 
-                    return Currencies.Find(cur => cur.Names.Company == BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted();
-                }
-                case (Account.Currency):
-                {
-                    return (ICurrency)account;
+                    return Currencies.Find(cur => cur.BaseCurrency == BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted();
                 }
                 case (Account.BankAccount):
                 {
@@ -38,12 +34,15 @@ namespace FinancialStructures.Database.Implementation
 
                     return Currencies.Find(cur => cur.BaseCurrency == BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted();
                 }
+                case (Account.Currency):
+                {
+                    return (ICurrency)account;
+                }
                 case (Account.Benchmark):
+                default:
                 {
                     return new Currency();
                 }
-                default:
-                    return new Currency();
             }
         }
     }
