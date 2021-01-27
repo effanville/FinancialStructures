@@ -23,7 +23,7 @@ namespace FinancialStructures.Statistics
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
         {
-            Value = portfolio.AccountInCompanyFraction(AccountToTotalsConverter.ConvertAccountToTotal(account), account, name, DateTime.Today);
+            Value = portfolio.AccountInCompanyFraction(EnumConvert.ConvertAccountToTotal(account), account, name, DateTime.Today);
         }
 
         /// <inheritdoc/>

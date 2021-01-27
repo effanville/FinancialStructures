@@ -3,7 +3,7 @@
     /// <summary>
     /// Provides conversions between <see cref="Account"/> and <see cref="Totals"/> enums.
     /// </summary>
-    public static class AccountToTotalsConverter
+    public static class EnumConvert
     {
         /// <summary>
         /// Converts a Account enum to a Totals enum.

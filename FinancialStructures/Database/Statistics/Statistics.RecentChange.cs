@@ -25,7 +25,7 @@ namespace FinancialStructures.Database.Statistics
                     {
                         if (desired.Any())
                         {
-                            total += portfolio.RecentChange(AccountToTotalsConverter.ConvertTotalToAccount(elementType), desired.Names);
+                            total += portfolio.RecentChange(EnumConvert.ConvertTotalToAccount(elementType), desired.Names);
                         }
                     }
 
@@ -45,7 +45,7 @@ namespace FinancialStructures.Database.Statistics
                     {
                         if (desired.Any())
                         {
-                            total += portfolio.RecentChange(AccountToTotalsConverter.ConvertTotalToAccount(elementType), desired.Names);
+                            total += portfolio.RecentChange(EnumConvert.ConvertTotalToAccount(elementType), desired.Names);
                         }
                     }
 
@@ -56,7 +56,7 @@ namespace FinancialStructures.Database.Statistics
                     double total = 0.0;
                     foreach (ICashAccount cashAccount in portfolio.BankAccounts)
                     {
-                        total += portfolio.RecentChange(AccountToTotalsConverter.ConvertTotalToAccount(elementType), cashAccount.Names);
+                        total += portfolio.RecentChange(EnumConvert.ConvertTotalToAccount(elementType), cashAccount.Names);
                     }
 
                     return total;

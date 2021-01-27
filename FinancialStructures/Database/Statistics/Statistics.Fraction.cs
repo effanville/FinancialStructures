@@ -10,7 +10,7 @@ namespace FinancialStructures.Database.Statistics
         /// </summary>
         public static double AccountInCompanyFraction(this IPortfolio portfolio, Totals elementType, Account account, TwoName names, DateTime date)
         {
-            Totals companyTotals = AccountToTotalsConverter.ConvertTotalToCompanyTotal(elementType);
+            Totals companyTotals = EnumConvert.ConvertTotalToCompanyTotal(elementType);
             double companyFraction = portfolio.Fraction(companyTotals, account, names, date);
             if (companyFraction.Equals(0.0))
             {

@@ -187,7 +187,7 @@ namespace FinancialStructures.Database.Statistics
                     case Totals.SecurityCompany:
                     case Totals.SecuritySector:
                     {
-                        foreach (string company in portfolio.Companies(AccountToTotalsConverter.ConvertTotalToAccount(total)))
+                        foreach (string company in portfolio.Companies(EnumConvert.ConvertTotalToAccount(total)))
                         {
                             double latest = portfolio.TotalValue(total, new TwoName(company));
                             if ((displayValueFunds && latest > 0) || !displayValueFunds)
@@ -199,7 +199,7 @@ namespace FinancialStructures.Database.Statistics
                     }
                     case Totals.BankAccount:
                     {
-                        foreach (string bankAccount in portfolio.Companies(AccountToTotalsConverter.ConvertTotalToAccount(total)))
+                        foreach (string bankAccount in portfolio.Companies(EnumConvert.ConvertTotalToAccount(total)))
                         {
                             double latest = portfolio.TotalValue(total, new TwoName(bankAccount));
                             if ((displayValueFunds && latest > 0) || !displayValueFunds)
@@ -212,7 +212,7 @@ namespace FinancialStructures.Database.Statistics
                     case Totals.BankAccountCompany:
                     case Totals.BankAccountSector:
                     {
-                        foreach (string company in portfolio.Companies(AccountToTotalsConverter.ConvertTotalToAccount(total)))
+                        foreach (string company in portfolio.Companies(EnumConvert.ConvertTotalToAccount(total)))
                         {
                             double latest = portfolio.TotalValue(total, new TwoName(company));
                             if ((displayValueFunds && latest > 0) || !displayValueFunds)
