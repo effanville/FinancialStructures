@@ -36,13 +36,13 @@ namespace FinancialStructures.Statistics
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
         {
-            Value = portfolio.Fraction(AccountToTotalsConverter.ConvertAccountToTotal(account), name, DateTime.Today);
+            Value = portfolio.Fraction(AccountToTotalsConverter.ConvertAccountToTotal(account), account, name, DateTime.Today);
         }
 
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Totals total, TwoName name)
         {
-            Value = portfolio.Fraction(total, name, DateTime.Today);
+            Value = portfolio.TotalFraction(total, name, DateTime.Today);
         }
     }
 }
