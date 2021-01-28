@@ -104,7 +104,7 @@
                 case Totals.BankAccountSector:
                 case Totals.BankAccountCurrency:
                 {
-                    return Totals.BankAccount;
+                    return Totals.BankAccountCompany;
                 }
                 case Totals.Benchmark:
                 {
