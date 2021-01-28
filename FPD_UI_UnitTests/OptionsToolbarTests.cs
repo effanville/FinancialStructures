@@ -15,15 +15,15 @@ namespace FPD_UI_UnitTests
         [Test]
         public void CanOpenNewDatabase()
         {
-            Mock<UICommon.Services.IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("notNeeded");
-            Mock<UICommon.Services.IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock(MessageBoxResult.Yes);
+            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("notNeeded");
+            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock(MessageBoxResult.Yes);
             Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
             viewModel.NewDatabaseCommand.Execute(1);
             //Check that data held is an empty database
 
-            Assert.AreEqual("", portfolio.FilePath);
+            Assert.AreEqual(null, portfolio.FilePath);
             Assert.AreEqual(0, portfolio.Funds.Count);
             Assert.AreEqual(0, portfolio.BankAccounts.Count);
             Assert.AreEqual(0, portfolio.BenchMarks.Count);
@@ -34,8 +34,8 @@ namespace FPD_UI_UnitTests
         {
             string databaseToLoad = TestingGUICode.ExampleDatabaseFolder + "\\BasicTestDatabase.xml";
             string testFilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + databaseToLoad;
-            Mock<UICommon.Services.IFileInteractionService> fileMock = TestingGUICode.CreateFileMock(testFilePath);
-            Mock<UICommon.Services.IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
+            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock(testFilePath);
+            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
             Portfolio portfolio = TestingGUICode.CreateEmptyDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
@@ -54,8 +54,8 @@ namespace FPD_UI_UnitTests
         {
             string databaseToLoad = TestingGUICode.ExampleDatabaseFolder + "\\BasicTestDatabase.xml";
             string testFilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + databaseToLoad;
-            Mock<UICommon.Services.IFileInteractionService> fileMock = TestingGUICode.CreateFileMock(testFilePath);
-            Mock<UICommon.Services.IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
+            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock(testFilePath);
+            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
             Portfolio portfolio = TestingGUICode.CreateEmptyDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);

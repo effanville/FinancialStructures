@@ -28,6 +28,7 @@ namespace FinancialStructures.Database.Implementation
                 AllData database = XmlFileAccess.ReadFromXmlFile<AllData>(filePath, out string error);
                 if (database != null)
                 {
+                    database.MyFunds.SetFilePath(filePath);
                     CopyData(database.MyFunds);
                     if (!database.MyFunds.BenchMarks.Any())
                     {

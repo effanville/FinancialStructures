@@ -35,16 +35,7 @@ namespace FPD_UI_UnitTests.TestConstruction
 
         public static Action<Action<IPortfolio>> CreateDataUpdater(IPortfolio portfolio)
         {
-            Action<Action<IPortfolio>> DummyDataUpdater = action => UpdateData(action);
-            void UpdateData(object obj)
-            {
-                if (obj is Action<IPortfolio> updateAction)
-                {
-                    updateAction(portfolio);
-                }
-            }
-
-            return DummyDataUpdater;
+            return action => action(portfolio);
         }
 
         internal static Action<object> DummyOpenTab

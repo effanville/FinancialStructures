@@ -24,14 +24,14 @@ namespace FinancialStructures.Database.Statistics
         /// </summary>
         public static double Fraction(this IPortfolio portfolio, Totals totals, Account account, TwoName names, DateTime date)
         {
-            if (portfolio.TotalValue(totals, date) == 0)
+            if (portfolio.TotalValue(totals, date, names) == 0)
             {
                 return double.NaN;
             }
 
             if (portfolio.Exists(account, names))
             {
-                return portfolio.Value(account, names, date) / portfolio.TotalValue(totals, date);
+                return portfolio.Value(account, names, date) / portfolio.TotalValue(totals, date, names);
             }
 
             return 0.0;
