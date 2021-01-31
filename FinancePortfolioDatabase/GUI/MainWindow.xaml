@@ -9,7 +9,7 @@
         Title="{Binding TitleValue}"
         MinHeight="400"
         MinWidth="400"
-        Height="600"
+        Height="500"
         Width="1000"
         Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}"
         Closing="Window_Closing">

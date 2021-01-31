@@ -22,7 +22,7 @@ namespace FinanceWindowsViewModels
         private readonly Action<Action<IPortfolio>> UpdateDataAction;
 
         public SecurityEditWindowViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation)
-            : base("Security Edit", Account.Security, portfolio)
+            : base("Securities", Account.Security, portfolio)
         {
             UpdateDataAction = updateData;
             ReportLogger = reportLogger;
