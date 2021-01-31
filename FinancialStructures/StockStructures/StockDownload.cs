@@ -3,7 +3,7 @@
     /// <summary>
     /// What information should be downloaded.
     /// </summary>
-    public enum StockExchangeDownloadMethod
+    public enum StockDownload
     {
         /// <summary>
         /// Download all history.

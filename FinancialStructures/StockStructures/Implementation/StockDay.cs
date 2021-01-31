@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FinancialStructures.StockStructures
+namespace FinancialStructures.StockStructures.Implementation
 {
     /// <summary>
     /// Class containing all data pertaining to a stock.

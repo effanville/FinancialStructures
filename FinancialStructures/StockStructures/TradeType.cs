@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.StockStructures.StockData
+﻿namespace FinancialStructures.StockStructures
 {
     /// <summary>
     /// The type of the trade.

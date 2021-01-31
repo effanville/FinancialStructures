@@ -1,10 +1,10 @@
 ﻿using System;
 using StructureCommon.Extensions;
 
-namespace FinancialStructures.StockStructures.StockData
+namespace FinancialStructures.StockStructures.Implementation
 {
     /// <summary>
-    ///
+    /// Contains all information about a Stock trade.
     /// </summary>
     public class Trade
     {
@@ -40,7 +40,7 @@ namespace FinancialStructures.StockStructures.StockData
         }
 
         /// <summary>
-        /// Construc an instance with only a <see cref="StockData.TradeType"/>
+        /// Construc an instance with only a <see cref="TradeType"/>
         /// </summary>
         public Trade(TradeType type)
         {

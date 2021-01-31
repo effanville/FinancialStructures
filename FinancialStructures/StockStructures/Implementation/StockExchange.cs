@@ -7,7 +7,7 @@ using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
 using StructureCommon.WebAccess;
 
-namespace FinancialStructures.StockStructures
+namespace FinancialStructures.StockStructures.Implementation
 {
     /// <summary>
     /// Simulates a stock exchange.
@@ -157,12 +157,12 @@ namespace FinancialStructures.StockStructures
         }
 
         /// <inheritdoc/>
-        public void Download(StockExchangeDownloadMethod downloadType, DateTime startDate, DateTime endDate, IReportLogger reportLogger = null)
+        public void Download(StockDownload downloadType, DateTime startDate, DateTime endDate, IReportLogger reportLogger = null)
         {
             foreach (Stock stock in Stocks)
             {
                 Uri downloadUrl;
-                if (downloadType == StockExchangeDownloadMethod.All)
+                if (downloadType == StockDownload.All)
                 {
                     downloadUrl = new Uri(stock.Name.Url + $"/history?period1={DateToYahooInt(startDate)}&period2={DateToYahooInt(endDate)}&interval=1d&filter=history&frequency=1d");
                 }
@@ -186,9 +186,9 @@ namespace FinancialStructures.StockStructures
             return new DateTime(1970, 1, 1).AddSeconds(yahooInt);
         }
 
-        private void ProcessAndAddData(StockExchangeDownloadMethod download, Stock stock, string websiteHtml, IReportLogger reportLogger = null)
+        private void ProcessAndAddData(StockDownload download, Stock stock, string websiteHtml, IReportLogger reportLogger = null)
         {
-            if (download == StockExchangeDownloadMethod.All)
+            if (download == StockDownload.All)
             {
                 string findString = "\"HistoricalPriceStore\":{\"prices\":";
                 int historyStartIndex = websiteHtml.IndexOf(findString);
@@ -229,7 +229,7 @@ namespace FinancialStructures.StockStructures
                 _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Downloading, $"Added {numberEntriesAdded} to stock {stock.Name}");
             }
 
-            if (download == StockExchangeDownloadMethod.Latest)
+            if (download == StockDownload.Latest)
             {
                 double close = FindAndGetSingleValue(websiteHtml, "<span class=\"Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)\" data-reactid=\"34\">");
                 double open = FindAndGetSingleValue(websiteHtml, "data-test=\"OPEN-value\" data-reactid=\"46\"><span class=\"Trsdu(0.3s) \" data-reactid=\"47\">");

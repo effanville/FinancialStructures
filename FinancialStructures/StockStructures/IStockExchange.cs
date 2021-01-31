@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using FinancialStructures.NamingStructures;
+using FinancialStructures.StockStructures.Implementation;
 using StructureCommon.Reporting;
 
 namespace FinancialStructures.StockStructures
@@ -77,6 +78,6 @@ namespace FinancialStructures.StockStructures
         /// <summary>
         /// Downloads data for the stock exchange between the dates provided.
         /// </summary>
-        void Download(StockExchangeDownloadMethod downloadType, DateTime startDate, DateTime endDate, IReportLogger reportLogger = null);
+        void Download(StockDownload downloadType, DateTime startDate, DateTime endDate, IReportLogger reportLogger = null);
     }
 }
