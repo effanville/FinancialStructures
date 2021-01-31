@@ -193,19 +193,6 @@ namespace FinancialStructures.Database.Implementation
             return 0;
         }
 
-        public int NumberOf(Account account, Func<IValueList, bool> selector)
-        {
-            switch (account)
-            {
-                case Account.Security:
-                {
-                    return Funds.Where(fund => selector(fund)).Count();
-                }
-                default:
-                    return 0;
-            }
-        }
-
         /// <inheritdoc/>
         public int NumberOf(Account account, Func<IValueList, bool> selector)
         {

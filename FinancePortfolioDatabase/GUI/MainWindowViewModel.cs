@@ -55,11 +55,12 @@ namespace FinanceWindowsViewModels
 
             OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService);
             Tabs.Add(new BasicDataViewModel(ProgramPortfolio));
+            Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, fileInteractionService, dialogCreationService));
             Tabs.Add(new SecurityEditWindowViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService));
             Tabs.Add(new SingleValueEditWindowViewModel("Bank Accounts", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, Account.BankAccount));
             Tabs.Add(new SingleValueEditWindowViewModel("Benchmarks", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, Account.Benchmark));
             Tabs.Add(new SingleValueEditWindowViewModel("Currencies", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, Account.Currency));
-            Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, fileInteractionService, dialogCreationService));
+
             ProgramPortfolio.PortfolioChanged += AllData_portfolioChanged;
         }
 

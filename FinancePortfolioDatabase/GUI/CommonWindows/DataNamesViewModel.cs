@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Download;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
+using StructureCommon.DataStructures;
 using StructureCommon.Reporting;
 using UICommon.Commands;
 using UICommon.ViewModelBases;
@@ -20,15 +23,23 @@ namespace FinanceCommonViewModels
         private readonly Account TypeOfAccount;
         private int fSelectedRowIndex;
 
+        public bool ShowPriceHistory
+        {
+            get
+            {
+                return TypeOfAccount == Account.Security;
+            }
+        }
+
         /// <summary>
         /// Backing field for <see cref="DataNames"/>.
         /// </summary>
-        private List<NameCompDate> fDataNames = new List<NameCompDate>();
+        private List<NameData> fDataNames = new List<NameData>();
 
         /// <summary>
         /// Name data of the names to be displayed in this view.
         /// </summary>
-        public List<NameCompDate> DataNames
+        public List<NameData> DataNames
         {
             get
             {
@@ -41,7 +52,72 @@ namespace FinanceCommonViewModels
             }
         }
 
-        internal NameCompDate fPreEditSelectedName;
+        private NameData fPreEditSelectedName;
+        public NameData PreEditSelectedName
+        {
+            get
+            {
+                return fPreEditSelectedName;
+            }
+            set
+            {
+                fPreEditSelectedName = value;
+                OnPropertyChanged(nameof(PreEditSelectedName));
+            }
+        }
+
+        private NameData fSelectedName;
+        public NameData SelectedName
+        {
+            get
+            {
+                return fSelectedName;
+            }
+            set
+            {
+                fSelectedName = value;
+                OnPropertyChanged(nameof(SelectedName));
+            }
+        }
+
+        private DateTime fSelectedLatestDate;
+        public DateTime SelectedLatestDate
+        {
+            get
+            {
+                return fSelectedLatestDate;
+            }
+            set
+            {
+                SetAndNotify(ref fSelectedLatestDate, value, nameof(SelectedLatestDate));
+            }
+        }
+
+        private List<DailyValuation> fSelectedValueHistory;
+        public List<DailyValuation> SelectedValueHistory
+        {
+            get
+            {
+                return fSelectedValueHistory;
+            }
+            set
+            {
+                SetAndNotify(ref fSelectedValueHistory, value);
+            }
+        }
+
+        private List<DailyValuation> fSelectedPriceHistory;
+        public List<DailyValuation> SelectedPriceHistory
+        {
+            get
+            {
+                return fSelectedPriceHistory;
+            }
+            set
+            {
+                SetAndNotify(ref fSelectedPriceHistory, value);
+            }
+        }
 
         /// <summary>
         /// Function which updates the main data store.
@@ -71,6 +147,7 @@ namespace FinanceCommonViewModels
             DeleteCommand = new RelayCommand(ExecuteDelete);
             DownloadCommand = new RelayCommand(ExecuteDownloadCommand);
             OpenTabCommand = new RelayCommand(OpenTab);
+            SelectedTextChangedCommand = new RelayCommand<RoutedEventArgs>(SelectedNameEdited);
         }
 
         /// <summary>
@@ -131,7 +208,7 @@ namespace FinanceCommonViewModels
         {
             if (e.Source is DataGrid dg)
             {
-                if (dg.CurrentItem != null && dg.CurrentItem is NameCompDate name)
+                if (dg.CurrentItem != null && dg.CurrentItem is NameData name)
                 {
                     if (DataNames != null)
                     {
@@ -139,10 +216,62 @@ namespace FinanceCommonViewModels
                         if (fSelectedRowIndex == -1 || fSelectedRowIndex != index)
                         {
                             fSelectedRowIndex = index;
-                            fPreEditSelectedName = name.Copy();
+                            PreEditSelectedName = name.Copy();
+                            SelectedName = name.Copy();
+                            DataStore.TryGetAccount(TypeOfAccount, name, out var desired);
+
+                            ISecurity security = desired as ISecurity;
+                            var unitPrices = security?.UnitPrice;
+                            SelectedLatestDate = desired.LatestValue().Day;
+                            DateTime calculationDate = desired.FirstValue().Day;
+                            var outputs = new List<DailyValuation>();
+                            var prices = new List<DailyValuation>();
+
+                            while (calculationDate < DateTime.Today)
+                            {
+                                var calcuationDateStatistics = desired.Value(calculationDate);
+                                outputs.Add(new DailyValuation(calculationDate, calcuationDateStatistics.Value));
+                                if (unitPrices != null)
+                                {
+                                    prices.Add(new DailyValuation(calculationDate, unitPrices.Value(calculationDate).Value));
+                                }
+
+                                calculationDate = calculationDate.AddDays(30);
+                            }
+                            if (calculationDate == DateTime.Today)
+                            {
+                                var calcuationDateStatistics = desired.Value(calculationDate);
+                                outputs.Add(new DailyValuation(calculationDate, calcuationDateStatistics.Value));
+
+                                if (unitPrices != null)
+                                {
+                                    prices.Add(new DailyValuation(calculationDate, unitPrices.Value(calculationDate).Value));
+                                }
+                            }
+
+                            SelectedValueHistory = outputs;
+                            SelectedPriceHistory = prices;
                         }
                     }
                 }
+            }
+        }
+
+        public ICommand SelectedTextChangedCommand
+        {
+            get;
+            set;
+        }
+
+        private void SelectedNameEdited(RoutedEventArgs e)
+        {
+            bool edited = false;
+            NameData name = new NameData(SelectedName.Company, SelectedName.Name, SelectedName.Currency, SelectedName.Url, SelectedName.Sectors);
+            UpdateDataCallback(portfolio => edited = portfolio.TryEditName(TypeOfAccount, fPreEditSelectedName, name, ReportLogger));
+
+            if (!edited)
+            {
+                _ = ReportLogger.LogWithStrings("Critical", "Error", "EditingData", "Was not able to edit desired.");
             }
         }
 

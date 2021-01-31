@@ -245,7 +245,7 @@ namespace FinancialStructures.Database
         /// </summary>
         /// <param name="elementType">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        List<NameCompDate> NameData(Account elementType);
+        List<NameData> NameData(Account elementType);
 
         /// <summary>
         /// Queries for data for the security of name and company.

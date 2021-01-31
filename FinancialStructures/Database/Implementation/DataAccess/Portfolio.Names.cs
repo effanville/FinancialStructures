@@ -21,9 +21,9 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
-        public List<NameCompDate> NameData(Account elementType)
+        public List<NameData> NameData(Account elementType)
         {
-            List<NameCompDate> namesAndCompanies = new List<NameCompDate>();
+            List<NameData> namesAndCompanies = new List<NameData>();
             switch (elementType)
             {
                 case (Account.Security):
@@ -49,20 +49,14 @@ namespace FinancialStructures.Database.Implementation
             return namesAndCompanies;
         }
 
-        private List<NameCompDate> SingleDataNameObtainer<T>(List<T> objects) where T : IValueList
+        private List<NameData> SingleDataNameObtainer<T>(List<T> objects) where T : IValueList
         {
-            List<NameCompDate> namesAndCompanies = new List<NameCompDate>();
+            List<NameData> namesAndCompanies = new List<NameData>();
             if (objects != null)
             {
                 foreach (T dataList in objects)
                 {
-                    DateTime date = DateTime.MinValue;
-                    if (dataList.Any())
-                    {
-                        date = dataList.LatestValue().Day;
-                    }
-
-                    namesAndCompanies.Add(new NameCompDate(dataList.Names.Company, dataList.Names.Name, dataList.Names.Currency, dataList.Names.Url, dataList.Names.Sectors, date));
+                    namesAndCompanies.Add(new NameData(dataList.Names.Company, dataList.Names.Name, dataList.Names.Currency, dataList.Names.Url, dataList.Names.Sectors));
                 }
             }
 
