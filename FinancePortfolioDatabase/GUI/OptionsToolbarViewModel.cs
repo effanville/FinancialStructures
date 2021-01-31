@@ -35,7 +35,6 @@ namespace FinanceWindowsViewModels
                 {
                     fBaseCurrency = value;
                     OnPropertyChanged(nameof(BaseCurrency));
-                    DataUpdateCallback(portfolio => portfolio.BaseCurrency = BaseCurrency);
                 }
             }
         }
@@ -71,6 +70,7 @@ namespace FinanceWindowsViewModels
             UpdateDataCommand = new RelayCommand(ExecuteUpdateData);
             CleanDataCommand = new RelayCommand(ExecuteCleanData);
             RefreshCommand = new RelayCommand(ExecuteRefresh);
+            CurrencyDropDownClosed = new RelayCommand(DropDownClosed);
         }
 
 
@@ -86,7 +86,7 @@ namespace FinanceWindowsViewModels
             }
 
             // We have just updated the portfolio, so shouldnt be setting BaseCurrency here.
-            fBaseCurrency = portfolio.BaseCurrency;
+            BaseCurrency = portfolio.BaseCurrency;
         }
 
         public ICommand OpenHelpCommand
@@ -176,6 +176,16 @@ namespace FinanceWindowsViewModels
         private void ExecuteRefresh()
         {
             DataUpdateCallback(programPortfolio => programPortfolio.OnPortfolioChanged(false, new PortfolioEventArgs(Account.All)));
+        }
+
+        public ICommand CurrencyDropDownClosed
+        {
+            get;
+        }
+        private void DropDownClosed()
+        {
+
+            DataUpdateCallback(portfolio => portfolio.BaseCurrency = BaseCurrency);
         }
     }
 }

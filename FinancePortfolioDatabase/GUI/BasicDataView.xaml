@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:cl="clr-namespace:Colouring"
+      xmlns:fs="clr-namespace:FinancialStructures.DataStructures;assembly=FinancialStructures"
       xmlns:uic="clr-namespace:UICommon.Converters;assembly=UICommon"
       mc:Ignorable="d"
       d:DesignHeight="450"
@@ -13,105 +14,93 @@
       Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
     <Grid.Resources>
         <uic:StringToUKDateConverter x:Key="StringToUKDate" />
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+        <DataTemplate DataType="{x:Type fs:DayValue_Named}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding Names.Company}"
+                           Grid.Column="0"/>
+                <TextBlock Text="{Binding Names.Name}"
+                           Grid.Column="1" />
+                <TextBlock Text="{Binding Value}"
+                           Grid.Column="2" />
+            </Grid>
+        </DataTemplate>
     </Grid.Resources>
-    <TabControl x:Name="fDataView"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                Margin="0"
-                Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
-        <TabItem Header="Securities">
-            <Grid Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
-                <ListView Name="SecBox"
-                          ItemsSource="{Binding FundNames}"
-                          Margin="2,2,2,2"
-                          Height="Auto"
-                          MinWidth="200"
-                          Width="Auto"
-                          ScrollViewer.VerticalScrollBarVisibility="Visible">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="HorizontalContentAlignment"
-                                    Value="Stretch" />
-                            <Setter Property="VerticalContentAlignment"
-                                    Value="Stretch" />
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Width="Auto"
-                                            Header="Company"
-                                            DisplayMemberBinding="{Binding Company}" />
-                            <GridViewColumn Width="Auto"
-                                            Header="Name"
-                                            DisplayMemberBinding="{Binding Name}" />
-                            <GridViewColumn Width="Auto"
-                                            Header="Last Recorded"
-                                            DisplayMemberBinding="{Binding DateToRecord, Converter={StaticResource StringToUKDate} }" />
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </Grid>
-        </TabItem>
-        <TabItem Header="Bank Accounts">
-            <Grid Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
-                <ListView Name="BankAccounts"
-                          ItemsSource="{Binding AccountNames}"
-                          Margin="2,2,2,2"
-                          ScrollViewer.VerticalScrollBarVisibility="Visible">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Width="Auto"
-                                            Header="Company"
-                                            DisplayMemberBinding="{Binding Company}" />
-                            <GridViewColumn Width="Auto"
-                                            Header="Name"
-                                            DisplayMemberBinding="{Binding Name}" />
-                            <GridViewColumn Width="Auto"
-                                            Header="Last Recorded"
-                                            DisplayMemberBinding="{Binding DateToRecord, Converter={StaticResource StringToUKDate}}" />
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </Grid>
-        </TabItem>
-        <TabItem Header="Sectors">
-            <Grid Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
-                <ListView Name="Sectors"
-                          ItemsSource="{Binding SectorNames}"
-                          Margin="2,2,2,2">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Width="100"
-                                            Header="Name"
-                                            DisplayMemberBinding="{Binding Name}" />
-                            <GridViewColumn Width="Auto"
-                                            Header="Last Recorded"
-                                            DisplayMemberBinding="{Binding DateToRecord, Converter={StaticResource StringToUKDate}}" />
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </Grid>
-        </TabItem>
-        <TabItem Header="Currencies">
-            <Grid Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
-                <ListView Name="Currencies"
-                          ItemsSource="{Binding CurrencyNames}"
-                          Margin="2,2,2,2">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Width="Auto"
-                                            Header="Company"
-                                            DisplayMemberBinding="{Binding Company}" />
-                            <GridViewColumn Width="Auto"
-                                            Header="Name"
-                                            DisplayMemberBinding="{Binding Name}" />
-                            <GridViewColumn Width="Auto"
-                                            Header="Last Recorded"
-                                            DisplayMemberBinding="{Binding DateToRecord, StringFormat=\{0:dd.MM.yyyy\}}" />
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-            </Grid>
-        </TabItem>
-    </TabControl>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="*" />
+        <RowDefinition Height="10*" />
+    </Grid.RowDefinitions>
+    <TextBlock Grid.Row="0"
+               Margin="10 1 1 1"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Center"
+               Text="{Binding PortfolioNameText}" />
+    <Grid Grid.Row="1"
+          Visibility="{Binding HasValues, Converter={StaticResource BoolToVis}}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Margin="10 5 10 5"
+                       Text="Securities"
+                       Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}" />
+            <TextBlock Grid.Row="1"
+                       Margin="10 5 10 5"
+                       Text="{Binding SecurityTotalText}" />
+            <TextBlock Grid.Row="2"
+                       Margin="10 5 10 5"
+                       Text="{Binding SecurityAmountText}" />
+            <TextBlock Grid.Row="3"
+                       Margin="10 5 10 5"
+                       Text="Top Securities:" />
+            <ItemsControl Grid.Row="4"
+                          ItemsSource="{Binding TopSecurities}"
+                          Margin="10 5 10 5" />
+        </Grid>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Margin="10 5 10 5"
+                       Text="BankAccounts"
+                       Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}" />
+            <TextBlock Grid.Row="1"
+                       Margin="10 5 10 5"
+                       Text="{Binding BankAccountTotalText}" />
+            <TextBlock Grid.Row="2"
+                       Margin="10 5 10 5"
+                       Text="{Binding BankAccountAmountText}" />
+            <TextBlock Grid.Row="3"
+                       Margin="10 5 10 5"
+                       Text="Top Securities:" />
+            <ItemsControl Grid.Row="4"
+                          ItemsSource="{Binding TopBankAccounts}"
+                          Margin="10 5 10 5" />
+        </Grid>
+    </Grid>
+    <Grid Grid.Row="1"
+          Visibility="{Binding NoValues, Converter={StaticResource BoolToVis}}">
+        <TextBlock Text="To get started, &#10; 1. Save your database in a convenient location by clicking at the top on the Save Database button.&#10; 2. Navigate to each page on the left hand side&#10; 3. Start adding Bank Accounts or Securities to the database.&#10; 4. Remember to save so you don't lose your data."
+                   TextWrapping="WrapWithOverflow"
+                   Margin="20"/>
+    </Grid>
 </Grid>

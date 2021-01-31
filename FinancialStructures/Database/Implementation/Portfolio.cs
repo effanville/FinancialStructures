@@ -166,6 +166,10 @@ namespace FinancialStructures.Database.Implementation
         {
             switch (elementType)
             {
+                case (Account.All):
+                {
+                    return Funds.Count + Currencies.Count + BankAccounts.Count + BenchMarks.Count;
+                }
                 case (Account.Security):
                 {
                     return Funds.Count;
@@ -180,13 +184,26 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case (Account.Benchmark):
                 {
-                    break;
+                    return BenchMarks.Count;
                 }
                 default:
                     break;
             }
 
             return 0;
+        }
+
+        public int NumberOf(Account account, Func<IValueList, bool> selector)
+        {
+            switch (account)
+            {
+                case Account.Security:
+                {
+                    return Funds.Where(fund => selector(fund)).Count();
+                }
+                default:
+                    return 0;
+            }
         }
 
         /// <inheritdoc/>

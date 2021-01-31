@@ -1,65 +1,154 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using FinanceCommonViewModels;
 using FinancialStructures.Database;
+using FinancialStructures.DataStructures;
 using FinancialStructures.NamingStructures;
+using StructureCommon.Extensions;
 
 namespace FinanceWindowsViewModels
 {
     internal class BasicDataViewModel : DataDisplayViewModelBase
     {
-        private List<NameCompDate> fFundNames;
-        public List<NameCompDate> FundNames
+        private string fPortfolioNameText;
+        public string PortfolioNameText
         {
             get
             {
-                return fFundNames;
+                return fPortfolioNameText;
             }
             set
             {
-                fFundNames = value;
-                OnPropertyChanged();
+                if (fPortfolioNameText != value)
+                {
+                    fPortfolioNameText = value;
+                    OnPropertyChanged(nameof(PortfolioNameText));
+                }
             }
         }
 
-        private List<NameCompDate> fAccountNames;
-        public List<NameCompDate> AccountNames
+        private bool fHasValues;
+        public bool HasValues
         {
             get
             {
-                return fAccountNames;
+                return fHasValues;
             }
             set
             {
-                fAccountNames = value;
-                OnPropertyChanged();
+                if (fHasValues != value)
+                {
+                    fHasValues = value;
+                    OnPropertyChanged(nameof(HasValues));
+                    OnPropertyChanged(nameof(NoValues));
+                }
             }
         }
 
-        private List<NameCompDate> fSectorNames;
-        public List<NameCompDate> SectorNames
+        public bool NoValues
         {
             get
             {
-                return fSectorNames;
-            }
-            set
-            {
-                fSectorNames = value;
-                OnPropertyChanged();
+                return !fHasValues;
             }
         }
 
-        private List<NameCompDate> fCurrencyNames;
-        public List<NameCompDate> CurrencyNames
+        private string fSecurityTotalText;
+        public string SecurityTotalText
         {
             get
             {
-                return fCurrencyNames;
+                return fSecurityTotalText;
             }
             set
             {
-                fCurrencyNames = value;
-                OnPropertyChanged();
+                if (fSecurityTotalText != value)
+                {
+                    fSecurityTotalText = value;
+                    OnPropertyChanged(nameof(SecurityTotalText));
+                }
+            }
+        }
+        private string fSecurityAmountText;
+        public string SecurityAmountText
+        {
+            get
+            {
+                return fSecurityAmountText;
+            }
+            set
+            {
+                if (fSecurityAmountText != value)
+                {
+                    fSecurityAmountText = value;
+                    OnPropertyChanged(nameof(SecurityAmountText));
+                }
+            }
+        }
+        private List<DayValue_Named> fTopSecurities;
+        public List<DayValue_Named> TopSecurities
+        {
+            get
+            {
+                return fTopSecurities;
+            }
+            set
+            {
+                if (fTopSecurities != value)
+                {
+                    fTopSecurities = value;
+                    OnPropertyChanged(nameof(TopSecurities));
+                }
+            }
+        }
+
+        private string fBankAccountTotalText;
+        public string BankAccountTotalText
+        {
+            get
+            {
+                return fBankAccountTotalText;
+            }
+            set
+            {
+                if (fBankAccountTotalText != value)
+                {
+                    fBankAccountTotalText = value;
+                    OnPropertyChanged(nameof(BankAccountTotalText));
+                }
+            }
+        }
+        private string fBankAccountAmountText;
+        public string BankAccountAmountText
+        {
+            get
+            {
+                return fBankAccountAmountText;
+            }
+            set
+            {
+                if (fBankAccountAmountText != value)
+                {
+                    fBankAccountAmountText = value;
+                    OnPropertyChanged(nameof(BankAccountAmountText));
+                }
+            }
+        }
+        private List<DayValue_Named> fTopBankAccounts;
+        public List<DayValue_Named> TopBankAccounts
+        {
+            get
+            {
+                return fTopBankAccounts;
+            }
+            set
+            {
+                if (fTopBankAccounts != value)
+                {
+                    fTopBankAccounts = value;
+                    OnPropertyChanged(nameof(TopBankAccounts));
+                }
             }
         }
 
@@ -71,14 +160,19 @@ namespace FinanceWindowsViewModels
 
         public override void UpdateData(IPortfolio portfolio)
         {
-            FundNames = portfolio.NameData(Account.Security);
-            FundNames.Sort();
-            AccountNames = portfolio.NameData(Account.BankAccount);
-            AccountNames.Sort();
-            SectorNames = portfolio.NameData(Account.Benchmark);
-            SectorNames.Sort();
-            CurrencyNames = portfolio.NameData(Account.Currency);
-            CurrencyNames.Sort();
+            PortfolioNameText = string.IsNullOrWhiteSpace(portfolio.DatabaseName) ? "Unsaved database loaded" : $"Portfolio: {portfolio.DatabaseName} loaded.";
+            HasValues = portfolio.NumberOf(Account.All) != 0;
+            SecurityTotalText = $"Total Securities: {portfolio.NumberOf(Account.Security)}";
+            SecurityAmountText = $"Total Value: {portfolio.TotalValue(Totals.Security).Truncate()} {portfolio.BaseCurrency}";
+            var securities = portfolio.Funds.ToList();
+            securities.Sort((fund, otherFund) => otherFund.Value(DateTime.Today).Value.CompareTo(fund.Value(DateTime.Today).Value));
+            TopSecurities = securities.Take(5).Select(name => new DayValue_Named(name.Company, name.Name, name.Value(DateTime.Today))).ToList();
+
+            BankAccountTotalText = $"Total Securities: {portfolio.NumberOf(Account.BankAccount)}";
+            BankAccountAmountText = $"Total Value: {portfolio.TotalValue(Totals.BankAccount)} {portfolio.BaseCurrency}";
+            var bankAccounts = portfolio.BankAccounts.ToList();
+            bankAccounts.Sort((bank, otherBank) => otherBank.Value(DateTime.Today).Value.CompareTo(bank.Value(DateTime.Today).Value));
+            TopBankAccounts = bankAccounts.Take(5).Select(name => new DayValue_Named(name.Company, name.Name, name.Value(DateTime.Today))).ToList();
         }
     }
 }
