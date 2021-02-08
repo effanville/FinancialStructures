@@ -69,6 +69,7 @@ namespace FinanceWindowsViewModels
             SaveDatabaseCommand = new RelayCommand(ExecuteSaveDatabase);
             LoadDatabaseCommand = new RelayCommand(ExecuteLoadDatabase);
             UpdateDataCommand = new RelayCommand(ExecuteUpdateData);
+            CleanDataCommand = new RelayCommand(ExecuteCleanData);
             RefreshCommand = new RelayCommand(ExecuteRefresh);
         }
 
@@ -156,6 +157,15 @@ namespace FinanceWindowsViewModels
         private void ExecuteUpdateData()
         {
             DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.Download(Account.All, programPortfolio, null, fReportLogger).ConfigureAwait(false));
+        }
+
+        public ICommand CleanDataCommand
+        {
+            get;
+        }
+        private void ExecuteCleanData()
+        {
+            DataUpdateCallback(programPortfolio => programPortfolio.CleanData());
         }
 
         public ICommand RefreshCommand

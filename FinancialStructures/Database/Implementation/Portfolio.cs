@@ -188,6 +188,41 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
+        public int NumberOf(Account account, Func<IValueList, bool> selector)
+        {
+            switch (account)
+            {
+                case Account.Security:
+                {
+                    return Funds.Where(fund => selector(fund)).Count();
+                }
+                case Account.BankAccount:
+                {
+                    return BankAccounts.Where(fund => selector(fund)).Count();
+                }
+                case Account.Benchmark:
+                {
+                    return BenchMarks.Where(fund => selector(fund)).Count();
+                }
+                case Account.Currency:
+                {
+                    return Currencies.Where(fund => selector(fund)).Count();
+                }
+                default:
+                    return 0;
+            }
+        }
+
+        /// <inheritdoc/>
+        public void CleanData()
+        {
+            foreach (var security in Funds)
+            {
+                security.CleanData();
+            }
+        }
+
+        /// <inheritdoc/>
         public void WireDataChangedEvents()
         {
             foreach (Security security in Funds)

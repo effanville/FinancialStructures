@@ -108,6 +108,19 @@ namespace FinancialStructures.Database
         int NumberOf(Account accountType);
 
         /// <summary>
+        /// Number of type satisfying a certain condition in the database.
+        /// </summary>
+        /// <param name="account">The type to search for.</param>
+        /// <param name="selector">A fucntion to select certain accounts.</param>
+        /// <returns>The number of type in the database.</returns>
+        int NumberOf(Account account, Func<IValueList, bool> selector);
+
+        /// <summary>
+        /// Removes unnecessary data from the database.
+        /// </summary>
+        void CleanData();
+
+        /// <summary>
         /// Handler for the event that data stored in the portfolio has changed.
         /// </summary>
         event EventHandler<PortfolioEventArgs> PortfolioChanged;

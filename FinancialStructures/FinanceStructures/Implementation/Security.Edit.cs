@@ -82,6 +82,15 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <summary>
+        /// Removes unnecessary investment and Share number values to reduce size.
+        /// </summary>
+        public void CleanData()
+        {
+            fShares.CleanValues();
+            fInvestments.CleanValues();
+        }
+
+        /// <summary>
         /// Try to edit data. If any dont have any relevant values, then do not edit
         /// If do have relevant values, then edit that value
         /// If investment value doesnt exist, then add that value.
@@ -115,6 +124,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// </remarks>
         private bool ComputeInvestments(IReportLogger reportLogger = null)
         {
+            CleanData();
+
             for (int index = 0; index < fInvestments.Count(); index++)
             {
                 DailyValuation investmentValue = fInvestments[index];
