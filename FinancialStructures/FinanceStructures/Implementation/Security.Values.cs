@@ -42,36 +42,33 @@ namespace FinancialStructures.FinanceStructures.Implementation
             List<SecurityDayData> output = new List<SecurityDayData>();
             if (fUnitPrice.Any())
             {
-                foreach (DailyValuation datevalue in fUnitPrice.GetValuesBetween(fUnitPrice.FirstDate(), fUnitPrice.LatestDate()))
+                foreach (DailyValuation unitPriceValuation in fUnitPrice.GetValuesBetween(fUnitPrice.FirstDate(), fUnitPrice.LatestDate()))
                 {
-                    _ = fUnitPrice.TryGetValue(datevalue.Day, out double UnitPrice);
-                    _ = fShares.TryGetValue(datevalue.Day, out double shares);
-                    _ = fInvestments.TryGetValue(datevalue.Day, out double invest);
-                    SecurityDayData thisday = new SecurityDayData(datevalue.Day, UnitPrice, shares, invest);
+                    double shares = fShares.NearestEarlierValue(unitPriceValuation.Day).Value;
+                    _ = fInvestments.TryGetValue(unitPriceValuation.Day, out double invest);
+                    SecurityDayData thisday = new SecurityDayData(unitPriceValuation.Day, unitPriceValuation.Value, shares, invest);
                     output.Add(thisday);
                 }
             }
             if (fShares.Any())
             {
-                foreach (DailyValuation datevalue in fShares.GetValuesBetween(fShares.FirstDate(), fShares.LatestDate()))
+                foreach (DailyValuation sharesValuation in fShares.GetValuesBetween(fShares.FirstDate(), fShares.LatestDate()))
                 {
-                    if (!fUnitPrice.TryGetValue(datevalue.Day, out double _))
+                    if (!fUnitPrice.TryGetValue(sharesValuation.Day, out double _))
                     {
-                        _ = fShares.TryGetValue(datevalue.Day, out double shares);
-                        _ = fInvestments.TryGetValue(datevalue.Day, out double invest);
-                        SecurityDayData thisday = new SecurityDayData(datevalue.Day, double.NaN, shares, invest);
+                        _ = fInvestments.TryGetValue(sharesValuation.Day, out double invest);
+                        SecurityDayData thisday = new SecurityDayData(sharesValuation.Day, double.NaN, sharesValuation.Value, invest);
                         output.Add(thisday);
                     }
                 }
             }
             if (fInvestments.Any())
             {
-                foreach (DailyValuation datevalue in fInvestments.GetValuesBetween(fInvestments.FirstDate(), fInvestments.LatestDate()))
+                foreach (DailyValuation investmentValuation in fInvestments.GetValuesBetween(fInvestments.FirstDate(), fInvestments.LatestDate()))
                 {
-                    if (!fUnitPrice.TryGetValue(datevalue.Day, out double _) && !fShares.TryGetValue(datevalue.Day, out double _))
+                    if (!fUnitPrice.TryGetValue(investmentValuation.Day, out double _) && !fShares.TryGetValue(investmentValuation.Day, out double _))
                     {
-                        _ = fInvestments.TryGetValue(datevalue.Day, out double invest);
-                        SecurityDayData thisday = new SecurityDayData(datevalue.Day, double.NaN, double.NaN, invest);
+                        SecurityDayData thisday = new SecurityDayData(investmentValuation.Day, double.NaN, double.NaN, investmentValuation.Value);
 
                         output.Add(thisday);
                     }
