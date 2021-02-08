@@ -101,7 +101,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 return new DailyValuation(date, 0.0);
             }
 
-            double latestValue = fShares.RecentPreviousValue(date).Value * val.Value * GetCurrencyValue(val.Day, currency);
+            double latestValue = fShares.NearestEarlierValue(date).Value * val.Value * GetCurrencyValue(val.Day, currency);
             return new DailyValuation(date, latestValue);
         }
 
