@@ -9,7 +9,7 @@ namespace FinancialStructures.FinanceStructures
     public interface IExchangableValueList : IValueList
     {
         /// <summary>
-        /// The first value and date stored in this security.
+        /// The first value and date stored in this list.
         /// </summary>
         /// <param name="currency">An optional currency to transfer the value using.</param>
         DailyValuation FirstValue(ICurrency currency);
