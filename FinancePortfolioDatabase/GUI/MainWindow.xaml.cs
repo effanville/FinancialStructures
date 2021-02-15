@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Reflection;
 using System.Windows;
 using FinanceWindowsViewModels;
@@ -28,6 +29,27 @@ namespace FinanceWindows
             Title = "Financial Database v" + version.ToString();
 
             DataContext = viewModel;
+        }
+
+        public void PrintErrorLog(Exception exception)
+        {
+            if (DataContext is MainWindowViewModel viewModel)
+            {
+                var result = fFileInteractionService.SaveFile("log", string.Empty, viewModel.ProgramPortfolio.Directory, filter: "log Files|*.log|All Files|*.*");
+                if (result.Success != null && (bool)result.Success)
+                {
+                    using (var stream = new StreamWriter(result.FilePath))
+                    {
+                        foreach (var report in viewModel.ApplicationLog.GetReports())
+                        {
+                            stream.WriteLine(report.ToString());
+                        }
+
+                        stream.WriteLine(exception.Message);
+                        stream.WriteLine(exception.StackTrace);
+                    }
+                }
+            }
         }
 
         /// <summary>

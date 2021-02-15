@@ -51,7 +51,7 @@ namespace FinanceWindowsViewModels
         public MainWindowViewModel(IFileInteractionService fileInteractionService, IDialogCreationService dialogCreationService)
         {
             ReportsViewModel = new ReportingWindowViewModel(fileInteractionService);
-            ReportLogger = new LogReporter(ReportsViewModel.UpdateReport);
+            ReportLogger = new LogReporter(UpdateReport);
 
             OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService);
             Tabs.Add(new BasicDataViewModel(ProgramPortfolio));
@@ -80,9 +80,17 @@ namespace FinanceWindowsViewModels
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         internal readonly IReportLogger ReportLogger;
+
+        internal ErrorReports ApplicationLog = new ErrorReports();
+
+        public void UpdateReport(ReportSeverity severity, ReportType type, ReportLocation location, string message)
+        {
+            ApplicationLog.AddErrorReport(severity, type, location, message);
+            ReportsViewModel?.UpdateReport(severity, type, location, message);
+        }
 
         /// <summary>
         /// The mechanism by which the data in <see cref="ProgramPortfolio"/> is updated. This includes a GUI update action.

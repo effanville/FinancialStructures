@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using FinanceWindows;
 
 namespace FinancePortfolioDatabase
 {
@@ -54,6 +55,8 @@ namespace FinancePortfolioDatabase
         {
             //Handling the exception within the UnhandledExcpeiton handler.
             _ = MessageBox.Show(e.Exception.Message + Environment.NewLine + e.Exception.StackTrace, "Exception Caught", MessageBoxButton.OK, MessageBoxImage.Error);
+            var main = Current.MainWindow as MainWindow;
+            main.PrintErrorLog(e.Exception);
             e.Handled = true;
         }
 
@@ -61,6 +64,8 @@ namespace FinancePortfolioDatabase
         {
             Exception ex = e.ExceptionObject as Exception;
             _ = MessageBox.Show(ex.Message, "Uncaught Thread Exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            var main = Current.MainWindow as MainWindow;
+            main.PrintErrorLog(ex);
         }
     }
 }
