@@ -1,4 +1,4 @@
-﻿using FinancialStructures.FinanceInterfaces;
+﻿using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Statistics
@@ -49,11 +49,27 @@ namespace FinancialStructures.Statistics
                     return new StatisticSectors();
                 case Statistic.NumberOfAccounts:
                     return new StatisticNumberOfAccounts();
+                case Statistic.FirstDate:
+                    return new StatisticFirstDate();
+                case Statistic.LatestDate:
+                    return new StatisticLatestDate();
+                case Statistic.NumberEntries:
+                    return new StatisticNumberEntries();
+                case Statistic.EntryYearDensity:
+                    return new StatisticEntryYearDensity();
                 default:
                     return new StatisticCompany();
             }
         }
 
+        /// <summary>
+        /// Generates a statistic class from the specific type enum.
+        /// </summary>
+        /// <param name="statTypeToGenerate">The <see cref="Statistic"/> to generate.</param>
+        /// <param name="portfolio">The portfolio to generate values from.</param>
+        /// <param name="account">The Account type to generate statistics for.</param>
+        /// <param name="name">A name to generate statistics with.</param>
+        /// <returns>A statistic with the relevant type and no value set.</returns>
         public static IStatistic Generate(Statistic statTypeToGenerate, IPortfolio portfolio, Account account, TwoName name)
         {
             var stats = Generate(statTypeToGenerate);
@@ -61,6 +77,14 @@ namespace FinancialStructures.Statistics
             return stats;
         }
 
+        /// <summary>
+        /// Generates a statistic class from the specific type enum.
+        /// </summary>
+        /// <param name="statTypeToGenerate">The <see cref="Statistic"/> to generate.</param>
+        /// <param name="portfolio">The portfolio to generate values from.</param>
+        /// <param name="totals">The totals type to generate statistics for.</param>
+        /// <param name="name">A name to generate statistics with.</param>
+        /// <returns>A statistic with the relevant type and no value set.</returns>
         public static IStatistic Generate(Statistic statTypeToGenerate, IPortfolio portfolio, Totals totals, TwoName name)
         {
             var stats = Generate(statTypeToGenerate);

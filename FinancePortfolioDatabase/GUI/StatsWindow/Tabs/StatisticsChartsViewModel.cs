@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls.DataVisualization.Charting;
 using System.Windows.Media;
+using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.StatisticStructures;
+using StructureCommon.DataStructures;
 
 namespace FinanceViewModels.StatsViewModels
 {
@@ -42,8 +43,8 @@ namespace FinanceViewModels.StatsViewModels
             }
         }
 
-        private List<DayValue_Named> fDistributionValues;
-        public List<DayValue_Named> DistributionValues
+        private Dictionary<string, DailyValuation> fDistributionValues;
+        public Dictionary<string, DailyValuation> SecurityValues
         {
             get
             {
@@ -57,8 +58,8 @@ namespace FinanceViewModels.StatsViewModels
         }
 
 
-        private List<DayValue_Named> fDistributionValues2;
-        public List<DayValue_Named> DistributionValues2
+        private Dictionary<string, DailyValuation> fDistributionValues2;
+        public Dictionary<string, DailyValuation> BankAccountValues
         {
             get
             {
@@ -71,9 +72,9 @@ namespace FinanceViewModels.StatsViewModels
             }
         }
 
-        private List<DayValue_Named> fDistributionValues3;
+        private Dictionary<string, DailyValuation> fDistributionValues3;
 
-        public List<DayValue_Named> DistributionValues3
+        public Dictionary<string, DailyValuation> SectorValues
         {
             get
             {
@@ -103,26 +104,38 @@ namespace FinanceViewModels.StatsViewModels
         {
             DisplayValueFunds = displayValueFunds;
             HistoryStats = await fPortfolio.GenerateHistoryStats(HistoryGapDays).ConfigureAwait(true);
-            DistributionValues = HistoryStats[HistoryStats.Count - 1].SecurityValues;
-            DistributionValues2 = HistoryStats[HistoryStats.Count - 1].BankAccValues;
-            DistributionValues3 = HistoryStats[HistoryStats.Count - 1].SectorValues;
+            if (DisplayValueFunds)
+            {
+                SecurityValues = HistoryStats[HistoryStats.Count - 1].SecurityValues.Where(x => x.Value.Value > 0).ToDictionary(x => x.Key, x => x.Value);
+                BankAccountValues = HistoryStats[HistoryStats.Count - 1].BankAccValues.Where(x => x.Value.Value > 0).ToDictionary(x => x.Key, x => x.Value);
+                SectorValues = HistoryStats[HistoryStats.Count - 1].SectorValues.Where(x => x.Value.Value > 0).ToDictionary(x => x.Key, x => x.Value);
+            }
+            else
+            {
+                SecurityValues = HistoryStats[HistoryStats.Count - 1].SecurityValues;
+                BankAccountValues = HistoryStats[HistoryStats.Count - 1].BankAccValues;
+                SectorValues = HistoryStats[HistoryStats.Count - 1].SectorValues;
+            }
+
             UpdateChart();
         }
 
         public void UpdateChart()
         {
-            IRRLines.Clear();
+            IRRLines = null;
+            var newValues = new ObservableCollection<LineSeries>();
             if (HistoryStats.Count > 1)
             {
-                for (int sectorIndex = 0; sectorIndex < HistoryStats[0].SectorCar.Count; sectorIndex++)
+                var sectorNames = fPortfolio.GetSecuritiesSectors();
+                foreach (var name in sectorNames)
                 {
-                    var total = HistoryStats[HistoryStats.Count - 1].TotalValue;
-                    if (HistoryStats[HistoryStats.Count - 1].SectorValues[sectorIndex].Value > 0.1 * total.Value)
+                    var total = HistoryStats[HistoryStats.Count - 1].SecurityValue;
+                    if (HistoryStats[HistoryStats.Count - 1].SectorValues[name].Value > 0.1 * total.Value)
                     {
                         List<KeyValuePair<DateTime, double>> pc = new List<KeyValuePair<DateTime, double>>();
                         for (int time = 0; time < HistoryStats.Count; time++)
                         {
-                            pc.Add(new KeyValuePair<DateTime, double>(HistoryStats[time].SectorCar[sectorIndex].Day, HistoryStats[time].SectorCar[sectorIndex].Value));
+                            pc.Add(new KeyValuePair<DateTime, double>(HistoryStats[time].SectorCar[name].Day, HistoryStats[time].SectorCar[name].Value));
                         }
 
                         LineSeries series1 = new LineSeries
@@ -130,7 +143,7 @@ namespace FinanceViewModels.StatsViewModels
                             DependentValuePath = "Value",
                             IndependentValuePath = "Key",
                             ItemsSource = pc,
-                            Title = HistoryStats[0].SectorCar[sectorIndex].Names.Company
+                            Title = name
                         };
                         Style style = new Style(typeof(DataPoint));
                         Setter st1 = new Setter(DataPoint.TemplateProperty, null);
@@ -140,9 +153,11 @@ namespace FinanceViewModels.StatsViewModels
                         style.Setters.Add(st1);
                         style.Setters.Add(back);
                         series1.DataPointStyle = style;
-                        IRRLines.Add(series1);
+                        newValues.Add(series1);
                     }
                 }
+
+                IRRLines = newValues;
             }
         }
 

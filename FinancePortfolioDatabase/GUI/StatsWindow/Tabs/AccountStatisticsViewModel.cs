@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using FinancialStructures.Statistics;
-using FinancialStructures.FinanceInterfaces;
 using FinancialStructures.Database.Statistics;
-using UICommon.DisplayClasses;
+using FinancialStructures.Database;
+using StructureCommon.DisplayClasses;
 
 namespace FinanceViewModels.StatsViewModels
 {
@@ -41,12 +41,12 @@ namespace FinanceViewModels.StatsViewModels
             }
         }
 
-        public AccountStatisticsViewModel(IPortfolio portfolio, Account account, bool displayValueFunds)
+        public AccountStatisticsViewModel(IPortfolio portfolio, Account account, bool displayValueFunds, Statistic[] statsToView = null)
             : base(portfolio, displayValueFunds)
         {
             fAccount = account;
             Header = $"{account} Statistics";
-            StatisticNames = AccountStatisticsHelpers.AllStatistics().Select(stat => new Selectable<Statistic>(stat, true)).ToList();
+            StatisticNames = statsToView != null ? statsToView.Select(stat => new Selectable<Statistic>(stat, true)).ToList() : AccountStatisticsHelpers.AllStatistics().Select(stat => new Selectable<Statistic>(stat, true)).ToList();
             StatisticNames.ForEach(stat => stat.SelectedChanged += OnSelectedChanged);
             GenerateStatistics(displayValueFunds);
         }

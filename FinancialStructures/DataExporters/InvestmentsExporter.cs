@@ -1,7 +1,7 @@
 ﻿using System.IO;
+using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
 using StructureCommon.Reporting;
 
 namespace FinancialStructures.DataExporters

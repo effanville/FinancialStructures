@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
+using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using StructureCommon.FileAccess;
 using StructureCommon.Reporting;
@@ -92,9 +93,10 @@ namespace FinanceWindowsViewModels
             {
                 FileInteractionResult result = fFileService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
                 List<object> outputs = null;
-                bool exists = DataStore.TryGetSecurity(fSelectedName, out ISecurity security);
+                bool exists = DataStore.TryGetAccount(Account.Security, fSelectedName, out IValueList account);
                 if (result.Success != null && (bool)result.Success && exists)
                 {
+                    var security = account as ISecurity;
                     outputs = CsvReaderWriter.ReadFromCsv(security, result.FilePath, ReportLogger);
                 }
                 if (outputs != null)
@@ -126,8 +128,9 @@ namespace FinanceWindowsViewModels
                 FileInteractionResult result = fFileService.SaveFile("csv", string.Empty, DataStore.Directory, "Csv Files|*.csv|All Files|*.*");
                 if (result.Success != null && (bool)result.Success)
                 {
-                    if (DataStore.TryGetSecurity(fSelectedName, out ISecurity security))
+                    if (DataStore.TryGetAccount(Account.Security, fSelectedName, out IValueList account))
                     {
+                        var security = account as ISecurity;
                         CsvReaderWriter.WriteToCSVFile(security, result.FilePath, ReportLogger);
                     }
                     else

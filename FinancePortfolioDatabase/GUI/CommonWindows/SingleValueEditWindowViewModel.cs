@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using StructureCommon.Reporting;
 using UICommon.Services;

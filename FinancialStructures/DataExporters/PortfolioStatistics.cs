@@ -5,7 +5,7 @@ using System.Linq;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataExporters.ExportOptions;
-using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Statistics;
 using StructureCommon.FileAccess;

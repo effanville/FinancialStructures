@@ -1,6 +1,6 @@
 ﻿using System;
 using FinancialStructures.Database.Statistics;
-using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Statistics
@@ -23,7 +23,8 @@ namespace FinancialStructures.Statistics
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
         {
-            Value = portfolio.AccountInCompanyFraction(AccountToTotalsConverter.ConvertAccountToTotal(account), name, DateTime.Today);
+            Totals companyTotals = EnumConvert.ConvertTotalToCompanyTotal(EnumConvert.ConvertAccountToTotal(account));
+            Value = portfolio.Fraction(companyTotals, account, name, DateTime.Today);
         }
 
         /// <inheritdoc/>

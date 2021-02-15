@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 
 // Which testing suite internals are visible to
-[assembly: InternalsVisibleTo("FinancialStructuresTests")]
+[assembly: InternalsVisibleTo("FinancialStructures.Tests")]
 [assembly: InternalsVisibleTo("FPD_UI_UnitTests")]
 
 // Version information for an assembly consists of the following four values:
