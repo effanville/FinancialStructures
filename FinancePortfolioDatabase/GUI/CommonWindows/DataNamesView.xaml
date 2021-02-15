@@ -34,10 +34,14 @@
                     ToolTip="Delete the highlighted." />
         </StackPanel>
         <DataGrid Grid.Row="1"
+                  Grid.Column="0"
+                  Width="Auto"
+                  HorizontalAlignment="Left"
                   ToolTip="Lists all items currently in the database. Select one to edit data."
                   SelectionUnit="FullRow"
                   SelectionMode="Single"
                   CanUserAddRows="True"
+                  IsReadOnly="False"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding Path=DataNames, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"

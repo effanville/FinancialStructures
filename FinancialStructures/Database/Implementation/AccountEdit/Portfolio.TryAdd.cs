@@ -9,7 +9,7 @@ namespace FinancialStructures.Database.Implementation
         /// <inheritdoc/>
         public bool TryAdd(Account elementType, NameData name, IReportLogger reportLogger = null)
         {
-            if (string.IsNullOrEmpty(name.Name) && string.IsNullOrEmpty(name.Company))
+            if (string.IsNullOrWhiteSpace(name.Name) && string.IsNullOrWhiteSpace(name.Company))
             {
                 _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Adding {elementType}: Company '{name.Company}' and name '{name.Name}' cannot both be empty.");
                 return false;
