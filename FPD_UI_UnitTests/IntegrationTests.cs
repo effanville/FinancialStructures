@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using FinancialStructures.Database;
 using FinanceCommonViewModels;
 using FinanceWindowsViewModels;
 using FPD_UI_UnitTests.TestConstruction;
@@ -32,15 +34,15 @@ namespace FPD_UI_UnitTests
             Assert.AreEqual(1, viewModel.ProgramPortfolio.BenchMarks.Count);
 
             BasicDataViewModel dataView = viewModel.Tabs[0] as BasicDataViewModel;
-            Assert.AreEqual(1, dataView.AccountNames.Count);
-            Assert.AreEqual(1, dataView.FundNames.Count);
-            Assert.AreEqual(1, dataView.SectorNames.Count);
+            Assert.AreEqual("Portfolio: BasicTestDatabase loaded.", dataView.PortfolioNameText);
+            Assert.AreEqual("Total Securities: 1", dataView.SecurityTotalText);
+            Assert.AreEqual("Total Bank Accounts: 1", dataView.BankAccountTotalText);
 
-            SecurityEditWindowViewModel securityView = viewModel.Tabs[1] as SecurityEditWindowViewModel;
+            SecurityEditWindowViewModel securityView = viewModel.Tabs.First(view => view is SecurityEditWindowViewModel) as SecurityEditWindowViewModel;
             DataNamesViewModel securityNamesView = securityView.Tabs[0] as DataNamesViewModel;
             Assert.AreEqual(1, securityNamesView.DataNames.Count);
 
-            SingleValueEditWindowViewModel bankAccView = viewModel.Tabs[2] as SingleValueEditWindowViewModel;
+            SingleValueEditWindowViewModel bankAccView = viewModel.Tabs.First(view => view is SingleValueEditWindowViewModel vm && vm.DataType == Account.BankAccount) as SingleValueEditWindowViewModel;
             DataNamesViewModel bankAccNamesView = bankAccView.Tabs[0] as DataNamesViewModel;
             Assert.AreEqual(1, bankAccNamesView.DataNames.Count);
         }

@@ -52,11 +52,11 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
 
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.BankAccount);
-            NameCompDate newName = new NameCompDate("company", "name", "GBP", "someUrl", new HashSet<string>(), DateTime.Today)
+            NameData newName = new NameData("company", "name", "GBP", "someUrl", new HashSet<string>())
             {
                 Company = "Company"
             };
-            viewModel.fPreEditSelectedName = newName;
+            viewModel.PreEditSelectedName = newName;
             viewModel.DataNames.Add(newName);
             var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames.Last());
             viewModel.CreateCommand.Execute(dataGridArgs);
@@ -74,7 +74,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
 
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.BankAccount);
-            viewModel.fPreEditSelectedName = viewModel.DataNames[0].Copy();
+            viewModel.PreEditSelectedName = viewModel.DataNames[0].Copy();
             viewModel.DataNames[0].Company = "NewCompany";
             var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[0]);
             viewModel.CreateCommand.Execute(dataGridArgs);
@@ -95,7 +95,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
 
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.BankAccount)
             {
-                fPreEditSelectedName = new NameCompDate("Barclays", "currentAccount")
+                PreEditSelectedName = new NameData("Barclays", "currentAccount")
             };
             viewModel.DownloadCommand.Execute(1);
 
@@ -114,7 +114,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
 
             Assert.AreEqual(1, viewModel.DataStore.BankAccounts.Count);
             Assert.AreEqual(1, portfolio.BankAccounts.Count);
-            viewModel.fPreEditSelectedName = new NameCompDate("Barclays", "currentAccount");
+            viewModel.PreEditSelectedName = new NameData("Barclays", "currentAccount");
             viewModel.DeleteCommand.Execute(1);
             Assert.AreEqual(0, viewModel.DataStore.BankAccounts.Count);
             Assert.AreEqual(0, portfolio.BankAccounts.Count);
@@ -152,11 +152,11 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.Security);
-            NameCompDate newName = new NameCompDate("company", "name", "GBP", "someUrl", new HashSet<string>(), DateTime.Today)
+            NameData newName = new NameData("company", "name", "GBP", "someUrl", new HashSet<string>())
             {
                 Company = "Company"
             };
-            viewModel.fPreEditSelectedName = newName;
+            viewModel.PreEditSelectedName = newName;
             viewModel.DataNames.Add(newName);
             var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[1]);
             viewModel.CreateCommand.Execute(dataGridArgs);
@@ -172,7 +172,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.Security);
-            viewModel.fPreEditSelectedName = viewModel.DataNames[0].Copy();
+            viewModel.PreEditSelectedName = viewModel.DataNames[0].Copy();
             viewModel.DataNames[0].Company = "NewCompany";
             var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[0]);
             viewModel.CreateCommand.Execute(dataGridArgs);
@@ -190,7 +190,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.Security);
-            viewModel.fPreEditSelectedName = viewModel.DataNames[0].Copy();
+            viewModel.PreEditSelectedName = viewModel.DataNames[0].Copy();
 
             viewModel.DataNames[0].Company = "NewCompany";
 
@@ -214,7 +214,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.Security)
             {
-                fPreEditSelectedName = new NameCompDate("Fidelity", "China")
+                PreEditSelectedName = new NameData("Fidelity", "China")
             };
             viewModel.DownloadCommand.Execute(1);
 
@@ -233,7 +233,7 @@ namespace FPD_UI_UnitTests.CommonWindowTests
 
             Assert.AreEqual(1, viewModel.DataStore.Funds.Count);
             Assert.AreEqual(1, portfolio.Funds.Count);
-            viewModel.fPreEditSelectedName = new NameCompDate("Fidelity", "China");
+            viewModel.PreEditSelectedName = new NameData("Fidelity", "China");
             viewModel.DeleteCommand.Execute(1);
             Assert.AreEqual(0, viewModel.DataStore.Funds.Count);
             Assert.AreEqual(0, portfolio.Funds.Count);
