@@ -62,7 +62,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         public DailyValuation Value(DateTime date, ICurrency currency = null)
         {
             DailyValuation perSharePrice = Values.ValueZeroBefore(date);
-            double value = perSharePrice.Value * GetCurrencyValue(date, currency);
+            double value = perSharePrice?.Value * GetCurrencyValue(date, currency) ?? 0.0;
             return new DailyValuation(date, value);
         }
 

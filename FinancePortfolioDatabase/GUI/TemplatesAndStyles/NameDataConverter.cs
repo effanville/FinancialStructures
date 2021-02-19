@@ -5,7 +5,12 @@ using FinancialStructures.NamingStructures;
 
 namespace FinancePortfolioDatabase.GUI
 {
-    public class NameCompDateConverter : IValueConverter
+    /// <summary>
+    /// Converts to and from an object a <see cref="NameData"/> instance.
+    /// Used in <see cref="FinanceCommonWindows.DataNamesView"/> to enable
+    /// adding of objects to the datagrid.
+    /// </summary>
+    public class NameDataConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
@@ -14,7 +19,7 @@ namespace FinancePortfolioDatabase.GUI
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is NameCompDate)
+            if (value is NameData)
             {
                 return value;
             }

@@ -47,12 +47,16 @@ namespace FinanceCommonViewModels
             }
             set
             {
-                fDataNames = value;
-                OnPropertyChanged(nameof(DataNames));
+                SetAndNotify(ref fDataNames, value, nameof(DataNames));
             }
         }
 
         private NameData fPreEditSelectedName;
+
+        /// <summary>
+        /// The selected name at the start of selection. 
+        /// Holds the data before any possible editing.
+        /// </summary>
         public NameData PreEditSelectedName
         {
             get
@@ -61,12 +65,16 @@ namespace FinanceCommonViewModels
             }
             set
             {
-                fPreEditSelectedName = value;
-                OnPropertyChanged(nameof(PreEditSelectedName));
+                SetAndNotify(ref fPreEditSelectedName, value, nameof(PreEditSelectedName));
             }
         }
 
         private NameData fSelectedName;
+
+        /// <summary>
+        /// The selected name with any alterations made by the user.
+        /// These alterations update the database when certain commands are executed.
+        /// </summary>
         public NameData SelectedName
         {
             get
@@ -75,8 +83,7 @@ namespace FinanceCommonViewModels
             }
             set
             {
-                fSelectedName = value;
-                OnPropertyChanged(nameof(SelectedName));
+                SetAndNotify(ref fSelectedName, value, nameof(SelectedName));
             }
         }
 
@@ -94,6 +101,10 @@ namespace FinanceCommonViewModels
         }
 
         private List<DailyValuation> fSelectedValueHistory;
+
+        /// <summary>
+        /// The evolution of the selected accounts total value.
+        /// </summary>
         public List<DailyValuation> SelectedValueHistory
         {
             get
@@ -102,11 +113,15 @@ namespace FinanceCommonViewModels
             }
             set
             {
-                SetAndNotify(ref fSelectedValueHistory, value);
+                SetAndNotify(ref fSelectedValueHistory, value, nameof(SelectedValueHistory));
             }
         }
 
         private List<DailyValuation> fSelectedPriceHistory;
+
+        /// <summary>
+        /// The history of the price evolution of the selected object.
+        /// </summary>
         public List<DailyValuation> SelectedPriceHistory
         {
             get
@@ -115,7 +130,7 @@ namespace FinanceCommonViewModels
             }
             set
             {
-                SetAndNotify(ref fSelectedPriceHistory, value);
+                SetAndNotify(ref fSelectedPriceHistory, value, nameof(SelectedPriceHistory));
             }
         }
 
@@ -146,7 +161,7 @@ namespace FinanceCommonViewModels
             SelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(ExecuteSelectionChanged);
             DeleteCommand = new RelayCommand(ExecuteDelete);
             DownloadCommand = new RelayCommand(ExecuteDownloadCommand);
-            OpenTabCommand = new RelayCommand(OpenTab);
+            OpenTabCommand = new RelayCommand(() => LoadSelectedTab(PreEditSelectedName));
             SelectedTextChangedCommand = new RelayCommand<RoutedEventArgs>(SelectedNameEdited);
         }
 
@@ -156,10 +171,6 @@ namespace FinanceCommonViewModels
         public ICommand OpenTabCommand
         {
             get;
-        }
-        private void OpenTab()
-        {
-            LoadSelectedTab(fPreEditSelectedName);
         }
 
         /// <summary>
@@ -192,13 +203,16 @@ namespace FinanceCommonViewModels
         }
         private void ExecuteDownloadCommand()
         {
-            if (fPreEditSelectedName != null)
+            if (PreEditSelectedName != null)
             {
-                NameData names = fPreEditSelectedName;
+                NameData names = PreEditSelectedName;
                 UpdateDataCallback(async programPortfolio => await PortfolioDataUpdater.Download(TypeOfAccount, programPortfolio, names, ReportLogger).ConfigureAwait(false));
             }
         }
 
+        /// <summary>
+        /// Enacts the selected item in the datagrid has changed.
+        /// </summary>
         public ICommand SelectionChangedCommand
         {
             get;
@@ -218,7 +232,7 @@ namespace FinanceCommonViewModels
                             fSelectedRowIndex = index;
                             PreEditSelectedName = name.Copy();
                             SelectedName = name.Copy();
-                            DataStore.TryGetAccount(TypeOfAccount, name, out var desired);
+                            _ = DataStore.TryGetAccount(TypeOfAccount, name, out var desired);
 
                             ISecurity security = desired as ISecurity;
                             var unitPrices = security?.UnitPrice;
@@ -257,6 +271,9 @@ namespace FinanceCommonViewModels
             }
         }
 
+        /// <summary>
+        /// Called when text in the <see cref="SelectedName"/> has changed.
+        /// </summary>
         public ICommand SelectedTextChangedCommand
         {
             get;
@@ -266,8 +283,7 @@ namespace FinanceCommonViewModels
         private void SelectedNameEdited(RoutedEventArgs e)
         {
             bool edited = false;
-            NameData name = new NameData(SelectedName.Company, SelectedName.Name, SelectedName.Currency, SelectedName.Url, SelectedName.Sectors);
-            UpdateDataCallback(portfolio => edited = portfolio.TryEditName(TypeOfAccount, fPreEditSelectedName, name, ReportLogger));
+            UpdateDataCallback(portfolio => edited = portfolio.TryEditName(TypeOfAccount, PreEditSelectedName, SelectedName.Copy(), ReportLogger));
 
             if (!edited)
             {
@@ -286,8 +302,8 @@ namespace FinanceCommonViewModels
         private void ExecuteCreateEdit(DataGridRowEditEndingEventArgs e)
         {
             bool edited = false;
-            var originRowName = e.Row.DataContext as NameCompDate;
-            if (!DataStore.NameData(TypeOfAccount).Any(item => item.Name == fPreEditSelectedName.Name && item.Company == fPreEditSelectedName.Company))
+            var originRowName = e.Row.DataContext as NameData;
+            if (!DataStore.NameData(TypeOfAccount).Any(item => item.Name == PreEditSelectedName.Name && item.Company == PreEditSelectedName.Company))
             {
                 NameData name = new NameData(originRowName.Company, originRowName.Name, originRowName.Currency, originRowName.Url, originRowName.Sectors, originRowName.Notes);
                 UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAdd(TypeOfAccount, name, ReportLogger));
@@ -316,9 +332,9 @@ namespace FinanceCommonViewModels
         }
         private void ExecuteDelete()
         {
-            if (fPreEditSelectedName.Name != null)
+            if (PreEditSelectedName != null)
             {
-                UpdateDataCallback(programPortfolio => programPortfolio.TryRemove(TypeOfAccount, fPreEditSelectedName, ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryRemove(TypeOfAccount, PreEditSelectedName, ReportLogger));
             }
             else
             {

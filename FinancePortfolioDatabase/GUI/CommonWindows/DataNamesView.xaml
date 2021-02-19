@@ -15,7 +15,7 @@
           VerticalAlignment="Stretch"
           HorizontalAlignment="Stretch">
         <Grid.Resources>
-            <gui:NameCompDateConverter x:Key="nameConverter" />
+            <gui:NameDataConverter x:Key="nameConverter" />
             <uic:StringToUKDateConverter x:Key="StringToUKDate" />
             <BooleanToVisibilityConverter x:Key="BoolToVis" />
         </Grid.Resources>
@@ -100,7 +100,7 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <Border BorderBrush="Black"
                     BorderThickness="2"
@@ -128,7 +128,7 @@
                                Grid.Column="0"
                                Grid.ColumnSpan="2"
                                Margin="5"
-                               Text="NameData" />
+                               Text="Name Data" />
                     <TextBlock Grid.Row="1"
                                Grid.Column="0"
                                Text="Company"
@@ -217,11 +217,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="35" />
                         <RowDefinition Height="35" />
-                        <RowDefinition Height="35" />
-                        <RowDefinition Height="35" />
-                        <RowDefinition Height="35" />
-                        <RowDefinition Height="35" />
-                        <RowDefinition Height="35" />
+                        <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
@@ -242,47 +238,35 @@
                                Text="{Binding Path=SelectedLatestDate, Mode=OneWay, Converter={StaticResource StringToUKDate}}" />
                 </Grid>
             </Border>
-            <Grid           Height="Auto"
-                            Width="Auto"
-                            Grid.Column="1"
-                            Grid.Row="0"
-                            VerticalAlignment="Stretch"
-                            HorizontalAlignment="Stretch">
-                <cht:Chart Title="Holding History"
-                           Style="{StaticResource NoLegendChart}"
-                           Height="Auto"
-                           Width="Auto"
-                           Grid.Row="0"
-                           Grid.Column="0">
-                    <cht:Chart.Series>
-                        <cht:LineSeries ItemsSource="{Binding Path=SelectedValueHistory}"
-                                        DataPointStyle="{StaticResource InvisibleDataPointBlue}"
-                                        IndependentValueBinding="{Binding Path=Day}"
-                                        DependentValueBinding="{Binding Path=Value}"></cht:LineSeries>
-                    </cht:Chart.Series>
-                </cht:Chart>
-            </Grid>
-            <Grid Height="Auto"
-                  Width="Auto"
-                  Visibility="{Binding ShowPriceHistory, Converter={StaticResource BoolToVis}}"
-                  Grid.Column="1"
-                  Grid.Row="1"
-                  VerticalAlignment="Stretch"
-                  HorizontalAlignment="Stretch">
-                <cht:Chart Title="Price History"
-                           Height="Auto"
-                           Width="Auto"
-                           Style="{StaticResource NoLegendChart}"
-                           Grid.Row="0"
-                           Grid.Column="0">
-                    <cht:Chart.Series>
-                        <cht:LineSeries ItemsSource="{Binding Path=SelectedPriceHistory}"
-                                        DataPointStyle="{StaticResource InvisibleDataPointBlue}"
-                                        IndependentValueBinding="{Binding Path=Day}"
-                                        DependentValueBinding="{Binding Path=Value}"></cht:LineSeries>
-                    </cht:Chart.Series>
-                </cht:Chart>
-            </Grid>
+            <cht:Chart Title="Holding History"
+                       Style="{StaticResource NoLegendChart}"
+                       Height="Auto"
+                       Width="Auto"
+                       VerticalAlignment="Stretch"
+                       Grid.Row="0"
+                       Grid.Column="1">
+                <cht:Chart.Series>
+                    <cht:LineSeries ItemsSource="{Binding Path=SelectedValueHistory}"
+                                    DataPointStyle="{StaticResource InvisibleDataPointBlue}"
+                                    IndependentValueBinding="{Binding Path=Day}"
+                                    DependentValueBinding="{Binding Path=Value}"></cht:LineSeries>
+                </cht:Chart.Series>
+            </cht:Chart>
+            <cht:Chart Title="Price History"
+                       Grid.Column="1"
+                       Grid.Row="1"
+                       Height="Auto"
+                       VerticalAlignment="Stretch"
+                       Width="Auto"
+                       Style="{StaticResource NoLegendChart}"
+                       Visibility="{Binding ShowPriceHistory, Converter={StaticResource BoolToVis}}">
+                <cht:Chart.Series>
+                    <cht:LineSeries ItemsSource="{Binding Path=SelectedPriceHistory}"
+                                    DataPointStyle="{StaticResource InvisibleDataPointBlue}"
+                                    IndependentValueBinding="{Binding Path=Day}"
+                                    DependentValueBinding="{Binding Path=Value}"></cht:LineSeries>
+                </cht:Chart.Series>
+            </cht:Chart>
         </Grid>
     </Grid>
 </UserControl>

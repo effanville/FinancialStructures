@@ -128,11 +128,7 @@ namespace FinanceWindowsViewModels
             }
             set
             {
-                if (fBankAccountAmountText != value)
-                {
-                    fBankAccountAmountText = value;
-                    OnPropertyChanged(nameof(BankAccountAmountText));
-                }
+                SetAndNotify(ref fBankAccountAmountText, value, nameof(BankAccountAmountText));
             }
         }
         private List<DayValue_Named> fTopBankAccounts;
@@ -144,11 +140,7 @@ namespace FinanceWindowsViewModels
             }
             set
             {
-                if (fTopBankAccounts != value)
-                {
-                    fTopBankAccounts = value;
-                    OnPropertyChanged(nameof(TopBankAccounts));
-                }
+                SetAndNotify(ref fTopBankAccounts, value, nameof(TopBankAccounts));
             }
         }
 
@@ -168,7 +160,7 @@ namespace FinanceWindowsViewModels
             securities.Sort((fund, otherFund) => otherFund.Value(DateTime.Today).Value.CompareTo(fund.Value(DateTime.Today).Value));
             TopSecurities = securities.Take(5).Select(name => new DayValue_Named(name.Company, name.Name, name.Value(DateTime.Today))).ToList();
 
-            BankAccountTotalText = $"Total Securities: {portfolio.NumberOf(Account.BankAccount)}";
+            BankAccountTotalText = $"Total Bank Accounts: {portfolio.NumberOf(Account.BankAccount)}";
             BankAccountAmountText = $"Total Value: {portfolio.TotalValue(Totals.BankAccount)} {portfolio.BaseCurrency}";
             var bankAccounts = portfolio.BankAccounts.ToList();
             bankAccounts.Sort((bank, otherBank) => otherBank.Value(DateTime.Today).Value.CompareTo(bank.Value(DateTime.Today).Value));

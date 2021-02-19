@@ -1,5 +1,4 @@
 ﻿using System.Windows.Controls;
-using FinancialStructures.NamingStructures;
 
 namespace FinanceCommonWindows
 {
@@ -14,20 +13,6 @@ namespace FinanceCommonWindows
         public DataNamesView()
         {
             InitializeComponent();
-        }
-
-        private void MyList_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
-        {
-            if (sender is DataGrid dg)
-            {
-                if (dg.CurrentItem != null && dg.CurrentItem is NameCompDate name)
-                {
-                    if (!name.Equals(new NameCompDate()))
-                    {
-                        e.Cancel = true;
-                    }
-                }
-            }
         }
     }
 }
