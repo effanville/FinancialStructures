@@ -40,8 +40,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             }
             set
             {
-                fSelectedName = value;
-                OnPropertyChanged();
+                SetAndNotify(ref fSelectedName, value, nameof(SelectedName));
             }
         }
 
@@ -54,8 +53,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             }
             set
             {
-                fSelectedData = value;
-                OnPropertyChanged();
+                SetAndNotify(ref fSelectedData, value, nameof(SelectedData));
             }
         }
 
@@ -68,8 +66,12 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         private readonly IDialogCreationService fDialogCreationService;
 
         public SelectedSingleDataViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, NameData selectedName, Account accountType)
-            : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name", portfolio)
+            : base(selectedName != null ? selectedName.ToString() : "No-Name", portfolio)
         {
+            UpdateDataCallback = updateDataCallback;
+            ReportLogger = reportLogger;
+            fFileService = fileService;
+            fDialogCreationService = dialogCreation;
             SelectedName = selectedName;
             TypeOfAccount = accountType;
             UpdateData(portfolio);
@@ -80,10 +82,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             AddDefaultDataCommand = new RelayCommand<AddingNewItemEventArgs>(e => DataGrid_AddingNewItem(null, e));
             AddCsvData = new RelayCommand(ExecuteAddCsvData);
             ExportCsvData = new RelayCommand(ExecuteExportCsvData);
-            UpdateDataCallback = updateDataCallback;
-            ReportLogger = reportLogger;
-            fFileService = fileService;
-            fDialogCreationService = dialogCreation;
+
         }
 
         public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)

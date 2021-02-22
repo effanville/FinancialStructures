@@ -19,11 +19,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
             set
             {
-                if (fPortfolioNameText != value)
-                {
-                    fPortfolioNameText = value;
-                    OnPropertyChanged(nameof(PortfolioNameText));
-                }
+                SetAndNotify(ref fPortfolioNameText, value, nameof(PortfolioNameText));
             }
         }
 
@@ -62,13 +58,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
             set
             {
-                if (fSecurityTotalText != value)
-                {
-                    fSecurityTotalText = value;
-                    OnPropertyChanged(nameof(SecurityTotalText));
-                }
+                SetAndNotify(ref fSecurityTotalText, value, nameof(SecurityTotalText));
             }
         }
+
         private string fSecurityAmountText;
         public string SecurityAmountText
         {
@@ -78,13 +71,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
             set
             {
-                if (fSecurityAmountText != value)
-                {
-                    fSecurityAmountText = value;
-                    OnPropertyChanged(nameof(SecurityAmountText));
-                }
+                SetAndNotify(ref fSecurityAmountText, value, nameof(SecurityAmountText));
             }
         }
+
         private List<DayValue_Named> fTopSecurities;
         public List<DayValue_Named> TopSecurities
         {
@@ -111,13 +101,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
             set
             {
-                if (fBankAccountTotalText != value)
-                {
-                    fBankAccountTotalText = value;
-                    OnPropertyChanged(nameof(BankAccountTotalText));
-                }
+                SetAndNotify(ref fBankAccountTotalText, value, nameof(BankAccountTotalText));
             }
         }
+
         private string fBankAccountAmountText;
         public string BankAccountAmountText
         {
@@ -130,6 +117,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
                 SetAndNotify(ref fBankAccountAmountText, value, nameof(BankAccountAmountText));
             }
         }
+
         private List<DayValue_Named> fTopBankAccounts;
         public List<DayValue_Named> TopBankAccounts
         {

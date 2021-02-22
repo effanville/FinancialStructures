@@ -15,6 +15,17 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
     {
         internal IPortfolio ProgramPortfolio = PortfolioFactory.GenerateEmpty();
 
+        /// <summary>
+        /// The logging mechanism for the program. This both records into the 
+        /// reporting window and to the <see cref="ApplicationLog"/>.
+        /// </summary>
+        internal readonly IReportLogger ReportLogger;
+
+        /// <summary>
+        /// The log of the application.
+        /// </summary>
+        internal ErrorReports ApplicationLog = new ErrorReports();
+
         private OptionsToolbarViewModel fOptionsToolbarCommands;
 
         public OptionsToolbarViewModel OptionsToolbarCommands
@@ -81,13 +92,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
 
             OptionsToolbarCommands.UpdateData(ProgramPortfolio);
         }
-
-        /// <summary>
-        ///
-        /// </summary>
-        internal readonly IReportLogger ReportLogger;
-
-        internal ErrorReports ApplicationLog = new ErrorReports();
 
         public void UpdateReport(ReportSeverity severity, ReportType type, ReportLocation location, string message)
         {

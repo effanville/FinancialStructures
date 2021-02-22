@@ -83,7 +83,7 @@ namespace FinancialStructures.NamingStructures
                 return Company;
             }
 
-            return Company + "-" + Name;
+            return $"{Company}-{Name}";
         }
 
         /// <summary>

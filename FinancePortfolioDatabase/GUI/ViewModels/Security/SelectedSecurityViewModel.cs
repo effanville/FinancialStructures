@@ -17,6 +17,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 {
     internal class SelectedSecurityViewModel : TabViewModelBase<IPortfolio>
     {
+        /// <inheritdoc/>
         public override bool Closable
         {
             get
@@ -39,8 +40,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             }
             set
             {
-                fSelectedSecurityData = value;
-                OnPropertyChanged();
+                SetAndNotify(ref fSelectedSecurityData, value, nameof(SelectedSecurityData));
+                _ = fReportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Selected Security {fSelectedName} updated selected data.");
             }
         }
 
@@ -48,13 +49,16 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
 
-        private readonly IReportLogger ReportLogger;
+        private readonly IReportLogger fReportLogger;
         private readonly IFileInteractionService fFileService;
         private readonly IDialogCreationService fDialogCreationService;
 
         public SelectedSecurityViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, NameData selectedName)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name", portfolio)
         {
+            fReportLogger = reportLogger;
+            fFileService = fileService;
+            fDialogCreationService = dialogCreation;
             fSelectedName = selectedName;
             DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);
             AddCsvData = new RelayCommand(ExecuteAddCsvData);
@@ -64,9 +68,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             AddDefaultDataCommand = new RelayCommand<AddingNewItemEventArgs>(e => DataGrid_AddingNewItem(null, e));
             UpdateData(portfolio, null);
             UpdateDataCallback = updateData;
-            ReportLogger = reportLogger;
-            fFileService = fileService;
-            fDialogCreationService = dialogCreation;
         }
 
         public ICommand DeleteValuationCommand
@@ -76,9 +77,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 
         private void ExecuteDeleteValuation()
         {
+            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Selected Security {fSelectedName} deleting valuation {fOldSelectedValues}.");
             if (fSelectedName != null && fOldSelectedValues != null)
             {
-                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(Account.Security, fSelectedName, fOldSelectedValues.Date, ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(Account.Security, fSelectedName, fOldSelectedValues.Date, fReportLogger));
             }
         }
 
@@ -89,6 +91,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 
         private void ExecuteAddCsvData()
         {
+            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Selected Security {fSelectedName} adding data from csv.");
             if (fSelectedName != null)
             {
                 FileInteractionResult result = fFileService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
@@ -97,7 +100,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
                 if (result.Success != null && (bool)result.Success && exists)
                 {
                     var security = account as ISecurity;
-                    outputs = CsvReaderWriter.ReadFromCsv(security, result.FilePath, ReportLogger);
+                    outputs = CsvReaderWriter.ReadFromCsv(security, result.FilePath, fReportLogger);
                 }
                 if (outputs != null)
                 {
@@ -105,11 +108,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
                     {
                         if (objec is SecurityDayData view)
                         {
-                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditDataToSecurity(fSelectedName, view.Date, view.Date, view.ShareNo, view.UnitPrice, view.NewInvestment, ReportLogger));
+                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditDataToSecurity(fSelectedName, view.Date, view.Date, view.ShareNo, view.UnitPrice, view.NewInvestment, fReportLogger));
                         }
                         else
                         {
-                            _ = ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", "Have the wrong type of thing");
+                            _ = fReportLogger.LogUseful(ReportType.Error, ReportLocation.StatisticsPage, "Have the wrong type of thing");
                         }
                     }
                 }
@@ -123,6 +126,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 
         private void ExecuteExportCsvData()
         {
+            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Selected Security {fSelectedName} exporting data to csv.");
             if (fSelectedName != null)
             {
                 FileInteractionResult result = fFileService.SaveFile("csv", string.Empty, DataStore.Directory, "Csv Files|*.csv|All Files|*.*");
@@ -131,11 +135,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
                     if (DataStore.TryGetAccount(Account.Security, fSelectedName, out IValueList account))
                     {
                         var security = account as ISecurity;
-                        CsvReaderWriter.WriteToCSVFile(security, result.FilePath, ReportLogger);
+                        CsvReaderWriter.WriteToCSVFile(security, result.FilePath, fReportLogger);
                     }
                     else
                     {
-                        _ = ReportLogger.LogWithStrings("Critical", "Error", "Saving", "Could not find security.");
+                        _ = fReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Saving, "Could not find security.");
                     }
                 }
             }
@@ -171,12 +175,14 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
         }
         private void ExecuteSelectionChanged(SelectionChangedEventArgs e)
         {
+            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Selected Security {fSelectedName} selection changed fired.");
             if (e.Source is DataGrid dg)
             {
                 if (dg.CurrentItem != null)
                 {
                     if (dg.CurrentItem is SecurityDayData data)
                     {
+                        _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Selected Security {fSelectedName} updated selected item from {fOldSelectedValues} to {data}.");
                         fOldSelectedValues = data.Copy();
                     }
                 }
@@ -191,20 +197,23 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 
         private void ExecuteAddEditSecData(DataGridRowEditEndingEventArgs e)
         {
+            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Selected Security {fSelectedName}adding valuation called.");
             if (fSelectedName != null)
             {
                 var originRowData = e.Row.DataContext as SecurityDayData;
                 bool edited = false;
-                UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditDataToSecurity(fSelectedName, fOldSelectedValues.Date, originRowData.Date, originRowData.ShareNo, originRowData.UnitPrice, originRowData.NewInvestment, ReportLogger));
+                _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Selected Security {fSelectedName} adding valuation {originRowData}.");
+                UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditDataToSecurity(fSelectedName, fOldSelectedValues.Date, originRowData.Date, originRowData.ShareNo, originRowData.UnitPrice, originRowData.NewInvestment, fReportLogger));
                 if (!edited)
                 {
-                    _ = ReportLogger.LogUsefulWithStrings("Error", "EditingData", "Was not able to add or edit security data.");
+                    _ = fReportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, "Was not able to add or edit security data.");
                 }
             }
         }
 
         public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)
         {
+            _ = fReportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Selected Security {fSelectedName} updating data.");
             base.UpdateData(portfolio);
             if (fSelectedName != null)
             {
