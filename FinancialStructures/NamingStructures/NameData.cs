@@ -218,10 +218,11 @@ namespace FinancialStructures.NamingStructures
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            int currencyVal = Currency != null ? Currency.GetHashCode() : 0;
-            int urlVal = Url != null ? Url.GetHashCode() : 0;
-            int sectorVal = Sectors != null ? Sectors.GetHashCode() : 0;
-            return currencyVal + urlVal + sectorVal + base.GetHashCode();
+            int hashCode = 17;
+            hashCode = 23 * hashCode + Currency?.GetHashCode() ?? 17;
+            hashCode = 23 * hashCode + Url?.GetHashCode() ?? 17;
+            hashCode = 23 * hashCode + Sectors?.GetHashCode() ?? 17;
+            return 23 * hashCode + base.GetHashCode();
         }
     }
 }
