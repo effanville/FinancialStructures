@@ -1,5 +1,6 @@
 ﻿using System;
 using FinancialStructures.FinanceStructures;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Statistics
 {
@@ -101,6 +102,23 @@ namespace FinancialStructures.Database.Statistics
             }
 
             return output;
+        }
+
+        /// <summary>
+        /// Returns the latest date held in the portfolio.
+        /// </summary>
+        /// <param name="portfolio">The database to query</param>
+        /// <param name="elementType">The type of element to search for. All searches for Bank accounts and securities.</param>
+        /// <param name="name">An ancillary name to use in the case of Sectors</param>
+        /// <returns></returns>
+        public static DateTime LatestDate(this IPortfolio portfolio, Account elementType, TwoName name)
+        {
+            if (portfolio.TryGetAccount(elementType, name, out var desired))
+            {
+                return desired.LatestValue().Day;
+            }
+
+            return DateTime.MinValue;
         }
     }
 }
