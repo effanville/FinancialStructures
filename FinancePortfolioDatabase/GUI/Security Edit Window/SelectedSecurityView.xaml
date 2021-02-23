@@ -68,9 +68,10 @@
                 <DataGridTextColumn Header="Number of Shares"
                                     MinWidth="50"
                                     Binding="{Binding Path=ShareNo, UpdateSourceTrigger=LostFocus}" />
-                <DataGridTextColumn Header="Value"
+                <DataGridTextColumn Header="Value(Not Editable)"
                                     MinWidth="50"
-                                    Binding="{Binding Path=Value, UpdateSourceTrigger=LostFocus}" />
+                                    IsReadOnly="True"
+                                    Binding="{Binding Path=Value, UpdateSourceTrigger=LostFocus, Mode=OneWay}" />
                 <DataGridTextColumn Header="New Investment"
                                     MinWidth="50"
                                     Binding="{Binding Path=NewInvestment, UpdateSourceTrigger=LostFocus}" />
