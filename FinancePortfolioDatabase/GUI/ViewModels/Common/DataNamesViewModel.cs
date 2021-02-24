@@ -89,6 +89,18 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             {
                 SetAndNotify(ref fSelectedName, value, nameof(SelectedName));
                 _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, "Set SelectedName");
+                if (SelectedName != null)
+                {
+                    OnPropertyChanged(nameof(SelectedNameSet));
+                }
+            }
+        }
+
+        public bool SelectedNameSet
+        {
+            get
+            {
+                return SelectedName != null;
             }
         }
 

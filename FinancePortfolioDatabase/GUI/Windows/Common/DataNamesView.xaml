@@ -84,7 +84,6 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Company"
                                     MinWidth="70"
-                                    
                                     Binding="{Binding Path=Instance.Company,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Name"
                                     MinWidth="70"
@@ -106,6 +105,7 @@
         </DataGrid>
         <Grid Grid.Row="1"
               Grid.Column="1"
+              Visibility="{Binding Path=SelectedNameSet, Converter={StaticResource BoolToVis}}"
               Width="Auto"
               Height="Auto"
               VerticalAlignment="Stretch"
