@@ -115,7 +115,7 @@ namespace FinancialStructures.Database.Statistics
         {
             if (portfolio.TryGetAccount(elementType, name, out var desired))
             {
-                return desired.LatestValue().Day;
+                return desired.LatestValue()?.Day ?? DateTime.MinValue;
             }
 
             return DateTime.MinValue;

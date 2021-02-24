@@ -6,9 +6,11 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Download;
+using FinancialStructures.Database.Statistics;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
+using StructureCommon.DisplayClasses;
 using StructureCommon.Reporting;
 using UICommon.Commands;
 using UICommon.ViewModelBases;
@@ -34,12 +36,12 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         /// <summary>
         /// Backing field for <see cref="DataNames"/>.
         /// </summary>
-        private List<NameData> fDataNames = new List<NameData>();
+        private List<Selectable<NameData>> fDataNames = new List<Selectable<NameData>>();
 
         /// <summary>
         /// Name data of the names to be displayed in this view.
         /// </summary>
-        public List<NameData> DataNames
+        public List<Selectable<NameData>> DataNames
         {
             get
             {
@@ -160,7 +162,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             TypeOfAccount = accountType;
             fSelectedRowIndex = -1;
             ReportLogger = reportLogger;
-            DataNames = portfolio.NameData(accountType);
+            DataNames = portfolio.NameData(accountType).Select(name => new Selectable<NameData>(name, portfolio.LatestDate(accountType, name) == DateTime.Today)).ToList();
             DataNames.Sort();
 
             CreateCommand = new RelayCommand<DataGridRowEditEndingEventArgs>(ExecuteCreateEdit);
@@ -168,6 +170,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             DeleteCommand = new RelayCommand(ExecuteDelete);
             DownloadCommand = new RelayCommand(ExecuteDownloadCommand);
             OpenTabCommand = new RelayCommand(() => LoadSelectedTab(PreEditSelectedName));
+            AddDefaultDataCommand = new RelayCommand<AddingNewItemEventArgs>(e => DataGrid_AddingNewItem(null, e));
             SelectedTextChangedCommand = new RelayCommand<RoutedEventArgs>(SelectedNameEdited);
         }
 
@@ -187,10 +190,14 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Updating DataView for {TypeOfAccount} list.");
             base.UpdateData(portfolio);
 
-            var values = portfolio.NameData(TypeOfAccount);
+            bool IsUpdated(NameData name)
+            {
+                return portfolio.LatestDate(TypeOfAccount, name) == DateTime.Today || portfolio.LatestValue(TypeOfAccount, name) == 0.0;
+            }
+            var values = portfolio.NameData(TypeOfAccount).Select(name => new Selectable<NameData>(name, IsUpdated(name))).ToList();
             DataNames = null;
             DataNames = values;
-            DataNames.Sort();
+            DataNames.Sort((a, b) => a.Instance.CompareTo(b.Instance));
         }
 
         /// <summary>
@@ -218,6 +225,20 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             }
         }
 
+        public ICommand AddDefaultDataCommand
+        {
+            get;
+            set;
+        }
+
+        private void DataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        {
+            if (DataNames != null)
+            {
+                e.NewItem = new Selectable<NameData>(new NameData(), false);
+            }
+        }
+
         /// <summary>
         /// Enacts the selected item in the datagrid has changed.
         /// </summary>
@@ -231,61 +252,76 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Is it a datagrid {e.Source is DataGrid}");
             if (e.Source is DataGrid dg)
             {
-                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Current item is a name? {dg.CurrentItem != null && dg.CurrentItem is NameData}");
-                if (dg.CurrentItem != null && dg.CurrentItem is NameData name)
+                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Current item is a name? {dg.CurrentItem != null && dg.CurrentItem is Selectable<NameData>}");
+                if (dg.CurrentItem != null && dg.CurrentItem is Selectable<NameData> selectableName)
                 {
-                    _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Current item is a name {name}");
-                    if (DataNames != null)
+                    var name = selectableName.Instance;
+                    if (name != null)
                     {
-                        _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"DataNames is not null? {DataNames != null}");
-                        int index = DataNames.FindIndex(x => x.IsEqualTo(name));
 
-                        _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"New index is {index} and the current index is {fSelectedRowIndex}");
-                        if (fSelectedRowIndex == -1 || fSelectedRowIndex != index)
+                        _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Current item is a name {name}");
+                        if (DataNames != null)
                         {
-                            fSelectedRowIndex = index;
-                            PreEditSelectedName = name.Copy();
-                            SelectedName = name.Copy();
-
-                            _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Updating selected value to index {fSelectedRowIndex} - {SelectedName}");
-                            _ = DataStore.TryGetAccount(TypeOfAccount, name, out var desired);
-                            if (desired != null)
+                            _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"DataNames is not null? {DataNames != null}");
+                            bool Equality(Selectable<NameData> first, Selectable<NameData> second)
                             {
-                                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Stored item has been retrieved and is a {TypeOfAccount}.");
-                                ISecurity security = desired as ISecurity;
-                                var unitPrices = security?.UnitPrice;
-
-                                SelectedLatestDate = desired.LatestValue().Day;
-                                DateTime calculationDate = desired.FirstValue().Day;
-                                var outputs = new List<DailyValuation>();
-                                var prices = new List<DailyValuation>();
-
-                                while (calculationDate < DateTime.Today)
+                                if (first.Instance == null)
                                 {
-                                    var calcuationDateStatistics = desired.Value(calculationDate);
-                                    outputs.Add(new DailyValuation(calculationDate, calcuationDateStatistics.Value));
-                                    if (unitPrices != null)
-                                    {
-                                        prices.Add(new DailyValuation(calculationDate, unitPrices.Value(calculationDate).Value));
-                                    }
-
-                                    calculationDate = calculationDate.AddDays(30);
-                                }
-                                if (calculationDate == DateTime.Today)
-                                {
-                                    var calcuationDateStatistics = desired.Value(calculationDate);
-                                    outputs.Add(new DailyValuation(calculationDate, calcuationDateStatistics.Value));
-
-                                    if (unitPrices != null)
-                                    {
-                                        prices.Add(new DailyValuation(calculationDate, unitPrices.Value(calculationDate).Value));
-                                    }
+                                    return second.Instance == null;
                                 }
 
-                                SelectedValueHistory = outputs;
-                                SelectedPriceHistory = prices;
+                                return first.Instance.IsEqualTo(second.Instance);
+                            }
+                            int index = DataNames.FindIndex(x => Equality(x, selectableName));
 
-                                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Successfully updated SelectedItem.");
+                            _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"New index is {index} and the current index is {fSelectedRowIndex}");
+                            if (fSelectedRowIndex == -1 || fSelectedRowIndex != index)
+                            {
+                                fSelectedRowIndex = index;
+                                PreEditSelectedName = name?.Copy();
+                                SelectedName = name?.Copy();
+
+                                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Updating selected value to index {fSelectedRowIndex} - {SelectedName}");
+                                _ = DataStore.TryGetAccount(TypeOfAccount, name, out var desired);
+                                if (desired != null)
+                                {
+                                    _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Stored item has been retrieved and is a {TypeOfAccount}.");
+                                    ISecurity security = desired as ISecurity;
+                                    var unitPrices = security?.UnitPrice;
+
+                                    SelectedLatestDate = desired.LatestValue()?.Day ?? DateTime.Today;
+                                    DateTime calculationDate = desired.FirstValue()?.Day ?? DateTime.Today.AddDays(-365);
+                                    var outputs = new List<DailyValuation>();
+                                    var prices = new List<DailyValuation>();
+
+                                    while (calculationDate < DateTime.Today)
+                                    {
+                                        var calcuationDateStatistics = desired.Value(calculationDate);
+                                        outputs.Add(new DailyValuation(calculationDate, calcuationDateStatistics?.Value ?? 0.0));
+                                        if (unitPrices != null)
+                                        {
+                                            prices.Add(new DailyValuation(calculationDate, unitPrices.Value(calculationDate)?.Value ?? 0.0));
+                                        }
+
+                                        calculationDate = calculationDate.AddDays(30);
+                                    }
+                                    if (calculationDate == DateTime.Today)
+                                    {
+                                        var calcuationDateStatistics = desired.Value(calculationDate);
+                                        outputs.Add(new DailyValuation(calculationDate, calcuationDateStatistics?.Value ?? 0.0));
+
+                                        if (unitPrices != null)
+                                        {
+                                            // This value here can be null, even if unitPrices is not.
+                                            prices.Add(new DailyValuation(calculationDate, unitPrices.Value(calculationDate)?.Value ?? 0.0));
+                                        }
+                                    }
+
+                                    SelectedValueHistory = outputs;
+                                    SelectedPriceHistory = prices;
+
+                                    _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Successfully updated SelectedItem.");
+                                }
                             }
                         }
                     }
@@ -326,8 +362,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         {
             _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"ExecuteCreateEdit called.");
             bool edited = false;
-            var originRowName = e.Row.DataContext as NameData;
-
+            var rowName = e.Row.DataContext as Selectable<NameData>;
+            var originRowName = rowName.Instance;
             if (!DataStore.NameData(TypeOfAccount).Any(item => item.Name == PreEditSelectedName.Name && item.Company == PreEditSelectedName.Company))
             {
                 _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Adding {originRowName} to the database");
@@ -345,7 +381,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
                 }
                 if (!edited)
                 {
-                    _ = ReportLogger.LogWithStrings("Critical", "Error", "EditingData", "Was not able to edit desired.");
+                    _ = ReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.EditingData, "Was not able to edit desired.");
                 }
             }
         }

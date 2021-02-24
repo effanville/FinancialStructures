@@ -56,9 +56,24 @@
                   ScrollViewer.VerticalScrollBarVisibility="Visible"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <DataGrid.Resources></DataGrid.Resources>
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Selected}"
+                                     Value="False">
+                            <Setter Property="Background"
+                                    Value="#FF5555"></Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="RowEditEnding">
                     <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=CreateCommand}"
+                                           PassEventArgsToCommand="True" />
+                </i:EventTrigger>
+                <i:EventTrigger EventName="AddingNewItem">
+                    <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=AddDefaultDataCommand}"
                                            PassEventArgsToCommand="True" />
                 </i:EventTrigger>
                 <i:EventTrigger EventName="SelectionChanged">
@@ -69,10 +84,11 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Company"
                                     MinWidth="70"
-                                    Binding="{Binding Path=Company,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    
+                                    Binding="{Binding Path=Instance.Company,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Name"
                                     MinWidth="70"
-                                    Binding="{Binding Path=Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    Binding="{Binding Path=Instance.Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

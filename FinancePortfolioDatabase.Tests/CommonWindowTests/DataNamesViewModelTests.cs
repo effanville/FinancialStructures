@@ -10,6 +10,7 @@ using FinancePortfolioDatabase.Tests.TestConstruction;
 using Moq;
 using NUnit.Framework;
 using UICommon.Services;
+using StructureCommon.DisplayClasses;
 
 namespace FinancePortfolioDatabase.Tests.CommonWindowTests
 {
@@ -57,7 +58,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
                 Company = "Company"
             };
             viewModel.PreEditSelectedName = newName;
-            viewModel.DataNames.Add(newName);
+            viewModel.DataNames.Add(new Selectable<NameData>(newName, false));
             var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames.Last());
             viewModel.CreateCommand.Execute(dataGridArgs);
             Assert.AreEqual(2, viewModel.DataNames.Count);
@@ -74,8 +75,8 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
 
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.BankAccount);
-            viewModel.PreEditSelectedName = viewModel.DataNames[0].Copy();
-            viewModel.DataNames[0].Company = "NewCompany";
+            viewModel.PreEditSelectedName = viewModel.DataNames[0].Instance.Copy();
+            viewModel.DataNames[0].Instance.Company = "NewCompany";
             var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[0]);
             viewModel.CreateCommand.Execute(dataGridArgs);
             Assert.AreEqual(1, viewModel.DataNames.Count);
@@ -157,7 +158,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
                 Company = "Company"
             };
             viewModel.PreEditSelectedName = newName;
-            viewModel.DataNames.Add(newName);
+            viewModel.DataNames.Add(new Selectable<NameData>(newName, false));
             var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[1]);
             viewModel.CreateCommand.Execute(dataGridArgs);
             Assert.AreEqual(2, viewModel.DataNames.Count, "Bot enough in the view.");
@@ -172,8 +173,8 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
             Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.Security);
-            viewModel.PreEditSelectedName = viewModel.DataNames[0].Copy();
-            viewModel.DataNames[0].Company = "NewCompany";
+            viewModel.PreEditSelectedName = viewModel.DataNames[0].Instance.Copy();
+            viewModel.DataNames[0].Instance.Company = "NewCompany";
             var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[0]);
             viewModel.CreateCommand.Execute(dataGridArgs);
             Assert.AreEqual(1, viewModel.DataNames.Count);
@@ -190,11 +191,11 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
             Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.Security);
-            viewModel.PreEditSelectedName = viewModel.DataNames[0].Copy();
+            viewModel.PreEditSelectedName = viewModel.DataNames[0].Instance.Copy();
 
-            viewModel.DataNames[0].Company = "NewCompany";
+            viewModel.DataNames[0].Instance.Company = "NewCompany";
 
-            viewModel.DataNames[0].Url = "NewUrl";
+            viewModel.DataNames[0].Instance.Url = "NewUrl";
             var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[0]);
             viewModel.CreateCommand.Execute(dataGridArgs);
             Assert.AreEqual(1, viewModel.DataNames.Count);
