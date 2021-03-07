@@ -50,15 +50,13 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
 
         private readonly IReportLogger fReportLogger;
-        private readonly IFileInteractionService fFileService;
-        private readonly IDialogCreationService fDialogCreationService;
+        private readonly UiGlobals fUiGlobals;
 
-        public SelectedSecurityViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, NameData selectedName)
+        public SelectedSecurityViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, UiGlobals globals, NameData selectedName)
             : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name", portfolio)
         {
             fReportLogger = reportLogger;
-            fFileService = fileService;
-            fDialogCreationService = dialogCreation;
+            fUiGlobals = globals;
             fSelectedName = selectedName;
             DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);
             AddCsvData = new RelayCommand(ExecuteAddCsvData);
@@ -94,7 +92,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Selected Security {fSelectedName} adding data from csv.");
             if (fSelectedName != null)
             {
-                FileInteractionResult result = fFileService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
+                FileInteractionResult result = fUiGlobals.FileInteractionService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
                 List<object> outputs = null;
                 bool exists = DataStore.TryGetAccount(Account.Security, fSelectedName, out IValueList account);
                 if (result.Success != null && (bool)result.Success && exists)
@@ -129,7 +127,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Selected Security {fSelectedName} exporting data to csv.");
             if (fSelectedName != null)
             {
-                FileInteractionResult result = fFileService.SaveFile("csv", string.Empty, DataStore.Directory, "Csv Files|*.csv|All Files|*.*");
+                FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile("csv", string.Empty, DataStore.Directory, "Csv Files|*.csv|All Files|*.*");
                 if (result.Success != null && (bool)result.Success)
                 {
                     if (DataStore.TryGetAccount(Account.Security, fSelectedName, out IValueList account))

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Abstractions;
 using System.Windows;
 using System.Windows.Controls;
 using FinancePortfolioDatabase.GUI.ViewModels;
@@ -15,7 +16,6 @@ namespace FinancePortfolioDatabase.Tests.TestConstruction
 {
     internal static class TestingGUICode
     {
-        public static string ExampleDatabaseFolder = "ExampleDatabases";
         internal static IReportLogger DummyReportLogger = new NothingReportLogger();
 
         public static Mock<IFileInteractionService> CreateFileMock(string expectedFilePath)
@@ -36,6 +36,22 @@ namespace FinancePortfolioDatabase.Tests.TestConstruction
         public static Action<Action<IPortfolio>> CreateDataUpdater(IPortfolio portfolio)
         {
             return action => action(portfolio);
+        }
+
+        public static UiGlobals CreateGlobalsMock(IFileSystem fileSystem, IFileInteractionService fileService, IDialogCreationService dialogCreationService)
+        {
+            return new UiGlobals(null, DispatcherSetup().Object, fileSystem, fileService, dialogCreationService);
+        }
+
+        private static Mock<IDispatcher> DispatcherSetup()
+        {
+            Mock<IDispatcher> dispatcherMock = new Mock<IDispatcher>();
+            dispatcherMock.Setup(x => x.Invoke(It.IsAny<Action>()))
+              .Callback((Action a) => a());
+
+            dispatcherMock.Setup(x => x.BeginInvoke(It.IsAny<Action>()))
+              .Callback((Action a) => a());
+            return dispatcherMock;
         }
 
         internal static Action<object> DummyOpenTab
@@ -68,9 +84,9 @@ namespace FinancePortfolioDatabase.Tests.TestConstruction
         public static void UpdatePortfolio(Portfolio portfolio)
         {
             portfolio.SetFilePath("TestFilePath");
-            portfolio.TryAdd(Account.Security, new NameData("Fidelity", "China", "GBP", "http://www.fidelity.co.uk", new HashSet<string>() { "Bonds", "UK" }), TestingGUICode.DummyReportLogger);
+            portfolio.TryAdd(Account.Security, new NameData("Fidelity", "China", "GBP", "https://markets.ft.com/data/funds/tearsheet/summary?s=gb00b5lxgg05:gbx", new HashSet<string>() { "Bonds", "UK" }), TestingGUICode.DummyReportLogger);
             portfolio.TryAddOrEditDataToSecurity(new TwoName("Fidelity", "China"), new DateTime(2000, 1, 1), new DateTime(2000, 1, 1), 1, 1, 1);
-            portfolio.TryAdd(Account.BankAccount, new NameData("Barclays", "currentAccount"), TestingGUICode.DummyReportLogger);
+            portfolio.TryAdd(Account.BankAccount, new NameData("Barclays", "currentAccount", url: "https://markets.ft.com/data/funds/tearsheet/summary?s=gb00b5lxgg05:gbx"), TestingGUICode.DummyReportLogger);
             portfolio.TryAddOrEditData(Account.BankAccount, new NameData("Barclays", "currentAccount"), new DailyValuation(new DateTime(2000, 1, 1), 1), new DailyValuation(new DateTime(2000, 1, 1), 1));
             portfolio.TryAdd(Account.Currency, new NameData(string.Empty, "GBP"), TestingGUICode.DummyReportLogger);
 
@@ -82,11 +98,11 @@ namespace FinancePortfolioDatabase.Tests.TestConstruction
             return new Portfolio();
         }
 
-        internal static MainWindowViewModel SetupWindow(Portfolio portfolio)
+        internal static MainWindowViewModel SetupWindow(Portfolio portfolio, IFileSystem fileSystem)
         {
             Mock<IFileInteractionService> fileMock = CreateFileMock("filepath");
             Mock<IDialogCreationService> dialogMock = CreateDialogMock(MessageBoxResult.OK);
-            MainWindowViewModel viewModel = new MainWindowViewModel(fileMock.Object, dialogMock.Object)
+            MainWindowViewModel viewModel = new MainWindowViewModel(CreateGlobalsMock(fileSystem, fileMock.Object, dialogMock.Object))
             {
                 ProgramPortfolio = portfolio
             };

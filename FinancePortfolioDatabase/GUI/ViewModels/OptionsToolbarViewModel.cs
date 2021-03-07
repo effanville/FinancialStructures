@@ -17,10 +17,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
     {
         private string fFileName;
         private string fDirectory;
+        private readonly UiGlobals fUiGlobals;
         private readonly Action<Action<IPortfolio>> DataUpdateCallback;
         private readonly IReportLogger fReportLogger;
-        private readonly IFileInteractionService fFileService;
-        private readonly IDialogCreationService fDialogCreationService;
         private string fBaseCurrency;
 
         public string BaseCurrency
@@ -50,12 +49,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
         }
 
-        public OptionsToolbarViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation)
+        public OptionsToolbarViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, UiGlobals globals)
             : base("Options", portfolio)
         {
             fReportLogger = reportLogger;
-            fFileService = fileService;
-            fDialogCreationService = dialogCreation;
+            fUiGlobals = globals;
             DataUpdateCallback = updateData;
             UpdateData(portfolio);
 
@@ -106,16 +104,16 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             MessageBoxResult result;
             if (DataStore.IsAlteredSinceSave)
             {
-                result = fDialogCreationService.ShowMessageBox("Current database has unsaved alterations. Are you sure you want to load a new database?", "New Database?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                result = fUiGlobals.DialogCreationService.ShowMessageBox("Current database has unsaved alterations. Are you sure you want to load a new database?", "New Database?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             }
             else
             {
-                result = fDialogCreationService.ShowMessageBox("Do you want to load a new database?", "New Database?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                result = fUiGlobals.DialogCreationService.ShowMessageBox("Do you want to load a new database?", "New Database?", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             }
             if (result == MessageBoxResult.Yes)
             {
                 DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(""));
-                DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio("", fReportLogger));
+                DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio("", fUiGlobals.CurrentFileSystem, fReportLogger));
             }
         }
 
@@ -126,11 +124,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         private void ExecuteSaveDatabase()
         {
             _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.Saving, $"Saving database {fFileName} called.");
-            FileInteractionResult result = fFileService.SaveFile("xml", fFileName, fDirectory, "XML Files|*.xml|All Files|*.*");
+            FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile("xml", fFileName, fDirectory, "XML Files|*.xml|All Files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
                 DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(result.FilePath));
-                DataUpdateCallback(programPortfolio => programPortfolio.SavePortfolio(result.FilePath, fReportLogger));
+                DataUpdateCallback(programPortfolio => programPortfolio.SavePortfolio(result.FilePath, fUiGlobals.CurrentFileSystem, fReportLogger));
             }
         }
 
@@ -141,12 +139,12 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         private void ExecuteLoadDatabase()
         {
             _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.Loading, $"Loading database called.");
-            FileInteractionResult result = fFileService.OpenFile("xml", filter: "XML Files|*.xml|All Files|*.*");
+            FileInteractionResult result = fUiGlobals.FileInteractionService.OpenFile("xml", filter: "XML Files|*.xml|All Files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
                 DataUpdateCallback(programPortfolio => programPortfolio.Clear());
                 DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(result.FilePath));
-                DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio(result.FilePath, fReportLogger));
+                DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio(result.FilePath, fUiGlobals.CurrentFileSystem, fReportLogger));
             }
         }
 

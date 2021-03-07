@@ -18,10 +18,12 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="13.2.23" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FinancePortfolioDatabase\FinancePortfolioDatabase.csproj" />
+    <ProjectReference Include="..\FinancialStructures.Tests\FinancialStructures.Tests.csproj" />
     <ProjectReference Include="..\FinancialStructures\FinancialStructures.csproj" />
   </ItemGroup>
 
@@ -32,7 +34,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="StructureCommon" Version="1.0.6" />
+    <PackageReference Include="StructureCommon" Version="1.0.7" />
     <PackageReference Include="UICommon" Version="1.0.6" />
   </ItemGroup>
 

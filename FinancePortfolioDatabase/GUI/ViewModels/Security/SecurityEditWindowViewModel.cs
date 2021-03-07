@@ -6,7 +6,6 @@ using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using StructureCommon.Reporting;
-using UICommon.Services;
 using UICommon.ViewModelBases;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Security
@@ -16,18 +15,16 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
         public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
 
         private readonly IReportLogger ReportLogger;
-        private readonly IFileInteractionService fFileService;
-        private readonly IDialogCreationService fDialogCreationService;
+        private readonly UiGlobals fUiGlobals;
 
         private readonly Action<Action<IPortfolio>> UpdateDataAction;
 
-        public SecurityEditWindowViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation)
+        public SecurityEditWindowViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, UiGlobals globals)
             : base("Securities", Account.Security, portfolio)
         {
             UpdateDataAction = updateData;
             ReportLogger = reportLogger;
-            fFileService = fileService;
-            fDialogCreationService = dialogCreation;
+            fUiGlobals = globals;
             Tabs.Add(new DataNamesViewModel(DataStore, updateData, ReportLogger, (name) => LoadTabFunc(name), Account.Security));
         }
 
@@ -60,7 +57,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
         {
             if (obj is NameData name)
             {
-                Tabs.Add(new SelectedSecurityViewModel(DataStore, UpdateDataAction, ReportLogger, fFileService, fDialogCreationService, name));
+                Tabs.Add(new SelectedSecurityViewModel(DataStore, UpdateDataAction, ReportLogger, fUiGlobals, name));
             }
         }
     }

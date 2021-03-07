@@ -7,6 +7,7 @@ using NUnit.Framework;
 using UICommon.Services;
 using FinancialStructures.Database.Implementation;
 using FinancePortfolioDatabase.GUI.ViewModels;
+using System.IO.Abstractions;
 
 namespace FinancePortfolioDatabase.Tests
 {
@@ -15,11 +16,12 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void CanOpenNewDatabase()
         {
+            var fileSystem = new FileSystem();
             Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("notNeeded");
             Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock(MessageBoxResult.Yes);
             Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
+            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.CreateGlobalsMock(fileSystem, fileMock.Object, dialogMock.Object));
             viewModel.NewDatabaseCommand.Execute(1);
             //Check that data held is an empty database
 
@@ -32,13 +34,13 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void CanOpenDatabase()
         {
-            string databaseToLoad = TestingGUICode.ExampleDatabaseFolder + "\\BasicTestDatabase.xml";
-            string testFilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + databaseToLoad;
+            var fileSystem = new FileSystem();
+            string testFilePath = TestConstants.ExampleDatabaseLocation + "\\BasicTestDatabase.xml";
             Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock(testFilePath);
             Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
             Portfolio portfolio = TestingGUICode.CreateEmptyDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
+            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.CreateGlobalsMock(fileSystem, fileMock.Object, dialogMock.Object));
             viewModel.LoadDatabaseCommand.Execute(1);
             //Input prespecified example database
 
@@ -52,13 +54,13 @@ namespace FinancePortfolioDatabase.Tests
         [Ignore("IncompeteArchitecture - Requires improvements in dialog creation to be able to run.")]
         public void CanOpenHelpDocsPage()
         {
-            string databaseToLoad = TestingGUICode.ExampleDatabaseFolder + "\\BasicTestDatabase.xml";
-            string testFilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + databaseToLoad;
+            var fileSystem = new FileSystem();
+            string testFilePath = TestConstants.ExampleDatabaseLocation + "\\BasicTestDatabase.xml";
             Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock(testFilePath);
             Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
             Portfolio portfolio = TestingGUICode.CreateEmptyDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
+            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.CreateGlobalsMock(fileSystem, fileMock.Object, dialogMock.Object));
             viewModel.OpenHelpCommand.Execute(1);
             //Input prespecified example database
 
@@ -72,13 +74,13 @@ namespace FinancePortfolioDatabase.Tests
         [Ignore("IncompeteArchitecture - Test needs to have a dummy file structure to do this in.")]
         public void CanSaveDatabase()
         {
-            string databaseToLoad = TestingGUICode.ExampleDatabaseFolder + "\\BasicTestDatabase.xml";
-            string testFilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + databaseToLoad;
+            var fileSystem = new FileSystem();
+            string testFilePath = TestConstants.ExampleDatabaseLocation + "\\BasicTestDatabase.xml";
             Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock(testFilePath);
             Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
             Portfolio portfolio = TestingGUICode.CreateEmptyDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
+            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.CreateGlobalsMock(fileSystem, fileMock.Object, dialogMock.Object));
             viewModel.SaveDatabaseCommand.Execute(1);
             //Input prespecified example database
 
@@ -92,13 +94,13 @@ namespace FinancePortfolioDatabase.Tests
         [Ignore("IncompeteArchitecture - Downloader does not currently allow for use in test environment.")]
         public void CanUpdateDatabase()
         {
-            string databaseToLoad = TestingGUICode.ExampleDatabaseFolder + "\\BasicTestDatabase.xml";
-            string testFilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + databaseToLoad;
+            var fileSystem = new FileSystem();
+            string testFilePath = TestConstants.ExampleDatabaseLocation + "\\BasicTestDatabase.xml";
             Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock(testFilePath);
             Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
             Portfolio portfolio = TestingGUICode.CreateEmptyDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
+            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.CreateGlobalsMock(fileSystem, fileMock.Object, dialogMock.Object));
             viewModel.UpdateDataCommand.Execute(1);
             //Input prespecified example database
 
@@ -111,11 +113,12 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void CanRefreshDatabase()
         {
+            var fileSystem = new FileSystem();
             Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("notNeeded");
             Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock(MessageBoxResult.Yes);
             Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
+            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.CreateGlobalsMock(fileSystem, fileMock.Object, dialogMock.Object));
             viewModel.RefreshCommand.Execute(1);
             //Check that data held is an empty database
 

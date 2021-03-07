@@ -11,6 +11,7 @@ using Moq;
 using NUnit.Framework;
 using UICommon.Services;
 using StructureCommon.DisplayClasses;
+using FinancialStructures.FinanceStructures;
 
 namespace FinancePortfolioDatabase.Tests.CommonWindowTests
 {
@@ -59,8 +60,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
             };
             viewModel.PreEditSelectedName = newName;
             viewModel.DataNames.Add(new Selectable<NameData>(newName, false));
-            var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames.Last());
-            viewModel.CreateCommand.Execute(dataGridArgs);
+            viewModel.CreateCommand.Execute(viewModel.DataNames.Last());
             Assert.AreEqual(2, viewModel.DataNames.Count);
             Assert.AreEqual(2, portfolio.BankAccounts.Count);
         }
@@ -77,8 +77,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.BankAccount);
             viewModel.PreEditSelectedName = viewModel.DataNames[0].Instance.Copy();
             viewModel.DataNames[0].Instance.Company = "NewCompany";
-            var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[0]);
-            viewModel.CreateCommand.Execute(dataGridArgs);
+            viewModel.CreateCommand.Execute(viewModel.DataNames[0]);
             Assert.AreEqual(1, viewModel.DataNames.Count);
             Assert.AreEqual(1, portfolio.BankAccounts.Count);
 
@@ -86,12 +85,12 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         }
 
         [Test]
-        [Ignore("IncompeteArchitecture - Downloader does not currently allow for use in test environment.")]
+        //[Ignore("IncompeteArchitecture - Downloader does not currently allow for use in test environment.")]
         public void CanDownload()
         {
             Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
             Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio portfolio = TestingGUICode.CreateEmptyDataBase();
+            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
 
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.BankAccount)
@@ -101,6 +100,8 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
             viewModel.DownloadCommand.Execute(1);
 
             Assert.AreEqual(1, viewModel.DataNames.Count);
+            var account = portfolio.TryGetAccount(Account.BankAccount, new TwoName("Barclays", "currentAccount"), out var sec);
+            Assert.AreEqual(2, sec.Values.Count());
         }
 
         [Test]
@@ -159,8 +160,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
             };
             viewModel.PreEditSelectedName = newName;
             viewModel.DataNames.Add(new Selectable<NameData>(newName, false));
-            var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[1]);
-            viewModel.CreateCommand.Execute(dataGridArgs);
+            viewModel.CreateCommand.Execute(viewModel.DataNames[1]);
             Assert.AreEqual(2, viewModel.DataNames.Count, "Bot enough in the view.");
             Assert.AreEqual(2, portfolio.Funds.Count, "Not enough in portfolio");
         }
@@ -175,8 +175,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.Security);
             viewModel.PreEditSelectedName = viewModel.DataNames[0].Instance.Copy();
             viewModel.DataNames[0].Instance.Company = "NewCompany";
-            var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[0]);
-            viewModel.CreateCommand.Execute(dataGridArgs);
+            viewModel.CreateCommand.Execute(viewModel.DataNames[0]);
             Assert.AreEqual(1, viewModel.DataNames.Count);
             Assert.AreEqual(1, portfolio.Funds.Count);
 
@@ -196,8 +195,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
             viewModel.DataNames[0].Instance.Company = "NewCompany";
 
             viewModel.DataNames[0].Instance.Url = "NewUrl";
-            var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.DataNames[0]);
-            viewModel.CreateCommand.Execute(dataGridArgs);
+            viewModel.CreateCommand.Execute(viewModel.DataNames[0]);
             Assert.AreEqual(1, viewModel.DataNames.Count);
             Assert.AreEqual(1, portfolio.Funds.Count);
 

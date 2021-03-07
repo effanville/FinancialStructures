@@ -6,7 +6,6 @@ using FinancePortfolioDatabase.GUI.ViewModels.Stats;
 using System.Windows;
 using FinancialStructures.Database;
 using StructureCommon.Reporting;
-using UICommon.Services;
 using UICommon.ViewModelBases;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
@@ -20,6 +19,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         /// reporting window and to the <see cref="ApplicationLog"/>.
         /// </summary>
         internal readonly IReportLogger ReportLogger;
+        private readonly UiGlobals fUiGlobals;
 
         /// <summary>
         /// The log of the application.
@@ -61,18 +61,19 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         /// </summary>
         public List<object> Tabs { get; } = new List<object>(6);
 
-        public MainWindowViewModel(IFileInteractionService fileInteractionService, IDialogCreationService dialogCreationService)
+        public MainWindowViewModel(UiGlobals globals)
         {
-            ReportsViewModel = new ReportingWindowViewModel(fileInteractionService);
+            ReportsViewModel = new ReportingWindowViewModel(globals.FileInteractionService);
             ReportLogger = new LogReporter(UpdateReport);
+            fUiGlobals = globals;
 
-            OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService);
+            OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, fUiGlobals);
             Tabs.Add(new BasicDataViewModel(ProgramPortfolio));
-            Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, fileInteractionService, dialogCreationService));
-            Tabs.Add(new SecurityEditWindowViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService));
-            Tabs.Add(new ValueListWindowViewModel("Bank Accounts", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, Account.BankAccount));
-            Tabs.Add(new ValueListWindowViewModel("Benchmarks", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, Account.Benchmark));
-            Tabs.Add(new ValueListWindowViewModel("Currencies", ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService, Account.Currency));
+            Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, globals));
+            Tabs.Add(new SecurityEditWindowViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, globals));
+            Tabs.Add(new ValueListWindowViewModel("Bank Accounts", ProgramPortfolio, UpdateDataCallback, ReportLogger, globals.FileInteractionService, globals.DialogCreationService, Account.BankAccount));
+            Tabs.Add(new ValueListWindowViewModel("Benchmarks", ProgramPortfolio, UpdateDataCallback, ReportLogger, globals.FileInteractionService, globals.DialogCreationService, Account.Benchmark));
+            Tabs.Add(new ValueListWindowViewModel("Currencies", ProgramPortfolio, UpdateDataCallback, ReportLogger, globals.FileInteractionService, globals.DialogCreationService, Account.Currency));
 
             ProgramPortfolio.PortfolioChanged += AllData_portfolioChanged;
         }
@@ -85,7 +86,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
                 {
                     if (e.ShouldUpdate(vm.DataType))
                     {
-                        Application.Current.Dispatcher?.Invoke(() => vm.UpdateData(ProgramPortfolio));
+                        fUiGlobals.CurrentDispatcher?.Invoke(() => vm.UpdateData(ProgramPortfolio));
                     }
                 }
             }

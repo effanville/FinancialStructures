@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using FinancialStructures.Database;
@@ -233,7 +232,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
         private void ExecuteExportCommand(ICloseable window)
         {
-            FileInteractionResult result = fFileService.SaveFile(ExportType.Html.ToString(), Portfolio.DatabaseName, Portfolio.Directory, "Html Files|*.html|CSV Files|*.csv|All Files|*.*");
+            FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile(ExportType.Html.ToString(), Portfolio.DatabaseName, Portfolio.Directory, "Html Files|*.html|CSV Files|*.csv|All Files|*.*");
             string path = null;
 
             if (result.Success != null && (bool)result.Success)
@@ -270,10 +269,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 UserDisplayOptions options = new UserDisplayOptions(securitySelected, BankSelected, sectorSelected, DisplayConditions, SecuritySortingField, BankSortingField, SectorSortingField, SecurityDirection, BankDirection, SectorDirection);
 
                 PortfolioStatistics stats = new PortfolioStatistics(Portfolio, options);
-                string extension = Path.GetExtension(result.FilePath).Trim('.');
+                string extension = fUiGlobals.CurrentFileSystem.Path.GetExtension(result.FilePath).Trim('.');
                 ExportType type = extension.ToEnum<ExportType>();
 
-                stats.ExportToFile(result.FilePath, type, options, ReportLogger);
+                stats.ExportToFile(fUiGlobals.CurrentFileSystem, result.FilePath, type, options, ReportLogger);
 
                 _ = ReportLogger.LogUsefulWithStrings("Report", "StatisticsPage", "Created statistics page");
             }
@@ -286,17 +285,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             window.Close();
         }
 
-        private readonly IFileInteractionService fFileService;
-        private readonly IDialogCreationService fDialogCreationService;
         private readonly IReportLogger ReportLogger;
         private readonly Action<string> CloseWindowAction;
+        private readonly UiGlobals fUiGlobals;
 
-        public StatsOptionsViewModel(IPortfolio portfolio, IReportLogger reportLogger, Action<string> CloseWindow, IFileInteractionService fileService, IDialogCreationService dialogCreation)
+        public StatsOptionsViewModel(IPortfolio portfolio, IReportLogger reportLogger, Action<string> CloseWindow, UiGlobals uiGlobals)
         {
+            fUiGlobals = uiGlobals;
             Portfolio = portfolio;
             ReportLogger = reportLogger;
-            fFileService = fileService;
-            fDialogCreationService = dialogCreation;
             CloseWindowAction = CloseWindow;
             ExportCommand = new RelayCommand<ICloseable>(ExecuteExportCommand);
 

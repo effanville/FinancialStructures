@@ -16,6 +16,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
     internal class StatsCreatorWindowViewModel : DataDisplayViewModelBase
     {
+        private UiGlobals fUiGlobals;
         public ObservableCollection<object> StatsTabs { get; set; } = new ObservableCollection<object>();
 
         private bool fDisplayValueFunds = true;
@@ -39,15 +40,12 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         } = 20;
 
         private readonly IReportLogger ReportLogger;
-        private readonly IFileInteractionService fFileService;
-        private readonly IDialogCreationService fDialogCreationService;
 
-        public StatsCreatorWindowViewModel(IPortfolio portfolio, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation)
+        public StatsCreatorWindowViewModel(IPortfolio portfolio, IReportLogger reportLogger, UiGlobals globals)
             : base("Stats Creator", Account.All, portfolio)
         {
+            fUiGlobals = globals;
             ReportLogger = reportLogger;
-            fFileService = fileService;
-            fDialogCreationService = dialogCreation;
             StatsTabs.Add(new MainTabViewModel(OpenTab));
             StatsTabs.Add(new AccountStatisticsViewModel(portfolio, Account.Security, DisplayValueFunds));
 
@@ -72,7 +70,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
         private void ExecuteInvestmentListCommand()
         {
-            FileInteractionResult result = fFileService.SaveFile(".csv", DataStore.DatabaseName + "-CSVStats.csv", DataStore.Directory, "CSV file|*.csv|All files|*.*");
+            FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile(".csv", DataStore.DatabaseName + "-CSVStats.csv", DataStore.Directory, "CSV file|*.csv|All files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
                 if (!result.FilePath.EndsWith(".csv"))
@@ -90,7 +88,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
         private async void ExecuteCreateHistory()
         {
-            FileInteractionResult result = fFileService.SaveFile(".csv", DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + DataStore.DatabaseName + "-History.csv", DataStore.Directory, "CSV file|*.csv|All files|*.*");
+            FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile(".csv", DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + DataStore.DatabaseName + "-History.csv", DataStore.Directory, "CSV file|*.csv|All files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
                 if (!result.FilePath.EndsWith(".csv"))
@@ -110,8 +108,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         private void ExecuteCreateStatsCommand()
         {
             Action<string> StatsOptionFeedback = (filePath => StatsFeedback(filePath));
-            StatsOptionsViewModel context = new StatsOptionsViewModel(DataStore, ReportLogger, StatsOptionFeedback, fFileService, fDialogCreationService);
-            fDialogCreationService.DisplayCustomDialog(context);
+            StatsOptionsViewModel context = new StatsOptionsViewModel(DataStore, ReportLogger, StatsOptionFeedback, fUiGlobals);
+            fUiGlobals.DialogCreationService.DisplayCustomDialog(context);
         }
 
         private void StatsFeedback(string filePath)

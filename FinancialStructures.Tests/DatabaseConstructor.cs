@@ -4,6 +4,7 @@ using FinancialStructures.NamingStructures;
 using FinancialStructures.Database.Implementation;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.Tests.TestDatabaseConstructor;
+using System.IO.Abstractions;
 
 namespace FinancialStructures.Tests
 {
@@ -23,9 +24,9 @@ namespace FinancialStructures.Tests
             database.BaseCurrency = DefaultCurrencyName;
         }
 
-        public DatabaseConstructor LoadDatabaseFromFilepath(string filepath)
+        public DatabaseConstructor LoadDatabaseFromFilepath(IFileSystem fileSystem, string filepath)
         {
-            database.LoadPortfolio(filepath, null);
+            database.LoadPortfolio(filepath, fileSystem, null);
             return this;
         }
 
@@ -39,6 +40,8 @@ namespace FinancialStructures.Tests
                     return new TwoName(DefaultBankAccountCompany, DefaultBankAccountName);
                 case Account.Currency:
                     return new TwoName(DefaultCurrencyCompany, DefaultCurrencyName);
+                case Account.All:
+                case Account.Benchmark:
                 default:
                     return null;
             }

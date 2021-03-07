@@ -8,6 +8,9 @@ using UICommon.Services;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancePortfolioDatabase.GUI.ViewModels;
 using FinancePortfolioDatabase.GUI.ViewModels.Security;
+using System.IO.Abstractions;
+using FinancialStructures.NamingStructures;
+using StructureCommon.DisplayClasses;
 
 namespace FinancePortfolioDatabase.Tests
 {
@@ -20,13 +23,14 @@ namespace FinancePortfolioDatabase.Tests
         /// The open database button propagates the new database to all tabs in the main view.
         /// </summary>
         [Test]
+        [STAThread]
         public void OpenDatabaseUpdatesAllTabs()
         {
-            string databaseToLoad = TestingGUICode.ExampleDatabaseFolder + "\\BasicTestDatabase.xml";
-            string testFilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + databaseToLoad;
+            var fileSystem = new FileSystem();
+            string testFilePath = $"{TestConstants.ExampleDatabaseLocation}\\BasicTestDatabase.xml";
             Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock(testFilePath);
             Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            MainWindowViewModel viewModel = new MainWindowViewModel(fileMock.Object, dialogMock.Object);
+            MainWindowViewModel viewModel = new MainWindowViewModel(TestingGUICode.CreateGlobalsMock(fileSystem, fileMock.Object, dialogMock.Object));
 
             viewModel.OptionsToolbarCommands.LoadDatabaseCommand.Execute(1);
 
@@ -46,6 +50,30 @@ namespace FinancePortfolioDatabase.Tests
             ValueListWindowViewModel bankAccView = viewModel.Tabs.First(view => view is ValueListWindowViewModel vm && vm.DataType == Account.BankAccount) as ValueListWindowViewModel;
             DataNamesViewModel bankAccNamesView = bankAccView.Tabs[0] as DataNamesViewModel;
             Assert.AreEqual(1, bankAccNamesView.DataNames.Count);
+        }
+
+
+        [Test]
+        [STAThread]
+        public void AddingSecurityUpdatesSuccessfully()
+        {
+            var fileSystem = new FileSystem();
+            string testFilePath = $"{TestConstants.ExampleDatabaseLocation}\\BasicTestDatabase.xml";
+            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock(testFilePath);
+            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
+            MainWindowViewModel viewModel = new MainWindowViewModel(TestingGUICode.CreateGlobalsMock(fileSystem, fileMock.Object, dialogMock.Object));
+
+            var securityTab = viewModel.Tabs.First(tab => tab is SecurityEditWindowViewModel);
+            SecurityEditWindowViewModel securityViewModel = securityTab as SecurityEditWindowViewModel;
+            var securityNames = securityViewModel.Tabs[0] as DataNamesViewModel;
+            var selectedInitialName = new Selectable<NameData>(new NameData(), false);
+            securityNames.DataNames.Add(selectedInitialName);
+            securityNames.SelectionChangedCommand.Execute(selectedInitialName);
+
+            var selectedEditedName = new Selectable<NameData>(new NameData("Forgotton", "New"), false);
+            securityNames.CreateCommand.Execute(selectedEditedName);
+
+            Assert.AreEqual(1, securityNames.DataNames.Count);
         }
     }
 }

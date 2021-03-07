@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.IO.Abstractions;
 using System.Reflection;
 using System.Windows;
 using FinancePortfolioDatabase.GUI.ViewModels;
@@ -12,17 +13,17 @@ namespace FinancePortfolioDatabase.GUI.Windows
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly IFileInteractionService fFileInteractionService;
-        private readonly IDialogCreationService fDialogCreationService;
+        private readonly UiGlobals fUiGlobals;
 
         /// <summary>
         /// Construct an instance of the main window.
         /// </summary>
         public MainWindow()
         {
-            fFileInteractionService = new FileInteractionService(this);
-            fDialogCreationService = new DialogCreationService(this);
-            MainWindowViewModel viewModel = new MainWindowViewModel(fFileInteractionService, fDialogCreationService);
+            var FileInteractionService = new FileInteractionService(this);
+            var DialogCreationService = new DialogCreationService(this);
+            fUiGlobals = new UiGlobals(null, new DispatcherInstance(), new FileSystem(), FileInteractionService, DialogCreationService, null);
+            MainWindowViewModel viewModel = new MainWindowViewModel(fUiGlobals);
             InitializeComponent();
 
             Version version = Assembly.GetExecutingAssembly().GetName().Version;
@@ -35,7 +36,7 @@ namespace FinancePortfolioDatabase.GUI.Windows
         {
             if (DataContext is MainWindowViewModel viewModel)
             {
-                var result = fFileInteractionService.SaveFile("log", string.Empty, viewModel.ProgramPortfolio.Directory, filter: "log Files|*.log|All Files|*.*");
+                var result = fUiGlobals.FileInteractionService.SaveFile("log", string.Empty, viewModel.ProgramPortfolio.Directory, filter: "log Files|*.log|All Files|*.*");
                 if (result.Success != null && (bool)result.Success)
                 {
                     using (var stream = new StreamWriter(result.FilePath))
@@ -65,20 +66,20 @@ namespace FinancePortfolioDatabase.GUI.Windows
             MessageBoxResult result;
             if (VM.ProgramPortfolio.IsAlteredSinceSave)
             {
-                result = fDialogCreationService.ShowMessageBox("Data has changed since last saved. Would you like to save changes before closing?", $"Closing {Title}.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                result = fUiGlobals.DialogCreationService.ShowMessageBox("Data has changed since last saved. Would you like to save changes before closing?", $"Closing {Title}.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
             }
             else
             {
-                result = fDialogCreationService.ShowMessageBox("There is a small chance that the data has changed since last save (due to neglect on my part). Would you like to save before closing?", $"Closing {Title}.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                result = fUiGlobals.DialogCreationService.ShowMessageBox("There is a small chance that the data has changed since last save (due to neglect on my part). Would you like to save before closing?", $"Closing {Title}.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
             }
             if (result == MessageBoxResult.Yes)
             {
-                FileInteractionResult savingResult = fFileInteractionService.SaveFile("xml", VM.ProgramPortfolio.DatabaseName + VM.ProgramPortfolio.Extension, VM.ProgramPortfolio.Directory, "XML Files|*.xml|All Files|*.*");
+                FileInteractionResult savingResult = fUiGlobals.FileInteractionService.SaveFile("xml", VM.ProgramPortfolio.DatabaseName + VM.ProgramPortfolio.Extension, VM.ProgramPortfolio.Directory, "XML Files|*.xml|All Files|*.*");
                 if (savingResult.Success != null && (bool)savingResult.Success)
                 {
                     VM.ProgramPortfolio.SetFilePath(savingResult.FilePath);
                     MainWindowViewModel vm = DataContext as MainWindowViewModel;
-                    vm.ProgramPortfolio.SavePortfolio(savingResult.FilePath, vm.ReportLogger);
+                    vm.ProgramPortfolio.SavePortfolio(savingResult.FilePath, fUiGlobals.CurrentFileSystem, vm.ReportLogger);
                 }
             }
             if (result == MessageBoxResult.Cancel)
