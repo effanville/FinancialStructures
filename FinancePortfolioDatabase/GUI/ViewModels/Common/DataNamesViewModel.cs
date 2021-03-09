@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using FinancialStructures.Database;
@@ -23,7 +22,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
     internal class DataNamesViewModel : TabViewModelBase<IPortfolio>
     {
         private readonly Account TypeOfAccount;
-        private int fSelectedRowIndex;
 
         public bool ShowPriceHistory
         {
@@ -57,7 +55,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         private NameData fPreEditSelectedName;
 
         /// <summary>
-        /// The selected name at the start of selection. 
+        /// The selected name at the start of selection.
         /// Holds the data before any possible editing.
         /// </summary>
         public NameData PreEditSelectedName
@@ -73,13 +71,13 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             }
         }
 
-        private NameData fSelectedName;
+        private SelectableEquatable<NameData> fSelectedName;
 
         /// <summary>
         /// The selected name with any alterations made by the user.
         /// These alterations update the database when certain commands are executed.
         /// </summary>
-        public NameData SelectedName
+        public SelectableEquatable<NameData> SelectedName
         {
             get
             {
@@ -172,18 +170,17 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         {
             UpdateDataCallback = updateDataCallback;
             TypeOfAccount = accountType;
-            fSelectedRowIndex = -1;
             ReportLogger = reportLogger;
             DataNames = portfolio.NameData(accountType).Select(name => new SelectableEquatable<NameData>(name, portfolio.LatestDate(accountType, name) == DateTime.Today)).ToList();
             DataNames.Sort();
 
-            CreateCommand = new RelayCommand<SelectableEquatable<NameData>>(ExecuteCreateEdit);
             SelectionChangedCommand = new RelayCommand<object>(ExecuteSelectionChanged);
+            CreateCommand = new RelayCommand(ExecuteCreateEdit);
+            PreEditCommand = new RelayCommand(ExecutePreEdit);
             DeleteCommand = new RelayCommand(ExecuteDelete);
             DownloadCommand = new RelayCommand(ExecuteDownloadCommand);
             OpenTabCommand = new RelayCommand(() => LoadSelectedTab(PreEditSelectedName));
             AddDefaultDataCommand = new RelayCommand<AddingNewItemEventArgs>(e => DataGrid_AddingNewItem(null, e));
-            SelectedTextChangedCommand = new RelayCommand<RoutedEventArgs>(SelectedNameEdited);
         }
 
         /// <summary>
@@ -229,10 +226,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         }
         private void ExecuteDownloadCommand()
         {
-            _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Download selected for account {PreEditSelectedName} - a {TypeOfAccount}");
-            if (PreEditSelectedName != null)
+            _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Download selected for account {SelectedName} - a {TypeOfAccount}");
+            if (SelectedName != null)
             {
-                NameData names = PreEditSelectedName;
+                NameData names = SelectedName.Instance;
                 UpdateDataCallback(async programPortfolio => await PortfolioDataUpdater.Download(TypeOfAccount, programPortfolio, names, ReportLogger).ConfigureAwait(false));
             }
         }
@@ -259,95 +256,71 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             get;
             set;
         }
+
         private void ExecuteSelectionChanged(object args)
         {
             if (DataNames != null && args is SelectableEquatable<NameData> selectableName && selectableName.Instance != null)
             {
+                SelectedName = selectableName;
                 var name = selectableName.Instance;
                 _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Current item is a name {name}");
-                bool Equality(SelectableEquatable<NameData> first, SelectableEquatable<NameData> second)
+
+                _ = DataStore.TryGetAccount(TypeOfAccount, name, out var desired);
+                if (desired != null)
                 {
-                    if (first.Instance == null)
+                    _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Stored item has been retrieved and is a {TypeOfAccount}.");
+                    ISecurity security = desired as ISecurity;
+                    var unitPrices = security?.UnitPrice;
+
+                    SelectedLatestDate = desired.LatestValue()?.Day ?? DateTime.Today;
+                    DateTime calculationDate = desired.FirstValue()?.Day ?? DateTime.Today.AddDays(-365);
+                    var outputs = new List<DailyValuation>();
+                    var prices = new List<DailyValuation>();
+
+                    while (calculationDate < DateTime.Today)
                     {
-                        return second.Instance == null;
-                    }
-
-                    return first.Instance.IsEqualTo(second.Instance);
-                }
-
-                int index = DataNames.FindIndex(x => Equality(x, selectableName));
-
-                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"New index is {index} and the current index is {fSelectedRowIndex}");
-                if (fSelectedRowIndex == -1 || fSelectedRowIndex != index)
-                {
-                    fSelectedRowIndex = index;
-                    PreEditSelectedName = name?.Copy();
-                    SelectedName = name?.Copy();
-
-                    _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Updating selected value to index {fSelectedRowIndex} - {SelectedName}");
-                    _ = DataStore.TryGetAccount(TypeOfAccount, name, out var desired);
-                    if (desired != null)
-                    {
-                        _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Stored item has been retrieved and is a {TypeOfAccount}.");
-                        ISecurity security = desired as ISecurity;
-                        var unitPrices = security?.UnitPrice;
-
-                        SelectedLatestDate = desired.LatestValue()?.Day ?? DateTime.Today;
-                        DateTime calculationDate = desired.FirstValue()?.Day ?? DateTime.Today.AddDays(-365);
-                        var outputs = new List<DailyValuation>();
-                        var prices = new List<DailyValuation>();
-
-                        while (calculationDate < DateTime.Today)
+                        var calcuationDateStatistics = desired.Value(calculationDate);
+                        outputs.Add(new DailyValuation(calculationDate, calcuationDateStatistics?.Value ?? 0.0));
+                        if (unitPrices != null)
                         {
-                            var calcuationDateStatistics = desired.Value(calculationDate);
-                            outputs.Add(new DailyValuation(calculationDate, calcuationDateStatistics?.Value ?? 0.0));
-                            if (unitPrices != null)
-                            {
-                                prices.Add(new DailyValuation(calculationDate, unitPrices.Value(calculationDate)?.Value ?? 0.0));
-                            }
-
-                            calculationDate = calculationDate.AddDays(30);
-                        }
-                        if (calculationDate == DateTime.Today)
-                        {
-                            var calcuationDateStatistics = desired.Value(calculationDate);
-                            outputs.Add(new DailyValuation(calculationDate, calcuationDateStatistics?.Value ?? 0.0));
-
-                            if (unitPrices != null)
-                            {
-                                // This value here can be null, even if unitPrices is not.
-                                prices.Add(new DailyValuation(calculationDate, unitPrices.Value(calculationDate)?.Value ?? 0.0));
-                            }
+                            prices.Add(new DailyValuation(calculationDate, unitPrices.Value(calculationDate)?.Value ?? 0.0));
                         }
 
-                        SelectedValueHistory = outputs;
-                        SelectedPriceHistory = prices;
-
-                        _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Successfully updated SelectedItem.");
+                        calculationDate = calculationDate.AddDays(30);
                     }
+                    if (calculationDate == DateTime.Today)
+                    {
+                        var calcuationDateStatistics = desired.Value(calculationDate);
+                        outputs.Add(new DailyValuation(calculationDate, calcuationDateStatistics?.Value ?? 0.0));
+
+                        if (unitPrices != null)
+                        {
+                            // This value here can be null, even if unitPrices is not.
+                            prices.Add(new DailyValuation(calculationDate, unitPrices.Value(calculationDate)?.Value ?? 0.0));
+                        }
+                    }
+
+                    SelectedValueHistory = outputs;
+                    SelectedPriceHistory = prices;
+
+                    _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Successfully updated SelectedItem.");
                 }
             }
         }
 
         /// <summary>
-        /// Called when text in the <see cref="SelectedName"/> has changed.
+        /// Called prior to an edit occurring in a row. This is used
+        /// to record the state of the row before editing.
         /// </summary>
-        public ICommand SelectedTextChangedCommand
+        public ICommand PreEditCommand
         {
             get;
             set;
         }
 
-        private void SelectedNameEdited(RoutedEventArgs e)
+        private void ExecutePreEdit()
         {
-            _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"SelectedNamesEdited - editing {PreEditSelectedName} and changing to {SelectedName}");
-            bool edited = false;
-            UpdateDataCallback(portfolio => edited = portfolio.TryEditName(TypeOfAccount, PreEditSelectedName, SelectedName.Copy(), ReportLogger));
-
-            if (!edited)
-            {
-                _ = ReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.EditingData, "Was not able to edit desired.");
-            }
+            PreEditSelectedName = SelectedName?.Instance?.Copy();
         }
 
         /// <summary>
@@ -358,15 +331,16 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             get;
             set;
         }
-        private void ExecuteCreateEdit(SelectableEquatable<NameData> rowName)
+
+        private void ExecuteCreateEdit()
         {
             _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"ExecuteCreateEdit called.");
             bool edited = false;
-            var originRowName = rowName.Instance;
+            var originRowName = SelectedName.Instance; //rowName.Instance;
             if (!DataStore.NameData(TypeOfAccount).Any(item => item.Name == PreEditSelectedName?.Name && item.Company == PreEditSelectedName?.Company))
             {
                 _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Adding {originRowName} to the database");
-                NameData name = new NameData(originRowName.Company, originRowName.Name, originRowName.Currency, originRowName.Url, originRowName.Sectors, originRowName.Notes);
+                NameData name = new NameData(originRowName.Company, originRowName.Name, originRowName.Currency, originRowName.Url, originRowName.Sectors);
                 UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAdd(TypeOfAccount, name, ReportLogger));
             }
             else
@@ -376,12 +350,13 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
                 {
                     _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.EditingData, $"Editing {PreEditSelectedName} to {originRowName} in the database");
                     NameData name = new NameData(originRowName.Company, originRowName.Name, originRowName.Currency, originRowName.Url, originRowName.Sectors, originRowName.Notes);
-                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditName(TypeOfAccount, fPreEditSelectedName, name, ReportLogger));
+                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditName(TypeOfAccount, PreEditSelectedName, name, ReportLogger));
                 }
-                if (!edited)
-                {
-                    _ = ReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.EditingData, "Was not able to edit desired.");
-                }
+            }
+
+            if (!edited)
+            {
+                _ = ReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.EditingData, "Was not able to edit desired.");
             }
         }
 
@@ -394,10 +369,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         }
         private void ExecuteDelete()
         {
-            _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleting {PreEditSelectedName} from the database");
-            if (PreEditSelectedName != null)
+            _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleting {SelectedName} from the database");
+            if (SelectedName != null)
             {
-                UpdateDataCallback(programPortfolio => programPortfolio.TryRemove(TypeOfAccount, PreEditSelectedName, ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryRemove(TypeOfAccount, SelectedName.Instance, ReportLogger));
             }
             else
             {

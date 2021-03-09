@@ -7,6 +7,8 @@
              xmlns:uic="clr-namespace:UICommon.Converters;assembly=UICommon"
              xmlns:gui="clr-namespace:FinancePortfolioDatabase.GUI"
              xmlns:cht="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
+             xmlns:common="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Common"
+             d:DataContext="{d:DesignInstance Type=common:DataNamesViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
@@ -68,19 +70,22 @@
                 </Style>
             </DataGrid.RowStyle>
             <i:Interaction.Triggers>
+                <i:EventTrigger EventName="BeginningEdit">
+                    <i:InvokeCommandAction Command="{Binding PreEditCommand}" />
+                </i:EventTrigger>
                 <i:EventTrigger EventName="RowEditEnding">
-                    <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=CreateCommand}"
-                                           CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=CurrentItem}" />
+                    <i:InvokeCommandAction Command="{Binding CreateCommand}" />
                 </i:EventTrigger>
                 <i:EventTrigger EventName="AddingNewItem">
-                    <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=AddDefaultDataCommand}"
+                    <i:InvokeCommandAction Command="{Binding Path=AddDefaultDataCommand}"
                                            PassEventArgsToCommand="True" />
                 </i:EventTrigger>
                 <i:EventTrigger EventName="SelectionChanged">
-                    <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=SelectionChangedCommand}"
+                    <i:InvokeCommandAction Command="{Binding Path=SelectionChangedCommand}"
                                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=CurrentItem}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
+
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Company"
                                     MinWidth="70"
@@ -88,6 +93,16 @@
                 <DataGridTextColumn Header="Name"
                                     MinWidth="70"
                                     Binding="{Binding Path=Instance.Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Url"
+                                    MinWidth="50"
+                                    MaxWidth="250"
+                                    Binding="{Binding Path=Instance.Url,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Currency"
+                                    MinWidth="20"
+                                    Binding="{Binding Path=Instance.Currency,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <DataGridTextColumn Header="Sectors"
+                                    MinWidth="70"
+                                    Binding="{Binding Path=Instance.SectorsFlat,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTemplateColumn>
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
@@ -111,156 +126,19 @@
               VerticalAlignment="Stretch"
               HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Border BorderBrush="Black"
-                    BorderThickness="2"
-                    Grid.Column="0"
-                    Grid.Row="0"
-                    Width="Auto"
-                    Height="Auto">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="35" />
-                        <RowDefinition Height="35" />
-                        <RowDefinition Height="35" />
-                        <RowDefinition Height="35" />
-                        <RowDefinition Height="35" />
-                        <RowDefinition Height="35" />
-                        <RowDefinition Height="35" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto"
-                                          MinWidth="200"
-                                          MaxWidth="400" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0"
-                               Grid.Column="0"
-                               Grid.ColumnSpan="2"
-                               Margin="5"
-                               Text="Name Data" />
-                    <TextBlock Grid.Row="1"
-                               Grid.Column="0"
-                               Text="Company"
-                               Margin="5" />
-                    <TextBox Grid.Row="1"
-                             Grid.Column="1"
-                             Margin="5"
-                             Text="{Binding SelectedName.Company, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="LostFocus">
-                                <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=SelectedTextChangedCommand}"
-                                                       PassEventArgsToCommand="True" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TextBox>
-                    <TextBlock Grid.Row="2"
-                               Grid.Column="0"
-                               Margin="5"
-                               Text="Name" />
-                    <TextBox Grid.Row="2"
-                             Grid.Column="1"
-                             Margin="5"
-                             Text="{Binding SelectedName.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="LostFocus">
-                                <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=SelectedTextChangedCommand}"
-                                                       PassEventArgsToCommand="True" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TextBox>
-                    <TextBlock Grid.Row="3"
-                               Grid.Column="0"
-                               Margin="5"
-                               Text="Currency" />
-                    <TextBox Grid.Row="3"
-                             Grid.Column="1"
-                             Margin="5"
-                             Text="{Binding SelectedName.Currency, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="LostFocus">
-                                <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=SelectedTextChangedCommand}"
-                                                       PassEventArgsToCommand="True" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TextBox>
-                    <TextBlock Grid.Row="4"
-                               Grid.Column="0"
-                               Text="Url"
-                               Margin="5" />
-                    <TextBox Grid.Row="4"
-                             Grid.Column="1"
-                             Margin="5"
-                             MaxWidth="390"
-                             Text="{Binding SelectedName.Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="LostFocus">
-                                <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=SelectedTextChangedCommand}"
-                                                       PassEventArgsToCommand="True" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TextBox>
-                    <TextBlock Grid.Row="5"
-                               Grid.Column="0"
-                               Margin="5"
-                               Text="Sectors" />
-                    <TextBox Grid.Row="5"
-                             Grid.Column="1"
-                             Margin="5"
-                             Text="{Binding SelectedName.SectorsFlat, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
-                        <i:Interaction.Triggers>
-                            <i:EventTrigger EventName="LostFocus">
-                                <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=SelectedTextChangedCommand}"
-                                                       PassEventArgsToCommand="True" />
-                            </i:EventTrigger>
-                        </i:Interaction.Triggers>
-                    </TextBox>
-                </Grid>
-            </Border>
-            <Border BorderBrush="Black"
-                    BorderThickness="2"
-                    Grid.Column="0"
-                    Grid.Row="1"
-                    Width="Auto"
-                    Height="Auto">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="35" />
-                        <RowDefinition Height="35" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" />
-                        <ColumnDefinition Width="Auto"
-                                          MinWidth="200" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Margin="5"
-                               Grid.Column="0"
-                               Grid.Row="0"
-                               Text="Value Data" />
-                    <TextBlock Grid.Row="1"
-                               Grid.Column="0"
-                               Margin="5"
-                               Text="Latest Date" />
-                    <TextBlock Grid.Row="1"
-                               Grid.Column="1"
-                               Margin="5"
-                               Text="{Binding Path=SelectedLatestDate, Mode=OneWay, Converter={StaticResource StringToUKDate}}" />
-                </Grid>
-            </Border>
             <cht:Chart Title="Holding History"
                        Style="{StaticResource NoLegendChart}"
                        Height="Auto"
                        Width="Auto"
                        VerticalAlignment="Stretch"
                        Grid.Row="0"
-                       Grid.Column="1">
+                       Grid.Column="0">
                 <cht:Chart.Series>
                     <cht:LineSeries ItemsSource="{Binding Path=SelectedValueHistory}"
                                     DataPointStyle="{StaticResource InvisibleDataPointBlue}"
@@ -269,7 +147,7 @@
                 </cht:Chart.Series>
             </cht:Chart>
             <cht:Chart Title="Price History"
-                       Grid.Column="1"
+                       Grid.Column="0"
                        Grid.Row="1"
                        Height="Auto"
                        VerticalAlignment="Stretch"
