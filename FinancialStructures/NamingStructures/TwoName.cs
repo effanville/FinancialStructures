@@ -5,7 +5,7 @@ namespace FinancialStructures.NamingStructures
     /// <summary>
     /// Contains naming information, allowing for a primary and secondary name.
     /// </summary>
-    public class TwoName : IComparable
+    public class TwoName : IComparable, IEquatable<TwoName>
     {
         private string fCompany;
         private string fName;

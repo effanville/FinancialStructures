@@ -6,7 +6,7 @@ namespace FinancialStructures.NamingStructures
     /// <summary>
     /// Any name data associated to an account.
     /// </summary>
-    public class NameData : TwoName
+    public class NameData : TwoName, IEquatable<NameData>
     {
         private string fUrl;
         private string fCurrency;

@@ -36,12 +36,12 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         /// <summary>
         /// Backing field for <see cref="DataNames"/>.
         /// </summary>
-        private List<Selectable<NameData>> fDataNames = new List<Selectable<NameData>>();
+        private List<SelectableEquatable<NameData>> fDataNames = new List<SelectableEquatable<NameData>>();
 
         /// <summary>
         /// Name data of the names to be displayed in this view.
         /// </summary>
-        public List<Selectable<NameData>> DataNames
+        public List<SelectableEquatable<NameData>> DataNames
         {
             get
             {
@@ -174,10 +174,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             TypeOfAccount = accountType;
             fSelectedRowIndex = -1;
             ReportLogger = reportLogger;
-            DataNames = portfolio.NameData(accountType).Select(name => new Selectable<NameData>(name, portfolio.LatestDate(accountType, name) == DateTime.Today)).ToList();
+            DataNames = portfolio.NameData(accountType).Select(name => new SelectableEquatable<NameData>(name, portfolio.LatestDate(accountType, name) == DateTime.Today)).ToList();
             DataNames.Sort();
 
-            CreateCommand = new RelayCommand<Selectable<NameData>>(ExecuteCreateEdit);
+            CreateCommand = new RelayCommand<SelectableEquatable<NameData>>(ExecuteCreateEdit);
             SelectionChangedCommand = new RelayCommand<object>(ExecuteSelectionChanged);
             DeleteCommand = new RelayCommand(ExecuteDelete);
             DownloadCommand = new RelayCommand(ExecuteDownloadCommand);
@@ -206,7 +206,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             {
                 return portfolio.LatestDate(TypeOfAccount, name) == DateTime.Today || portfolio.LatestValue(TypeOfAccount, name) == 0.0;
             }
-            var values = portfolio.NameData(TypeOfAccount).Select(name => new Selectable<NameData>(name, IsUpdated(name))).ToList();
+            var values = portfolio.NameData(TypeOfAccount).Select(name => new SelectableEquatable<NameData>(name, IsUpdated(name))).ToList();
             DataNames = null;
             DataNames = values;
             DataNames.Sort((a, b) => a.Instance.CompareTo(b.Instance));
@@ -247,7 +247,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         {
             if (DataNames != null)
             {
-                e.NewItem = new Selectable<NameData>(new NameData(), false);
+                e.NewItem = new SelectableEquatable<NameData>(new NameData(), false);
             }
         }
 
@@ -261,11 +261,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         }
         private void ExecuteSelectionChanged(object args)
         {
-            if (DataNames != null && args is Selectable<NameData> selectableName && selectableName.Instance != null)
+            if (DataNames != null && args is SelectableEquatable<NameData> selectableName && selectableName.Instance != null)
             {
                 var name = selectableName.Instance;
                 _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Current item is a name {name}");
-                bool Equality(Selectable<NameData> first, Selectable<NameData> second)
+                bool Equality(SelectableEquatable<NameData> first, SelectableEquatable<NameData> second)
                 {
                     if (first.Instance == null)
                     {
@@ -358,7 +358,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             get;
             set;
         }
-        private void ExecuteCreateEdit(Selectable<NameData> rowName)
+        private void ExecuteCreateEdit(SelectableEquatable<NameData> rowName)
         {
             _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"ExecuteCreateEdit called.");
             bool edited = false;

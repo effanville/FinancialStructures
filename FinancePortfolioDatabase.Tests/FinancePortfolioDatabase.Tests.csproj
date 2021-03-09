@@ -34,7 +34,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="StructureCommon" Version="1.0.7" />
+    <PackageReference Include="StructureCommon" Version="1.0.8" />
     <PackageReference Include="UICommon" Version="1.0.6" />
   </ItemGroup>
 

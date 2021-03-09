@@ -32,7 +32,7 @@
   </ItemGroup>
   
     <ItemGroup>
-    <PackageReference Include="StructureCommon" Version="1.0.7" />
+    <PackageReference Include="StructureCommon" Version="1.0.8" />
   </ItemGroup>
 
  <!-- Alternative locations for dlls, if Nuget links cannot be generated
