@@ -179,7 +179,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             PreEditCommand = new RelayCommand(ExecutePreEdit);
             DeleteCommand = new RelayCommand(ExecuteDelete);
             DownloadCommand = new RelayCommand(ExecuteDownloadCommand);
-            OpenTabCommand = new RelayCommand(() => LoadSelectedTab(PreEditSelectedName));
+            OpenTabCommand = new RelayCommand(() => LoadSelectedTab(SelectedName?.Instance));
             AddDefaultDataCommand = new RelayCommand<AddingNewItemEventArgs>(e => DataGrid_AddingNewItem(null, e));
         }
 
