@@ -66,7 +66,7 @@ namespace FinancePortfolioDatabase.Tests
             var securityTab = viewModel.Tabs.First(tab => tab is SecurityEditWindowViewModel);
             SecurityEditWindowViewModel securityViewModel = securityTab as SecurityEditWindowViewModel;
             var securityNames = securityViewModel.Tabs[0] as DataNamesViewModel;
-            var selectedInitialName = new Selectable<NameData>(new NameData(), false);
+            var selectedInitialName = new SelectableEquatable<NameData>(new NameData(), false);
             securityNames.DataNames.Add(selectedInitialName);
             securityNames.SelectionChangedCommand.Execute(selectedInitialName);
 

@@ -59,7 +59,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
                 Company = "Company"
             };
             viewModel.PreEditSelectedName = newName;
-            viewModel.DataNames.Add(new Selectable<NameData>(newName, false));
+            viewModel.DataNames.Add(new SelectableEquatable<NameData>(newName, false));
             viewModel.CreateCommand.Execute(viewModel.DataNames.Last());
             Assert.AreEqual(2, viewModel.DataNames.Count);
             Assert.AreEqual(2, portfolio.BankAccounts.Count);
@@ -159,7 +159,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
                 Company = "Company"
             };
             viewModel.PreEditSelectedName = newName;
-            viewModel.DataNames.Add(new Selectable<NameData>(newName, false));
+            viewModel.DataNames.Add(new SelectableEquatable<NameData>(newName, false));
             viewModel.CreateCommand.Execute(viewModel.DataNames[1]);
             Assert.AreEqual(2, viewModel.DataNames.Count, "Bot enough in the view.");
             Assert.AreEqual(2, portfolio.Funds.Count, "Not enough in portfolio");

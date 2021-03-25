@@ -4,6 +4,7 @@ using System.Linq;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
+using StructureCommon.DataStructures;
 using StructureCommon.Extensions;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
@@ -151,7 +152,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             BankAccountAmountText = $"Total Value: {portfolio.TotalValue(Totals.BankAccount)} {portfolio.BaseCurrency}";
             var bankAccounts = portfolio.BankAccountsThreadSafe.ToList();
             bankAccounts.Sort((bank, otherBank) => otherBank.Value(DateTime.Today).Value.CompareTo(bank.Value(DateTime.Today).Value));
-            TopBankAccounts = bankAccounts.Take(5).Select(name => new DayValue_Named(name.Names.Company, name.Names.Name, name.Value(DateTime.Today))).ToList();
+            TopBankAccounts = bankAccounts.Take(5).Select(name => new DayValue_Named(name.Names.Company, name.Names.Name, name.Value(DateTime.Today) ?? new DailyValuation(DateTime.Today, 0.0))).ToList();
         }
     }
 }
