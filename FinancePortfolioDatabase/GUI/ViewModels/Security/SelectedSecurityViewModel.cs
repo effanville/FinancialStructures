@@ -15,7 +15,7 @@ using UICommon.ViewModelBases;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 {
-    internal class SelectedSecurityViewModel : TabViewModelBase<IPortfolio>
+    public class SelectedSecurityViewModel : TabViewModelBase<IPortfolio>
     {
         /// <inheritdoc/>
         public override bool Closable

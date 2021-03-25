@@ -1,14 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
-using FinancePortfolioDatabase.GUI.ViewModels.Security;
-using FinancialStructures.Database;
 using FinancialStructures.Database.Implementation;
 using FinancialStructures.NamingStructures;
 using FinancePortfolioDatabase.Tests.TestConstruction;
-using Moq;
 using NUnit.Framework;
-using UICommon.Services;
 
 namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
 {
@@ -16,19 +11,14 @@ namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
     /// Tests for window displaying security data.
     /// </summary>
     [TestFixture]
-    public class SecurityEditWindowTests
+    public class SecurityEditWindowTests : SecurityWindowTestHelper
     {
         [Test]
         public void CanLoadSuccessfully()
         {
-            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SecurityEditWindowViewModel viewModel = new SecurityEditWindowViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
-
-            Assert.AreEqual(1, viewModel.Tabs.Count);
-            object tab = viewModel.Tabs.Single();
+            Portfolio = TestingGUICode.CreateBasicDataBase();
+            Assert.AreEqual(1, ViewModel.Tabs.Count);
+            object tab = ViewModel.Tabs.Single();
             DataNamesViewModel nameModel = tab as DataNamesViewModel;
             Assert.AreEqual(1, nameModel.DataNames.Count);
         }
@@ -36,52 +26,37 @@ namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
         [Test]
         public void CanUpdateData()
         {
-            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio portfolio = TestingGUICode.CreateEmptyDataBase();
-            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SecurityEditWindowViewModel viewModel = new SecurityEditWindowViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
             Portfolio newData = TestingGUICode.CreateBasicDataBase();
-            viewModel.UpdateData(newData);
+            ViewModel.UpdateData(newData);
 
-            Assert.AreEqual("TestFilePath", viewModel.DataStore.FilePath);
-            Assert.AreEqual(1, viewModel.DataStore.FundsThreadSafe.Count);
+            Assert.AreEqual("TestFilePath", ViewModel.DataStore.FilePath);
+            Assert.AreEqual(1, ViewModel.DataStore.Funds.Count);
         }
 
         [Test]
         public void CanUpdateDataAndRemoveOldTab()
         {
-            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio portfolio = TestingGUICode.CreateEmptyDataBase();
-            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SecurityEditWindowViewModel viewModel = new SecurityEditWindowViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
-
             NameData newNameData = new NameData("Fidelity", "Europe");
-            viewModel.LoadTabFunc(newNameData);
+            ViewModel.LoadTabFunc(newNameData);
 
-            Assert.AreEqual(2, viewModel.Tabs.Count);
+            Assert.AreEqual(2, ViewModel.Tabs.Count);
 
             Portfolio newData = TestingGUICode.CreateBasicDataBase();
-            viewModel.UpdateData(newData);
-            Assert.AreEqual(1, viewModel.Tabs.Count);
-            Assert.AreEqual("TestFilePath", viewModel.DataStore.FilePath);
-            Assert.AreEqual(1, viewModel.DataStore.FundsThreadSafe.Count);
+            ViewModel.UpdateData(newData);
+            Assert.AreEqual(1, ViewModel.Tabs.Count);
+            Assert.AreEqual("TestFilePath", ViewModel.DataStore.FilePath);
+            Assert.AreEqual(1, ViewModel.DataStore.Funds.Count);
         }
 
         [Test]
         public void CanAddTab()
         {
-            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SecurityEditWindowViewModel viewModel = new SecurityEditWindowViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
+            Portfolio = TestingGUICode.CreateBasicDataBase();
 
             NameData newData = new NameData("Fidelity", "China");
-            viewModel.LoadTabFunc(newData);
+            ViewModel.LoadTabFunc(newData);
 
-            Assert.AreEqual(2, viewModel.Tabs.Count);
+            Assert.AreEqual(2, ViewModel.Tabs.Count);
         }
     }
 }
