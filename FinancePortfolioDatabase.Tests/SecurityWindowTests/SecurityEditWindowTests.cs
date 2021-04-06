@@ -57,6 +57,11 @@ namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
             ViewModel.LoadTabFunc(newData);
 
             Assert.AreEqual(2, ViewModel.Tabs.Count);
+            var dataNames = DataNames;
+            Assert.AreEqual(1, dataNames.DataNames.Count);
+            var selected = SelectedViewModel(newData);
+            Assert.IsNotNull(selected);
+            Assert.AreEqual(1, selected.SelectedSecurityData.Count);
         }
     }
 }

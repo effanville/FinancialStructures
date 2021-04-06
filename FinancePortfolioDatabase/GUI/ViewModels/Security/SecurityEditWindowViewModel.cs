@@ -53,7 +53,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             }
         }
 
-        internal void LoadTabFunc(Object obj)
+        internal void LoadTabFunc(object obj)
         {
             if (obj is NameData name)
             {
