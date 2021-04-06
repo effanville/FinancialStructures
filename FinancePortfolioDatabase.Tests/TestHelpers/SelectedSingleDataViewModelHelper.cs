@@ -1,15 +1,19 @@
 ﻿using System;
-using FinancePortfolioDatabase.GUI.ViewModels.Security;
 using FinancialStructures.Database;
 using FinancePortfolioDatabase.Tests.TestConstruction;
 using Moq;
 using NUnit.Framework;
 using UICommon.Services;
 using System.IO.Abstractions;
+using FinancePortfolioDatabase.GUI.ViewModels.Common;
+using FinancialStructures.NamingStructures;
+using StructureCommon.DisplayClasses;
+using System.Linq;
+using System.Windows.Controls;
 
 namespace FinancePortfolioDatabase.Tests
 {
-    public abstract class SecurityWindowTestHelper
+    public abstract class SelectedSingleDataViewModelHelper
     {
         private Action<Action<IPortfolio>> DataUpdater
         {
@@ -34,10 +38,40 @@ namespace FinancePortfolioDatabase.Tests
             }
         }
 
-        protected SecurityEditWindowViewModel ViewModel
+        protected SelectedSingleDataViewModel ViewModel
         {
             get;
             private set;
+        }
+
+        protected Account AccountType
+        {
+            get;
+            set;
+        } = Account.Security;
+
+        public NameData AddNewItem()
+        {
+
+            return newItem.Instance;
+        }
+
+        public void SelectItem(NameData name)
+        {
+            ViewModel.SelectionChangedCommand?.Execute(new SelectableEquatable<NameData>(name, false));
+        }
+
+        public void BeginEdit()
+        {
+        }
+
+        public void CompleteEdit()
+        {
+        }
+
+        public void DeleteSelected()
+        {
+            ViewModel.DeleteCommand?.Execute(null);
         }
 
         [SetUp]
@@ -48,7 +82,7 @@ namespace FinancePortfolioDatabase.Tests
             Portfolio = TestingGUICode.CreateEmptyDataBase();
 
             UiGlobals globals = TestingGUICode.CreateGlobalsMock(new FileSystem(), fileMock.Object, dialogMock.Object);
-            ViewModel = new SecurityEditWindowViewModel(Portfolio, DataUpdater, TestingGUICode.DummyReportLogger, globals);
+            ViewModel = new SelectedSingleDataViewModel(Portfolio, DataUpdater, TestingGUICode.DummyReportLogger, obj => { }, AccountType);
         }
 
         [TearDown]
