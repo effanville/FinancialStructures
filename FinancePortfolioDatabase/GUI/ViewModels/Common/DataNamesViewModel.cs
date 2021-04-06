@@ -19,7 +19,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
     /// <summary>
     /// Data store behind view for a list of names and associated update name methods.
     /// </summary>
-    internal class DataNamesViewModel : TabViewModelBase<IPortfolio>
+    public class DataNamesViewModel : TabViewModelBase<IPortfolio>
     {
         private readonly Account TypeOfAccount;
 
