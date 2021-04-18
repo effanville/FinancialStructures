@@ -1,7 +1,6 @@
 ﻿using System;
 using FinancePortfolioDatabase.GUI.ViewModels.Security;
 using FinancialStructures.Database;
-using FinancePortfolioDatabase.Tests.TestConstruction;
 using Moq;
 using NUnit.Framework;
 using UICommon.Services;
@@ -10,7 +9,7 @@ using System.Linq;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.NamingStructures;
 
-namespace FinancePortfolioDatabase.Tests
+namespace FinancePortfolioDatabase.Tests.TestHelpers
 {
     public abstract class SecurityWindowTestHelper
     {
@@ -67,12 +66,12 @@ namespace FinancePortfolioDatabase.Tests
         [SetUp]
         public void Setup()
         {
-            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio = TestingGUICode.CreateEmptyDataBase();
+            Mock<IFileInteractionService> fileMock = TestSetupHelper.CreateFileMock("nothing");
+            Mock<IDialogCreationService> dialogMock = TestSetupHelper.CreateDialogMock();
+            Portfolio = TestSetupHelper.CreateEmptyDataBase();
 
-            UiGlobals globals = TestingGUICode.CreateGlobalsMock(new FileSystem(), fileMock.Object, dialogMock.Object);
-            ViewModel = new SecurityEditWindowViewModel(Portfolio, DataUpdater, TestingGUICode.DummyReportLogger, globals);
+            UiGlobals globals = TestSetupHelper.CreateGlobalsMock(new FileSystem(), fileMock.Object, dialogMock.Object);
+            ViewModel = new SecurityEditWindowViewModel(Portfolio, DataUpdater, TestSetupHelper.DummyReportLogger, globals);
         }
 
         [TearDown]

@@ -1,25 +1,24 @@
-﻿using System.Linq;
-using FinancePortfolioDatabase.GUI.ViewModels.Common;
-using FinancePortfolioDatabase.Tests.TestHelpers;
+﻿using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database.Implementation;
 using FinancialStructures.NamingStructures;
 using NUnit.Framework;
+using FinancePortfolioDatabase.Tests.ViewModelExtensions;
+using FinancePortfolioDatabase.Tests.TestHelpers;
 
-namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
+namespace FinancePortfolioDatabase.Tests.CommonWindowTests
 {
     /// <summary>
-    /// Tests for window displaying security data.
+    /// Tests for window displaying single data stream data.
     /// </summary>
     [TestFixture]
-    public class SecurityEditWindowTests : SecurityWindowTestHelper
+    public class ValueListWindowViewModelTests : ValueListWindowViewModelTestHelper
     {
         [Test]
         public void CanLoadSuccessfully()
         {
             Portfolio = TestSetupHelper.CreateBasicDataBase();
             Assert.AreEqual(1, ViewModel.Tabs.Count);
-            object tab = ViewModel.Tabs.Single();
-            DataNamesViewModel nameModel = tab as DataNamesViewModel;
+            DataNamesViewModel nameModel = ViewModel.DataNames();
             Assert.AreEqual(1, nameModel.DataNames.Count);
         }
 
@@ -30,7 +29,7 @@ namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
             ViewModel.UpdateData(newData);
 
             Assert.AreEqual("TestFilePath", ViewModel.DataStore.FilePath);
-            Assert.AreEqual(1, ViewModel.DataStore.FundsThreadSafe.Count);
+            Assert.AreEqual(1, ViewModel.DataStore.BankAccountsThreadSafe.Count);
         }
 
         [Test]
@@ -45,23 +44,17 @@ namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
             ViewModel.UpdateData(newData);
             Assert.AreEqual(1, ViewModel.Tabs.Count);
             Assert.AreEqual("TestFilePath", ViewModel.DataStore.FilePath);
-            Assert.AreEqual(1, ViewModel.DataStore.FundsThreadSafe.Count);
+            Assert.AreEqual(1, ViewModel.DataStore.BankAccountsThreadSafe.Count);
         }
 
         [Test]
         public void CanAddTab()
         {
-            Portfolio = TestSetupHelper.CreateBasicDataBase();
-
+            Portfolio Portfolio = TestSetupHelper.CreateBasicDataBase();
             NameData newData = new NameData("Fidelity", "China");
             ViewModel.LoadTabFunc(newData);
 
             Assert.AreEqual(2, ViewModel.Tabs.Count);
-            var dataNames = DataNames;
-            Assert.AreEqual(1, dataNames.DataNames.Count);
-            var selected = SelectedViewModel(newData);
-            Assert.IsNotNull(selected);
-            Assert.AreEqual(1, selected.SelectedSecurityData.Count);
         }
     }
 }

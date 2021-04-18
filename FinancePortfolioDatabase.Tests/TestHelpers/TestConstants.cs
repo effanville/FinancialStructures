@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FinancePortfolioDatabase.Tests.TestConstruction
+namespace FinancePortfolioDatabase.Tests.TestHelpers
 {
     public static class TestConstants
     {

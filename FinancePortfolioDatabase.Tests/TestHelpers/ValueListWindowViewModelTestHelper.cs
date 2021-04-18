@@ -1,15 +1,14 @@
 ﻿using System;
-using FinancePortfolioDatabase.GUI.ViewModels.Security;
 using FinancialStructures.Database;
 using Moq;
 using NUnit.Framework;
 using UICommon.Services;
 using System.IO.Abstractions;
-using FinancialStructures.NamingStructures;
+using FinancePortfolioDatabase.GUI.ViewModels.Common;
 
 namespace FinancePortfolioDatabase.Tests.TestHelpers
 {
-    public abstract class SelectedSecurityTestHelper
+    public abstract class ValueListWindowViewModelTestHelper
     {
         private Action<Action<IPortfolio>> DataUpdater
         {
@@ -19,34 +18,42 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
             }
         }
 
+        private IPortfolio fPortfolio;
+
         protected IPortfolio Portfolio
         {
-            get;
-            set;
+            get
+            {
+                return fPortfolio;
+            }
+            set
+            {
+                fPortfolio = value;
+                ViewModel?.UpdateData(fPortfolio);
+            }
         }
 
-        protected NameData Name
-        {
-            get;
-            set;
-        }
-
-        protected SelectedSecurityViewModel ViewModel
+        protected ValueListWindowViewModel ViewModel
         {
             get;
             private set;
         }
+
+        protected Account AccountType
+        {
+            get;
+            set;
+        } = Account.Security;
 
         [SetUp]
         public void Setup()
         {
             Mock<IFileInteractionService> fileMock = TestSetupHelper.CreateFileMock("nothing");
             Mock<IDialogCreationService> dialogMock = TestSetupHelper.CreateDialogMock();
-            Portfolio = TestSetupHelper.CreateBasicDataBase();
-            Name = new NameData("Fidelity", "China");
+            Portfolio = TestSetupHelper.CreateEmptyDataBase();
 
             UiGlobals globals = TestSetupHelper.CreateGlobalsMock(new FileSystem(), fileMock.Object, dialogMock.Object);
-            ViewModel = new SelectedSecurityViewModel(Portfolio, DataUpdater, TestSetupHelper.DummyReportLogger, globals, Name);
+            ViewModel = new ValueListWindowViewModel("Title", Portfolio, DataUpdater, TestSetupHelper.DummyReportLogger, globals, AccountType);
         }
 
         [TearDown]

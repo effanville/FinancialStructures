@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
-using FinancialStructures.DataStructures;
-using FinancePortfolioDatabase.Tests.TestConstruction;
 using NUnit.Framework;
+using FinancePortfolioDatabase.Tests.ViewModelExtensions;
+using FinancialStructures.FinanceStructures;
+using FinancialStructures.Database;
+using FinancePortfolioDatabase.Tests.TestHelpers;
 
 namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
 {
     [TestFixture]
-    [Apartment(ApartmentState.STA)]
     public class SelectedSecurityViewModelTests : SelectedSecurityTestHelper
     {
         [Test]
@@ -21,30 +21,35 @@ namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
         public void CanAddValue()
         {
             Assert.AreEqual(1, ViewModel.SelectedSecurityData.Count);
-            SecurityDayData newValue = new SecurityDayData(new DateTime(2002, 1, 1), 1, 1, 1);
-            ViewModel.SelectedSecurityData.Add(newValue);
+            ViewModel.SelectItem(null);
+            var newItem = ViewModel.AddNewItem();
+            ViewModel.BeginEdit();
+            newItem.Date = new DateTime(2002, 1, 1);
+            newItem.NewInvestment = 1;
+            newItem.ShareNo = 1;
+            newItem.UnitPrice = 1;
+            ViewModel.CompleteEdit(Portfolio);
 
-            ViewModel.fOldSelectedValues = newValue.Copy();
-
-            var dataGridArgs = TestingGUICode.CreateRowArgs(ViewModel.SelectedSecurityData.Last());
-            ViewModel.AddEditSecurityDataCommand.Execute(dataGridArgs);
             Assert.AreEqual(2, ViewModel.SelectedSecurityData.Count);
-            Assert.AreEqual(2, Portfolio.Funds.Single().Count());
+            Assert.AreEqual(2, Portfolio.FundsThreadSafe.Single().Count());
         }
 
         [Test]
         public void CanEditValue()
         {
             Assert.AreEqual(1, ViewModel.SelectedSecurityData.Count);
-            ViewModel.fOldSelectedValues = ViewModel.SelectedSecurityData[0].Copy();
-            SecurityDayData newValue = new SecurityDayData(new DateTime(2000, 1, 1), 1, 1, 1);
-            ViewModel.SelectedSecurityData[0] = newValue;
+            var item = ViewModel.SelectedSecurityData[0];
+            ViewModel.SelectItem(item);
+            ViewModel.BeginEdit();
+            item.Date = new DateTime(2000, 1, 1);
+            item.NewInvestment = 1;
+            item.ShareNo = 1;
+            item.UnitPrice = 1;
+            ViewModel.CompleteEdit(Portfolio);
 
-            var dataGridArgs = TestingGUICode.CreateRowArgs(ViewModel.SelectedSecurityData.Last());
-            ViewModel.AddEditSecurityDataCommand.Execute(dataGridArgs);
             Assert.AreEqual(1, ViewModel.SelectedSecurityData.Count);
-            Assert.AreEqual(1, Portfolio.Funds.Single().Count());
-            Assert.AreEqual(new DateTime(2000, 1, 1), Portfolio.Funds.Single().FirstValue().Day);
+            Assert.AreEqual(1, Portfolio.FundsThreadSafe.Single().Count());
+            Assert.AreEqual(new DateTime(2000, 1, 1), Portfolio.FundsThreadSafe.Single().FirstValue().Day);
         }
 
         [Test]
@@ -64,12 +69,16 @@ namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
         [Test]
         public void CanDeleteValue()
         {
-            ViewModel.fOldSelectedValues = ViewModel.SelectedSecurityData.Single();
             Assert.AreEqual(1, ViewModel.SelectedSecurityData.Count);
-
-            ViewModel.DeleteValuationCommand.Execute(1);
-
-            Assert.AreEqual(0, Portfolio.Funds.Single().Count());
+            ViewModel.SelectItem(ViewModel.SelectedSecurityData[0]);
+            ViewModel.DeleteSelected(Portfolio);
+            _ = Portfolio.TryGetAccount(Account.Security, Name, out IValueList valueList);
+            var security = valueList as ISecurity;
+            Assert.AreEqual(0, security.Values.Count());
+            Assert.AreEqual(0, security.Shares.Count());
+            Assert.AreEqual(0, security.UnitPrice.Count());
+            Assert.AreEqual(0, security.Investments.Count());
+            Assert.AreEqual(0, ViewModel.SelectedSecurityData.Count);
         }
     }
 }

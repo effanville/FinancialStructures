@@ -1,6 +1,6 @@
 using System.Linq;
 using FinancePortfolioDatabase.GUI.ViewModels;
-using FinancePortfolioDatabase.Tests.TestConstruction;
+using FinancePortfolioDatabase.Tests.TestHelpers;
 using NUnit.Framework;
 using StructureCommon.Reporting;
 
@@ -86,7 +86,7 @@ namespace FinancePortfolioDatabase.Tests
 
         private ReportingWindowViewModel CreateViewModel(string filepath, ReportSeverity reportingSeverity = ReportSeverity.Detailed)
         {
-            var mockFileService = TestingGUICode.CreateFileMock(filepath);
+            var mockFileService = TestSetupHelper.CreateFileMock(filepath);
             ReportingWindowViewModel viewModel = new ReportingWindowViewModel(mockFileService.Object)
             {
                 ReportingSeverity = reportingSeverity

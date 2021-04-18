@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using FinancePortfolioDatabase.Tests.TestHelpers;
+using NUnit.Framework;
 
 namespace FinancePortfolioDatabase.Tests
 {

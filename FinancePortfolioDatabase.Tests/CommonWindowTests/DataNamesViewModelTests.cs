@@ -5,10 +5,9 @@ using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Implementation;
 using FinancialStructures.NamingStructures;
-using FinancePortfolioDatabase.Tests.TestConstruction;
-using Moq;
 using NUnit.Framework;
-using UICommon.Services;
+using FinancePortfolioDatabase.Tests.ViewModelExtensions;
+using FinancePortfolioDatabase.Tests.TestHelpers;
 
 namespace FinancePortfolioDatabase.Tests.CommonWindowTests
 {
@@ -19,14 +18,14 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         [Test]
         public void CanOpen()
         {
-            Portfolio = TestingGUICode.CreateBasicDataBase();
+            Portfolio = TestSetupHelper.CreateBasicDataBase();
             Assert.AreEqual(1, ViewModel.DataNames.Count);
         }
 
         [Test]
         public void CanUpdateData()
         {
-            Portfolio newData = TestingGUICode.CreateBasicDataBase();
+            Portfolio newData = TestSetupHelper.CreateBasicDataBase();
 
             ViewModel.UpdateData(newData);
 
@@ -36,77 +35,72 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         [Test]
         public void CanOpenSecurity()
         {
-            Portfolio output = TestingGUICode.CreateBasicDataBase();
-            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            DataNamesViewModel viewModel = new DataNamesViewModel(output, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.Security);
+            Portfolio output = TestSetupHelper.CreateBasicDataBase();
+            Portfolio portfolio = TestSetupHelper.CreateBasicDataBase();
+            Action<Action<IPortfolio>> dataUpdater = TestSetupHelper.CreateDataUpdater(portfolio);
+            DataNamesViewModel viewModel = new DataNamesViewModel(output, dataUpdater, TestSetupHelper.DummyReportLogger, TestSetupHelper.DummyOpenTab, Account.Security);
             Assert.AreEqual(1, viewModel.DataNames.Count);
         }
 
         [Test]
         public void CanUpdateSecurityData()
         {
-            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio portfolio = TestingGUICode.CreateEmptyDataBase();
-            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.Security);
-            Portfolio newData = TestingGUICode.CreateBasicDataBase();
-            viewModel.UpdateData(newData);
+            Portfolio newData = TestSetupHelper.CreateBasicDataBase();
+            ViewModel.UpdateData(newData);
 
-            Assert.AreEqual(1, viewModel.DataNames.Count);
+            Assert.AreEqual(1, ViewModel.DataNames.Count);
         }
 
         [Test]
         public void CanCreateNewSecurity()
         {
-            Portfolio = TestingGUICode.CreateBasicDataBase();
+            Portfolio = TestSetupHelper.CreateBasicDataBase();
 
-            SelectItem(null);
-            var newItem = AddNewItem();
+            ViewModel.SelectItem(null);
+            var newItem = ViewModel.AddNewItem();
 
-            BeginEdit();
+            ViewModel.BeginEdit();
             newItem.Company = "company";
             newItem.Name = "name";
             newItem.Currency = "GBP";
             newItem.Url = "someUrl";
-            CompleteEdit();
+            ViewModel.CompleteEdit();
             Assert.AreEqual(2, ViewModel.DataNames.Count, "Bot enough in the view.");
-            Assert.AreEqual(2, Portfolio.Funds.Count, "Not enough in portfolio");
+            Assert.AreEqual(2, Portfolio.FundsThreadSafe.Count, "Not enough in portfolio");
         }
 
         [Test]
         public void CanEditSecurityName()
         {
-            Portfolio = TestingGUICode.CreateBasicDataBase();
+            Portfolio = TestSetupHelper.CreateBasicDataBase();
             var item = ViewModel.DataNames[0].Instance;
-            SelectItem(item);
-            BeginEdit();
+            ViewModel.SelectItem(item);
+            ViewModel.BeginEdit();
             item.Company = "NewCompany";
-            CompleteEdit();
+            ViewModel.CompleteEdit();
 
             Assert.AreEqual(1, ViewModel.DataNames.Count);
-            Assert.AreEqual(1, Portfolio.Funds.Count);
+            Assert.AreEqual(1, Portfolio.FundsThreadSafe.Count);
 
-            Assert.AreEqual("NewCompany", Portfolio.Funds.Single().Names.Company);
+            Assert.AreEqual("NewCompany", Portfolio.FundsThreadSafe.Single().Names.Company);
         }
 
         [Test]
         public void CanEditSecurityNameAndUrl()
         {
-            Portfolio = TestingGUICode.CreateBasicDataBase();
+            Portfolio = TestSetupHelper.CreateBasicDataBase();
             var item = ViewModel.DataNames[0].Instance;
-            SelectItem(item);
-            BeginEdit();
+            ViewModel.SelectItem(item);
+            ViewModel.BeginEdit();
             item.Company = "NewCompany";
             item.Url = "NewUrl";
-            CompleteEdit();
+            ViewModel.CompleteEdit();
 
             Assert.AreEqual(1, ViewModel.DataNames.Count);
-            Assert.AreEqual(1, Portfolio.Funds.Count);
+            Assert.AreEqual(1, Portfolio.FundsThreadSafe.Count);
 
-            Assert.AreEqual("NewCompany", Portfolio.Funds.Single().Names.Company);
-            Assert.AreEqual("NewUrl", Portfolio.Funds.Single().Names.Url);
+            Assert.AreEqual("NewCompany", Portfolio.FundsThreadSafe.Single().Names.Company);
+            Assert.AreEqual("NewUrl", Portfolio.FundsThreadSafe.Single().Names.Url);
         }
 
         [Test]
@@ -114,8 +108,8 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         public void CanDownloadSecurity()
         {
             var item = new NameData("Fidelity", "China");
-            SelectItem(item);
-            DownloadSelected();
+            ViewModel.SelectItem(item);
+            ViewModel.DownloadSelected();
 
             Assert.AreEqual(1, ViewModel.DataNames.Count);
         }
@@ -124,15 +118,15 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         [Test]
         public void CanDeleteSecurity()
         {
-            Portfolio = TestingGUICode.CreateBasicDataBase();
-            Assert.AreEqual(1, ViewModel.DataStore.Funds.Count);
-            Assert.AreEqual(1, Portfolio.Funds.Count);
+            Portfolio = TestSetupHelper.CreateBasicDataBase();
+            Assert.AreEqual(1, ViewModel.DataStore.FundsThreadSafe.Count);
+            Assert.AreEqual(1, Portfolio.FundsThreadSafe.Count);
 
             var item = new NameData("Fidelity", "China");
-            SelectItem(item);
-            DeleteSelected();
-            Assert.AreEqual(0, ViewModel.DataStore.Funds.Count);
-            Assert.AreEqual(0, Portfolio.Funds.Count);
+            ViewModel.SelectItem(item);
+            ViewModel.DeleteSelected();
+            Assert.AreEqual(0, ViewModel.DataStore.FundsThreadSafe.Count);
+            Assert.AreEqual(0, Portfolio.FundsThreadSafe.Count);
         }
     }
 }

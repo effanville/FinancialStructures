@@ -1,6 +1,6 @@
 ﻿using FinancePortfolioDatabase.GUI.ViewModels;
+using FinancePortfolioDatabase.Tests.TestHelpers;
 using FinancialStructures.Database.Implementation;
-using FinancePortfolioDatabase.Tests.TestConstruction;
 using NUnit.Framework;
 
 namespace FinancePortfolioDatabase.Tests
@@ -33,7 +33,7 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void CanViewData()
         {
-            BasicDataViewModel viewModel = new BasicDataViewModel(TestingGUICode.CreateBasicDataBase());
+            BasicDataViewModel viewModel = new BasicDataViewModel(TestSetupHelper.CreateBasicDataBase());
             Assert.Multiple(() =>
             {
                 Assert.IsTrue(viewModel.HasValues);
@@ -58,7 +58,7 @@ namespace FinancePortfolioDatabase.Tests
 
             Assert.IsFalse(viewModel.HasValues);
             // Now update that data.
-            TestingGUICode.UpdatePortfolio(portfolio);
+            TestSetupHelper.UpdatePortfolio(portfolio);
             viewModel.UpdateData(portfolio);
 
             // Ensure new data has been displayed correctly.

@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Linq;
-using System.Threading;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
-using FinancePortfolioDatabase.Tests.TestConstruction;
 using NUnit.Framework;
-using StructureCommon.DataStructures;
 using FinancialStructures.FinanceStructures;
+using FinancePortfolioDatabase.Tests.ViewModelExtensions;
+using FinancePortfolioDatabase.Tests.TestHelpers;
 
 namespace FinancePortfolioDatabase.Tests.CommonWindowTests
 {
     [TestFixture]
-    [Apartment(ApartmentState.STA)]
     public class SelectedSingleDataViewModelTests : SelectedSingleDataViewModelHelper
     {
         [SetUp]
@@ -33,16 +31,16 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         {
 
             Assert.AreEqual(1, ViewModel.SelectedData.Count);
-            SelectItem(null);
-            var newItem = AddNewItem();
+            ViewModel.SelectItem(null);
+            var newItem = ViewModel.AddNewItem();
 
-            BeginEdit();
+            ViewModel.BeginEdit();
             newItem.Day = new DateTime(2002, 1, 1);
             newItem.Value = 1;
-            CompleteEdit();
+            ViewModel.CompleteEdit(Portfolio);
 
             Assert.AreEqual(2, ViewModel.SelectedData.Count);
-            Assert.AreEqual(2, Portfolio.BankAccounts.Single().Count());
+            Assert.AreEqual(2, Portfolio.BankAccountsThreadSafe.Single().Count());
         }
 
         [Test]
@@ -50,15 +48,15 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         {
             Assert.AreEqual(1, ViewModel.SelectedData.Count);
             var item = ViewModel.SelectedData[0];
-            SelectItem(item);
-            BeginEdit();
+            ViewModel.SelectItem(item);
+            ViewModel.BeginEdit();
             item.Day = new DateTime(2000, 1, 1);
             item.Value = 1;
-            CompleteEdit();
+            ViewModel.CompleteEdit(Portfolio);
 
             Assert.AreEqual(1, ViewModel.SelectedData.Count);
-            Assert.AreEqual(1, Portfolio.Funds.Single().Count());
-            Assert.AreEqual(new DateTime(2000, 1, 1), Portfolio.Funds.Single().FirstValue().Day);
+            Assert.AreEqual(1, Portfolio.BankAccountsThreadSafe.Single().Count());
+            Assert.AreEqual(new DateTime(2000, 1, 1), Portfolio.BankAccountsThreadSafe.Single().FirstValue().Day);
         }
 
 
@@ -81,8 +79,8 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         {
             Assert.AreEqual(1, ViewModel.SelectedData.Count);
 
-            SelectItem(ViewModel.SelectedData[0]);
-            DeleteSelected();
+            ViewModel.SelectItem(ViewModel.SelectedData[0]);
+            ViewModel.DeleteSelected(Portfolio);
             _ = Portfolio.TryGetAccount(AccountType, Name, out IValueList bankAccount);
             Assert.AreEqual(0, bankAccount.Values.Count());
             Assert.AreEqual(0, ViewModel.SelectedData.Count);

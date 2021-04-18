@@ -60,8 +60,7 @@
                         <i:InvokeCommandAction Command="{Binding PreEditCommand}" />
                     </i:EventTrigger>
                     <i:EventTrigger EventName="RowEditEnding">
-                        <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=EditDataCommand}"
-                                               PassEventArgsToCommand="True" />
+                        <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=EditDataCommand}"/>
                     </i:EventTrigger>
                     <i:EventTrigger EventName="AddingNewItem">
                         <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=AddDefaultDataCommand}"

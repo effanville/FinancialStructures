@@ -166,13 +166,13 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 
         private void ExecuteEditDataCommand()
         {
-            if (SelectedName != null)
+            if (fSelectedName != null)
             {
                 bool edited = false;
-                UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditData(TypeOfAccount, SelectedName, fOldSelectedValue, SelectedValue, ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditData(TypeOfAccount, fSelectedName, fOldSelectedValue, SelectedValue, ReportLogger));
                 if (!edited)
                 {
-                    _ = ReportLogger.LogWithStrings("Critical", "Error", "EditingData", "Was not able to add or edit data.");
+                    _ = ReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.EditingData, "Was not able to add or edit data.");
                 }
             }
         }
@@ -184,13 +184,13 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 
         private void ExecuteDeleteValuation()
         {
-            if (SelectedName != null)
+            if (fSelectedName != null && SelectedValue != null)
             {
-                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(TypeOfAccount, SelectedName, SelectedValue.Day, ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(TypeOfAccount, fSelectedName, SelectedValue.Day, ReportLogger));
             }
             else
             {
-                _ = ReportLogger.LogWithStrings("Critical", "Error", "DeletingData", "No Account was selected when trying to delete data.");
+                _ = ReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.DeletingData, "No Account was selected when trying to delete data.");
             }
         }
 
