@@ -42,7 +42,6 @@ namespace FinancialStructures.Database.Implementation
             {
                 if (values[AccountIndex].Names.IsEqualTo(oldName))
                 {
-                    OnPortfolioChanged(values[AccountIndex], new PortfolioEventArgs(elementType));
                     return values[AccountIndex].EditNameData(newName);
                 }
             }

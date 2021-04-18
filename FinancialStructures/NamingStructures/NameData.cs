@@ -86,6 +86,15 @@ namespace FinancialStructures.NamingStructures
         }
 
         /// <summary>
+        /// Any extra notes to add to the NameData.
+        /// </summary>
+        public string Notes
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Empty constructor.
         /// </summary>
         public NameData()
@@ -96,12 +105,13 @@ namespace FinancialStructures.NamingStructures
         /// <summary>
         /// Set all name type values.
         /// </summary>
-        public NameData(string company, string name, string currency = null, string url = null, HashSet<string> sectors = null)
+        public NameData(string company, string name, string currency = null, string url = null, HashSet<string> sectors = null, string notes = null)
             : base(company, name)
         {
             Currency = currency;
             Url = url;
             Sectors = sectors;
+            Notes = notes;
         }
 
         /// <summary>
@@ -109,7 +119,7 @@ namespace FinancialStructures.NamingStructures
         /// </summary>
         public NameData Copy()
         {
-            return new NameData(Company, Name, Currency, Url, Sectors);
+            return new NameData(Company, Name, Currency, Url, Sectors, Notes);
         }
 
         /// <inheritdoc/>
@@ -222,6 +232,7 @@ namespace FinancialStructures.NamingStructures
             hashCode = 23 * hashCode + Currency?.GetHashCode() ?? 17;
             hashCode = 23 * hashCode + Url?.GetHashCode() ?? 17;
             hashCode = 23 * hashCode + Sectors?.GetHashCode() ?? 17;
+            hashCode = 23 * hashCode + Notes?.GetHashCode() ?? 17
             return 23 * hashCode + base.GetHashCode();
         }
     }

@@ -124,9 +124,10 @@ namespace FinancialStructures.NamingStructures
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            int companyVal = Company != null ? Company.GetHashCode() * 365 : 0;
-            int nameVal = Name != null ? Name.GetHashCode() : 0;
-            return companyVal + nameVal;
+            int hashCode = 17;
+            hashCode = 23 * hashCode + Company?.GetHashCode() ?? 17;
+            hashCode = 23 * hashCode + Name?.GetHashCode() ?? 17;
+            return hashCode;
         }
 
         /// <summary>
