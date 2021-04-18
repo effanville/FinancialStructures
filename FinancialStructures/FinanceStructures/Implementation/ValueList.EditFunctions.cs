@@ -64,7 +64,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <param name="reportLogger">A logger to record outcomes.</param>
         public virtual void WriteDataToCsv(TextWriter writer, IReportLogger reportLogger = null)
         {
-            foreach (DailyValuation value in GetDataForDisplay())
+            foreach (DailyValuation value in ListOfValues())
             {
                 writer.WriteLine(value.ToString());
             }

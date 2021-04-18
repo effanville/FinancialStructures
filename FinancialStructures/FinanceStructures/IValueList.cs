@@ -94,7 +94,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Retrieves data in a list ordered by date.
         /// </summary>
-        List<DailyValuation> GetDataForDisplay();
+        List<DailyValuation> ListOfValues();
 
         /// <summary>
         /// Edits the names of the Value list.

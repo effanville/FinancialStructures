@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:uic="clr-namespace:UICommon.Converters;assembly=UICommon"
+             xmlns:cht="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
@@ -15,10 +16,12 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal"
                     Height="40"
                     Grid.Row="0"
+                    Grid.ColumnSpan="2"
                     Grid.Column="0">
             <Button Content="Delete Valuation"
                     Style="{StaticResource ResourceKey=defaultButton}"
@@ -41,7 +44,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <DataGrid Grid.Row="0"
+            <DataGrid Grid.Row="1"
                       Grid.Column="0"
                       SelectionUnit="FullRow"
                       CanUserAddRows="True"
@@ -75,6 +78,27 @@
                                         Binding="{Binding Path=Value, UpdateSourceTrigger=LostFocus}" />
                 </DataGrid.Columns>
             </DataGrid>
+        </Grid>
+        <Grid Grid.Row="1"
+              Grid.Column="1"
+              Width="Auto"
+              Height="Auto"
+              VerticalAlignment="Stretch"
+              HorizontalAlignment="Stretch">
+            <cht:Chart Title="Holding History"
+                       Style="{StaticResource NoLegendChart}"
+                       Height="Auto"
+                       Width="Auto"
+                       VerticalAlignment="Stretch"
+                       Grid.Row="0"
+                       Grid.Column="0">
+                <cht:Chart.Series>
+                    <cht:LineSeries ItemsSource="{Binding Path=SelectedData}"
+                                    DataPointStyle="{StaticResource InvisibleDataPointBlue}"
+                                    IndependentValueBinding="{Binding Path=Day}"
+                                    DependentValueBinding="{Binding Path=Value}"></cht:LineSeries>
+                </cht:Chart.Series>
+            </cht:Chart>
         </Grid>
     </Grid>
 </UserControl>

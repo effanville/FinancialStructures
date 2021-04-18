@@ -6,7 +6,6 @@ using System.Windows.Input;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Download;
 using FinancialStructures.Database.Statistics;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 using StructureCommon.DisplayClasses;
@@ -22,14 +21,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
     internal class DataNamesViewModel : TabViewModelBase<IPortfolio>
     {
         private readonly Account TypeOfAccount;
-
-        public bool ShowPriceHistory
-        {
-            get
-            {
-                return TypeOfAccount == Account.Security;
-            }
-        }
 
         /// <summary>
         /// Backing field for <see cref="DataNames"/>.
@@ -131,24 +122,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             {
                 SetAndNotify(ref fSelectedValueHistory, value, nameof(SelectedValueHistory));
                 _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, "Set ValueHistory");
-            }
-        }
-
-        private List<DailyValuation> fSelectedPriceHistory;
-
-        /// <summary>
-        /// The history of the price evolution of the selected object.
-        /// </summary>
-        public List<DailyValuation> SelectedPriceHistory
-        {
-            get
-            {
-                return fSelectedPriceHistory;
-            }
-            set
-            {
-                SetAndNotify(ref fSelectedPriceHistory, value, nameof(SelectedPriceHistory));
-                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, "Set PriceHistory");
             }
         }
 
@@ -262,49 +235,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             if (DataNames != null && args is SelectableEquatable<NameData> selectableName && selectableName.Instance != null)
             {
                 SelectedName = selectableName;
-                var name = selectableName.Instance;
-                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Current item is a name {name}");
+                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Current item is a name {SelectedName.Instance}");
+                SelectedValueHistory = DataStore.NumberData(TypeOfAccount, SelectedName.Instance, ReportLogger);
 
-                _ = DataStore.TryGetAccount(TypeOfAccount, name, out var desired);
-                if (desired != null)
-                {
-                    _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Stored item has been retrieved and is a {TypeOfAccount}.");
-                    ISecurity security = desired as ISecurity;
-                    var unitPrices = security?.UnitPrice;
-
-                    SelectedLatestDate = desired.LatestValue()?.Day ?? DateTime.Today;
-                    DateTime calculationDate = desired.FirstValue()?.Day ?? DateTime.Today.AddDays(-365);
-                    var outputs = new List<DailyValuation>();
-                    var prices = new List<DailyValuation>();
-
-                    while (calculationDate < DateTime.Today)
-                    {
-                        var calcuationDateStatistics = desired.Value(calculationDate);
-                        outputs.Add(new DailyValuation(calculationDate, calcuationDateStatistics?.Value ?? 0.0));
-                        if (unitPrices != null)
-                        {
-                            prices.Add(new DailyValuation(calculationDate, unitPrices.Value(calculationDate)?.Value ?? 0.0));
-                        }
-
-                        calculationDate = calculationDate.AddDays(30);
-                    }
-                    if (calculationDate == DateTime.Today)
-                    {
-                        var calcuationDateStatistics = desired.Value(calculationDate);
-                        outputs.Add(new DailyValuation(calculationDate, calcuationDateStatistics?.Value ?? 0.0));
-
-                        if (unitPrices != null)
-                        {
-                            // This value here can be null, even if unitPrices is not.
-                            prices.Add(new DailyValuation(calculationDate, unitPrices.Value(calculationDate)?.Value ?? 0.0));
-                        }
-                    }
-
-                    SelectedValueHistory = outputs;
-                    SelectedPriceHistory = prices;
-
-                    _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Successfully updated SelectedItem.");
-                }
+                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Successfully updated SelectedItem.");
             }
         }
 

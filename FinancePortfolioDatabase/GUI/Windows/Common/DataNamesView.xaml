@@ -130,7 +130,6 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
-                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <cht:Chart Title="Holding History"
                        Style="{StaticResource NoLegendChart}"
@@ -138,24 +137,10 @@
                        Width="Auto"
                        VerticalAlignment="Stretch"
                        Grid.Row="0"
+                       Grid.RowSpan="2"
                        Grid.Column="0">
                 <cht:Chart.Series>
                     <cht:LineSeries ItemsSource="{Binding Path=SelectedValueHistory}"
-                                    DataPointStyle="{StaticResource InvisibleDataPointBlue}"
-                                    IndependentValueBinding="{Binding Path=Day}"
-                                    DependentValueBinding="{Binding Path=Value}"></cht:LineSeries>
-                </cht:Chart.Series>
-            </cht:Chart>
-            <cht:Chart Title="Price History"
-                       Grid.Column="0"
-                       Grid.Row="1"
-                       Height="Auto"
-                       VerticalAlignment="Stretch"
-                       Width="Auto"
-                       Style="{StaticResource NoLegendChart}"
-                       Visibility="{Binding ShowPriceHistory, Converter={StaticResource BoolToVis}}">
-                <cht:Chart.Series>
-                    <cht:LineSeries ItemsSource="{Binding Path=SelectedPriceHistory}"
                                     DataPointStyle="{StaticResource InvisibleDataPointBlue}"
                                     IndependentValueBinding="{Binding Path=Day}"
                                     DependentValueBinding="{Binding Path=Value}"></cht:LineSeries>

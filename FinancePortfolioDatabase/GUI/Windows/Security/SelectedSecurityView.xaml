@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:cht="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
              xmlns:uic="clr-namespace:UICommon.Converters;assembly=UICommon"
              mc:Ignorable="d"
              d:DesignHeight="450"
@@ -15,6 +16,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <StackPanel Grid.Row="0"
                     Grid.Column="0"
@@ -77,5 +79,47 @@
                                     Binding="{Binding Path=NewInvestment, UpdateSourceTrigger=LostFocus}" />
             </DataGrid.Columns>
         </DataGrid>
+        <Grid Grid.Row="1"
+              Grid.Column="1"
+              Width="Auto"
+              Height="Auto"
+              VerticalAlignment="Stretch"
+              HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <cht:Chart Title="Holding History"
+                       Style="{StaticResource NoLegendChart}"
+                       Height="Auto"
+                       Width="Auto"
+                       VerticalAlignment="Stretch"
+                       Grid.Row="0"
+                       Grid.Column="0">
+                <cht:Chart.Series>
+                    <cht:LineSeries ItemsSource="{Binding Path=SelectedSecurityData}"
+                                    DataPointStyle="{StaticResource InvisibleDataPointBlue}"
+                                    IndependentValueBinding="{Binding Path=Date}"
+                                    DependentValueBinding="{Binding Path=Value}"></cht:LineSeries>
+                </cht:Chart.Series>
+            </cht:Chart>
+            <cht:Chart Title="Price History"
+                       Grid.Column="0"
+                       Grid.Row="1"
+                       Height="Auto"
+                       VerticalAlignment="Stretch"
+                       Width="Auto"
+                       Style="{StaticResource NoLegendChart}">
+                <cht:Chart.Series>
+                    <cht:LineSeries ItemsSource="{Binding Path=SelectedSecurityData}"
+                                    DataPointStyle="{StaticResource InvisibleDataPointBlue}"
+                                    IndependentValueBinding="{Binding Path=Date}"
+                                    DependentValueBinding="{Binding Path=UnitPrice}"></cht:LineSeries>
+                </cht:Chart.Series>
+            </cht:Chart>
+        </Grid>
     </Grid>
 </UserControl>

@@ -29,6 +29,10 @@ namespace FinancialStructures.Database.Implementation
         {
             switch (elementType)
             {
+                case (Account.Security):
+                {
+                    return SingleDataListDataObtainer(Funds, elementType, name, reportLogger);
+                }
                 case (Account.Currency):
                 {
                     return SingleDataListDataObtainer(Currencies, elementType, name, reportLogger);
@@ -42,7 +46,6 @@ namespace FinancialStructures.Database.Implementation
                     return SingleDataListDataObtainer(BenchMarks, elementType, name, reportLogger);
                 }
                 default:
-                case (Account.Security):
                 {
                     return new List<DailyValuation>();
                 }
@@ -55,7 +58,7 @@ namespace FinancialStructures.Database.Implementation
             {
                 if (name.IsEqualTo(account.Names))
                 {
-                    return account.GetDataForDisplay();
+                    return account.ListOfValues();
                 }
             }
 
