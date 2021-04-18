@@ -1,74 +1,64 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
-using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
-using FinancialStructures.Database.Implementation;
 using FinancialStructures.NamingStructures;
 using FinancePortfolioDatabase.Tests.TestConstruction;
-using Moq;
 using NUnit.Framework;
 using StructureCommon.DataStructures;
-using UICommon.Services;
+using FinancialStructures.FinanceStructures;
 
 namespace FinancePortfolioDatabase.Tests.CommonWindowTests
 {
     [TestFixture]
     [Apartment(ApartmentState.STA)]
-    public class SelectedSingleDataViewModelTests
+    public class SelectedSingleDataViewModelTests : SelectedSingleDataViewModelHelper
     {
+        [SetUp]
+        public void SetBankAccount()
+        {
+            AccountType = Account.BankAccount;
+            Name = new NameData("Barclays", "currentAccount");
+            base.Setup();
+        }
 
         [Test]
         public void CanOpenWindow()
         {
-            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SelectedSingleDataViewModel viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Barclays", "currentAccount"), Account.BankAccount);
-
-            Assert.AreEqual(1, viewModel.SelectedData.Count);
+            Assert.AreEqual(1, ViewModel.SelectedData.Count);
         }
 
         [Test]
         public void CanAddValue()
         {
-            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SelectedSingleDataViewModel viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Barclays", "currentAccount"), Account.BankAccount);
 
-            Assert.AreEqual(1, viewModel.SelectedData.Count);
-            DailyValuation newValue = new DailyValuation(new DateTime(2002, 1, 1), 1);
-            viewModel.SelectedData.Add(newValue);
-            viewModel.fOldSelectedValue = newValue.Copy();
+            Assert.AreEqual(1, ViewModel.SelectedData.Count);
+            SelectItem(null);
+            var newItem = AddNewItem();
 
-            var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.SelectedData.Last());
-            viewModel.EditDataCommand.Execute(dataGridArgs);
-            Assert.AreEqual(2, viewModel.SelectedData.Count);
-            Assert.AreEqual(2, portfolio.BankAccounts.Single().Count());
+            BeginEdit();
+            newItem.Day = new DateTime(2002, 1, 1);
+            newItem.Value = 1;
+            CompleteEdit();
+
+            Assert.AreEqual(2, ViewModel.SelectedData.Count);
+            Assert.AreEqual(2, Portfolio.BankAccounts.Single().Count());
         }
 
         [Test]
         public void CanEditValue()
         {
-            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SelectedSingleDataViewModel viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Barclays", "currentAccount"), Account.BankAccount);
+            Assert.AreEqual(1, ViewModel.SelectedData.Count);
+            var item = ViewModel.SelectedData[0];
+            SelectItem(item);
+            BeginEdit();
+            item.Day = new DateTime(2000, 1, 1);
+            item.Value = 1;
+            CompleteEdit();
 
-            Assert.AreEqual(1, viewModel.SelectedData.Count);
-            viewModel.fOldSelectedValue = viewModel.SelectedData[0].Copy();
-            DailyValuation newValue = new DailyValuation(new DateTime(2000, 1, 1), 1);
-            viewModel.SelectedData[0] = newValue;
-
-            var dataGridArgs = TestingGUICode.CreateRowArgs(viewModel.SelectedData.Last());
-            viewModel.EditDataCommand.Execute(dataGridArgs);
-            Assert.AreEqual(1, viewModel.SelectedData.Count);
-            Assert.AreEqual(1, portfolio.Funds.Single().Count());
-            Assert.AreEqual(new DateTime(2000, 1, 1), portfolio.Funds.Single().FirstValue().Day);
+            Assert.AreEqual(1, ViewModel.SelectedData.Count);
+            Assert.AreEqual(1, Portfolio.Funds.Single().Count());
+            Assert.AreEqual(new DateTime(2000, 1, 1), Portfolio.Funds.Single().FirstValue().Day);
         }
 
 
@@ -76,42 +66,26 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         [Ignore("IncompeteArchitecture - FileInteraction does not currently allow for use in test environment.")]
         public void CanAddFromCSV()
         {
-            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SelectedSingleDataViewModel viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Barclays", "currentAccount"), Account.BankAccount);
-
-            Assert.AreEqual(1, viewModel.SelectedData.Count);
+            Assert.AreEqual(1, ViewModel.SelectedData.Count);
         }
 
         [Test]
         [Ignore("IncompeteArchitecture - FileInteraction does not currently allow for use in test environment.")]
         public void CanWriteToCSV()
         {
-            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SelectedSingleDataViewModel viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Barclays", "currentAccount"), Account.BankAccount);
-
-            Assert.AreEqual(1, viewModel.SelectedData.Count);
+            Assert.AreEqual(1, ViewModel.SelectedData.Count);
         }
 
         [Test]
         public void CanDeleteValue()
         {
-            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
-            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio portfolio = TestingGUICode.CreateBasicDataBase();
-            Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
-            SelectedSingleDataViewModel viewModel = new SelectedSingleDataViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Barclays", "currentAccount"), Account.BankAccount);
-            viewModel.fOldSelectedValue = viewModel.SelectedData.Single();
-            Assert.AreEqual(1, viewModel.SelectedData.Count);
+            Assert.AreEqual(1, ViewModel.SelectedData.Count);
 
-            viewModel.DeleteValuationCommand.Execute(1);
-
-            Assert.AreEqual(0, portfolio.BankAccounts.Single().Count());
+            SelectItem(ViewModel.SelectedData[0]);
+            DeleteSelected();
+            _ = Portfolio.TryGetAccount(AccountType, Name, out IValueList bankAccount);
+            Assert.AreEqual(0, bankAccount.Values.Count());
+            Assert.AreEqual(0, ViewModel.SelectedData.Count);
         }
     }
 }

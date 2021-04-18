@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using FinancePortfolioDatabase.Tests.TestConstruction;

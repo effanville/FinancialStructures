@@ -53,7 +53,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
         private readonly UiGlobals fUiGlobals;
 
         public SelectedSecurityViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, UiGlobals globals, NameData selectedName)
-            : base(selectedName != null ? selectedName.Company + "-" + selectedName.Name : "No-Name", portfolio)
+            : base(selectedName != null ? selectedName.ToString() : "No-Name", portfolio)
         {
             fReportLogger = reportLogger;
             fUiGlobals = globals;

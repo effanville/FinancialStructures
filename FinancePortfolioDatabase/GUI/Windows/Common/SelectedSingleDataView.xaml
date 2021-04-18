@@ -56,6 +56,9 @@
                     <uic:StringToUKDateConverter x:Key="StringToUKDate" />
                 </DataGrid.Resources>
                 <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="BeginningEdit">
+                        <i:InvokeCommandAction Command="{Binding PreEditCommand}" />
+                    </i:EventTrigger>
                     <i:EventTrigger EventName="RowEditEnding">
                         <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=EditDataCommand}"
                                                PassEventArgsToCommand="True" />
@@ -66,7 +69,7 @@
                     </i:EventTrigger>
                     <i:EventTrigger EventName="SelectionChanged">
                         <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=SelectionChangedCommand}"
-                                               PassEventArgsToCommand="True" />
+                                               CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=CurrentItem}" />
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
                 <DataGrid.Columns>

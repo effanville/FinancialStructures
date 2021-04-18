@@ -1,15 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading;
-using FinancePortfolioDatabase.GUI.ViewModels.Security;
-using FinancialStructures.Database;
-using FinancialStructures.Database.Implementation;
 using FinancialStructures.DataStructures;
-using FinancialStructures.NamingStructures;
 using FinancePortfolioDatabase.Tests.TestConstruction;
-using Moq;
 using NUnit.Framework;
-using UICommon.Services;
 
 namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
 {

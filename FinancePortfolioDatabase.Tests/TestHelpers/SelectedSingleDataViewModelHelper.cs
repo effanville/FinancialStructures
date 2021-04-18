@@ -7,9 +7,9 @@ using UICommon.Services;
 using System.IO.Abstractions;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.NamingStructures;
-using StructureCommon.DisplayClasses;
-using System.Linq;
+using StructureCommon.DataStructures;
 using System.Windows.Controls;
+using System.Linq;
 
 namespace FinancePortfolioDatabase.Tests
 {
@@ -49,29 +49,44 @@ namespace FinancePortfolioDatabase.Tests
             get;
             set;
         } = Account.Security;
-
-        public NameData AddNewItem()
+        protected NameData Name
         {
-
-            return newItem.Instance;
+            get;
+            set;
         }
 
-        public void SelectItem(NameData name)
+        public DailyValuation AddNewItem()
         {
-            ViewModel.SelectionChangedCommand?.Execute(new SelectableEquatable<NameData>(name, false));
+            SelectItem(null);
+            ViewModel.AddDefaultDataCommand?.Execute(new AddingNewItemEventArgs());
+            ViewModel.SelectedData.Add(new DailyValuation());
+            var newItem = ViewModel.SelectedData.Last();
+            SelectItem(newItem);
+            BeginEdit();
+
+            return newItem;
+        }
+
+        public void SelectItem(DailyValuation valueToSelect)
+        {
+            ViewModel.SelectionChangedCommand?.Execute(valueToSelect);
         }
 
         public void BeginEdit()
         {
+            ViewModel.PreEditCommand?.Execute(null);
         }
 
         public void CompleteEdit()
         {
+            ViewModel.EditDataCommand?.Execute(null);
+            ViewModel.UpdateData(Portfolio);
         }
 
         public void DeleteSelected()
         {
-            ViewModel.DeleteCommand?.Execute(null);
+            ViewModel.DeleteValuationCommand?.Execute(null);
+            ViewModel.UpdateData(Portfolio);
         }
 
         [SetUp]
@@ -79,10 +94,10 @@ namespace FinancePortfolioDatabase.Tests
         {
             Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
             Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
-            Portfolio = TestingGUICode.CreateEmptyDataBase();
+            Portfolio = TestingGUICode.CreateBasicDataBase();
 
             UiGlobals globals = TestingGUICode.CreateGlobalsMock(new FileSystem(), fileMock.Object, dialogMock.Object);
-            ViewModel = new SelectedSingleDataViewModel(Portfolio, DataUpdater, TestingGUICode.DummyReportLogger, obj => { }, AccountType);
+            ViewModel = new SelectedSingleDataViewModel(Portfolio, DataUpdater, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Barclays", "currentAccount"), AccountType);
         }
 
         [TearDown]
