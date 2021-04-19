@@ -118,7 +118,12 @@ namespace FinancialStructures.NamingStructures
         /// <inheritdoc/>
         public override bool Equals(object obj)
         {
-            return EqualityMethod(obj);
+            if (obj is TwoName otherName)
+            {
+                return Equals(otherName);
+            }
+
+            return false;
         }
 
         /// <inheritdoc/>
@@ -136,53 +141,20 @@ namespace FinancialStructures.NamingStructures
         /// </summary>
         public bool IsEqualTo(object obj)
         {
-            return EqualityMethod(obj);
-        }
-
-        private bool EqualityMethod(object obj)
-        {
             if (obj is TwoName otherName)
             {
-                if (otherName == null)
-                {
-                    return false;
-                }
-                if (string.IsNullOrEmpty(Company) && string.IsNullOrEmpty(Name))
-                {
-                    if (string.IsNullOrEmpty(otherName.Company) && string.IsNullOrEmpty(otherName.Name))
-                    {
-                        return true;
-                    }
-
-                    return false;
-                }
-                if (string.IsNullOrEmpty(Company))
-                {
-                    if (string.IsNullOrEmpty(otherName.Company))
-                    {
-                        return Name.Equals(otherName.Name);
-                    }
-
-                    return false;
-                }
-
-                if (string.IsNullOrEmpty(Name))
-                {
-                    if (string.IsNullOrEmpty(otherName.Name))
-                    {
-                        return Company.Equals(otherName.Company);
-                    }
-
-                    return false;
-                }
-
-                if (Company.Equals(otherName.Company) && Name.Equals(otherName.Name))
-                {
-                    return true;
-                }
+                return Equals(otherName);
             }
 
             return false;
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(TwoName other)
+        {
+            bool companiesEqual = Company?.Equals(other.Company) ?? other.Company == null;
+            bool namesEqual = Name?.Equals(other.Name) ?? other.Name == null;
+            return companiesEqual && namesEqual;
         }
     }
 }

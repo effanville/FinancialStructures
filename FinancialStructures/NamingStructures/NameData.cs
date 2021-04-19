@@ -136,93 +136,11 @@ namespace FinancialStructures.NamingStructures
         /// <inheritdoc/>
         public bool Equals(NameData otherName)
         {
-            if (string.IsNullOrEmpty(Currency) && string.IsNullOrEmpty(Url) && string.IsNullOrEmpty(SectorsFlat))
-            {
-                if (string.IsNullOrEmpty(otherName.Currency) && string.IsNullOrEmpty(otherName.Url) && string.IsNullOrEmpty(otherName.SectorsFlat))
-                {
-
-                    return base.Equals(otherName);
-                }
-
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(Url) && string.IsNullOrEmpty(SectorsFlat))
-            {
-                if (string.IsNullOrEmpty(otherName.Url) && string.IsNullOrEmpty(otherName.SectorsFlat))
-                {
-                    if (Currency.Equals(otherName.Currency))
-                    {
-                        return base.Equals(otherName);
-                    }
-                }
-                return false;
-            }
-            if (string.IsNullOrEmpty(Currency) && string.IsNullOrEmpty(SectorsFlat))
-            {
-                if (string.IsNullOrEmpty(otherName.Currency) && string.IsNullOrEmpty(otherName.SectorsFlat))
-                {
-                    if (Url.Equals(otherName.Url))
-                    {
-                        return base.Equals(otherName);
-                    }
-                }
-                return false;
-            }
-            if (string.IsNullOrEmpty(Currency) && string.IsNullOrEmpty(Url))
-            {
-                if (string.IsNullOrEmpty(otherName.Currency) && string.IsNullOrEmpty(otherName.Url))
-                {
-                    if (SectorsFlat.Equals(otherName.SectorsFlat))
-                    {
-                        return base.Equals(otherName);
-                    }
-                }
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(Currency))
-            {
-                if (string.IsNullOrEmpty(otherName.Currency))
-                {
-                    if (Url.Equals(otherName.Url) && SectorsFlat.Equals(otherName.SectorsFlat))
-                    {
-                        return base.Equals(otherName);
-                    }
-                }
-
-                return false;
-            }
-            if (string.IsNullOrEmpty(Url))
-            {
-                if (string.IsNullOrEmpty(otherName.Url))
-                {
-                    if (Currency.Equals(otherName.Currency) && SectorsFlat.Equals(otherName.SectorsFlat))
-                    {
-                        return base.Equals(otherName);
-                    }
-                }
-
-                return false;
-            }
-            if (string.IsNullOrEmpty(SectorsFlat))
-            {
-                if (string.IsNullOrEmpty(otherName.SectorsFlat))
-                {
-                    if (Currency.Equals(otherName.Currency) && Url.Equals(otherName.Url))
-                    {
-                        return base.Equals(otherName);
-                    }
-                }
-
-                return false;
-            }
-            if (Currency.Equals(otherName.Currency) && Url.Equals(otherName.Url) && SectorsFlat.Equals(otherName.SectorsFlat))
-            {
-                return base.Equals(otherName);
-            }
-
-            return false;
+            bool currenciesEqual = Currency?.Equals(otherName.Currency) ?? otherName.Currency == null;
+            bool urlEqual = Url?.Equals(otherName.Url) ?? otherName.Url == null;
+            bool sectorsEqual = SectorsFlat?.Equals(otherName.SectorsFlat) ?? otherName.SectorsFlat == null;
+            bool notesEqual = Notes?.Equals(otherName.Notes) ?? otherName.Notes == null;
+            return currenciesEqual && urlEqual && sectorsEqual && notesEqual && base.Equals(otherName);
         }
 
         /// <inheritdoc/>
@@ -232,7 +150,7 @@ namespace FinancialStructures.NamingStructures
             hashCode = 23 * hashCode + Currency?.GetHashCode() ?? 17;
             hashCode = 23 * hashCode + Url?.GetHashCode() ?? 17;
             hashCode = 23 * hashCode + Sectors?.GetHashCode() ?? 17;
-            hashCode = 23 * hashCode + Notes?.GetHashCode() ?? 17
+            hashCode = 23 * hashCode + Notes?.GetHashCode() ?? 17;
             return 23 * hashCode + base.GetHashCode();
         }
     }
