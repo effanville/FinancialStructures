@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Download;
@@ -180,6 +181,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             DataNames = null;
             DataNames = values;
             DataNames.Sort((a, b) => a.Instance.CompareTo(b.Instance));
+            if (!DataNames.Contains(SelectedName))
+            {
+                SelectedName = null;
+            }
         }
 
         /// <summary>
@@ -240,6 +245,13 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 
                 _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Successfully updated SelectedItem.");
             }
+            else
+            {
+                if (args == CollectionView.NewItemPlaceholder)
+                {
+                    SelectedName = null;
+                }
+            }
         }
 
         /// <summary>
@@ -270,21 +282,24 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         {
             _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"ExecuteCreateEdit called.");
             bool edited = false;
-            var originRowName = SelectedName.Instance; //rowName.Instance;
-            if (!DataStore.NameData(TypeOfAccount).Any(item => item.Name == PreEditSelectedName?.Name && item.Company == PreEditSelectedName?.Company))
+            if (SelectedName != null && SelectedName.Instance != null)
             {
-                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Adding {originRowName} to the database");
-                NameData name = new NameData(originRowName.Company, originRowName.Name, originRowName.Currency, originRowName.Url, originRowName.Sectors);
-                UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAdd(TypeOfAccount, name, ReportLogger));
-            }
-            else
-            {
-                // maybe fired from editing stuff. Try that
-                if (!string.IsNullOrEmpty(originRowName.Name) || !string.IsNullOrEmpty(originRowName.Company))
+                var selectedInstance = SelectedName.Instance; //rowName.Instance;
+                if (!DataStore.NameData(TypeOfAccount).Any(item => item.Name == PreEditSelectedName?.Name && item.Company == PreEditSelectedName?.Company))
                 {
-                    _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.EditingData, $"Editing {PreEditSelectedName} to {originRowName} in the database");
-                    NameData name = new NameData(originRowName.Company, originRowName.Name, originRowName.Currency, originRowName.Url, originRowName.Sectors, originRowName.Notes);
-                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditName(TypeOfAccount, PreEditSelectedName, name, ReportLogger));
+                    _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Adding {selectedInstance} to the database");
+                    NameData name = new NameData(selectedInstance.Company, selectedInstance.Name, selectedInstance.Currency, selectedInstance.Url, selectedInstance.Sectors, selectedInstance.Notes);
+                    UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAdd(TypeOfAccount, name, ReportLogger));
+                }
+                else
+                {
+                    // maybe fired from editing stuff. Try that
+                    if (!string.IsNullOrEmpty(selectedInstance.Name) || !string.IsNullOrEmpty(selectedInstance.Company))
+                    {
+                        _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.EditingData, $"Editing {PreEditSelectedName} to {selectedInstance} in the database");
+                        NameData name = new NameData(selectedInstance.Company, selectedInstance.Name, selectedInstance.Currency, selectedInstance.Url, selectedInstance.Sectors, selectedInstance.Notes);
+                        UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditName(TypeOfAccount, PreEditSelectedName, name, ReportLogger));
+                    }
                 }
             }
 
