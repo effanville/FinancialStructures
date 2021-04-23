@@ -175,17 +175,13 @@ namespace FinancialStructures.Database.Statistics
                 {
                     case Totals.All:
                     {
-                        stats.Add(new AccountStatistics(portfolio, total, new NameData("Totals", ""), statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics()));
+                        stats.Add(new AccountStatistics(portfolio, total, new NameData("Totals", "All"), statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics()));
                         break;
                     }
                     case Totals.Security:
-                    default:
-                    {
-                        stats.Add(new AccountStatistics(portfolio, total, new NameData("Totals", "Securities"), statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics()));
-                        break;
-                    }
                     case Totals.SecurityCompany:
                     case Totals.SecuritySector:
+                    default:
                     {
                         foreach (string company in portfolio.Companies(EnumConvert.ConvertTotalToAccount(total)))
                         {
@@ -195,9 +191,12 @@ namespace FinancialStructures.Database.Statistics
                                 stats.Add(new AccountStatistics(portfolio, total, new NameData(company, "Totals"), statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics()));
                             }
                         }
+
                         break;
                     }
                     case Totals.BankAccount:
+                    case Totals.BankAccountCompany:
+                    case Totals.BankAccountSector:
                     {
                         foreach (string bankAccount in portfolio.Companies(EnumConvert.ConvertTotalToAccount(total)))
                         {
@@ -205,19 +204,6 @@ namespace FinancialStructures.Database.Statistics
                             if ((displayValueFunds && latest > 0) || !displayValueFunds)
                             {
                                 stats.Add(new AccountStatistics(portfolio, total, new NameData(bankAccount, "Totals"), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
-                            }
-                        }
-                        break;
-                    }
-                    case Totals.BankAccountCompany:
-                    case Totals.BankAccountSector:
-                    {
-                        foreach (string company in portfolio.Companies(EnumConvert.ConvertTotalToAccount(total)))
-                        {
-                            double latest = portfolio.TotalValue(total, new TwoName(company));
-                            if ((displayValueFunds && latest > 0) || !displayValueFunds)
-                            {
-                                stats.Add(new AccountStatistics(portfolio, total, new NameData(company, "Totals"), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
                             }
                         }
                         break;
@@ -254,16 +240,16 @@ namespace FinancialStructures.Database.Statistics
                 switch (total)
                 {
                     case Totals.All:
-                    case Totals.Security:
                     default:
+                    case Totals.Security:
                     {
-                        stats.Add(new AccountStatistics(portfolio, total, new TwoName("Totals", ""), statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics()));
+                        stats.Add(new AccountStatistics(portfolio, total, new TwoName("Totals", total.ToString()), statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics()));
                         break;
                     }
                     case Totals.BankAccount:
                     case Totals.Currency:
                     {
-                        stats.Add(new AccountStatistics(portfolio, total, new TwoName("Totals", ""), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
+                        stats.Add(new AccountStatistics(portfolio, total, new TwoName("Totals", total.ToString()), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
                         break;
                     }
                     case Totals.BankAccountCompany:

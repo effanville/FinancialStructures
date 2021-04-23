@@ -112,16 +112,16 @@ namespace FinancialStructures.DataExporters
 
         private void GenerateStatistics(IPortfolio portfolio)
         {
-            PortfolioTotals.AddRange(portfolio.GetStats(Totals.Security, displayValueFunds: fDisplayOptions.DisplayValueFunds, AccountStatisticsHelpers.DefaultBankAccountStats()));
-            PortfolioTotals.AddRange(portfolio.GetStats(Totals.BankAccount, displayValueFunds: fDisplayOptions.DisplayValueFunds, AccountStatisticsHelpers.DefaultBankAccountStats()));
-            PortfolioTotals.AddRange(portfolio.GetStats(Totals.All, displayValueFunds: fDisplayOptions.DisplayValueFunds, AccountStatisticsHelpers.DefaultBankAccountStats()));
+            PortfolioTotals.AddRange(portfolio.GetStats(Totals.Security, new TwoName(), AccountStatisticsHelpers.DefaultBankAccountStats()));
+            PortfolioTotals.AddRange(portfolio.GetStats(Totals.BankAccount, new TwoName(), AccountStatisticsHelpers.DefaultBankAccountStats()));
+            PortfolioTotals.AddRange(portfolio.GetStats(Totals.All, new TwoName(), AccountStatisticsHelpers.DefaultBankAccountStats()));
 
             var securityData = fDisplayOptions.SecurityDisplayOptions.DisplayFields.ToArray();
 
             IndividualSecurityStats = portfolio.GetStats(Account.Security, displayValueFunds: fDisplayOptions.DisplayValueFunds, displayTotals: false, securityData);
 
             CompanyTotalsStats = portfolio.GetStats(Totals.SecurityCompany, fDisplayOptions.DisplayValueFunds, securityData);
-            PortfolioSecurityStats = portfolio.GetStats(Totals.Security, fDisplayOptions.DisplayValueFunds, securityData);
+            PortfolioSecurityStats = portfolio.GetStats(Totals.Security, new TwoName(), securityData);
 
             BankAccountStats = portfolio.GetStats(Account.BankAccount, fDisplayOptions.DisplayValueFunds, false);
 
