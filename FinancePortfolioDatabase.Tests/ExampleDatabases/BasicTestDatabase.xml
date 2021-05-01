@@ -21,6 +21,7 @@
         <Investments>
           <Values />
         </Investments>
+        <SecurityTrades />
       </Security>
     </Funds>
     <BankAccounts>

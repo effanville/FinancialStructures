@@ -174,7 +174,22 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Adds the desired data to the security if it can.
         /// </summary>
-        bool TryAddOrEditDataToSecurity(TwoName names, DateTime oldDate, DateTime date, double shares, double unitPrice, double Investment, IReportLogger reportLogger = null);
+        bool TryAddOrEditDataToSecurity(TwoName names, DateTime oldDate, DateTime date, double shares, double unitPrice, double investment, SecurityTrade trade, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Adds the desired trade data if it can.
+        /// </summary>
+        bool TryAddOrEditTradeData(Account elementType, TwoName names, SecurityTrade oldTrade, SecurityTrade trade, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Attempts to remove trade data from the account.
+        /// </summary>
+        /// <param name="elementType">The type of data to remove from.</param>
+        /// <param name="name">The name to remove from.</param>
+        /// <param name="date">The date on which to remove data.</param>
+        /// <param name="reportLogger">Report callback.</param>
+        /// <returns>Success or failure.</returns>
+        bool TryDeleteTradeData(Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Attempts to add data to the account.

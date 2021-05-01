@@ -39,6 +39,14 @@ namespace FinancialStructures.FinanceStructures
         }
 
         /// <summary>
+        /// The list of Trades made in this <see cref="ISecurity"/>.
+        /// </summary>
+        List<SecurityTrade> SecurityTrades
+        {
+            get;
+        }
+
+        /// <summary>
         /// Compares another <see cref="ISecurity"/> and determines if they both have the same name and company.
         /// </summary>
         bool IsEqualTo(ISecurity otherSecurity);
@@ -107,13 +115,30 @@ namespace FinancialStructures.FinanceStructures
         /// <param name="unitPrice">The unit price data to add.</param>
         /// <param name="shares">The number of shares data to add.</param>
         /// <param name="investment">The value of the investment.</param>
+        /// <param name="trade">The details of any trade on this date.</param>
         /// <param name="reportLogger">An optional logger to log progress.</param>
         /// <returns>Was adding or editing successful.</returns>
-        bool AddOrEditData(DateTime oldDate, DateTime date, double unitPrice, double shares, double investment, IReportLogger reportLogger = null);
+        bool AddOrEditData(DateTime oldDate, DateTime date, double unitPrice, double shares, double investment = 0.0, SecurityTrade trade = null, IReportLogger reportLogger = null);
 
         /// <summary>
-        ///
+        /// Tries to add data for the date specified if it doesnt exist, or edits data if it exists.
+        /// If cannot add any value that one wants to, then doesn't add all the values chosen.
+        /// </summary>
+        /// <param name="oldDate">The existing date held.</param>
+        /// <param name="date">The date to add data to.</param>
+        /// <param name="investment">The value of the investment.</param>
+        /// <param name="trade">The details of any trade on this date.</param>
+        /// <param name="reportLogger">An optional logger to log progress.</param>
+        /// <returns>Was adding or editing successful.</returns>
+        bool TryAddOrEditTradeData(SecurityTrade oldTrade, SecurityTrade newTrade, IReportLogger reportLogger = null);
+
+        bool TryDeleteTradeData(DateTime date, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Removes unnecessary investment and Share number values to reduce size.
         /// </summary>
         void CleanData();
+
+        bool EnsureDataConsistency(IReportLogger reportLogger = null);
     }
 }

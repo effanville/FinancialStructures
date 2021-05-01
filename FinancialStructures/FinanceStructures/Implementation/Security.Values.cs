@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FinancialStructures.DataStructures;
 using Common.Structure.DataStructures;
+using System.Linq;
 using FinancialStructures.NamingStructures;
 using Common.Structure.NamingStructures;
 
@@ -17,7 +18,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
             _ = UnitPrice.TryGetValue(day, out double unitPrice);
             _ = Shares.TryGetValue(day, out double shares);
             _ = Investments.TryGetValue(day, out double invest);
-            return new SecurityDayData(day, unitPrice, shares, invest);
+            var trade = SecurityTrades.Where(t => t.Day.Equals(day)).FirstOrDefault();
+            return new SecurityDayData(day, unitPrice, shares, invest, trade);
         }
 
         /// <inheritdoc/>
@@ -30,7 +32,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             {
                 if (value != null && value.Value != 0)
                 {
-                    value.Value = value.Value * GetCurrencyValue(value.Day, currency);
+                    value.Value *= GetCurrencyValue(value.Day, currency);
                     namedValues.Add(new Labelled<TwoName, DailyValuation>(new TwoName(Names.Company, Names.Name), value));
                 }
             }
@@ -95,33 +97,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return output;
         }
 
-        private double GetCurrencyValue(DateTime date, ICurrency currency)
+        private static double GetCurrencyValue(DateTime date, ICurrency currency)
         {
             return currency == null ? 1.0 : currency.Value(date)?.Value ?? 1.0;
-        }
-
-        /// <summary>
-        /// Checks if SharePrice data for the date specified exists. if so outputs index value
-        /// </summary>
-        private bool DoesDateSharesDataExist(DateTime date, out int index)
-        {
-            return Shares.ValueExists(date, out index);
-        }
-
-        /// <summary>
-        /// Checks if UnitPrice data for the date specified exists. if so outputs index value
-        /// </summary>
-        private bool DoesDateUnitPriceDataExist(DateTime date, out int index)
-        {
-            return UnitPrice.ValueExists(date, out index);
-        }
-
-        /// <summary>
-        /// Checks if UnitPrice data for the date specified exists. if so outputs index value
-        /// </summary>
-        private bool DoesDateInvestmentDataExist(DateTime date, out int index)
-        {
-            return Investments.ValueExists(date, out index);
         }
     }
 }

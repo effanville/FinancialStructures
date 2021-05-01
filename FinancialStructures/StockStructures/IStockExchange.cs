@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Abstractions;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.StockStructures.Implementation;
 using Common.Structure.Reporting;
@@ -76,8 +77,31 @@ namespace FinancialStructures.StockStructures
         void SaveStockExchange(string filePath, IReportLogger reportLogger = null);
 
         /// <summary>
+        /// Instantiates a <see cref="StockExchange"/> from a file
+        /// where each line is
+        /// Ticker, Company,Name,Url
+        /// </summary>
+        void Configure(string stockFilePath, IFileSystem fileSystem, IReportLogger logger = null);
+
+        /// <summary>
+        /// Loads the <see cref="StockExchange"/> from the file specified.
+        /// </summary>
+        void LoadStockExchange(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Saves the <see cref="StockExchange"/> to the file specified.
+        /// </summary>
+        void SaveStockExchange(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null);
+
+
+        /// <summary>
         /// Downloads data for the stock exchange between the dates provided.
         /// </summary>
-        void Download(StockDownload downloadType, DateTime startDate, DateTime endDate, IReportLogger reportLogger = null);
+        void Download(DateTime startDate, DateTime endDate, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Downloads data for the stock exchange on the latest date possible.
+        /// </summary>
+        void Download(IReportLogger reportLogger = null);
     }
 }
