@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using FinanceCommonViewModels;
 using FinancialStructures.Database;
 using StructureCommon.Reporting;
@@ -70,7 +71,7 @@ namespace FinanceWindowsViewModels
                 {
                     if (e.ShouldUpdate(vm.DataType))
                     {
-                        vm.UpdateData(ProgramPortfolio);
+                        Application.Current.Dispatcher?.Invoke(() => vm.UpdateData(ProgramPortfolio));
                     }
                 }
             }
