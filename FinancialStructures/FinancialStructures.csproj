@@ -2,28 +2,14 @@
 
   <PropertyGroup>
     <TargetFrameworks>net48;netcoreapp3.1</TargetFrameworks>
-    <Deterministic>false</Deterministic>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Platforms>AnyCPU;x64</Platforms>
     <Configurations>Debug;Release</Configurations>
-    <DocumentationFile>..\bin\FinancialStructures.xml</DocumentationFile>
-    <OutputPath>..\bin\</OutputPath>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="StructureCommon" Version="1.0.5" />
-  </ItemGroup>
+  <Import Project="..\Build\CommonProperties.Build.props" />
 
- <!-- Alternative locations for dlls, if Nuget links cannot be generated
- <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
-    <Reference Include="StructureCommon">
-      <HintPath>..\..\Publish\netcoreapp3.1\StructureCommon.dll</HintPath>
-    </Reference>
-  </ItemGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
+    <DocumentationFile>..\bin\Release\FinancialStructures.xml</DocumentationFile>
+  </PropertyGroup>
   
-  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
-    <Reference Include="StructureCommon">
-      <HintPath>..\..\Publish\net48\StructureCommon.dll</HintPath>
-    </Reference>
-  </ItemGroup> -->
 </Project>

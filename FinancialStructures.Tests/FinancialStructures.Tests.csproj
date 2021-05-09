@@ -10,6 +10,8 @@
     <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
+  <Import Project="..\Build\CommonProperties.Build.props" />
+
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
   </ItemGroup>

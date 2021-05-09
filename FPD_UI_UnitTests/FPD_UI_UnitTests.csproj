@@ -8,6 +8,8 @@
     <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
+  <Import Project="..\Build\CommonProperties.Build.props" />
+
   <ItemGroup>
     <PackageReference Include="Moq" Version="4.13.1" />
     <PackageReference Include="nunit" Version="3.12.0" />
@@ -31,7 +33,7 @@
   
   <ItemGroup>
     <PackageReference Include="StructureCommon" Version="1.0.5" />
-    <PackageReference Include="UICommon" Version="1.0.4" />
+    <PackageReference Include="UICommon" Version="1.0.5" />
   </ItemGroup>
 
  <!-- Alternative locations for dlls, if Nuget links cannot be generated
