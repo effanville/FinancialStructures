@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using FinanceCommonViewModels;
 using FinanceViewModels.StatsViewModels;
+using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
-using FinancialStructures.FinanceInterfaces;
-using FinancialStructures.StatisticStructures;
-using FinancialStructures.StatsMakers;
+using FinancialStructures.DataExporters;
+using FinancialStructures.DataStructures;
 using StructureCommon.Reporting;
 using UICommon.Commands;
 using UICommon.Services;
-using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
-    internal class StatsCreatorWindowViewModel : ViewModelBase<IPortfolio>
+    internal class StatsCreatorWindowViewModel : DataDisplayViewModelBase
     {
         public ObservableCollection<object> StatsTabs { get; set; } = new ObservableCollection<object>();
 
@@ -43,13 +43,13 @@ namespace FinanceWindowsViewModels
         private readonly IDialogCreationService fDialogCreationService;
 
         public StatsCreatorWindowViewModel(IPortfolio portfolio, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation)
-            : base("Stats Creator", portfolio)
+            : base("Stats Creator", Account.All, portfolio)
         {
             ReportLogger = reportLogger;
             fFileService = fileService;
             fDialogCreationService = dialogCreation;
             StatsTabs.Add(new MainTabViewModel(OpenTab));
-            StatsTabs.Add(new SecuritiesStatisticsViewModel(portfolio, DisplayValueFunds));
+            StatsTabs.Add(new AccountStatisticsViewModel(portfolio, Account.Security, DisplayValueFunds));
 
             CreateInvestmentListCommand = new RelayCommand(ExecuteInvestmentListCommand);
             CreateStatsCommand = new RelayCommand(ExecuteCreateStatsCommand);
@@ -148,16 +148,13 @@ namespace FinanceWindowsViewModels
                     StatsTabs.Add(new MainTabViewModel(OpenTab));
                     return;
                 case (TabType.SecurityStats):
-                    StatsTabs.Add(new SecuritiesStatisticsViewModel(DataStore, DisplayValueFunds));
+                    StatsTabs.Add(new AccountStatisticsViewModel(DataStore, Account.Security, DisplayValueFunds));
                     return;
                 case (TabType.SecurityInvestment):
                     StatsTabs.Add(new SecurityInvestmentViewModel(DataStore, DisplayValueFunds));
                     return;
                 case (TabType.BankAccountStats):
-                    StatsTabs.Add(new BankAccStatsViewModel(DataStore, DisplayValueFunds));
-                    return;
-                case (TabType.DatabaseStats):
-                    StatsTabs.Add(new DataBaseStatsViewModel(DataStore, DisplayValueFunds));
+                    StatsTabs.Add(new AccountStatisticsViewModel(DataStore, Account.BankAccount, DisplayValueFunds));
                     return;
                 case (TabType.PortfolioHistory):
                     StatsTabs.Add(new PortfolioHistoryViewModel(DataStore, DisplayValueFunds));

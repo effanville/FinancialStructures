@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
-using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.Database;
 using Microsoft.Win32;
 using UICommon.Commands;
 

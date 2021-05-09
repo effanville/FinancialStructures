@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using FinancialStructures.FinanceInterfaces;
+using FinanceCommonViewModels;
+using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
-using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
-    internal class BasicDataViewModel : ViewModelBase<IPortfolio>
+    internal class BasicDataViewModel : DataDisplayViewModelBase
     {
         private List<NameCompDate> fFundNames;
         public List<NameCompDate> FundNames
@@ -64,7 +64,7 @@ namespace FinanceWindowsViewModels
         }
 
         public BasicDataViewModel(IPortfolio portfolio)
-            : base("Overview")
+            : base("Overview", Account.All, portfolio)
         {
             UpdateData(portfolio);
         }

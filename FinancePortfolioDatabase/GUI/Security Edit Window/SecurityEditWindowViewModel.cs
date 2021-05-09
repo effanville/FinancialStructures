@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using FinanceCommonViewModels;
-using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using StructureCommon.Reporting;
 using UICommon.Services;
@@ -11,7 +11,7 @@ using UICommon.ViewModelBases;
 
 namespace FinanceWindowsViewModels
 {
-    internal class SecurityEditWindowViewModel : ViewModelBase<IPortfolio>
+    internal class SecurityEditWindowViewModel : DataDisplayViewModelBase
     {
         public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
 
@@ -22,7 +22,7 @@ namespace FinanceWindowsViewModels
         private readonly Action<Action<IPortfolio>> UpdateDataAction;
 
         public SecurityEditWindowViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation)
-            : base("Security Edit", portfolio)
+            : base("Security Edit", Account.Security, portfolio)
         {
             UpdateDataAction = updateData;
             ReportLogger = reportLogger;

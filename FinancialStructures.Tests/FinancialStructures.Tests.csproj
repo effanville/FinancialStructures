@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+
+    <Platforms>AnyCPU;x64</Platforms>
+
+    <Configurations>Debug;Release</Configurations>
+  </PropertyGroup>
+
+  <Import Project="..\Build\CommonProperties.Build.props" />
+
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.16.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
+    <PackageReference Include="UICommon" Version="1.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FinancialStructures\FinancialStructures.csproj" />
+  </ItemGroup>
+  
+    <ItemGroup>
+    <PackageReference Include="StructureCommon" Version="1.0.5" />
+  </ItemGroup>
+
+ <!-- Alternative locations for dlls, if Nuget links cannot be generated
+ <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+    <Reference Include="StructureCommon">
+      <HintPath>..\..\Publish\netcoreapp3.1\StructureCommon.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
+    <Reference Include="StructureCommon">
+      <HintPath>..\..\Publish\net48\StructureCommon.dll</HintPath>
+    </Reference>
+  </ItemGroup> -->
+
+</Project>

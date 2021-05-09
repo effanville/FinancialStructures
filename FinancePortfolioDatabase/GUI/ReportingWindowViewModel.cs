@@ -144,7 +144,7 @@ namespace FinanceWindowsViewModels
                     writer.Close();
                 }
             }
-            catch (IOException exeption)
+            catch (IOException)
             {
             }
         }

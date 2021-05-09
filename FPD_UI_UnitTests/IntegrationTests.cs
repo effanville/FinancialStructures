@@ -2,7 +2,9 @@
 using FinanceCommonViewModels;
 using FinanceWindowsViewModels;
 using FPD_UI_UnitTests.TestConstruction;
+using Moq;
 using NUnit.Framework;
+using UICommon.Services;
 
 namespace FPD_UI_UnitTests
 {
@@ -19,8 +21,8 @@ namespace FPD_UI_UnitTests
         {
             string databaseToLoad = TestingGUICode.ExampleDatabaseFolder + "\\BasicTestDatabase.xml";
             string testFilePath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase + databaseToLoad;
-            Moq.Mock<UICommon.Services.IFileInteractionService> fileMock = TestingGUICode.CreateFileMock(testFilePath);
-            Moq.Mock<UICommon.Services.IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
+            Mock<IFileInteractionService> fileMock = TestingGUICode.CreateFileMock(testFilePath);
+            Mock<IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
             MainWindowViewModel viewModel = new MainWindowViewModel(fileMock.Object, dialogMock.Object);
 
             viewModel.OptionsToolbarCommands.LoadDatabaseCommand.Execute(1);

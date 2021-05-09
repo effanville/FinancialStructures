@@ -4,8 +4,8 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using FinanceWindows;
+using FinancialStructures.Database;
 using FinancialStructures.Database.Download;
-using FinancialStructures.FinanceInterfaces;
 using StructureCommon.Reporting;
 using UICommon.Commands;
 using UICommon.Services;
@@ -69,6 +69,7 @@ namespace FinanceWindowsViewModels
             SaveDatabaseCommand = new RelayCommand(ExecuteSaveDatabase);
             LoadDatabaseCommand = new RelayCommand(ExecuteLoadDatabase);
             UpdateDataCommand = new RelayCommand(ExecuteUpdateData);
+            CleanDataCommand = new RelayCommand(ExecuteCleanData);
             RefreshCommand = new RelayCommand(ExecuteRefresh);
         }
 
@@ -158,6 +159,15 @@ namespace FinanceWindowsViewModels
             DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.Download(Account.All, programPortfolio, null, fReportLogger).ConfigureAwait(false));
         }
 
+        public ICommand CleanDataCommand
+        {
+            get;
+        }
+        private void ExecuteCleanData()
+        {
+            DataUpdateCallback(programPortfolio => programPortfolio.CleanData());
+        }
+
         public ICommand RefreshCommand
         {
             get;
@@ -165,7 +175,7 @@ namespace FinanceWindowsViewModels
 
         private void ExecuteRefresh()
         {
-            DataUpdateCallback(programPortfolio => programPortfolio.OnPortfolioChanged(false, null));
+            DataUpdateCallback(programPortfolio => programPortfolio.OnPortfolioChanged(false, new PortfolioEventArgs(Account.All)));
         }
     }
 }

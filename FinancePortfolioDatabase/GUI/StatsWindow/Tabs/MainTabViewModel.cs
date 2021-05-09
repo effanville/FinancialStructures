@@ -25,10 +25,6 @@ namespace FinanceViewModels.StatsViewModels
         {
             get;
         }
-        public ICommand OpenDatabaseTab
-        {
-            get;
-        }
         public ICommand OpenBankAccTab
         {
             get;
@@ -53,7 +49,6 @@ namespace FinanceViewModels.StatsViewModels
             OpenTab = openTab;
             OpenSecuritiesTab = new RelayCommand(ExecuteSecuritiesTab);
             OpenSecInvTab = new RelayCommand(ExecuteSecInvTab);
-            OpenDatabaseTab = new RelayCommand(ExecuteDatabaseTab);
             OpenBankAccTab = new RelayCommand(ExecuteBankAccTab);
             OpenHistoryTab = new RelayCommand(ExecuteHistoryTab);
             OpenChartsTab = new RelayCommand(ExecuteChartsTab);
@@ -88,11 +83,6 @@ namespace FinanceViewModels.StatsViewModels
         private void ExecuteSecuritiesTab()
         {
             OpenTab(TabType.SecurityStats, null);
-        }
-
-        private void ExecuteDatabaseTab()
-        {
-            OpenTab(TabType.DatabaseStats, null);
         }
     }
 }

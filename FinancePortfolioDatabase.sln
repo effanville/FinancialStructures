@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29418.71
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialStructuresTests", "FinancialStructuresTests\FinancialStructuresTests.csproj", "{709294DA-0BBE-4ACD-9C5E-29773FD18735}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialStructures.Tests", "FinancialStructures.Tests\FinancialStructures.Tests.csproj", "{709294DA-0BBE-4ACD-9C5E-29773FD18735}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B86EADB1-3561-470B-9421-2E6992A25346} = {B86EADB1-3561-470B-9421-2E6992A25346}
 	EndProjectSection
@@ -23,6 +23,11 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{89F98A9D-5FE5-4238-A7FA-AA2C4ABC5077}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{8989B308-837A-402C-BE70-82764592AC9C}"
+	ProjectSection(SolutionItems) = preProject
+		Build\CommonProperties.build.props = Build\CommonProperties.build.props
 	EndProjectSection
 EndProject
 Global
@@ -95,6 +100,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{8989B308-837A-402C-BE70-82764592AC9C} = {89F98A9D-5FE5-4238-A7FA-AA2C4ABC5077}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {93C86412-6CF8-4AE6-823D-068DDC6A6B87}

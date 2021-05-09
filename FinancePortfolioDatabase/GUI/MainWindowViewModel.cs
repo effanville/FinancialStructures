@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using FinanceCommonViewModels;
 using FinancialStructures.Database;
-using FinancialStructures.FinanceInterfaces;
 using StructureCommon.Reporting;
 using UICommon.Services;
 using UICommon.ViewModelBases;
@@ -11,7 +10,7 @@ namespace FinanceWindowsViewModels
 {
     internal class MainWindowViewModel : PropertyChangedBase
     {
-        internal IPortfolio ProgramPortfolio = new Portfolio();
+        internal IPortfolio ProgramPortfolio = PortfolioFactory.GenerateEmpty();
 
         private OptionsToolbarViewModel fOptionsToolbarCommands;
 
@@ -51,7 +50,7 @@ namespace FinanceWindowsViewModels
         public MainWindowViewModel(IFileInteractionService fileInteractionService, IDialogCreationService dialogCreationService)
         {
             ReportsViewModel = new ReportingWindowViewModel(fileInteractionService);
-            ReportLogger = new LogReporter(ReportsViewModel.UpdateReport);
+            ReportLogger = new LogReporter(UpdateReport);
 
             OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, fileInteractionService, dialogCreationService);
             Tabs.Add(new BasicDataViewModel(ProgramPortfolio));
@@ -63,13 +62,16 @@ namespace FinanceWindowsViewModels
             ProgramPortfolio.PortfolioChanged += AllData_portfolioChanged;
         }
 
-        private void AllData_portfolioChanged(object sender, EventArgs e)
+        private void AllData_portfolioChanged(object sender, PortfolioEventArgs e)
         {
             foreach (object tab in Tabs)
             {
-                if (tab is ViewModelBase<IPortfolio> vm)
+                if (tab is DataDisplayViewModelBase vm)
                 {
-                    vm.UpdateData(ProgramPortfolio);
+                    if (e.ShouldUpdate(vm.DataType))
+                    {
+                        vm.UpdateData(ProgramPortfolio);
+                    }
                 }
             }
 
@@ -77,9 +79,17 @@ namespace FinanceWindowsViewModels
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         internal readonly IReportLogger ReportLogger;
+
+        internal ErrorReports ApplicationLog = new ErrorReports();
+
+        public void UpdateReport(ReportSeverity severity, ReportType type, ReportLocation location, string message)
+        {
+            ApplicationLog.AddErrorReport(severity, type, location, message);
+            ReportsViewModel?.UpdateReport(severity, type, location, message);
+        }
 
         /// <summary>
         /// The mechanism by which the data in <see cref="ProgramPortfolio"/> is updated. This includes a GUI update action.

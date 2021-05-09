@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using FinanceWindowsViewModels;
 using FinancialStructures.Database;
-using FinancialStructures.FinanceInterfaces;
+using FinancialStructures.Database.Implementation;
 using FinancialStructures.NamingStructures;
 using Moq;
 using StructureCommon.DataStructures;
@@ -35,16 +35,7 @@ namespace FPD_UI_UnitTests.TestConstruction
 
         public static Action<Action<IPortfolio>> CreateDataUpdater(IPortfolio portfolio)
         {
-            Action<Action<IPortfolio>> DummyDataUpdater = action => UpdateData(action);
-            void UpdateData(object obj)
-            {
-                if (obj is Action<IPortfolio> updateAction)
-                {
-                    updateAction(portfolio);
-                }
-            }
-
-            return DummyDataUpdater;
+            return action => action(portfolio);
         }
 
         internal static Action<object> DummyOpenTab

@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using FinanceWindowsViewModels;
-using FinancialStructures.Database;
+using FinancialStructures.Database.Implementation;
 using FPD_UI_UnitTests.TestConstruction;
 using NUnit.Framework;
 

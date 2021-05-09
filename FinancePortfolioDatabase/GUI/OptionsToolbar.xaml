@@ -31,6 +31,9 @@
                     <Button Content="Update Data"
                             Style="{StaticResource ResourceKey=defaultButtonNoMargin}"
                             Command="{Binding UpdateDataCommand}" />
+                    <Button Content="Clean Data"
+                            Style="{StaticResource ResourceKey=defaultButtonNoMargin}"
+                            Command="{Binding CleanDataCommand}" />
                     <Label Margin="5 5 5 5"
                            Content="Base Currency" />
                     <ComboBox Margin="5 5 5 5"

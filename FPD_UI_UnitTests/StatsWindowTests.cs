@@ -1,4 +1,5 @@
 ﻿using FinanceWindowsViewModels;
+using FinancialStructures.Database.Implementation;
 using FPD_UI_UnitTests.TestConstruction;
 using NUnit.Framework;
 
@@ -16,7 +17,7 @@ namespace FPD_UI_UnitTests
         [Ignore("not yet implemented")]
         public void CanLoadWithNames()
         {
-            FinancialStructures.Database.Portfolio output = TestingGUICode.CreateBasicDataBase();
+            Portfolio output = TestingGUICode.CreateBasicDataBase();
             Moq.Mock<UICommon.Services.IFileInteractionService> fileMock = TestingGUICode.CreateFileMock("nothing");
             Moq.Mock<UICommon.Services.IDialogCreationService> dialogMock = TestingGUICode.CreateDialogMock();
             StatsCreatorWindowViewModel viewModel = new StatsCreatorWindowViewModel(output, TestingGUICode.DummyReportLogger, fileMock.Object, dialogMock.Object);
