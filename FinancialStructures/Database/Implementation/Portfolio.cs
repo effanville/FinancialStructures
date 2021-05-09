@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Implementation;
 
 namespace FinancialStructures.Database.Implementation
