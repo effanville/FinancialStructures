@@ -8,16 +8,14 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Retrieves data in a list ordered by date.
         /// </summary>
-        public List<DailyValuation> GetDataForDisplay()
+        public virtual List<DailyValuation> ListOfValues()
         {
             List<DailyValuation> output = new List<DailyValuation>();
             if (Values.Any())
             {
-                foreach (DailyValuation datevalue in Values.GetValuesBetween(Values.FirstDate(), Values.LatestDate()))
+                foreach (DailyValuation dateValue in Values.Values)
                 {
-                    _ = Values.TryGetValue(datevalue.Day, out double UnitPrice);
-                    DailyValuation thisday = new DailyValuation(datevalue.Day, UnitPrice);
-                    output.Add(thisday);
+                    output.Add(dateValue.Copy());
                 }
             }
 

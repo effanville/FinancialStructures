@@ -1,5 +1,6 @@
 ﻿using System;
 using FinancialStructures.FinanceStructures;
+using StructureCommon.Extensions;
 
 namespace FinancialStructures.DataStructures
 {
@@ -85,7 +86,7 @@ namespace FinancialStructures.DataStructures
         /// <inheritdoc/>
         public override string ToString()
         {
-            return string.Concat(Date.Day.ToString().PadLeft(2, '0'), "/", Date.Month.ToString().PadLeft(2, '0'), "/", Date.Year, ", ", UnitPrice.ToString(), ", ", ShareNo.ToString(), ", ", NewInvestment.ToString());
+            return $"{Date.ToUkDateStringPadded()}, {UnitPrice}, {ShareNo}, {NewInvestment}";
         }
 
         /// <inheritdoc/>

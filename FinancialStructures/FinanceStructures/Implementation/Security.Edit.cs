@@ -15,8 +15,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public override bool TryAddOrEditData(DateTime oldDate, DateTime date, double unitPrice, IReportLogger reportLogger = null)
         {
-            double shares = Shares.Value(date).Value;
-            double investment = Investments.Value(date).Value;
+            double shares = Shares.Value(date)?.Value ?? 0.0;
+            double investment = Investments.Value(date)?.Value ?? 0.0;
             return TryAddOrEditData(oldDate, date, unitPrice, shares, investment, reportLogger: reportLogger);
         }
 
@@ -25,7 +25,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
             if (DoesDateSharesDataExist(oldDate, out int _) || DoesDateInvestmentDataExist(oldDate, out int _) || DoesDateUnitPriceDataExist(oldDate, out int _))
             {
-                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Security {Names.ToString()} data on {date.ToString("d")} edited.");
+                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Security {Names} data on {date.ToString("d")} edited.");
                 return TryEditData(oldDate, date, shares, unitPrice, investment, reportLogger);
             }
 

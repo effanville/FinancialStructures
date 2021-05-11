@@ -32,7 +32,7 @@ namespace FinancialStructures.Database.Statistics
                         foreach (ISecurity security in portfolio.Funds)
                         {
                             var latest = security.LatestValue();
-                            if ((displayValueFunds && latest.Value > 0) || !displayValueFunds)
+                            if ((displayValueFunds && latest != null && latest.Value > 0) || !displayValueFunds)
                             {
                                 stats.Add(new AccountStatistics(portfolio, account, security.Names, statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics()));
                             }

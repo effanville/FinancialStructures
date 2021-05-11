@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using System.IO.Abstractions;
 using System.Linq;
 using FinancialStructures.SavingClasses;
 using StructureCommon.FileAccess;
@@ -21,9 +21,9 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
-        public void LoadPortfolio(string filePath, IReportLogger reportLogger = null)
+        public void LoadPortfolio(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null)
         {
-            if (File.Exists(filePath))
+            if (fileSystem.File.Exists(filePath))
             {
                 AllData database = XmlFileAccess.ReadFromXmlFile<AllData>(filePath, out string error);
                 if (database != null)
@@ -57,7 +57,7 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
-        public void SavePortfolio(string filePath, IReportLogger reportLogger = null)
+        public void SavePortfolio(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null)
         {
             AllData toSave = new AllData(this, null);
 

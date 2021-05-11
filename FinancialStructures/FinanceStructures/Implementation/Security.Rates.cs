@@ -43,7 +43,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             DailyValuation latestDate = fUnitPrice.LatestValuation();
             if (latestDate == null)
             {
-                return new DailyValuation(DateTime.Today, 0.0);
+                return null;
             }
 
             double latestValue = latestDate.Value * fShares.LatestValue() * GetCurrencyValue(latestDate.Day, currency);
@@ -63,8 +63,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             DailyValuation firstDate = fUnitPrice.FirstValuation();
             if (firstDate == null)
             {
-                return new DailyValuation(DateTime.MinValue, 0.0);
-                ;
+                return null;
             }
 
             double latestValue = firstDate.Value * fShares.FirstValue() * GetCurrencyValue(firstDate.Day, currency);
@@ -82,7 +81,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         public DailyValuation Value(DateTime date, ICurrency currency)
         {
             DailyValuation perSharePrice = fUnitPrice.Value(date);
-            double value = perSharePrice.Value * fShares.NearestEarlierValue(date).Value * GetCurrencyValue(date, currency);
+            double value = perSharePrice?.Value * fShares.NearestEarlierValue(date).Value * GetCurrencyValue(date, currency) ?? 0.0;
             return new DailyValuation(date, value);
         }
 

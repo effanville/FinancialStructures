@@ -166,6 +166,10 @@ namespace FinancialStructures.Database.Implementation
         {
             switch (elementType)
             {
+                case (Account.All):
+                {
+                    return Funds.Count + Currencies.Count + BankAccounts.Count + BenchMarks.Count;
+                }
                 case (Account.Security):
                 {
                     return Funds.Count;
@@ -180,7 +184,7 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case (Account.Benchmark):
                 {
-                    break;
+                    return BenchMarks.Count;
                 }
                 default:
                     break;

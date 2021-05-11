@@ -9,7 +9,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public virtual DailyValuation LatestValue()
         {
-            return Values.LatestValuation().Copy();
+            return Values.LatestValuation();
         }
 
         /// <inheritdoc/>

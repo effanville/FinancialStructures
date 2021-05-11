@@ -1,0 +1,29 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:view="clr-namespace:FinancePortfolioDatabase.GUI.Windows.Stats"
+                    xmlns:vm="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Stats">
+
+    <DataTemplate DataType="{x:Type vm:MainTabViewModel}">
+        <view:StatsWindowMainTab/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:AccountStatisticsViewModel}">
+        <view:AccountStatistics/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:SecurityInvestmentViewModel}">
+        <view:SecurityInvestments />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:HtmlStatsViewerViewModel}">
+        <view:HtmlStatsViewer />
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:PortfolioHistoryViewModel}">
+        <view:PortfolioHistory/>
+    </DataTemplate>
+
+    <DataTemplate DataType="{x:Type vm:StatisticsChartsViewModel}">
+        <view:StatisticsCharts/>
+    </DataTemplate>
+</ResourceDictionary>

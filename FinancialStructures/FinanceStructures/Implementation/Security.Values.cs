@@ -36,8 +36,23 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return namedValues;
         }
 
+        /// <summary>
+        /// Retrieves data in a list ordered by date.
+        /// </summary>
+        public override List<DailyValuation> ListOfValues()
+        {
+            var output = GetDataForDisplay();
+            List<DailyValuation> thing = new List<DailyValuation>();
+            foreach (var dateValue in output)
+            {
+                thing.Add(new DailyValuation(dateValue.Date, dateValue.Value));
+            }
+
+            return thing;
+        }
+
         /// <inheritdoc/>
-        public new List<SecurityDayData> GetDataForDisplay()
+        public List<SecurityDayData> GetDataForDisplay()
         {
             List<SecurityDayData> output = new List<SecurityDayData>();
             if (fUnitPrice.Any())

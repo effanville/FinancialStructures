@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
-using FinanceWindows;
+using FinancePortfolioDatabase.GUI.Windows;
 
 namespace FinancePortfolioDatabase
 {

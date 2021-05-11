@@ -1,4 +1,5 @@
-﻿using FinancialStructures.Database.Implementation;
+﻿using System.IO.Abstractions;
+using FinancialStructures.Database.Implementation;
 using StructureCommon.Reporting;
 
 namespace FinancialStructures.Database
@@ -14,10 +15,10 @@ namespace FinancialStructures.Database
         {
         }
 
-        public static IPortfolio CreateFromFile(string filepath, IReportLogger logger)
+        public static IPortfolio CreateFromFile(IFileSystem fileSystem, string filepath, IReportLogger logger)
         {
             var portfolio = new Portfolio();
-            portfolio.LoadPortfolio(filepath, logger);
+            portfolio.LoadPortfolio(filepath, fileSystem, logger);
             return portfolio;
         }
     }

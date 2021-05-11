@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPDconsole", "FPDconsole\FP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialStructures", "FinancialStructures\FinancialStructures.csproj", "{B86EADB1-3561-470B-9421-2E6992A25346}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPD_UI_UnitTests", "FPD_UI_UnitTests\FPD_UI_UnitTests.csproj", "{5DC1103C-E51E-4F82-BD64-FFC47CB08C2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancePortfolioDatabase.Tests", "FinancePortfolioDatabase.Tests\FinancePortfolioDatabase.Tests.csproj", "{5DC1103C-E51E-4F82-BD64-FFC47CB08C2C}"
 	ProjectSection(ProjectDependencies) = postProject
 		{7531F889-34E2-4D3D-994D-38EBF4FA9249} = {7531F889-34E2-4D3D-994D-38EBF4FA9249}
 		{B86EADB1-3561-470B-9421-2E6992A25346} = {B86EADB1-3561-470B-9421-2E6992A25346}

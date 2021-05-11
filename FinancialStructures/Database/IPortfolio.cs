@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Abstractions;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Implementation;
@@ -184,14 +185,14 @@ namespace FinancialStructures.Database
         /// </summary>
         /// <param name="filePath">The path to load from.</param>
         /// <param name="reportLogger">Callback to report information.</param>
-        void LoadPortfolio(string filePath, IReportLogger reportLogger = null);
+        void LoadPortfolio(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Save database to xml file.
         /// </summary>
         /// <param name="filePath">The path to save to.</param>
         /// <param name="reportLogger">Callback to report information.</param>
-        void SavePortfolio(string filePath, IReportLogger reportLogger = null);
+        void SavePortfolio(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Clears all data in the portfolio.
@@ -245,7 +246,7 @@ namespace FinancialStructures.Database
         /// </summary>
         /// <param name="elementType">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        List<NameCompDate> NameData(Account elementType);
+        List<NameData> NameData(Account elementType);
 
         /// <summary>
         /// Queries for data for the security of name and company.

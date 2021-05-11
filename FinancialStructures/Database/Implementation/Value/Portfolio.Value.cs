@@ -26,7 +26,7 @@ namespace FinancialStructures.Database.Implementation
 
                     var security = desired as ISecurity;
                     ICurrency currency = Currency(Account.Security, security);
-                    return security.Value(date, currency).Value;
+                    return security.Value(date, currency)?.Value ?? 0.0;
                 }
                 case (Account.Currency):
                 case (Account.Benchmark):
@@ -36,7 +36,7 @@ namespace FinancialStructures.Database.Implementation
                         return 1.0;
                     }
 
-                    return desired.Value(date).Value;
+                    return desired.Value(date)?.Value ?? 0.0;
                 }
                 case (Account.BankAccount):
                 {
@@ -47,7 +47,7 @@ namespace FinancialStructures.Database.Implementation
 
                     var bankAccount = account as ICashAccount;
                     ICurrency currency = Currency(elementType, bankAccount);
-                    return bankAccount.NearestEarlierValuation(date, currency).Value;
+                    return bankAccount.NearestEarlierValuation(date, currency)?.Value ?? 0.0;
 
                 }
                 default:

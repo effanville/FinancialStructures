@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:viewStats="clr-namespace:FinancePortfolioDatabase.GUI.Windows.Stats"
+                    xmlns:vm="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Stats">
+    <DataTemplate DataType="{x:Type vm:StatsOptionsViewModel}">
+        <viewStats:StatsOptionsWindow />
+    </DataTemplate>
+    <Style TargetType="{x:Type Rectangle}" />
+</ResourceDictionary>

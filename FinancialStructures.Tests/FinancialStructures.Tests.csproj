@@ -23,7 +23,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
-    <PackageReference Include="UICommon" Version="1.0.4" />
+    <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="13.2.23" />
+    <PackageReference Include="UICommon" Version="1.0.6" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,7 +32,7 @@
   </ItemGroup>
   
     <ItemGroup>
-    <PackageReference Include="StructureCommon" Version="1.0.5" />
+    <PackageReference Include="StructureCommon" Version="1.0.8" />
   </ItemGroup>
 
  <!-- Alternative locations for dlls, if Nuget links cannot be generated
