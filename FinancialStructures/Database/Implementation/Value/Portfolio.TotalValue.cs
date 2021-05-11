@@ -27,7 +27,7 @@ namespace FinancialStructures.Database.Implementation
                 case (Totals.Security):
                 {
                     double total = 0;
-                    foreach (ISecurity sec in Funds)
+                    foreach (ISecurity sec in FundsThreadSafe)
                     {
                         if (sec.Any())
                         {
@@ -41,7 +41,7 @@ namespace FinancialStructures.Database.Implementation
                 case (Totals.Currency):
                 {
                     double total = 0;
-                    foreach (ISecurity sec in Funds)
+                    foreach (ISecurity sec in FundsThreadSafe)
                     {
                         if (sec.Any() && sec.Names.Currency == names.Name)
                         {
@@ -49,7 +49,7 @@ namespace FinancialStructures.Database.Implementation
                             total += sec.Value(date, currency).Value;
                         }
                     }
-                    foreach (ICashAccount acc in BankAccounts)
+                    foreach (ICashAccount acc in BankAccountsThreadSafe)
                     {
                         if (acc.Any() && acc.Names.Currency == names.Name)
                         {
@@ -62,7 +62,7 @@ namespace FinancialStructures.Database.Implementation
                 case (Totals.BankAccount):
                 {
                     double sum = 0;
-                    foreach (ICashAccount acc in BankAccounts)
+                    foreach (ICashAccount acc in BankAccountsThreadSafe)
                     {
                         if (acc.Any())
                         {
@@ -76,14 +76,11 @@ namespace FinancialStructures.Database.Implementation
                 case (Totals.Sector):
                 {
                     double sum = 0;
-                    if (Funds != null)
+                    foreach (ISecurity fund in FundsThreadSafe)
                     {
-                        foreach (ISecurity fund in Funds)
+                        if (fund.IsSectorLinked(names?.Company))
                         {
-                            if (fund.IsSectorLinked(names?.Company))
-                            {
-                                sum += fund.NearestEarlierValuation(date).Value;
-                            }
+                            sum += fund.NearestEarlierValuation(date).Value;
                         }
                     }
 

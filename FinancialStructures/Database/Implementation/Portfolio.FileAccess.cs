@@ -14,10 +14,22 @@ namespace FinancialStructures.Database.Implementation
             SetFilePath("");
             BaseCurrency = "";
             IsAlteredSinceSave = false;
-            Funds.Clear();
-            BenchMarks.Clear();
-            Currencies.Clear();
-            BankAccounts.Clear();
+            lock (FundsLock)
+            {
+                Funds.Clear();
+            }
+            lock (BenchmarksLock)
+            {
+                BenchMarks.Clear();
+            }
+            lock (CurrenciesLock)
+            {
+                Currencies.Clear();
+            }
+            lock (BankAccountsLock)
+            {
+                BankAccounts.Clear();
+            }
         }
 
         /// <inheritdoc/>
@@ -30,6 +42,7 @@ namespace FinancialStructures.Database.Implementation
                 {
                     database.MyFunds.SetFilePath(filePath);
                     CopyData(database.MyFunds);
+
                     if (!database.MyFunds.BenchMarks.Any())
                     {
                         SetBenchMarks(database.myBenchMarks);

@@ -65,17 +65,26 @@ namespace FinancialStructures.Database
         }
 
         /// <summary>
-        /// Securities stored in this database.
+        /// <para>
+        /// Securities stored in this database.</para>
+        /// <para>
+        /// This is a shallow copy of the actual list, accessed in a
+        /// threadsafe manner.
+        /// </para>
         /// </summary>
-        List<Security> Funds
+        IReadOnlyList<ISecurity> FundsThreadSafe
         {
             get;
         }
 
         /// <summary>
         /// Bank accounts stored in this database.
+        /// <para>
+        /// This is a shallow copy of the actual list, accessed in a
+        /// threadsafe manner.
+        /// </para>
         /// </summary>
-        List<CashAccount> BankAccounts
+        IReadOnlyList<ICashAccount> BankAccountsThreadSafe
         {
             get;
         }
@@ -83,7 +92,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// The currencies other objects are held in.
         /// </summary>
-        List<Currency> Currencies
+        IReadOnlyList<ICurrency> CurrenciesThreadSafe
         {
             get;
         }
@@ -91,15 +100,10 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Sector benchmarks for comparison of held data.
         /// </summary>
-        List<Sector> BenchMarks
+        IReadOnlyList<ISector> BenchMarksThreadSafe
         {
             get;
         }
-
-        /// <summary>
-        /// Copies references of other portfolio to this portfolio.
-        /// </summary>
-        void CopyData(IPortfolio portfolio);
 
         /// <summary>
         /// Number of type in the database.
@@ -345,5 +349,10 @@ namespace FinancialStructures.Database
         /// returns the currency associated to the account.
         /// </summary>
         ICurrency Currency(Account elementType, object account);
+
+        /// <summary>
+        /// returns the currency associated to the name.
+        /// </summary>
+        ICurrency Currency(string currency);
     }
 }

@@ -14,19 +14,19 @@ namespace FinancialStructures.Database.Implementation
             {
                 case (Account.Security):
                 {
-                    return TryEditNameSingleList(Funds, elementType, oldName, newName, reportLogger);
+                    return TryEditNameSingleList(FundsThreadSafe, elementType, oldName, newName, reportLogger);
                 }
                 case (Account.Currency):
                 {
-                    return TryEditNameSingleList(Currencies, elementType, oldName, newName, reportLogger);
+                    return TryEditNameSingleList(CurrenciesThreadSafe, elementType, oldName, newName, reportLogger);
                 }
                 case (Account.BankAccount):
                 {
-                    return TryEditNameSingleList(BankAccounts, elementType, oldName, newName, reportLogger);
+                    return TryEditNameSingleList(BankAccountsThreadSafe, elementType, oldName, newName, reportLogger);
                 }
                 case (Account.Benchmark):
                 {
-                    return TryEditNameSingleList(BenchMarks, elementType, oldName, newName, reportLogger);
+                    return TryEditNameSingleList(BenchMarksThreadSafe, elementType, oldName, newName, reportLogger);
                 }
                 default:
                 {
@@ -36,7 +36,7 @@ namespace FinancialStructures.Database.Implementation
             }
         }
 
-        private bool TryEditNameSingleList<T>(List<T> values, Account elementType, NameData oldName, NameData newName, IReportLogger reportLogger = null) where T : IValueList
+        private bool TryEditNameSingleList<T>(IReadOnlyList<T> values, Account elementType, NameData oldName, NameData newName, IReportLogger reportLogger = null) where T : IValueList
         {
             for (int AccountIndex = 0; AccountIndex < values.Count; AccountIndex++)
             {

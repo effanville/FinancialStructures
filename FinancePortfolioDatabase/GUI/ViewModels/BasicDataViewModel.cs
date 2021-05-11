@@ -143,13 +143,13 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             HasValues = portfolio.NumberOf(Account.All) != 0;
             SecurityTotalText = $"Total Securities: {portfolio.NumberOf(Account.Security)}";
             SecurityAmountText = $"Total Value: {portfolio.TotalValue(Totals.Security).Truncate()} {portfolio.BaseCurrency}";
-            var securities = portfolio.Funds.ToList();
+            var securities = portfolio.FundsThreadSafe.ToList();
             securities.Sort((fund, otherFund) => otherFund.Value(DateTime.Today).Value.CompareTo(fund.Value(DateTime.Today).Value));
             TopSecurities = securities.Take(5).Select(name => new DayValue_Named(name.Names.Company, name.Names.Name, name.Value(DateTime.Today))).ToList();
 
             BankAccountTotalText = $"Total Bank Accounts: {portfolio.NumberOf(Account.BankAccount)}";
             BankAccountAmountText = $"Total Value: {portfolio.TotalValue(Totals.BankAccount)} {portfolio.BaseCurrency}";
-            var bankAccounts = portfolio.BankAccounts.ToList();
+            var bankAccounts = portfolio.BankAccountsThreadSafe.ToList();
             bankAccounts.Sort((bank, otherBank) => otherBank.Value(DateTime.Today).Value.CompareTo(bank.Value(DateTime.Today).Value));
             TopBankAccounts = bankAccounts.Take(5).Select(name => new DayValue_Named(name.Names.Company, name.Names.Name, name.Value(DateTime.Today))).ToList();
         }

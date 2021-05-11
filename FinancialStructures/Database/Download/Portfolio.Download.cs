@@ -75,28 +75,28 @@ namespace FinancialStructures.Database.Download
         private static List<Task> DownloadPortfolioLatest(IPortfolio portfo, IReportLogger reportLogger)
         {
             var downloadTasks = new List<Task>();
-            foreach (ISecurity sec in portfo.Funds)
+            foreach (ISecurity sec in portfo.FundsThreadSafe)
             {
                 if (!string.IsNullOrEmpty(sec.Names.Url))
                 {
                     downloadTasks.Add(DownloadLatestValue(sec.Names, value => sec.TryAddOrEditData(DateTime.Today, DateTime.Today, value, reportLogger), reportLogger));
                 }
             }
-            foreach (ICashAccount acc in portfo.BankAccounts)
+            foreach (ICashAccount acc in portfo.BankAccountsThreadSafe)
             {
                 if (!string.IsNullOrEmpty(acc.Names.Url))
                 {
                     downloadTasks.Add(DownloadLatestValue(acc.Names, value => acc.TryAddOrEditData(DateTime.Today, DateTime.Today, value, reportLogger), reportLogger));
                 }
             }
-            foreach (ICurrency currency in portfo.Currencies)
+            foreach (ICurrency currency in portfo.CurrenciesThreadSafe)
             {
                 if (!string.IsNullOrEmpty(currency.Names.Url))
                 {
                     downloadTasks.Add(DownloadLatestValue(currency.Names, value => currency.TryAddOrEditData(DateTime.Today, DateTime.Today, value, reportLogger), reportLogger));
                 }
             }
-            foreach (ISector sector in portfo.BenchMarks)
+            foreach (ISector sector in portfo.BenchMarksThreadSafe)
             {
                 if (!string.IsNullOrEmpty(sector.Names.Url))
                 {

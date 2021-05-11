@@ -14,10 +14,10 @@ namespace FinancialStructures.Database.Implementation
         {
             for (int fundIndex = 0; fundIndex < NumberOf(Account.Security); fundIndex++)
             {
-                if (names.IsEqualTo(Funds[fundIndex].Names))
+                if (names.IsEqualTo(FundsThreadSafe[fundIndex].Names))
                 {
                     _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Security `{names.Company}'-`{names.Name}' has data on date .");
-                    return Funds[fundIndex].TryAddOrEditData(oldDate, date, unitPrice, shares, Investment, reportLogger);
+                    return FundsThreadSafe[fundIndex].TryAddOrEditData(oldDate, date, unitPrice, shares, Investment, reportLogger);
                 }
             }
             _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Security `{names.Company}'-`{names.Name}' could not be found in the database.");
@@ -31,19 +31,19 @@ namespace FinancialStructures.Database.Implementation
             {
                 case (Account.Security):
                 {
-                    return SingleListAddOrEdit(Funds, name, oldData, data, reportLogger);
+                    return SingleListAddOrEdit(FundsThreadSafe, name, oldData, data, reportLogger);
                 }
                 case (Account.Currency):
                 {
-                    return SingleListAddOrEdit(Currencies, name, oldData, data, reportLogger);
+                    return SingleListAddOrEdit(CurrenciesThreadSafe, name, oldData, data, reportLogger);
                 }
                 case (Account.BankAccount):
                 {
-                    return SingleListAddOrEdit(BankAccounts, name, oldData, data, reportLogger);
+                    return SingleListAddOrEdit(BankAccountsThreadSafe, name, oldData, data, reportLogger);
                 }
                 case (Account.Benchmark):
                 {
-                    return SingleListAddOrEdit(BenchMarks, name, oldData, data, reportLogger);
+                    return SingleListAddOrEdit(BenchMarksThreadSafe, name, oldData, data, reportLogger);
                 }
                 default:
                     _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, $"Editing an Unknown type.");
@@ -51,7 +51,7 @@ namespace FinancialStructures.Database.Implementation
             }
         }
 
-        private bool SingleListAddOrEdit<T>(List<T> listToEdit, TwoName name, DailyValuation oldData, DailyValuation data, IReportLogger reportLogger = null) where T : IValueList
+        private bool SingleListAddOrEdit<T>(IReadOnlyList<T> listToEdit, TwoName name, DailyValuation oldData, DailyValuation data, IReportLogger reportLogger = null) where T : IValueList
         {
             for (int accountIndex = 0; accountIndex < listToEdit.Count; accountIndex++)
             {

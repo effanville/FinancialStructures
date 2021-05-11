@@ -37,11 +37,11 @@ namespace FinancialStructures.Database.Statistics
                     double laterValue = 0;
                     List<DailyValuation> Investments = new List<DailyValuation>();
 
-                    foreach (ISecurity security in portfolio.Funds)
+                    foreach (ISecurity security in portfolio.FundsThreadSafe)
                     {
                         if (security.Any())
                         {
-                            ICurrency currency = portfolio.Currencies.Find(cur => cur.Names.Name == security.Names.Currency);
+                            ICurrency currency = portfolio.Currency(security.Names.Currency);
                             earlierValue += security.Value(earlierTime, currency).Value;
                             laterValue += security.Value(laterTime, currency).Value;
                             Investments.AddRange(security.InvestmentsBetween(earlierTime, laterTime, currency));
@@ -65,7 +65,7 @@ namespace FinancialStructures.Database.Statistics
                     {
                         if (security.Any())
                         {
-                            ICurrency currency = portfolio.Currencies.Find(cur => cur.Names.Name == security.Names.Currency);
+                            ICurrency currency = portfolio.Currency(security.Names.Currency);
                             earlierValue += security.Value(earlierTime, currency).Value;
                             laterValue += security.Value(laterTime, currency).Value;
                             Investments.AddRange(security.InvestmentsBetween(earlierTime, laterTime, currency));
@@ -103,9 +103,9 @@ namespace FinancialStructures.Database.Statistics
                     double earlierValue = 0;
                     double laterValue = 0;
 
-                    foreach (var bankAccount in portfolio.BankAccounts)
+                    foreach (var bankAccount in portfolio.BankAccountsThreadSafe)
                     {
-                        ICurrency currency = portfolio.Currencies.Find(cur => cur.Names.Name == bankAccount.Names.Currency);
+                        ICurrency currency = portfolio.Currency(bankAccount.Names.Currency);
                         earlierValue += bankAccount.Value(earlierTime, currency).Value;
                         laterValue += bankAccount.Value(laterTime, currency).Value;
                     }
@@ -117,7 +117,7 @@ namespace FinancialStructures.Database.Statistics
                     double earlierValue = 0;
                     double laterValue = 0;
 
-                    foreach (var benchmark in portfolio.BenchMarks)
+                    foreach (IValueList benchmark in portfolio.BenchMarksThreadSafe)
                     {
                         earlierValue += benchmark.Value(earlierTime).Value;
                         laterValue += benchmark.Value(laterTime).Value;
@@ -130,7 +130,7 @@ namespace FinancialStructures.Database.Statistics
                     double earlierValue = 0;
                     double laterValue = 0;
 
-                    foreach (var currency in portfolio.Currencies)
+                    foreach (var currency in portfolio.CurrenciesThreadSafe)
                     {
                         earlierValue += currency.Value(earlierTime).Value;
                         laterValue += currency.Value(laterTime).Value;

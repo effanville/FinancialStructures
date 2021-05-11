@@ -12,7 +12,7 @@ namespace FinancialStructures.Database.Implementation
         /// <inheritdoc/>
         public List<SecurityDayData> SecurityData(TwoName name, IReportLogger reportLogger = null)
         {
-            foreach (ISecurity security in Funds)
+            foreach (ISecurity security in FundsThreadSafe)
             {
                 if (name.IsEqualTo(security.Names))
                 {
@@ -31,19 +31,19 @@ namespace FinancialStructures.Database.Implementation
             {
                 case (Account.Security):
                 {
-                    return SingleDataListDataObtainer(Funds, elementType, name, reportLogger);
+                    return SingleDataListDataObtainer(FundsThreadSafe, elementType, name, reportLogger);
                 }
                 case (Account.Currency):
                 {
-                    return SingleDataListDataObtainer(Currencies, elementType, name, reportLogger);
+                    return SingleDataListDataObtainer(CurrenciesThreadSafe, elementType, name, reportLogger);
                 }
                 case (Account.BankAccount):
                 {
-                    return SingleDataListDataObtainer(BankAccounts, elementType, name, reportLogger);
+                    return SingleDataListDataObtainer(BankAccountsThreadSafe, elementType, name, reportLogger);
                 }
                 case (Account.Benchmark):
                 {
-                    return SingleDataListDataObtainer(BenchMarks, elementType, name, reportLogger);
+                    return SingleDataListDataObtainer(BenchMarksThreadSafe, elementType, name, reportLogger);
                 }
                 default:
                 {
@@ -52,7 +52,7 @@ namespace FinancialStructures.Database.Implementation
             }
         }
 
-        private List<DailyValuation> SingleDataListDataObtainer<T>(List<T> objects, Account elementType, TwoName name, IReportLogger reportLogger = null) where T : IValueList
+        private List<DailyValuation> SingleDataListDataObtainer<T>(IReadOnlyList<T> objects, Account elementType, TwoName name, IReportLogger reportLogger = null) where T : IValueList
         {
             foreach (T account in objects)
             {

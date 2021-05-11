@@ -21,7 +21,7 @@ namespace FinancialStructures.Database.Statistics
                 case (Totals.Security):
                 {
                     var total = new Dictionary<DateTime, int>();
-                    foreach (var desired in portfolio.Funds)
+                    foreach (var desired in portfolio.FundsThreadSafe)
                     {
                         if (desired.Any())
                         {
@@ -122,7 +122,7 @@ namespace FinancialStructures.Database.Statistics
                 case Totals.BankAccount:
                 {
                     var total = new Dictionary<DateTime, int>();
-                    foreach (ICashAccount cashAccount in portfolio.BankAccounts)
+                    foreach (ICashAccount cashAccount in portfolio.BankAccountsThreadSafe)
                     {
                         foreach (var value in cashAccount.Values.Values)
                         {

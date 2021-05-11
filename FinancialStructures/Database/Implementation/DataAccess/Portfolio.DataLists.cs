@@ -43,7 +43,7 @@ namespace FinancialStructures.Database.Implementation
         public List<ISecurity> CompanySecurities(string company)
         {
             List<ISecurity> securities = new List<ISecurity>();
-            foreach (ISecurity sec in Funds)
+            foreach (ISecurity sec in FundsThreadSafe)
             {
                 if (sec.Names.Company == company)
                 {
@@ -74,7 +74,7 @@ namespace FinancialStructures.Database.Implementation
         public List<ISecurity> SectorSecurities(string sectorName)
         {
             List<ISecurity> securities = new List<ISecurity>();
-            foreach (ISecurity security in Funds)
+            foreach (ISecurity security in FundsThreadSafe)
             {
                 if (security.IsSectorLinked(sectorName))
                 {

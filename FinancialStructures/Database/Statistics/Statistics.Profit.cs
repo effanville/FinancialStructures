@@ -16,7 +16,7 @@ namespace FinancialStructures.Database.Statistics
             {
                 case (Totals.Security):
                 {
-                    foreach (ISecurity security in portfolio.Funds)
+                    foreach (ISecurity security in portfolio.FundsThreadSafe)
                     {
                         if (security.Any())
                         {
@@ -42,7 +42,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case (Totals.BankAccount):
                 {
-                    foreach (var account in portfolio.BankAccounts)
+                    foreach (var account in portfolio.BankAccountsThreadSafe)
                     {
                         if (account.Any())
                         {
@@ -53,7 +53,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case (Totals.Benchmark):
                 {
-                    foreach (var benchmark in portfolio.BenchMarks)
+                    foreach (IValueList benchmark in portfolio.BenchMarksThreadSafe)
                     {
                         if (benchmark.Any())
                         {
@@ -64,7 +64,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case (Totals.Currency):
                 {
-                    foreach (var currency in portfolio.Currencies)
+                    foreach (IValueList currency in portfolio.CurrenciesThreadSafe)
                     {
                         if (currency.Any())
                         {

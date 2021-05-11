@@ -20,7 +20,7 @@ namespace FinancialStructures.Database.Statistics
             {
                 case Totals.Security:
                 {
-                    foreach (ISecurity sec in portfolio.Funds)
+                    foreach (ISecurity sec in portfolio.FundsThreadSafe)
                     {
                         if (sec.Any())
                         {
@@ -58,7 +58,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Totals.BankAccount:
                 {
-                    foreach (ICashAccount cashAccount in portfolio.BankAccounts)
+                    foreach (ICashAccount cashAccount in portfolio.BankAccountsThreadSafe)
                     {
                         if (cashAccount.LatestValue().Day > output)
                         {
@@ -70,7 +70,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Totals.Benchmark:
                 {
-                    foreach (ICashAccount cashAccount in portfolio.BenchMarks)
+                    foreach (ICashAccount cashAccount in portfolio.BenchMarksThreadSafe)
                     {
                         if (cashAccount.LatestValue().Day > output)
                         {
@@ -82,7 +82,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Totals.Currency:
                 {
-                    foreach (ICashAccount cashAccount in portfolio.Currencies)
+                    foreach (ICashAccount cashAccount in portfolio.CurrenciesThreadSafe)
                     {
                         if (cashAccount.LatestValue().Day > output)
                         {
