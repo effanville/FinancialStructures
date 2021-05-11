@@ -19,7 +19,7 @@ namespace FinancialStructures.Database.Implementation
         /// Flag to state when the user has altered values in the portfolio
         /// after the last save.
         /// </summary>
-        [XmlIgnoreAttribute]
+        [XmlIgnore]
         public bool IsAlteredSinceSave
         {
             get;

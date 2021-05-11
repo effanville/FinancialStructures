@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
@@ -18,6 +19,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// For backwards compatibility with old systems where this was the true store of sectors.
         /// </summary>
+        [XmlIgnore]
         public HashSet<string> Sectors
         {
             get
