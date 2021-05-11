@@ -34,9 +34,9 @@ namespace FinancePortfolioDatabase.Tests
 
             viewModel.OptionsToolbarCommands.LoadDatabaseCommand.Execute(1);
 
-            Assert.AreEqual(1, viewModel.ProgramPortfolio.BankAccounts.Count);
-            Assert.AreEqual(1, viewModel.ProgramPortfolio.Funds.Count);
-            Assert.AreEqual(1, viewModel.ProgramPortfolio.BenchMarks.Count);
+            Assert.AreEqual(1, viewModel.ProgramPortfolio.BankAccountsThreadSafe.Count);
+            Assert.AreEqual(1, viewModel.ProgramPortfolio.FundsThreadSafe.Count);
+            Assert.AreEqual(1, viewModel.ProgramPortfolio.BenchMarksThreadSafe.Count);
 
             BasicDataViewModel dataView = viewModel.Tabs[0] as BasicDataViewModel;
             Assert.AreEqual("Portfolio: BasicTestDatabase loaded.", dataView.PortfolioNameText);
