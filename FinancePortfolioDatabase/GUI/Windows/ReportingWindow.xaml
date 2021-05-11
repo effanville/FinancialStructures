@@ -1,13 +1,17 @@
-﻿<Grid x:Class="FinancePortfolioDatabase.GUI.Windows.ReportingWindow"
-      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:cl="clr-namespace:Colouring"
-      mc:Ignorable="d"
-      MaxHeight="150"
-      HorizontalAlignment="Stretch"
-      VerticalAlignment="Stretch">
+﻿<Expander x:Class="FinancePortfolioDatabase.GUI.Windows.ReportingWindow"
+          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+          xmlns:cl="clr-namespace:Colouring"
+          xmlns:viewmodels="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels"
+          d:DataContext="{d:DesignInstance Type=viewmodels:ReportingWindowViewModel}"
+          mc:Ignorable="d"
+          MaxHeight="150"
+          Header="Error Reports"
+          IsExpanded="{Binding IsExpanded}"
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch">
     <Grid HorizontalAlignment="Stretch"
           VerticalAlignment="Stretch">
         <Grid.ColumnDefinitions>
@@ -43,6 +47,6 @@
                   SelectedIndex="{Binding IndexToDelete}"
                   Grid.Column="1"
                   Margin="10 10 10 10"
-                  ScrollViewer.VerticalScrollBarVisibility="Auto"></DataGrid>
+                  ScrollViewer.VerticalScrollBarVisibility="Auto" />
     </Grid>
-</Grid>
+</Expander>
