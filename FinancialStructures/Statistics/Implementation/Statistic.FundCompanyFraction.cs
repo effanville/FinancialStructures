@@ -30,12 +30,7 @@ namespace FinancialStructures.Statistics
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Totals total, TwoName name)
         {
-            if (total == Totals.Company)
-            {
-                Value = 1;
-            }
-
-            if (total == Totals.All)
+            if (total == Totals.Company || total == Totals.SecurityCompany || total == Totals.All)
             {
                 Value = 1;
             }

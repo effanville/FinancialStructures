@@ -14,8 +14,8 @@ namespace FinancialStructures.Database.Statistics
         /// </summary>
         public static double IRRTotal(this IPortfolio portfolio, Totals accountType, TwoName name = null)
         {
-            DateTime earlierTime = portfolio.FirstValueDate(accountType, name.Name);
-            DateTime laterTime = portfolio.LatestDate(accountType, name.Name);
+            DateTime earlierTime = portfolio.FirstValueDate(accountType, name.Company);
+            DateTime laterTime = portfolio.LatestDate(accountType, name.Company);
             return portfolio.IRRTotal(accountType, earlierTime, laterTime, name);
         }
 

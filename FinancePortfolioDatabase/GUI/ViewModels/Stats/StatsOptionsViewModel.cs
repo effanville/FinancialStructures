@@ -274,11 +274,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
                 stats.ExportToFile(fUiGlobals.CurrentFileSystem, result.FilePath, type, options, ReportLogger);
 
-                _ = ReportLogger.LogUsefulWithStrings("Report", "StatisticsPage", "Created statistics page");
+                _ = ReportLogger.LogUseful(ReportType.Report, ReportLocation.StatisticsPage, "Created statistics page");
             }
             else
             {
-                _ = ReportLogger.LogWithStrings("Critical", "Error", "StatisticsPage", "Was not able to create page in place specified.");
+                _ = ReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.StatisticsPage, "Was not able to create page in place specified.");
             }
 
             CloseWindowAction(path);
