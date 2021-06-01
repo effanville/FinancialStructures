@@ -15,19 +15,19 @@ namespace FinancialStructures.Database.Implementation
             {
                 case (Account.Security):
                 {
-                    return TryDeleteSingleListData(Funds, elementType, name, date, reportLogger);
+                    return TryDeleteSingleListData(FundsThreadSafe, elementType, name, date, reportLogger);
                 }
                 case (Account.Currency):
                 {
-                    return TryDeleteSingleListData(Currencies, elementType, name, date, reportLogger);
+                    return TryDeleteSingleListData(CurrenciesThreadSafe, elementType, name, date, reportLogger);
                 }
                 case (Account.BankAccount):
                 {
-                    return TryDeleteSingleListData(BankAccounts, elementType, name, date, reportLogger);
+                    return TryDeleteSingleListData(BankAccountsThreadSafe, elementType, name, date, reportLogger);
                 }
                 case (Account.Benchmark):
                 {
-                    return TryDeleteSingleListData(BenchMarks, elementType, name, date, reportLogger);
+                    return TryDeleteSingleListData(BenchMarksThreadSafe, elementType, name, date, reportLogger);
                 }
                 default:
                     _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.DeletingData, $"Editing an Unknown type.");
@@ -35,7 +35,7 @@ namespace FinancialStructures.Database.Implementation
             }
         }
 
-        private bool TryDeleteSingleListData<T>(List<T> values, Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null) where T : IValueList
+        private bool TryDeleteSingleListData<T>(IReadOnlyList<T> values, Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null) where T : IValueList
         {
             foreach (T account in values)
             {

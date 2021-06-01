@@ -28,8 +28,21 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
         }
 
-        private ErrorReports fReports;
+        private bool fIsExpanded;
+        public bool IsExpanded
+        {
+            get
+            {
+                return fIsExpanded;
+            }
 
+            set
+            {
+                SetAndNotify(ref fIsExpanded, value, nameof(IsExpanded));
+            }
+        }
+
+        private ErrorReports fReports;
         public ErrorReports Reports
         {
             get
@@ -84,6 +97,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
 
         public ReportingWindowViewModel(IFileInteractionService fileInteractionService)
         {
+            IsExpanded = false;
             fFileInteractionService = fileInteractionService;
             Reports = new ErrorReports();
             ReportsToView = new ObservableCollection<ErrorReport>();
@@ -97,7 +111,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         {
             ReportsToView = null;
             ReportsToView = new ObservableCollection<ErrorReport>(Reports.GetReports(ReportingSeverity));
-            OnPropertyChanged(nameof(ReportsToView));
+            if (ReportsToView != null && ReportsToView.Any())
+            {
+                IsExpanded = true;
+            }
         }
 
         public ICommand ClearReportsCommand

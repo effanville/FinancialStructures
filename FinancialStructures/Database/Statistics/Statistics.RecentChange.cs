@@ -21,7 +21,7 @@ namespace FinancialStructures.Database.Statistics
                 case (Totals.Security):
                 {
                     double total = 0;
-                    foreach (ISecurity desired in portfolio.Funds)
+                    foreach (ISecurity desired in portfolio.FundsThreadSafe)
                     {
                         if (desired.Any())
                         {
@@ -54,7 +54,7 @@ namespace FinancialStructures.Database.Statistics
                 case Totals.BankAccount:
                 {
                     double total = 0.0;
-                    foreach (ICashAccount cashAccount in portfolio.BankAccounts)
+                    foreach (ICashAccount cashAccount in portfolio.BankAccountsThreadSafe)
                     {
                         total += portfolio.RecentChange(EnumConvert.ConvertTotalToAccount(elementType), cashAccount.Names);
                     }

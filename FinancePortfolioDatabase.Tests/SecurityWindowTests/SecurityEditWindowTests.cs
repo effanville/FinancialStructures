@@ -45,7 +45,7 @@ namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
             viewModel.UpdateData(newData);
 
             Assert.AreEqual("TestFilePath", viewModel.DataStore.FilePath);
-            Assert.AreEqual(1, viewModel.DataStore.Funds.Count);
+            Assert.AreEqual(1, viewModel.DataStore.FundsThreadSafe.Count);
         }
 
         [Test]
@@ -66,7 +66,7 @@ namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
             viewModel.UpdateData(newData);
             Assert.AreEqual(1, viewModel.Tabs.Count);
             Assert.AreEqual("TestFilePath", viewModel.DataStore.FilePath);
-            Assert.AreEqual(1, viewModel.DataStore.Funds.Count);
+            Assert.AreEqual(1, viewModel.DataStore.FundsThreadSafe.Count);
         }
 
         [Test]

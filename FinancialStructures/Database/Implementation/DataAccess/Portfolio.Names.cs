@@ -28,19 +28,19 @@ namespace FinancialStructures.Database.Implementation
             {
                 case (Account.Security):
                 {
-                    return SingleDataNameObtainer(Funds);
+                    return SingleDataNameObtainer(FundsThreadSafe);
                 }
                 case (Account.Currency):
                 {
-                    return SingleDataNameObtainer(Currencies);
+                    return SingleDataNameObtainer(CurrenciesThreadSafe);
                 }
                 case (Account.BankAccount):
                 {
-                    return SingleDataNameObtainer(BankAccounts);
+                    return SingleDataNameObtainer(BankAccountsThreadSafe);
                 }
                 case (Account.Benchmark):
                 {
-                    return SingleDataNameObtainer(BenchMarks);
+                    return SingleDataNameObtainer(BenchMarksThreadSafe);
                 }
                 default:
                     break;
@@ -49,7 +49,7 @@ namespace FinancialStructures.Database.Implementation
             return namesAndCompanies;
         }
 
-        private List<NameData> SingleDataNameObtainer<T>(List<T> objects) where T : IValueList
+        private List<NameData> SingleDataNameObtainer<T>(IReadOnlyList<T> objects) where T : IValueList
         {
             List<NameData> namesAndCompanies = new List<NameData>();
             if (objects != null)

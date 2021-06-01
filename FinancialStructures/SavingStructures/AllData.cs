@@ -18,7 +18,7 @@ namespace FinancialStructures.SavingClasses
         {
         }
 
-        public AllData(IPortfolio portfo, List<Sector> fSectors)
+        public AllData(Portfolio portfo, List<Sector> fSectors)
         {
             MyFunds.CopyData(portfo);
             myBenchMarks = fSectors;

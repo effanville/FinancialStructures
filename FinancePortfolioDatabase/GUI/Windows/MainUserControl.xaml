@@ -4,6 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:cl="clr-namespace:Colouring"
+             xmlns:vm="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels"
+             d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
              mc:Ignorable="d"
              Margin="0"
              Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
@@ -38,11 +40,9 @@
                 </Style>
             </TabControl.ItemContainerStyle>
         </TabControl>
-        <Expander VerticalAlignment="Stretch"
-                  Background="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}"
-                  IsExpanded="False"
-                  Header="Error Reports"
-                  Content="{Binding ReportsViewModel}"
-                  Grid.Row="1" />
+        <UserControl Grid.Row="1"
+                     VerticalAlignment="Stretch"
+                     Background="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}"
+                     Content="{Binding ReportsViewModel}" />
     </Grid>
 </UserControl>

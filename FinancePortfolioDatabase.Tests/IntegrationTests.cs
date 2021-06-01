@@ -34,9 +34,9 @@ namespace FinancePortfolioDatabase.Tests
 
             viewModel.OptionsToolbarCommands.LoadDatabaseCommand.Execute(1);
 
-            Assert.AreEqual(1, viewModel.ProgramPortfolio.BankAccounts.Count);
-            Assert.AreEqual(1, viewModel.ProgramPortfolio.Funds.Count);
-            Assert.AreEqual(1, viewModel.ProgramPortfolio.BenchMarks.Count);
+            Assert.AreEqual(1, viewModel.ProgramPortfolio.BankAccountsThreadSafe.Count);
+            Assert.AreEqual(1, viewModel.ProgramPortfolio.FundsThreadSafe.Count);
+            Assert.AreEqual(1, viewModel.ProgramPortfolio.BenchMarksThreadSafe.Count);
 
             BasicDataViewModel dataView = viewModel.Tabs[0] as BasicDataViewModel;
             Assert.AreEqual("Portfolio: BasicTestDatabase loaded.", dataView.PortfolioNameText);
@@ -66,7 +66,7 @@ namespace FinancePortfolioDatabase.Tests
             var securityTab = viewModel.Tabs.First(tab => tab is SecurityEditWindowViewModel);
             SecurityEditWindowViewModel securityViewModel = securityTab as SecurityEditWindowViewModel;
             var securityNames = securityViewModel.Tabs[0] as DataNamesViewModel;
-            var selectedInitialName = new Selectable<NameData>(new NameData(), false);
+            var selectedInitialName = new SelectableEquatable<NameData>(new NameData(), false);
             securityNames.DataNames.Add(selectedInitialName);
             securityNames.SelectionChangedCommand.Execute(selectedInitialName);
 

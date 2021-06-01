@@ -28,7 +28,11 @@ namespace FinancialStructures.Database.Implementation
                 {
                     Security toAdd = new Security(name);
                     toAdd.DataEdit += OnPortfolioChanged;
-                    Funds.Add(toAdd);
+                    lock (FundsLock)
+                    {
+                        Funds.Add(toAdd);
+                    }
+
                     OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
                     break;
                 }
@@ -40,7 +44,11 @@ namespace FinancialStructures.Database.Implementation
                     }
                     Currency toAdd = new Currency(name);
                     toAdd.DataEdit += OnPortfolioChanged;
-                    Currencies.Add(toAdd);
+                    lock (CurrenciesLock)
+                    {
+                        Currencies.Add(toAdd);
+                    }
+
                     OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
                     break;
                 }
@@ -48,7 +56,11 @@ namespace FinancialStructures.Database.Implementation
                 {
                     CashAccount toAdd = new CashAccount(name);
                     toAdd.DataEdit += OnPortfolioChanged;
-                    BankAccounts.Add(toAdd);
+                    lock (BankAccountsLock)
+                    {
+                        BankAccounts.Add(toAdd);
+                    }
+
                     OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
                     break;
                 }
@@ -56,7 +68,11 @@ namespace FinancialStructures.Database.Implementation
                 {
                     Sector toAdd = new Sector(name);
                     toAdd.DataEdit += OnPortfolioChanged;
-                    BenchMarks.Add(toAdd);
+                    lock (BenchmarksLock)
+                    {
+                        BenchMarks.Add(toAdd);
+                    }
+
                     OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
                     break;
                 }

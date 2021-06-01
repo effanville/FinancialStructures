@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancePortfolioDatabase.GUI.ViewModels.Security;
 using FinancePortfolioDatabase.GUI.ViewModels.Stats;
-using System.Windows;
 using FinancialStructures.Database;
 using StructureCommon.Reporting;
 using UICommon.ViewModelBases;

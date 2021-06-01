@@ -29,7 +29,7 @@ namespace FinancialStructures.Database.Statistics
                     case Account.Security:
                     default:
                     {
-                        foreach (ISecurity security in portfolio.Funds)
+                        foreach (ISecurity security in portfolio.FundsThreadSafe)
                         {
                             var latest = security.LatestValue();
                             if ((displayValueFunds && latest != null && latest.Value > 0) || !displayValueFunds)
@@ -47,7 +47,7 @@ namespace FinancialStructures.Database.Statistics
                     }
                     case Account.BankAccount:
                     {
-                        foreach (ICashAccount acc in portfolio.BankAccounts)
+                        foreach (ICashAccount acc in portfolio.BankAccountsThreadSafe)
                         {
                             var latest = acc.LatestValue();
                             if ((displayValueFunds && latest.Value > 0) || !displayValueFunds)
@@ -66,7 +66,7 @@ namespace FinancialStructures.Database.Statistics
                     }
                     case Account.Benchmark:
                     {
-                        foreach (ISector acc in portfolio.BenchMarks)
+                        foreach (ISector acc in portfolio.BenchMarksThreadSafe)
                         {
                             var latest = acc.LatestValue();
                             if ((displayValueFunds && latest.Value > 0) || !displayValueFunds)
@@ -86,7 +86,7 @@ namespace FinancialStructures.Database.Statistics
                     }
                     case Account.Currency:
                     {
-                        foreach (ICurrency acc in portfolio.Currencies)
+                        foreach (ICurrency acc in portfolio.CurrenciesThreadSafe)
                         {
                             var latest = acc.LatestValue();
                             if ((displayValueFunds && latest.Value > 0) || !displayValueFunds)

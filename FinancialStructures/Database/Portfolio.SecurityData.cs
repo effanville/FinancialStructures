@@ -19,7 +19,7 @@ namespace FinancialStructures.Database
         public static List<string> GetSecuritiesSectors(this IPortfolio portfolio)
         {
             List<string> sectors = new List<string>();
-            foreach (ISecurity security in portfolio.Funds)
+            foreach (ISecurity security in portfolio.FundsThreadSafe)
             {
                 foreach (string sector in security.Names.Sectors)
                 {
@@ -36,7 +36,7 @@ namespace FinancialStructures.Database
 
         public static double SecurityPrices(this IPortfolio portfolio, TwoName names, DateTime date, SecurityDataStream dataStream = SecurityDataStream.NumberOfShares)
         {
-            foreach (ISecurity sec in portfolio.Funds)
+            foreach (ISecurity sec in portfolio.FundsThreadSafe)
             {
                 if (sec.Names.IsEqualTo(names))
                 {

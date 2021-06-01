@@ -59,7 +59,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
                 Company = "Company"
             };
             viewModel.PreEditSelectedName = newName;
-            viewModel.DataNames.Add(new Selectable<NameData>(newName, false));
+            viewModel.DataNames.Add(new SelectableEquatable<NameData>(newName, false));
             viewModel.CreateCommand.Execute(viewModel.DataNames.Last());
             Assert.AreEqual(2, viewModel.DataNames.Count);
             Assert.AreEqual(2, portfolio.BankAccounts.Count);
@@ -114,11 +114,11 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
 
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.BankAccount);
 
-            Assert.AreEqual(1, viewModel.DataStore.BankAccounts.Count);
+            Assert.AreEqual(1, viewModel.DataStore.BankAccountsThreadSafe.Count);
             Assert.AreEqual(1, portfolio.BankAccounts.Count);
             viewModel.PreEditSelectedName = new NameData("Barclays", "currentAccount");
             viewModel.DeleteCommand.Execute(1);
-            Assert.AreEqual(0, viewModel.DataStore.BankAccounts.Count);
+            Assert.AreEqual(0, viewModel.DataStore.BankAccountsThreadSafe.Count);
             Assert.AreEqual(0, portfolio.BankAccounts.Count);
         }
 
@@ -159,7 +159,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
                 Company = "Company"
             };
             viewModel.PreEditSelectedName = newName;
-            viewModel.DataNames.Add(new Selectable<NameData>(newName, false));
+            viewModel.DataNames.Add(new SelectableEquatable<NameData>(newName, false));
             viewModel.CreateCommand.Execute(viewModel.DataNames[1]);
             Assert.AreEqual(2, viewModel.DataNames.Count, "Bot enough in the view.");
             Assert.AreEqual(2, portfolio.Funds.Count, "Not enough in portfolio");
@@ -230,11 +230,11 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
             Action<Action<IPortfolio>> dataUpdater = TestingGUICode.CreateDataUpdater(portfolio);
             DataNamesViewModel viewModel = new DataNamesViewModel(portfolio, dataUpdater, TestingGUICode.DummyReportLogger, TestingGUICode.DummyOpenTab, Account.Security);
 
-            Assert.AreEqual(1, viewModel.DataStore.Funds.Count);
+            Assert.AreEqual(1, viewModel.DataStore.FundsThreadSafe.Count);
             Assert.AreEqual(1, portfolio.Funds.Count);
             viewModel.PreEditSelectedName = new NameData("Fidelity", "China");
             viewModel.DeleteCommand.Execute(1);
-            Assert.AreEqual(0, viewModel.DataStore.Funds.Count);
+            Assert.AreEqual(0, viewModel.DataStore.FundsThreadSafe.Count);
             Assert.AreEqual(0, portfolio.Funds.Count);
         }
     }

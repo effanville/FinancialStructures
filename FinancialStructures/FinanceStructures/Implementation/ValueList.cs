@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Serialization;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
@@ -20,6 +21,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// This should only be used for serialisation.
         /// </summary>
+        [XmlIgnore]
         public string Name
         {
             get
@@ -36,6 +38,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// This should only be used for serialisation.
         /// </summary>
+        [XmlIgnore]
         public string Company
         {
             get
@@ -52,6 +55,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// A url to retrieve data for this list.
         /// </summary>
+        [XmlIgnore]
         public string Url
         {
             get
@@ -68,6 +72,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// The currency the data in this list is associated with.
         /// </summary>
+        [XmlIgnore]
         public string Currency
         {
             get

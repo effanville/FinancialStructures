@@ -1,4 +1,5 @@
-﻿using FinancialStructures.FinanceStructures;
+﻿using System.Linq;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Implementation;
 
 namespace FinancialStructures.Database.Implementation
@@ -16,13 +17,13 @@ namespace FinancialStructures.Database.Implementation
                 case (Account.BankAccount):
                 {
                     string currencyName = ((IValueList)valueList).Names.Currency;
-                    ICurrency currency = Currencies.Find(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == BaseCurrency);
+                    ICurrency currency = CurrenciesThreadSafe.FirstOrDefault(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == BaseCurrency);
                     if (currency != null)
                     {
                         return currency;
                     }
 
-                    return Currencies.Find(cur => cur.BaseCurrency == BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted();
+                    return CurrenciesThreadSafe.FirstOrDefault(cur => cur.BaseCurrency == BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted();
                 }
                 case (Account.Currency):
                 {
@@ -34,6 +35,20 @@ namespace FinancialStructures.Database.Implementation
                     return new Currency();
                 }
             }
+        }
+
+        /// <summary>
+        /// returns the currency associated to the account.
+        /// </summary>
+        public ICurrency Currency(string currencyName)
+        {
+            ICurrency currency = CurrenciesThreadSafe.FirstOrDefault(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == BaseCurrency);
+            if (currency != null)
+            {
+                return currency;
+            }
+
+            return CurrenciesThreadSafe.FirstOrDefault(cur => cur.BaseCurrency == BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted();
         }
     }
 }
