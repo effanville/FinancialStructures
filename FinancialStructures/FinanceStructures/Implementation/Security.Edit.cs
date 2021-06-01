@@ -15,21 +15,47 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public override bool TryAddOrEditData(DateTime oldDate, DateTime date, double unitPrice, IReportLogger reportLogger = null)
         {
-            double shares = Shares.Value(date)?.Value ?? 0.0;
-            double investment = Investments.Value(date)?.Value ?? 0.0;
-            return TryAddOrEditData(oldDate, date, unitPrice, shares, investment, reportLogger: reportLogger);
+            return AddOrEditUnitPriceData(oldDate, date, unitPrice, reportLogger);
         }
 
         /// <inheritdoc/>
-        public bool TryAddOrEditData(DateTime oldDate, DateTime date, double unitPrice, double shares = 0, double investment = 0, IReportLogger reportLogger = null)
+        public bool TryAddOrEditData(DateTime oldDate, DateTime date, double unitPrice, double shares, double investment = 0, IReportLogger reportLogger = null)
         {
-            if (DoesDateSharesDataExist(oldDate, out int _) || DoesDateInvestmentDataExist(oldDate, out int _) || DoesDateUnitPriceDataExist(oldDate, out int _))
+            bool editUnitPrice = AddOrEditUnitPriceData(oldDate, date, unitPrice, reportLogger);
+            bool editShares = AddOrEditSharesData(oldDate, date, shares, reportLogger);
+            bool editInvestments = AddOrEditInvestmentData(oldDate, date, investment, reportLogger);
+
+            return editUnitPrice & editShares & editInvestments && ComputeInvestments(reportLogger);
+        }
+
+        private bool AddOrEditUnitPriceData(DateTime oldDate, DateTime date, double shares, IReportLogger reportLogger = null)
+        {
+            if (DoesDateUnitPriceDataExist(oldDate, out int _))
             {
-                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Security {Names} data on {date.ToString("d")} edited.");
-                return TryEditData(oldDate, date, shares, unitPrice, investment, reportLogger);
+                return fUnitPrice.TryEditData(oldDate, date, shares, reportLogger);
             }
 
-            return fShares.TryAddValue(date, shares, reportLogger) & fUnitPrice.TryAddValue(date, unitPrice, reportLogger) & fInvestments.TryAddValue(date, investment, reportLogger) && ComputeInvestments(reportLogger);
+            return fUnitPrice.TryAddValue(date, shares, reportLogger);
+        }
+
+        private bool AddOrEditSharesData(DateTime oldDate, DateTime date, double shares, IReportLogger reportLogger = null)
+        {
+            if (DoesDateSharesDataExist(oldDate, out int _))
+            {
+                return fShares.TryEditData(oldDate, date, shares, reportLogger);
+            }
+
+            return fShares.TryAddValue(date, shares, reportLogger);
+        }
+
+        private bool AddOrEditInvestmentData(DateTime oldDate, DateTime date, double shares, IReportLogger reportLogger = null)
+        {
+            if (DoesDateInvestmentDataExist(oldDate, out int _))
+            {
+                return fInvestments.TryEditData(oldDate, date, shares, reportLogger);
+            }
+
+            return fInvestments.TryAddValue(date, shares, reportLogger);
         }
 
         /// <inheritdoc/>
@@ -88,30 +114,6 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
             fShares.CleanValues();
             fInvestments.CleanValues();
-        }
-
-        /// <summary>
-        /// Try to edit data. If any dont have any relevant values, then do not edit
-        /// If do have relevant values, then edit that value
-        /// If investment value doesnt exist, then add that value.
-        /// </summary>
-        private bool TryEditData(DateTime oldDate, DateTime newDate, double shares, double unitPrice, double Investment, IReportLogger reportLogger = null)
-        {
-            bool editShares = false;
-            bool editUnitPrice = false;
-            if (DoesDateSharesDataExist(oldDate, out int _))
-            {
-                editShares = fShares.TryEditData(oldDate, newDate, shares, reportLogger);
-            }
-
-            if (DoesDateUnitPriceDataExist(oldDate, out int _))
-            {
-                editUnitPrice = fUnitPrice.TryEditData(oldDate, newDate, unitPrice, reportLogger);
-            }
-
-            fInvestments.TryEditDataOtherwiseAdd(oldDate, newDate, Investment, reportLogger);
-
-            return editShares & editUnitPrice && ComputeInvestments(reportLogger);
         }
 
         /// <summary>
