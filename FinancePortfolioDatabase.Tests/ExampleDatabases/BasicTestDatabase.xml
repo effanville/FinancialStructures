@@ -9,12 +9,12 @@
           <Sectors />
           <SectorsFlat />
         </Names>
-        <Name>name</Name>
-        <Company>company</Company>
+        <Values>
+          <Values />
+        </Values>
         <Shares>
           <Values />
         </Shares>
-        <Sectors />
         <UnitPrice>
           <Values />
         </UnitPrice>
@@ -31,8 +31,6 @@
           <Sectors />
           <SectorsFlat />
         </Names>
-        <Name>account</Name>
-        <Company>bank</Company>
         <Values>
           <Values />
         </Values>
@@ -49,8 +47,6 @@
           <Sectors />
           <SectorsFlat />
         </Names>
-        <Name>hkd</Name>
-        <Company>gbp</Company>
         <Values>
           <Values />
         </Values>
@@ -64,27 +60,10 @@
           <Sectors />
           <SectorsFlat />
         </Names>
-        <Name>last</Name>
-        <Company>first</Company>
         <Values>
           <Values />
         </Values>
       </Sector>
     </BenchMarks>
   </MyFunds>
-  <myBenchMarks>
-    <Sector>
-      <Names>
-        <Company>first</Company>
-        <Name>last</Name>
-        <Sectors />
-        <SectorsFlat />
-      </Names>
-      <Name>last</Name>
-      <Company>first</Company>
-      <Values>
-        <Values />
-      </Values>
-    </Sector>
-  </myBenchMarks>
 </AllData>

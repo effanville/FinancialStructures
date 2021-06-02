@@ -15,12 +15,19 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
     public static class TestSetupHelper
     {
         internal static IReportLogger DummyReportLogger = new NothingReportLogger();
-
-        public static Mock<IFileInteractionService> CreateFileMock(string expectedFilePath)
+        public static Mock<IFileInteractionService> CreateFileMock(string filePath)
         {
             Mock<IFileInteractionService> mockfileinteraction = new Mock<IFileInteractionService>();
-            _ = mockfileinteraction.Setup(x => x.OpenFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInteractionResult(true, expectedFilePath));
-            _ = mockfileinteraction.Setup(x => x.SaveFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInteractionResult(true, expectedFilePath));
+            _ = mockfileinteraction.Setup(x => x.OpenFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInteractionResult(true, filePath));
+            _ = mockfileinteraction.Setup(x => x.SaveFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInteractionResult(true, filePath));
+            return mockfileinteraction;
+        }
+
+        public static Mock<IFileInteractionService> CreateFileMock(string openFilePath, string saveFilePath)
+        {
+            Mock<IFileInteractionService> mockfileinteraction = new Mock<IFileInteractionService>();
+            _ = mockfileinteraction.Setup(x => x.OpenFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInteractionResult(true, openFilePath));
+            _ = mockfileinteraction.Setup(x => x.SaveFile(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(new FileInteractionResult(true, saveFilePath));
             return mockfileinteraction;
         }
 
