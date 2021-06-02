@@ -13,7 +13,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
     /// <summary>
     /// A view model for displaying a collect of <see cref="FinancialStructures.FinanceStructures.IValueList"/>
     /// </summary>
-    internal class ValueListWindowViewModel : DataDisplayViewModelBase
+    public class ValueListWindowViewModel : DataDisplayViewModelBase
     {
         public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
 
@@ -22,13 +22,13 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         private readonly IFileInteractionService fFileService;
         private readonly IDialogCreationService fDialogCreationService;
 
-        public ValueListWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, Account accountType)
+        public ValueListWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, UiGlobals globals, Account accountType)
             : base(title, accountType, portfolio)
         {
             UpdateDataCallback = updateDataCallback;
             ReportLogger = reportLogger;
-            fFileService = fileService;
-            fDialogCreationService = dialogCreation;
+            fFileService = globals.FileInteractionService;
+            fDialogCreationService = globals.DialogCreationService;
             UpdateData(portfolio);
             Tabs.Add(new DataNamesViewModel(DataStore, updateDataCallback, reportLogger, (name) => LoadTabFunc(name), accountType));
         }

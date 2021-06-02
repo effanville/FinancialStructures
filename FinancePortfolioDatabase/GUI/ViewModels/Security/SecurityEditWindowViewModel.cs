@@ -10,7 +10,7 @@ using UICommon.ViewModelBases;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 {
-    internal class SecurityEditWindowViewModel : DataDisplayViewModelBase
+    public class SecurityEditWindowViewModel : DataDisplayViewModelBase
     {
         public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
 
@@ -53,7 +53,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             }
         }
 
-        internal void LoadTabFunc(Object obj)
+        internal void LoadTabFunc(object obj)
         {
             if (obj is NameData name)
             {

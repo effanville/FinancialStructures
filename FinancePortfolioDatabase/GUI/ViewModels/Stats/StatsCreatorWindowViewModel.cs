@@ -14,7 +14,7 @@ using UICommon.Services;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
-    internal class StatsCreatorWindowViewModel : DataDisplayViewModelBase
+    public class StatsCreatorWindowViewModel : DataDisplayViewModelBase
     {
         private UiGlobals fUiGlobals;
         public ObservableCollection<object> StatsTabs { get; set; } = new ObservableCollection<object>();

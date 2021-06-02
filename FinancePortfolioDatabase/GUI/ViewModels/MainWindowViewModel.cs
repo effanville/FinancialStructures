@@ -14,7 +14,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         internal IPortfolio ProgramPortfolio = PortfolioFactory.GenerateEmpty();
 
         /// <summary>
-        /// The logging mechanism for the program. This both records into the 
+        /// The logging mechanism for the program. This both records into the
         /// reporting window and to the <see cref="ApplicationLog"/>.
         /// </summary>
         internal readonly IReportLogger ReportLogger;
@@ -70,9 +70,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             Tabs.Add(new BasicDataViewModel(ProgramPortfolio));
             Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, globals));
             Tabs.Add(new SecurityEditWindowViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, globals));
-            Tabs.Add(new ValueListWindowViewModel("Bank Accounts", ProgramPortfolio, UpdateDataCallback, ReportLogger, globals.FileInteractionService, globals.DialogCreationService, Account.BankAccount));
-            Tabs.Add(new ValueListWindowViewModel("Benchmarks", ProgramPortfolio, UpdateDataCallback, ReportLogger, globals.FileInteractionService, globals.DialogCreationService, Account.Benchmark));
-            Tabs.Add(new ValueListWindowViewModel("Currencies", ProgramPortfolio, UpdateDataCallback, ReportLogger, globals.FileInteractionService, globals.DialogCreationService, Account.Currency));
+            Tabs.Add(new ValueListWindowViewModel("Bank Accounts", ProgramPortfolio, UpdateDataCallback, ReportLogger, globals, Account.BankAccount));
+            Tabs.Add(new ValueListWindowViewModel("Benchmarks", ProgramPortfolio, UpdateDataCallback, ReportLogger, globals, Account.Benchmark));
+            Tabs.Add(new ValueListWindowViewModel("Currencies", ProgramPortfolio, UpdateDataCallback, ReportLogger, globals, Account.Currency));
 
             ProgramPortfolio.PortfolioChanged += AllData_portfolioChanged;
         }

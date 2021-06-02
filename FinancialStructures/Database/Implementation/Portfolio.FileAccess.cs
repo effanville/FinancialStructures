@@ -37,7 +37,7 @@ namespace FinancialStructures.Database.Implementation
         {
             if (fileSystem.File.Exists(filePath))
             {
-                AllData database = XmlFileAccess.ReadFromXmlFile<AllData>(filePath, out string error);
+                AllData database = XmlFileAccess.ReadFromXmlFile<AllData>(fileSystem, filePath, out string error);
                 if (database != null)
                 {
                     database.MyFunds.SetFilePath(filePath);
@@ -76,7 +76,7 @@ namespace FinancialStructures.Database.Implementation
 
             if (filePath != null)
             {
-                XmlFileAccess.WriteToXmlFile(filePath, toSave, out string error);
+                XmlFileAccess.WriteToXmlFile(fileSystem, filePath, toSave, out string error);
                 if (error != null)
                 {
                     _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Saving, $"Failed to save database: {error}");

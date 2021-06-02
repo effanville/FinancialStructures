@@ -15,7 +15,7 @@ using UICommon.ViewModelBases;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {
-    internal class SelectedSingleDataViewModel : TabViewModelBase<IPortfolio>
+    public class SelectedSingleDataViewModel : TabViewModelBase<IPortfolio>
     {
         private readonly Account TypeOfAccount;
 
@@ -58,6 +58,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         }
 
         internal DailyValuation fOldSelectedValue;
+        internal DailyValuation SelectedValue;
 
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
 
@@ -76,9 +77,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             TypeOfAccount = accountType;
             UpdateData(portfolio);
 
-            EditDataCommand = new RelayCommand<DataGridRowEditEndingEventArgs>(ExecuteEditDataCommand);
+            PreEditCommand = new RelayCommand(ExecutePreEdit);
+            EditDataCommand = new RelayCommand(ExecuteEditDataCommand);
             DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);
-            SelectionChangedCommand = new RelayCommand<SelectionChangedEventArgs>(ExecuteSelectionChanged);
+            SelectionChangedCommand = new RelayCommand<object>(ExecuteSelectionChanged);
             AddDefaultDataCommand = new RelayCommand<AddingNewItemEventArgs>(e => DataGrid_AddingNewItem(null, e));
             AddCsvData = new RelayCommand(ExecuteAddCsvData);
             ExportCsvData = new RelayCommand(ExecuteExportCsvData);
@@ -133,18 +135,27 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             get;
             set;
         }
-        private void ExecuteSelectionChanged(SelectionChangedEventArgs e)
+        private void ExecuteSelectionChanged(object obj)
         {
-            if (e.Source is DataGrid dg)
+            if (SelectedData != null && obj is DailyValuation data)
             {
-                if (dg.CurrentItem != null)
-                {
-                    if (dg.CurrentItem is DailyValuation data)
-                    {
-                        fOldSelectedValue = data.Copy();
-                    }
-                }
+                SelectedValue = data;
             }
+        }
+
+        /// <summary>
+        /// Called prior to an edit occurring in a row. This is used
+        /// to record the state of the row before editing.
+        /// </summary>
+        public ICommand PreEditCommand
+        {
+            get;
+            set;
+        }
+
+        private void ExecutePreEdit()
+        {
+            fOldSelectedValue = SelectedValue?.Copy();
         }
 
         public ICommand EditDataCommand
@@ -153,16 +164,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             set;
         }
 
-        private void ExecuteEditDataCommand(DataGridRowEditEndingEventArgs e)
+        private void ExecuteEditDataCommand()
         {
-            if (SelectedName != null)
+            if (fSelectedName != null)
             {
-                var originRowData = e.Row.DataContext as DailyValuation;
                 bool edited = false;
-                UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditData(TypeOfAccount, SelectedName, fOldSelectedValue, originRowData, ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditData(TypeOfAccount, fSelectedName, fOldSelectedValue, SelectedValue, ReportLogger));
                 if (!edited)
                 {
-                    _ = ReportLogger.LogWithStrings("Critical", "Error", "EditingData", "Was not able to add or edit data.");
+                    _ = ReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.EditingData, "Was not able to add or edit data.");
                 }
             }
         }
@@ -174,13 +184,13 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 
         private void ExecuteDeleteValuation()
         {
-            if (SelectedName != null)
+            if (fSelectedName != null && SelectedValue != null)
             {
-                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(TypeOfAccount, SelectedName, fOldSelectedValue.Day, ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(TypeOfAccount, fSelectedName, SelectedValue.Day, ReportLogger));
             }
             else
             {
-                _ = ReportLogger.LogWithStrings("Critical", "Error", "DeletingData", "No Account was selected when trying to delete data.");
+                _ = ReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.DeletingData, "No Account was selected when trying to delete data.");
             }
         }
 
