@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace FinancialStructures.NamingStructures
 {
@@ -8,23 +9,15 @@ namespace FinancialStructures.NamingStructures
     /// </summary>
     public class NameData : TwoName, IEquatable<NameData>
     {
-        private string fUrl;
-        private string fCurrency;
-        private HashSet<string> fSectors = new HashSet<string>();
+        private HashSet<string> fSectors;
 
         /// <summary>
         /// Website associated to account.
         /// </summary>
         public string Url
         {
-            get
-            {
-                return fUrl;
-            }
-            set
-            {
-                fUrl = value;
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -32,14 +25,8 @@ namespace FinancialStructures.NamingStructures
         /// </summary>
         public string Currency
         {
-            get
-            {
-                return fCurrency;
-            }
-            set
-            {
-                fCurrency = value;
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -60,6 +47,7 @@ namespace FinancialStructures.NamingStructures
         /// <summary>
         /// Input of sector values from a string, with comma as separator.
         /// </summary>
+        [XmlIgnore]
         public string SectorsFlat
         {
             get
@@ -100,6 +88,7 @@ namespace FinancialStructures.NamingStructures
         public NameData()
             : base()
         {
+            Sectors = new HashSet<string>();
         }
 
         /// <summary>
@@ -110,7 +99,7 @@ namespace FinancialStructures.NamingStructures
         {
             Currency = currency;
             Url = url;
-            Sectors = sectors;
+            Sectors = sectors ?? new HashSet<string>();
             Notes = notes;
         }
 

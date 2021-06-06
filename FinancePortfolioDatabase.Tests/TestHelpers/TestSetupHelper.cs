@@ -79,7 +79,7 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
 
         public static void UpdatePortfolio(Portfolio portfolio)
         {
-            portfolio.SetFilePath("TestFilePath");
+            portfolio.FilePath = "TestFilePath";
             _ = portfolio.TryAdd(Account.Security, new NameData("Fidelity", "China", "GBP", "https://markets.ft.com/data/funds/tearsheet/summary?s=gb00b5lxgg05:gbx", new HashSet<string>() { "Bonds", "UK" }), DummyReportLogger);
             _ = portfolio.TryAddOrEditDataToSecurity(new TwoName("Fidelity", "China"), new DateTime(2000, 1, 1), new DateTime(2000, 1, 1), 1, 1, 1);
             _ = portfolio.TryAdd(Account.BankAccount, new NameData("Barclays", "currentAccount", url: "https://markets.ft.com/data/funds/tearsheet/summary?s=gb00b5lxgg05:gbx"), DummyReportLogger);
@@ -91,7 +91,7 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
 
         public static Portfolio CreateEmptyDataBase()
         {
-            return new Portfolio();
+            return new Portfolio() { FilePath = "c:/temp/saved.xml" };
         }
     }
 }

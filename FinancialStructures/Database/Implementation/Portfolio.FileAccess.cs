@@ -11,7 +11,7 @@ namespace FinancialStructures.Database.Implementation
         /// <inheritdoc />
         public void Clear()
         {
-            SetFilePath("");
+            FilePath = "";
             BaseCurrency = "";
             IsAlteredSinceSave = false;
             lock (FundsLock)
@@ -40,7 +40,7 @@ namespace FinancialStructures.Database.Implementation
                 AllData database = XmlFileAccess.ReadFromXmlFile<AllData>(fileSystem, filePath, out string error);
                 if (database != null)
                 {
-                    database.MyFunds.SetFilePath(filePath);
+                    database.MyFunds.FilePath = filePath;
                     CopyData(database.MyFunds);
 
                     if (!database.MyFunds.BenchMarks.Any())

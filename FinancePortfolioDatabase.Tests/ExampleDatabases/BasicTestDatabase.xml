@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AllData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <MyFunds>
+    <FilePath>c:/temp/saved.xml</FilePath>
     <Funds>
       <Security>
         <Names>
           <Company>company</Company>
           <Name>name</Name>
           <Sectors />
-          <SectorsFlat />
         </Names>
         <Values>
           <Values />
@@ -29,7 +29,6 @@
           <Company>bank</Company>
           <Name>account</Name>
           <Sectors />
-          <SectorsFlat />
         </Names>
         <Values>
           <Values />
@@ -45,7 +44,6 @@
           <Company>gbp</Company>
           <Name>hkd</Name>
           <Sectors />
-          <SectorsFlat />
         </Names>
         <Values>
           <Values />
@@ -58,7 +56,6 @@
           <Company>first</Company>
           <Name>last</Name>
           <Sectors />
-          <SectorsFlat />
         </Names>
         <Values>
           <Values />

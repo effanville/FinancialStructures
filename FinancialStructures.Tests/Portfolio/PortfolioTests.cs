@@ -13,7 +13,7 @@ namespace FinancialStructures.Tests.Database
         public void FilePathAttributes(string filePath, string extension, string directory, string databaseName)
         {
             var portfolio = new Portfolio();
-            portfolio.SetFilePath(filePath);
+            portfolio.FilePath = filePath;
             Assert.AreEqual(filePath, portfolio.FilePath);
             Assert.AreEqual(extension, portfolio.Extension);
             Assert.AreEqual(directory, portfolio.Directory);

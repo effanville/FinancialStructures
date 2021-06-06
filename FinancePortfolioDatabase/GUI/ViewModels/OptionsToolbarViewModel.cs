@@ -112,7 +112,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
             if (result == MessageBoxResult.Yes)
             {
-                DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(""));
+                DataUpdateCallback(programPortfolio => programPortfolio.FilePath = "");
                 DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio("", fUiGlobals.CurrentFileSystem, fReportLogger));
             }
         }
@@ -127,7 +127,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile("xml", fFileName, fDirectory, "XML Files|*.xml|All Files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
-                DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(result.FilePath));
+                DataUpdateCallback(programPortfolio => programPortfolio.FilePath = result.FilePath);
                 DataUpdateCallback(programPortfolio => programPortfolio.SavePortfolio(result.FilePath, fUiGlobals.CurrentFileSystem, fReportLogger));
             }
         }
@@ -143,7 +143,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             if (result.Success != null && (bool)result.Success)
             {
                 DataUpdateCallback(programPortfolio => programPortfolio.Clear());
-                DataUpdateCallback(programPortfolio => programPortfolio.SetFilePath(result.FilePath));
+                DataUpdateCallback(programPortfolio => programPortfolio.FilePath = result.FilePath);
                 DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio(result.FilePath, fUiGlobals.CurrentFileSystem, fReportLogger));
             }
         }

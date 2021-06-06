@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
 
     <IsPackable>false</IsPackable>
 
@@ -30,7 +30,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FinancialStructures\FinancialStructures.csproj" />
   </ItemGroup>
-  
+
     <ItemGroup>
     <PackageReference Include="StructureCommon" Version="1.0.8" />
   </ItemGroup>
@@ -41,7 +41,7 @@
       <HintPath>..\..\Publish\netcoreapp3.1\StructureCommon.dll</HintPath>
     </Reference>
   </ItemGroup>
-  
+
   <ItemGroup Condition="'$(TargetFramework)' == 'net48'">
     <Reference Include="StructureCommon">
       <HintPath>..\..\Publish\net48\StructureCommon.dll</HintPath>
