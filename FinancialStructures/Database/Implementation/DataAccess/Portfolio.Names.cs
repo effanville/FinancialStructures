@@ -56,7 +56,7 @@ namespace FinancialStructures.Database.Implementation
             {
                 foreach (T dataList in objects)
                 {
-                    namesAndCompanies.Add(new NameData(dataList.Names.Company, dataList.Names.Name, dataList.Names.Currency, dataList.Names.Url, dataList.Names.Sectors));
+                    namesAndCompanies.Add(new NameData(dataList.Names.Company, dataList.Names.Name, dataList.Names.Currency, dataList.Names.Url, dataList.Names.Sectors, dataList.Names.Notes));
                 }
             }
 
