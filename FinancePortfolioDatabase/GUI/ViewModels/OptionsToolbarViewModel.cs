@@ -31,7 +31,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             set
             {
                 SetAndNotify(ref fBaseCurrency, value, nameof(BaseCurrency));
-                _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Editing BaseCurrency.");
+                _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, $"Editing BaseCurrency.");
             }
         }
 
@@ -70,7 +70,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
 
         public override void UpdateData(IPortfolio portfolio)
         {
-            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Updating data in OptionsToolbarViewModel");
+            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.AddingData, $"Updating data in OptionsToolbarViewModel");
             base.UpdateData(portfolio);
             fFileName = portfolio.DatabaseName + portfolio.Extension;
             fDirectory = portfolio.Directory;
@@ -89,7 +89,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         }
         private void OpenHelpDocsCommand()
         {
-            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.Unknown, $"Opening help window.");
+            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Unknown, $"Opening help window.");
             HelpWindow helpwindow = new HelpWindow(fReportLogger);
             helpwindow.Show();
         }
@@ -100,7 +100,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         }
         private void ExecuteNewDatabase()
         {
-            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"ExecuteNewDatabase called.");
+            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.AddingData, $"ExecuteNewDatabase called.");
             MessageBoxResult result;
             if (DataStore.IsAlteredSinceSave)
             {
@@ -123,7 +123,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         }
         private void ExecuteSaveDatabase()
         {
-            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.Saving, $"Saving database {fFileName} called.");
+            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Saving, $"Saving database {fFileName} called.");
             FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile("xml", fFileName, fDirectory, "XML Files|*.xml|All Files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
@@ -138,7 +138,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         }
         private void ExecuteLoadDatabase()
         {
-            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.Loading, $"Loading database called.");
+            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Loading, $"Loading database called.");
             FileInteractionResult result = fUiGlobals.FileInteractionService.OpenFile("xml", filter: "XML Files|*.xml|All Files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
@@ -154,7 +154,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         }
         private void ExecuteUpdateData()
         {
-            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.Downloading, $"Execute update data for  database {fFileName} called.");
+            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Downloading, $"Execute update data for  database {fFileName} called.");
             DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.Download(Account.All, programPortfolio, null, fReportLogger).ConfigureAwait(false));
         }
 
@@ -164,7 +164,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         }
         private void ExecuteCleanData()
         {
-            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.EditingData, $"Execute clean database for database {fFileName} called.");
+            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.EditingData, $"Execute clean database for database {fFileName} called.");
             DataUpdateCallback(programPortfolio => programPortfolio.CleanData());
         }
 
@@ -175,7 +175,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
 
         private void ExecuteRefresh()
         {
-            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Execute refresh on the window fo database {fFileName} called.");
+            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, $"Execute refresh on the window fo database {fFileName} called.");
             DataUpdateCallback(programPortfolio => programPortfolio.OnPortfolioChanged(false, new PortfolioEventArgs(Account.All)));
         }
 

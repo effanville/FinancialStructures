@@ -41,7 +41,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             set
             {
                 SetAndNotify(ref fSelectedSecurityData, value, nameof(SelectedSecurityData));
-                _ = fReportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Selected Security {SelectedName} updated selected data.");
+                _ = fReportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, $"Selected Security {SelectedName} updated selected data.");
             }
         }
 
@@ -77,7 +77,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 
         private void ExecuteDeleteValuation()
         {
-            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Selected Security {SelectedName} deleting valuation {fOldSelectedValue}.");
+            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, $"Selected Security {SelectedName} deleting valuation {fOldSelectedValue}.");
             if (SelectedName != null && SelectedValue != null)
             {
                 UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(Account.Security, SelectedName, SelectedValue.Date, fReportLogger));
@@ -95,7 +95,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 
         private void ExecuteAddCsvData()
         {
-            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Selected Security {SelectedName} adding data from csv.");
+            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, $"Selected Security {SelectedName} adding data from csv.");
             if (SelectedName != null)
             {
                 FileInteractionResult result = fUiGlobals.FileInteractionService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
@@ -130,7 +130,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 
         private void ExecuteExportCsvData()
         {
-            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Selected Security {SelectedName} exporting data to csv.");
+            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, $"Selected Security {SelectedName} exporting data to csv.");
             if (SelectedName != null)
             {
                 FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile("csv", string.Empty, DataStore.Directory, "Csv Files|*.csv|All Files|*.*");
@@ -208,7 +208,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 
         private void ExecuteAddEditSecData()
         {
-            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Selected Security {SelectedName}adding valuation called.");
+            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, $"Selected Security {SelectedName}adding valuation called.");
             if (SelectedName != null)
             {
                 bool edited = false;
@@ -222,7 +222,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 
         public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)
         {
-            _ = fReportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Selected Security {SelectedName} updating data.");
+            _ = fReportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, $"Selected Security {SelectedName} updating data.");
             base.UpdateData(portfolio);
             if (SelectedName != null)
             {

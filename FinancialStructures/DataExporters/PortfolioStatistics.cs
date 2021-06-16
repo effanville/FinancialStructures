@@ -231,7 +231,7 @@ namespace FinancialStructures.DataExporters
                 return;
             }
 
-            _ = LogReporter.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.StatisticsPage, "Successfully exported statistics page.");
+            _ = LogReporter.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.StatisticsPage, "Successfully exported statistics page.");
         }
 
         /// <summary>

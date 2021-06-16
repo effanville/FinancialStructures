@@ -1,7 +1,6 @@
 ﻿using System;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
-using StructureCommon.DataStructures;
 
 namespace FinancialStructures.Tests.TestDatabaseConstructor
 {
@@ -18,8 +17,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 
         public BankAccountConstructor WithData(DateTime date, double price)
         {
-            item.Amounts.Values.Add(new DailyValuation(date, price));
-
+            item.Amounts.SetData(date, price);
             return this;
         }
     }

@@ -112,7 +112,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         public DailyValuation NearestEarlierValuation(DateTime date, ICurrency currency = null)
         {
             DailyValuation value = Values.NearestEarlierValue(date);
-            value.SetValue(value.Value * GetCurrencyValue(value.Day, currency));
+            value.Value = value.Value * GetCurrencyValue(value.Day, currency);
             return value;
         }
 

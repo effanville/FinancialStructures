@@ -274,7 +274,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
                 stats.ExportToFile(fUiGlobals.CurrentFileSystem, result.FilePath, type, options, ReportLogger);
 
-                _ = ReportLogger.LogUseful(ReportType.Report, ReportLocation.StatisticsPage, "Created statistics page");
+                _ = ReportLogger.LogUseful(ReportType.Information, ReportLocation.StatisticsPage, "Created statistics page");
             }
             else
             {

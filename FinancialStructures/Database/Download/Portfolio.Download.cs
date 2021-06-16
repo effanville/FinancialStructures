@@ -36,7 +36,7 @@ namespace FinancialStructures.Database.Download
             }
 
             await Task.WhenAll(downloadTasks);
-            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Downloading, "Downloader Completed");
+            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Downloading, "Downloader Completed");
         }
 
         private static readonly string Pence = "GBX";

@@ -28,7 +28,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             {
                 if (value != null && value.Value != 0)
                 {
-                    value.SetValue(value.Value * GetCurrencyValue(value.Day, currency));
+                    value.Value = value.Value * GetCurrencyValue(value.Day, currency);
                     namedValues.Add(new DayValue_Named(Names.Company, Names.Name, value));
                 }
             }

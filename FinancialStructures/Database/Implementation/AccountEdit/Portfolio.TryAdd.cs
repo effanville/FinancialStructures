@@ -81,7 +81,7 @@ namespace FinancialStructures.Database.Implementation
                     return false;
             }
 
-            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"{elementType} `{name.Company}'-`{name.Name}' added to database.");
+            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.AddingData, $"{elementType} `{name.Company}'-`{name.Name}' added to database.");
             return true;
         }
     }

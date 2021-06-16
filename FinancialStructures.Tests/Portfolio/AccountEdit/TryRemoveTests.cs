@@ -79,7 +79,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             Assert.AreEqual(1, reports.Count);
 
             var report = reports.First();
-            Assert.AreEqual(ReportType.Report, report.ErrorType);
+            Assert.AreEqual(ReportType.Information, report.ErrorType);
             Assert.AreEqual(ReportLocation.DeletingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Detailed, report.ErrorSeverity);
             Assert.AreEqual($"Security {BaseCompanyName}-{BaseName} removed from the database.", report.Message);
@@ -116,7 +116,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             Assert.AreEqual(1, reports.Count);
 
             var report = reports.First();
-            Assert.AreEqual(ReportType.Report, report.ErrorType);
+            Assert.AreEqual(ReportType.Information, report.ErrorType);
             Assert.AreEqual(ReportLocation.DeletingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Detailed, report.ErrorSeverity);
             Assert.AreEqual($"Deleted benchmark {BaseName}", report.Message);

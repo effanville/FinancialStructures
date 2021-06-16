@@ -1,7 +1,6 @@
 ﻿using System;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
-using StructureCommon.DataStructures;
 
 namespace FinancialStructures.Tests.TestDatabaseConstructor
 {
@@ -17,7 +16,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 
         public SectorConstructor WithData(DateTime date, double valueToAdd)
         {
-            item.Values.Values.Add(new DailyValuation(date, valueToAdd));
+            item.Values.SetData(date, valueToAdd);
             return this;
         }
     }

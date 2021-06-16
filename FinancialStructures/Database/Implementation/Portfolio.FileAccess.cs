@@ -51,7 +51,7 @@ namespace FinancialStructures.Database.Implementation
                     WireDataChangedEvents();
                     OnPortfolioChanged(this, new PortfolioEventArgs());
                     Saving();
-                    _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Loading, $"Loaded new database from {filePath}");
+                    _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Loading, $"Loaded new database from {filePath}");
                 }
                 else
                 {
@@ -61,7 +61,7 @@ namespace FinancialStructures.Database.Implementation
                 return;
             }
 
-            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Loading, "Loaded Empty New Database.");
+            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Loading, "Loaded Empty New Database.");
 
             CopyData(new Portfolio());
             WireDataChangedEvents();
@@ -84,7 +84,7 @@ namespace FinancialStructures.Database.Implementation
                 }
 
                 Saving();
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Saving, $"Saved Database at {filePath}");
+                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Saving, $"Saved Database at {filePath}");
             }
         }
     }

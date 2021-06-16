@@ -34,7 +34,7 @@ namespace FinancialStructures.DataExporters
                     historyWriter.WriteLine(statistic.ToString());
                 }
                 historyWriter.Close();
-                _ = reportLogger?.LogUseful(ReportType.Report, ReportLocation.StatisticsPage, $"Successfully exported history to {filePath}.");
+                _ = reportLogger?.LogUseful(ReportType.Information, ReportLocation.StatisticsPage, $"Successfully exported history to {filePath}.");
             }
             catch (Exception exception)
             {
