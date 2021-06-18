@@ -18,10 +18,11 @@ namespace FinancialStructures.Tests
         public readonly double[] DefaultSecurityInvestments = new double[] { 100.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 
         internal Portfolio database;
-        public DatabaseConstructor()
+        public DatabaseConstructor(string filePath = null, string currency = null)
         {
             database = new Portfolio();
-            database.BaseCurrency = DefaultCurrencyName;
+            database.FilePath = filePath ?? null;
+            database.BaseCurrency = currency ?? DefaultCurrencyName;
         }
 
         public DatabaseConstructor LoadDatabaseFromFilepath(IFileSystem fileSystem, string filepath)
@@ -86,6 +87,12 @@ namespace FinancialStructures.Tests
                 default:
                     return null;
             }
+        }
+
+        public DatabaseConstructor SetFilePath(string filePath)
+        {
+            database.FilePath = filePath;
+            return this;
         }
 
         public DatabaseConstructor SetCurrencyAsGBP()

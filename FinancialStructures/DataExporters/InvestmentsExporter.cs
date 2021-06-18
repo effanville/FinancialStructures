@@ -20,7 +20,7 @@ namespace FinancialStructures.DataExporters
                 statsWriter.WriteLine(securitiesData);
             }
 
-            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Saving, $"Created Investment list page at {filePath}.");
+            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Saving, $"Created Investment list page at {filePath}.");
             statsWriter.Close();
         }
     }

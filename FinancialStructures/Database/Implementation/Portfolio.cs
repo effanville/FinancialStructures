@@ -37,6 +37,11 @@ namespace FinancialStructures.Database.Implementation
             {
                 return fDatabaseFilePath;
             }
+            set
+            {
+                fDatabaseFilePath = value;
+                OnPortfolioChanged(FilePath, new PortfolioEventArgs());
+            }
         }
 
         /// <inheritdoc/>
@@ -211,16 +216,6 @@ namespace FinancialStructures.Database.Implementation
         public void Saving()
         {
             IsAlteredSinceSave = false;
-        }
-
-        /// <inheritdoc/>
-        public void SetFilePath(string path)
-        {
-            if (fDatabaseFilePath != path)
-            {
-                fDatabaseFilePath = path;
-                OnPortfolioChanged(fDatabaseFilePath, new PortfolioEventArgs());
-            }
         }
 
         /// <inheritdoc/>

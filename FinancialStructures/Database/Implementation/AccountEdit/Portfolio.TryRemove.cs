@@ -26,7 +26,7 @@ namespace FinancialStructures.Database.Implementation
                             if (name.IsEqualTo(sec.Names))
                             {
                                 _ = Funds.Remove(sec);
-                                _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Security {name} removed from the database.");
+                                _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData, $"Security {name} removed from the database.");
                                 OnPortfolioChanged(Funds, new PortfolioEventArgs(elementType));
                                 return true;
                             }
@@ -42,7 +42,7 @@ namespace FinancialStructures.Database.Implementation
                         {
                             if (name.IsEqualTo(currency.Names))
                             {
-                                _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted currency {currency.Names.Name}");
+                                _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData, $"Deleted currency {currency.Names.Name}");
                                 _ = Currencies.Remove(currency);
                                 OnPortfolioChanged(Currencies, new PortfolioEventArgs(elementType));
                                 return true;
@@ -60,7 +60,7 @@ namespace FinancialStructures.Database.Implementation
                             if (name.IsEqualTo(acc.Names))
                             {
                                 _ = BankAccounts.Remove(acc);
-                                _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleting Bank Account: Deleted {name}.");
+                                _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData, $"Deleting Bank Account: Deleted {name}.");
                                 OnPortfolioChanged(BankAccounts, new PortfolioEventArgs(elementType));
                                 return true;
                             }
@@ -76,7 +76,7 @@ namespace FinancialStructures.Database.Implementation
                         {
                             if (name.IsEqualTo(sector.Names))
                             {
-                                _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted benchmark {sector.Names.Name}");
+                                _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData, $"Deleted benchmark {sector.Names.Name}");
                                 _ = BenchMarks.Remove(sector);
                                 OnPortfolioChanged(BenchMarks, new PortfolioEventArgs(elementType));
                                 return true;

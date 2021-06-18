@@ -32,11 +32,11 @@ namespace FinancialStructures.Database.Download
             else
             {
                 _ = portfolio.TryGetAccount(accountType, names, out IValueList acc);
-                downloadTasks.Add(DownloadLatestValue(acc.Names, value => acc.TryAddOrEditData(DateTime.Today, DateTime.Today, value, reportLogger), reportLogger));
+                downloadTasks.Add(DownloadLatestValue(acc.Names, value => acc.SetData(DateTime.Today, value, reportLogger), reportLogger));
             }
 
             await Task.WhenAll(downloadTasks);
-            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Downloading, "Downloader Completed");
+            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Downloading, "Downloader Completed");
         }
 
         private static readonly string Pence = "GBX";
@@ -79,28 +79,28 @@ namespace FinancialStructures.Database.Download
             {
                 if (!string.IsNullOrEmpty(sec.Names.Url))
                 {
-                    downloadTasks.Add(DownloadLatestValue(sec.Names, value => sec.TryAddOrEditData(DateTime.Today, DateTime.Today, value, reportLogger), reportLogger));
+                    downloadTasks.Add(DownloadLatestValue(sec.Names, value => sec.SetData(DateTime.Today, value, reportLogger), reportLogger));
                 }
             }
             foreach (ICashAccount acc in portfo.BankAccountsThreadSafe)
             {
                 if (!string.IsNullOrEmpty(acc.Names.Url))
                 {
-                    downloadTasks.Add(DownloadLatestValue(acc.Names, value => acc.TryAddOrEditData(DateTime.Today, DateTime.Today, value, reportLogger), reportLogger));
+                    downloadTasks.Add(DownloadLatestValue(acc.Names, value => acc.SetData(DateTime.Today, value, reportLogger), reportLogger));
                 }
             }
             foreach (ICurrency currency in portfo.CurrenciesThreadSafe)
             {
                 if (!string.IsNullOrEmpty(currency.Names.Url))
                 {
-                    downloadTasks.Add(DownloadLatestValue(currency.Names, value => currency.TryAddOrEditData(DateTime.Today, DateTime.Today, value, reportLogger), reportLogger));
+                    downloadTasks.Add(DownloadLatestValue(currency.Names, value => currency.SetData(DateTime.Today, value, reportLogger), reportLogger));
                 }
             }
             foreach (ISector sector in portfo.BenchMarksThreadSafe)
             {
                 if (!string.IsNullOrEmpty(sector.Names.Url))
                 {
-                    downloadTasks.Add(DownloadLatestValue(sector.Names, value => sector.TryAddOrEditData(DateTime.Today, DateTime.Today, value, reportLogger), reportLogger));
+                    downloadTasks.Add(DownloadLatestValue(sector.Names, value => sector.SetData(DateTime.Today, value, reportLogger), reportLogger));
                 }
             }
 

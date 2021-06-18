@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 using StructureCommon.Reporting;
 using FinancialStructures.Database;
@@ -86,7 +85,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             Assert.AreEqual(1, reports.Count);
 
             var report = reports.First();
-            Assert.AreEqual(ReportType.Report, report.ErrorType);
+            Assert.AreEqual(ReportType.Information, report.ErrorType);
             Assert.AreEqual(ReportLocation.AddingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Detailed, report.ErrorSeverity);
             Assert.AreEqual($"Security `{BaseCompanyName}'-`{BaseName}' added to database.", report.Message);
@@ -125,7 +124,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             Assert.AreEqual(1, reports.Count);
 
             var report = reports.First();
-            Assert.AreEqual(ReportType.Report, report.ErrorType);
+            Assert.AreEqual(ReportType.Information, report.ErrorType);
             Assert.AreEqual(ReportLocation.AddingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Detailed, report.ErrorSeverity);
             Assert.AreEqual($"Benchmark `{BaseCompanyName}'-`{BaseName}' added to database.", report.Message);

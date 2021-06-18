@@ -1,7 +1,6 @@
 ﻿using System;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
-using StructureCommon.DataStructures;
 
 namespace FinancialStructures.Tests.TestDatabaseConstructor
 {
@@ -18,11 +17,11 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 
         public SecurityConstructor WithData(DateTime date, double sharePrice, double numberUnits, double investment = 0)
         {
-            item.Shares.Values.Add(new DailyValuation(date, numberUnits));
-            item.UnitPrice.Values.Add(new DailyValuation(date, sharePrice));
+            item.Shares.SetData(date, numberUnits);
+            item.UnitPrice.SetData(date, sharePrice);
             if (investment != 0)
             {
-                item.Investments.Values.Add(new DailyValuation(date, investment));
+                item.Investments.SetData(date, investment);
             }
 
             return this;

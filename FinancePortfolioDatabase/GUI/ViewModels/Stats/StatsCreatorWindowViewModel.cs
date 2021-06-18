@@ -16,7 +16,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
     public class StatsCreatorWindowViewModel : DataDisplayViewModelBase
     {
-        private UiGlobals fUiGlobals;
+        private readonly UiGlobals fUiGlobals;
         public ObservableCollection<object> StatsTabs { get; set; } = new ObservableCollection<object>();
 
         private bool fDisplayValueFunds = true;
@@ -82,7 +82,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
             else
             {
-                _ = ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", $"Was not able to create Investment list page at {result.FilePath}");
+                _ = ReportLogger.LogUseful(ReportType.Error, ReportLocation.StatisticsPage, $"Was not able to create Investment list page at {result.FilePath}");
             }
         }
 
@@ -101,7 +101,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
             else
             {
-                _ = ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", $"Was not able to create Investment list page at {result.FilePath}");
+                _ = ReportLogger.LogUseful(ReportType.Error, ReportLocation.StatisticsPage, $"Was not able to create Investment list page at {result.FilePath}");
             }
         }
 

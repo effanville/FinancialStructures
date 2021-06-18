@@ -3,7 +3,7 @@
                     xmlns:cl="clr-namespace:Colouring"
                     xmlns:fs="clr-namespace:StructureCommon.DataStructures;assembly=StructureCommon"
                     xmlns:cht="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit" xmlns:chartingPrimitives="clr-namespace:System.Windows.Controls.DataVisualization.Charting.Primitives;assembly=DotNetProjects.DataVisualization.Toolkit">
-    <Style x:Key="defaultButton" 
+    <Style x:Key="defaultButton"
            TargetType="Button">
         <Setter Property="Background" Value="{Binding Source={x:Static cl:Colours.DefaultButtonBrush}}"/>
         <Setter Property="Margin" Value="5"/>
@@ -17,20 +17,20 @@
         <Setter Property="Background" Value="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}"/>
     </Style>
 
-    <Style x:Key="defaultButtonNoMargin" 
+    <Style x:Key="defaultButtonNoMargin"
            TargetType="Button">
         <Setter Property="Background" Value="{Binding Source={x:Static cl:Colours.DefaultButtonBrush}}"/>
         <Setter Property="Height" Value="30"/>
         <Setter Property="Width" Value="90"/>
     </Style>
-    
+
     <DataTemplate x:Key="DVView" DataType="{x:Type fs:DailyValuation}">
         <StackPanel Orientation="Horizontal">
             <TextBlock Text="{Binding Path=Day}" />
             <TextBlock Text="{Binding Path=Value}" />
         </StackPanel>
     </DataTemplate>
-    
+
     <Style x:Key="ChartStyle1" x:Name="AlignTop" TargetType="cht:Chart">
         <Setter Property="BorderBrush" Value="Black"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -111,17 +111,17 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
 
-                            <cht:Title Content="{TemplateBinding Title}" 
-                                           Grid.Row="0"  
+                            <cht:Title Content="{TemplateBinding Title}"
+                                           Grid.Row="0"
                                            Style="{TemplateBinding TitleStyle}"/>
-                            <chartingPrimitives:EdgePanel x:Name="ChartArea" 
-                                                                  Grid.Row="1" 
-                                                                  Grid.RowSpan="2"  
+                            <chartingPrimitives:EdgePanel x:Name="ChartArea"
+                                                                  Grid.Row="1"
+                                                                  Grid.RowSpan="2"
                                                                   Style="{TemplateBinding ChartAreaStyle}">
-                                <Grid Style="{TemplateBinding PlotAreaStyle}" 
+                                <Grid Style="{TemplateBinding PlotAreaStyle}"
                                       Canvas.ZIndex="-1"/>
-                                <Border BorderBrush="#FF919191" 
-                                        BorderThickness="1" 
+                                <Border BorderBrush="#FF919191"
+                                        BorderThickness="1"
                                         Canvas.ZIndex="10"/>
                             </chartingPrimitives:EdgePanel>
                             <cht:Legend Grid.Row="1" FontSize="14" FontWeight="Normal"  x:Name="Legend"  Header="{TemplateBinding LegendTitle}" Style="{TemplateBinding LegendStyle}"/>
@@ -222,12 +222,12 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style x:Key="InvisibleDataPointBlue" TargetType="{x:Type cht:DataPoint}">
         <Setter Property="Background" Value="Blue"/>
         <Setter Property="Template" Value="{x:Null}"/>
     </Style>
-    
+
     <Style x:Key="InvisibleDataPointRed" TargetType="{x:Type cht:DataPoint}">
         <Setter Property="Background" Value="Red"/>
         <Setter Property="Template" Value="{x:Null}"/>

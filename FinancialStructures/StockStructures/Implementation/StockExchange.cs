@@ -142,7 +142,7 @@ namespace FinancialStructures.StockStructures.Implementation
                 return;
             }
 
-            _ = reportLogger?.LogUseful(ReportType.Report, ReportLocation.Loading, "Loaded Empty New Database.");
+            _ = reportLogger?.LogUseful(ReportType.Information, ReportLocation.Loading, "Loaded Empty New Database.");
             Stocks = new List<Stock>();
         }
 
@@ -226,7 +226,7 @@ namespace FinancialStructures.StockStructures.Implementation
                     }
                 }
 
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Downloading, $"Added {numberEntriesAdded} to stock {stock.Name}");
+                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Downloading, $"Added {numberEntriesAdded} to stock {stock.Name}");
             }
 
             if (download == StockDownload.Latest)

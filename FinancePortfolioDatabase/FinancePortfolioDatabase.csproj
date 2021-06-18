@@ -19,7 +19,7 @@
     <PackageReference Include="System.IO.Abstractions" Version="13.2.23" />
     <PackageReference Include="UICommon" Version="1.0.6" />
   </ItemGroup>
-  
+
   <ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
     <PackageReference Include="System.Windows.Forms.DataVisualization" Version="1.0.0-prerelease.20110.1" />
   </ItemGroup>

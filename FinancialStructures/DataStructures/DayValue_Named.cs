@@ -80,5 +80,14 @@ namespace FinancialStructures.DataStructures
 
             return false;
         }
+
+        public override int GetHashCode()
+        {
+            int hashCode = 17;
+            hashCode = 23 * hashCode + Names.GetHashCode();
+            hashCode = 23 * hashCode + Value.GetHashCode();
+            hashCode = 23 * hashCode + Day.GetHashCode();
+            return hashCode;
+        }
     }
 }

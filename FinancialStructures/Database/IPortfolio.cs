@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO.Abstractions;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
-using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
 using StructureCommon.DataStructures;
 using StructureCommon.Reporting;
@@ -16,11 +15,12 @@ namespace FinancialStructures.Database
     public interface IPortfolio
     {
         /// <summary>
-        /// Access of the databse path.
+        /// Access of the database path.
         /// </summary>
         string FilePath
         {
             get;
+            set;
         }
 
         /// <summary>
@@ -134,11 +134,6 @@ namespace FinancialStructures.Database
         /// Raise event if something has changed.
         /// </summary>
         void OnPortfolioChanged(object obj, PortfolioEventArgs e);
-
-        /// <summary>
-        /// Set the path where the database will be stored.
-        /// </summary>
-        void SetFilePath(string path);
 
         /// <summary>
         /// Edits the name of the data currently held.

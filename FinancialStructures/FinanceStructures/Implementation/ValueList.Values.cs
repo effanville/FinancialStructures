@@ -13,7 +13,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             List<DailyValuation> output = new List<DailyValuation>();
             if (Values.Any())
             {
-                foreach (DailyValuation dateValue in Values.Values)
+                foreach (DailyValuation dateValue in Values.Values())
                 {
                     output.Add(dateValue.Copy());
                 }

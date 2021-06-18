@@ -77,7 +77,7 @@ namespace FinancePortfolioDatabase.GUI.Windows
                 FileInteractionResult savingResult = fUiGlobals.FileInteractionService.SaveFile("xml", VM.ProgramPortfolio.DatabaseName + VM.ProgramPortfolio.Extension, VM.ProgramPortfolio.Directory, "XML Files|*.xml|All Files|*.*");
                 if (savingResult.Success != null && (bool)savingResult.Success)
                 {
-                    VM.ProgramPortfolio.SetFilePath(savingResult.FilePath);
+                    VM.ProgramPortfolio.FilePath = savingResult.FilePath;
                     MainWindowViewModel vm = DataContext as MainWindowViewModel;
                     vm.ProgramPortfolio.SavePortfolio(savingResult.FilePath, fUiGlobals.CurrentFileSystem, vm.ReportLogger);
                 }

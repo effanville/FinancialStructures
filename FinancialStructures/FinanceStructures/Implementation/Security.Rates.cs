@@ -25,7 +25,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             List<DailyValuation> values = fInvestments.GetValuesBetween(earlierDate, laterDate);
             foreach (DailyValuation value in values)
             {
-                value.SetValue(value.Value * GetCurrencyValue(value.Day, currency));
+                value.Value = value.Value * GetCurrencyValue(value.Day, currency);
             }
 
             return values;

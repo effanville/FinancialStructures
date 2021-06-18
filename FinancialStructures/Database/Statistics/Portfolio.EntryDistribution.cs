@@ -25,7 +25,7 @@ namespace FinancialStructures.Database.Statistics
                     {
                         if (desired.Any())
                         {
-                            foreach (var value in desired.Shares.Values)
+                            foreach (var value in desired.Shares.Values())
                             {
                                 if (total.TryGetValue(value.Day, out _))
                                 {
@@ -37,7 +37,7 @@ namespace FinancialStructures.Database.Statistics
                                 }
                             }
 
-                            foreach (var priceValue in desired.UnitPrice.Values)
+                            foreach (var priceValue in desired.UnitPrice.Values())
                             {
                                 if (total.TryGetValue(priceValue.Day, out _))
                                 {
@@ -49,7 +49,7 @@ namespace FinancialStructures.Database.Statistics
                                 }
                             }
 
-                            foreach (var investmentValue in desired.Investments.Values)
+                            foreach (var investmentValue in desired.Investments.Values())
                             {
                                 if (total.TryGetValue(investmentValue.Day, out _))
                                 {
@@ -79,7 +79,7 @@ namespace FinancialStructures.Database.Statistics
                     {
                         if (desired.Any())
                         {
-                            foreach (var value in desired.Shares.Values)
+                            foreach (var value in desired.Shares.Values())
                             {
                                 if (total.TryGetValue(value.Day, out _))
                                 {
@@ -91,7 +91,7 @@ namespace FinancialStructures.Database.Statistics
                                 }
                             }
 
-                            foreach (var priceValue in desired.UnitPrice.Values)
+                            foreach (var priceValue in desired.UnitPrice.Values())
                             {
                                 if (total.TryGetValue(priceValue.Day, out _))
                                 {
@@ -103,7 +103,7 @@ namespace FinancialStructures.Database.Statistics
                                 }
                             }
 
-                            foreach (var investmentValue in desired.Investments.Values)
+                            foreach (var investmentValue in desired.Investments.Values())
                             {
                                 if (total.TryGetValue(investmentValue.Day, out _))
                                 {
@@ -124,7 +124,7 @@ namespace FinancialStructures.Database.Statistics
                     var total = new Dictionary<DateTime, int>();
                     foreach (ICashAccount cashAccount in portfolio.BankAccountsThreadSafe)
                     {
-                        foreach (var value in cashAccount.Values.Values)
+                        foreach (var value in cashAccount.Values.Values())
                         {
                             if (total.TryGetValue(value.Day, out _))
                             {

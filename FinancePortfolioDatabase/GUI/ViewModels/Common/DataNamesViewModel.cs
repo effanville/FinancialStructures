@@ -40,7 +40,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             set
             {
                 SetAndNotify(ref fDataNames, value, nameof(DataNames));
-                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, "Set Datanames");
+                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, "Set Datanames");
             }
         }
 
@@ -59,7 +59,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             set
             {
                 SetAndNotify(ref fPreEditSelectedName, value, nameof(PreEditSelectedName));
-                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, "Set PreEditSelectedName");
+                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, "Set PreEditSelectedName");
             }
         }
 
@@ -78,7 +78,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             set
             {
                 SetAndNotify(ref fSelectedName, value, nameof(SelectedName));
-                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, "Set SelectedName");
+                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, "Set SelectedName");
                 if (SelectedName != null)
                 {
                     OnPropertyChanged(nameof(SelectedNameSet));
@@ -104,7 +104,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             set
             {
                 SetAndNotify(ref fSelectedLatestDate, value, nameof(SelectedLatestDate));
-                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, "Set SelectedLatestDate");
+                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, "Set SelectedLatestDate");
             }
         }
 
@@ -122,7 +122,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             set
             {
                 SetAndNotify(ref fSelectedValueHistory, value, nameof(SelectedValueHistory));
-                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, "Set ValueHistory");
+                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, "Set ValueHistory");
             }
         }
 
@@ -170,7 +170,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         /// </summary>
         public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)
         {
-            _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Updating DataView for {TypeOfAccount} list.");
+            _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, $"Updating DataView for {TypeOfAccount} list.");
             base.UpdateData(portfolio);
 
             bool IsUpdated(NameData name)
@@ -204,7 +204,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         }
         private void ExecuteDownloadCommand()
         {
-            _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"Download selected for account {SelectedName} - a {TypeOfAccount}");
+            _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, $"Download selected for account {SelectedName} - a {TypeOfAccount}");
             if (SelectedName != null)
             {
                 NameData names = SelectedName.Instance;
@@ -240,10 +240,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             if (DataNames != null && args is SelectableEquatable<NameData> selectableName && selectableName.Instance != null)
             {
                 SelectedName = selectableName;
-                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Current item is a name {SelectedName.Instance}");
+                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.AddingData, $"Current item is a name {SelectedName.Instance}");
                 SelectedValueHistory = DataStore.NumberData(TypeOfAccount, SelectedName.Instance, ReportLogger);
 
-                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Successfully updated SelectedItem.");
+                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.AddingData, $"Successfully updated SelectedItem.");
             }
             else
             {
@@ -280,14 +280,14 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 
         private void ExecuteCreateEdit()
         {
-            _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DatabaseAccess, $"ExecuteCreateEdit called.");
+            _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, $"ExecuteCreateEdit called.");
             bool edited = false;
             if (SelectedName != null && SelectedName.Instance != null)
             {
                 var selectedInstance = SelectedName.Instance; //rowName.Instance;
                 if (!DataStore.NameData(TypeOfAccount).Any(item => item.Name == PreEditSelectedName?.Name && item.Company == PreEditSelectedName?.Company))
                 {
-                    _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"Adding {selectedInstance} to the database");
+                    _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.AddingData, $"Adding {selectedInstance} to the database");
                     NameData name = new NameData(selectedInstance.Company, selectedInstance.Name, selectedInstance.Currency, selectedInstance.Url, selectedInstance.Sectors, selectedInstance.Notes);
                     UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAdd(TypeOfAccount, name, ReportLogger));
                 }
@@ -296,7 +296,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
                     // maybe fired from editing stuff. Try that
                     if (!string.IsNullOrEmpty(selectedInstance.Name) || !string.IsNullOrEmpty(selectedInstance.Company))
                     {
-                        _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.EditingData, $"Editing {PreEditSelectedName} to {selectedInstance} in the database");
+                        _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.EditingData, $"Editing {PreEditSelectedName} to {selectedInstance} in the database");
                         NameData name = new NameData(selectedInstance.Company, selectedInstance.Name, selectedInstance.Currency, selectedInstance.Url, selectedInstance.Sectors, selectedInstance.Notes);
                         UpdateDataCallback(programPortfolio => edited = programPortfolio.TryEditName(TypeOfAccount, PreEditSelectedName, name, ReportLogger));
                     }
@@ -318,7 +318,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         }
         private void ExecuteDelete()
         {
-            _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleting {SelectedName} from the database");
+            _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData, $"Deleting {SelectedName} from the database");
             if (SelectedName != null)
             {
                 UpdateDataCallback(programPortfolio => programPortfolio.TryRemove(TypeOfAccount, SelectedName.Instance, ReportLogger));

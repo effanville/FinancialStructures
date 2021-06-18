@@ -13,9 +13,15 @@ namespace FinancialStructures.FinanceStructures.Implementation
     public partial class Security
     {
         /// <inheritdoc/>
-        public override bool TryAddOrEditData(DateTime oldDate, DateTime date, double unitPrice, IReportLogger reportLogger = null)
+        public override bool TryEditData(DateTime oldDate, DateTime date, double unitPrice, IReportLogger reportLogger = null)
         {
             return AddOrEditUnitPriceData(oldDate, date, unitPrice, reportLogger);
+        }
+
+        /// <inheritdoc/>
+        public override void SetData(DateTime date, double unitPrice, IReportLogger reportLogger = null)
+        {
+            _ = AddOrEditUnitPriceData(date, date, unitPrice, reportLogger);
         }
 
         /// <inheritdoc/>
@@ -35,7 +41,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 return fUnitPrice.TryEditData(oldDate, date, shares, reportLogger);
             }
 
-            return fUnitPrice.TryAddValue(date, shares, reportLogger);
+            fUnitPrice.SetData(date, shares, reportLogger);
+            return true;
         }
 
         private bool AddOrEditSharesData(DateTime oldDate, DateTime date, double shares, IReportLogger reportLogger = null)
@@ -45,7 +52,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 return fShares.TryEditData(oldDate, date, shares, reportLogger);
             }
 
-            return fShares.TryAddValue(date, shares, reportLogger);
+            fShares.SetData(date, shares, reportLogger);
+            return true;
         }
 
         private bool AddOrEditInvestmentData(DateTime oldDate, DateTime date, double shares, IReportLogger reportLogger = null)
@@ -55,7 +63,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 return fInvestments.TryEditData(oldDate, date, shares, reportLogger);
             }
 
-            return fInvestments.TryAddValue(date, shares, reportLogger);
+            fInvestments.SetData(date, shares, reportLogger);
+            return true;
         }
 
         /// <inheritdoc/>
@@ -86,7 +95,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             }
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Trys to get latest data earlier than date requested. Only returns true if all data present.
         /// </summary>
         internal bool TryGetEarlierData(DateTime date, out DailyValuation price, out DailyValuation units, out DailyValuation investment)
@@ -94,7 +103,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return fUnitPrice.TryGetNearestEarlierValue(date, out price)
                 & fShares.TryGetNearestEarlierValue(date, out units)
                 & fInvestments.TryGetNearestEarlierValue(date, out investment);
-        }
+        }*/
 
         /// <summary>
         /// Tries to delete the data. If it can, it deletes all data specified, then returns true only if all data has been successfully deleted.
@@ -137,7 +146,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                     DailyValuation sharesPreviousValue = fShares.RecentPreviousValue(investmentValue.Day) ?? new DailyValuation(DateTime.Today, 0);
                     if (sharesCurrentValue != null)
                     {
-                        _ = fInvestments.TryEditData(investmentValue.Day, (sharesCurrentValue.Value - sharesPreviousValue.Value) * fUnitPrice.NearestEarlierValue(investmentValue.Day).Value, reportLogger);
+                        fInvestments.SetData(investmentValue.Day, (sharesCurrentValue.Value - sharesPreviousValue.Value) * fUnitPrice.NearestEarlierValue(investmentValue.Day).Value, reportLogger);
                     }
                 }
                 if (investmentValue.Value == 0)
