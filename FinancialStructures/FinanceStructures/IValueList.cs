@@ -112,7 +112,16 @@ namespace FinancialStructures.FinanceStructures
         /// <param name="value">The value data to add.</param>
         /// <param name="reportLogger">An optional logger to log progress.</param>
         /// <returns>Was adding or editing successful.</returns>
-        bool TryAddOrEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null);
+        bool TryEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Sets data on the date specified to the value given. This overwrites the existing
+        /// value if it exists.
+        /// </summary>
+        /// <param name="date">The date to add data to.</param>
+        /// <param name="value">The value data to add.</param>
+        /// <param name="reportLogger">An optional logger to log progress.</param>
+        void SetData(DateTime date, double value, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Attempts to delete data on the date specified.

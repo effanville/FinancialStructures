@@ -220,7 +220,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
                         }
                         else
                         {
-                            _ = ReportLogger.LogUsefulWithStrings("Error", "StatisticsPage", "Have the wrong type of thing");
+                            _ = ReportLogger.LogUseful(ReportType.Error, ReportLocation.StatisticsPage, "Have the wrong type of thing");
                         }
                     }
                 }
@@ -245,7 +245,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
                     }
                     else
                     {
-                        _ = ReportLogger.LogWithStrings("Critical", "Error", "Saving", "Could not find security.");
+                        _ = ReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Saving, "Could not find security.");
                     }
                 }
             }

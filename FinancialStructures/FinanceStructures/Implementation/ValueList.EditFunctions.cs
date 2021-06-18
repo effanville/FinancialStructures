@@ -24,14 +24,21 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public virtual bool TryAddOrEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null)
+        public virtual bool TryEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null)
         {
             if (Values.ValueExists(oldDate, out _))
             {
                 return Values.TryEditData(oldDate, date, value, reportLogger);
             }
 
-            return Values.TryAddValue(date, value, reportLogger);
+            Values.SetData(date, value, reportLogger);
+            return true;
+        }
+
+        /// <inheritdoc/>
+        public virtual void SetData(DateTime date, double value, IReportLogger logger = null)
+        {
+            Values.SetData(date, value, logger);
         }
 
         /// <summary>

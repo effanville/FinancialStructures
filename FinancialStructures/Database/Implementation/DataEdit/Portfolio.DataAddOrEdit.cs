@@ -58,7 +58,7 @@ namespace FinancialStructures.Database.Implementation
                 if (listToEdit[accountIndex].Names.IsEqualTo(name))
                 {
                     // now edit data
-                    return listToEdit[accountIndex].TryAddOrEditData(oldData.Day, data.Day, data.Value, reportLogger);
+                    return listToEdit[accountIndex].TryEditData(oldData.Day, data.Day, data.Value, reportLogger);
                 }
             }
 
