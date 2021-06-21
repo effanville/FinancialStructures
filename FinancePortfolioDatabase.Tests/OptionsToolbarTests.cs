@@ -38,7 +38,7 @@ namespace FinancePortfolioDatabase.Tests
         {
             var tempFileSystem = new MockFileSystem();
             string file = File.ReadAllText(TestConstants.ExampleDatabaseLocation + "\\BasicTestDatabase.xml");
-            string testPath = "c:/data/database.xml";
+            string testPath = "c:/temp/saved.xml";
 
             tempFileSystem.AddFile(testPath, new MockFileData(file));
 
@@ -74,7 +74,7 @@ namespace FinancePortfolioDatabase.Tests
             viewModel.LoadDatabaseCommand.Execute(1);
             //Input prespecified example database
 
-            Assert.AreEqual(testPath, portfolio.FilePath);
+            Assert.AreEqual(savePath, portfolio.FilePath);
             Assert.AreEqual(1, portfolio.Funds.Count);
             Assert.AreEqual(1, portfolio.BankAccounts.Count);
             Assert.AreEqual(1, portfolio.BenchMarks.Count);

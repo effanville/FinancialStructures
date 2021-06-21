@@ -15,12 +15,6 @@ namespace FinancePortfolioDatabase.Tests
     /// </summary>
     public class IntegrationTests : MainWindowViewModelTestHelper
     {
-        [SetUp]
-        public void SetUp()
-        {
-            PortfolioFilePath = $"{TestConstants.ExampleDatabaseLocation}\\BasicTestDatabase.xml";
-        }
-
         /// <summary>
         /// The open database button propagates the new database to all tabs in the main view.
         /// </summary>
@@ -34,7 +28,7 @@ namespace FinancePortfolioDatabase.Tests
             Assert.AreEqual(1, ViewModel.ProgramPortfolio.BenchMarksThreadSafe.Count);
 
             BasicDataViewModel dataView = ViewModel.Tabs[0] as BasicDataViewModel;
-            Assert.AreEqual("Portfolio: BasicTestDatabase loaded.", dataView.PortfolioNameText);
+            Assert.AreEqual("Portfolio: saved loaded.", dataView.PortfolioNameText);
             Assert.AreEqual("Total Securities: 1", dataView.SecurityTotalText);
             Assert.AreEqual("Total Bank Accounts: 1", dataView.BankAccountTotalText);
 
