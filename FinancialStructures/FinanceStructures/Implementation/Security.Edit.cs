@@ -95,16 +95,6 @@ namespace FinancialStructures.FinanceStructures.Implementation
             }
         }
 
-        /*/// <summary>
-        /// Trys to get latest data earlier than date requested. Only returns true if all data present.
-        /// </summary>
-        internal bool TryGetEarlierData(DateTime date, out DailyValuation price, out DailyValuation units, out DailyValuation investment)
-        {
-            return fUnitPrice.TryGetNearestEarlierValue(date, out price)
-                & fShares.TryGetNearestEarlierValue(date, out units)
-                & fInvestments.TryGetNearestEarlierValue(date, out investment);
-        }*/
-
         /// <summary>
         /// Tries to delete the data. If it can, it deletes all data specified, then returns true only if all data has been successfully deleted.
         /// </summary>

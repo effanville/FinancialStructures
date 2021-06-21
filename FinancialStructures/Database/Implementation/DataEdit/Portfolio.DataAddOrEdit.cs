@@ -12,12 +12,13 @@ namespace FinancialStructures.Database.Implementation
         /// <inheritdoc/>
         public bool TryAddOrEditDataToSecurity(TwoName names, DateTime oldDate, DateTime date, double shares, double unitPrice, double Investment, IReportLogger reportLogger = null)
         {
+            var funds = FundsThreadSafe;
             for (int fundIndex = 0; fundIndex < NumberOf(Account.Security); fundIndex++)
             {
-                if (names.IsEqualTo(FundsThreadSafe[fundIndex].Names))
+                if (names.IsEqualTo(funds[fundIndex].Names))
                 {
                     _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Security `{names.Company}'-`{names.Name}' has data on date .");
-                    return FundsThreadSafe[fundIndex].TryAddOrEditData(oldDate, date, unitPrice, shares, Investment, reportLogger);
+                    return funds[fundIndex].TryAddOrEditData(oldDate, date, unitPrice, shares, Investment, reportLogger);
                 }
             }
             _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Security `{names.Company}'-`{names.Name}' could not be found in the database.");

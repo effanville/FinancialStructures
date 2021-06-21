@@ -42,6 +42,7 @@ namespace FinancialStructures.Database.Implementation
                     {
                         name.Company = "GBP";
                     }
+
                     Currency toAdd = new Currency(name);
                     toAdd.DataEdit += OnPortfolioChanged;
                     lock (CurrenciesLock)
@@ -77,7 +78,7 @@ namespace FinancialStructures.Database.Implementation
                     break;
                 }
                 default:
-                    _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Editing an Unknown type.");
+                    _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, $"Adding an Unknown type to portfolio.");
                     return false;
             }
 

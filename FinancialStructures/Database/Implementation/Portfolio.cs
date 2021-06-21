@@ -40,7 +40,6 @@ namespace FinancialStructures.Database.Implementation
             set
             {
                 fDatabaseFilePath = value;
-                OnPortfolioChanged(FilePath, new PortfolioEventArgs());
             }
         }
 
