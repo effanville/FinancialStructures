@@ -34,21 +34,18 @@ namespace FinancePortfolioDatabase.GUI.Windows
 
         public void PrintErrorLog(Exception exception)
         {
-            if (DataContext is MainWindowViewModel viewModel)
+            var result = fUiGlobals.FileInteractionService.SaveFile("log", string.Empty, fUiGlobals.CurrentWorkingDirectory, filter: "log Files|*.log|All Files|*.*");
+            if (result.Success != null && (bool)result.Success)
             {
-                var result = fUiGlobals.FileInteractionService.SaveFile("log", string.Empty, viewModel.ProgramPortfolio.Directory, filter: "log Files|*.log|All Files|*.*");
-                if (result.Success != null && (bool)result.Success)
+                using (var stream = new StreamWriter(result.FilePath))
                 {
-                    using (var stream = new StreamWriter(result.FilePath))
+                    foreach (var report in fUiGlobals.ReportLogger.Reports.GetReports())
                     {
-                        foreach (var report in viewModel.ApplicationLog.GetReports())
-                        {
-                            stream.WriteLine(report.ToString());
-                        }
-
-                        stream.WriteLine(exception.Message);
-                        stream.WriteLine(exception.StackTrace);
+                        stream.WriteLine(report.ToString());
                     }
+
+                    stream.WriteLine(exception.Message);
+                    stream.WriteLine(exception.StackTrace);
                 }
             }
         }

@@ -49,10 +49,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
         }
 
-        public OptionsToolbarViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, UiGlobals globals)
+        public OptionsToolbarViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, UiGlobals globals)
             : base("Options", portfolio)
         {
-            fReportLogger = reportLogger;
+            fReportLogger = globals.ReportLogger;
             fUiGlobals = globals;
             DataUpdateCallback = updateData;
             UpdateData(portfolio);
@@ -114,6 +114,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             {
                 DataUpdateCallback(programPortfolio => programPortfolio.FilePath = "");
                 DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio("", fUiGlobals.CurrentFileSystem, fReportLogger));
+                fUiGlobals.CurrentWorkingDirectory = "";
             }
         }
 
@@ -129,6 +130,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             {
                 DataUpdateCallback(programPortfolio => programPortfolio.FilePath = result.FilePath);
                 DataUpdateCallback(programPortfolio => programPortfolio.SavePortfolio(result.FilePath, fUiGlobals.CurrentFileSystem, fReportLogger));
+                fUiGlobals.CurrentWorkingDirectory = fUiGlobals.CurrentFileSystem.Path.GetDirectoryName(result.FilePath);
             }
         }
 
@@ -145,6 +147,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
                 DataUpdateCallback(programPortfolio => programPortfolio.Clear());
                 DataUpdateCallback(programPortfolio => programPortfolio.FilePath = result.FilePath);
                 DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio(result.FilePath, fUiGlobals.CurrentFileSystem, fReportLogger));
+                fUiGlobals.CurrentWorkingDirectory = fUiGlobals.CurrentFileSystem.Path.GetDirectoryName(result.FilePath);
             }
         }
 

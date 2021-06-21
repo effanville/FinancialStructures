@@ -14,16 +14,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         internal IPortfolio ProgramPortfolio = PortfolioFactory.GenerateEmpty();
 
         /// <summary>
-        /// The logging mechanism for the program. This both records into the
-        /// reporting window and to the <see cref="ApplicationLog"/>.
+        /// The logging mechanism for the program.
         /// </summary>
         internal readonly IReportLogger ReportLogger;
         private readonly UiGlobals fUiGlobals;
-
-        /// <summary>
-        /// The log of the application.
-        /// </summary>
-        internal ErrorReports ApplicationLog = new ErrorReports();
 
         private OptionsToolbarViewModel fOptionsToolbarCommands;
 
@@ -65,14 +59,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             ReportsViewModel = new ReportingWindowViewModel(globals.FileInteractionService);
             ReportLogger = new LogReporter(UpdateReport);
             fUiGlobals = globals;
+            fUiGlobals.ReportLogger = ReportLogger;
 
-            OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, fUiGlobals);
+            OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, fUiGlobals);
             Tabs.Add(new BasicDataViewModel(ProgramPortfolio));
-            Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, globals));
-            Tabs.Add(new SecurityEditWindowViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, globals));
-            Tabs.Add(new ValueListWindowViewModel("Bank Accounts", ProgramPortfolio, UpdateDataCallback, ReportLogger, globals, Account.BankAccount));
-            Tabs.Add(new ValueListWindowViewModel("Benchmarks", ProgramPortfolio, UpdateDataCallback, ReportLogger, globals, Account.Benchmark));
-            Tabs.Add(new ValueListWindowViewModel("Currencies", ProgramPortfolio, UpdateDataCallback, ReportLogger, globals, Account.Currency));
+            Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, fUiGlobals));
+            Tabs.Add(new SecurityEditWindowViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, fUiGlobals));
+            Tabs.Add(new ValueListWindowViewModel("Bank Accounts", ProgramPortfolio, UpdateDataCallback, ReportLogger, fUiGlobals, Account.BankAccount));
+            Tabs.Add(new ValueListWindowViewModel("Benchmarks", ProgramPortfolio, UpdateDataCallback, ReportLogger, fUiGlobals, Account.Benchmark));
+            Tabs.Add(new ValueListWindowViewModel("Currencies", ProgramPortfolio, UpdateDataCallback, ReportLogger, fUiGlobals, Account.Currency));
 
             ProgramPortfolio.PortfolioChanged += AllData_portfolioChanged;
         }
@@ -91,11 +86,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
 
             OptionsToolbarCommands.UpdateData(ProgramPortfolio);
+
+            if (e.ChangedPortfolio)
+            {
+                ReportsViewModel?.ClearReportsCommand.Execute(null);
+            }
         }
 
         public void UpdateReport(ReportSeverity severity, ReportType type, ReportLocation location, string message)
         {
-            ApplicationLog.AddErrorReport(severity, type, location, message);
             ReportsViewModel?.UpdateReport(severity, type, location, message);
         }
 

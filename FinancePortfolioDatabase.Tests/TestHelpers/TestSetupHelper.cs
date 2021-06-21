@@ -43,9 +43,9 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
             return action => action(portfolio);
         }
 
-        public static UiGlobals CreateGlobalsMock(IFileSystem fileSystem, IFileInteractionService fileService, IDialogCreationService dialogCreationService)
+        public static UiGlobals CreateGlobalsMock(IFileSystem fileSystem, IFileInteractionService fileService, IDialogCreationService dialogCreationService, IReportLogger logger = null)
         {
-            return new UiGlobals(null, DispatcherSetup().Object, fileSystem, fileService, dialogCreationService);
+            return new UiGlobals(null, DispatcherSetup().Object, fileSystem, fileService, dialogCreationService, logger ?? DummyReportLogger);
         }
 
         private static Mock<IDispatcher> DispatcherSetup()

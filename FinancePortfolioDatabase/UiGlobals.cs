@@ -44,9 +44,10 @@ namespace FinancePortfolioDatabase
         public IReportLogger ReportLogger
         {
             get;
+            set;
         }
 
-        public UiGlobals(string currentWorkingDirectory, IDispatcher currentDispatcher, IFileSystem currentFileSystem, IFileInteractionService fileInteractionService, IDialogCreationService dialogCreationService, IReportLogger reportLogger = null)
+        public UiGlobals(string currentWorkingDirectory, IDispatcher currentDispatcher, IFileSystem currentFileSystem, IFileInteractionService fileInteractionService, IDialogCreationService dialogCreationService, IReportLogger reportLogger)
         {
             CurrentWorkingDirectory = currentWorkingDirectory;
             CurrentDispatcher = currentDispatcher;
