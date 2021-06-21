@@ -51,6 +51,12 @@ namespace FinancialStructures.Database
             }
         }
 
+        public bool ChangedPortfolio
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// The type of account this refers to.
         /// </summary>
@@ -60,21 +66,12 @@ namespace FinancialStructures.Database
         }
 
         /// <summary>
-        /// Details how the account type has changed.
+        /// Constructor taking an account type.
         /// </summary>
-        public EventAction HowChanged
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Constructor taking an account type, and how the data was edited.
-        /// </summary>
-        public PortfolioEventArgs(Account type, EventAction eventAction)
+        public PortfolioEventArgs(bool changedPortfolio)
             : base()
         {
-            HowChanged = eventAction;
-            ChangedAccount = type;
+            ChangedPortfolio = changedPortfolio;
         }
 
         /// <summary>

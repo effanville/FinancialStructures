@@ -40,7 +40,6 @@ namespace FinancialStructures.Database.Implementation
                 AllData database = XmlFileAccess.ReadFromXmlFile<AllData>(fileSystem, filePath, out string error);
                 if (database != null)
                 {
-                    database.MyFunds.FilePath = filePath;
                     CopyData(database.MyFunds);
 
                     if (!database.MyFunds.BenchMarks.Any())
@@ -49,7 +48,7 @@ namespace FinancialStructures.Database.Implementation
                     }
 
                     WireDataChangedEvents();
-                    OnPortfolioChanged(this, new PortfolioEventArgs());
+                    OnPortfolioChanged(this, new PortfolioEventArgs(changedPortfolio: true));
                     Saving();
                     _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Loading, $"Loaded new database from {filePath}");
                 }
@@ -65,7 +64,7 @@ namespace FinancialStructures.Database.Implementation
 
             CopyData(new Portfolio());
             WireDataChangedEvents();
-            OnPortfolioChanged(this, new PortfolioEventArgs());
+            OnPortfolioChanged(this, new PortfolioEventArgs(changedPortfolio: true));
             Saving();
         }
 

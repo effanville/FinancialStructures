@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
@@ -13,9 +12,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
 {
     public class ReportingWindowViewModel : PropertyChangedBase
     {
-        private ObservableCollection<ErrorReport> fReportsToView;
+        private ErrorReports fReportsToView;
         private readonly IFileInteractionService fFileInteractionService;
-        public ObservableCollection<ErrorReport> ReportsToView
+        public ErrorReports ReportsToView
         {
             get
             {
@@ -42,33 +41,16 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
         }
 
-        private ErrorReports fReports;
         public ErrorReports Reports
         {
-            get
-            {
-                return fReports;
-            }
-            set
-            {
-                fReports = value;
-                OnPropertyChanged(nameof(Reports));
-            }
+            get;
+            set;
         }
-
-        private int fIndexToDelete;
 
         public int IndexToDelete
         {
-            get
-            {
-                return fIndexToDelete;
-            }
-            set
-            {
-                fIndexToDelete = value;
-                OnPropertyChanged(nameof(IndexToDelete));
-            }
+            get;
+            set;
         }
 
         private ReportSeverity fReportingSeverity;
@@ -100,7 +82,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             IsExpanded = false;
             fFileInteractionService = fileInteractionService;
             Reports = new ErrorReports();
-            ReportsToView = new ObservableCollection<ErrorReport>();
+            ReportsToView = new ErrorReports();
             ClearReportsCommand = new RelayCommand(ExecuteClearReports);
             ClearSingleReportCommand = new RelayCommand(ExecuteClearSelectedReport);
             ExportReportsCommand = new RelayCommand(ExecuteExportReportsCommand);
@@ -110,8 +92,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         internal void SyncReports()
         {
             ReportsToView = null;
-            ReportsToView = new ObservableCollection<ErrorReport>(Reports.GetReports(ReportingSeverity));
-            if (ReportsToView != null && ReportsToView.Any())
+            ReportsToView = new ErrorReports(Reports.GetReports(ReportingSeverity));
+            if (ReportsToView != null && (ReportsToView?.Any() ?? false))
             {
                 IsExpanded = true;
             }
