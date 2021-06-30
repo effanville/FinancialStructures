@@ -81,12 +81,20 @@ namespace FinancialStructures.Database.Download
                 {
                     downloadTasks.Add(DownloadLatestValue(sec.Names, value => sec.SetData(DateTime.Today, value, reportLogger), reportLogger));
                 }
+                else
+                {
+                    _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Downloading, $"No Url set for {sec.Names}");
+                }
             }
             foreach (IExchangableValueList acc in portfo.BankAccountsThreadSafe)
             {
                 if (!string.IsNullOrEmpty(acc.Names.Url))
                 {
                     downloadTasks.Add(DownloadLatestValue(acc.Names, value => acc.SetData(DateTime.Today, value, reportLogger), reportLogger));
+                }
+                else
+                {
+                    _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Downloading, $"No Url set for {acc.Names}");
                 }
             }
             foreach (ICurrency currency in portfo.CurrenciesThreadSafe)
@@ -95,12 +103,20 @@ namespace FinancialStructures.Database.Download
                 {
                     downloadTasks.Add(DownloadLatestValue(currency.Names, value => currency.SetData(DateTime.Today, value, reportLogger), reportLogger));
                 }
+                else
+                {
+                    _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Downloading, $"No Url set for {currency.Names}");
+                }
             }
             foreach (IValueList sector in portfo.BenchMarksThreadSafe)
             {
                 if (!string.IsNullOrEmpty(sector.Names.Url))
                 {
                     downloadTasks.Add(DownloadLatestValue(sector.Names, value => sector.SetData(DateTime.Today, value, reportLogger), reportLogger));
+                }
+                else
+                {
+                    _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Downloading, $"No Url set for {sector.Names}");
                 }
             }
 
@@ -115,7 +131,7 @@ namespace FinancialStructures.Database.Download
             string data = await WebDownloader.DownloadFromURLasync(names.Url, reportLogger).ConfigureAwait(false);
             if (string.IsNullOrEmpty(data))
             {
-                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.Downloading, $"{names.Company}-{names.Name}: could not download data from {names.Url}");
+                _ = reportLogger?.LogUsefulError(ReportLocation.Downloading, $"{names.Company}-{names.Name}: could not download data from {names.Url}");
                 return;
             }
             if (!ProcessDownloadString(names.Url, data, reportLogger, out double value))
