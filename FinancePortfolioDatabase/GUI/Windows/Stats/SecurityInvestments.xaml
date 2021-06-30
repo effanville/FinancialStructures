@@ -1,5 +1,5 @@
 ﻿<statswindow:AutoGenColumnControl x:ClassModifier="internal"
-                                  xmlns:statswindow="clr-namespace:FinanceWindows.StatsWindow"
+                                  xmlns:statswindow="clr-namespace:Common.UI.DisplayObjects;assembly=Common.UI"
                                   x:Class="FinancePortfolioDatabase.GUI.Windows.Stats.SecurityInvestments"
                                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"

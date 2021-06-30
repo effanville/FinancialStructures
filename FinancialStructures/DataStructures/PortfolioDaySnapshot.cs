@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.NamingStructures;
-using StructureCommon.DataStructures;
-using StructureCommon.Extensions;
+using Common.Structure.DataStructures;
+using Common.Structure.Extensions;
 
 namespace FinancialStructures.DataStructures
 {

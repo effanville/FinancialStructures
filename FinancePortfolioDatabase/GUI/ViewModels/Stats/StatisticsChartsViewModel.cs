@@ -8,7 +8,7 @@ using System.Windows.Media;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataStructures;
-using StructureCommon.DataStructures;
+using Common.Structure.DataStructures;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {

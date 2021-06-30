@@ -4,8 +4,8 @@ using System.Linq;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
-using StructureCommon.DataStructures;
-using StructureCommon.Extensions;
+using Common.Structure.DataStructures;
+using Common.Structure.Extensions;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {

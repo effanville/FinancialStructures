@@ -1,7 +1,7 @@
 ﻿using System.Windows.Controls;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 
-namespace FinancePortfolioDatabase.GUI.Windows.Common
+namespace FinancePortfolioDatabase.GUI.Windows
 {
     /// <summary>
     /// Interaction logic for SingleValueEditWindow.xaml

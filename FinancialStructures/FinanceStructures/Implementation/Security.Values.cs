@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using FinancialStructures.DataStructures;
-using StructureCommon.DataStructures;
+using Common.Structure.DataStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {

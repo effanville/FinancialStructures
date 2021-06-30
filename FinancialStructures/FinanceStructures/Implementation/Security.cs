@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
-using StructureCommon.DataStructures;
+using Common.Structure.DataStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {

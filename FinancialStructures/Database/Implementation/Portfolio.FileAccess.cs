@@ -1,8 +1,8 @@
 ﻿using System.IO.Abstractions;
 using System.Linq;
 using FinancialStructures.SavingClasses;
-using StructureCommon.FileAccess;
-using StructureCommon.Reporting;
+using Common.Structure.FileAccess;
+using Common.Structure.Reporting;
 
 namespace FinancialStructures.Database.Implementation
 {

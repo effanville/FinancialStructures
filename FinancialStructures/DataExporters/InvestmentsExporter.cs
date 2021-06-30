@@ -2,7 +2,7 @@
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataStructures;
-using StructureCommon.Reporting;
+using Common.Structure.Reporting;
 
 namespace FinancialStructures.DataExporters
 {

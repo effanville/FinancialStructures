@@ -4,7 +4,7 @@ using System.Linq;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using NUnit.Framework;
-using StructureCommon.DisplayClasses;
+using Common.Structure.DisplayClasses;
 using FinancePortfolioDatabase.Tests.ViewModelExtensions;
 using FinancePortfolioDatabase.Tests.TestHelpers;
 

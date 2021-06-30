@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using FinancialStructures.NamingStructures;
-using StructureCommon.FileAccess;
-using StructureCommon.Reporting;
-using StructureCommon.WebAccess;
+using Common.Structure.FileAccess;
+using Common.Structure.Reporting;
+using Common.Structure.WebAccess;
 
 namespace FinancialStructures.StockStructures.Implementation
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
-using StructureCommon.Reporting;
+using Common.Structure.Reporting;
 
 namespace FinanceWindows
 {

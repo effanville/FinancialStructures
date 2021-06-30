@@ -6,9 +6,9 @@ using FinancialStructures.Database;
 using FinancialStructures.Database.Implementation;
 using FinancialStructures.NamingStructures;
 using Moq;
-using StructureCommon.DataStructures;
-using StructureCommon.Reporting;
-using UICommon.Services;
+using Common.Structure.DataStructures;
+using Common.Structure.Reporting;
+using Common.UI.Services;
 
 namespace FinancePortfolioDatabase.Tests.TestHelpers
 {

@@ -4,9 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
-using StructureCommon.Reporting;
-using UICommon.Services;
-using UICommon.ViewModelBases;
+using Common.Structure.Reporting;
+using Common.UI.Services;
+using Common.UI.ViewModelBases;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {

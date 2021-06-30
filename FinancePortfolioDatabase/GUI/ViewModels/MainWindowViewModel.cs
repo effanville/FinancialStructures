@@ -4,8 +4,8 @@ using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancePortfolioDatabase.GUI.ViewModels.Security;
 using FinancePortfolioDatabase.GUI.ViewModels.Stats;
 using FinancialStructures.Database;
-using StructureCommon.Reporting;
-using UICommon.ViewModelBases;
+using Common.Structure.Reporting;
+using Common.UI.ViewModelBases;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {

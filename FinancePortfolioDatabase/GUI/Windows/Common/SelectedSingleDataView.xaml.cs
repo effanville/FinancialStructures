@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace FinancePortfolioDatabase.GUI.Windows.Common
+namespace FinancePortfolioDatabase.GUI.Windows
 {
     /// <summary>
     /// Interaction logic for SelectedSingleDataView.xaml

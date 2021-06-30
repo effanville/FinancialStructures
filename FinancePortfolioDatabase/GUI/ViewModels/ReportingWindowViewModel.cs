@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
-using StructureCommon.Reporting;
-using UICommon.Commands;
-using UICommon.Services;
-using UICommon.ViewModelBases;
+using Common.Structure.Reporting;
+using Common.UI.Commands;
+using Common.UI.Services;
+using Common.UI.ViewModelBases;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {

@@ -2,7 +2,7 @@
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.NamingStructures;
-using StructureCommon.Extensions;
+using Common.Structure.Extensions;
 
 namespace FinancialStructures.Statistics
 {

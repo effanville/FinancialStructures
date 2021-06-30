@@ -4,7 +4,7 @@ using System.IO.Abstractions;
 using System.Reflection;
 using System.Windows;
 using FinancePortfolioDatabase.GUI.ViewModels;
-using UICommon.Services;
+using Common.UI.Services;
 
 namespace FinancePortfolioDatabase.GUI.Windows
 {

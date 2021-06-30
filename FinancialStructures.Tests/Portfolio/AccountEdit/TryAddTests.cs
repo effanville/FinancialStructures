@@ -2,7 +2,7 @@
 using System.Linq;
 using FinancialStructures.NamingStructures;
 using NUnit.Framework;
-using StructureCommon.Reporting;
+using Common.Structure.Reporting;
 using FinancialStructures.Database;
 
 namespace FinancialStructures.Tests.Database.AccountEdit

@@ -6,12 +6,12 @@ using System.Windows.Input;
 using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
-using StructureCommon.DataStructures;
-using StructureCommon.FileAccess;
-using StructureCommon.Reporting;
-using UICommon.Commands;
-using UICommon.Services;
-using UICommon.ViewModelBases;
+using Common.Structure.DataStructures;
+using Common.Structure.FileAccess;
+using Common.Structure.Reporting;
+using Common.UI.Commands;
+using Common.UI.Services;
+using Common.UI.ViewModelBases;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {

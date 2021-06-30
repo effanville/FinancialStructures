@@ -2,7 +2,7 @@
 using System.Linq;
 using FinancialStructures.NamingStructures;
 using NUnit.Framework;
-using StructureCommon.DataStructures;
+using Common.Structure.DataStructures;
 using FinancialStructures.Database;
 
 namespace FinancialStructures.Tests.Database.DataEdit

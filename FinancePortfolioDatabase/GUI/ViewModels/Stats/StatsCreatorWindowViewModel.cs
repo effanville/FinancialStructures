@@ -8,9 +8,9 @@ using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataExporters;
 using FinancialStructures.DataStructures;
-using StructureCommon.Reporting;
-using UICommon.Commands;
-using UICommon.Services;
+using Common.Structure.Reporting;
+using Common.UI.Commands;
+using Common.UI.Services;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {

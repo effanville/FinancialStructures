@@ -5,7 +5,7 @@
                     xmlns:vms="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Security"
                     xmlns:vmStats="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Stats"
                     xmlns:cvm="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Common"
-                    xmlns:viewCommon="clr-namespace:FinancePortfolioDatabase.GUI.Windows.Common"
+                    xmlns:viewCommon="clr-namespace:FinancePortfolioDatabase.GUI.Windows"
                     xmlns:viewSecurity="clr-namespace:FinancePortfolioDatabase.GUI.Windows.Security"
                     xmlns:viewStats="clr-namespace:FinancePortfolioDatabase.GUI.Windows.Stats">
     <DataTemplate DataType="{x:Type vm:BasicDataViewModel}">

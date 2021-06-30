@@ -9,8 +9,8 @@ using FinancialStructures.DataExporters.ExportOptions;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Statistics;
-using StructureCommon.FileAccess;
-using StructureCommon.Reporting;
+using Common.Structure.FileAccess;
+using Common.Structure.Reporting;
 
 namespace FinancialStructures.DataExporters
 {

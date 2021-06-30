@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using FinancialStructures.DataStructures;
-using StructureCommon.DataStructures;
-using StructureCommon.Reporting;
+using Common.Structure.DataStructures;
+using Common.Structure.Reporting;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {

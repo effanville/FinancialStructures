@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using FinancialStructures.Statistics;
-using StructureCommon.DisplayClasses;
+using Common.Structure.DisplayClasses;
 
 namespace FinancialStructures.DataExporters.ExportOptions
 {

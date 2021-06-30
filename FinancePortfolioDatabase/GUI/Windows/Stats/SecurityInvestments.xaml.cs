@@ -1,4 +1,4 @@
-﻿using FinanceWindows.StatsWindow;
+﻿using Common.UI.DisplayObjects;
 
 namespace FinancePortfolioDatabase.GUI.Windows.Stats
 {

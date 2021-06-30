@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using StructureCommon.DataStructures;
+using Common.Structure.DataStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {

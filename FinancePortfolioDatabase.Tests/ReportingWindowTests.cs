@@ -2,7 +2,7 @@ using System.Linq;
 using FinancePortfolioDatabase.GUI.ViewModels;
 using FinancePortfolioDatabase.Tests.TestHelpers;
 using NUnit.Framework;
-using StructureCommon.Reporting;
+using Common.Structure.Reporting;
 
 namespace FinancePortfolioDatabase.Tests
 {

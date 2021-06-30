@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.StockStructures.Implementation;
-using StructureCommon.Reporting;
+using Common.Structure.Reporting;
 
 namespace FinancialStructures.StockStructures
 {

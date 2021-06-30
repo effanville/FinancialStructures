@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using StructureCommon.Mathematics;
+using Common.Structure.Mathematics;
 
 namespace FinancialStructures.StockStructures.Implementation
 {

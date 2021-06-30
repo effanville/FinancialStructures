@@ -5,7 +5,7 @@ using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancePortfolioDatabase.GUI.ViewModels;
 using FinancePortfolioDatabase.GUI.ViewModels.Security;
 using FinancialStructures.NamingStructures;
-using StructureCommon.DisplayClasses;
+using Common.Structure.DisplayClasses;
 using FinancePortfolioDatabase.Tests.ViewModelExtensions;
 
 namespace FinancePortfolioDatabase.Tests

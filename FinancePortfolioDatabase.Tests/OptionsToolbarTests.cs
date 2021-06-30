@@ -3,7 +3,7 @@ using System.Windows;
 using FinancialStructures.Database;
 using Moq;
 using NUnit.Framework;
-using UICommon.Services;
+using Common.UI.Services;
 using FinancialStructures.Database.Implementation;
 using FinancePortfolioDatabase.GUI.ViewModels;
 using System.IO.Abstractions;

@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
-using StructureCommon.DataStructures;
-using StructureCommon.FinanceFunctions;
+using Common.Structure.DataStructures;
+using Common.Structure.FinanceFunctions;
 
 namespace FinancialStructures.Database.Statistics
 {

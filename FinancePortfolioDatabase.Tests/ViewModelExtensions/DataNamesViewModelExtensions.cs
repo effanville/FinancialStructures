@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.NamingStructures;
-using StructureCommon.DisplayClasses;
+using Common.Structure.DisplayClasses;
 
 namespace FinancePortfolioDatabase.Tests.ViewModelExtensions
 {

@@ -3,7 +3,7 @@ using System.Data;
 using System.Linq;
 using System.Windows;
 using FinancePortfolioDatabase.GUI.ViewModels.Stats;
-using FinanceWindows.StatsWindow;
+using Common.UI.DisplayObjects;
 
 namespace FinancePortfolioDatabase.GUI.Windows.Stats
 {

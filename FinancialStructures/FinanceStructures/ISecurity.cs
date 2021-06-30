@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using FinancialStructures.DataStructures;
-using StructureCommon.DataStructures;
-using StructureCommon.FileAccess;
-using StructureCommon.Reporting;
+using Common.Structure.DataStructures;
+using Common.Structure.FileAccess;
+using Common.Structure.Reporting;
 
 namespace FinancialStructures.FinanceStructures
 {

@@ -2,7 +2,7 @@
 using System.Windows.Input;
 using FinancialStructures.Database;
 using Microsoft.Win32;
-using UICommon.Commands;
+using Common.UI.Commands;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {

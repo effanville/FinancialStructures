@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 using FinancePortfolioDatabase.GUI.Windows.Stats;
-using UICommon.Commands;
+using Common.UI.Commands;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {

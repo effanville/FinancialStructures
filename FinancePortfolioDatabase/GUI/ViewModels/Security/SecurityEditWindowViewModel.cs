@@ -5,8 +5,8 @@ using System.Linq;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
-using StructureCommon.Reporting;
-using UICommon.ViewModelBases;
+using Common.Structure.Reporting;
+using Common.UI.ViewModelBases;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 {

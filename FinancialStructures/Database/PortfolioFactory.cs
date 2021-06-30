@@ -1,6 +1,6 @@
 ﻿using System.IO.Abstractions;
 using FinancialStructures.Database.Implementation;
-using StructureCommon.Reporting;
+using Common.Structure.Reporting;
 
 namespace FinancialStructures.Database
 {

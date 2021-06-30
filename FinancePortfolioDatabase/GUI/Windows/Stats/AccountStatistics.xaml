@@ -1,4 +1,4 @@
-﻿<statswindow1:AutoGenColumnControl  xmlns:statswindow1="clr-namespace:FinanceWindows.StatsWindow"
+﻿<statswindow:AutoGenColumnControl  xmlns:statswindow="clr-namespace:Common.UI.DisplayObjects;assembly=Common.UI"
                                   x:ClassModifier="internal"
                                   x:Class="FinancePortfolioDatabase.GUI.Windows.Stats.AccountStatistics"
                                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -50,4 +50,4 @@
                   x:FieldModifier="private">
         </DataGrid>
     </Grid>
-</statswindow1:AutoGenColumnControl>
+</statswindow:AutoGenColumnControl>

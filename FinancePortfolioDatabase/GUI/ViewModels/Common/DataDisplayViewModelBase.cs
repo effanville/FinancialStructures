@@ -1,5 +1,5 @@
 ﻿using FinancialStructures.Database;
-using UICommon.ViewModelBases;
+using Common.UI.ViewModelBases;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {

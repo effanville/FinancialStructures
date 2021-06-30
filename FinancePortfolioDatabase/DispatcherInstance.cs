@@ -6,7 +6,7 @@ namespace FinancePortfolioDatabase
 {
     /// <summary>
     /// An implementation of <see cref="IDispatcher"/> using
-    /// the <see cref="Application.Current.Dispatcher"/> to 
+    /// the <see cref="Application.Current.Dispatcher"/> to
     /// dispatch.
     /// </summary>
     public class DispatcherInstance : IDispatcher

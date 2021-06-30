@@ -4,7 +4,7 @@ using System.Linq;
 using FinancialStructures.Statistics;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.Database;
-using StructureCommon.DisplayClasses;
+using Common.Structure.DisplayClasses;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {

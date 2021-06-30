@@ -1,6 +1,6 @@
 ﻿using System.IO.Abstractions;
-using StructureCommon.Reporting;
-using UICommon.Services;
+using Common.Structure.Reporting;
+using Common.UI.Services;
 
 namespace FinancePortfolioDatabase
 {

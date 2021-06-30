@@ -6,10 +6,10 @@ using System.Windows.Input;
 using FinanceWindows;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Download;
-using StructureCommon.Reporting;
-using UICommon.Commands;
-using UICommon.Services;
-using UICommon.ViewModelBases;
+using Common.Structure.Reporting;
+using Common.UI.Commands;
+using Common.UI.Services;
+using Common.UI.ViewModelBases;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {

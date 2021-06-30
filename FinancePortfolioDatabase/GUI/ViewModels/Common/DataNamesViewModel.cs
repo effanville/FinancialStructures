@@ -8,11 +8,11 @@ using FinancialStructures.Database;
 using FinancialStructures.Database.Download;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.NamingStructures;
-using StructureCommon.DataStructures;
-using StructureCommon.DisplayClasses;
-using StructureCommon.Reporting;
-using UICommon.Commands;
-using UICommon.ViewModelBases;
+using Common.Structure.DataStructures;
+using Common.Structure.DisplayClasses;
+using Common.Structure.Reporting;
+using Common.UI.Commands;
+using Common.UI.ViewModelBases;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {

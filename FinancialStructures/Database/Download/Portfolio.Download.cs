@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
-using StructureCommon.Reporting;
-using StructureCommon.WebAccess;
+using Common.Structure.Reporting;
+using Common.Structure.WebAccess;
 
 namespace FinancialStructures.Database.Download
 {

@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:cht="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
-             xmlns:uic="clr-namespace:UICommon.Converters;assembly=UICommon"
+             xmlns:uic="clr-namespace:Common.UI.Converters;assembly=Common.UI"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
