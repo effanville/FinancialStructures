@@ -57,6 +57,8 @@ namespace FinancialStructures.Statistics
                     return new StatisticNumberEntries();
                 case Statistic.EntryYearDensity:
                     return new StatisticEntryYearDensity();
+                case Statistic.Notes:
+                    return new StatisticNotes();
                 default:
                     return new StatisticCompany();
             }

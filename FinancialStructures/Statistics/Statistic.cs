@@ -103,6 +103,11 @@
         /// <summary>
         /// The number of data entries per year.
         /// </summary>
-        EntryYearDensity
+        EntryYearDensity,
+
+        /// <summary>
+        /// Any notes associated to this object.
+        /// </summary>
+        Notes
     }
 }

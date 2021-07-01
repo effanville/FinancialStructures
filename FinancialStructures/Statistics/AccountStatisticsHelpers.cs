@@ -94,7 +94,7 @@ namespace FinancialStructures.Statistics
         /// </summary>
         public static Statistic[] DefaultBankAccountStats()
         {
-            return new Statistic[] { Statistic.Company, Statistic.Name, Statistic.LatestValue };
+            return new Statistic[] { Statistic.Company, Statistic.Name, Statistic.LatestValue, Statistic.Notes };
         }
 
         /// <summary>
