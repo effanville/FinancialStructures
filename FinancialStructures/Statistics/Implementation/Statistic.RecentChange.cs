@@ -20,15 +20,7 @@ namespace FinancialStructures.Statistics
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Totals total, TwoName name)
         {
-            if (total == Totals.Company)
-            {
-                Value = portfolio.RecentChange(Totals.SecurityCompany, name.Company);
-            }
-
-            if (total == Totals.All)
-            {
-                Value = portfolio.RecentChange();
-            }
+            Value = portfolio.RecentChange(total, name.Company);
         }
     }
 }
