@@ -1,5 +1,6 @@
 ﻿using System;
 using FinancialStructures.FinanceStructures;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Statistics
 {
@@ -12,7 +13,7 @@ namespace FinancialStructures.Database.Statistics
         /// <param name="elementType">The type of element to search for. All searches for Bank accounts and securities.</param>
         /// <param name="name">An ancillary name to use in the case of Sectors</param>
         /// <returns></returns>
-        public static DateTime FirstValueDate(this IPortfolio portfolio, Totals elementType, string name = null)
+        public static DateTime FirstValueDate(this IPortfolio portfolio, Totals elementType, TwoName name = null)
         {
             DateTime output = DateTime.Today;
             switch (elementType)
@@ -34,7 +35,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Totals.SecurityCompany:
                 {
-                    foreach (ISecurity sec in portfolio.CompanySecurities(name))
+                    foreach (ISecurity sec in portfolio.CompanySecurities(name.Company))
                     {
                         if (sec.FirstValue().Day < output)
                         {
@@ -46,7 +47,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Totals.Sector:
                 {
-                    foreach (ISecurity sec in portfolio.SectorSecurities(name))
+                    foreach (ISecurity sec in portfolio.SectorSecurities(name.Name))
                     {
                         if (sec.FirstValue().Day < output)
                         {

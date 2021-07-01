@@ -12,11 +12,11 @@ namespace FinancialStructures.Database.Statistics
         /// <summary>
         /// Calculates the total IRR for the portfolio and the account type given over the time frame specified.
         /// </summary>
-        public static double IRRTotal(this IPortfolio portfolio, Totals accountType, TwoName name = null)
+        public static double IRRTotal(this IPortfolio portfolio, Totals total, TwoName name = null)
         {
-            DateTime earlierTime = portfolio.FirstValueDate(accountType, name.Company);
-            DateTime laterTime = portfolio.LatestDate(accountType, name.Company);
-            return portfolio.IRRTotal(accountType, earlierTime, laterTime, name);
+            DateTime earlierTime = portfolio.FirstValueDate(total, name);
+            DateTime laterTime = portfolio.LatestDate(total, name);
+            return portfolio.IRRTotal(total, earlierTime, laterTime, name);
         }
 
         /// <summary>

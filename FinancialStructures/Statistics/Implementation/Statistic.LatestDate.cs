@@ -64,7 +64,7 @@ namespace FinancialStructures.Statistics
         /// <inheritdoc/>
         public void Calculate(IPortfolio portfolio, Totals total, TwoName name)
         {
-            StringValue = portfolio.LatestDate(total, name.Company).ToUkDateString();
+            StringValue = portfolio.LatestDate(total, name).ToUkDateString();
         }
 
         /// <inheritdoc/>

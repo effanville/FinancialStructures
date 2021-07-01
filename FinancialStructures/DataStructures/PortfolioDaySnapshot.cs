@@ -180,7 +180,7 @@ namespace FinancialStructures.DataStructures
                 var yearCar = new DailyValuation(date, portfolio.IRRTotal(Totals.SecurityCompany, date.AddDays(-365), date, new TwoName(companyName)).Truncate());
                 Security1YrCar.Add(companyName, yearCar);
 
-                double totalIRR = date < portfolio.FirstValueDate(Totals.SecurityCompany, companyName) ? 0.0 : portfolio.IRRTotal(Totals.SecurityCompany, portfolio.FirstValueDate(Totals.SecurityCompany, companyName), date, new TwoName(companyName)).Truncate();
+                double totalIRR = date < portfolio.FirstValueDate(Totals.SecurityCompany, new TwoName(companyName)) ? 0.0 : portfolio.IRRTotal(Totals.SecurityCompany, portfolio.FirstValueDate(Totals.SecurityCompany, new TwoName(companyName)), date, new TwoName(companyName)).Truncate();
 
                 SecurityTotalCar.Add(companyName, new DailyValuation(date, totalIRR));
             }
@@ -205,7 +205,7 @@ namespace FinancialStructures.DataStructures
                 var sectorValue = new DailyValuation(date, portfolio.TotalValue(Totals.Sector, date, new TwoName(sectorName)).Truncate());
                 SectorValues.Add(sectorName, sectorValue);
 
-                double sectorCAR = date < portfolio.FirstValueDate(Totals.Sector, sectorName) ? 0.0 : portfolio.IRRTotal(Totals.Sector, portfolio.FirstValueDate(Totals.Sector, sectorName), date, new TwoName(null, sectorName)).Truncate();
+                double sectorCAR = date < portfolio.FirstValueDate(Totals.Sector, new TwoName(null, sectorName)) ? 0.0 : portfolio.IRRTotal(Totals.Sector, portfolio.FirstValueDate(Totals.Sector, new TwoName(null, sectorName)), date, new TwoName(null, sectorName)).Truncate();
 
                 SectorCar.Add(sectorName, new DailyValuation(date, sectorCAR));
             }

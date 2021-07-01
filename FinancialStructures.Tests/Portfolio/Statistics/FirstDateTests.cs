@@ -2,6 +2,7 @@
 using FinancialStructures.Database.Statistics;
 using NUnit.Framework;
 using FinancialStructures.Database;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Tests.Database.Statistics
 {
@@ -15,7 +16,7 @@ namespace FinancialStructures.Tests.Database.Statistics
         public void FirstValueDateTests(TestDatabaseName databaseName, Totals totals, string companyName, DateTime expectedDate)
         {
             var portfolio = TestDatabase.Databases[databaseName];
-            Assert.AreEqual(expectedDate, portfolio.FirstValueDate(totals, companyName));
+            Assert.AreEqual(expectedDate, portfolio.FirstValueDate(totals, new TwoName(companyName)));
         }
     }
 }

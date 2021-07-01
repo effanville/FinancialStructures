@@ -27,7 +27,7 @@ namespace FinancialStructures.Statistics
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Totals total, TwoName name)
         {
-            Value = (portfolio.LatestDate(total, name.Company) - portfolio.FirstValueDate(total, name.Company)).Days / ((double)365 * portfolio.EntryDistribution(total, name).Count());
+            Value = (portfolio.LatestDate(total, name) - portfolio.FirstValueDate(total, name)).Days / ((double)365 * portfolio.EntryDistribution(total, name).Count());
         }
 
         /// <inheritdoc/>
