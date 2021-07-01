@@ -213,7 +213,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         {
             get
             {
-                return AccountStatisticsHelpers.AllStatistics().ToList();
+                return AccountStatisticsHelpers.DefaultSectorStats().ToList();
             }
         }
 
@@ -300,10 +300,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             foreach (var stat in AccountStatisticsHelpers.AllStatistics())
             {
                 SecurityColumnNames.Add(new Selectable<Statistic>(stat, true));
-                SectorColumnNames.Add(new Selectable<Statistic>(stat, true));
             }
 
             SecuritySortingField = Statistic.Company;
+
+            foreach (var stat in AccountStatisticsHelpers.DefaultSectorStats())
+            {
+                SectorColumnNames.Add(new Selectable<Statistic>(stat, true));
+            }
+
             SectorSortingField = Statistic.Name;
 
             foreach (var stat in AccountStatisticsHelpers.DefaultBankAccountStats())

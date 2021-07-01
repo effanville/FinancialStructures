@@ -71,7 +71,7 @@ namespace FinancialStructures.Database.Statistics
                             var latest = acc.LatestValue();
                             if ((displayValueFunds && latest.Value > 0) || !displayValueFunds)
                             {
-                                stats.Add(new AccountStatistics(portfolio, account, acc.Names, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
+                                stats.Add(new AccountStatistics(portfolio, account, acc.Names, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats()));
                             }
                         }
 
@@ -80,7 +80,7 @@ namespace FinancialStructures.Database.Statistics
                         if (displayTotals)
                         {
 
-                            stats.Add(new AccountStatistics(portfolio, Totals.Benchmark, new NameData("Totals", ""), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
+                            stats.Add(new AccountStatistics(portfolio, Totals.Benchmark, new NameData("Totals", ""), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats()));
                         }
                         break;
                     }
@@ -140,7 +140,7 @@ namespace FinancialStructures.Database.Statistics
                     }
                     case Account.Benchmark:
                     {
-                        stats.Add(new AccountStatistics(portfolio, account, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
+                        stats.Add(new AccountStatistics(portfolio, account, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats()));
 
                         break;
                     }
@@ -196,7 +196,6 @@ namespace FinancialStructures.Database.Statistics
                     }
                     case Totals.BankAccount:
                     case Totals.BankAccountCompany:
-                    case Totals.BankAccountSector:
                     {
                         foreach (string bankAccount in portfolio.Companies(EnumConvert.ConvertTotalToAccount(total)))
                         {
@@ -204,6 +203,18 @@ namespace FinancialStructures.Database.Statistics
                             if ((displayValueFunds && latest > 0) || !displayValueFunds)
                             {
                                 stats.Add(new AccountStatistics(portfolio, total, new NameData(bankAccount, "Totals"), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
+                            }
+                        }
+                        break;
+                    }
+                    case Totals.BankAccountSector:
+                    {
+                        foreach (string bankAccount in portfolio.Companies(EnumConvert.ConvertTotalToAccount(total)))
+                        {
+                            double latest = portfolio.TotalValue(total, new TwoName(bankAccount));
+                            if ((displayValueFunds && latest > 0) || !displayValueFunds)
+                            {
+                                stats.Add(new AccountStatistics(portfolio, total, new NameData(bankAccount, "Totals"), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats()));
                             }
                         }
                         break;
@@ -258,12 +269,16 @@ namespace FinancialStructures.Database.Statistics
                         stats.Add(new AccountStatistics(portfolio, total, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
                         break;
                     }
-                    case Totals.Sector:
-                    case Totals.Benchmark:
-                    case Totals.SecurityCompany:
                     case Totals.SecuritySector:
+                    case Totals.SecurityCompany:
                     {
                         stats.Add(new AccountStatistics(portfolio, total, name, statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics()));
+                        break;
+                    }
+                    case Totals.Sector:
+                    case Totals.Benchmark:
+                    {
+                        stats.Add(new AccountStatistics(portfolio, total, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats()));
                         break;
                     }
                 }

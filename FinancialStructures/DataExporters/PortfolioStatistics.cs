@@ -212,7 +212,7 @@ namespace FinancialStructures.DataExporters
 
                         sectorDataToWrite.Sort(options.SectorDisplayOptions);
 
-                        SpacingAdd(options.Spacing, options.SectorDisplayOptions.SortingField, ref sectorDataToWrite);
+                        SectorSpacingAdd(options.Spacing, options.SectorDisplayOptions.SortingField, ref sectorDataToWrite);
 
                         fileWriter.WriteTableFromEnumerable(exportType, options.SectorDisplayOptions.DisplayFieldNames(), sectorDataToWrite.Select(data => data.Statistics), true);
                     }
@@ -247,6 +247,29 @@ namespace FinancialStructures.DataExporters
                     while (index < dataList.Count - 1)
                     {
                         if (dataList[index].NameData.Company != dataList[index + 1].NameData.Company)
+                        {
+                            dataList.Insert(index + 1, new AccountStatistics());
+                            index++;
+                        }
+                        index++;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds spacing into the table list if user desires.
+        /// </summary>
+        private void SectorSpacingAdd(bool addSpacing, Statistic sortingField, ref List<AccountStatistics> dataList)
+        {
+            if (addSpacing)
+            {
+                if (sortingField == Statistic.Company || sortingField == Statistic.Name)
+                {
+                    int index = 0;
+                    while (index < dataList.Count - 1)
+                    {
+                        if (dataList[index].NameData.Name != dataList[index + 1].NameData.Name)
                         {
                             dataList.Insert(index + 1, new AccountStatistics());
                             index++;

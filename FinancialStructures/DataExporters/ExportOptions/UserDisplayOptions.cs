@@ -103,7 +103,7 @@ namespace FinancialStructures.DataExporters.ExportOptions
             options.Add(new Selectable<string>(ShowSecurities, true));
             options.Add(new Selectable<string>(ShowBankAccounts, true));
             options.Add(new Selectable<string>(ShowSectors, true));
-            return new UserDisplayOptions(AccountStatisticsHelpers.AllStatistics().ToList(), AccountStatisticsHelpers.DefaultBankAccountStats().ToList(), AccountStatisticsHelpers.AllStatistics().ToList(), options);
+            return new UserDisplayOptions(AccountStatisticsHelpers.AllStatistics().ToList(), AccountStatisticsHelpers.DefaultBankAccountStats().ToList(), AccountStatisticsHelpers.DefaultSectorStats().ToList(), options);
         }
     }
 }
