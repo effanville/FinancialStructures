@@ -120,9 +120,9 @@ namespace FinancialStructures.Database.Statistics
         /// <param name="statisticsToDisplay">The array of statistics to be displayed.</param>
         public static List<AccountStatistics> GetStats(this IPortfolio portfolio, Account account, TwoName name, Statistic[] statisticsToDisplay = null)
         {
+            var stats = new List<AccountStatistics>();
             if (portfolio != null)
             {
-                var stats = new List<AccountStatistics>();
                 switch (account)
                 {
                     case Account.Security:
@@ -140,8 +140,10 @@ namespace FinancialStructures.Database.Statistics
                     }
                     case Account.Benchmark:
                     {
-                        stats.Add(new AccountStatistics(portfolio, account, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats()));
-
+                        if (portfolio.Exists(Account.Benchmark, new TwoName(null, name.Name)))
+                        {
+                            stats.Add(new AccountStatistics(portfolio, account, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats()));
+                        }
                         break;
                     }
                     case Account.Currency:
@@ -151,11 +153,9 @@ namespace FinancialStructures.Database.Statistics
                         break;
                     }
                 }
-
-                return stats;
             }
 
-            return null;
+            return stats;
         }
 
         /// <summary>

@@ -23,6 +23,14 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
     {
         private readonly Account TypeOfAccount;
 
+        public bool DisplayCompany
+        {
+            get
+            {
+                return TypeOfAccount != Account.Benchmark;
+            }
+        }
+
         /// <summary>
         /// Backing field for <see cref="DataNames"/>.
         /// </summary>
@@ -177,6 +185,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             {
                 return portfolio.LatestDate(TypeOfAccount, name) == DateTime.Today || portfolio.LatestValue(TypeOfAccount, name) == 0.0;
             }
+
             var values = portfolio.NameData(TypeOfAccount).Select(name => new SelectableEquatable<NameData>(name, IsUpdated(name))).ToList();
             DataNames = null;
             DataNames = values;
@@ -185,6 +194,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             {
                 SelectedName = null;
             }
+
+            OnPropertyChanged(nameof(DisplayCompany));
         }
 
         /// <summary>
