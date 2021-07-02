@@ -181,7 +181,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
         }
 
-        public List<Statistic> SecurityFieldNames
+        public static List<Statistic> SecurityFieldNames
         {
             get
             {
@@ -189,7 +189,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
         }
 
-        public List<Statistic> BankFieldNames
+        public static List<Statistic> BankFieldNames
         {
             get
             {
@@ -197,7 +197,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
         }
 
-        public List<Statistic> SectorFieldNames
+        public static List<Statistic> SectorFieldNames
         {
             get
             {
@@ -205,7 +205,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
         }
 
-        public List<SortDirection> SortDirections
+        public static List<SortDirection> SortDirections
         {
             get
             {
@@ -220,7 +220,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
         private void ExecuteExportCommand(ICloseable window)
         {
-            FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile(ExportType.Html.ToString(), Portfolio.DatabaseName, Portfolio.Directory, "Html Files|*.html|CSV Files|*.csv|All Files|*.*");
+            FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile(ExportType.Html.ToString(), Portfolio.DatabaseName(fUiGlobals.CurrentFileSystem), Portfolio.Directory(fUiGlobals.CurrentFileSystem), "Html Files|*.html|CSV Files|*.csv|All Files|*.*");
             string path = null;
 
             if (result.Success != null && (bool)result.Success)
@@ -228,7 +228,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 path = result.FilePath;
 
                 List<Statistic> securitySelected = new List<Statistic>();
-                foreach (var column in SecurityColumnNames)
+                foreach (Selectable<Statistic> column in SecurityColumnNames)
                 {
                     if (column.Selected || column.Instance == Statistic.Company || column.Instance == Statistic.Name)
                     {
@@ -237,7 +237,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 }
 
                 List<Statistic> BankSelected = new List<Statistic>();
-                foreach (var column in BankColumnNames)
+                foreach (Selectable<Statistic> column in BankColumnNames)
                 {
                     if (column.Selected || column.Instance == Statistic.Company || column.Instance == Statistic.Name)
                     {
@@ -246,7 +246,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 }
 
                 List<Statistic> sectorSelected = new List<Statistic>();
-                foreach (var column in SectorColumnNames)
+                foreach (Selectable<Statistic> column in SectorColumnNames)
                 {
                     if (column.Selected || column.Instance == Statistic.Company || column.Instance == Statistic.Name)
                     {
@@ -256,7 +256,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
                 UserDisplayOptions options = new UserDisplayOptions(securitySelected, BankSelected, sectorSelected, DisplayConditions, SecuritySortingField, BankSortingField, SectorSortingField, SecurityDirection, BankDirection, SectorDirection);
 
-                PortfolioStatistics stats = new PortfolioStatistics(Portfolio, options);
+                PortfolioStatistics stats = new PortfolioStatistics(Portfolio, options, fUiGlobals.CurrentFileSystem);
                 string extension = fUiGlobals.CurrentFileSystem.Path.GetExtension(result.FilePath).Trim('.');
                 ExportType type = extension.ToEnum<ExportType>();
 
@@ -285,21 +285,21 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             CloseWindowAction = CloseWindow;
             ExportCommand = new RelayCommand<ICloseable>(ExecuteExportCommand);
 
-            foreach (var stat in AccountStatisticsHelpers.AllStatistics())
+            foreach (Statistic stat in AccountStatisticsHelpers.AllStatistics())
             {
                 SecurityColumnNames.Add(new Selectable<Statistic>(stat, true));
             }
 
             SecuritySortingField = Statistic.Company;
 
-            foreach (var stat in AccountStatisticsHelpers.DefaultSectorStats())
+            foreach (Statistic stat in AccountStatisticsHelpers.DefaultSectorStats())
             {
                 SectorColumnNames.Add(new Selectable<Statistic>(stat, true));
             }
 
             SectorSortingField = Statistic.Name;
 
-            foreach (var stat in AccountStatisticsHelpers.DefaultBankAccountStats())
+            foreach (Statistic stat in AccountStatisticsHelpers.DefaultBankAccountStats())
             {
                 BankColumnNames.Add(new Selectable<Statistic>(stat, true));
             }

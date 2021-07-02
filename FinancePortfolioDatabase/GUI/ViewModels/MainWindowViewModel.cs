@@ -62,12 +62,12 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             fUiGlobals.ReportLogger = ReportLogger;
 
             OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, fUiGlobals);
-            Tabs.Add(new BasicDataViewModel(ProgramPortfolio));
+            Tabs.Add(new BasicDataViewModel(ProgramPortfolio, fUiGlobals));
             Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, fUiGlobals));
             Tabs.Add(new SecurityEditWindowViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, fUiGlobals));
-            Tabs.Add(new ValueListWindowViewModel("Bank Accounts", ProgramPortfolio, UpdateDataCallback, ReportLogger, fUiGlobals, Account.BankAccount));
-            Tabs.Add(new ValueListWindowViewModel("Benchmarks", ProgramPortfolio, UpdateDataCallback, ReportLogger, fUiGlobals, Account.Benchmark));
-            Tabs.Add(new ValueListWindowViewModel("Currencies", ProgramPortfolio, UpdateDataCallback, ReportLogger, fUiGlobals, Account.Currency));
+            Tabs.Add(new ValueListWindowViewModel("Bank Accounts", ProgramPortfolio, UpdateDataCallback, fUiGlobals, Account.BankAccount));
+            Tabs.Add(new ValueListWindowViewModel("Benchmarks", ProgramPortfolio, UpdateDataCallback, fUiGlobals, Account.Benchmark));
+            Tabs.Add(new ValueListWindowViewModel("Currencies", ProgramPortfolio, UpdateDataCallback, fUiGlobals, Account.Currency));
 
             ProgramPortfolio.PortfolioChanged += AllData_portfolioChanged;
         }

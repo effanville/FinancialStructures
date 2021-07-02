@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Windows;
 using FinancePortfolioDatabase.GUI.ViewModels;
 using Common.UI.Services;
+using FinancialStructures.Database;
+using Common.Structure.Reporting;
 
 namespace FinancePortfolioDatabase.GUI.Windows
 {
@@ -34,12 +36,12 @@ namespace FinancePortfolioDatabase.GUI.Windows
 
         public void PrintErrorLog(Exception exception)
         {
-            var result = fUiGlobals.FileInteractionService.SaveFile("log", string.Empty, fUiGlobals.CurrentWorkingDirectory, filter: "log Files|*.log|All Files|*.*");
+            FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile("log", string.Empty, fUiGlobals.CurrentWorkingDirectory, filter: "log Files|*.log|All Files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
-                using (var stream = new StreamWriter(result.FilePath))
+                using (StreamWriter stream = new StreamWriter(result.FilePath))
                 {
-                    foreach (var report in fUiGlobals.ReportLogger.Reports.GetReports())
+                    foreach (ErrorReport report in fUiGlobals.ReportLogger.Reports.GetReports())
                     {
                         stream.WriteLine(report.ToString());
                     }
@@ -60,18 +62,14 @@ namespace FinancePortfolioDatabase.GUI.Windows
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             MainWindowViewModel VM = DataContext as MainWindowViewModel;
-            MessageBoxResult result;
-            if (VM.ProgramPortfolio.IsAlteredSinceSave)
-            {
-                result = fUiGlobals.DialogCreationService.ShowMessageBox("Data has changed since last saved. Would you like to save changes before closing?", $"Closing {Title}.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
-            }
-            else
-            {
-                result = fUiGlobals.DialogCreationService.ShowMessageBox("There is a small chance that the data has changed since last save (due to neglect on my part). Would you like to save before closing?", $"Closing {Title}.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
-            }
+
+            MessageBoxResult result = VM.ProgramPortfolio.IsAlteredSinceSave
+                ? fUiGlobals.DialogCreationService.ShowMessageBox("Data has changed since last saved. Would you like to save changes before closing?", $"Closing {Title}.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning)
+                : fUiGlobals.DialogCreationService.ShowMessageBox("There is a small chance that the data has changed since last save (due to neglect on my part). Would you like to save before closing?", $"Closing {Title}.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+
             if (result == MessageBoxResult.Yes)
             {
-                FileInteractionResult savingResult = fUiGlobals.FileInteractionService.SaveFile("xml", VM.ProgramPortfolio.DatabaseName + VM.ProgramPortfolio.Extension, VM.ProgramPortfolio.Directory, "XML Files|*.xml|All Files|*.*");
+                FileInteractionResult savingResult = fUiGlobals.FileInteractionService.SaveFile("xml", fUiGlobals.CurrentFileSystem.Path.GetFileName(VM.ProgramPortfolio.FilePath), VM.ProgramPortfolio.Directory(fUiGlobals.CurrentFileSystem), "XML Files|*.xml|All Files|*.*");
                 if (savingResult.Success != null && (bool)savingResult.Success)
                 {
                     VM.ProgramPortfolio.FilePath = savingResult.FilePath;

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using FinancialStructures.FinanceStructures;
@@ -34,33 +33,6 @@ namespace FinancialStructures.Database.Implementation
         {
             get;
             set;
-        }
-
-        /// <inheritdoc/>
-        public string Extension
-        {
-            get
-            {
-                return string.IsNullOrEmpty(FilePath) ? string.Empty : Path.GetExtension(FilePath);
-            }
-        }
-
-        /// <inheritdoc/>
-        public string Directory
-        {
-            get
-            {
-                return string.IsNullOrEmpty(FilePath) ? string.Empty : Path.GetDirectoryName(FilePath);
-            }
-        }
-
-        /// <inheritdoc/>
-        public string DatabaseName
-        {
-            get
-            {
-                return Path.GetFileNameWithoutExtension(FilePath);
-            }
         }
 
         /// <inheritdoc/>

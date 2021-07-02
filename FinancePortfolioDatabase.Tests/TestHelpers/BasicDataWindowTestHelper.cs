@@ -1,23 +1,14 @@
-﻿using System;
+﻿using System.IO.Abstractions;
+using Common.UI.Services;
+using FinancePortfolioDatabase.GUI.ViewModels;
 using FinancialStructures.Database;
 using Moq;
 using NUnit.Framework;
-using Common.UI.Services;
-using System.IO.Abstractions;
-using FinancePortfolioDatabase.GUI.ViewModels.Common;
 
 namespace FinancePortfolioDatabase.Tests.TestHelpers
 {
-    public abstract class ValueListWindowViewModelTestHelper
+    internal class BasicDataWindowTestHelper
     {
-        private Action<Action<IPortfolio>> DataUpdater
-        {
-            get
-            {
-                return action => action(Portfolio);
-            }
-        }
-
         private IPortfolio fPortfolio;
 
         protected IPortfolio Portfolio
@@ -33,17 +24,11 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
             }
         }
 
-        protected ValueListWindowViewModel ViewModel
+        protected BasicDataViewModel ViewModel
         {
             get;
             private set;
         }
-
-        protected Account AccountType
-        {
-            get;
-            set;
-        } = Account.Security;
 
         [SetUp]
         public void Setup()
@@ -53,7 +38,7 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
             Portfolio = TestSetupHelper.CreateEmptyDataBase();
 
             UiGlobals globals = TestSetupHelper.CreateGlobalsMock(new FileSystem(), fileMock.Object, dialogMock.Object, TestSetupHelper.DummyReportLogger);
-            ViewModel = new ValueListWindowViewModel("Title", Portfolio, DataUpdater, globals, AccountType);
+            ViewModel = new BasicDataViewModel(Portfolio, globals);
         }
 
         [TearDown]

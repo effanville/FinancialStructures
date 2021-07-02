@@ -24,30 +24,6 @@ namespace FinancialStructures.Database
         }
 
         /// <summary>
-        /// The file extension of the path.
-        /// </summary>
-        string Extension
-        {
-            get;
-        }
-
-        /// <summary>
-        /// The directory where the database is stored.
-        /// </summary>
-        string Directory
-        {
-            get;
-        }
-
-        /// <summary>
-        /// The non-extension part of the filename, considered to be the databse name.
-        /// </summary>
-        string DatabaseName
-        {
-            get;
-        }
-
-        /// <summary>
         /// Whether the user has changed the database since last save.
         /// </summary>
         bool IsAlteredSinceSave

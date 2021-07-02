@@ -103,9 +103,9 @@ namespace FinancialStructures.DataExporters
         /// <summary>
         /// Constructor from a portfolio.
         /// </summary>
-        public PortfolioStatistics(IPortfolio portfolio, UserDisplayOptions displayOptions)
+        public PortfolioStatistics(IPortfolio portfolio, UserDisplayOptions displayOptions, IFileSystem fileSystem)
         {
-            fDatabaseName = portfolio.DatabaseName;
+            fDatabaseName = portfolio.DatabaseName(fileSystem);
             fDisplayOptions = displayOptions;
             GenerateStatistics(portfolio);
         }

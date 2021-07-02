@@ -1,5 +1,4 @@
-﻿using FinancePortfolioDatabase.GUI.ViewModels;
-using FinancePortfolioDatabase.Tests.TestHelpers;
+﻿using FinancePortfolioDatabase.Tests.TestHelpers;
 using FinancialStructures.Database;
 using NUnit.Framework;
 
@@ -8,7 +7,8 @@ namespace FinancePortfolioDatabase.Tests
     /// <summary>
     /// Tests for the default data window.
     /// </summary>
-    public class BasicDataViewWindowTests
+    [TestFixture]
+    internal class BasicDataViewWindowTests : BasicDataWindowTestHelper
     {
         /// <summary>
         /// Ensures the window displays data if the underlying database is modified.
@@ -16,14 +16,11 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void EmptyPortfolioHasEmptyData()
         {
-            // Setup basic data in the display.
-            IPortfolio portfolio = PortfolioFactory.GenerateEmpty();
-            BasicDataViewModel viewModel = new BasicDataViewModel(portfolio);
-
+            Portfolio = PortfolioFactory.GenerateEmpty();
             Assert.Multiple(() =>
             {
-                Assert.IsFalse(viewModel.HasValues);
-                Assert.AreEqual(viewModel.PortfolioNameText, "Unsaved database loaded");
+                Assert.IsFalse(ViewModel.HasValues);
+                Assert.AreEqual(ViewModel.PortfolioNameText, "Unsaved database loaded");
             });
         }
 
@@ -33,16 +30,16 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void CanViewData()
         {
-            BasicDataViewModel viewModel = new BasicDataViewModel(TestSetupHelper.CreateBasicDataBase());
+            Portfolio = TestSetupHelper.CreateBasicDataBase();
             Assert.Multiple(() =>
             {
-                Assert.IsTrue(viewModel.HasValues);
-                Assert.AreEqual("Portfolio: TestFilePath loaded.", viewModel.PortfolioNameText);
-                Assert.AreEqual("Total Securities: 1", viewModel.SecurityTotalText);
-                Assert.AreEqual("Total Value: 1 ", viewModel.SecurityAmountText);
+                Assert.IsTrue(ViewModel.HasValues);
+                Assert.AreEqual("Portfolio: TestFilePath loaded.", ViewModel.PortfolioNameText);
+                Assert.AreEqual("Total Securities: 1", ViewModel.SecurityTotalText);
+                Assert.AreEqual("Total Value: 1 ", ViewModel.SecurityAmountText);
 
-                Assert.AreEqual("Total Bank Accounts: 1", viewModel.BankAccountTotalText);
-                Assert.AreEqual("Total Value: 1 ", viewModel.BankAccountAmountText);
+                Assert.AreEqual("Total Bank Accounts: 1", ViewModel.BankAccountTotalText);
+                Assert.AreEqual("Total Value: 1 ", ViewModel.BankAccountAmountText);
             });
         }
 
@@ -52,25 +49,22 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void CanUpdateData()
         {
-            // Setup basic data in the display.
-            IPortfolio portfolio = PortfolioFactory.GenerateEmpty();
-            BasicDataViewModel viewModel = new BasicDataViewModel(portfolio);
+            Assert.IsFalse(ViewModel.HasValues);
 
-            Assert.IsFalse(viewModel.HasValues);
             // Now update that data.
-            TestSetupHelper.UpdatePortfolio(portfolio);
-            viewModel.UpdateData(portfolio);
+            TestSetupHelper.UpdatePortfolio(Portfolio);
+            ViewModel.UpdateData(Portfolio);
 
             // Ensure new data has been displayed correctly.
             Assert.Multiple(() =>
             {
 
-                Assert.IsTrue(viewModel.HasValues);
-                Assert.AreEqual("Total Securities: 1", viewModel.SecurityTotalText);
-                Assert.AreEqual("Total Value: 1 ", viewModel.SecurityAmountText);
+                Assert.IsTrue(ViewModel.HasValues);
+                Assert.AreEqual("Total Securities: 1", ViewModel.SecurityTotalText);
+                Assert.AreEqual("Total Value: 1 ", ViewModel.SecurityAmountText);
 
-                Assert.AreEqual("Total Bank Accounts: 1", viewModel.BankAccountTotalText);
-                Assert.AreEqual("Total Value: 1 ", viewModel.BankAccountAmountText);
+                Assert.AreEqual("Total Bank Accounts: 1", ViewModel.BankAccountTotalText);
+                Assert.AreEqual("Total Value: 1 ", ViewModel.BankAccountAmountText);
             });
         }
     }

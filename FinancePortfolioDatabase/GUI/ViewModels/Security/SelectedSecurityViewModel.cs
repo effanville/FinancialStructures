@@ -133,7 +133,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, $"Selected Security {SelectedName} exporting data to csv.");
             if (SelectedName != null)
             {
-                FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile("csv", string.Empty, DataStore.Directory, "Csv Files|*.csv|All Files|*.*");
+                FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile("csv", string.Empty, DataStore.Directory(fUiGlobals.CurrentFileSystem), "Csv Files|*.csv|All Files|*.*");
                 if (result.Success != null && (bool)result.Success)
                 {
                     if (DataStore.TryGetAccount(Account.Security, SelectedName, out IValueList account))

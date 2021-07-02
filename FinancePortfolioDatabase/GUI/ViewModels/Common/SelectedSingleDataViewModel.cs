@@ -17,6 +17,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {
     public class SelectedSingleDataViewModel : TabViewModelBase<IPortfolio>
     {
+        private readonly UiGlobals fUiGlobals;
         private readonly Account TypeOfAccount;
 
         public override bool Closable
@@ -63,16 +64,18 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
 
         private readonly IReportLogger ReportLogger;
-        private readonly IFileInteractionService fFileService;
-        private readonly IDialogCreationService fDialogCreationService;
 
-        public SelectedSingleDataViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, IFileInteractionService fileService, IDialogCreationService dialogCreation, NameData selectedName, Account accountType)
+        public SelectedSingleDataViewModel(
+            IPortfolio portfolio,
+            Action<Action<IPortfolio>> updateDataCallback,
+            UiGlobals globals,
+            NameData selectedName,
+            Account accountType)
             : base(selectedName != null ? selectedName.ToString() : "No-Name", portfolio)
         {
+            fUiGlobals = globals;
+            ReportLogger = fUiGlobals.ReportLogger;
             UpdateDataCallback = updateDataCallback;
-            ReportLogger = reportLogger;
-            fFileService = fileService;
-            fDialogCreationService = dialogCreation;
             SelectedName = selectedName;
             TypeOfAccount = accountType;
             UpdateData(portfolio);
@@ -203,7 +206,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         {
             if (fSelectedName != null)
             {
-                FileInteractionResult result = fFileService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
+                FileInteractionResult result = fUiGlobals.FileInteractionService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
                 List<object> outputs = null;
                 bool exists = DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out IValueList account);
                 if (result.Success != null && (bool)result.Success && exists)
@@ -236,7 +239,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         {
             if (fSelectedName != null)
             {
-                FileInteractionResult result = fFileService.SaveFile("csv", string.Empty, DataStore.Directory, "Csv Files|*.csv|All Files|*.*");
+                FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile("csv", string.Empty, DataStore.Directory(fUiGlobals.CurrentFileSystem), "Csv Files|*.csv|All Files|*.*");
                 if (result.Success != null && (bool)result.Success)
                 {
                     if (DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out IValueList account))

@@ -58,8 +58,8 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
             Mock<IDialogCreationService> dialogMock = TestSetupHelper.CreateDialogMock();
             Portfolio = TestSetupHelper.CreateBasicDataBase();
 
-            UiGlobals globals = TestSetupHelper.CreateGlobalsMock(new FileSystem(), fileMock.Object, dialogMock.Object);
-            ViewModel = new SelectedSingleDataViewModel(Portfolio, DataUpdater, TestSetupHelper.DummyReportLogger, fileMock.Object, dialogMock.Object, new NameData("Barclays", "currentAccount"), AccountType);
+            UiGlobals globals = TestSetupHelper.CreateGlobalsMock(new FileSystem(), fileMock.Object, dialogMock.Object, TestSetupHelper.DummyReportLogger);
+            ViewModel = new SelectedSingleDataViewModel(Portfolio, DataUpdater, globals, new NameData("Barclays", "currentAccount"), AccountType);
         }
 
         [TearDown]

@@ -4,8 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
-using Common.Structure.Reporting;
-using Common.UI.Services;
 using Common.UI.ViewModelBases;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
@@ -17,20 +15,16 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
     {
         public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
 
+        private readonly UiGlobals fUiGlobals;
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
-        private readonly IReportLogger ReportLogger;
-        private readonly IFileInteractionService fFileService;
-        private readonly IDialogCreationService fDialogCreationService;
 
-        public ValueListWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, UiGlobals globals, Account accountType)
+        public ValueListWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, UiGlobals globals, Account accountType)
             : base(title, accountType, portfolio)
         {
+            fUiGlobals = globals;
             UpdateDataCallback = updateDataCallback;
-            ReportLogger = reportLogger;
-            fFileService = globals.FileInteractionService;
-            fDialogCreationService = globals.DialogCreationService;
             UpdateData(portfolio);
-            Tabs.Add(new DataNamesViewModel(DataStore, updateDataCallback, reportLogger, (name) => LoadTabFunc(name), accountType));
+            Tabs.Add(new DataNamesViewModel(DataStore, updateDataCallback, fUiGlobals.ReportLogger, (name) => LoadTabFunc(name), accountType));
         }
 
         public override void UpdateData(IPortfolio portfolio)
@@ -63,7 +57,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         {
             if (obj is NameData name)
             {
-                Tabs.Add(new SelectedSingleDataViewModel(DataStore, UpdateDataCallback, ReportLogger, fFileService, fDialogCreationService, name, DataType));
+                Tabs.Add(new SelectedSingleDataViewModel(DataStore, UpdateDataCallback, fUiGlobals, name, DataType));
             }
         }
     }

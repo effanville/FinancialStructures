@@ -11,6 +11,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
 {
     internal class BasicDataViewModel : DataDisplayViewModelBase
     {
+        private readonly UiGlobals fUiGlobals;
         private string fPortfolioNameText;
         public string PortfolioNameText
         {
@@ -132,15 +133,16 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
         }
 
-        public BasicDataViewModel(IPortfolio portfolio)
+        public BasicDataViewModel(IPortfolio portfolio, UiGlobals globals)
             : base("Overview", Account.All, portfolio)
         {
+            fUiGlobals = globals;
             UpdateData(portfolio);
         }
 
         public override void UpdateData(IPortfolio portfolio)
         {
-            PortfolioNameText = string.IsNullOrWhiteSpace(portfolio.DatabaseName) ? "Unsaved database loaded" : $"Portfolio: {portfolio.DatabaseName} loaded.";
+            PortfolioNameText = string.IsNullOrWhiteSpace(portfolio.DatabaseName(fUiGlobals.CurrentFileSystem)) ? "Unsaved database loaded" : $"Portfolio: {portfolio.DatabaseName(fUiGlobals.CurrentFileSystem)} loaded.";
             HasValues = portfolio.NumberOf(Account.All) != 0;
             SecurityTotalText = $"Total Securities: {portfolio.NumberOf(Account.Security)}";
             SecurityAmountText = $"Total Value: {portfolio.TotalValue(Totals.Security).Truncate()} {portfolio.BaseCurrency}";
