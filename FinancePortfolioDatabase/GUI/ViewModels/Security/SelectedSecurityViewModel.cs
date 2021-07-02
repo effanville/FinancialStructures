@@ -232,7 +232,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
                     return;
                 }
 
-                SelectedSecurityData = DataStore.SecurityData(SelectedName);
+                SelectedSecurityData = DataStore.SecurityData(SelectedName).ToList();
             }
             else
             {

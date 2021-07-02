@@ -92,7 +92,7 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.SecurityCompany:
                 {
-                    List<IValueList> securities = CompanyAccounts(Account.Security, names.Company);
+                    IReadOnlyList<IValueList> securities = CompanyAccounts(Account.Security, names.Company);
                     double value = 0;
                     foreach (ISecurity security in securities)
                     {
@@ -107,7 +107,7 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.BankAccountCompany:
                 {
-                    List<IValueList> bankAccounts = CompanyAccounts(Account.BankAccount, names.Company);
+                    IReadOnlyList<IValueList> bankAccounts = CompanyAccounts(Account.BankAccount, names.Company);
                     if (bankAccounts.Count == 0)
                     {
                         return double.NaN;

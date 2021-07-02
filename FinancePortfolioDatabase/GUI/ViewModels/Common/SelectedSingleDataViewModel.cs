@@ -101,7 +101,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
                     return;
                 }
 
-                SelectedData = DataStore.NumberData(TypeOfAccount, SelectedName, ReportLogger);
+                SelectedData = DataStore.NumberData(TypeOfAccount, SelectedName, ReportLogger).ToList();
             }
             else
             {

@@ -18,7 +18,7 @@ namespace FinancialStructures.Database.Statistics
                 {
                     return portfolio.RecentChange(Totals.Security) + portfolio.RecentChange(Totals.BankAccount);
                 }
-                case (Totals.Security):
+                case Totals.Security:
                 {
                     double total = 0;
                     foreach (ISecurity desired in portfolio.FundsThreadSafe)
@@ -31,11 +31,11 @@ namespace FinancialStructures.Database.Statistics
 
                     return total;
                 }
-                case (Totals.SecurityCompany):
+                case Totals.SecurityCompany:
                 {
                     double total = 0;
 
-                    List<IValueList> securities = portfolio.CompanyAccounts(Account.Security, company);
+                    IReadOnlyList<IValueList> securities = portfolio.CompanyAccounts(Account.Security, company);
                     if (securities.Count == 0)
                     {
                         return double.NaN;
@@ -75,7 +75,7 @@ namespace FinancialStructures.Database.Statistics
         {
             switch (elementType)
             {
-                case (Account.Security):
+                case Account.Security:
                 {
                     if (portfolio.TryGetAccount(Account.Security, names, out IValueList security))
                     {
@@ -95,7 +95,7 @@ namespace FinancialStructures.Database.Statistics
 
                     break;
                 }
-                case (Account.BankAccount):
+                case Account.BankAccount:
                 {
                     if (portfolio.TryGetAccount(elementType, names, out IValueList desired))
                     {

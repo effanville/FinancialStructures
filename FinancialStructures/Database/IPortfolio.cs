@@ -41,12 +41,9 @@ namespace FinancialStructures.Database
         }
 
         /// <summary>
-        /// <para>
-        /// Securities stored in this database.</para>
-        /// <para>
+        /// Securities stored in this database.
         /// This is a shallow copy of the actual list, accessed in a
         /// threadsafe manner.
-        /// </para>
         /// </summary>
         IReadOnlyList<ISecurity> FundsThreadSafe
         {
@@ -206,7 +203,7 @@ namespace FinancialStructures.Database
         /// </summary>
         /// <param name="elementType">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        List<string> Companies(Account elementType);
+        IReadOnlyList<string> Companies(Account elementType);
 
 
         /// <summary>
@@ -214,19 +211,19 @@ namespace FinancialStructures.Database
         /// </summary>
         /// <param name="elementType">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        List<string> Names(Account elementType);
+        IReadOnlyList<string> Names(Account elementType);
 
         /// <summary>
         /// Returns a list of all namedata in the databse.
         /// </summary>
         /// <param name="elementType">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        List<NameData> NameData(Account elementType);
+        IReadOnlyList<NameData> NameData(Account elementType);
 
         /// <summary>
         /// Queries for data for the security of name and company.
         /// </summary>
-        List<SecurityDayData> SecurityData(TwoName name, IReportLogger reportLogger = null);
+        IReadOnlyList<SecurityDayData> SecurityData(TwoName name, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Returns the
@@ -235,7 +232,7 @@ namespace FinancialStructures.Database
         /// <param name="name"></param>
         /// <param name="reportLogger"></param>
         /// <returns></returns>
-        List<DailyValuation> NumberData(Account elementType, TwoName name, IReportLogger reportLogger = null);
+        IReadOnlyList<DailyValuation> NumberData(Account elementType, TwoName name, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Outputs the account if it exists.
@@ -248,19 +245,19 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Returns a copy of all accounts of type account with the company as specified.
         /// </summary>
-        List<IValueList> CompanyAccounts(Account acount, string company);
+        IReadOnlyList<IValueList> CompanyAccounts(Account acount, string company);
 
         /// <summary>
         /// Returns a copy of all accounts with the company as specified.
         /// </summary>
-        List<IValueList> CompanyAccounts(string company);
+        IReadOnlyList<IValueList> CompanyAccounts(string company);
 
         /// <summary>
         /// Returns all Securities related to the given benchmark.
         /// </summary>
         /// <param name="sectorName"></param>
         /// <returns></returns>
-        List<ISecurity> SectorSecurities(string sectorName);
+        IReadOnlyList<ISecurity> SectorSecurities(string sectorName);
 
         /// <summary>
         /// Returns a copy of the currently held portfolio.

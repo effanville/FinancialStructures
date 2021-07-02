@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
@@ -24,7 +25,7 @@ namespace FinancialStructures.Database.Statistics
                 case Totals.Security:
                 {
                     List<DayValue_Named> output = new List<DayValue_Named>();
-                    List<string> companies = portfolio.Companies(Account.Security);
+                    List<string> companies = portfolio.Companies(Account.Security).ToList();
                     companies.Sort();
                     foreach (string comp in companies)
                     {

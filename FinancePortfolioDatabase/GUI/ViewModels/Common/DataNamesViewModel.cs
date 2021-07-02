@@ -252,7 +252,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             {
                 SelectedName = selectableName;
                 _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.AddingData, $"Current item is a name {SelectedName.Instance}");
-                SelectedValueHistory = DataStore.NumberData(TypeOfAccount, SelectedName.Instance, ReportLogger);
+                SelectedValueHistory = DataStore.NumberData(TypeOfAccount, SelectedName.Instance, ReportLogger).ToList();
 
                 _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.AddingData, $"Successfully updated SelectedItem.");
             }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
@@ -9,39 +8,40 @@ namespace FinancialStructures.Database.Implementation
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public List<string> Companies(Account elementType)
+        public IReadOnlyList<string> Companies(Account elementType)
         {
             return NameData(elementType).Select(NameData => NameData.Company).Distinct().ToList();
         }
 
         /// <inheritdoc/>
-        public List<string> Names(Account elementType)
+        public IReadOnlyList<string> Names(Account elementType)
         {
             return NameData(elementType).Select(NameData => NameData.Name).ToList();
         }
 
         /// <inheritdoc/>
-        public List<NameData> NameData(Account elementType)
+        public IReadOnlyList<NameData> NameData(Account elementType)
         {
             List<NameData> namesAndCompanies = new List<NameData>();
             switch (elementType)
             {
-                case (Account.Security):
+                case Account.Security:
                 {
                     return SingleDataNameObtainer(FundsThreadSafe);
                 }
-                case (Account.Currency):
+                case Account.Currency:
                 {
                     return SingleDataNameObtainer(CurrenciesThreadSafe);
                 }
-                case (Account.BankAccount):
+                case Account.BankAccount:
                 {
                     return SingleDataNameObtainer(BankAccountsThreadSafe);
                 }
-                case (Account.Benchmark):
+                case Account.Benchmark:
                 {
                     return SingleDataNameObtainer(BenchMarksThreadSafe);
                 }
+                case Account.All:
                 default:
                     break;
             }

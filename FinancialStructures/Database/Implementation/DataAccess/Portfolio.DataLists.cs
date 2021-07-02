@@ -39,13 +39,13 @@ namespace FinancialStructures.Database.Implementation
             return PortfoCopy;
         }
         /// <inheritdoc/>
-        public List<IValueList> CompanyAccounts(string company)
+        public IReadOnlyList<IValueList> CompanyAccounts(string company)
         {
             return CompanyAccounts(Account.All, company);
         }
 
         /// <inheritdoc/>
-        public List<IValueList> CompanyAccounts(Account account, string company)
+        public IReadOnlyList<IValueList> CompanyAccounts(Account account, string company)
         {
             List<IValueList> accountList = new List<IValueList>();
             switch (account)
@@ -92,7 +92,7 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
-        public List<ISecurity> SectorSecurities(string sectorName)
+        public IReadOnlyList<ISecurity> SectorSecurities(string sectorName)
         {
             List<ISecurity> securities = new List<ISecurity>();
             foreach (ISecurity security in FundsThreadSafe)

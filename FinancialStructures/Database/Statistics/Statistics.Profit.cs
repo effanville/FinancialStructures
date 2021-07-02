@@ -27,7 +27,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Totals.SecurityCompany:
                 {
-                    List<IValueList> securities = portfolio.CompanyAccounts(Account.Security, names.Company);
+                    IReadOnlyList<IValueList> securities = portfolio.CompanyAccounts(Account.Security, names.Company);
                     double value = 0;
                     foreach (ISecurity security in securities)
                     {

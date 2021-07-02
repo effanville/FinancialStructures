@@ -10,7 +10,7 @@ namespace FinancialStructures.Database.Implementation
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public List<SecurityDayData> SecurityData(TwoName name, IReportLogger reportLogger = null)
+        public IReadOnlyList<SecurityDayData> SecurityData(TwoName name, IReportLogger reportLogger = null)
         {
             foreach (ISecurity security in FundsThreadSafe)
             {
@@ -20,31 +20,32 @@ namespace FinancialStructures.Database.Implementation
                 }
             }
 
-            _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.DatabaseAccess, $"Could not find {Account.Security} - {name.ToString()}");
+            _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.DatabaseAccess, $"Could not find {Account.Security} - {name}");
             return new List<SecurityDayData>();
         }
 
         /// <inheritdoc/>
-        public List<DailyValuation> NumberData(Account elementType, TwoName name, IReportLogger reportLogger = null)
+        public IReadOnlyList<DailyValuation> NumberData(Account elementType, TwoName name, IReportLogger reportLogger = null)
         {
             switch (elementType)
             {
-                case (Account.Security):
+                case Account.Security:
                 {
                     return SingleDataListDataObtainer(FundsThreadSafe, elementType, name, reportLogger);
                 }
-                case (Account.Currency):
+                case Account.Currency:
                 {
                     return SingleDataListDataObtainer(CurrenciesThreadSafe, elementType, name, reportLogger);
                 }
-                case (Account.BankAccount):
+                case Account.BankAccount:
                 {
                     return SingleDataListDataObtainer(BankAccountsThreadSafe, elementType, name, reportLogger);
                 }
-                case (Account.Benchmark):
+                case Account.Benchmark:
                 {
                     return SingleDataListDataObtainer(BenchMarksThreadSafe, elementType, name, reportLogger);
                 }
+                case Account.All:
                 default:
                 {
                     return new List<DailyValuation>();
@@ -52,7 +53,7 @@ namespace FinancialStructures.Database.Implementation
             }
         }
 
-        private List<DailyValuation> SingleDataListDataObtainer<T>(IReadOnlyList<T> objects, Account elementType, TwoName name, IReportLogger reportLogger = null) where T : IValueList
+        private static List<DailyValuation> SingleDataListDataObtainer<T>(IReadOnlyList<T> objects, Account elementType, TwoName name, IReportLogger reportLogger = null) where T : IValueList
         {
             foreach (T account in objects)
             {
@@ -62,7 +63,7 @@ namespace FinancialStructures.Database.Implementation
                 }
             }
 
-            _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.DatabaseAccess, $"Could not find {elementType.ToString()} - {name.ToString()}");
+            _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.DatabaseAccess, $"Could not find {elementType} - {name}");
             return new List<DailyValuation>();
         }
     }

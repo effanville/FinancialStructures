@@ -5,6 +5,7 @@ using FinancialStructures.Database.Statistics;
 using FinancialStructures.NamingStructures;
 using Common.Structure.DataStructures;
 using Common.Structure.Extensions;
+using System.Linq;
 
 namespace FinancialStructures.DataStructures
 {
@@ -170,7 +171,7 @@ namespace FinancialStructures.DataStructures
 
         private void AddSecurityValues(DateTime date, IPortfolio portfolio)
         {
-            List<string> companyNames = portfolio.Companies(Account.Security);
+            List<string> companyNames = portfolio.Companies(Account.Security).ToList();
             companyNames.Sort();
             foreach (string companyName in companyNames)
             {
@@ -188,7 +189,7 @@ namespace FinancialStructures.DataStructures
 
         private void AddBankAccountValues(DateTime date, IPortfolio portfolio)
         {
-            List<string> companyBankNames = portfolio.Companies(Account.BankAccount);
+            List<string> companyBankNames = portfolio.Companies(Account.BankAccount).ToList();
             companyBankNames.Sort();
             foreach (string companyName in companyBankNames)
             {
