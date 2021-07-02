@@ -20,19 +20,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
     internal class StatsOptionsViewModel : PropertyChangedBase
     {
         private readonly IPortfolio Portfolio;
-        private bool fDisplayValueFunds = true;
-        public bool displayValueFunds
-        {
-            get
-            {
-                return fDisplayValueFunds;
-            }
-            set
-            {
-                fDisplayValueFunds = value;
-                OnPropertyChanged();
-            }
-        }
+
         private UserDisplayOptions fSelectOptions;
 
         public UserDisplayOptions SelectOptions
@@ -324,6 +312,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowSecurities, true));
             DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowBankAccounts, true));
             DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowSectors, true));
+            DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowBenchmarks, false));
         }
     }
 }

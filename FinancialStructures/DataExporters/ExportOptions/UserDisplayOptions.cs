@@ -13,6 +13,13 @@ namespace FinancialStructures.DataExporters.ExportOptions
         public const string ShowSecurities = "ShowSecurites";
         public const string ShowBankAccounts = "ShowBankAccounts";
         public const string ShowSectors = "ShowSectors";
+        public const string ShowBenchmarks = "ShowBenchmarks";
+
+        public bool IncludeBenchmarks
+        {
+            get;
+            set;
+        }
 
         public bool DisplayValueFunds
         {
@@ -85,6 +92,7 @@ namespace FinancialStructures.DataExporters.ExportOptions
             BankAccountDisplayOptions = new StatisticTableOptions(SelectableHelpers.GetData(conditions, ShowBankAccounts), bankSortingField, bankAccountSortDirection, bankAccounts);
             SectorDisplayOptions = new StatisticTableOptions(SelectableHelpers.GetData(conditions, ShowSectors), sectorSortingField, sectorSortDirection, sectors);
 
+            IncludeBenchmarks = SelectableHelpers.GetData(conditions, ShowBenchmarks);
             DisplayValueFunds = SelectableHelpers.GetData(conditions, nameof(DisplayValueFunds));
             Spacing = SelectableHelpers.GetData(conditions, nameof(Spacing));
             Colours = SelectableHelpers.GetData(conditions, nameof(Colours));
@@ -103,6 +111,7 @@ namespace FinancialStructures.DataExporters.ExportOptions
             options.Add(new Selectable<string>(ShowSecurities, true));
             options.Add(new Selectable<string>(ShowBankAccounts, true));
             options.Add(new Selectable<string>(ShowSectors, true));
+            options.Add(new Selectable<string>(ShowBenchmarks, true));
             return new UserDisplayOptions(AccountStatisticsHelpers.AllStatistics().ToList(), AccountStatisticsHelpers.DefaultBankAccountStats().ToList(), AccountStatisticsHelpers.DefaultSectorStats().ToList(), options);
         }
     }
