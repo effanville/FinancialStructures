@@ -98,6 +98,14 @@ namespace FinancialStructures.Statistics
         }
 
         /// <summary>
+        /// Returns those statistic types suitable for Sectors.
+        /// </summary>
+        public static Statistic[] DefaultSectorStats()
+        {
+            return new Statistic[] { Statistic.Company, Statistic.Name, Statistic.LatestValue, Statistic.RecentChange, Statistic.Profit, Statistic.IRR3M, Statistic.IRR6M, Statistic.IRR1Y, Statistic.IRR5Y, Statistic.IRRTotal, Statistic.NumberOfAccounts, Statistic.FirstDate, Statistic.LatestDate, Statistic.Notes };
+        }
+
+        /// <summary>
         /// Generates statistic types for database info.
         /// </summary>
         public static Statistic[] DefaultDatabaseStatistics()

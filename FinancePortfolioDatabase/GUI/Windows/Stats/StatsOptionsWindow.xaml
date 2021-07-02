@@ -4,6 +4,8 @@
               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
               xmlns:cl="clr-namespace:Colouring"
+              xmlns:vm="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Stats"
+              d:DataContext="{d:DesignInstance Type=vm:StatsOptionsViewModel}"
               mc:Ignorable="d"
               Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}"
               Height="450"

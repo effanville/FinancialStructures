@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:uic="clr-namespace:Common.UI.Converters;assembly=Common.UI"
+             xmlns:commonui="clr-namespace:Common.UI"
              xmlns:gui="clr-namespace:FinancePortfolioDatabase.GUI"
              xmlns:cht="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
              xmlns:common="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Common"
@@ -55,9 +56,13 @@
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="False"
                   ItemsSource="{Binding Path=DataNames, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  DataContext="{Binding}"
                   ScrollViewer.VerticalScrollBarVisibility="Visible"
                   ScrollViewer.HorizontalScrollBarVisibility="Auto">
-            <DataGrid.Resources></DataGrid.Resources>
+            <DataGrid.Resources>
+                <commonui:BindingProxy x:Key="proxy"
+                                    Data="{Binding}" />
+            </DataGrid.Resources>
             <DataGrid.RowStyle>
                 <Style TargetType="DataGridRow">
                     <Style.Triggers>
@@ -82,13 +87,14 @@
                 </i:EventTrigger>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding Path=SelectionChangedCommand}"
-                                           CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=CurrentItem}" />
+                                           CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Mode=Default, Path=CurrentItem}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
 
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Company"
                                     MinWidth="70"
+                                    Visibility="{Binding Data.DisplayCompany, Converter={StaticResource BoolToVis}, Source={StaticResource proxy}}"
                                     Binding="{Binding Path=Instance.Company,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Name"
                                     MinWidth="70"

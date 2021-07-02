@@ -20,19 +20,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
     internal class StatsOptionsViewModel : PropertyChangedBase
     {
         private readonly IPortfolio Portfolio;
-        private bool fDisplayValueFunds = true;
-        public bool displayValueFunds
-        {
-            get
-            {
-                return fDisplayValueFunds;
-            }
-            set
-            {
-                fDisplayValueFunds = value;
-                OnPropertyChanged();
-            }
-        }
+
         private UserDisplayOptions fSelectOptions;
 
         public UserDisplayOptions SelectOptions
@@ -213,7 +201,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         {
             get
             {
-                return AccountStatisticsHelpers.AllStatistics().ToList();
+                return AccountStatisticsHelpers.DefaultSectorStats().ToList();
             }
         }
 
@@ -300,10 +288,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             foreach (var stat in AccountStatisticsHelpers.AllStatistics())
             {
                 SecurityColumnNames.Add(new Selectable<Statistic>(stat, true));
-                SectorColumnNames.Add(new Selectable<Statistic>(stat, true));
             }
 
             SecuritySortingField = Statistic.Company;
+
+            foreach (var stat in AccountStatisticsHelpers.DefaultSectorStats())
+            {
+                SectorColumnNames.Add(new Selectable<Statistic>(stat, true));
+            }
+
             SectorSortingField = Statistic.Name;
 
             foreach (var stat in AccountStatisticsHelpers.DefaultBankAccountStats())
@@ -319,6 +312,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowSecurities, true));
             DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowBankAccounts, true));
             DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowSectors, true));
+            DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowBenchmarks, false));
         }
     }
 }

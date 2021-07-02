@@ -6,7 +6,6 @@ using System.Linq;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataExporters.ExportOptions;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Statistics;
 using Common.Structure.FileAccess;
@@ -117,7 +116,7 @@ namespace FinancialStructures.DataExporters
             PortfolioTotals.AddRange(portfolio.GetStats(Totals.BankAccount, new TwoName(), AccountStatisticsHelpers.DefaultBankAccountStats()));
             PortfolioTotals.AddRange(portfolio.GetStats(Totals.All, new TwoName(), AccountStatisticsHelpers.DefaultBankAccountStats()));
 
-            var securityData = fDisplayOptions.SecurityDisplayOptions.DisplayFields.ToArray();
+            Statistic[] securityData = fDisplayOptions.SecurityDisplayOptions.DisplayFields.ToArray();
 
             IndividualSecurityStats = portfolio.GetStats(Account.Security, displayValueFunds: fDisplayOptions.DisplayValueFunds, displayTotals: false, securityData);
 
@@ -126,16 +125,20 @@ namespace FinancialStructures.DataExporters
 
             BankAccountStats = portfolio.GetStats(Account.BankAccount, fDisplayOptions.DisplayValueFunds, false);
 
-            var bankAccountData = fDisplayOptions.BankAccountDisplayOptions.DisplayFields.ToArray();
+            Statistic[] bankAccountData = fDisplayOptions.BankAccountDisplayOptions.DisplayFields.ToArray();
             BankAccountCompanyStats = portfolio.GetStats(Totals.BankAccount, fDisplayOptions.DisplayValueFunds, bankAccountData);
             BankAccountTotalStats = portfolio.GetStats(Totals.BankAccount, new TwoName("Totals", ""), bankAccountData);
 
-            var sectorData = fDisplayOptions.SectorDisplayOptions.DisplayFields.ToArray();
+            Statistic[] sectorData = fDisplayOptions.SectorDisplayOptions.DisplayFields.ToArray();
             List<string> sectorNames = portfolio.GetSecuritiesSectors();
             foreach (string sectorName in sectorNames)
             {
                 SectorStats.AddRange(portfolio.GetStats(Totals.Sector, new TwoName("Totals", sectorName), sectorData));
-                SectorStats.AddRange(portfolio.GetStats(Account.Benchmark, new TwoName("Benchmark", sectorName), statisticsToDisplay: sectorData));
+
+                if (fDisplayOptions.IncludeBenchmarks)
+                {
+                    SectorStats.AddRange(portfolio.GetStats(Account.Benchmark, new TwoName("Benchmark", sectorName), statisticsToDisplay: sectorData));
+                }
             }
         }
 
@@ -166,9 +169,9 @@ namespace FinancialStructures.DataExporters
                         fileWriter.WriteTitle(exportType, "Funds Data", HtmlTag.h2);
                         List<AccountStatistics> securityDataToWrite = IndividualSecurityStats;
 
-                        foreach (var companyStatistic in CompanyTotalsStats)
+                        foreach (AccountStatistics companyStatistic in CompanyTotalsStats)
                         {
-                            int number = securityDataToWrite.Count(datum => datum.NameData.Company.Equals(companyStatistic.NameData.Company));
+                            int number = securityDataToWrite.Count(datum => datum.NameData.Company.Equals(companyStatistic.NameData.Company, StringComparison.Ordinal));
                             if (number > 1)
                             {
                                 securityDataToWrite.Add(companyStatistic);
@@ -188,9 +191,9 @@ namespace FinancialStructures.DataExporters
                         fileWriter.WriteTitle(exportType, "Bank Accounts Data", HtmlTag.h2);
                         List<AccountStatistics> bankAccountDataToWrite = BankAccountStats;
 
-                        foreach (var companyStatistic in BankAccountCompanyStats)
+                        foreach (AccountStatistics companyStatistic in BankAccountCompanyStats)
                         {
-                            int number = bankAccountDataToWrite.Count(datum => datum.NameData.Company.Equals(companyStatistic.NameData.Company));
+                            int number = bankAccountDataToWrite.Count(datum => datum.NameData.Company.Equals(companyStatistic.NameData.Company, StringComparison.Ordinal));
                             if (number > 1)
                             {
                                 bankAccountDataToWrite.Add(companyStatistic);
@@ -212,7 +215,7 @@ namespace FinancialStructures.DataExporters
 
                         sectorDataToWrite.Sort(options.SectorDisplayOptions);
 
-                        SpacingAdd(options.Spacing, options.SectorDisplayOptions.SortingField, ref sectorDataToWrite);
+                        SectorSpacingAdd(options.Spacing, options.SectorDisplayOptions.SortingField, ref sectorDataToWrite);
 
                         fileWriter.WriteTableFromEnumerable(exportType, options.SectorDisplayOptions.DisplayFieldNames(), sectorDataToWrite.Select(data => data.Statistics), true);
                     }
@@ -237,7 +240,7 @@ namespace FinancialStructures.DataExporters
         /// <summary>
         /// Adds spacing into the table list if user desires.
         /// </summary>
-        private void SpacingAdd(bool addSpacing, Statistic sortingField, ref List<AccountStatistics> dataList)
+        private static void SpacingAdd(bool addSpacing, Statistic sortingField, ref List<AccountStatistics> dataList)
         {
             if (addSpacing)
             {
@@ -247,6 +250,29 @@ namespace FinancialStructures.DataExporters
                     while (index < dataList.Count - 1)
                     {
                         if (dataList[index].NameData.Company != dataList[index + 1].NameData.Company)
+                        {
+                            dataList.Insert(index + 1, new AccountStatistics());
+                            index++;
+                        }
+                        index++;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Adds spacing into the table list if user desires.
+        /// </summary>
+        private static void SectorSpacingAdd(bool addSpacing, Statistic sortingField, ref List<AccountStatistics> dataList)
+        {
+            if (addSpacing)
+            {
+                if (sortingField == Statistic.Company || sortingField == Statistic.Name)
+                {
+                    int index = 0;
+                    while (index < dataList.Count - 1)
+                    {
+                        if (dataList[index].NameData.Name != dataList[index + 1].NameData.Name)
                         {
                             dataList.Insert(index + 1, new AccountStatistics());
                             index++;
