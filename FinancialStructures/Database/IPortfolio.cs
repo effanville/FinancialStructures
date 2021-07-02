@@ -270,16 +270,14 @@ namespace FinancialStructures.Database
         bool TryGetAccount(Account accountType, TwoName name, out IValueList desired);
 
         /// <summary>
-        /// Returns a copy of all securities with the company as specified.
+        /// Returns a copy of all accounts of type account with the company as specified.
         /// </summary>
-        List<ISecurity> CompanySecurities(string company);
+        List<IValueList> CompanyAccounts(Account acount, string company);
 
         /// <summary>
-        /// Returns a copy of all Bank Accounts listed with the specified company.
+        /// Returns a copy of all accounts with the company as specified.
         /// </summary>
-        /// <param name="company">The company to return all bank accounts for.</param>
-        /// <returns></returns>
-        List<ICashAccount> CompanyBankAccounts(string company);
+        List<IValueList> CompanyAccounts(string company);
 
         /// <summary>
         /// Returns all Securities related to the given benchmark.
@@ -343,11 +341,11 @@ namespace FinancialStructures.Database
         /// <summary>
         /// returns the currency associated to the account.
         /// </summary>
-        ICurrency Currency(Account elementType, object account);
+        ICurrency Currency(Account account, IValueList valueList);
 
         /// <summary>
         /// returns the currency associated to the name.
         /// </summary>
-        ICurrency Currency(string currency);
+        ICurrency Currency(string currencyName);
     }
 }

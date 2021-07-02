@@ -24,7 +24,7 @@ namespace FinancialStructures.Database.Implementation
         {
             switch (elementType)
             {
-                case (Totals.Security):
+                case Totals.Security:
                 {
                     double total = 0;
                     foreach (ISecurity sec in FundsThreadSafe)
@@ -38,7 +38,7 @@ namespace FinancialStructures.Database.Implementation
 
                     return total;
                 }
-                case (Totals.Currency):
+                case Totals.Currency:
                 {
                     double total = 0;
                     foreach (ISecurity sec in FundsThreadSafe)
@@ -59,7 +59,7 @@ namespace FinancialStructures.Database.Implementation
                     }
                     return total;
                 }
-                case (Totals.BankAccount):
+                case Totals.BankAccount:
                 {
                     double sum = 0;
                     foreach (ICashAccount acc in BankAccountsThreadSafe)
@@ -73,7 +73,7 @@ namespace FinancialStructures.Database.Implementation
 
                     return sum;
                 }
-                case (Totals.Sector):
+                case Totals.Sector:
                 {
                     double sum = 0;
                     foreach (ISecurity fund in FundsThreadSafe)
@@ -86,13 +86,13 @@ namespace FinancialStructures.Database.Implementation
 
                     return sum;
                 }
-                case (Totals.All):
+                case Totals.All:
                 {
                     return TotalValue(Totals.Security, date) + TotalValue(Totals.BankAccount, date);
                 }
                 case Totals.SecurityCompany:
                 {
-                    List<ISecurity> securities = CompanySecurities(names.Company);
+                    List<IValueList> securities = CompanyAccounts(Account.Security, names.Company);
                     double value = 0;
                     foreach (ISecurity security in securities)
                     {
@@ -107,7 +107,7 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.BankAccountCompany:
                 {
-                    List<ICashAccount> bankAccounts = CompanyBankAccounts(names.Company);
+                    List<IValueList> bankAccounts = CompanyAccounts(Account.BankAccount, names.Company);
                     if (bankAccounts.Count == 0)
                     {
                         return double.NaN;
@@ -128,7 +128,13 @@ namespace FinancialStructures.Database.Implementation
                 {
                     return TotalValue(Totals.BankAccount, date, names) + TotalValue(Totals.Security, date, names);
                 }
-                case (Totals.Benchmark):
+
+                case Totals.SecuritySector:
+                case Totals.BankAccountSector:
+                case Totals.CurrencySector:
+                case Totals.SecurityCurrency:
+                case Totals.BankAccountCurrency:
+                case Totals.Benchmark:
                 default:
                     break;
             }

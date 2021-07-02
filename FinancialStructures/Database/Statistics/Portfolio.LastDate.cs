@@ -36,7 +36,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Totals.SecurityCompany:
                 {
-                    foreach (ISecurity sec in portfolio.CompanySecurities(name.Company))
+                    foreach (ISecurity sec in portfolio.CompanyAccounts(Account.Security, name.Company))
                     {
                         if (sec.Any() && sec.LatestValue().Day > output)
                         {

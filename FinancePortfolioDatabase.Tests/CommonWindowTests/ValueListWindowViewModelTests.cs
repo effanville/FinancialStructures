@@ -1,5 +1,5 @@
 ﻿using FinancePortfolioDatabase.GUI.ViewModels.Common;
-using FinancialStructures.Database.Implementation;
+using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using NUnit.Framework;
 using FinancePortfolioDatabase.Tests.ViewModelExtensions;
@@ -25,7 +25,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         [Test]
         public void CanUpdateData()
         {
-            Portfolio newData = TestSetupHelper.CreateBasicDataBase();
+            IPortfolio newData = TestSetupHelper.CreateBasicDataBase();
             ViewModel.UpdateData(newData);
 
             Assert.AreEqual("TestFilePath", ViewModel.DataStore.FilePath);
@@ -40,7 +40,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
 
             Assert.AreEqual(2, ViewModel.Tabs.Count);
 
-            Portfolio newData = TestSetupHelper.CreateBasicDataBase();
+            IPortfolio newData = TestSetupHelper.CreateBasicDataBase();
             ViewModel.UpdateData(newData);
             Assert.AreEqual(1, ViewModel.Tabs.Count);
             Assert.AreEqual("TestFilePath", ViewModel.DataStore.FilePath);
@@ -50,7 +50,6 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         [Test]
         public void CanAddTab()
         {
-            Portfolio Portfolio = TestSetupHelper.CreateBasicDataBase();
             NameData newData = new NameData("Fidelity", "China");
             ViewModel.LoadTabFunc(newData);
 

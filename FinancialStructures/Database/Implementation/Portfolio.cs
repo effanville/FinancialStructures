@@ -13,7 +13,6 @@ namespace FinancialStructures.Database.Implementation
     /// </summary>
     public partial class Portfolio : IPortfolio
     {
-        private string fDatabaseFilePath;
         private readonly object FundsLock = new object();
         private readonly object BankAccountsLock = new object();
         private readonly object CurrenciesLock = new object();
@@ -33,14 +32,8 @@ namespace FinancialStructures.Database.Implementation
         /// <inheritdoc/>
         public string FilePath
         {
-            get
-            {
-                return fDatabaseFilePath;
-            }
-            set
-            {
-                fDatabaseFilePath = value;
-            }
+            get;
+            set;
         }
 
         /// <inheritdoc/>
@@ -48,7 +41,7 @@ namespace FinancialStructures.Database.Implementation
         {
             get
             {
-                return string.IsNullOrEmpty(fDatabaseFilePath) ? string.Empty : Path.GetExtension(fDatabaseFilePath);
+                return string.IsNullOrEmpty(FilePath) ? string.Empty : Path.GetExtension(FilePath);
             }
         }
 
@@ -57,7 +50,7 @@ namespace FinancialStructures.Database.Implementation
         {
             get
             {
-                return string.IsNullOrEmpty(fDatabaseFilePath) ? string.Empty : Path.GetDirectoryName(fDatabaseFilePath);
+                return string.IsNullOrEmpty(FilePath) ? string.Empty : Path.GetDirectoryName(FilePath);
             }
         }
 
@@ -66,7 +59,7 @@ namespace FinancialStructures.Database.Implementation
         {
             get
             {
-                return Path.GetFileNameWithoutExtension(fDatabaseFilePath);
+                return Path.GetFileNameWithoutExtension(FilePath);
             }
         }
 
@@ -161,7 +154,7 @@ namespace FinancialStructures.Database.Implementation
         /// <summary>
         /// Default parameterless constructor.
         /// </summary>
-        public Portfolio()
+        internal Portfolio()
         {
         }
 
@@ -169,7 +162,7 @@ namespace FinancialStructures.Database.Implementation
         public void CopyData(Portfolio portfolio)
         {
             BaseCurrency = portfolio.BaseCurrency;
-            fDatabaseFilePath = portfolio.FilePath;
+            FilePath = portfolio.FilePath;
             Funds = portfolio.Funds;
             BankAccounts = portfolio.BankAccounts;
             Currencies = portfolio.Currencies;

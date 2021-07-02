@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using FinancialStructures.Tests.TestDatabaseConstructor;
+using FinancialStructures.Database;
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.Database.DataAccess
@@ -13,11 +13,10 @@ namespace FinancialStructures.Tests.Database.DataAccess
         {
             var generator = new DatabaseConstructor();
             string secCompany = "company1";
-            generator.WithSecurityFromNameAndDataPoint(secCompany, "name1", date: new DateTime(2000, 1, 1), sharePrice: 101, numberUnits: 12);
-            generator.WithSecurityFromNameAndDataPoint("otherCompany", "name1", date: new DateTime(2000, 1, 1), sharePrice: 101, numberUnits: 12);
-            var database = generator.database;
+            _ = generator.WithSecurityFromNameAndDataPoint(secCompany, "name1", date: new DateTime(2000, 1, 1), sharePrice: 101, numberUnits: 12);
+            _ = generator.WithSecurityFromNameAndDataPoint("otherCompany", "name1", date: new DateTime(2000, 1, 1), sharePrice: 101, numberUnits: 12);
 
-            var data = database.CompanySecurities(secCompany);
+            var data = generator.database.CompanyAccounts(Account.Security, secCompany);
 
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual("name1", data.Single().Names.Name);
@@ -28,12 +27,9 @@ namespace FinancialStructures.Tests.Database.DataAccess
         {
             var generator = new DatabaseConstructor();
             string secCompany = "company1";
-            generator.WithSecurityFromNameAndDataPoint(secCompany, "name1", date: new DateTime(2000, 1, 1), sharePrice: 101, numberUnits: 12);
+            _ = generator.WithSecurityFromNameAndDataPoint(secCompany, "name1", date: new DateTime(2000, 1, 1), sharePrice: 101, numberUnits: 12);
 
-            var database = generator.database;
-
-            var data = database.CompanySecurities("other");
-
+            var data = generator.database.CompanyAccounts(Account.Security, "other");
             Assert.AreEqual(0, data.Count);
         }
 
@@ -43,10 +39,9 @@ namespace FinancialStructures.Tests.Database.DataAccess
             var generator = new DatabaseConstructor();
 
             string bankCompany = "Bank";
-            generator.WithBankAccountFromNameAndDataPoint(bankCompany, "AccountName", date: new DateTime(2000, 1, 1), value: 53);
-            var database = generator.database;
+            _ = generator.WithBankAccountFromNameAndDataPoint(bankCompany, "AccountName", date: new DateTime(2000, 1, 1), value: 53);
 
-            var data = database.CompanyBankAccounts(bankCompany);
+            var data = generator.database.CompanyAccounts(Account.BankAccount, bankCompany);
 
             Assert.AreEqual(1, data.Count);
             Assert.AreEqual(bankCompany, data.Single().Names.Company);
@@ -55,13 +50,13 @@ namespace FinancialStructures.Tests.Database.DataAccess
         [Test]
         public void RetrievesNewListForNoBankAccountData()
         {
-            var generator = new DatabaseConstructor();
+            DatabaseConstructor generator = new DatabaseConstructor();
 
             string bankCompany = "Bank";
-            generator.WithBankAccountFromNameAndDataPoint(bankCompany, "AccountName", date: new DateTime(2000, 1, 1), value: 53);
+            _ = generator.WithBankAccountFromNameAndDataPoint(bankCompany, "AccountName", date: new DateTime(2000, 1, 1), value: 53);
             var database = generator.database;
 
-            var data = database.CompanyBankAccounts("name");
+            var data = database.CompanyAccounts(Account.BankAccount, "name");
 
             Assert.AreEqual(0, data.Count);
         }

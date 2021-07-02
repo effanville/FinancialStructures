@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Windows;
 using FinancialStructures.Database;
-using FinancialStructures.Database.Implementation;
 using FinancialStructures.NamingStructures;
 using Moq;
 using Common.Structure.DataStructures;
@@ -70,14 +69,14 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
             return;
         }
 
-        public static Portfolio CreateBasicDataBase()
+        public static IPortfolio CreateBasicDataBase()
         {
-            Portfolio portfolio = new Portfolio();
+            IPortfolio portfolio = PortfolioFactory.GenerateEmpty();
             UpdatePortfolio(portfolio);
             return portfolio;
         }
 
-        public static void UpdatePortfolio(Portfolio portfolio)
+        public static void UpdatePortfolio(IPortfolio portfolio)
         {
             portfolio.FilePath = "TestFilePath";
             _ = portfolio.TryAdd(Account.Security, new NameData("Fidelity", "China", "GBP", "https://markets.ft.com/data/funds/tearsheet/summary?s=gb00b5lxgg05:gbx", new HashSet<string>() { "Bonds", "UK" }), DummyReportLogger);
@@ -89,9 +88,11 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
             _ = portfolio.TryAdd(Account.Benchmark, new NameData(string.Empty, "UK", string.Empty, "http://www.hi.com"), DummyReportLogger);
         }
 
-        public static Portfolio CreateEmptyDataBase()
+        public static IPortfolio CreateEmptyDataBase()
         {
-            return new Portfolio() { FilePath = "c:/temp/saved.xml" };
+            IPortfolio portfolio = PortfolioFactory.GenerateEmpty();
+            portfolio.FilePath = "c:/temp/saved.xml";
+            return portfolio;
         }
     }
 }

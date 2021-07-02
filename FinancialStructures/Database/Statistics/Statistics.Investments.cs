@@ -36,7 +36,7 @@ namespace FinancialStructures.Database.Statistics
                 case Totals.SecurityCompany:
                 {
                     List<DayValue_Named> output = new List<DayValue_Named>();
-                    foreach (ISecurity sec in portfolio.CompanySecurities(Name.Company))
+                    foreach (ISecurity sec in portfolio.CompanyAccounts(Account.Security, Name.Company))
                     {
                         ICurrency currency = portfolio.Currency(Account.Security, sec);
                         output.AddRange(sec.AllInvestmentsNamed(currency));

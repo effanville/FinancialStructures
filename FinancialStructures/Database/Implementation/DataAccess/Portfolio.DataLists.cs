@@ -18,7 +18,7 @@ namespace FinancialStructures.Database.Implementation
         {
             Portfolio PortfoCopy = new Portfolio();
             PortfoCopy.BaseCurrency = BaseCurrency;
-            PortfoCopy.fDatabaseFilePath = fDatabaseFilePath;
+            PortfoCopy.FilePath = FilePath;
             foreach (Security security in Funds)
             {
                 PortfoCopy.Funds.Add((Security)security.Copy());
@@ -38,36 +38,57 @@ namespace FinancialStructures.Database.Implementation
 
             return PortfoCopy;
         }
-
         /// <inheritdoc/>
-        public List<ISecurity> CompanySecurities(string company)
+        public List<IValueList> CompanyAccounts(string company)
         {
-            List<ISecurity> securities = new List<ISecurity>();
-            foreach (ISecurity sec in FundsThreadSafe)
-            {
-                if (sec.Names.Company == company)
-                {
-                    securities.Add(sec.Copy());
-                }
-            }
-            securities.Sort();
-            return securities;
+            return CompanyAccounts(Account.All, company);
         }
 
         /// <inheritdoc/>
-        public List<ICashAccount> CompanyBankAccounts(string company)
+        public List<IValueList> CompanyAccounts(Account account, string company)
         {
-            List<ICashAccount> accounts = new List<ICashAccount>();
-            foreach (ICashAccount acc in BankAccounts)
+            List<IValueList> accountList = new List<IValueList>();
+            switch (account)
             {
-                if (acc.Names.Company == company)
+                case Account.All:
                 {
-                    accounts.Add(acc);
+                    accountList.AddRange(CompanyAccounts(Account.Security, company));
+                    accountList.AddRange(CompanyAccounts(Account.BankAccount, company));
+                    accountList.Sort();
+                    break;
                 }
+                case Account.Security:
+                {
+                    foreach (ISecurity sec in FundsThreadSafe)
+                    {
+                        if (sec.Names.Company == company)
+                        {
+                            accountList.Add(sec.Copy());
+                        }
+                    }
+                    accountList.Sort();
+                    break;
+                }
+                case Account.BankAccount:
+                {
+                    foreach (ICashAccount acc in BankAccounts)
+                    {
+                        if (acc.Names.Company == company)
+                        {
+                            accountList.Add(acc);
+                        }
+                    }
+
+                    accountList.Sort();
+                    break;
+                }
+                case Account.Benchmark:
+                case Account.Currency:
+                default:
+                    break;
             }
 
-            accounts.Sort();
-            return accounts;
+            return accountList;
         }
 
         /// <inheritdoc/>

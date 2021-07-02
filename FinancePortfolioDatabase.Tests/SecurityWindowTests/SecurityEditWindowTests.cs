@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancePortfolioDatabase.Tests.TestHelpers;
-using FinancialStructures.Database.Implementation;
+using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using NUnit.Framework;
 
@@ -26,7 +26,7 @@ namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
         [Test]
         public void CanUpdateData()
         {
-            Portfolio newData = TestSetupHelper.CreateBasicDataBase();
+            IPortfolio newData = TestSetupHelper.CreateBasicDataBase();
             ViewModel.UpdateData(newData);
 
             Assert.AreEqual("TestFilePath", ViewModel.DataStore.FilePath);
@@ -41,7 +41,7 @@ namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
 
             Assert.AreEqual(2, ViewModel.Tabs.Count);
 
-            Portfolio newData = TestSetupHelper.CreateBasicDataBase();
+            IPortfolio newData = TestSetupHelper.CreateBasicDataBase();
             ViewModel.UpdateData(newData);
             Assert.AreEqual(1, ViewModel.Tabs.Count);
             Assert.AreEqual("TestFilePath", ViewModel.DataStore.FilePath);

@@ -14,7 +14,7 @@ namespace FinancialStructures.Database.Statistics
             double total = 0;
             switch (elementType)
             {
-                case (Totals.Security):
+                case Totals.Security:
                 {
                     foreach (ISecurity security in portfolio.FundsThreadSafe)
                     {
@@ -25,9 +25,9 @@ namespace FinancialStructures.Database.Statistics
                     }
                     break;
                 }
-                case (Totals.SecurityCompany):
+                case Totals.SecurityCompany:
                 {
-                    List<ISecurity> securities = portfolio.CompanySecurities(names.Company);
+                    List<IValueList> securities = portfolio.CompanyAccounts(Account.Security, names.Company);
                     double value = 0;
                     foreach (ISecurity security in securities)
                     {
@@ -40,7 +40,7 @@ namespace FinancialStructures.Database.Statistics
 
                     return value;
                 }
-                case (Totals.BankAccount):
+                case Totals.BankAccount:
                 {
                     foreach (var account in portfolio.BankAccountsThreadSafe)
                     {
@@ -51,7 +51,7 @@ namespace FinancialStructures.Database.Statistics
                     }
                     break;
                 }
-                case (Totals.Benchmark):
+                case Totals.Benchmark:
                 {
                     foreach (IValueList benchmark in portfolio.BenchMarksThreadSafe)
                     {
@@ -62,7 +62,7 @@ namespace FinancialStructures.Database.Statistics
                     }
                     break;
                 }
-                case (Totals.Currency):
+                case Totals.Currency:
                 {
                     foreach (IValueList currency in portfolio.CurrenciesThreadSafe)
                     {
@@ -88,6 +88,14 @@ namespace FinancialStructures.Database.Statistics
                 {
                     return portfolio.TotalProfit(Totals.Security) + portfolio.TotalProfit(Totals.BankAccount);
                 }
+
+                case Totals.BankAccountCompany:
+                case Totals.Company:
+                case Totals.SecuritySector:
+                case Totals.BankAccountSector:
+                case Totals.CurrencySector:
+                case Totals.SecurityCurrency:
+                case Totals.BankAccountCurrency:
                 default:
                     break;
             }
@@ -102,7 +110,7 @@ namespace FinancialStructures.Database.Statistics
         {
             switch (elementType)
             {
-                case (Account.Security):
+                case Account.Security:
                 {
                     if (portfolio.TryGetAccount(elementType, names, out IValueList desired))
                     {
@@ -145,6 +153,8 @@ namespace FinancialStructures.Database.Statistics
 
                     return double.NaN;
                 }
+
+                case Account.All:
                 default:
                     return double.NaN;
             }

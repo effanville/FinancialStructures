@@ -35,7 +35,7 @@ namespace FinancialStructures.Database.Statistics
                 {
                     double total = 0;
 
-                    List<ISecurity> securities = portfolio.CompanySecurities(company);
+                    List<IValueList> securities = portfolio.CompanyAccounts(Account.Security, company);
                     if (securities.Count == 0)
                     {
                         return double.NaN;

@@ -52,7 +52,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Totals.SecurityCompany:
                 {
-                    List<ISecurity> securities = portfolio.CompanySecurities(name.Company);
+                    List<IValueList> securities = portfolio.CompanyAccounts(Account.Security, name.Company);
                     if (securities.Count == 0)
                     {
                         return double.NaN;
@@ -103,7 +103,7 @@ namespace FinancialStructures.Database.Statistics
                     double earlierValue = 0;
                     double laterValue = 0;
 
-                    foreach (var bankAccount in portfolio.BankAccountsThreadSafe)
+                    foreach (ICashAccount bankAccount in portfolio.BankAccountsThreadSafe)
                     {
                         ICurrency currency = portfolio.Currency(bankAccount.Names.Currency);
                         earlierValue += bankAccount.Value(earlierTime, currency).Value;
@@ -130,7 +130,7 @@ namespace FinancialStructures.Database.Statistics
                     double earlierValue = 0;
                     double laterValue = 0;
 
-                    foreach (var currency in portfolio.CurrenciesThreadSafe)
+                    foreach (ICurrency currency in portfolio.CurrenciesThreadSafe)
                     {
                         earlierValue += currency.Value(earlierTime).Value;
                         laterValue += currency.Value(laterTime).Value;
@@ -138,6 +138,13 @@ namespace FinancialStructures.Database.Statistics
 
                     return FinancialFunctions.CAR(new DailyValuation(earlierTime, earlierValue), new DailyValuation(laterTime, laterValue));
                 }
+
+                case Totals.BankAccountCompany:
+                case Totals.Company:
+                case Totals.BankAccountSector:
+                case Totals.CurrencySector:
+                case Totals.SecurityCurrency:
+                case Totals.BankAccountCurrency:
                 default:
                 {
                     return 0.0;

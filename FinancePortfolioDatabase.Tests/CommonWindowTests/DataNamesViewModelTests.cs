@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
-using FinancialStructures.Database.Implementation;
 using FinancialStructures.NamingStructures;
 using NUnit.Framework;
 using FinancePortfolioDatabase.Tests.ViewModelExtensions;
@@ -25,7 +24,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         [Test]
         public void CanUpdateData()
         {
-            Portfolio newData = TestSetupHelper.CreateBasicDataBase();
+            IPortfolio newData = TestSetupHelper.CreateBasicDataBase();
 
             ViewModel.UpdateData(newData);
 
@@ -35,8 +34,8 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         [Test]
         public void CanOpenSecurity()
         {
-            Portfolio output = TestSetupHelper.CreateBasicDataBase();
-            Portfolio portfolio = TestSetupHelper.CreateBasicDataBase();
+            IPortfolio output = TestSetupHelper.CreateBasicDataBase();
+            IPortfolio portfolio = TestSetupHelper.CreateBasicDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestSetupHelper.CreateDataUpdater(portfolio);
             DataNamesViewModel viewModel = new DataNamesViewModel(output, dataUpdater, TestSetupHelper.DummyReportLogger, TestSetupHelper.DummyOpenTab, Account.Security);
             Assert.AreEqual(1, viewModel.DataNames.Count);
@@ -45,7 +44,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         [Test]
         public void CanUpdateSecurityData()
         {
-            Portfolio newData = TestSetupHelper.CreateBasicDataBase();
+            IPortfolio newData = TestSetupHelper.CreateBasicDataBase();
             ViewModel.UpdateData(newData);
 
             Assert.AreEqual(1, ViewModel.DataNames.Count);

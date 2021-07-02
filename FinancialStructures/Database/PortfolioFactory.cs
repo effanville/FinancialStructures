@@ -11,8 +11,9 @@ namespace FinancialStructures.Database
             return new Portfolio();
         }
 
-        public static void FillDetailsFromFile(this IPortfolio portfolio, string filePath)
+        public static void FillDetailsFromFile(this IPortfolio portfolio, IFileSystem fileSystem, string filePath, IReportLogger logger)
         {
+            portfolio.LoadPortfolio(filePath, fileSystem, logger);
         }
 
         public static IPortfolio CreateFromFile(IFileSystem fileSystem, string filepath, IReportLogger logger)

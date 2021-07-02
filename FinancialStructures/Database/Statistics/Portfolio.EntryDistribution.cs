@@ -69,7 +69,7 @@ namespace FinancialStructures.Database.Statistics
                 {
                     var total = new Dictionary<DateTime, int>();
 
-                    var securities = portfolio.CompanySecurities(company.Company);
+                    var securities = portfolio.CompanyAccounts(Account.Security, company.Company);
                     if (securities.Count == 0)
                     {
                         return new Dictionary<DateTime, int>();
