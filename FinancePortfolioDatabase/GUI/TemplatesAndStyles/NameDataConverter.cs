@@ -7,7 +7,7 @@ namespace FinancePortfolioDatabase.GUI
 {
     /// <summary>
     /// Converts to and from an object a <see cref="NameData"/> instance.
-    /// Used in <see cref="FinanceCommonWindows.DataNamesView"/> to enable
+    /// Used in <see cref="Windows.DataNamesView"/> to enable
     /// adding of objects to the datagrid.
     /// </summary>
     public class NameDataConverter : IValueConverter

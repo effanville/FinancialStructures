@@ -19,6 +19,20 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
+        public bool TryEditData(DateTime oldDate, DateTime date, double? unitPrice, double? shares, double? investment, IReportLogger reportLogger = null)
+        {
+            bool editedUnitPrice = false;
+            bool editedShares = false;
+            bool editedInvestment = false;
+            if (unitPrice.HasValue)
+            {
+                editedUnitPrice = AddOrEditUnitPriceData(oldDate, date, unitPrice.Value, reportLogger);
+            }
+
+            return editedUnitPrice & editedShares & editedInvestment;
+        }
+
+        /// <inheritdoc/>
         public override void SetData(DateTime date, double unitPrice, IReportLogger reportLogger = null)
         {
             _ = AddOrEditUnitPriceData(date, date, unitPrice, reportLogger);
