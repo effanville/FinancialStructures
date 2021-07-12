@@ -138,7 +138,7 @@ namespace FinancialStructures.NamingStructures
             int hashCode = 17;
             hashCode = 23 * hashCode + Currency?.GetHashCode() ?? 17;
             hashCode = 23 * hashCode + Url?.GetHashCode() ?? 17;
-            hashCode = 23 * hashCode + Sectors?.GetHashCode() ?? 17;
+            hashCode = 23 * hashCode + SectorsFlat?.GetHashCode() ?? 17;
             hashCode = 23 * hashCode + Notes?.GetHashCode() ?? 17;
             return 23 * hashCode + base.GetHashCode();
         }

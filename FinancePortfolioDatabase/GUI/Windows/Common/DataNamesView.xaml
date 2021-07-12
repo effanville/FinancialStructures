@@ -50,7 +50,7 @@
                   HorizontalAlignment="Left"
                   ToolTip="Lists all items currently in the database. Select one to edit data."
                   SelectionUnit="FullRow"
-                  SelectionMode="Single"
+                  SelectionMode="Extended"
                   CanUserAddRows="True"
                   IsReadOnly="False"
                   CanUserDeleteRows="False"
