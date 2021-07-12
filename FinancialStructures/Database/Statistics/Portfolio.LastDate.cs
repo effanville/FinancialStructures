@@ -31,29 +31,37 @@ namespace FinancialStructures.Database.Statistics
                             }
                         }
                     }
+
                     break;
                 }
                 case Totals.SecurityCompany:
                 {
                     foreach (ISecurity sec in portfolio.CompanySecurities(name.Company))
                     {
-                        if (sec.LatestValue().Day > output)
+                        if (sec.Any())
                         {
-                            output = sec.LatestValue().Day;
+                            if (sec.LatestValue().Day > output)
+                            {
+                                output = sec.LatestValue().Day;
+                            }
                         }
                     }
 
-                    return output;
+                    break;
                 }
                 case Totals.Sector:
                 {
-                    foreach (ISecurity sec in portfolio.SectorSecurities(name.Name))
+                    foreach (ISecurity sector in portfolio.SectorSecurities(name.Name))
                     {
-                        if (sec.LatestValue().Day > output)
+                        if (sector.Any())
                         {
-                            output = sec.LatestValue().Day;
+                            if (sector.LatestValue().Day > output)
+                            {
+                                output = sector.LatestValue().Day;
+                            }
                         }
                     }
+
                     break;
                 }
                 case Totals.BankAccount:
@@ -70,11 +78,14 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Totals.Benchmark:
                 {
-                    foreach (ICashAccount cashAccount in portfolio.BenchMarksThreadSafe)
+                    foreach (IValueList benchmark in portfolio.BenchMarksThreadSafe)
                     {
-                        if (cashAccount.LatestValue().Day > output)
+                        if (benchmark.Any())
                         {
-                            output = cashAccount.LatestValue().Day;
+                            if (benchmark.LatestValue().Day > output)
+                            {
+                                output = benchmark.LatestValue().Day;
+                            }
                         }
                     }
 
@@ -82,11 +93,14 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Totals.Currency:
                 {
-                    foreach (ICashAccount cashAccount in portfolio.CurrenciesThreadSafe)
+                    foreach (ICashAccount currency in portfolio.CurrenciesThreadSafe)
                     {
-                        if (cashAccount.LatestValue().Day > output)
+                        if (currency.Any())
                         {
-                            output = cashAccount.LatestValue().Day;
+                            if (currency.LatestValue().Day > output)
+                            {
+                                output = currency.LatestValue().Day;
+                            }
                         }
                     }
 
