@@ -102,6 +102,13 @@ namespace FinancialStructures.Database.Statistics
                         }
                         break;
                     }
+                    case Account.All:
+                    {
+                        stats.AddRange(portfolio.GetStats(Account.Security, displayValueFunds, displayTotals, statisticsToDisplay));
+                        stats.AddRange(portfolio.GetStats(Account.BankAccount, displayValueFunds, displayTotals, statisticsToDisplay));
+                        stats.Sort();
+                        break;
+                    }
                 }
 
                 return stats;

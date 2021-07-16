@@ -25,10 +25,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         {
             get;
         }
-        public ICommand OpenBankAccTab
-        {
-            get;
-        }
         public ICommand OpenHistoryTab
         {
             get;
@@ -49,7 +45,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             OpenTab = openTab;
             OpenSecuritiesTab = new RelayCommand(ExecuteSecuritiesTab);
             OpenSecInvTab = new RelayCommand(ExecuteSecInvTab);
-            OpenBankAccTab = new RelayCommand(ExecuteBankAccTab);
             OpenHistoryTab = new RelayCommand(ExecuteHistoryTab);
             OpenChartsTab = new RelayCommand(ExecuteChartsTab);
             OpenHtmlViewerTab = new RelayCommand(ExecuteHtmlViewerTab);
@@ -68,11 +63,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         private void ExecuteHistoryTab()
         {
             OpenTab(TabType.PortfolioHistory, null);
-        }
-
-        private void ExecuteBankAccTab()
-        {
-            OpenTab(TabType.BankAccountStats, null);
         }
 
         private void ExecuteSecInvTab()

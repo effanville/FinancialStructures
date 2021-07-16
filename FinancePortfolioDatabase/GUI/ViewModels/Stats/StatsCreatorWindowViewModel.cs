@@ -47,7 +47,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             fUiGlobals = globals;
             ReportLogger = reportLogger;
             StatsTabs.Add(new MainTabViewModel(OpenTab));
-            StatsTabs.Add(new AccountStatisticsViewModel(portfolio, Account.Security, DisplayValueFunds));
+            StatsTabs.Add(new AccountStatisticsViewModel(portfolio, Account.All, DisplayValueFunds));
 
             CreateInvestmentListCommand = new RelayCommand(ExecuteInvestmentListCommand);
             CreateStatsCommand = new RelayCommand(ExecuteCreateStatsCommand);
