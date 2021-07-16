@@ -32,7 +32,7 @@ namespace FinancialStructures.Database.Statistics
                         foreach (ISecurity security in portfolio.FundsThreadSafe)
                         {
                             var latest = security.LatestValue();
-                            if ((displayValueFunds && latest != null && latest.Value > 0) || !displayValueFunds)
+                            if ((displayValueFunds && latest?.Value > 0) || !displayValueFunds)
                             {
                                 stats.Add(new AccountStatistics(portfolio, account, security.Names, statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics()));
                             }
@@ -50,7 +50,7 @@ namespace FinancialStructures.Database.Statistics
                         foreach (ICashAccount acc in portfolio.BankAccountsThreadSafe)
                         {
                             var latest = acc.LatestValue();
-                            if ((displayValueFunds && latest.Value > 0) || !displayValueFunds)
+                            if ((displayValueFunds && latest?.Value > 0) || !displayValueFunds)
                             {
                                 stats.Add(new AccountStatistics(portfolio, account, acc.Names, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
                             }
@@ -69,7 +69,7 @@ namespace FinancialStructures.Database.Statistics
                         foreach (ISector acc in portfolio.BenchMarksThreadSafe)
                         {
                             var latest = acc.LatestValue();
-                            if ((displayValueFunds && latest.Value > 0) || !displayValueFunds)
+                            if ((displayValueFunds && latest?.Value > 0) || !displayValueFunds)
                             {
                                 stats.Add(new AccountStatistics(portfolio, account, acc.Names, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats()));
                             }
@@ -89,7 +89,7 @@ namespace FinancialStructures.Database.Statistics
                         foreach (ICurrency acc in portfolio.CurrenciesThreadSafe)
                         {
                             var latest = acc.LatestValue();
-                            if ((displayValueFunds && latest.Value > 0) || !displayValueFunds)
+                            if ((displayValueFunds && latest?.Value > 0) || !displayValueFunds)
                             {
                                 stats.Add(new AccountStatistics(portfolio, account, acc.Names, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
                             }

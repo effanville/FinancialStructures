@@ -38,12 +38,9 @@ namespace FinancialStructures.Database.Statistics
                 {
                     foreach (ISecurity sec in portfolio.CompanySecurities(name.Company))
                     {
-                        if (sec.Any())
+                        if (sec.Any() && sec.LatestValue().Day > output)
                         {
-                            if (sec.LatestValue().Day > output)
-                            {
-                                output = sec.LatestValue().Day;
-                            }
+                            output = sec.LatestValue().Day;
                         }
                     }
 
@@ -53,12 +50,9 @@ namespace FinancialStructures.Database.Statistics
                 {
                     foreach (ISecurity sector in portfolio.SectorSecurities(name.Name))
                     {
-                        if (sector.Any())
+                        if (sector.Any() && sector.LatestValue().Day > output)
                         {
-                            if (sector.LatestValue().Day > output)
-                            {
-                                output = sector.LatestValue().Day;
-                            }
+                            output = sector.LatestValue().Day;
                         }
                     }
 
@@ -68,7 +62,7 @@ namespace FinancialStructures.Database.Statistics
                 {
                     foreach (ICashAccount cashAccount in portfolio.BankAccountsThreadSafe)
                     {
-                        if (cashAccount.LatestValue().Day > output)
+                        if (cashAccount.Any() && cashAccount.LatestValue().Day > output)
                         {
                             output = cashAccount.LatestValue().Day;
                         }
@@ -80,12 +74,9 @@ namespace FinancialStructures.Database.Statistics
                 {
                     foreach (IValueList benchmark in portfolio.BenchMarksThreadSafe)
                     {
-                        if (benchmark.Any())
+                        if (benchmark.Any() && benchmark.LatestValue().Day > output)
                         {
-                            if (benchmark.LatestValue().Day > output)
-                            {
-                                output = benchmark.LatestValue().Day;
-                            }
+                            output = benchmark.LatestValue().Day;
                         }
                     }
 
@@ -95,12 +86,9 @@ namespace FinancialStructures.Database.Statistics
                 {
                     foreach (ICashAccount currency in portfolio.CurrenciesThreadSafe)
                     {
-                        if (currency.Any())
+                        if (currency.Any() && currency.LatestValue().Day > output)
                         {
-                            if (currency.LatestValue().Day > output)
-                            {
-                                output = currency.LatestValue().Day;
-                            }
+                            output = currency.LatestValue().Day;
                         }
                     }
 
