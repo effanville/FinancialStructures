@@ -6,6 +6,11 @@
     public enum Statistic
     {
         /// <summary>
+        /// The type of account.
+        /// </summary>
+        AccountType,
+
+        /// <summary>
         /// The company.
         /// </summary>
         Company,

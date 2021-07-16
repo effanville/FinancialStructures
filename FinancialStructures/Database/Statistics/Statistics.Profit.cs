@@ -20,7 +20,7 @@ namespace FinancialStructures.Database.Statistics
                     {
                         if (security.Any())
                         {
-                            total += portfolio.Profit(EnumConvert.ConvertTotalToAccount(elementType), security.Names);
+                            total += portfolio.Profit(elementType.ToAccount(), security.Names);
                         }
                     }
                     break;
@@ -46,7 +46,7 @@ namespace FinancialStructures.Database.Statistics
                     {
                         if (account.Any())
                         {
-                            total += portfolio.Profit(EnumConvert.ConvertTotalToAccount(elementType), account.Names);
+                            total += portfolio.Profit(elementType.ToAccount(), account.Names);
                         }
                     }
                     break;
@@ -57,7 +57,7 @@ namespace FinancialStructures.Database.Statistics
                     {
                         if (benchmark.Any())
                         {
-                            total += portfolio.Profit(EnumConvert.ConvertTotalToAccount(elementType), benchmark.Names);
+                            total += portfolio.Profit(elementType.ToAccount(), benchmark.Names);
                         }
                     }
                     break;
@@ -68,7 +68,7 @@ namespace FinancialStructures.Database.Statistics
                     {
                         if (currency.Any())
                         {
-                            total += portfolio.Profit(EnumConvert.ConvertTotalToAccount(elementType), currency.Names);
+                            total += portfolio.Profit(elementType.ToAccount(), currency.Names);
                         }
                     }
                     break;

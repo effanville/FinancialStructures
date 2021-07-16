@@ -15,7 +15,7 @@ namespace FinancialStructures.Tests.Database.Value
         [TestCase(TestDatabaseName.TwoSecTwoBank, Totals.BankAccountCompany, 101.1)]
         public void LatestCompanyValueTests(TestDatabaseName databaseName, Totals totalsType, double expectedValue)
         {
-            var accountType = EnumConvert.ConvertTotalToAccount(totalsType);
+            var accountType = totalsType.ToAccount();
             var portfolio = TestDatabase.Databases[databaseName];
             Assert.AreEqual(expectedValue, portfolio.TotalValue(totalsType, DateTime.Today, TestDatabase.Name(accountType, NameOrder.Default)));
         }
@@ -24,7 +24,7 @@ namespace FinancialStructures.Tests.Database.Value
         [TestCase(Totals.BankAccountCompany, 201.1)]
         public void LatestCompanyValueAccountTests(Totals totalsType, double expectedValue)
         {
-            var accountType = EnumConvert.ConvertTotalToAccount(totalsType);
+            var accountType = totalsType.ToAccount();
             var constructor = new DatabaseConstructor();
             constructor.WithDefaultFromType(accountType);
             constructor.WithSecondaryFromType(accountType);

@@ -17,6 +17,8 @@ namespace FinancialStructures.Statistics
         {
             switch (statTypeToGenerate)
             {
+                case Statistic.AccountType:
+                    return new StatisticAccountType();
                 case Statistic.Company:
                     return new StatisticCompany();
                 case Statistic.Name:

@@ -36,7 +36,7 @@ namespace FinancialStructures.Statistics
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
         {
-            Value = portfolio.Fraction(EnumConvert.ConvertAccountToTotal(account), account, name, DateTime.Today);
+            Value = portfolio.Fraction(account.ToTotals(), account, name, DateTime.Today);
         }
 
         /// <inheritdoc/>
