@@ -107,30 +107,7 @@ namespace FinancialStructures.FinanceStructures
         /// <param name="investment">The value of the investment.</param>
         /// <param name="reportLogger">An optional logger to log progress.</param>
         /// <returns>Was adding or editing successful.</returns>
-        bool TryAddOrEditData(DateTime oldDate, DateTime date, double unitPrice, double shares, double investment, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Tries to edit data if it exists.
-        /// </summary>
-        /// <param name="oldDate">The existing date held.</param>
-        /// <param name="newDate">The date to add data to.</param>
-        /// <param name="unitPrice">The unit price data to add.</param>
-        /// <param name="shares">The number of shares data to add.</param>
-        /// <param name="investment">The value of the investment.</param>
-        /// <param name="reportLogger">An optional logger to log progress.</param>
-        /// <returns>Was adding or editing successful.</returns>
-        bool TryEditData(DateTime oldDate, DateTime newDate, double? unitPrice = null, double? shares = null, double? investment = null, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Sets data on the date specified. If data exists then it overwrites.
-        /// </summary>
-        /// <param name="recordDate">The existing date held.</param>
-        /// <param name="unitPrice">The unit price data to add.</param>
-        /// <param name="shares">The number of shares data to add.</param>
-        /// <param name="investment">The value of the investment.</param>
-        /// <param name="reportLogger">An optional logger to log progress.</param>
-        /// <returns>Was adding or editing successful.</returns>
-        void SetData(DateTime recordDate, double? unitPrice, double? shares = null, double? investment = null, IReportLogger reportLogger = null);
+        bool AddOrEditData(DateTime oldDate, DateTime date, double unitPrice, double shares, double investment, IReportLogger reportLogger = null);
 
         /// <summary>
         ///

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Xml.Serialization;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using Common.Structure.DataStructures;
@@ -12,60 +11,14 @@ namespace FinancialStructures.FinanceStructures.Implementation
     /// </summary>
     public partial class Security : ValueList, ISecurity
     {
-        private TimeList fInvestments = new TimeList();
-        private TimeList fShares = new TimeList();
-        private TimeList fUnitPrice = new TimeList();
-
-        /// <summary>
-        /// For backwards compatibility with old systems where this was the true store of sectors.
-        /// </summary>
-        [XmlIgnore]
-        public HashSet<string> Sectors
-        {
-            get
-            {
-                return Names.Sectors;
-            }
-        }
+        /// <inheritdoc/>
+        public TimeList Shares { get; set; } = new TimeList();
 
         /// <inheritdoc/>
-        public TimeList Shares
-        {
-            get
-            {
-                return fShares;
-            }
-            set
-            {
-                fShares = value;
-            }
-        }
+        public TimeList UnitPrice { get; set; } = new TimeList();
 
         /// <inheritdoc/>
-        public TimeList UnitPrice
-        {
-            get
-            {
-                return fUnitPrice;
-            }
-            set
-            {
-                fUnitPrice = value;
-            }
-        }
-
-        /// <inheritdoc/>
-        public TimeList Investments
-        {
-            get
-            {
-                return fInvestments;
-            }
-            set
-            {
-                fInvestments = value;
-            }
-        }
+        public TimeList Investments { get; set; } = new TimeList();
 
         /// <summary>
         /// An empty constructor.
@@ -96,9 +49,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
         private Security(NameData names, TimeList shares, TimeList prices, TimeList investments)
         {
             Names = names.Copy();
-            fShares = shares;
-            fUnitPrice = prices;
-            fInvestments = investments;
+            Shares = shares;
+            UnitPrice = prices;
+            Investments = investments;
             SetupEventListening();
         }
 
@@ -134,13 +87,13 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public new ISecurity Copy()
         {
-            return new Security(Names, fShares, fUnitPrice, fInvestments);
+            return new Security(Names, Shares, UnitPrice, Investments);
         }
 
         /// <inheritdoc/>
         public override bool Any()
         {
-            if (fUnitPrice.Any() && fShares.Any())
+            if (UnitPrice.Any() && Shares.Any())
             {
                 return true;
             }
@@ -151,7 +104,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public override int Count()
         {
-            return fUnitPrice.Count();
+            return UnitPrice.Count();
         }
 
         /// <inheritdoc/>

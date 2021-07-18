@@ -18,7 +18,7 @@ namespace FinancialStructures.Database.Implementation
                 if (names.IsEqualTo(funds[fundIndex].Names))
                 {
                     _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Security `{names.Company}'-`{names.Name}' has data on date .");
-                    return funds[fundIndex].TryAddOrEditData(oldDate, date, unitPrice, shares, Investment, reportLogger);
+                    return funds[fundIndex].AddOrEditData(oldDate, date, unitPrice, shares, Investment, reportLogger);
                 }
             }
             _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Security `{names.Company}'-`{names.Name}' could not be found in the database.");

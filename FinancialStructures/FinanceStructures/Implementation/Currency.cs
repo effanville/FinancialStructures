@@ -16,22 +16,10 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public string BaseCurrency
-        {
-            get
-            {
-                return Names.Company;
-            }
-        }
+        public string BaseCurrency => Names.Company;
 
         /// <inheritdoc/>
-        public string QuoteCurrency
-        {
-            get
-            {
-                return Names.Name;
-            }
-        }
+        public string QuoteCurrency => Names.Name;
 
         internal Currency(NameData names)
             : base(names)

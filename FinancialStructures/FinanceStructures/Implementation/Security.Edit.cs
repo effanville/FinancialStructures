@@ -19,27 +19,13 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public bool TryEditData(DateTime oldDate, DateTime date, double? unitPrice, double? shares, double? investment, IReportLogger reportLogger = null)
-        {
-            bool editedUnitPrice = false;
-            bool editedShares = false;
-            bool editedInvestment = false;
-            if (unitPrice.HasValue)
-            {
-                editedUnitPrice = AddOrEditUnitPriceData(oldDate, date, unitPrice.Value, reportLogger);
-            }
-
-            return editedUnitPrice & editedShares & editedInvestment;
-        }
-
-        /// <inheritdoc/>
         public override void SetData(DateTime date, double unitPrice, IReportLogger reportLogger = null)
         {
             _ = AddOrEditUnitPriceData(date, date, unitPrice, reportLogger);
         }
 
         /// <inheritdoc/>
-        public bool TryAddOrEditData(DateTime oldDate, DateTime date, double unitPrice, double shares, double investment = 0, IReportLogger reportLogger = null)
+        public bool AddOrEditData(DateTime oldDate, DateTime date, double unitPrice, double shares, double investment = 0, IReportLogger reportLogger = null)
         {
             bool editUnitPrice = AddOrEditUnitPriceData(oldDate, date, unitPrice, reportLogger);
             bool editShares = AddOrEditSharesData(oldDate, date, shares, reportLogger);
@@ -52,10 +38,10 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
             if (DoesDateUnitPriceDataExist(oldDate, out int _))
             {
-                return fUnitPrice.TryEditData(oldDate, date, shares, reportLogger);
+                return UnitPrice.TryEditData(oldDate, date, shares, reportLogger);
             }
 
-            fUnitPrice.SetData(date, shares, reportLogger);
+            UnitPrice.SetData(date, shares, reportLogger);
             return true;
         }
 
@@ -63,10 +49,10 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
             if (DoesDateSharesDataExist(oldDate, out int _))
             {
-                return fShares.TryEditData(oldDate, date, shares, reportLogger);
+                return Shares.TryEditData(oldDate, date, shares, reportLogger);
             }
 
-            fShares.SetData(date, shares, reportLogger);
+            Shares.SetData(date, shares, reportLogger);
             return true;
         }
 
@@ -74,10 +60,10 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
             if (DoesDateInvestmentDataExist(oldDate, out int _))
             {
-                return fInvestments.TryEditData(oldDate, date, shares, reportLogger);
+                return Investments.TryEditData(oldDate, date, shares, reportLogger);
             }
 
-            fInvestments.SetData(date, shares, reportLogger);
+            Investments.SetData(date, shares, reportLogger);
             return true;
         }
 
@@ -114,9 +100,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// </summary>
         public override bool TryDeleteData(DateTime date, IReportLogger reportLogger = null)
         {
-            return fUnitPrice.TryDeleteValue(date, reportLogger)
-                & fShares.TryDeleteValue(date, reportLogger)
-                & fInvestments.TryDeleteValue(date, reportLogger)
+            return UnitPrice.TryDeleteValue(date, reportLogger)
+                & Shares.TryDeleteValue(date, reportLogger)
+                & Investments.TryDeleteValue(date, reportLogger)
                 && ComputeInvestments(reportLogger);
         }
 
@@ -125,8 +111,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// </summary>
         public void CleanData()
         {
-            fShares.CleanValues();
-            fInvestments.CleanValues();
+            Shares.CleanValues();
+            Investments.CleanValues();
         }
 
         /// <summary>
@@ -141,21 +127,21 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
             CleanData();
 
-            for (int index = 0; index < fInvestments.Count(); index++)
+            for (int index = 0; index < Investments.Count(); index++)
             {
-                DailyValuation investmentValue = fInvestments[index];
+                DailyValuation investmentValue = Investments[index];
                 if (investmentValue.Value != 0)
                 {
-                    DailyValuation sharesCurrentValue = fShares.NearestEarlierValue(investmentValue.Day);
-                    DailyValuation sharesPreviousValue = fShares.RecentPreviousValue(investmentValue.Day) ?? new DailyValuation(DateTime.Today, 0);
+                    DailyValuation sharesCurrentValue = Shares.NearestEarlierValue(investmentValue.Day);
+                    DailyValuation sharesPreviousValue = Shares.RecentPreviousValue(investmentValue.Day) ?? new DailyValuation(DateTime.Today, 0);
                     if (sharesCurrentValue != null)
                     {
-                        fInvestments.SetData(investmentValue.Day, (sharesCurrentValue.Value - sharesPreviousValue.Value) * fUnitPrice.NearestEarlierValue(investmentValue.Day).Value, reportLogger);
+                        Investments.SetData(investmentValue.Day, (sharesCurrentValue.Value - sharesPreviousValue.Value) * UnitPrice.NearestEarlierValue(investmentValue.Day).Value, reportLogger);
                     }
                 }
                 if (investmentValue.Value == 0)
                 {
-                    if (fInvestments.TryDeleteValue(investmentValue.Day, reportLogger))
+                    if (Investments.TryDeleteValue(investmentValue.Day, reportLogger))
                     {
                         index--;
                     }
