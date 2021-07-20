@@ -126,7 +126,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             var newValues = new ObservableCollection<LineSeries>();
             if (HistoryStats.Count > 1)
             {
-                var sectorNames = fPortfolio.GetSecuritiesSectors();
+                var sectorNames = fPortfolio.Sectors(Account.Security);
                 foreach (var name in sectorNames)
                 {
                     var total = HistoryStats[HistoryStats.Count - 1].SecurityValue;

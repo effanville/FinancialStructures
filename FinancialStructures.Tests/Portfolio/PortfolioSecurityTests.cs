@@ -1,7 +1,4 @@
-﻿using System;
-using FinancialStructures.Database;
-using FinancialStructures.NamingStructures;
-using FinancialStructures.Tests.TestDatabaseConstructor;
+﻿using FinancialStructures.Database;
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.Database
@@ -23,26 +20,13 @@ namespace FinancialStructures.Tests.Database
             var constructor = new DatabaseConstructor();
             constructor = constructor.WithSecurityFromName("company1", "name1", sectors: firstSecuritySectors).WithSecurityFromName("company2", "name2", sectors: secondSecuritySectors);
             var database = constructor.database;
-            var sectings = database.GetSecuritiesSectors();
+            var sectings = database.Sectors(Account.Security);
 
             Assert.AreEqual(sectors.Length, sectings.Count);
             for (int i = 0; i < sectors.Length; i++)
             {
                 Assert.AreEqual(sectors[i], sectings[i]);
             }
-        }
-
-        [TestCase(SecurityDataStream.NumberOfShares, 12)]
-        [TestCase(SecurityDataStream.SharePrice, 101)]
-        public void TestSecurityPrices(SecurityDataStream stream, double expected)
-        {
-            var constructor = new DatabaseConstructor();
-            constructor = constructor.WithSecurityFromNameAndDataPoint("company1", "name1", date: new DateTime(2000, 1, 1), sharePrice: 101, numberUnits: 12).WithSecurityFromNameAndDataPoint("company2", "name2", date: new DateTime(2000, 1, 1), sharePrice: 202, numberUnits: 52);
-            var database = constructor.database;
-
-            var value = database.SecurityPrices(new TwoName("company1", "name1"), new DateTime(2000, 2, 1), stream);
-
-            Assert.AreEqual(expected, value);
         }
     }
 }

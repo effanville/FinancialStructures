@@ -200,7 +200,7 @@ namespace FinancialStructures.DataStructures
 
         private void AddSectorTotalValues(DateTime date, IPortfolio portfolio)
         {
-            List<string> sectorNames = portfolio.GetSecuritiesSectors();
+            IReadOnlyList<string> sectorNames = portfolio.Sectors(Account.Security);
             foreach (string sectorName in sectorNames)
             {
                 var sectorValue = new DailyValuation(date, portfolio.TotalValue(Totals.Sector, date, new TwoName(sectorName)).Truncate());

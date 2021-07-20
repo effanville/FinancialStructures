@@ -199,22 +199,28 @@ namespace FinancialStructures.Database
         bool TryDeleteData(Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null);
 
         /// <summary>
-        /// Returns a list of all companes of the desired type in the databse.
+        /// Returns a list of all companes of the desired type in the database.
         /// </summary>
         /// <param name="elementType">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
         IReadOnlyList<string> Companies(Account elementType);
 
+        /// <summary>
+        /// Returns a list of all sector names of the desired type in the database.
+        /// </summary>
+        /// <param name="elementType">Type of object to search for.</param>
+        /// <returns>List of names of the desired type.</returns>
+        IReadOnlyList<string> Sectors(Account elementType);
 
         /// <summary>
-        /// Returns a list of all names of the desired type in the databse.
+        /// Returns a list of all names of the desired type in the database.
         /// </summary>
         /// <param name="elementType">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
         IReadOnlyList<string> Names(Account elementType);
 
         /// <summary>
-        /// Returns a list of all namedata in the databse.
+        /// Returns a list of all namedata in the database.
         /// </summary>
         /// <param name="elementType">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>

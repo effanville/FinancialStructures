@@ -1,5 +1,6 @@
 ﻿using System;
 using FinancialStructures.Database;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Statistics
@@ -14,7 +15,14 @@ namespace FinancialStructures.Statistics
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
         {
-            Value = portfolio.SecurityPrices(name, DateTime.Today, SecurityDataStream.NumberOfShares);
+            if (!portfolio.TryGetAccount(account, name, out var desired))
+            {
+                Value = 0.0;
+            }
+            if (desired is ISecurity security)
+            {
+                Value = security.Shares.NearestEarlierValue(DateTime.Today).Value;
+            }
         }
 
         /// <inheritdoc/>

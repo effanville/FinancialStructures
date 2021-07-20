@@ -52,7 +52,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public List<SecurityDayData> GetDataForDisplay()
+        public IReadOnlyList<SecurityDayData> GetDataForDisplay()
         {
             List<SecurityDayData> output = new List<SecurityDayData>();
             if (UnitPrice.Any())

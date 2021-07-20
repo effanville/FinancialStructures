@@ -50,7 +50,7 @@ namespace FinancialStructures.FinanceStructures
         /// Produces a list of data for visual display purposes. Display in the base currency
         /// of the fund ( so this does not modify values due to currency)
         /// </summary>
-        List<SecurityDayData> GetDataForDisplay();
+        IReadOnlyList<SecurityDayData> GetDataForDisplay();
 
         /// <summary>
         /// Produces a list of all investments (values in <see cref="Investments"/>) in the <see cref="ISecurity"/> between the dates requested, with a currency conversion if required.

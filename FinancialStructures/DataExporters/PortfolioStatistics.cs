@@ -130,7 +130,7 @@ namespace FinancialStructures.DataExporters
             BankAccountTotalStats = portfolio.GetStats(Totals.BankAccount, new TwoName("Totals", ""), bankAccountData);
 
             Statistic[] sectorData = fDisplayOptions.SectorDisplayOptions.DisplayFields.ToArray();
-            List<string> sectorNames = portfolio.GetSecuritiesSectors();
+            IReadOnlyList<string> sectorNames = portfolio.Sectors(Account.Security);
             foreach (string sectorName in sectorNames)
             {
                 SectorStats.AddRange(portfolio.GetStats(Totals.Sector, new TwoName("Totals", sectorName), sectorData));

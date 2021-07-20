@@ -20,6 +20,14 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
+        public IReadOnlyList<string> Sectors(Account elementType)
+        {
+            var sectors = NameData(elementType).SelectMany(name => name.Sectors).Distinct().ToList();
+            sectors.Sort();
+            return sectors;
+        }
+
+        /// <inheritdoc/>
         public IReadOnlyList<NameData> NameData(Account elementType)
         {
             List<NameData> namesAndCompanies = new List<NameData>();
