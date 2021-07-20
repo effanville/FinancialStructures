@@ -74,8 +74,9 @@ namespace FinancialStructures.Database.Statistics
                     break;
                 }
                 case Totals.Sector:
+                case Totals.SecuritySector:
                 {
-                    foreach (ISecurity security in portfolio.SectorSecurities(names.Name))
+                    foreach (ISecurity security in portfolio.SectorAccounts(Account.Security, names.Name))
                     {
                         if (security.Any())
                         {
@@ -91,7 +92,6 @@ namespace FinancialStructures.Database.Statistics
 
                 case Totals.BankAccountCompany:
                 case Totals.Company:
-                case Totals.SecuritySector:
                 case Totals.BankAccountSector:
                 case Totals.CurrencySector:
                 case Totals.SecurityCurrency:

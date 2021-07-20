@@ -79,12 +79,6 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public override string ToString()
-        {
-            return Names.ToString();
-        }
-
-        /// <inheritdoc/>
         public new ISecurity Copy()
         {
             return new Security(Names, Shares, UnitPrice, Investments);

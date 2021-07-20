@@ -13,13 +13,13 @@ namespace FinancialStructures.Statistics
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
         {
-            Value = portfolio.SectorSecurities(name.Name).Count;
+            Value = portfolio.SectorAccounts(account, name.Name).Count;
         }
 
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Totals total, TwoName name)
         {
-            Value = portfolio.SectorSecurities(name.Name).Count;
+            Value = portfolio.SectorAccounts(total.ToAccount(), name.Name).Count;
         }
     }
 }

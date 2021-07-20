@@ -263,7 +263,7 @@ namespace FinancialStructures.Database
         /// </summary>
         /// <param name="sectorName"></param>
         /// <returns></returns>
-        IReadOnlyList<ISecurity> SectorSecurities(string sectorName);
+        IReadOnlyList<IValueList> SectorAccounts(Account account, string sectorName);
 
         /// <summary>
         /// Returns a copy of the currently held portfolio.

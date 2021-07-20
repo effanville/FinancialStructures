@@ -54,7 +54,6 @@ namespace FinancialStructures.Database.Implementation
                 {
                     accountList.AddRange(CompanyAccounts(Account.Security, company));
                     accountList.AddRange(CompanyAccounts(Account.BankAccount, company));
-                    accountList.Sort();
                     break;
                 }
                 case Account.Security:
@@ -66,7 +65,6 @@ namespace FinancialStructures.Database.Implementation
                             accountList.Add(sec.Copy());
                         }
                     }
-                    accountList.Sort();
                     break;
                 }
                 case Account.BankAccount:
@@ -75,11 +73,10 @@ namespace FinancialStructures.Database.Implementation
                     {
                         if (acc.Names.Company == company)
                         {
-                            accountList.Add(acc);
+                            accountList.Add(acc.Copy());
                         }
                     }
 
-                    accountList.Sort();
                     break;
                 }
                 case Account.Benchmark:
@@ -88,22 +85,54 @@ namespace FinancialStructures.Database.Implementation
                     break;
             }
 
+            accountList.Sort();
             return accountList;
         }
 
         /// <inheritdoc/>
-        public IReadOnlyList<ISecurity> SectorSecurities(string sectorName)
+        public IReadOnlyList<IValueList> SectorAccounts(Account account, string sectorName)
         {
-            List<ISecurity> securities = new List<ISecurity>();
-            foreach (ISecurity security in FundsThreadSafe)
+            List<IValueList> accountList = new List<IValueList>();
+            switch (account)
             {
-                if (security.IsSectorLinked(sectorName))
+                case Account.All:
                 {
-                    securities.Add(security);
+                    accountList.AddRange(SectorAccounts(Account.Security, sectorName));
+                    accountList.AddRange(SectorAccounts(Account.BankAccount, sectorName));
+                    break;
                 }
+                case Account.Security:
+                {
+                    foreach (ISecurity security in FundsThreadSafe)
+                    {
+                        if (security.IsSectorLinked(sectorName))
+                        {
+                            accountList.Add(security);
+                        }
+                    }
+
+                    break;
+                }
+                case Account.BankAccount:
+                {
+                    foreach (ICashAccount cashAccount in BankAccountsThreadSafe)
+                    {
+                        if (cashAccount.IsSectorLinked(sectorName))
+                        {
+                            accountList.Add(cashAccount);
+                        }
+                    }
+
+                    break;
+                }
+                case Account.Benchmark:
+                case Account.Currency:
+                default:
+                    break;
             }
-            securities.Sort();
-            return securities;
+
+            accountList.Sort();
+            return accountList;
         }
     }
 }

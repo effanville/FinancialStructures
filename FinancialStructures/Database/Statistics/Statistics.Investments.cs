@@ -48,7 +48,7 @@ namespace FinancialStructures.Database.Statistics
                 case Totals.SecuritySector:
                 {
                     List<DayValue_Named> output = new List<DayValue_Named>();
-                    foreach (ISecurity security in portfolio.SectorSecurities(Name.Name))
+                    foreach (ISecurity security in portfolio.SectorAccounts(Account.Security, Name.Name))
                     {
                         output.AddRange(security.AllInvestmentsNamed());
                     }
