@@ -51,7 +51,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Totals.Sector:
                 {
-                    foreach (ISector sector in portfolio.SectorSecurities(name.Name))
+                    foreach (ISecurity sector in portfolio.SectorSecurities(name.Name))
                     {
                         if (sector.Any())
                         {
