@@ -8,12 +8,6 @@ namespace FinancialStructures.Database.Implementation
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public double TotalValue(DateTime date, TwoName names)
-        {
-            return TotalValue(Totals.All, date, names);
-        }
-
-        /// <inheritdoc/>
         public double TotalValue(Totals elementType, TwoName names = null)
         {
             return TotalValue(elementType, DateTime.Today, names);

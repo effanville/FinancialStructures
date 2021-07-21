@@ -310,14 +310,6 @@ namespace FinancialStructures.Database
         double TotalValue(Totals elementType, DateTime date, TwoName names = null);
 
         /// <summary>
-        /// Total value of all accounts of all types on date given.
-        /// </summary>
-        /// <param name="date">The date to find the total on.</param>
-        /// <param name="names">Any name associated with this total, e.g. the Sector name</param>
-        /// <returns>The total value held.</returns>
-        double TotalValue(DateTime date, TwoName names = null);
-
-        /// <summary>
         /// returns the currency associated to the account.
         /// </summary>
         ICurrency Currency(Account account, IValueList valueList);

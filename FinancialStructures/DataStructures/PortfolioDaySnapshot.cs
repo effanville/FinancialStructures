@@ -160,7 +160,7 @@ namespace FinancialStructures.DataStructures
         /// <param name="portfolio"></param>
         public PortfolioDaySnapshot(DateTime date, IPortfolio portfolio)
         {
-            TotalValue = new DailyValuation(date, portfolio.TotalValue(date).Truncate());
+            TotalValue = new DailyValuation(date, portfolio.TotalValue(Totals.All, date).Truncate());
             BankAccValue = new DailyValuation(date, portfolio.TotalValue(Totals.BankAccount, date).Truncate());
             SecurityValue = new DailyValuation(date, portfolio.TotalValue(Totals.Security, date).Truncate());
 
