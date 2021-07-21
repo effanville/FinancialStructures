@@ -97,7 +97,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 }
 
                 List<PortfolioDaySnapshot> historyStatistics = await DataStore.GenerateHistoryStats(HistoryGapDays).ConfigureAwait(false);
-                CSVHistoryWriter.WriteToCSV(historyStatistics, result.FilePath, ReportLogger);
+                CSVHistoryWriter.WriteToCSV(historyStatistics, result.FilePath, fUiGlobals.CurrentFileSystem, ReportLogger);
             }
             else
             {

@@ -86,64 +86,57 @@ namespace FinancialStructures.DataStructures
             get;
         } = new Dictionary<string, DailyValuation>();
 
-        /// <summary>
-        /// Outputs the headers for the snapshot for a given collection of values in CSV style.
-        /// </summary>
-        public string Headers()
+        public List<string> ExportHeaders()
         {
-            string outputCSVStyle = string.Empty;
-            outputCSVStyle += string.Concat("Date, TotalValue", ",");
+            List<string> headers = new List<string>();
+            headers.Add("Date");
+            headers.Add("TotalValue");
+            headers.Add("BankTotal");
 
-            outputCSVStyle += string.Concat("BankTotal", ",");
-
-            outputCSVStyle += string.Concat("SecurityTotal", ",");
+            headers.Add("SecurityTotal");
 
             foreach (var value in SecurityValues)
             {
-                outputCSVStyle += string.Concat(value.Key, ",");
+                headers.Add(value.Key);
             }
 
             foreach (var value in BankAccValues)
             {
-                outputCSVStyle += string.Concat(value.Key, ",");
+                headers.Add(value.Key);
             }
 
             foreach (var value in SectorValues)
             {
-                outputCSVStyle += string.Concat(value.Key, ",");
+                headers.Add(value.Key);
             }
 
-            return outputCSVStyle;
+            return headers;
         }
 
-        /// <summary>
-        /// Outputs the values stored in CSV style.
-        /// </summary>
-        public override string ToString()
+        public List<string> ExportValues()
         {
-            string outputCSVStyle = string.Empty;
-            outputCSVStyle += string.Concat(TotalValue.ToString(), ",");
-
-            outputCSVStyle += string.Concat(BankAccValue.Value, ",");
-
-            outputCSVStyle += string.Concat(SecurityValue.Value, ",");
+            List<string> values = new List<string>();
+            values.Add(TotalValue.Day.ToUkDateString());
+            values.Add(TotalValue.Value.ToString());
+            values.Add(BankAccValue.Value.ToString());
+            values.Add(SecurityValue.Value.ToString());
 
             foreach (var value in SecurityValues)
             {
-                outputCSVStyle += string.Concat(value.Value.Value, ",");
+                values.Add(value.Value.Value.ToString());
             }
 
             foreach (var value in BankAccValues)
             {
-                outputCSVStyle += string.Concat(value.Value.Value, ",");
+                values.Add(value.Value.Value.ToString());
             }
 
             foreach (var value in SectorValues)
             {
-                outputCSVStyle += string.Concat(value.Value.Value, ",");
+                values.Add(value.Value.Value.ToString());
             }
 
-            return outputCSVStyle;
+            return values;
         }
 
         /// <summary>
