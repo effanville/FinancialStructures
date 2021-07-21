@@ -51,6 +51,11 @@
         FundCompanyFraction,
 
         /// <summary>
+        /// The amount of money invested in this.
+        /// </summary>
+        Investment,
+
+        /// <summary>
         /// The total profit.
         /// </summary>
         Profit,
