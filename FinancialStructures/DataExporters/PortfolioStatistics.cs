@@ -126,7 +126,7 @@ namespace FinancialStructures.DataExporters
             BankAccountStats = portfolio.GetStats(Account.BankAccount, fDisplayOptions.DisplayValueFunds, false);
 
             Statistic[] bankAccountData = fDisplayOptions.BankAccountDisplayOptions.DisplayFields.ToArray();
-            BankAccountCompanyStats = portfolio.GetStats(Totals.BankAccount, fDisplayOptions.DisplayValueFunds, bankAccountData);
+            BankAccountCompanyStats = portfolio.GetStats(Totals.BankAccountCompany, fDisplayOptions.DisplayValueFunds, bankAccountData);
             BankAccountTotalStats = portfolio.GetStats(Totals.BankAccount, new TwoName("Totals", ""), bankAccountData);
 
             Statistic[] sectorData = fDisplayOptions.SectorDisplayOptions.DisplayFields.ToArray();
