@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
+using FinancialStructures.Tests.TestDatabaseConstructor;
 
 namespace FinancialStructures.Tests
 {
@@ -18,21 +19,21 @@ namespace FinancialStructures.Tests
 
                     var constructor = new DatabaseConstructor(TestFilePath);
                     _ = constructor.WithDefaultBankAccount();
-                    fDatabases.Add(TestDatabaseName.OneBank, constructor.database.Copy());
+                    fDatabases.Add(TestDatabaseName.OneBank, constructor.Database.Copy());
 
                     _ = constructor.WithDefaultSecurity();
-                    fDatabases.Add(TestDatabaseName.OneSecOneBank, constructor.database.Copy());
+                    fDatabases.Add(TestDatabaseName.OneSecOneBank, constructor.Database.Copy());
 
                     _ = constructor.WithSecondaryBankAccount();
-                    fDatabases.Add(TestDatabaseName.OneSecTwoBank, constructor.database.Copy());
+                    fDatabases.Add(TestDatabaseName.OneSecTwoBank, constructor.Database.Copy());
 
                     _ = constructor.WithSecondarySecurity();
-                    fDatabases.Add(TestDatabaseName.TwoSecTwoBank, constructor.database.Copy());
+                    fDatabases.Add(TestDatabaseName.TwoSecTwoBank, constructor.Database.Copy());
 
                     _ = constructor
                         .SetCurrencyAsGBP()
                         .WithDefaultCurrency();
-                    fDatabases.Add(TestDatabaseName.TwoSecTwoBankCur, constructor.database.Copy());
+                    fDatabases.Add(TestDatabaseName.TwoSecTwoBankCur, constructor.Database.Copy());
 
                     _ = constructor
                         .ClearDatabase()
@@ -41,27 +42,27 @@ namespace FinancialStructures.Tests
 
                     _ = constructor.WithDefaultBankAccount()
                         .WithSecondaryBankAccount();
-                    fDatabases.Add(TestDatabaseName.TwoBank, constructor.database.Copy());
+                    fDatabases.Add(TestDatabaseName.TwoBank, constructor.Database.Copy());
                     _ = constructor
                         .SetCurrencyAsGBP()
                         .WithDefaultCurrency();
-                    fDatabases.Add(TestDatabaseName.TwoBankCur, constructor.database.Copy());
+                    fDatabases.Add(TestDatabaseName.TwoBankCur, constructor.Database.Copy());
 
                     _ = constructor
                         .ClearDatabase()
                         .SetCurrencyAsGBP()
                         .SetFilePath(TestFilePath)
                         .WithDefaultSecurity();
-                    fDatabases.Add(TestDatabaseName.OneSec, constructor.database.Copy());
+                    fDatabases.Add(TestDatabaseName.OneSec, constructor.Database.Copy());
 
                     _ = constructor.WithSecondarySecurity();
 
-                    fDatabases.Add(TestDatabaseName.TwoSec, constructor.database.Copy());
+                    fDatabases.Add(TestDatabaseName.TwoSec, constructor.Database.Copy());
 
                     _ = constructor
                         .SetCurrencyAsGBP()
                         .WithDefaultCurrency();
-                    fDatabases.Add(TestDatabaseName.TwoSecCur, constructor.database.Copy());
+                    fDatabases.Add(TestDatabaseName.TwoSecCur, constructor.Database.Copy());
                 }
 
                 return fDatabases;

@@ -4,6 +4,7 @@ using FinancialStructures.NamingStructures;
 using NUnit.Framework;
 using Common.Structure.DataStructures;
 using FinancialStructures.Database;
+using FinancialStructures.Tests.TestDatabaseConstructor;
 
 namespace FinancialStructures.Tests.Database.DataEdit
 {
@@ -14,9 +15,9 @@ namespace FinancialStructures.Tests.Database.DataEdit
         public void CanAddToSecurity()
         {
             var constructor = new DatabaseConstructor();
-            _ = constructor.WithSecurityFromName("Company", "Name");
+            _ = constructor.WithSecurity("Company", "Name");
 
-            var portfolio = constructor.database;
+            var portfolio = constructor.Database;
             bool success = portfolio.TryAddOrEditDataToSecurity(new TwoName("Company", "Name"), new DateTime(2010, 1, 1), new DateTime(2010, 1, 1), 1, 1, 1, null);
 
             Assert.IsTrue(success);
@@ -29,7 +30,7 @@ namespace FinancialStructures.Tests.Database.DataEdit
             var constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName("Company", "Name");
 
-            var portfolio = constructor.database;
+            var portfolio = constructor.Database;
             var data = new DailyValuation(new DateTime(2010, 1, 1), 1);
             bool success = portfolio.TryAddOrEditData(Account.Benchmark, new TwoName("Company", "Name"), data, data);
 
@@ -41,9 +42,9 @@ namespace FinancialStructures.Tests.Database.DataEdit
         public void CanEditToSecurity()
         {
             var constructor = new DatabaseConstructor();
-            _ = constructor.WithSecurityFromNameAndData("Company", "Name", dates: new DateTime[] { new DateTime(2010, 1, 1) }, sharePrice: new double[] { 2.0 }, numberUnits: new double[] { 100.0 }, investment: new double[] { 0.0 });
+            _ = constructor.WithSecurity("Company", "Name", dates: new DateTime[] { new DateTime(2010, 1, 1) }, sharePrice: new double[] { 2.0 }, numberUnits: new double[] { 100.0 }, investment: new double[] { 0.0 });
 
-            var portfolio = constructor.database;
+            var portfolio = constructor.Database;
 
             bool success = portfolio.TryAddOrEditDataToSecurity(new TwoName("Company", "Name"), new DateTime(2010, 1, 1), new DateTime(2010, 1, 1), 1, 1, 1, null);
 
@@ -57,7 +58,7 @@ namespace FinancialStructures.Tests.Database.DataEdit
             var constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromNameAndData("Company", "Name", date: new DateTime[] { new DateTime(2010, 1, 1) }, value: new double[] { 2.0 });
 
-            var portfolio = constructor.database;
+            var portfolio = constructor.Database;
             bool success = portfolio.TryAddOrEditData(Account.Benchmark, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 2), new DailyValuation(new DateTime(2010, 1, 1), 1));
 
             Assert.IsTrue(success);
@@ -71,9 +72,9 @@ namespace FinancialStructures.Tests.Database.DataEdit
         public void CanAddToSecurity2()
         {
             var constructor = new DatabaseConstructor();
-            _ = constructor.WithSecurityFromName("Company", "Name");
+            _ = constructor.WithSecurity("Company", "Name");
 
-            var portfolio = constructor.database;
+            var portfolio = constructor.Database;
 
             bool success = portfolio.TryAddOrEditDataToSecurity(new TwoName("Company", "Name"), new DateTime(2010, 1, 1), new DateTime(2010, 1, 1), 1, 1, 1, null);
 
@@ -87,7 +88,7 @@ namespace FinancialStructures.Tests.Database.DataEdit
             var constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName("Company", "Name");
 
-            var portfolio = constructor.database;
+            var portfolio = constructor.Database;
 
             bool success = portfolio.TryAddOrEditData(Account.Benchmark, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 1), new DailyValuation(new DateTime(2010, 1, 1), 1));
 
@@ -99,9 +100,9 @@ namespace FinancialStructures.Tests.Database.DataEdit
         public void CanEditToSecurity2()
         {
             var constructor = new DatabaseConstructor();
-            _ = constructor.WithSecurityFromNameAndData("Company", "Name", dates: new DateTime[] { new DateTime(2010, 1, 1) }, sharePrice: new double[] { 2.0 }, numberUnits: new double[] { 100.0 }, investment: new double[] { 0.0 });
+            _ = constructor.WithSecurity("Company", "Name", dates: new DateTime[] { new DateTime(2010, 1, 1) }, sharePrice: new double[] { 2.0 }, numberUnits: new double[] { 100.0 }, investment: new double[] { 0.0 });
 
-            var portfolio = constructor.database;
+            var portfolio = constructor.Database;
 
             bool success = portfolio.TryAddOrEditDataToSecurity(new TwoName("Company", "Name"), new DateTime(2010, 1, 1), new DateTime(2020, 1, 1), 1, 1, 1, null);
 
@@ -115,7 +116,7 @@ namespace FinancialStructures.Tests.Database.DataEdit
             var constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromNameAndData("Company", "Name", date: new DateTime[] { new DateTime(2010, 1, 1) }, value: new double[] { 2.0 });
 
-            var portfolio = constructor.database;
+            var portfolio = constructor.Database;
 
             bool success = portfolio.TryAddOrEditData(Account.Benchmark, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 2.0), new DailyValuation(new DateTime(2011, 1, 1), 1));
 
