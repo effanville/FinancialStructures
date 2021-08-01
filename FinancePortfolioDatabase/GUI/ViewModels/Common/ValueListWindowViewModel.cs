@@ -5,6 +5,7 @@ using System.Linq;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using Common.UI.ViewModelBases;
+using Common.UI;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {

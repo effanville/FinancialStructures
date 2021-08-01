@@ -8,6 +8,7 @@ using System.IO.Abstractions;
 using System.Linq;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.NamingStructures;
+using Common.UI;
 
 namespace FinancePortfolioDatabase.Tests.TestHelpers
 {

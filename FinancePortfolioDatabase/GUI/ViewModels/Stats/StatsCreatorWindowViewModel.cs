@@ -11,6 +11,7 @@ using FinancialStructures.DataStructures;
 using Common.Structure.Reporting;
 using Common.UI.Commands;
 using Common.UI.Services;
+using Common.UI;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
@@ -20,6 +21,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         public ObservableCollection<object> StatsTabs { get; set; } = new ObservableCollection<object>();
 
         private bool fDisplayValueFunds = true;
+        private IPortfolio programPortfolio;
+        private UiGlobals fUiGlobals1;
+
         public bool DisplayValueFunds
         {
             get
@@ -107,7 +111,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
         private void ExecuteCreateStatsCommand()
         {
-            Action<string> StatsOptionFeedback = (filePath => StatsFeedback(filePath));
+            Action<string> StatsOptionFeedback = filePath => StatsFeedback(filePath);
             StatsOptionsViewModel context = new StatsOptionsViewModel(DataStore, ReportLogger, StatsOptionFeedback, fUiGlobals);
             fUiGlobals.DialogCreationService.DisplayCustomDialog(context);
         }

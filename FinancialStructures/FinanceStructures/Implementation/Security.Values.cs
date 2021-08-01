@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using FinancialStructures.DataStructures;
 using Common.Structure.DataStructures;
+using FinancialStructures.NamingStructures;
+using Common.Structure.NamingStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {
@@ -19,17 +21,17 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public List<DayValue_Named> AllInvestmentsNamed(ICurrency currency = null)
+        public List<Labelled<TwoName, DailyValuation>> AllInvestmentsNamed(ICurrency currency = null)
         {
             List<DailyValuation> values = Investments.GetValuesBetween(Investments.FirstDate(), Investments.LatestDate());
-            List<DayValue_Named> namedValues = new List<DayValue_Named>();
+            List<Labelled<TwoName, DailyValuation>> namedValues = new List<Labelled<TwoName, DailyValuation>>();
 
             foreach (DailyValuation value in values)
             {
                 if (value != null && value.Value != 0)
                 {
                     value.Value = value.Value * GetCurrencyValue(value.Day, currency);
-                    namedValues.Add(new DayValue_Named(Names.Company, Names.Name, value));
+                    namedValues.Add(new Labelled<TwoName, DailyValuation>(new TwoName(Names.Company, Names.Name), value));
                 }
             }
 

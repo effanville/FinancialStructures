@@ -5,7 +5,7 @@ namespace FinancialStructures.NamingStructures
     /// <summary>
     /// Contains naming information, allowing for a primary and secondary name.
     /// </summary>
-    public class TwoName : IComparable, IEquatable<TwoName>
+    public class TwoName : IComparable, IComparable<TwoName>, IEquatable<TwoName>
     {
         private string fCompany;
         private string fName;
@@ -86,30 +86,37 @@ namespace FinancialStructures.NamingStructures
             return $"{Company}-{Name}";
         }
 
+        public int CompareTo(TwoName other)
+        {
+            if (Company == other.Company)
+            {
+                if (Name == null)
+                {
+                    if (other.Name == null)
+                    {
+                        return 0;
+                    }
+                    return 1;
+                }
+                return Name.CompareTo(other.Name);
+            }
+
+            if (Company == null && other.Company != null)
+            {
+                return -1;
+            }
+
+            return Company.CompareTo(other.Company);
+        }
+
         /// <summary>
         /// Compares both names.
         /// </summary>
         public int CompareTo(object obj)
         {
-            if (obj is TwoName value)
+            if (obj is TwoName other)
             {
-                if (Company == value.Company)
-                {
-                    if (Name == null)
-                    {
-                        if (value.Name == null)
-                        {
-                            return 0;
-                        }
-                        return 1;
-                    }
-                    return Name.CompareTo(value.Name);
-                }
-                if (Company == null && value.Company != null)
-                {
-                    return -1;
-                }
-                return Company.CompareTo(value.Company);
+                return CompareTo(other);
             }
 
             return 0;

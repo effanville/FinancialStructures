@@ -1,7 +1,6 @@
 ﻿using System.IO;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
-using FinancialStructures.DataStructures;
 using Common.Structure.Reporting;
 
 namespace FinancialStructures.DataExporters
@@ -14,9 +13,9 @@ namespace FinancialStructures.DataExporters
             // write in column headers
             statsWriter.WriteLine("Securities Investments");
             statsWriter.WriteLine("Date, Company, Name, Investment Amount");
-            foreach (DayValue_Named stats in portfolio.TotalInvestments(Totals.Security))
+            foreach (var stats in portfolio.TotalInvestments(Totals.Security))
             {
-                string securitiesData = stats.Day.ToShortDateString() + ", " + stats.Names.Company + ", " + stats.Names.Name + ", " + stats.Value.ToString();
+                string securitiesData = stats.Instance.Day.ToShortDateString() + ", " + stats.Label.Company + ", " + stats.Label.Name + ", " + stats.Instance.Value.ToString();
                 statsWriter.WriteLine(securitiesData);
             }
 

@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Common.UI.Services;
 using System.IO.Abstractions;
 using FinancialStructures.NamingStructures;
+using Common.UI;
 
 namespace FinancePortfolioDatabase.Tests.TestHelpers
 {

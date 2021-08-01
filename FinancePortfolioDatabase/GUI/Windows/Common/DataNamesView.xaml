@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:uic="clr-namespace:Common.UI.Converters;assembly=Common.UI"
-             xmlns:commonui="clr-namespace:Common.UI"
+             xmlns:commonui="clr-namespace:Common.UI;assembly=Common.UI"
              xmlns:gui="clr-namespace:FinancePortfolioDatabase.GUI"
              xmlns:cht="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
              xmlns:common="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Common"

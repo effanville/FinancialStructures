@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Common.UI.Services;
 using System.IO.Abstractions;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
+using Common.UI;
 
 namespace FinancePortfolioDatabase.Tests.TestHelpers
 {

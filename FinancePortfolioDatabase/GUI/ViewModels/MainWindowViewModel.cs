@@ -6,6 +6,7 @@ using FinancePortfolioDatabase.GUI.ViewModels.Stats;
 using FinancialStructures.Database;
 using Common.Structure.Reporting;
 using Common.UI.ViewModelBases;
+using Common.UI;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {

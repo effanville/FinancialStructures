@@ -112,7 +112,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         public void CleanData()
         {
             Shares.CleanValues();
-            Investments.CleanValues();
+            Investments.CleanValues(0.0);
         }
 
         /// <summary>

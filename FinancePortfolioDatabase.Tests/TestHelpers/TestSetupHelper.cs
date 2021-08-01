@@ -8,6 +8,7 @@ using Moq;
 using Common.Structure.DataStructures;
 using Common.Structure.Reporting;
 using Common.UI.Services;
+using Common.UI;
 
 namespace FinancePortfolioDatabase.Tests.TestHelpers
 {

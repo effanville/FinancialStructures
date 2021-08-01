@@ -7,6 +7,7 @@ using FinancePortfolioDatabase.GUI.ViewModels;
 using Common.UI.Services;
 using FinancialStructures.Database;
 using Common.Structure.Reporting;
+using Common.UI;
 
 namespace FinancePortfolioDatabase.GUI.Windows
 {

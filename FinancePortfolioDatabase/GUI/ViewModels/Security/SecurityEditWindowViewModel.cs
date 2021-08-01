@@ -7,6 +7,7 @@ using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using Common.Structure.Reporting;
 using Common.UI.ViewModelBases;
+using Common.UI;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 {

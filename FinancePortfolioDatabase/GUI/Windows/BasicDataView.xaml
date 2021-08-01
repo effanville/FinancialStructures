@@ -4,8 +4,14 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:cl="clr-namespace:Colouring"
-      xmlns:fs="clr-namespace:FinancialStructures.DataStructures;assembly=FinancialStructures"
       xmlns:uic="clr-namespace:Common.UI.Converters;assembly=Common.UI"
+      xmlns:cs="clr-namespace:Common.Structure.NamingStructures;assembly=Common.Structure"
+      xmlns:ns="clr-namespace:FinancialStructures.NamingStructures;assembly=FinancialStructures"
+      xmlns:ds="clr-namespace:Common.Structure.DataStructures;assembly=Common.Structure"
+      xmlns:financeportfoliodatabase="clr-namespace:FinancePortfolioDatabase"
+      xmlns:System="clr-namespace:System;assembly=mscorlib"
+      xmlns:viewmodels="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels"
+      d:DataContext="{d:DesignInstance Type=viewmodels:BasicDataViewModel}"
       mc:Ignorable="d"
       d:DesignHeight="450"
       d:DesignWidth="800"
@@ -15,18 +21,26 @@
     <Grid.Resources>
         <uic:StringToUKDateConverter x:Key="StringToUKDate" />
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
-        <DataTemplate DataType="{x:Type fs:DayValue_Named}">
+        <x:Array Type="{x:Type System:Type}"
+                 x:Key="ListWithTwoStringTypes">
+            <x:Type TypeName="ns:TwoName" />
+            <x:Type TypeName="ds:DailyValuation" />
+        </x:Array>
+        <financeportfoliodatabase:GenericType BaseType="{x:Type TypeName=cs:Labelled`2}"
+                                   InnerTypes="{StaticResource ListWithTwoStringTypes}"
+                                   x:Key="DictionaryStringString" />
+        <DataTemplate DataType="{StaticResource DictionaryStringString}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding Names.Company}"
-                           Grid.Column="0"/>
-                <TextBlock Text="{Binding Names.Name}"
+                <TextBlock Text="{Binding Label.Company}"
+                           Grid.Column="0" />
+                <TextBlock Text="{Binding Label.Name}"
                            Grid.Column="1" />
-                <TextBlock Text="{Binding Value}"
+                <TextBlock Text="{Binding Instance.Value, StringFormat=N2}"
                            Grid.Column="2" />
             </Grid>
         </DataTemplate>

@@ -24,7 +24,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.5.0" />
     <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="13.2.23" />
-    <PackageReference Include="Common.UI" Version="1.0.6" />
+    <PackageReference Include="Common.UI" Version="1.0.7" />
   </ItemGroup>
 
   <ItemGroup>

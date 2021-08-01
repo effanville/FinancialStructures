@@ -6,6 +6,7 @@ using Common.UI.Services;
 using System.IO.Abstractions;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.NamingStructures;
+using Common.UI;
 
 namespace FinancePortfolioDatabase.Tests.TestHelpers
 {

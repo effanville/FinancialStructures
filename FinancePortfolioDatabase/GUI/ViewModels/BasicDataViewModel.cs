@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
-using FinancialStructures.DataStructures;
 using Common.Structure.DataStructures;
 using Common.Structure.Extensions;
+using Common.Structure.NamingStructures;
+using FinancialStructures.NamingStructures;
+using Common.UI;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {
@@ -77,8 +79,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
         }
 
-        private List<DayValue_Named> fTopSecurities;
-        public List<DayValue_Named> TopSecurities
+        private List<Labelled<TwoName, DailyValuation>> fTopSecurities;
+        public List<Labelled<TwoName, DailyValuation>> TopSecurities
         {
             get
             {
@@ -120,8 +122,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
         }
 
-        private List<DayValue_Named> fTopBankAccounts;
-        public List<DayValue_Named> TopBankAccounts
+        private List<Labelled<TwoName, DailyValuation>> fTopBankAccounts;
+        public List<Labelled<TwoName, DailyValuation>> TopBankAccounts
         {
             get
             {
@@ -148,13 +150,13 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             SecurityAmountText = $"Total Value: {portfolio.TotalValue(Totals.Security).Truncate()} {portfolio.BaseCurrency}";
             var securities = portfolio.FundsThreadSafe.ToList();
             securities.Sort((fund, otherFund) => otherFund.Value(DateTime.Today).Value.CompareTo(fund.Value(DateTime.Today).Value));
-            TopSecurities = securities.Take(5).Select(name => new DayValue_Named(name.Names.Company, name.Names.Name, name.Value(DateTime.Today))).ToList();
+            TopSecurities = securities.Take(5).Select(name => new Labelled<TwoName, DailyValuation>(new TwoName(name.Names.Company, name.Names.Name), name.Value(DateTime.Today))).ToList();
 
             BankAccountTotalText = $"Total Bank Accounts: {portfolio.NumberOf(Account.BankAccount)}";
             BankAccountAmountText = $"Total Value: {portfolio.TotalValue(Totals.BankAccount)} {portfolio.BaseCurrency}";
             var bankAccounts = portfolio.BankAccountsThreadSafe.ToList();
             bankAccounts.Sort((bank, otherBank) => otherBank.Value(DateTime.Today).Value.CompareTo(bank.Value(DateTime.Today).Value));
-            TopBankAccounts = bankAccounts.Take(5).Select(name => new DayValue_Named(name.Names.Company, name.Names.Name, name.Value(DateTime.Today) ?? new DailyValuation(DateTime.Today, 0.0))).ToList();
+            TopBankAccounts = bankAccounts.Take(5).Select(name => new Labelled<TwoName, DailyValuation>(new TwoName(name.Names.Company, name.Names.Name), name.Value(DateTime.Today) ?? new DailyValuation(DateTime.Today, 0.0))).ToList();
         }
     }
 }

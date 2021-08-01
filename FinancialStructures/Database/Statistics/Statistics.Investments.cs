@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Common.Structure.DataStructures;
+using Common.Structure.NamingStructures;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
@@ -17,14 +19,13 @@ namespace FinancialStructures.Database.Statistics
         /// <param name="portfolio"></param>
         /// <param name="accountType"></param>
         /// <param name="Name"></param>
-        /// <returns></returns>
-        public static List<DayValue_Named> TotalInvestments(this IPortfolio portfolio, Totals accountType, TwoName Name = null)
+        public static List<Labelled<TwoName, DailyValuation>> TotalInvestments(this IPortfolio portfolio, Totals accountType, TwoName Name = null)
         {
             switch (accountType)
             {
                 case Totals.Security:
                 {
-                    List<DayValue_Named> output = new List<DayValue_Named>();
+                    List<Labelled<TwoName, DailyValuation>> output = new List<Labelled<TwoName, DailyValuation>>();
                     List<string> companies = portfolio.Companies(Account.Security).ToList();
                     companies.Sort();
                     foreach (string comp in companies)
@@ -36,7 +37,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Totals.SecurityCompany:
                 {
-                    List<DayValue_Named> output = new List<DayValue_Named>();
+                    List<Labelled<TwoName, DailyValuation>> output = new List<Labelled<TwoName, DailyValuation>>();
                     foreach (ISecurity sec in portfolio.CompanyAccounts(Account.Security, Name.Company))
                     {
                         ICurrency currency = portfolio.Currency(Account.Security, sec);
@@ -47,7 +48,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Totals.SecuritySector:
                 {
-                    List<DayValue_Named> output = new List<DayValue_Named>();
+                    List<Labelled<TwoName, DailyValuation>> output = new List<Labelled<TwoName, DailyValuation>>();
                     foreach (ISecurity security in portfolio.SectorAccounts(Account.Security, Name.Name))
                     {
                         output.AddRange(security.AllInvestmentsNamed());
@@ -73,7 +74,7 @@ namespace FinancialStructures.Database.Statistics
         /// <param name="accountType">The type of account to look for.</param>
         /// <param name="names">The name of the account.</param>
         /// <returns></returns>
-        public static List<DayValue_Named> Investments(this IPortfolio portfolio, Account accountType, TwoName names)
+        public static List<Labelled<TwoName, DailyValuation>> Investments(this IPortfolio portfolio, Account accountType, TwoName names)
         {
             switch (accountType)
             {
@@ -83,7 +84,7 @@ namespace FinancialStructures.Database.Statistics
                     {
                         if (desired.Any())
                         {
-                            var security = desired as ISecurity;
+                            ISecurity security = desired as ISecurity;
                             ICurrency currency = portfolio.Currency(Account.Security, security);
                             return security.AllInvestmentsNamed(currency);
                         }

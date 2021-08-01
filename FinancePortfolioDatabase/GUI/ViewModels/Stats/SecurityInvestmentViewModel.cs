@@ -1,15 +1,17 @@
 ﻿using System.Collections.Generic;
+using Common.Structure.DataStructures;
+using Common.Structure.NamingStructures;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
-using FinancialStructures.DataStructures;
+using FinancialStructures.NamingStructures;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
     internal class SecurityInvestmentViewModel : TabViewModelBase
     {
-        private List<DayValue_Named> fSecuritiesInvestments;
+        private List<Labelled<TwoName, DailyValuation>> fSecuritiesInvestments;
 
-        public List<DayValue_Named> SecuritiesInvestments
+        public List<Labelled<TwoName, DailyValuation>> SecuritiesInvestments
         {
             get
             {

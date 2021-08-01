@@ -4,6 +4,8 @@ using FinancialStructures.DataStructures;
 using Common.Structure.DataStructures;
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
+using FinancialStructures.NamingStructures;
+using Common.Structure.NamingStructures;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -71,7 +73,7 @@ namespace FinancialStructures.FinanceStructures
         /// Returns a list of all investments with the name of the security.
         /// </summary>
         /// <param name="currency">An optional currency to exchange the value with.</param>
-        List<DayValue_Named> AllInvestmentsNamed(ICurrency currency = null);
+        List<Labelled<TwoName, DailyValuation>> AllInvestmentsNamed(ICurrency currency = null);
 
         /// <summary>
         /// Calculates the compound annual rate of the Value list.

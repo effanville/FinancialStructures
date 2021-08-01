@@ -21,7 +21,7 @@ namespace FinancialStructures.Statistics
             {
                 foreach (var investment in investments)
                 {
-                    sum += investment.Value;
+                    sum += investment.Instance.Value;
                 }
             }
 
@@ -37,7 +37,7 @@ namespace FinancialStructures.Statistics
             {
                 foreach (var investment in investments)
                 {
-                    sum += investment.Value;
+                    sum += investment.Instance.Value;
                 }
             }
 

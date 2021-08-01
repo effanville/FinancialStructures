@@ -14,6 +14,7 @@ using Common.UI.Commands;
 using Common.UI.Interfaces;
 using Common.UI.Services;
 using Common.UI.ViewModelBases;
+using Common.UI;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
