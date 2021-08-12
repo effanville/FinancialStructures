@@ -16,4 +16,8 @@
     <DataTemplate DataType="{x:Type cvm:SelectedSingleDataViewModel}">
         <cview:SelectedSingleDataView/>
     </DataTemplate>
+
+    <DataTemplate DataType="{x:Type cvm:TimeListViewModel}">
+        <cview:TimeListView />
+    </DataTemplate>
 </ResourceDictionary>
