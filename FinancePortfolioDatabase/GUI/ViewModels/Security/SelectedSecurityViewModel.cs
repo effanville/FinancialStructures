@@ -82,9 +82,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             UpdateDataCallback = updateData;
 
 
-            _ = portfolio.TryGetAccount(Account.Security, SelectedName, out IValueList desired);
-            ISecurity security = desired as ISecurity;
-            TLVM = new TimeListViewModel(security.UnitPrice, "UnitPrice", globals, value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditUnitPriceData(SelectedName, old, newVal));
+            if (portfolio.TryGetAccount(Account.Security, SelectedName, out IValueList desired))
+            {
+                ISecurity security = desired as ISecurity;
+                TLVM = new TimeListViewModel(security.UnitPrice, "UnitPrice", globals, value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditUnitPriceData(SelectedName, old, newVal));
+            }
+            else
+            {
+                TLVM = new TimeListViewModel(null, "UnitPrice", globals, value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditUnitPriceData(SelectedName, old, newVal));
+            }
 
             UpdateData(portfolio, null);
         }

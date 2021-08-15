@@ -21,7 +21,7 @@ namespace FinancialStructures.Statistics
                 return;
             }
 
-            Value = ((bankAcc.LatestValue().Day - bankAcc.FirstValue().Day).Days) / ((double)365 * bankAcc.Count());
+            Value = ((bankAcc.LatestValue()?.Day - bankAcc.FirstValue()?.Day)?.Days ?? 0) / ((double)365 * bankAcc.Count());
         }
 
         /// <inheritdoc/>

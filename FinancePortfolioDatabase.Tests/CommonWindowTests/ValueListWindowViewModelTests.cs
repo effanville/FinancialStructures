@@ -35,6 +35,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         [Test]
         public void CanUpdateDataAndRemoveOldTab()
         {
+            Portfolio = TestSetupHelper.CreateBasicDataBase();
             NameData newNameData = new NameData("Fidelity", "Europe");
             ViewModel.LoadTabFunc(newNameData);
 
@@ -50,6 +51,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         [Test]
         public void CanAddTab()
         {
+            Portfolio = TestSetupHelper.CreateBasicDataBase();
             NameData newData = new NameData("Fidelity", "China");
             ViewModel.LoadTabFunc(newData);
 

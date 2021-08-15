@@ -14,9 +14,9 @@ namespace FinancePortfolioDatabase.Tests.ViewModelExtensions
         public static DailyValuation AddNewItem(this SelectedSingleDataViewModel viewModel)
         {
             viewModel.SelectItem(null);
-            viewModel.AddDefaultDataCommand?.Execute(new AddingNewItemEventArgs());
-            viewModel.SelectedData.Add(new DailyValuation());
-            var newItem = viewModel.SelectedData.Last();
+            viewModel.TLVM.AddDefaultDataCommand?.Execute(new AddingNewItemEventArgs());
+            viewModel.TLVM.Valuations.Add(new DailyValuation());
+            var newItem = viewModel.TLVM.Valuations.Last();
             viewModel.SelectItem(newItem);
             viewModel.BeginEdit();
 
@@ -25,17 +25,17 @@ namespace FinancePortfolioDatabase.Tests.ViewModelExtensions
 
         public static void SelectItem(this SelectedSingleDataViewModel viewModel, DailyValuation valueToSelect)
         {
-            viewModel.SelectionChangedCommand?.Execute(valueToSelect);
+            viewModel.TLVM.SelectionChangedCommand?.Execute(valueToSelect);
         }
 
         public static void BeginEdit(this SelectedSingleDataViewModel viewModel)
         {
-            viewModel.PreEditCommand?.Execute(null);
+            viewModel.TLVM.PreEditCommand?.Execute(null);
         }
 
         public static void CompleteEdit(this SelectedSingleDataViewModel viewModel, IPortfolio portfolio)
         {
-            viewModel.EditDataCommand?.Execute(null);
+            viewModel.TLVM.AddEditDataCommand?.Execute(null);
             viewModel.UpdateData(portfolio);
         }
 

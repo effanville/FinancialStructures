@@ -60,8 +60,14 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             SelectedName = selectedName;
             TypeOfAccount = accountType;
 
-            _ = portfolio.TryGetAccount(accountType, SelectedName, out IValueList desired);
-            TLVM = new TimeListViewModel(desired.Values, "Value", globals, value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditData(SelectedName, old, newVal));
+            if (portfolio.TryGetAccount(accountType, SelectedName, out IValueList desired))
+            {
+                TLVM = new TimeListViewModel(desired.Values, "Value", globals, value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditData(SelectedName, old, newVal));
+            }
+            else
+            {
+                TLVM = new TimeListViewModel(null, "Value", globals, value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditData(SelectedName, old, newVal));
+            }
             UpdateData(portfolio);
 
             DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);
