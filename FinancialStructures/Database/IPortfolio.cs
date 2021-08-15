@@ -216,30 +216,30 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Returns a list of all companes of the desired type in the database.
         /// </summary>
-        /// <param name="elementType">Type of object to search for.</param>
+        /// <param name="account">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        IReadOnlyList<string> Companies(Account elementType);
+        IReadOnlyList<string> Companies(Account account);
 
         /// <summary>
         /// Returns a list of all sector names of the desired type in the database.
         /// </summary>
-        /// <param name="elementType">Type of object to search for.</param>
+        /// <param name="account">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        IReadOnlyList<string> Sectors(Account elementType);
+        IReadOnlyList<string> Sectors(Account account);
 
         /// <summary>
         /// Returns a list of all names of the desired type in the database.
         /// </summary>
-        /// <param name="elementType">Type of object to search for.</param>
+        /// <param name="account">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        IReadOnlyList<string> Names(Account elementType);
+        IReadOnlyList<string> Names(Account account);
 
         /// <summary>
         /// Returns a list of all namedata in the database.
         /// </summary>
-        /// <param name="elementType">Type of object to search for.</param>
+        /// <param name="account">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        IReadOnlyList<NameData> NameData(Account elementType);
+        IReadOnlyList<NameData> NameData(Account account);
 
         /// <summary>
         /// Queries for data for the security of name and company.
@@ -247,13 +247,9 @@ namespace FinancialStructures.Database
         IReadOnlyList<SecurityDayData> SecurityData(TwoName name, IReportLogger reportLogger = null);
 
         /// <summary>
-        /// Returns the
+        /// Returns the valuations of the account.
         /// </summary>
-        /// <param name="elementType"></param>
-        /// <param name="name"></param>
-        /// <param name="reportLogger"></param>
-        /// <returns></returns>
-        IReadOnlyList<DailyValuation> NumberData(Account elementType, TwoName name, IReportLogger reportLogger = null);
+        IReadOnlyList<DailyValuation> NumberData(Account account, TwoName name, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Outputs the account if it exists.

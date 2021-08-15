@@ -23,22 +23,24 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         private List<DailyValuation> fUnitPrices = new List<DailyValuation>();
         public List<DailyValuation> Valuations
         {
-            get
-            {
-                return fUnitPrices;
-            }
-            set
-            {
-                SetAndNotify(ref fUnitPrices, value, nameof(Valuations));
-            }
+            get => fUnitPrices;
+            set => SetAndNotify(ref fUnitPrices, value, nameof(Valuations));
         }
 
-        public TimeListViewModel(TimeList timeList, UiGlobals globals, Action<DailyValuation> deleteValueAction, Action<DailyValuation, DailyValuation> addEditValueAction)
+        private string fValueName;
+        public string ValueName
+        {
+            get => fValueName;
+            set => SetAndNotify(ref fValueName, value, nameof(ValueName));
+        }
+
+        public TimeListViewModel(TimeList timeList, string valueName, UiGlobals globals, Action<DailyValuation> deleteValueAction, Action<DailyValuation, DailyValuation> addEditValueAction)
         {
             DeleteValueAction = deleteValueAction;
             AddEditValueAction = addEditValueAction;
             fDisplayList = timeList;
             fUiGlobals = globals;
+            ValueName = valueName;
             PreEditCommand = new RelayCommand(ExecutePreEdit);
             AddEditDataCommand = new RelayCommand(ExecuteAddEditData);
             SelectionChangedCommand = new RelayCommand<object>(ExecuteSelectionChanged);

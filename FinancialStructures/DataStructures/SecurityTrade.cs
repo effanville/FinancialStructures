@@ -8,7 +8,6 @@ namespace FinancialStructures.DataStructures
     /// Contains all information about a Stock trade.
     /// </summary>
     public class SecurityTrade
-
     {
         /// <summary>
         /// The type of this trade.
