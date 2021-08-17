@@ -1,6 +1,7 @@
 ﻿using System;
 using FinancialStructures.NamingStructures;
 using Common.Structure.Extensions;
+using System.Xml.Serialization;
 
 namespace FinancialStructures.DataStructures
 {
@@ -12,18 +13,35 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// The type of this trade.
         /// </summary>
+        [XmlAttribute]
         public TradeType TradeType
         {
             get;
             set;
         }
 
+        [XmlAttribute]
+        public string Company
+        {
+            get => Names.Company;
+            set => Names.Company = value;
+        }
+
+        [XmlAttribute]
+        public string Name
+        {
+            get => Names.Name;
+            set => Names.Name = value;
+        }
+
+        [XmlIgnore]
         public TwoName Names
         {
             get;
             set;
         }
 
+        [XmlAttribute]
         public DateTime Day
         {
             get;
@@ -51,6 +69,8 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         ///
         /// </summary>
+
+        [XmlAttribute]
         public double NumberShares
         {
             get;
@@ -60,6 +80,8 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// The price of the underlying that this trade was enacted at.
         /// </summary>
+
+        [XmlAttribute]
         public double UnitPrice
         {
             get;
@@ -70,6 +92,8 @@ namespace FinancialStructures.DataStructures
         /// The cost of performing this trade. Encompasses all fixed costs and
         /// percentage costs.
         /// </summary>
+
+        [XmlAttribute]
         public double TradeCosts
         {
             get;
@@ -81,6 +105,7 @@ namespace FinancialStructures.DataStructures
         /// </summary>
         public SecurityTrade()
         {
+            Names = new TwoName();
         }
 
         /// <summary>

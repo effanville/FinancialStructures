@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures.Implementation;
+using FinancialStructures.NamingStructures;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 
@@ -123,7 +124,7 @@ namespace FinancialStructures.Tests.FinanceStructuresTests
         [TestCaseSource(nameof(TradeData))]
         public void SecurityTradeTests(Security sut, (DateTime Date, double UP, double Shares, double Inv, double TradeShares, double TradePrice, double TradeCost) dataToAdd, (DateTime Date, double UnitPrice, double ShareNo, double Investment)[] expectedValues)
         {
-            _ = sut.AddOrEditData(dataToAdd.Date, dataToAdd.Date, dataToAdd.UP, dataToAdd.Shares, dataToAdd.Inv, trade: new SecurityTrade(TradeType.Buy, sut.Names, dataToAdd.Date, dataToAdd.TradeShares, dataToAdd.TradePrice, dataToAdd.TradeCost), reportLogger: null);
+            _ = sut.AddOrEditData(dataToAdd.Date, dataToAdd.Date, dataToAdd.UP, dataToAdd.Shares, dataToAdd.Inv, trade: new SecurityTrade(TradeType.Buy, sut.Names.ToTwoName(), dataToAdd.Date, dataToAdd.TradeShares, dataToAdd.TradePrice, dataToAdd.TradeCost), reportLogger: null);
 
             Assert.Multiple(() =>
             {

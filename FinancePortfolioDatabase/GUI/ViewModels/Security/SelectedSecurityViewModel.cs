@@ -109,7 +109,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
         {
             if (name != null && value != null)
             {
-                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(Account.Security, name, value.Day, fReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(Account.Security, name.ToTwoName(), value.Day, fReportLogger));
             }
             else
             {
@@ -201,7 +201,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             if (newValue != null)
             {
                 bool edited = false;
-                UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAddOrEditData(Account.Security, name, oldValue, newValue, fReportLogger));
+                UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAddOrEditData(Account.Security, name.ToTwoName(), oldValue, newValue, fReportLogger));
                 if (!edited)
                 {
                     _ = fReportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.EditingData, "Was not able to add or edit security data.");
@@ -302,7 +302,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             if (SelectedTrade != null)
             {
                 bool edited = false;
-                UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAddOrEditTradeData(Account.Security, SelectedName, fOldSelectedTrade, SelectedTrade, fReportLogger));
+                UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAddOrEditTradeData(Account.Security, SelectedName.ToTwoName(), fOldSelectedTrade, SelectedTrade, fReportLogger));
                 if (!edited)
                 {
                     _ = fReportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.EditingData, $"Was not able to add or edit {Account.Security} trade data.");
