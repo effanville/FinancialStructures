@@ -19,11 +19,56 @@ namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
         }
 
         [Test]
+        public void CanAddTradeValue()
+        {
+            Assert.AreEqual(1, ViewModel.Trades.Count);
+            ViewModel.SelectTrade(null);
+            var newItem = ViewModel.AddNewTrade();
+            ViewModel.BeginEditTrade();
+            newItem.Day = new DateTime(2002, 1, 1);
+            newItem.NumberShares = 5;
+            ViewModel.CompleteEditTrade(Portfolio);
+
+            Assert.AreEqual(2, ViewModel.Trades.Count);
+            Assert.AreEqual(1, Portfolio.FundsThreadSafe.Single().Count());
+        }
+
+        [Test]
+        public void CanEditTradeValue()
+        {
+            Assert.AreEqual(1, ViewModel.Trades.Count);
+            var item = ViewModel.Trades[0];
+            ViewModel.SelectTrade(item);
+            ViewModel.BeginEditTrade();
+            item.Day = new DateTime(2000, 1, 1);
+            item.NumberShares = 1;
+            ViewModel.CompleteEditTrade(Portfolio);
+
+            Assert.AreEqual(1, ViewModel.Trades.Count);
+            Assert.AreEqual(1, Portfolio.FundsThreadSafe.Single().Count());
+            Assert.AreEqual(new DateTime(2000, 1, 1), Portfolio.FundsThreadSafe.Single().FirstValue().Day);
+        }
+
+        [Test]
+        [RequiresThread(ApartmentState.STA)]
+        public void CanDeleteTrade()
+        {
+            Assert.AreEqual(1, ViewModel.Trades.Count);
+            ViewModel.SelectTrade(ViewModel.Trades[0]);
+            ViewModel.DeleteSelectedTrade(Portfolio);
+            _ = Portfolio.TryGetAccount(Account.Security, Name, out IValueList valueList);
+            var security = valueList as ISecurity;
+            Assert.AreEqual(0, security.Values.Count());
+            Assert.AreEqual(1, security.UnitPrice.Count());
+            Assert.AreEqual(0, security.SecurityTrades.Count());
+        }
+
+        [Test]
         public void CanAddValue()
         {
             Assert.AreEqual(1, ViewModel.TLVM.Valuations.Count);
-            ViewModel.SelectItem(null);
-            var newItem = ViewModel.AddNewItem();
+            ViewModel.SelectUnitPrice(null);
+            var newItem = ViewModel.AddNewUnitPrice();
             ViewModel.BeginEdit();
             newItem.Day = new DateTime(2002, 1, 1);
             newItem.Value = 1;
@@ -38,7 +83,7 @@ namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
         {
             Assert.AreEqual(1, ViewModel.TLVM.Valuations.Count);
             var item = ViewModel.TLVM.Valuations[0];
-            ViewModel.SelectItem(item);
+            ViewModel.SelectUnitPrice(item);
             ViewModel.BeginEdit();
             item.Day = new DateTime(2000, 1, 1);
             item.Value = 1;
@@ -68,12 +113,13 @@ namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
         public void CanDeleteValue()
         {
             Assert.AreEqual(1, ViewModel.TLVM.Valuations.Count);
-            ViewModel.SelectItem(ViewModel.TLVM.Valuations[0]);
+            ViewModel.SelectUnitPrice(ViewModel.TLVM.Valuations[0]);
             ViewModel.DeleteSelected(Portfolio);
             _ = Portfolio.TryGetAccount(Account.Security, Name, out IValueList valueList);
             var security = valueList as ISecurity;
             Assert.AreEqual(0, security.Values.Count());
             Assert.AreEqual(0, security.UnitPrice.Count());
+            Assert.AreEqual(1, security.SecurityTrades.Count());
         }
     }
 }
