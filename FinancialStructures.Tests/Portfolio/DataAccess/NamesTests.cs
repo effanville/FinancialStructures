@@ -14,9 +14,9 @@ namespace FinancialStructures.Tests.Database.DataAccess
                 case Account.Security:
                 {
                     var constructor = new DatabaseConstructor();
-                    _ = constructor.WithSecurityFromName(company1, name1);
-                    _ = constructor.WithSecurityFromName(company2, name2);
-                    _ = constructor.WithSecurityFromName(company3, name3);
+                    _ = constructor.WithSecurity(company1, name1);
+                    _ = constructor.WithSecurity(company2, name2);
+                    _ = constructor.WithSecurity(company3, name3);
                     return constructor;
                 }
                 case Account.Benchmark:
@@ -30,9 +30,9 @@ namespace FinancialStructures.Tests.Database.DataAccess
                 case Account.BankAccount:
                 {
                     var constructor = new DatabaseConstructor();
-                    _ = constructor.WithBankAccountFromName(company1, name1);
-                    _ = constructor.WithBankAccountFromName(company2, name2);
-                    _ = constructor.WithBankAccountFromName(company3, name3);
+                    _ = constructor.WithBankAccount(company1, name1);
+                    _ = constructor.WithBankAccount(company2, name2);
+                    _ = constructor.WithBankAccount(company3, name3);
                     return constructor;
                 }
                 case Account.Currency:
@@ -55,7 +55,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
         public void NameDataTests(Account elementType, string company1, string name1, string company2, string name2, string company3, string name3)
         {
             var constructor = CreateThreeAccounts(elementType, company1, name1, company2, name2, company3, name3);
-            var database = constructor.database;
+            var database = constructor.Database;
 
             var names = database.NameData(elementType);
             Assert.AreEqual(3, names.Count);
@@ -76,7 +76,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
         public void NamesTests(Account elementType, string company1, string name1, string company2, string name2, string company3, string name3)
         {
             var constructor = CreateThreeAccounts(elementType, company1, name1, company2, name2, company3, name3);
-            var database = constructor.database;
+            var database = constructor.Database;
 
             var names = database.Names(elementType);
             Assert.AreEqual(3, names.Count);
@@ -93,7 +93,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
         public void CompaniesTests(Account elementType, string company1, string name1, string company2, string name2, string company3, string name3)
         {
             var constructor = CreateThreeAccounts(elementType, company1, name1, company2, name2, company3, name3);
-            var database = constructor.database;
+            var database = constructor.Database;
 
             var names = database.Companies(elementType);
             Assert.AreEqual(3, names.Count);

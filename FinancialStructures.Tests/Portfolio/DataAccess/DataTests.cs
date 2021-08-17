@@ -17,8 +17,8 @@ namespace FinancialStructures.Tests.Database.DataAccess
         {
             var generator = new DatabaseConstructor();
             string secCompany = "company1";
-            generator.WithSecurityFromNameAndDataPoint(secCompany, "name1", date: new DateTime(2000, 1, 1), sharePrice: 101, numberUnits: 12);
-            var database = generator.database;
+            generator.WithSecurity(secCompany, "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0 }, numberUnits: new[] { 12.0 });
+            var database = generator.Database;
 
             var data = database.SecurityData(new TwoName(secCompany, "name1"));
 
@@ -32,9 +32,9 @@ namespace FinancialStructures.Tests.Database.DataAccess
         {
             var generator = new DatabaseConstructor();
             string secCompany = "company1";
-            generator.WithSecurityFromNameAndDataPoint(secCompany, "name1", date: new DateTime(2000, 1, 1), sharePrice: 101, numberUnits: 12);
+            generator.WithSecurity(secCompany, "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0 }, numberUnits: new[] { 12.0 });
 
-            var database = generator.database;
+            var database = generator.Database;
 
             var data = database.SecurityData(new TwoName(secCompany, "name"));
 
@@ -47,8 +47,8 @@ namespace FinancialStructures.Tests.Database.DataAccess
             var generator = new DatabaseConstructor();
 
             string bankCompany = "Bank";
-            generator.WithBankAccountFromNameAndDataPoint(bankCompany, "AccountName", date: new DateTime(2000, 1, 1), value: 53);
-            var database = generator.database;
+            generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0 });
+            var database = generator.Database;
 
             var data = database.NumberData(Account.BankAccount, new NameData(bankCompany, "AccountName"));
 
@@ -62,8 +62,8 @@ namespace FinancialStructures.Tests.Database.DataAccess
             var generator = new DatabaseConstructor();
 
             string bankCompany = "Bank";
-            generator.WithBankAccountFromNameAndDataPoint(bankCompany, "AccountName", date: new DateTime(2000, 1, 1), value: 53);
-            var database = generator.database;
+            generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0 });
+            var database = generator.Database;
 
             var data = database.NumberData(Account.BankAccount, new NameData(bankCompany, "name"));
 
@@ -78,8 +78,8 @@ namespace FinancialStructures.Tests.Database.DataAccess
             var reports = new List<ErrorReport>();
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             string bankCompany = "Bank";
-            generator.WithBankAccountFromNameAndDataPoint(bankCompany, "AccountName", date: new DateTime(2000, 1, 1), value: 53);
-            var database = generator.database;
+            generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0 });
+            var database = generator.Database;
 
             var data = database.NumberData(Account.BankAccount, new NameData(bankCompany, "name"), logging);
 

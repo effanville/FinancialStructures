@@ -3,6 +3,7 @@ using System.IO.Abstractions;
 using System.Linq;
 using FinancialStructures.DataExporters;
 using FinancialStructures.DataExporters.ExportOptions;
+using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.StatsMakers
@@ -15,11 +16,11 @@ namespace FinancialStructures.Tests.StatsMakers
         {
             var generator = new DatabaseConstructor();
             string secCompany = "company1";
-            _ = generator.WithSecurityFromNameAndDataPoint(secCompany, "name1", date: new DateTime(2000, 1, 1), sharePrice: 101, numberUnits: 12);
+            _ = generator.WithSecurity(secCompany, "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0 }, numberUnits: new[] { 12.0 });
 
             string bankCompany = "Bank";
-            _ = generator.WithBankAccountFromNameAndDataPoint(bankCompany, "AccountName", date: new DateTime(2000, 1, 1), value: 53);
-            var stats = new PortfolioStatistics(generator.database, new UserDisplayOptions(), new FileSystem());
+            _ = generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0 });
+            var stats = new PortfolioStatistics(generator.Database, new UserDisplayOptions(), new FileSystem());
 
             Assert.AreEqual(1, stats.IndividualSecurityStats.Count);
             Assert.AreEqual(secCompany, stats.IndividualSecurityStats.First().NameData.Company);

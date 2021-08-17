@@ -18,9 +18,9 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         public void CanRemoveSecurity()
         {
             var constructor = new DatabaseConstructor();
-            _ = constructor.WithSecurityFromName(BaseCompanyName, BaseName);
+            _ = constructor.WithSecurity(BaseCompanyName, BaseName);
 
-            var database = constructor.database;
+            var database = constructor.Database;
 
             _ = database.TryRemove(Account.Security, new NameData(BaseCompanyName, BaseName));
 
@@ -33,7 +33,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName(BaseCompanyName, BaseName);
 
-            var database = constructor.database;
+            var database = constructor.Database;
 
             _ = database.TryRemove(Account.Benchmark, new NameData(BaseCompanyName, BaseName));
 
@@ -44,9 +44,9 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         public void CanRemoveBankAccount()
         {
             var constructor = new DatabaseConstructor();
-            _ = constructor.WithBankAccountFromName(BaseCompanyName, BaseName);
+            _ = constructor.WithBankAccount(BaseCompanyName, BaseName);
 
-            var database = constructor.database;
+            var database = constructor.Database;
 
             _ = database.TryRemove(Account.BankAccount, new NameData(BaseCompanyName, BaseName));
 
@@ -59,7 +59,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var constructor = new DatabaseConstructor();
             _ = constructor.WithCurrencyFromName(BaseCompanyName, BaseName);
 
-            var database = constructor.database;
+            var database = constructor.Database;
 
             _ = database.TryRemove(Account.Currency, new NameData(BaseCompanyName, BaseName));
 
@@ -70,9 +70,9 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         public void ReportsSecurityCorrect()
         {
             var constructor = new DatabaseConstructor();
-            _ = constructor.WithSecurityFromName(BaseCompanyName, BaseName);
+            _ = constructor.WithSecurity(BaseCompanyName, BaseName);
             var reports = new List<ErrorReport>();
-            var database = constructor.database;
+            var database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryRemove(Account.Security, new NameData(BaseCompanyName, BaseName), logging);
 
@@ -90,7 +90,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         {
             var constructor = new DatabaseConstructor();
             var reports = new List<ErrorReport>();
-            var database = constructor.database;
+            var database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryRemove(Account.Security, new NameData(BaseCompanyName, BaseName), logging);
 
@@ -109,7 +109,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName(BaseCompanyName, BaseName);
             var reports = new List<ErrorReport>();
-            var database = constructor.database;
+            var database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryRemove(Account.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
 
@@ -127,7 +127,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         {
             var constructor = new DatabaseConstructor();
             var reports = new List<ErrorReport>();
-            var database = constructor.database;
+            var database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryRemove(Account.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
 

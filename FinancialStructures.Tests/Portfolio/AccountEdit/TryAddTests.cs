@@ -4,6 +4,7 @@ using FinancialStructures.NamingStructures;
 using NUnit.Framework;
 using Common.Structure.Reporting;
 using FinancialStructures.Database;
+using FinancialStructures.Tests.TestDatabaseConstructor;
 
 namespace FinancialStructures.Tests.Database.AccountEdit
 {
@@ -18,7 +19,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         {
             var constructor = new DatabaseConstructor();
 
-            var database = constructor.database;
+            var database = constructor.Database;
 
             _ = database.TryAdd(Account.Security, new NameData(BaseCompanyName, BaseName));
 
@@ -33,7 +34,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         {
             var constructor = new DatabaseConstructor();
 
-            var database = constructor.database;
+            var database = constructor.Database;
 
             _ = database.TryAdd(Account.Benchmark, new NameData(BaseCompanyName, BaseName));
 
@@ -48,7 +49,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         {
             var constructor = new DatabaseConstructor();
 
-            var database = constructor.database;
+            var database = constructor.Database;
 
             _ = database.TryAdd(Account.BankAccount, new NameData(BaseCompanyName, BaseName));
 
@@ -63,7 +64,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         {
             var constructor = new DatabaseConstructor();
 
-            var database = constructor.database;
+            var database = constructor.Database;
 
             _ = database.TryAdd(Account.Currency, new NameData(BaseCompanyName, BaseName));
 
@@ -78,7 +79,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         {
             var constructor = new DatabaseConstructor();
             var reports = new List<ErrorReport>();
-            var database = constructor.database;
+            var database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryAdd(Account.Security, new NameData(BaseCompanyName, BaseName), logging);
 
@@ -96,10 +97,10 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         {
             var constructor = new DatabaseConstructor();
 
-            _ = constructor.WithSecurityFromName(BaseCompanyName, BaseName);
+            _ = constructor.WithSecurity(BaseCompanyName, BaseName);
 
             var reports = new List<ErrorReport>();
-            var database = constructor.database;
+            var database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryAdd(Account.Security, new NameData(BaseCompanyName, BaseName), logging);
 
@@ -117,7 +118,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         {
             var constructor = new DatabaseConstructor();
             var reports = new List<ErrorReport>();
-            var database = constructor.database;
+            var database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryAdd(Account.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
 
@@ -136,7 +137,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName(BaseCompanyName, BaseName);
             var reports = new List<ErrorReport>();
-            var database = constructor.database;
+            var database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryAdd(Account.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
 

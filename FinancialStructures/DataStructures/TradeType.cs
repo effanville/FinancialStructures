@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.StockStructures
+﻿namespace FinancialStructures.DataStructures
 {
     /// <summary>
     /// The type of the trade.
@@ -13,6 +13,11 @@
         /// <summary>
         /// The trade was a sell.
         /// </summary>
-        Sell
+        Sell,
+
+        /// <summary>
+        /// The trade was a dividend investment.
+        /// </summary>
+        Dividend
     }
 }

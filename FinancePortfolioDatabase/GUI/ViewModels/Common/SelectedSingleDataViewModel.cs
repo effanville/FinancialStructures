@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Controls;
 using System.Windows.Input;
 using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures;
@@ -20,14 +18,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
     {
         private readonly UiGlobals fUiGlobals;
         private readonly Account TypeOfAccount;
+        private readonly Action<Action<IPortfolio>> UpdateDataCallback;
+        private readonly IReportLogger fReportLogger;
 
-        public override bool Closable
-        {
-            get
-            {
-                return true;
-            }
-        }
+        /// <inheritdoc/>
+        public override bool Closable => true;
 
         private NameData fSelectedName;
 
@@ -36,35 +31,20 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         /// </summary>
         public NameData SelectedName
         {
-            get
-            {
-                return fSelectedName;
-            }
-            set
-            {
-                SetAndNotify(ref fSelectedName, value, nameof(SelectedName));
-            }
+            get => fSelectedName;
+
+            set => SetAndNotify(ref fSelectedName, value, nameof(SelectedName));
+
         }
 
-        private List<DailyValuation> fSelectedData;
-        public List<DailyValuation> SelectedData
+        private TimeListViewModel fTLVM;
+        public TimeListViewModel TLVM
         {
-            get
-            {
-                return fSelectedData;
-            }
-            set
-            {
-                SetAndNotify(ref fSelectedData, value, nameof(SelectedData));
-            }
+            get => fTLVM;
+
+            set => SetAndNotify(ref fTLVM, value, nameof(TLVM));
+
         }
-
-        internal DailyValuation fOldSelectedValue;
-        internal DailyValuation SelectedValue;
-
-        private readonly Action<Action<IPortfolio>> UpdateDataCallback;
-
-        private readonly IReportLogger ReportLogger;
 
         public SelectedSingleDataViewModel(
             IPortfolio portfolio,
@@ -75,108 +55,59 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             : base(selectedName != null ? selectedName.ToString() : "No-Name", portfolio)
         {
             fUiGlobals = globals;
-            ReportLogger = fUiGlobals.ReportLogger;
+            fReportLogger = fUiGlobals.ReportLogger;
             UpdateDataCallback = updateDataCallback;
             SelectedName = selectedName;
             TypeOfAccount = accountType;
+
+            if (portfolio.TryGetAccount(accountType, SelectedName, out IValueList desired))
+            {
+                TLVM = new TimeListViewModel(desired.Values, "Value", globals, value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditData(SelectedName, old, newVal));
+            }
+            else
+            {
+                TLVM = new TimeListViewModel(null, "Value", globals, value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditData(SelectedName, old, newVal));
+            }
             UpdateData(portfolio);
 
-            PreEditCommand = new RelayCommand(ExecutePreEdit);
-            EditDataCommand = new RelayCommand(ExecuteEditDataCommand);
             DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);
-            SelectionChangedCommand = new RelayCommand<object>(ExecuteSelectionChanged);
-            AddDefaultDataCommand = new RelayCommand<AddingNewItemEventArgs>(e => DataGrid_AddingNewItem(null, e));
             AddCsvData = new RelayCommand(ExecuteAddCsvData);
             ExportCsvData = new RelayCommand(ExecuteExportCsvData);
 
         }
 
-        public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)
+        /// <inheritdoc/>
+        public override void UpdateData(IPortfolio dataToDisplay, Action<object> removeTab)
         {
-            base.UpdateData(portfolio);
+            base.UpdateData(dataToDisplay);
             if (SelectedName != null)
             {
-                if (!portfolio.Exists(TypeOfAccount, SelectedName))
+                if (!dataToDisplay.Exists(TypeOfAccount, SelectedName))
                 {
                     removeTab?.Invoke(this);
                     return;
                 }
 
-                SelectedData = DataStore.NumberData(TypeOfAccount, SelectedName, ReportLogger).ToList();
-            }
-            else
-            {
-                SelectedData = null;
+                _ = dataToDisplay.TryGetAccount(TypeOfAccount, SelectedName, out IValueList desired);
+                TLVM?.UpdateData(desired.Values);
             }
         }
 
-        public override void UpdateData(IPortfolio portfolio)
+        /// <inheritdoc/>
+        public override void UpdateData(IPortfolio dataToDisplay)
         {
-            UpdateData(portfolio, null);
+            UpdateData(dataToDisplay, null);
         }
 
-        public ICommand AddDefaultDataCommand
+        private void ExecuteAddEditData(NameData name, DailyValuation oldValue, DailyValuation newValue)
         {
-            get;
-            set;
-        }
-
-        private void DataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
-        {
-            if (SelectedData != null && SelectedData.Any())
-            {
-                double latestValue = SelectedData.Last().Value;
-                e.NewItem = new DailyValuation()
-                {
-                    Day = DateTime.Today,
-                    Value = latestValue
-                };
-            }
-        }
-
-        public ICommand SelectionChangedCommand
-        {
-            get;
-            set;
-        }
-        private void ExecuteSelectionChanged(object obj)
-        {
-            if (SelectedData != null && obj is DailyValuation data)
-            {
-                SelectedValue = data;
-            }
-        }
-
-        /// <summary>
-        /// Called prior to an edit occurring in a row. This is used
-        /// to record the state of the row before editing.
-        /// </summary>
-        public ICommand PreEditCommand
-        {
-            get;
-            set;
-        }
-
-        private void ExecutePreEdit()
-        {
-            fOldSelectedValue = SelectedValue?.Copy();
-        }
-
-        public ICommand EditDataCommand
-        {
-            get;
-            set;
-        }
-
-        private void ExecuteEditDataCommand()
-        {
-            if (fSelectedName != null)
+            if (name != null)
             {
                 bool edited = false;
-                UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditData(TypeOfAccount, fSelectedName, fOldSelectedValue, SelectedValue, ReportLogger));
+                UpdateDataCallback(programPortfolio => edited = programPortfolio.TryAddOrEditData(TypeOfAccount, name, oldValue, newValue, fReportLogger));
                 if (!edited)
                 {
-                    _ = ReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.EditingData, "Was not able to add or edit data.");
+                    _ = fReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.EditingData, "Was not able to add or edit data.");
                 }
             }
         }
@@ -188,13 +119,18 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 
         private void ExecuteDeleteValuation()
         {
-            if (fSelectedName != null && SelectedValue != null)
+            DeleteValue(SelectedName, TLVM.SelectedValuation);
+        }
+
+        private void DeleteValue(NameData name, DailyValuation value)
+        {
+            if (name != null && value != null)
             {
-                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(TypeOfAccount, fSelectedName, SelectedValue.Day, ReportLogger));
+                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteData(TypeOfAccount, name, value.Day, fReportLogger));
             }
             else
             {
-                _ = ReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.DeletingData, "No Account was selected when trying to delete data.");
+                _ = fReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.DeletingData, "No Account was selected when trying to delete data.");
             }
         }
 
@@ -212,7 +148,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
                 bool exists = DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out IValueList account);
                 if (result.Success != null && (bool)result.Success && exists)
                 {
-                    outputs = CsvReaderWriter.ReadFromCsv(account, result.FilePath, ReportLogger);
+                    outputs = CsvReaderWriter.ReadFromCsv(account, result.FilePath, fReportLogger);
                 }
                 if (outputs != null)
                 {
@@ -220,11 +156,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
                     {
                         if (objec is DailyValuation view)
                         {
-                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditData(TypeOfAccount, SelectedName, view, view, ReportLogger));
+                            UpdateDataCallback(programPortfolio => programPortfolio.TryAddOrEditData(TypeOfAccount, SelectedName, view, view, fReportLogger));
                         }
                         else
                         {
-                            _ = ReportLogger.LogUseful(ReportType.Error, ReportLocation.StatisticsPage, "Have the wrong type of thing");
+                            _ = fReportLogger.LogUseful(ReportType.Error, ReportLocation.StatisticsPage, "Have the wrong type of thing");
                         }
                     }
                 }
@@ -245,11 +181,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
                 {
                     if (DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out IValueList account))
                     {
-                        CsvReaderWriter.WriteToCSVFile(account, result.FilePath, ReportLogger);
+                        CsvReaderWriter.WriteToCSVFile(account, result.FilePath, fReportLogger);
                     }
                     else
                     {
-                        _ = ReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Saving, "Could not find security.");
+                        _ = fReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Saving, "Could not find security.");
                     }
                 }
             }

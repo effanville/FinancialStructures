@@ -13,9 +13,9 @@ namespace FinancialStructures.Tests.Database
             string company = "Company";
             string name = "Name";
             var constructor = new DatabaseConstructor();
-            _ = constructor.WithSecurityFromName(company, name);
+            _ = constructor.WithSecurity(company, name);
 
-            var portfolio = constructor.database;
+            var portfolio = constructor.Database;
 
             bool exists = portfolio.Exists(Account.Security, new TwoName(company, name));
 
@@ -28,9 +28,9 @@ namespace FinancialStructures.Tests.Database
             string company = "Company";
             string name = "Name";
             var constructor = new DatabaseConstructor();
-            _ = constructor.WithSecurityFromName(company, name);
+            _ = constructor.WithSecurity(company, name);
 
-            var portfolio = constructor.database;
+            var portfolio = constructor.Database;
 
             bool exists = portfolio.Exists(Account.Security, new TwoName("Man", name));
 
@@ -45,7 +45,7 @@ namespace FinancialStructures.Tests.Database
             var constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName(company, name);
 
-            var portfolio = constructor.database;
+            var portfolio = constructor.Database;
 
             bool exists = portfolio.Exists(Account.Benchmark, new TwoName(company, name));
 
@@ -60,7 +60,7 @@ namespace FinancialStructures.Tests.Database
             var constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName(company, name);
 
-            var portfolio = constructor.database;
+            var portfolio = constructor.Database;
 
             bool exists = portfolio.Exists(Account.Benchmark, new TwoName("Man", name));
 

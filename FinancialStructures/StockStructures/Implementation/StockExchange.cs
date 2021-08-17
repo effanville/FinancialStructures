@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.IO.Abstractions;
 using System.Linq;
 using FinancialStructures.NamingStructures;
 using Common.Structure.FileAccess;
@@ -128,9 +128,15 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <inheritdoc/>
         public void LoadStockExchange(string filePath, IReportLogger reportLogger = null)
         {
-            if (File.Exists(filePath))
+            LoadStockExchange(filePath, new FileSystem(), reportLogger);
+        }
+
+        /// <inheritdoc/>
+        public void LoadStockExchange(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null)
+        {
+            if (fileSystem.File.Exists(filePath))
             {
-                StockExchange database = XmlFileAccess.ReadFromXmlFile<StockExchange>(filePath, out string error);
+                StockExchange database = XmlFileAccess.ReadFromXmlFile<StockExchange>(fileSystem, filePath, out string error);
                 if (database != null)
                 {
                     Stocks = database.Stocks;
@@ -149,7 +155,13 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <inheritdoc/>
         public void SaveStockExchange(string filePath, IReportLogger reportLogger = null)
         {
-            XmlFileAccess.WriteToXmlFile<StockExchange>(filePath, this, out string error);
+            SaveStockExchange(filePath, new FileSystem(), reportLogger);
+        }
+
+        /// <inheritdoc/>
+        public void SaveStockExchange(string filePath, IFileSystem fileSystem, IReportLogger reportLogger)
+        {
+            XmlFileAccess.WriteToXmlFile<StockExchange>(fileSystem, filePath, this, out string error);
             if (error != null)
             {
                 _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.Saving, error);
@@ -157,43 +169,17 @@ namespace FinancialStructures.StockStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public void Download(StockDownload downloadType, DateTime startDate, DateTime endDate, IReportLogger reportLogger = null)
+        public void Download(DateTime startDate, DateTime endDate, IReportLogger reportLogger = null)
         {
             foreach (Stock stock in Stocks)
             {
-                Uri downloadUrl;
-                if (downloadType == StockDownload.All)
-                {
-                    downloadUrl = new Uri(stock.Name.Url + $"/history?period1={DateToYahooInt(startDate)}&period2={DateToYahooInt(endDate)}&interval=1d&filter=history&frequency=1d");
-                }
-                else
-                {
-                    downloadUrl = new Uri(stock.Name.Url);
-                }
+                Uri downloadUrl = new Uri(stock.Name.Url + $"/history?period1={DateToYahooInt(startDate)}&period2={DateToYahooInt(endDate)}&interval=1d&filter=history&frequency=1d");
                 string stockWebsite = WebDownloader.DownloadFromURLasync(downloadUrl.ToString(), reportLogger).Result;
-                ProcessAndAddData(downloadType, stock, stockWebsite, reportLogger);
-            }
-        }
 
-        private int DateToYahooInt(DateTime date)
-        {
-            return int.Parse((date - new DateTime(1970, 1, 1)).TotalSeconds.ToString());
-            throw new NotImplementedException();
-        }
-
-        private DateTime YahooIntToDate(int yahooInt)
-        {
-            return new DateTime(1970, 1, 1).AddSeconds(yahooInt);
-        }
-
-        private void ProcessAndAddData(StockDownload download, Stock stock, string websiteHtml, IReportLogger reportLogger = null)
-        {
-            if (download == StockDownload.All)
-            {
                 string findString = "\"HistoricalPriceStore\":{\"prices\":";
-                int historyStartIndex = websiteHtml.IndexOf(findString);
+                int historyStartIndex = stockWebsite.IndexOf(findString);
 
-                string dataLeft = websiteHtml.Substring(historyStartIndex + findString.Length);
+                string dataLeft = stockWebsite.Substring(historyStartIndex + findString.Length);
                 // data is of form {"date":1582907959,"open":150.4199981689453,"high":152.3000030517578,"low":146.60000610351562,"close":148.74000549316406,"volume":120763559,"adjclose":148.74000549316406}.
                 // Iterate through these until stop.
                 int numberEntriesAdded = 0;
@@ -227,20 +213,39 @@ namespace FinancialStructures.StockStructures.Implementation
                 }
 
                 _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Downloading, $"Added {numberEntriesAdded} to stock {stock.Name}");
-            }
 
-            if (download == StockDownload.Latest)
+                stock.Sort();
+            }
+        }
+
+        /// <inheritdoc/>
+        public void Download(IReportLogger reportLogger = null)
+        {
+            foreach (Stock stock in Stocks)
             {
-                double close = FindAndGetSingleValue(websiteHtml, "<span class=\"Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)\" data-reactid=\"34\">");
-                double open = FindAndGetSingleValue(websiteHtml, "data-test=\"OPEN-value\" data-reactid=\"46\"><span class=\"Trsdu(0.3s) \" data-reactid=\"47\">");
-                Tuple<double, double> range = FindAndGetDoubleValues(websiteHtml, "data-test=\"DAYS_RANGE-value\" data-reactid=\"61\">");
-                double volume = FindAndGetSingleValue(websiteHtml, "data-test=\"TD_VOLUME-value\" data-reactid=\"69\"><span class=\"Trsdu(0.3s) \" data-reactid=\"70\">");
+                Uri downloadUrl = new Uri(stock.Name.Url);
+                string stockWebsite = WebDownloader.DownloadFromURLasync(downloadUrl.ToString(), reportLogger).Result;
+                double close = FindAndGetSingleValue(stockWebsite, "<span class=\"Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)\" data-reactid=\"34\">");
+                double open = FindAndGetSingleValue(stockWebsite, "data-test=\"OPEN-value\" data-reactid=\"46\"><span class=\"Trsdu(0.3s) \" data-reactid=\"47\">");
+                Tuple<double, double> range = FindAndGetDoubleValues(stockWebsite, "data-test=\"DAYS_RANGE-value\" data-reactid=\"61\">");
+                double volume = FindAndGetSingleValue(stockWebsite, "data-test=\"TD_VOLUME-value\" data-reactid=\"69\"><span class=\"Trsdu(0.3s) \" data-reactid=\"70\">");
 
                 DateTime date = DateTime.Now.TimeOfDay > new DateTime(2010, 1, 1, 16, 30, 0).TimeOfDay ? DateTime.Today : DateTime.Today.AddDays(-1);
                 stock.AddValue(date, open, range.Item2, range.Item1, close, volume);
-            }
 
-            stock.Sort();
+                stock.Sort();
+            }
+        }
+
+        private int DateToYahooInt(DateTime date)
+        {
+            return int.Parse((date - new DateTime(1970, 1, 1)).TotalSeconds.ToString());
+            throw new NotImplementedException();
+        }
+
+        private DateTime YahooIntToDate(int yahooInt)
+        {
+            return new DateTime(1970, 1, 1).AddSeconds(yahooInt);
         }
 
         private double FindAndGetSingleValue(string searchString, string findString, bool includeCommas = true, int containedWithin = 50)
@@ -303,10 +308,16 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <inheritdoc/>
         public void Configure(string stockFilePath, IReportLogger logger = null)
         {
+            Configure(stockFilePath, new FileSystem(), logger);
+        }
+
+        /// <inheritdoc/>
+        public void Configure(string stockFilePath, IFileSystem fileSystem, IReportLogger logger = null)
+        {
             string[] fileContents = new string[] { };
             try
             {
-                fileContents = File.ReadAllLines(stockFilePath);
+                fileContents = fileSystem.File.ReadAllLines(stockFilePath);
             }
             catch (Exception ex)
             {

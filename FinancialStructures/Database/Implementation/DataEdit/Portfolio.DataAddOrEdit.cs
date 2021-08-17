@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using Common.Structure.DataStructures;
@@ -10,7 +11,7 @@ namespace FinancialStructures.Database.Implementation
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public bool TryAddOrEditDataToSecurity(TwoName names, DateTime oldDate, DateTime date, double shares, double unitPrice, double Investment, IReportLogger reportLogger = null)
+        public bool TryAddOrEditTradeData(Account elementType, TwoName names, SecurityTrade oldTrade, SecurityTrade newTrade, IReportLogger reportLogger = null)
         {
             var funds = FundsThreadSafe;
             for (int fundIndex = 0; fundIndex < NumberOf(Account.Security); fundIndex++)
@@ -18,7 +19,23 @@ namespace FinancialStructures.Database.Implementation
                 if (names.IsEqualTo(funds[fundIndex].Names))
                 {
                     _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Security `{names.Company}'-`{names.Name}' has data on date .");
-                    return funds[fundIndex].AddOrEditData(oldDate, date, unitPrice, shares, Investment, reportLogger);
+                    return funds[fundIndex].TryAddOrEditTradeData(oldTrade, newTrade, reportLogger);
+                }
+            }
+            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Security `{names.Company}'-`{names.Name}' could not be found in the database.");
+            return false;
+        }
+
+        /// <inheritdoc/>
+        public bool TryAddOrEditDataToSecurity(TwoName names, DateTime oldDate, DateTime date, double shares, double unitPrice, double investment, SecurityTrade trade, IReportLogger reportLogger = null)
+        {
+            var funds = FundsThreadSafe;
+            for (int fundIndex = 0; fundIndex < NumberOf(Account.Security); fundIndex++)
+            {
+                if (names.IsEqualTo(funds[fundIndex].Names))
+                {
+                    _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Security `{names.Company}'-`{names.Name}' has data on date .");
+                    return funds[fundIndex].AddOrEditData(oldDate, date, unitPrice, shares, investment, trade, reportLogger);
                 }
             }
             _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Security `{names.Company}'-`{names.Name}' could not be found in the database.");

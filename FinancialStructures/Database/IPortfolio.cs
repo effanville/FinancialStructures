@@ -174,7 +174,22 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Adds the desired data to the security if it can.
         /// </summary>
-        bool TryAddOrEditDataToSecurity(TwoName names, DateTime oldDate, DateTime date, double shares, double unitPrice, double Investment, IReportLogger reportLogger = null);
+        bool TryAddOrEditDataToSecurity(TwoName names, DateTime oldDate, DateTime date, double shares, double unitPrice, double investment, SecurityTrade trade, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Adds the desired trade data if it can.
+        /// </summary>
+        bool TryAddOrEditTradeData(Account elementType, TwoName names, SecurityTrade oldTrade, SecurityTrade trade, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Attempts to remove trade data from the account.
+        /// </summary>
+        /// <param name="elementType">The type of data to remove from.</param>
+        /// <param name="name">The name to remove from.</param>
+        /// <param name="date">The date on which to remove data.</param>
+        /// <param name="reportLogger">Report callback.</param>
+        /// <returns>Success or failure.</returns>
+        bool TryDeleteTradeData(Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Attempts to add data to the account.
@@ -201,30 +216,30 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Returns a list of all companes of the desired type in the database.
         /// </summary>
-        /// <param name="elementType">Type of object to search for.</param>
+        /// <param name="account">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        IReadOnlyList<string> Companies(Account elementType);
+        IReadOnlyList<string> Companies(Account account);
 
         /// <summary>
         /// Returns a list of all sector names of the desired type in the database.
         /// </summary>
-        /// <param name="elementType">Type of object to search for.</param>
+        /// <param name="account">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        IReadOnlyList<string> Sectors(Account elementType);
+        IReadOnlyList<string> Sectors(Account account);
 
         /// <summary>
         /// Returns a list of all names of the desired type in the database.
         /// </summary>
-        /// <param name="elementType">Type of object to search for.</param>
+        /// <param name="account">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        IReadOnlyList<string> Names(Account elementType);
+        IReadOnlyList<string> Names(Account account);
 
         /// <summary>
         /// Returns a list of all namedata in the database.
         /// </summary>
-        /// <param name="elementType">Type of object to search for.</param>
+        /// <param name="account">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        IReadOnlyList<NameData> NameData(Account elementType);
+        IReadOnlyList<NameData> NameData(Account account);
 
         /// <summary>
         /// Queries for data for the security of name and company.
@@ -232,13 +247,9 @@ namespace FinancialStructures.Database
         IReadOnlyList<SecurityDayData> SecurityData(TwoName name, IReportLogger reportLogger = null);
 
         /// <summary>
-        /// Returns the
+        /// Returns the valuations of the account.
         /// </summary>
-        /// <param name="elementType"></param>
-        /// <param name="name"></param>
-        /// <param name="reportLogger"></param>
-        /// <returns></returns>
-        IReadOnlyList<DailyValuation> NumberData(Account elementType, TwoName name, IReportLogger reportLogger = null);
+        IReadOnlyList<DailyValuation> NumberData(Account account, TwoName name, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Outputs the account if it exists.

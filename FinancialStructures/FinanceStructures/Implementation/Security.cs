@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using FinancialStructures.Database;
+using FinancialStructures.DataStructures;
 using FinancialStructures.NamingStructures;
 using Common.Structure.DataStructures;
 
@@ -19,6 +20,12 @@ namespace FinancialStructures.FinanceStructures.Implementation
 
         /// <inheritdoc/>
         public TimeList Investments { get; set; } = new TimeList();
+
+        public List<SecurityTrade> SecurityTrades
+        {
+            get;
+            set;
+        } = new List<SecurityTrade>();
 
         /// <summary>
         /// An empty constructor.

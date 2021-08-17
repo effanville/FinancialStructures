@@ -3,6 +3,7 @@ using System.Linq;
 using FinancialStructures.NamingStructures;
 using NUnit.Framework;
 using FinancialStructures.Database;
+using FinancialStructures.Tests.TestDatabaseConstructor;
 
 namespace FinancialStructures.Tests.Database.DataEdit
 {
@@ -12,9 +13,9 @@ namespace FinancialStructures.Tests.Database.DataEdit
         public void CanDeleteFromSecurity()
         {
             var constructor = new DatabaseConstructor();
-            constructor.WithSecurityFromNameAndData("Company", "Name", dates: new DateTime[] { new DateTime(2010, 1, 1) }, sharePrice: new double[] { 2.0 }, numberUnits: new double[] { 100.0 }, investment: new double[] { 0.0 });
+            constructor.WithSecurity("Company", "Name", dates: new DateTime[] { new DateTime(2010, 1, 1) }, sharePrice: new double[] { 2.0 }, numberUnits: new double[] { 100.0 }, investment: new double[] { 0.0 });
 
-            var portfolio = constructor.database;
+            var portfolio = constructor.Database;
 
             bool success = portfolio.TryDeleteData(Account.Security, new NameData("Company", "Name"), new DateTime(2010, 1, 1), null);
 
@@ -30,7 +31,7 @@ namespace FinancialStructures.Tests.Database.DataEdit
             var constructor = new DatabaseConstructor();
             constructor.WithSectorFromNameAndData("Company", "Name", date: new DateTime[] { new DateTime(2010, 1, 1) }, value: new double[] { 2.0 });
 
-            var portfolio = constructor.database;
+            var portfolio = constructor.Database;
 
             bool success = portfolio.TryDeleteData(Account.Benchmark, new NameData("Company", "Name"), new DateTime(2010, 1, 1), null);
 

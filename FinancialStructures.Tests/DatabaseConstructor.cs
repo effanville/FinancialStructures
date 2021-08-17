@@ -3,31 +3,23 @@ using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Database.Implementation;
 using FinancialStructures.FinanceStructures.Implementation;
-using FinancialStructures.Tests.TestDatabaseConstructor;
 using System.IO.Abstractions;
 
-namespace FinancialStructures.Tests
+namespace FinancialStructures.Tests.TestDatabaseConstructor
 {
     public class DatabaseConstructor
     {
-        public const string DefaultSecurityName = "UK Stock";
-        public const string DefaultSecurityCompany = "BlackRock";
-        public readonly DateTime[] DefaultSecurityDates = new DateTime[] { new DateTime(2010, 1, 1), new DateTime(2011, 1, 1), new DateTime(2012, 5, 1), new DateTime(2015, 4, 3), new DateTime(2018, 5, 6), new DateTime(2020, 1, 1) };
-        public readonly double[] DefaultSecurityShareValues = new double[] { 2.0, 1.5, 17.3, 4, 5.7, 5.5 };
-        public readonly double[] DefaultSecurityUnitPrices = new double[] { 100.0, 100.0, 125.2, 90.6, 77.7, 101.1 };
-        public readonly double[] DefaultSecurityInvestments = new double[] { 100.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-
-        internal Portfolio database;
+        internal Portfolio Database;
         public DatabaseConstructor(string filePath = null, string currency = null)
         {
-            database = new Portfolio();
-            database.FilePath = filePath ?? null;
-            database.BaseCurrency = currency ?? DefaultCurrencyName;
+            Database = new Portfolio();
+            Database.FilePath = filePath ?? null;
+            Database.BaseCurrency = currency ?? DefaultCurrencyName;
         }
 
         public DatabaseConstructor LoadDatabaseFromFilepath(IFileSystem fileSystem, string filepath)
         {
-            database.LoadPortfolio(filepath, fileSystem, null);
+            Database.LoadPortfolio(filepath, fileSystem, null);
             return this;
         }
 
@@ -36,9 +28,9 @@ namespace FinancialStructures.Tests
             switch (acctype)
             {
                 case Account.Security:
-                    return new TwoName(DefaultSecurityCompany, DefaultSecurityName);
+                    return new TwoName(SecurityConstructor.DefaultCompany, SecurityConstructor.DefaultName);
                 case Account.BankAccount:
-                    return new TwoName(DefaultBankAccountCompany, DefaultBankAccountName);
+                    return new TwoName(BankAccountConstructor.DefaultCompany, BankAccountConstructor.DefaultName);
                 case Account.Currency:
                     return new TwoName(DefaultCurrencyCompany, DefaultCurrencyName);
                 case Account.All:
@@ -53,9 +45,9 @@ namespace FinancialStructures.Tests
             switch (account)
             {
                 case Account.Security:
-                    return new TwoName(SecondarySecurityCompany, SecondarySecurityName);
+                    return new TwoName(SecurityConstructor.SecondaryCompany, SecurityConstructor.SecondaryName);
                 case Account.BankAccount:
-                    return new TwoName(SecondaryBankAccountCompany, SecondaryBankAccountName);
+                    return new TwoName(BankAccountConstructor.SecondaryCompany, BankAccountConstructor.SecondaryName);
                 default:
                     return null;
             }
@@ -91,56 +83,19 @@ namespace FinancialStructures.Tests
 
         public DatabaseConstructor SetFilePath(string filePath)
         {
-            database.FilePath = filePath;
+            Database.FilePath = filePath;
             return this;
         }
 
         public DatabaseConstructor SetCurrencyAsGBP()
         {
-            database.BaseCurrency = "GBP";
+            Database.BaseCurrency = "GBP";
             return this;
         }
         public DatabaseConstructor SetCurrency(string currency)
         {
-            database.BaseCurrency = currency;
+            Database.BaseCurrency = currency;
             return this;
-        }
-
-        public DatabaseConstructor WithDefaultSecurity()
-        {
-            return WithSecurityFromNameAndData(DefaultSecurityCompany, DefaultSecurityName, dates: DefaultSecurityDates, sharePrice: DefaultSecurityUnitPrices, numberUnits: DefaultSecurityShareValues, investment: DefaultSecurityInvestments);
-        }
-
-        public const string SecondarySecurityName = "China Stock";
-        public const string SecondarySecurityCompany = "Prudential";
-        public readonly DateTime[] SecondarySecurityDates = new DateTime[] { new DateTime(2010, 1, 5), new DateTime(2011, 2, 1), new DateTime(2012, 5, 5), new DateTime(2016, 4, 3), new DateTime(2019, 5, 6), new DateTime(2020, 1, 1) };
-        public readonly double[] SecondarySecurityShareValues = new double[] { 2.0, 2.5, 17.3, 22.5, 22.7, 25.5 };
-        public readonly double[] SecondarySecurityUnitPrices = new double[] { 1010.0, 1110.0, 1215.2, 900.6, 1770.7, 1001.1 };
-        public readonly double[] SecondarySecurityInvestments = new double[] { 2020.0, 0.0, 21022.96, 0.0, 0.0, 0.0 };
-
-        public DatabaseConstructor WithSecondarySecurity()
-        {
-            return WithSecurityFromNameAndData(SecondarySecurityCompany, SecondarySecurityName, currency: DefaultCurrencyCompany, dates: SecondarySecurityDates, sharePrice: SecondarySecurityUnitPrices, numberUnits: SecondarySecurityShareValues, investment: SecondarySecurityInvestments);
-        }
-
-        public string DefaultBankAccountName = "Current";
-        public string DefaultBankAccountCompany = "Santander";
-        public DateTime[] DefaultBankAccountDates = new DateTime[] { new DateTime(2010, 1, 1), new DateTime(2011, 1, 1), new DateTime(2012, 5, 1), new DateTime(2015, 4, 3), new DateTime(2018, 5, 6), new DateTime(2020, 1, 1) };
-        public double[] DefaultBankAccountValues = new double[] { 100.0, 100.0, 125.2, 90.6, 77.7, 101.1 };
-
-        public DatabaseConstructor WithDefaultBankAccount()
-        {
-            return WithBankAccountFromNameAndData(DefaultBankAccountCompany, DefaultBankAccountName, date: DefaultBankAccountDates, value: DefaultBankAccountValues);
-        }
-
-        public string SecondaryBankAccountName = "Current";
-        public string SecondaryBankAccountCompany = "Halifax";
-        public DateTime[] SecondaryBankAccountDates = new DateTime[] { new DateTime(2010, 1, 1), new DateTime(2011, 1, 1), new DateTime(2012, 5, 1), new DateTime(2015, 4, 3), new DateTime(2018, 5, 6), new DateTime(2020, 1, 1) };
-        public double[] SecondaryBankAccountValues = new double[] { 1100.0, 2100.0, 1125.2, 900.6, 770.7, 1001.1 };
-
-        public DatabaseConstructor WithSecondaryBankAccount()
-        {
-            return WithBankAccountFromNameAndData(SecondaryBankAccountCompany, SecondaryBankAccountName, currency: DefaultCurrencyCompany, date: SecondaryBankAccountDates, value: SecondaryBankAccountValues);
         }
 
         public DatabaseConstructor WithAccountFromNameAndData(Account accType, string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] dates = null, double[] sharePrice = null, double[] numberUnits = null, double[] investment = null)
@@ -149,11 +104,11 @@ namespace FinancialStructures.Tests
             {
                 case Account.Security:
                 {
-                    return WithSecurityFromNameAndData(company, name, currency, url, sectors, dates, sharePrice, numberUnits, investment);
+                    return WithSecurity(company, name, currency, url, sectors, dates, sharePrice, numberUnits, investment);
                 }
                 case Account.BankAccount:
                 {
-                    return WithBankAccountFromNameAndData(company, name, currency, url, sectors, dates, numberUnits);
+                    return WithBankAccount(company, name, currency, url, sectors, dates, numberUnits);
                 }
                 case Account.Currency:
                 {
@@ -164,63 +119,51 @@ namespace FinancialStructures.Tests
             }
         }
 
-        public DatabaseConstructor WithSecurityFromName(string company, string name, string currency = null, string url = null, string sectors = null)
+        public DatabaseConstructor WithDefaultSecurity()
         {
-            var securityConstructor = new SecurityConstructor(company, name, currency, url, sectors);
-            database.Funds.Add(securityConstructor.item);
+            Database.Funds.Add(SecurityConstructor.Default().Item);
             return this;
         }
 
-        public DatabaseConstructor WithSecurityFromNameAndDataPoint(string company, string name, string currency = null, string url = null, string sectors = null, DateTime date = new DateTime(), double sharePrice = 0, double numberUnits = 0, double investment = 0)
+        public DatabaseConstructor WithSecondarySecurity()
         {
-            var securityConstructor = new SecurityConstructor(company, name, currency, url, sectors);
-            securityConstructor.WithData(date, sharePrice, numberUnits, investment);
-            database.Funds.Add(securityConstructor.item);
+            Database.Funds.Add(SecurityConstructor.Secondary().Item);
             return this;
         }
 
-        public DatabaseConstructor WithSecurityFromNameAndData(string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] dates = null, double[] sharePrice = null, double[] numberUnits = null, double[] investment = null)
+        public DatabaseConstructor WithSecurity(string company, string name)
         {
-            var securityConstructor = new SecurityConstructor(company, name, currency, url, sectors);
-            if (dates != null)
-            {
-                for (int i = 0; i < dates.Length; i++)
-                {
-                    securityConstructor.WithData(dates[i], sharePrice[i], numberUnits[i], investment[i]);
-                }
-            }
-            database.Funds.Add(securityConstructor.item);
+            Database.Funds.Add(SecurityConstructor.FromName(company, name).Item);
             return this;
         }
 
-        public DatabaseConstructor WithBankAccountFromName(string company, string name, string currency = null, string url = null, string sectors = null)
+        public DatabaseConstructor WithSecurity(string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] dates = null, double[] sharePrice = null, double[] numberUnits = null, double[] investment = null)
         {
-            var bAConstructor = new BankAccountConstructor(company, name, currency, url, sectors);
-            database.BankAccounts.Add(bAConstructor.item);
+            Database.Funds.Add(SecurityConstructor.FromNameAndData(company, name, currency, url, sectors, dates, sharePrice, numberUnits, investment).Item);
             return this;
         }
 
-        public DatabaseConstructor WithBankAccountFromNameAndDataPoint(string company, string name, string currency = null, string url = null, string sectors = null, DateTime date = new DateTime(), double value = 0)
+        public DatabaseConstructor WithDefaultBankAccount()
         {
-            var bankConstructor = new BankAccountConstructor(company, name, currency, url, sectors);
-            bankConstructor.WithData(date, value);
-            database.BankAccounts.Add(bankConstructor.item);
+            Database.BankAccounts.Add(BankAccountConstructor.Default().Item);
             return this;
         }
 
-        public DatabaseConstructor WithBankAccountFromNameAndData(string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] date = null, double[] value = null)
+        public DatabaseConstructor WithSecondaryBankAccount()
         {
-            var bankConstructor = new BankAccountConstructor(company, name, currency, url, sectors);
-            if (date != null)
-            {
-                for (int i = 0; i < date.Length; i++)
-                {
+            Database.BankAccounts.Add(BankAccountConstructor.Secondary().Item);
+            return this;
+        }
 
-                    bankConstructor.WithData(date[i], value[i]);
-                }
-            }
+        public DatabaseConstructor WithBankAccount(string company, string name)
+        {
+            Database.BankAccounts.Add(BankAccountConstructor.FromName(company, name).Item);
+            return this;
+        }
 
-            database.BankAccounts.Add(bankConstructor.item);
+        public DatabaseConstructor WithBankAccount(string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] dates = null, double[] values = null)
+        {
+            Database.BankAccounts.Add(BankAccountConstructor.FromNameAndData(company, name, currency, url, sectors, dates: dates, values: values).Item);
             return this;
         }
 
@@ -236,9 +179,7 @@ namespace FinancialStructures.Tests
 
         public DatabaseConstructor WithCurrencyFromName(string company, string name, string url = null, string sectors = null)
         {
-            var names = new NameData(company, name, null, url);
-            names.SectorsFlat = sectors;
-            database.Currencies.Add(new Currency(names));
+            Database.Currencies.Add(new CurrencyConstructor(company, name, null, url, sectors).item);
             return this;
         }
 
@@ -253,13 +194,13 @@ namespace FinancialStructures.Tests
                 }
             }
 
-            database.Currencies.Add(bankConstructor.item);
+            Database.Currencies.Add(bankConstructor.item);
             return this;
         }
 
         public DatabaseConstructor WithSectorFromName(string company, string name, string currency = null, string url = null)
         {
-            database.BenchMarks.Add(new Sector(new NameData(company, name, currency, url)));
+            Database.BenchMarks.Add(new Sector(new NameData(company, name, currency, url)));
             return this;
         }
 
@@ -274,13 +215,13 @@ namespace FinancialStructures.Tests
                 }
             }
 
-            database.BenchMarks.Add(bankConstructor.item);
+            Database.BenchMarks.Add(bankConstructor.item);
             return this;
         }
 
         public DatabaseConstructor ClearDatabase()
         {
-            database.Clear();
+            Database.Clear();
             return this;
         }
     }

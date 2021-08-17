@@ -61,7 +61,7 @@ namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
             Assert.AreEqual(1, dataNames.DataNames.Count);
             var selected = SelectedViewModel(newData);
             Assert.IsNotNull(selected);
-            Assert.AreEqual(1, selected.SelectedSecurityData.Count);
+            Assert.AreEqual(1, selected.TLVM.Valuations.Count);
         }
     }
 }

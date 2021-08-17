@@ -20,9 +20,9 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         public void CanEditSecurityName()
         {
             var constructor = new DatabaseConstructor();
-            _ = constructor.WithSecurityFromName(BaseCompanyName, BaseName);
+            _ = constructor.WithSecurity(BaseCompanyName, BaseName);
 
-            var database = constructor.database;
+            var database = constructor.Database;
 
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
@@ -35,9 +35,9 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         public void CanEditSecurityUrl()
         {
             var constructor = new DatabaseConstructor();
-            _ = constructor.WithSecurityFromName(BaseCompanyName, BaseName, url: "http://www.google.com");
+            _ = constructor.WithSecurity(BaseCompanyName, BaseName, url: "http://www.google.com");
 
-            var database = constructor.database;
+            var database = constructor.Database;
 
             string newUrl = "http://www.amazon.com";
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, url: newUrl));
@@ -52,9 +52,9 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         public void CanEditSecurityCurrency()
         {
             var constructor = new DatabaseConstructor();
-            _ = constructor.WithSecurityFromName(BaseCompanyName, BaseName, currency: "Pounds");
+            _ = constructor.WithSecurity(BaseCompanyName, BaseName, currency: "Pounds");
 
-            var database = constructor.database;
+            var database = constructor.Database;
 
             string newCurrency = "Dollars";
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, currency: newCurrency));
@@ -69,9 +69,9 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         public void CanEditSecuritySectors()
         {
             var constructor = new DatabaseConstructor();
-            _ = constructor.WithSecurityFromName(BaseCompanyName, BaseName);
+            _ = constructor.WithSecurity(BaseCompanyName, BaseName);
 
-            var database = constructor.database;
+            var database = constructor.Database;
 
             var sectorValues = new HashSet<string>() { "Cats", "Dogs" };
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName, sectors: sectorValues));
@@ -95,7 +95,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName(BaseCompanyName, BaseName);
 
-            var database = constructor.database;
+            var database = constructor.Database;
 
             _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
@@ -108,9 +108,9 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         public void CanEditBankAccountName()
         {
             var constructor = new DatabaseConstructor();
-            _ = constructor.WithBankAccountFromName(BaseCompanyName, BaseName);
+            _ = constructor.WithBankAccount(BaseCompanyName, BaseName);
 
-            var database = constructor.database;
+            var database = constructor.Database;
 
             _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
@@ -123,9 +123,9 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         public void CanEditBankAccountUrl()
         {
             var constructor = new DatabaseConstructor();
-            _ = constructor.WithBankAccountFromName(BaseCompanyName, BaseName, url: "http://www.google.com");
+            _ = constructor.WithBankAccount(BaseCompanyName, BaseName, url: "http://www.google.com");
 
-            var database = constructor.database;
+            var database = constructor.Database;
 
             string newUrl = "http://www.amazon.com";
             _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, url: newUrl));
@@ -140,9 +140,9 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         public void CanEditBankAccountCurrency()
         {
             var constructor = new DatabaseConstructor();
-            _ = constructor.WithBankAccountFromName(BaseCompanyName, BaseName, currency: "Pounds");
+            _ = constructor.WithBankAccount(BaseCompanyName, BaseName, currency: "Pounds");
 
-            var database = constructor.database;
+            var database = constructor.Database;
 
             string newCurrency = "Dollars";
             _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, currency: newCurrency));
@@ -157,9 +157,9 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         public void CanEditBankAccountSectors()
         {
             var constructor = new DatabaseConstructor();
-            _ = constructor.WithBankAccountFromName(BaseCompanyName, BaseName);
+            _ = constructor.WithBankAccount(BaseCompanyName, BaseName);
 
-            var database = constructor.database;
+            var database = constructor.Database;
 
             var sectorValues = new HashSet<string>() { "Cats", "Dogs" };
             _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName, sectors: sectorValues));
@@ -183,7 +183,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var constructor = new DatabaseConstructor();
             _ = constructor.WithCurrencyFromName(BaseCompanyName, BaseName);
 
-            var database = constructor.database;
+            var database = constructor.Database;
 
             _ = database.TryEditName(Account.Currency, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
@@ -196,9 +196,9 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         public void ReportsSecurityCorrect()
         {
             var constructor = new DatabaseConstructor();
-            _ = constructor.WithSecurityFromName(BaseCompanyName, BaseName);
+            _ = constructor.WithSecurity(BaseCompanyName, BaseName);
             var reports = new List<ErrorReport>();
-            var database = constructor.database;
+            var database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
@@ -220,7 +220,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         {
             var constructor = new DatabaseConstructor();
             var reports = new List<ErrorReport>();
-            var database = constructor.database;
+            var database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
@@ -239,7 +239,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             var constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName(BaseCompanyName, BaseName);
             var reports = new List<ErrorReport>();
-            var database = constructor.database;
+            var database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
@@ -261,7 +261,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         {
             var constructor = new DatabaseConstructor();
             var reports = new List<ErrorReport>();
-            var database = constructor.database;
+            var database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 

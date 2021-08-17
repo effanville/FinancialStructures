@@ -16,10 +16,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
         public List<AccountStatistics> Stats
         {
-            get
-            {
-                return fSecuritiesStats;
-            }
+            get => fSecuritiesStats;
             set
             {
                 fSecuritiesStats = value;

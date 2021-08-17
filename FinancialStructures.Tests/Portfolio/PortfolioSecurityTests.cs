@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.Database;
+using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.Database
@@ -18,8 +19,8 @@ namespace FinancialStructures.Tests.Database
                 sectors = new string[0];
             }
             var constructor = new DatabaseConstructor();
-            constructor = constructor.WithSecurityFromName("company1", "name1", sectors: firstSecuritySectors).WithSecurityFromName("company2", "name2", sectors: secondSecuritySectors);
-            var database = constructor.database;
+            constructor = constructor.WithSecurity("company1", "name1", sectors: firstSecuritySectors).WithSecurity("company2", "name2", sectors: secondSecuritySectors);
+            var database = constructor.Database;
             var sectings = database.Sectors(Account.Security);
 
             Assert.AreEqual(sectors.Length, sectings.Count);

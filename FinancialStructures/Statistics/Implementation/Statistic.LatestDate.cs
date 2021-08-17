@@ -58,7 +58,7 @@ namespace FinancialStructures.Statistics
                 return;
             }
 
-            StringValue = desired.LatestValue().Day.ToUkDateString();
+            StringValue = desired.LatestValue()?.Day.ToUkDateString();
         }
 
         /// <inheritdoc/>

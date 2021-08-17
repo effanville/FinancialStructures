@@ -53,7 +53,7 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
         }
 
         [SetUp]
-        public void Setup()
+        public virtual void Setup()
         {
             Mock<IFileInteractionService> fileMock = TestSetupHelper.CreateFileMock("nothing");
             Mock<IDialogCreationService> dialogMock = TestSetupHelper.CreateDialogMock();

@@ -56,6 +56,12 @@ namespace FinancialStructures.DataStructures
             set;
         }
 
+        public SecurityTrade Trade
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Create an empty <see cref="SecurityDayData"/>
         /// </summary>
@@ -67,12 +73,13 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Create a <see cref="SecurityDayData"/> from the specified values.
         /// </summary>
-        public SecurityDayData(DateTime date, double unitPrice, double shareNo, double newInvestment)
+        public SecurityDayData(DateTime date, double unitPrice, double shareNo, double newInvestment, SecurityTrade trade = null)
         {
             Date = date;
             UnitPrice = unitPrice;
             ShareNo = shareNo;
             NewInvestment = newInvestment;
+            Trade = trade;
         }
 
         /// <summary>
@@ -80,7 +87,7 @@ namespace FinancialStructures.DataStructures
         /// </summary>
         public SecurityDayData Copy()
         {
-            return new SecurityDayData(Date, UnitPrice, ShareNo, NewInvestment);
+            return new SecurityDayData(Date, UnitPrice, ShareNo, NewInvestment, Trade);
         }
 
         /// <inheritdoc/>
