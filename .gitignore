@@ -260,3 +260,6 @@ paket-files/
 __pycache__/
 *.pyc
 Build/tools
+Build/source/tools
+tools
+Build/source/Properties/launchSettings.json
