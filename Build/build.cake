@@ -1,6 +1,6 @@
 var target = Argument("target", "Publish");
 var configuration = Argument("configuration", "Release");
-var framework = Argument("framework", "net48");
+var framework = Argument("framework", "net5.0-windows");
 var publishDir = Argument("publishDir", $"/../Publish/FPD/{framework}");
 var remoteDir = Argument("remoteDir", "%remote_location%");
 

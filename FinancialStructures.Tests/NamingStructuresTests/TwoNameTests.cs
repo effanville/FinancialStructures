@@ -1,7 +1,7 @@
 ﻿using FinancialStructures.NamingStructures;
 using NUnit.Framework;
 
-namespace FinancialStructures.Tests.NamingStructures
+namespace FinancialStructures.Tests.NamingStructuresTests
 {
     [TestFixture]
     public sealed class NameTests

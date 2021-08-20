@@ -2,13 +2,11 @@
 
   <PropertyGroup>
     <TargetFrameworks>net5.0;net48;netcoreapp3.1</TargetFrameworks>
-    <Platforms>AnyCPU;x64</Platforms>
-    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <Import Project="..\Build\CommonProperties.Build.props" />
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
+  <PropertyGroup>
     <DocumentationFile>..\bin\Release\FinancialStructures.xml</DocumentationFile>
   </PropertyGroup>
 
