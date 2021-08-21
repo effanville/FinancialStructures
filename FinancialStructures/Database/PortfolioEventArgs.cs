@@ -51,6 +51,9 @@ namespace FinancialStructures.Database
             }
         }
 
+        /// <summary>
+        /// Has this change altered the portfolio.
+        /// </summary>
         public bool ChangedPortfolio
         {
             get;

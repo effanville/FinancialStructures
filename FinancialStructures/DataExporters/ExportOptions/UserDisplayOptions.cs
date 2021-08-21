@@ -15,24 +15,36 @@ namespace FinancialStructures.DataExporters.ExportOptions
         public const string ShowSectors = "ShowSectors";
         public const string ShowBenchmarks = "ShowBenchmarks";
 
+        /// <summary>
+        /// Should benchmarks be included in the sector table.
+        /// </summary>
         public bool IncludeBenchmarks
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// Only display accounts that have non zero current value.
+        /// </summary>
         public bool DisplayValueFunds
         {
             get;
             set;
         } = false;
 
+        /// <summary>
+        /// Display with spacing in tables.
+        /// </summary>
         public bool Spacing
         {
             get;
             set;
         } = false;
 
+        /// <summary>
+        /// Display with colours.
+        /// </summary>
         public bool Colours
         {
             get;

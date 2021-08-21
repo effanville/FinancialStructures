@@ -2,6 +2,9 @@
 
 namespace FinancialStructures.Database
 {
+    /// <summary>
+    /// Helper class for getting directory and file information.
+    /// </summary>
     public static class PortfolioFileHelpers
     {
         /// <summary>
@@ -12,7 +15,9 @@ namespace FinancialStructures.Database
             return string.IsNullOrEmpty(portfolio.FilePath) ? string.Empty : fileSystem.Path.GetDirectoryName(portfolio.FilePath);
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// The file name of the database location (considered the name).
+        /// </summary>
         public static string DatabaseName(this IPortfolio portfolio, IFileSystem fileSystem)
         {
             return fileSystem.Path.GetFileNameWithoutExtension(portfolio.FilePath);

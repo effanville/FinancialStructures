@@ -156,6 +156,7 @@ namespace FinancialStructures.Database
         /// Load database from xml file.
         /// </summary>
         /// <param name="filePath">The path to load from.</param>
+        /// <param name="fileSystem">The file system abstraction to use to resolve the file.</param>
         /// <param name="reportLogger">Callback to report information.</param>
         void LoadPortfolio(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null);
 
@@ -163,6 +164,7 @@ namespace FinancialStructures.Database
         /// Save database to xml file.
         /// </summary>
         /// <param name="filePath">The path to save to.</param>
+        /// <param name="fileSystem">The file system abstraction to use to resolve the file.</param>
         /// <param name="reportLogger">Callback to report information.</param>
         void SavePortfolio(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null);
 
@@ -272,8 +274,6 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Returns all Securities related to the given benchmark.
         /// </summary>
-        /// <param name="sectorName"></param>
-        /// <returns></returns>
         IReadOnlyList<IValueList> SectorAccounts(Account account, string sectorName);
 
         /// <summary>

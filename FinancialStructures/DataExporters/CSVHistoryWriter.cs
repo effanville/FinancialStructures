@@ -19,6 +19,7 @@ namespace FinancialStructures.DataExporters
         /// </summary>
         /// <param name="historyStatistics">The statistics to export.</param>
         /// <param name="filePath">The path to export to.</param>
+        /// <param name="fileSystem">The fileSystem to use in the export.</param>
         /// <param name="reportLogger">Callback to log any issues.</param>
         public static void WriteToCSV(List<PortfolioDaySnapshot> historyStatistics, string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null)
         {

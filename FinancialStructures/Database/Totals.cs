@@ -60,8 +60,19 @@
         /// </summary>
         BankAccountSector,
 
+        /// <summary>
+        /// A sector where all accounts are associated to the currency.
+        /// </summary>
         CurrencySector,
+
+        /// <summary>
+        /// All securities associated to a currency.
+        /// </summary>
         SecurityCurrency,
+
+        /// <summary>
+        /// All bank accounts associated to a currency.
+        /// </summary>
         BankAccountCurrency
     }
 }

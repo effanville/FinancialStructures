@@ -5,8 +5,14 @@ using Common.Structure.Reporting;
 
 namespace FinancialStructures.DataExporters
 {
+    /// <summary>
+    /// Contains methods for exporting investment data.
+    /// </summary>
     public static class InvestmentsExporter
     {
+        /// <summary>
+        /// Exports all investments in the portfolio to file.
+        /// </summary>
         public static void Export(IPortfolio portfolio, string filePath, IReportLogger reportLogger = null)
         {
             StreamWriter statsWriter = new StreamWriter(filePath);

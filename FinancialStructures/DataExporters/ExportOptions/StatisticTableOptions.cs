@@ -42,6 +42,9 @@ namespace FinancialStructures.DataExporters.ExportOptions
             get;
         } = new List<Statistic>();
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public StatisticTableOptions()
         {
             ShouldDisplay = true;

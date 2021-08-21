@@ -21,8 +21,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         public ObservableCollection<object> StatsTabs { get; set; } = new ObservableCollection<object>();
 
         private bool fDisplayValueFunds = true;
-        private IPortfolio programPortfolio;
-        private UiGlobals fUiGlobals1;
 
         public bool DisplayValueFunds
         {
