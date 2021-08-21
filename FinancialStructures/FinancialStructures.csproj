@@ -4,6 +4,11 @@
     <TargetFrameworks>net5.0;net48;netcoreapp3.1</TargetFrameworks>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <VersionPrefix>1.7.0</VersionPrefix>
+    <VersionSuffix>$([System.DateTime]::UtcNow.ToString(`yyyyMMdd-HHmm`))</VersionSuffix>
+  </PropertyGroup>
+
   <Import Project="..\Build\CommonProperties.Build.props" />
 
   <PropertyGroup>
@@ -14,4 +19,9 @@
     <PackageReference Include="System.IO.Abstractions" Version="13.2.43" />
   </ItemGroup>
 
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+    <_Parameter1>FinancialStructures.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
 </Project>

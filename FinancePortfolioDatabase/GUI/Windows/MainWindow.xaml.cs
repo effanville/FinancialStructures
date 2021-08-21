@@ -29,8 +29,9 @@ namespace FinancePortfolioDatabase.GUI.Windows
             MainWindowViewModel viewModel = new MainWindowViewModel(fUiGlobals);
             InitializeComponent();
 
-            Version version = Assembly.GetExecutingAssembly().GetName().Version;
-            Title = "Financial Database v" + version.ToString();
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            string informationVersion = assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>().InformationalVersion;
+            Title = "Financial Database v" + informationVersion;
 
             DataContext = viewModel;
         }

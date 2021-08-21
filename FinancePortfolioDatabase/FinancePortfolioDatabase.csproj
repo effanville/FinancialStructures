@@ -6,11 +6,18 @@
     <UseWPF>true</UseWPF>
     <ApplicationIcon>owl.ico</ApplicationIcon>
   </PropertyGroup>
+  
+  <PropertyGroup>
+    <AssemblyTitle>FinancePortfolioDatabase</AssemblyTitle>
+    <Product>FinancePortfolioDatabase</Product>
+    <VersionPrefix>1.7.0</VersionPrefix>
+    <VersionSuffix>$([System.DateTime]::UtcNow.ToString(`yyyyMMdd-HHmm`))</VersionSuffix>
+  </PropertyGroup>
 
   <Import Project="..\Build\CommonProperties.Build.props" />
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|netcoreapp3.1|AnyCPU'">
-    <DocumentationFile>..\bin\Release\FinancePortfolioDatabase.xml</DocumentationFile>
+  <PropertyGroup>
+    <DocumentationFile>..\bin\$(Configuration)\FinancePortfolioDatabase.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,5 +33,14 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FinancialStructures\FinancialStructures.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>FinancePortfolioDatabase.Tests</_Parameter1>
+    </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.InteropServices.ComVisible">
+      <_Parameter1>false</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 </Project>
