@@ -2,7 +2,6 @@
 
 namespace FinancialStructures.Database.Implementation
 {
-
     public partial class Portfolio
     {
         /// <inheritdoc/>

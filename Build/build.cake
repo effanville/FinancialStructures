@@ -1,6 +1,7 @@
 var target = Argument("target", "Publish");
 var configuration = Argument("configuration", "Release");
 var framework = Argument("framework", "net5.0-windows");
+var runtime = Argument("runtime", "win-x64");
 var publishDir = Argument("publishDir", $"/../Publish/FPD/{framework}");
 var remoteDir = Argument("remoteDir", "%remote_location%");
 
@@ -21,6 +22,9 @@ Task("Build")
     .IsDependentOn("Clean")
     .Does(() =>
 {
+    DotNetCoreRestore(new DotNetCoreRestoreSettings
+	{
+	});
     DotNetCoreBuild($"{repoDir}/FinancePortfolioDatabase.sln", new DotNetCoreBuildSettings
     {
         Configuration = configuration,
@@ -43,12 +47,14 @@ Task("Publish")
 	.IsDependentOn("Test")
 	.Does(context =>
 {
+    var outputDirectory = publishLocation + Directory($"/{System.DateTime.Now.ToString("yyyyMMdd-HHmm")}");
 	var settings = new DotNetCorePublishSettings
 	{
 		Configuration = configuration,
 		Framework = framework,
+		Runtime = runtime,
 		NoBuild = true,
-		OutputDirectory = publishLocation,
+		OutputDirectory = outputDirectory,
 		SelfContained = true
 	};
 	DotNetCorePublish($"{repoDir}/FinancePortfolioDatabase/FinancePortfolioDatabase.csproj", settings);

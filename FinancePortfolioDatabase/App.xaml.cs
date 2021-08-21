@@ -8,6 +8,7 @@ using FinancePortfolioDatabase.GUI.Windows;
 
 namespace FinancePortfolioDatabase
 {
+
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
@@ -29,6 +30,7 @@ namespace FinancePortfolioDatabase
         /// </summary>
         public void Application_Startup(object sender, StartupEventArgs e)
         {
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             if (CultureInfo.CurrentUICulture.IetfLanguageTag == "en-US")
             {
                 CultureInfo UKEnglishCulture = new CultureInfo("en-GB");
@@ -36,7 +38,6 @@ namespace FinancePortfolioDatabase
                     typeof(FrameworkElement),
                     new FrameworkPropertyMetadata(
                     XmlLanguage.GetLanguage(UKEnglishCulture.IetfLanguageTag)));
-                AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             }
             else
             {
@@ -44,7 +45,6 @@ namespace FinancePortfolioDatabase
                     typeof(FrameworkElement),
                     new FrameworkPropertyMetadata(
                     XmlLanguage.GetLanguage(CultureInfo.CurrentUICulture.IetfLanguageTag)));
-                AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             }
         }
 

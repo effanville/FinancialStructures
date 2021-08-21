@@ -3,10 +3,13 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <PublishTrimmed>false</PublishTrimmed>
+    <TrimMode>CopyUsed</TrimMode>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>owl.ico</ApplicationIcon>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <AssemblyTitle>FinancePortfolioDatabase</AssemblyTitle>
     <Product>FinancePortfolioDatabase</Product>
@@ -34,13 +37,10 @@
   <ItemGroup>
     <ProjectReference Include="..\FinancialStructures\FinancialStructures.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>FinancePortfolioDatabase.Tests</_Parameter1>
-    </AssemblyAttribute>
-    <AssemblyAttribute Include="System.Runtime.InteropServices.ComVisible">
-      <_Parameter1>false</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
 </Project>
