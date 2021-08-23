@@ -182,38 +182,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
         }
 
-        public static List<Statistic> SecurityFieldNames
-        {
-            get
-            {
-                return AccountStatisticsHelpers.AllStatistics().ToList();
-            }
-        }
-
-        public static List<Statistic> BankFieldNames
-        {
-            get
-            {
-                return AccountStatisticsHelpers.DefaultBankAccountStats().ToList();
-            }
-        }
-
-        public static List<Statistic> SectorFieldNames
-        {
-            get
-            {
-                return AccountStatisticsHelpers.DefaultSectorStats().ToList();
-            }
-        }
-
-        public static List<SortDirection> SortDirections
-        {
-            get
-            {
-                return Enum.GetValues(typeof(SortDirection)).Cast<SortDirection>().ToList();
-            }
-        }
-
         public ICommand ExportCommand
         {
             get;
