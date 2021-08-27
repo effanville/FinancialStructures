@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Input;
 using FinancialStructures.Database;
 using FinancialStructures.DataExporters;
@@ -26,160 +25,83 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
         public UserDisplayOptions SelectOptions
         {
-            get
-            {
-                return fSelectOptions;
-            }
-            set
-            {
-                fSelectOptions = value;
-                OnPropertyChanged();
-            }
+            get => fSelectOptions;
+            set => SetAndNotify(ref fSelectOptions, value, nameof(SelectOptions));
         }
 
         private List<Selectable<string>> fDisplayConditions = new List<Selectable<string>>();
 
         public List<Selectable<string>> DisplayConditions
         {
-            get
-            {
-                return fDisplayConditions;
-            }
-            set
-            {
-                fDisplayConditions = value;
-                OnPropertyChanged();
-            }
+            get => fDisplayConditions;
+            set => SetAndNotify(ref fDisplayConditions, value, nameof(DisplayConditions));
         }
 
         private Statistic fSecuritySortingField;
         public Statistic SecuritySortingField
         {
-            get
-            {
-                return fSecuritySortingField;
-            }
-            set
-            {
-                fSecuritySortingField = value;
-                OnPropertyChanged(nameof(SecuritySortingField));
-            }
+            get => fSecuritySortingField;
+            set => SetAndNotify(ref fSecuritySortingField, value, nameof(SecuritySortingField));
         }
 
         private SortDirection fSecurityDirection;
         public SortDirection SecurityDirection
         {
-            get
-            {
-                return fSecurityDirection;
-            }
-            set
-            {
-                fSecurityDirection = value;
-                OnPropertyChanged(nameof(SecurityDirection));
-            }
+            get => fSecurityDirection;
+            set => SetAndNotify(ref fSecurityDirection, value, nameof(SecurityDirection));
         }
 
         private List<Selectable<Statistic>> fSecurityColumnNames = new List<Selectable<Statistic>>();
 
         public List<Selectable<Statistic>> SecurityColumnNames
         {
-            get
-            {
-                return fSecurityColumnNames;
-            }
-            set
-            {
-                fSecurityColumnNames = value;
-                OnPropertyChanged();
-            }
+            get => fSecurityColumnNames;
+            set => SetAndNotify(ref fSecurityColumnNames, value, nameof(SecurityColumnNames));
         }
 
         private Statistic fBankSortingField;
         public Statistic BankSortingField
         {
-            get
-            {
-                return fBankSortingField;
-            }
-            set
-            {
-                fBankSortingField = value;
-                OnPropertyChanged(nameof(BankSortingField));
-            }
+            get => fBankSortingField;
+            set => SetAndNotify(ref fBankSortingField, value, nameof(BankSortingField));
         }
 
         private SortDirection fBankDirection;
         public SortDirection BankDirection
         {
-            get
-            {
-                return fBankDirection;
-            }
-            set
-            {
-                fBankDirection = value;
-                OnPropertyChanged(nameof(BankDirection));
-            }
+            get => fBankDirection;
+            set => SetAndNotify(ref fBankDirection, value, nameof(BankDirection));
         }
 
         private List<Selectable<Statistic>> fBankColumnNames = new List<Selectable<Statistic>>();
 
         public List<Selectable<Statistic>> BankColumnNames
         {
-            get
-            {
-                return fBankColumnNames;
-            }
-            set
-            {
-                fBankColumnNames = value;
-                OnPropertyChanged();
-            }
+            get => fBankColumnNames;
+            set => SetAndNotify(ref fBankColumnNames, value, nameof(BankColumnNames));
         }
 
         private Statistic fSectorSortingField;
         public Statistic SectorSortingField
         {
-            get
-            {
-                return fSectorSortingField;
-            }
-            set
-            {
-                fSectorSortingField = value;
-                OnPropertyChanged(nameof(SectorSortingField));
-            }
+            get => fSectorSortingField;
+            set => SetAndNotify(ref fSectorSortingField, value, nameof(SectorSortingField));
         }
 
 
         private SortDirection fSectorDirection;
         public SortDirection SectorDirection
         {
-            get
-            {
-                return fSectorDirection;
-            }
-            set
-            {
-                fSectorDirection = value;
-                OnPropertyChanged(nameof(SectorDirection));
-            }
+            get => fSectorDirection;
+            set => SetAndNotify(ref fSectorDirection, value, nameof(SectorDirection));
         }
 
         private List<Selectable<Statistic>> fSectorColumnNames = new List<Selectable<Statistic>>();
 
         public List<Selectable<Statistic>> SectorColumnNames
         {
-            get
-            {
-                return fSectorColumnNames;
-            }
-            set
-            {
-                fSectorColumnNames = value;
-                OnPropertyChanged();
-            }
+            get => fSectorColumnNames;
+            set => SetAndNotify(ref fSectorColumnNames, value, nameof(SectorColumnNames));
         }
 
         public ICommand ExportCommand

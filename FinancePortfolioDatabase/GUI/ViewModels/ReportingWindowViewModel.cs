@@ -16,29 +16,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         private readonly IFileInteractionService fFileInteractionService;
         public ErrorReports ReportsToView
         {
-            get
-            {
-                return fReportsToView;
-            }
-            set
-            {
-                fReportsToView = value;
-                OnPropertyChanged(nameof(ReportsToView));
-            }
+            get => fReportsToView;
+            set => SetAndNotify(ref fReportsToView, value, nameof(ReportsToView));
         }
 
         private bool fIsExpanded;
         public bool IsExpanded
         {
-            get
-            {
-                return fIsExpanded;
-            }
-
-            set
-            {
-                SetAndNotify(ref fIsExpanded, value, nameof(IsExpanded));
-            }
+            get => fIsExpanded;
+            set => SetAndNotify(ref fIsExpanded, value, nameof(IsExpanded));
         }
 
         public ErrorReports Reports
@@ -57,10 +43,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
 
         public ReportSeverity ReportingSeverity
         {
-            get
-            {
-                return fReportingSeverity;
-            }
+            get => fReportingSeverity;
             set
             {
                 fReportingSeverity = value;
@@ -69,14 +52,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
         }
 
-        public List<ReportSeverity> EnumValues
-        {
-            get
-            {
-                return Enum.GetValues(typeof(ReportSeverity)).Cast<ReportSeverity>().ToList();
-            }
-        }
+        public List<ReportSeverity> EnumValues => Enum.GetValues(typeof(ReportSeverity)).Cast<ReportSeverity>().ToList();
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public ReportingWindowViewModel(IFileInteractionService fileInteractionService)
         {
             IsExpanded = false;

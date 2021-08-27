@@ -24,10 +24,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
         public bool DisplayValueFunds
         {
-            get
-            {
-                return fDisplayValueFunds;
-            }
+            get => fDisplayValueFunds;
             set
             {
                 fDisplayValueFunds = value;
