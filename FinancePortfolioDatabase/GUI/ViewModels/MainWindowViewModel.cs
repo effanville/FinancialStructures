@@ -7,6 +7,7 @@ using FinancialStructures.Database;
 using Common.Structure.Reporting;
 using Common.UI.ViewModelBases;
 using Common.UI;
+using FinancePortfolioDatabase.GUI.Configuration;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {
@@ -22,6 +23,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         /// </summary>
         internal readonly IReportLogger ReportLogger;
         private readonly UiGlobals fUiGlobals;
+        private UserConfiguration fUserConfiguration;
 
         private OptionsToolbarViewModel fOptionsToolbarCommands;
 
@@ -67,10 +69,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             ReportLogger = new LogReporter(UpdateReport);
             fUiGlobals = globals;
             fUiGlobals.ReportLogger = ReportLogger;
+            fUserConfiguration = new UserConfiguration();
 
             OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, fUiGlobals);
             Tabs.Add(new BasicDataViewModel(ProgramPortfolio, fUiGlobals));
-            Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, fUiGlobals));
+            Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, fUiGlobals, fUserConfiguration));
             Tabs.Add(new SecurityEditWindowViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, fUiGlobals));
             Tabs.Add(new ValueListWindowViewModel("Bank Accounts", ProgramPortfolio, UpdateDataCallback, fUiGlobals, Account.BankAccount));
             Tabs.Add(new ValueListWindowViewModel("Benchmarks", ProgramPortfolio, UpdateDataCallback, fUiGlobals, Account.Benchmark));

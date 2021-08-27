@@ -12,11 +12,13 @@ using Common.Structure.Reporting;
 using Common.UI.Commands;
 using Common.UI.Services;
 using Common.UI;
+using FinancePortfolioDatabase.GUI.Configuration;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
     public class StatsCreatorWindowViewModel : DataDisplayViewModelBase
     {
+        private UserConfiguration fUserConfiguration;
         private readonly UiGlobals fUiGlobals;
         public ObservableCollection<object> StatsTabs { get; set; } = new ObservableCollection<object>();
 
@@ -40,9 +42,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
         private readonly IReportLogger ReportLogger;
 
-        public StatsCreatorWindowViewModel(IPortfolio portfolio, IReportLogger reportLogger, UiGlobals globals)
+        public StatsCreatorWindowViewModel(IPortfolio portfolio, IReportLogger reportLogger, UiGlobals globals, UserConfiguration userConfiguration)
             : base("Stats Creator", Account.All, portfolio)
         {
+            fUserConfiguration = userConfiguration;
+            fUserConfiguration.StatsConfiguration.HasLoaded = true;
             fUiGlobals = globals;
             ReportLogger = reportLogger;
             StatsTabs.Add(new MainTabViewModel(OpenTab));
@@ -107,7 +111,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         private void ExecuteCreateStatsCommand()
         {
             Action<string> StatsOptionFeedback = filePath => StatsFeedback(filePath);
-            StatsOptionsViewModel context = new StatsOptionsViewModel(DataStore, ReportLogger, StatsOptionFeedback, fUiGlobals);
+            StatsOptionsViewModel context = new StatsOptionsViewModel(DataStore, ReportLogger, StatsOptionFeedback, fUiGlobals, fUserConfiguration);
             fUiGlobals.DialogCreationService.DisplayCustomDialog(context);
         }
 
