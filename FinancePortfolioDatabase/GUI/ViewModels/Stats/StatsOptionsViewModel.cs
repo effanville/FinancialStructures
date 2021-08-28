@@ -18,18 +18,10 @@ using FinancePortfolioDatabase.GUI.Configuration;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
-    internal class StatsOptionsViewModel : PropertyChangedBase
+    public class StatsOptionsViewModel : PropertyChangedBase
     {
-        private UserConfiguration fUserConfiguration;
+        private IConfiguration fUserConfiguration;
         private readonly IPortfolio Portfolio;
-
-        private UserDisplayOptions fSelectOptions;
-
-        public UserDisplayOptions SelectOptions
-        {
-            get => fSelectOptions;
-            set => SetAndNotify(ref fSelectOptions, value, nameof(SelectOptions));
-        }
 
         private List<Selectable<string>> fDisplayConditions = new List<Selectable<string>>();
 
@@ -113,7 +105,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
         private void ExecuteExportCommand(ICloseable window)
         {
-            fUserConfiguration.StatsConfiguration.OptionsConfiguration.StoreConfiguration(this);
+            fUserConfiguration.StoreConfiguration(this);
             FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile(ExportType.Html.ToString(), Portfolio.DatabaseName(fUiGlobals.CurrentFileSystem), Portfolio.Directory(fUiGlobals.CurrentFileSystem), "Html Files|*.html|CSV Files|*.csv|All Files|*.*");
             string path = null;
 
@@ -171,7 +163,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         private readonly Action<string> CloseWindowAction;
         private readonly UiGlobals fUiGlobals;
 
-        public StatsOptionsViewModel(IPortfolio portfolio, IReportLogger reportLogger, Action<string> CloseWindow, UiGlobals uiGlobals, UserConfiguration userConfiguration)
+        public StatsOptionsViewModel(IPortfolio portfolio, IReportLogger reportLogger, Action<string> CloseWindow, UiGlobals uiGlobals, IConfiguration userConfiguration)
         {
             fUiGlobals = uiGlobals;
             fUserConfiguration = userConfiguration;
@@ -179,9 +171,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             ReportLogger = reportLogger;
             CloseWindowAction = CloseWindow;
             ExportCommand = new RelayCommand<ICloseable>(ExecuteExportCommand);
-            if (fUserConfiguration.StatsConfiguration.OptionsConfiguration.HasLoaded)
+            if (fUserConfiguration.HasLoaded)
             {
-                fUserConfiguration.StatsConfiguration.OptionsConfiguration.RestoreFromConfiguration(this);
+                fUserConfiguration.RestoreFromConfiguration(this);
             }
             else
             {
@@ -214,7 +206,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowSectors, true));
                 DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowBenchmarks, false));
 
-                fUserConfiguration.StatsConfiguration.OptionsConfiguration.HasLoaded = true;
+                fUserConfiguration.HasLoaded = true;
             }
         }
     }

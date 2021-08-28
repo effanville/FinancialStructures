@@ -1,14 +1,28 @@
-﻿namespace FinancePortfolioDatabase.GUI.Configuration
+﻿using System.Collections.Generic;
+using System.IO.Abstractions;
+using FinancePortfolioDatabase.GUI.ViewModels.Stats;
+
+namespace FinancePortfolioDatabase.GUI.Configuration
 {
     /// <summary>
     /// Contains user specific configuration for the ui.
     /// </summary>
-    public sealed class UserConfiguration
+    public sealed class UserConfiguration : IConfiguration
     {
         /// <summary>
-        /// The configuration for the stats window.
+        /// Name of the child configuration for the stats window.
         /// </summary>
-        public StatsDisplayConfiguration StatsConfiguration
+        public const string StatsDisplay = nameof(StatsCreatorWindowViewModel);
+
+        /// <inheritdoc/>
+        public Dictionary<string, IConfiguration> ChildConfigurations
+        {
+            get;
+            set;
+        }
+
+        /// <inheritdoc/>
+        public bool HasLoaded
         {
             get;
             set;
@@ -19,7 +33,34 @@
         /// </summary>
         public UserConfiguration()
         {
-            StatsConfiguration = new StatsDisplayConfiguration();
+            ChildConfigurations = new Dictionary<string, IConfiguration>
+            {
+                { StatsDisplay, new StatsDisplayConfiguration() }
+            };
+        }
+
+        /// <inheritdoc/>
+        public void StoreConfiguration(object viewModel)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public void RestoreFromConfiguration(object viewModel)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public void LoadConfiguration(string filePath, IFileSystem fileSystem)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public void SaveConfiguration(string filePath, IFileSystem fileSystem)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

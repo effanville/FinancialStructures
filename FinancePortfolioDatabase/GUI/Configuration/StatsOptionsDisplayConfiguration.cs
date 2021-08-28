@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.IO.Abstractions;
 using Common.Structure.DisplayClasses;
 using FinancePortfolioDatabase.GUI.ViewModels.Stats;
-using FinancialStructures.DataExporters.ExportOptions;
 using FinancialStructures.Statistics;
 
 namespace FinancePortfolioDatabase.GUI.Configuration
@@ -9,81 +9,33 @@ namespace FinancePortfolioDatabase.GUI.Configuration
     /// <summary>
     /// Configuration for the stats display
     /// </summary>
-    public sealed class StatsOptionsDisplayConfiguration
+    public sealed class StatsOptionsDisplayConfiguration : IConfiguration
     {
-        /// <summary>
-        /// Flag determining whether display has loaded yet.
-        /// </summary>
+        // Internal configurations to store.
+        private List<Selectable<string>> DisplayConditions = new List<Selectable<string>>();
+        private Statistic SecuritySortingField;
+        private SortDirection SecurityDirection;
+        private List<Selectable<Statistic>> SecurityColumnNames = new List<Selectable<Statistic>>();
+        private Statistic BankSortingField;
+        private SortDirection BankDirection;
+        private List<Selectable<Statistic>> BankColumnNames = new List<Selectable<Statistic>>();
+        private Statistic SectorSortingField;
+        private SortDirection SectorDirection;
+        private List<Selectable<Statistic>> SectorColumnNames = new List<Selectable<Statistic>>();
+
+        /// <inheritdoc/>
         public bool HasLoaded
         {
             get;
             set;
         }
 
-        public UserDisplayOptions SelectOptions
+        /// <inheritdoc/>
+        public Dictionary<string, IConfiguration> ChildConfigurations
         {
             get;
             set;
         }
-
-        public List<Selectable<string>> DisplayConditions
-        {
-            get;
-            set;
-        } = new List<Selectable<string>>();
-
-        public Statistic SecuritySortingField
-        {
-            get;
-            set;
-        }
-
-        public SortDirection SecurityDirection
-        {
-            get;
-            set;
-        }
-
-        public List<Selectable<Statistic>> SecurityColumnNames
-        {
-            get; set;
-        } = new List<Selectable<Statistic>>();
-
-        public Statistic BankSortingField
-        {
-            get;
-            set;
-        }
-
-        public SortDirection BankDirection
-        {
-            get;
-            set;
-        }
-
-        public List<Selectable<Statistic>> BankColumnNames
-        {
-            get;
-            set;
-        } = new List<Selectable<Statistic>>();
-
-        public Statistic SectorSortingField
-        {
-            get;
-            set;
-        }
-
-        public SortDirection SectorDirection
-        {
-            get;
-            set;
-        }
-
-        public List<Selectable<Statistic>> SectorColumnNames
-        {
-            get;
-            set;
-        } = new List<Selectable<Statistic>>();
 
 
         /// <summary>
@@ -93,29 +45,52 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         {
         }
 
-        internal void StoreConfiguration(StatsOptionsViewModel viewModel)
+        /// <inheritdoc/>
+        public void StoreConfiguration(object viewModel)
         {
-            SecurityColumnNames = viewModel.SecurityColumnNames;
-            SecuritySortingField = viewModel.SecuritySortingField;
-            SectorColumnNames = viewModel.SectorColumnNames;
-            SectorSortingField = viewModel.SectorSortingField;
-            BankColumnNames = viewModel.BankColumnNames;
-            BankSortingField = viewModel.BankSortingField;
-            DisplayConditions = viewModel.DisplayConditions;
+            if (viewModel is StatsOptionsViewModel vm)
+            {
+                SecurityColumnNames = vm.SecurityColumnNames;
+                SecuritySortingField = vm.SecuritySortingField;
+                SecurityDirection = vm.SecurityDirection;
+                SectorColumnNames = vm.SectorColumnNames;
+                SectorSortingField = vm.SectorSortingField;
+                SectorDirection = vm.SectorDirection;
+                BankColumnNames = vm.BankColumnNames;
+                BankSortingField = vm.BankSortingField;
+                BankDirection = vm.BankDirection;
+                DisplayConditions = vm.DisplayConditions;
+            }
         }
 
-        internal void RestoreFromConfiguration(StatsOptionsViewModel viewModel)
+        /// <inheritdoc/>
+        public void RestoreFromConfiguration(object viewModel)
         {
-            if (HasLoaded)
+            if (HasLoaded && viewModel is StatsOptionsViewModel vm)
             {
-                viewModel.SecurityColumnNames = SecurityColumnNames;
-                viewModel.SecuritySortingField = SecuritySortingField;
-                viewModel.SectorColumnNames = SectorColumnNames;
-                viewModel.SectorSortingField = SectorSortingField;
-                viewModel.BankColumnNames = BankColumnNames;
-                viewModel.BankSortingField = BankSortingField;
-                viewModel.DisplayConditions = DisplayConditions;
+                vm.SecurityColumnNames = SecurityColumnNames;
+                vm.SecuritySortingField = SecuritySortingField;
+                vm.SecurityDirection = SecurityDirection;
+                vm.SectorColumnNames = SectorColumnNames;
+                vm.SectorSortingField = SectorSortingField;
+                vm.SectorDirection = SectorDirection;
+                vm.BankColumnNames = BankColumnNames;
+                vm.BankSortingField = BankSortingField;
+                vm.BankDirection = BankDirection;
+                vm.DisplayConditions = DisplayConditions;
             }
+        }
+
+        /// <inheritdoc/>
+        public void LoadConfiguration(string filePath, IFileSystem fileSystem)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        /// <inheritdoc/>
+        public void SaveConfiguration(string filePath, IFileSystem fileSystem)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
