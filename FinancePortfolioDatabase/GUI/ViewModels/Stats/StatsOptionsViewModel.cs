@@ -18,9 +18,12 @@ using FinancePortfolioDatabase.GUI.Configuration;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
+    /// <summary>
+    /// View model for the stats options page.
+    /// </summary>
     public class StatsOptionsViewModel : PropertyChangedBase
     {
-        private IConfiguration fUserConfiguration;
+        private readonly IConfiguration fUserConfiguration;
         private readonly IPortfolio Portfolio;
 
         private List<Selectable<string>> fDisplayConditions = new List<Selectable<string>>();

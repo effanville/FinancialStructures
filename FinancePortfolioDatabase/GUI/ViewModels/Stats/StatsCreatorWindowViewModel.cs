@@ -16,11 +16,22 @@ using FinancePortfolioDatabase.GUI.Configuration;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
+    /// <summary>
+    /// View model for the statistics display.
+    /// </summary>
     public class StatsCreatorWindowViewModel : DataDisplayViewModelBase
     {
-        private IConfiguration fUserConfiguration;
+        private readonly IConfiguration fUserConfiguration;
         private readonly UiGlobals fUiGlobals;
-        public ObservableCollection<object> StatsTabs { get; set; } = new ObservableCollection<object>();
+
+        /// <summary>
+        /// The tabs to display in the window.
+        /// </summary>
+        public ObservableCollection<object> StatsTabs
+        {
+            get;
+            set;
+        } = new ObservableCollection<object>();
 
         private bool fDisplayValueFunds = true;
 
@@ -29,19 +40,22 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             get => fDisplayValueFunds;
             set
             {
-                fDisplayValueFunds = value;
-                OnPropertyChanged();
+                SetAndNotify(ref fDisplayValueFunds, value, nameof(DisplayValueFunds));
                 UpdateData();
             }
         }
 
         public int HistoryGapDays
         {
-            get; set;
+            get;
+            set;
         } = 20;
 
         private readonly IReportLogger ReportLogger;
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public StatsCreatorWindowViewModel(IPortfolio portfolio, IReportLogger reportLogger, UiGlobals globals, IConfiguration userConfiguration)
             : base("Stats Creator", Account.All, portfolio)
         {
@@ -57,10 +71,17 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             ExportHistoryCommand = new RelayCommand(ExecuteCreateHistory);
         }
 
+        /// <summary>
+        /// Command to create a csv list of all investments.
+        /// </summary>
         public ICommand CreateInvestmentListCommand
         {
             get;
         }
+
+        /// <summary>
+        /// Command to create a statistics object.
+        /// </summary>
         public ICommand CreateStatsCommand
         {
             get;
@@ -110,16 +131,12 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
         private void ExecuteCreateStatsCommand()
         {
-            Action<string> StatsOptionFeedback = filePath => StatsFeedback(filePath);
+            void StatsOptionFeedback(string filePath) => LoadTab(TabType.StatsViewer, filePath);
             StatsOptionsViewModel context = new StatsOptionsViewModel(DataStore, ReportLogger, StatsOptionFeedback, fUiGlobals, fUserConfiguration.ChildConfigurations[StatsDisplayConfiguration.StatsOptions]);
             fUiGlobals.DialogCreationService.DisplayCustomDialog(context);
         }
 
-        private void StatsFeedback(string filePath)
-        {
-            LoadTab(TabType.StatsViewer, filePath);
-        }
-
+        /// <inheritdoc/>
         public override void UpdateData(IPortfolio portfolio = null)
         {
             base.UpdateData(portfolio);
@@ -133,37 +150,31 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
         }
 
-        private Action<TabType, string> OpenTab
-        {
-            get
-            {
-                return (tabtype, filepath) => LoadTab(tabtype, filepath);
-            }
-        }
+        private Action<TabType, string> OpenTab => (tabtype, filepath) => LoadTab(tabtype, filepath);
 
         private void LoadTab(TabType tabType, string filepath)
         {
             switch (tabType)
             {
-                case (TabType.Main):
+                case TabType.Main:
                     StatsTabs.Add(new MainTabViewModel(OpenTab));
                     return;
-                case (TabType.SecurityStats):
+                case TabType.SecurityStats:
                     StatsTabs.Add(new AccountStatisticsViewModel(DataStore, Account.Security, DisplayValueFunds));
                     return;
-                case (TabType.SecurityInvestment):
+                case TabType.SecurityInvestment:
                     StatsTabs.Add(new SecurityInvestmentViewModel(DataStore, DisplayValueFunds));
                     return;
-                case (TabType.BankAccountStats):
+                case TabType.BankAccountStats:
                     StatsTabs.Add(new AccountStatisticsViewModel(DataStore, Account.BankAccount, DisplayValueFunds));
                     return;
-                case (TabType.PortfolioHistory):
+                case TabType.PortfolioHistory:
                     StatsTabs.Add(new PortfolioHistoryViewModel(DataStore, DisplayValueFunds));
                     return;
-                case (TabType.StatsCharts):
+                case TabType.StatsCharts:
                     StatsTabs.Add(new StatisticsChartsViewModel(DataStore, DisplayValueFunds));
                     return;
-                case (TabType.StatsViewer):
+                case TabType.StatsViewer:
                     StatsTabs.Add(new HtmlStatsViewerViewModel(DataStore, DisplayValueFunds, filepath));
                     return;
             }
