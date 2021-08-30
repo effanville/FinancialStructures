@@ -67,18 +67,36 @@ namespace FinancialStructures.Database.Implementation
 
                     return sum;
                 }
-                case Totals.Sector:
+                case Totals.SecuritySector:
                 {
                     double sum = 0;
                     foreach (ISecurity fund in FundsThreadSafe)
                     {
-                        if (fund.IsSectorLinked(names?.Company))
+                        if (fund.IsSectorLinked(names?.Name))
                         {
                             sum += fund.NearestEarlierValuation(date).Value;
                         }
                     }
 
                     return sum;
+                }
+                case Totals.BankAccountSector:
+                {
+                    double sum = 0;
+
+                    foreach (ICashAccount fund in BankAccountsThreadSafe)
+                    {
+                        if (fund.IsSectorLinked(names?.Name))
+                        {
+                            sum += fund.NearestEarlierValuation(date).Value;
+                        }
+                    }
+
+                    return sum;
+                }
+                case Totals.Sector:
+                {
+                    return TotalValue(Totals.SecuritySector, names) + TotalValue(Totals.BankAccountSector, names);
                 }
                 case Totals.All:
                 {
@@ -123,8 +141,6 @@ namespace FinancialStructures.Database.Implementation
                     return TotalValue(Totals.BankAccount, date, names) + TotalValue(Totals.Security, date, names);
                 }
 
-                case Totals.SecuritySector:
-                case Totals.BankAccountSector:
                 case Totals.CurrencySector:
                 case Totals.SecurityCurrency:
                 case Totals.BankAccountCurrency:
