@@ -60,12 +60,16 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             : base("Stats Creator", Account.All, portfolio)
         {
             fUserConfiguration = userConfiguration;
+            if (fUserConfiguration.HasLoaded)
+            {
+                fUserConfiguration.RestoreFromConfiguration(this);
+            }
+
             fUserConfiguration.HasLoaded = true;
             fUiGlobals = globals;
             ReportLogger = reportLogger;
             StatsTabs.Add(new MainTabViewModel(OpenTab));
             StatsTabs.Add(new AccountStatisticsViewModel(portfolio, Account.All, DisplayValueFunds));
-
             CreateInvestmentListCommand = new RelayCommand(ExecuteInvestmentListCommand);
             CreateStatsCommand = new RelayCommand(ExecuteCreateStatsCommand);
             ExportHistoryCommand = new RelayCommand(ExecuteCreateHistory);
@@ -148,6 +152,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                     vmBase.GenerateStatistics(DisplayValueFunds);
                 }
             }
+            fUserConfiguration.StoreConfiguration(this);
         }
 
         private Action<TabType, string> OpenTab => (tabtype, filepath) => LoadTab(tabtype, filepath);

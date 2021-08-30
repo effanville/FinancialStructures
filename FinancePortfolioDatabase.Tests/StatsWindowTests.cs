@@ -1,4 +1,5 @@
-﻿using FinancePortfolioDatabase.Tests.TestHelpers;
+﻿using FinancePortfolioDatabase.GUI.ViewModels.Stats;
+using FinancePortfolioDatabase.Tests.TestHelpers;
 using NUnit.Framework;
 
 namespace FinancePortfolioDatabase.Tests
@@ -13,9 +14,29 @@ namespace FinancePortfolioDatabase.Tests
         /// The defaults are loaded correctly.
         /// </summary>
         [Test]
-        [Ignore("not yet implemented")]
         public void CanLoadWithNames()
         {
+            Assert.AreEqual(2, ViewModel.StatsTabs.Count);
+            Assert.AreEqual(true, ViewModel.DisplayValueFunds);
+        }
+
+        /// <summary>
+        /// The defaults are loaded correctly.
+        /// </summary>
+        [TestCase(false)]
+        [TestCase(true)]
+        public void CanStoreConfig(bool valueFunds)
+        {
+            Assert.AreEqual(2, ViewModel.StatsTabs.Count);
+            Assert.AreEqual(true, ViewModel.DisplayValueFunds);
+
+            ViewModel.DisplayValueFunds = valueFunds;
+            Assert.AreEqual(valueFunds, ViewModel.DisplayValueFunds);
+
+            ViewModel = new StatsCreatorWindowViewModel(Portfolio, TestSetupHelper.DummyReportLogger, Globals, VMConfiguration);
+
+            Assert.AreEqual(valueFunds, ViewModel.DisplayValueFunds);
+            Assert.AreEqual(2, ViewModel.StatsTabs.Count);
         }
     }
 }
