@@ -274,7 +274,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Returns all Securities related to the given benchmark.
         /// </summary>
-        IReadOnlyList<IValueList> SectorAccounts(Account account, string sectorName);
+        IReadOnlyList<IValueList> SectorAccounts(Account account, TwoName sectorName);
 
         /// <summary>
         /// Returns a copy of the currently held portfolio.

@@ -136,13 +136,13 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         /// <param name="sectorName">The sector to remove.</param>
         /// <returns>Whether removal was successful or not.</returns>
-        bool TryRemoveSector(string sectorName);
+        bool TryRemoveSector(TwoName sectorName);
 
         /// <summary>
         /// Is the sector listed in this <see cref="IValueList"/>
         /// </summary>
         /// <param name="sectorName">The sector to check.</param>
-        bool IsSectorLinked(string sectorName);
+        bool IsSectorLinked(TwoName sectorName);
 
         /// <summary>
         /// The total number of sectors associated to this <see cref="IValueList"/>

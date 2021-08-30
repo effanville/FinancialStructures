@@ -49,7 +49,7 @@ namespace FinancialStructures.Database.Statistics
                 case Totals.Sector:
                 case Totals.SecuritySector:
                 {
-                    foreach (ISecurity sector in portfolio.SectorAccounts(Account.Security, name.Name))
+                    foreach (ISecurity sector in portfolio.SectorAccounts(Account.Security, name))
                     {
                         if (sector.Any() && sector.LatestValue().Day > output)
                         {

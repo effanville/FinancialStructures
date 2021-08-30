@@ -10,14 +10,15 @@ namespace FinancialStructures.Database.Statistics
         /// </summary>
         public static double Fraction(this IPortfolio portfolio, Totals totals, Account account, TwoName names, DateTime date)
         {
-            if (portfolio.TotalValue(totals, date, names) == 0)
+            double totalValue = portfolio.TotalValue(totals, date, names);
+            if (totalValue == 0)
             {
                 return double.NaN;
             }
 
             if (portfolio.Exists(account, names))
             {
-                return portfolio.Value(account, names, date) / portfolio.TotalValue(totals, date, names);
+                return portfolio.Value(account, names, date) / totalValue;
             }
 
             return 0.0;
@@ -29,12 +30,13 @@ namespace FinancialStructures.Database.Statistics
         /// </summary>
         public static double TotalFraction(this IPortfolio portfolio, Totals totals, TwoName names, DateTime date)
         {
-            if (portfolio.TotalValue(Totals.All, date) == 0)
+            double totalValue = portfolio.TotalValue(Totals.All, date);
+            if (totalValue == 0)
             {
                 return double.NaN;
             }
 
-            return portfolio.TotalValue(totals, date, names) / portfolio.TotalValue(Totals.All, date);
+            return portfolio.TotalValue(totals, date, names) / totalValue;
         }
     }
 }
