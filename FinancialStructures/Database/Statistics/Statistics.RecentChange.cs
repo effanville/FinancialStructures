@@ -66,7 +66,7 @@ namespace FinancialStructures.Database.Statistics
                     double total = 0;
                     foreach (ISecurity desired in portfolio.FundsThreadSafe)
                     {
-                        if (desired.IsSectorLinked(names?.Name) && desired.Any())
+                        if (desired.IsSectorLinked(names) && desired.Any())
                         {
                             total += portfolio.RecentChange(elementType.ToAccount(), desired.Names);
                         }
@@ -79,7 +79,7 @@ namespace FinancialStructures.Database.Statistics
                     double total = 0;
                     foreach (ICashAccount desired in portfolio.BankAccountsThreadSafe)
                     {
-                        if (desired.IsSectorLinked(names?.Name) && desired.Any())
+                        if (desired.IsSectorLinked(names) && desired.Any())
                         {
                             total += portfolio.RecentChange(elementType.ToAccount(), desired.Names);
                         }

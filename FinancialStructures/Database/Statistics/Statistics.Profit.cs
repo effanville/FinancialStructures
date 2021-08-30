@@ -76,7 +76,7 @@ namespace FinancialStructures.Database.Statistics
                 case Totals.Sector:
                 case Totals.SecuritySector:
                 {
-                    foreach (ISecurity security in portfolio.SectorAccounts(Account.Security, names.Name))
+                    foreach (ISecurity security in portfolio.SectorAccounts(Account.Security, names))
                     {
                         if (security.Any())
                         {

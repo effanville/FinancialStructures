@@ -72,7 +72,7 @@ namespace FinancialStructures.Database.Implementation
                     double sum = 0;
                     foreach (ISecurity fund in FundsThreadSafe)
                     {
-                        if (fund.IsSectorLinked(names?.Name))
+                        if (fund.IsSectorLinked(names))
                         {
                             sum += fund.NearestEarlierValuation(date).Value;
                         }
@@ -86,7 +86,7 @@ namespace FinancialStructures.Database.Implementation
 
                     foreach (ICashAccount fund in BankAccountsThreadSafe)
                     {
-                        if (fund.IsSectorLinked(names?.Name))
+                        if (fund.IsSectorLinked(names))
                         {
                             sum += fund.NearestEarlierValuation(date).Value;
                         }

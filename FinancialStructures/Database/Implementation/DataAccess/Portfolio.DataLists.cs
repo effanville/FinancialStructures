@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Implementation;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Implementation
 {
@@ -90,7 +91,7 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
-        public IReadOnlyList<IValueList> SectorAccounts(Account account, string sectorName)
+        public IReadOnlyList<IValueList> SectorAccounts(Account account, TwoName sectorName)
         {
             List<IValueList> accountList = new List<IValueList>();
             switch (account)

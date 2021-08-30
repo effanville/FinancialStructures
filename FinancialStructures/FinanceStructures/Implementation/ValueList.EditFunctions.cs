@@ -84,11 +84,11 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public bool TryRemoveSector(string sectorName)
+        public bool TryRemoveSector(TwoName sectorName)
         {
             if (IsSectorLinked(sectorName))
             {
-                _ = Names.Sectors.Remove(sectorName);
+                _ = Names.Sectors.Remove(sectorName.Name);
                 OnDataEdit(this, new EventArgs());
                 return true;
             }
@@ -97,13 +97,13 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public bool IsSectorLinked(string sectorName)
+        public bool IsSectorLinked(TwoName sectorName)
         {
             if (Names.Sectors != null && Names.Sectors.Any())
             {
                 foreach (string name in Names.Sectors)
                 {
-                    if (name == sectorName)
+                    if (name == sectorName.Name)
                     {
                         return true;
                     }

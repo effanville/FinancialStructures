@@ -77,7 +77,7 @@ namespace FinancialStructures.Database.Statistics
                 case Totals.Sector:
                 case Totals.SecuritySector:
                 {
-                    IReadOnlyList<IValueList> securities = portfolio.SectorAccounts(Account.Security, name.Name);
+                    IReadOnlyList<IValueList> securities = portfolio.SectorAccounts(Account.Security, name);
                     if (securities.Count == 0)
                     {
                         return double.NaN;
