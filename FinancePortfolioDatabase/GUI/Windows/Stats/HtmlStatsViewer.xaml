@@ -10,8 +10,8 @@
              d:DesignWidth="800">
     <Grid Width="Auto"
           Height="Auto"
-          MinHeight="400"
           VerticalAlignment="Stretch"
+          HorizontalAlignment="Stretch"
           Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
