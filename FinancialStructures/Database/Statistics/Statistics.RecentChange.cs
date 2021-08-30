@@ -10,7 +10,7 @@ namespace FinancialStructures.Database.Statistics
         /// <summary>
         /// returns the total profit in the portfolio.
         /// </summary>
-        public static double RecentChange(this IPortfolio portfolio, Totals elementType = Totals.Security, string company = null)
+        public static double RecentChange(this IPortfolio portfolio, Totals elementType = Totals.Security, TwoName names = null)
         {
             switch (elementType)
             {
@@ -35,7 +35,7 @@ namespace FinancialStructures.Database.Statistics
                 {
                     double total = 0;
 
-                    IReadOnlyList<IValueList> securities = portfolio.CompanyAccounts(Account.Security, company);
+                    IReadOnlyList<IValueList> securities = portfolio.CompanyAccounts(Account.Security, names?.Company);
                     if (securities.Count == 0)
                     {
                         return double.NaN;
@@ -60,6 +60,36 @@ namespace FinancialStructures.Database.Statistics
                     }
 
                     return total;
+                }
+                case Totals.SecuritySector:
+                {
+                    double total = 0;
+                    foreach (ISecurity desired in portfolio.FundsThreadSafe)
+                    {
+                        if (desired.IsSectorLinked(names?.Name) && desired.Any())
+                        {
+                            total += portfolio.RecentChange(elementType.ToAccount(), desired.Names);
+                        }
+                    }
+
+                    return total;
+                }
+                case Totals.BankAccountSector:
+                {
+                    double total = 0;
+                    foreach (ICashAccount desired in portfolio.BankAccountsThreadSafe)
+                    {
+                        if (desired.IsSectorLinked(names?.Name) && desired.Any())
+                        {
+                            total += portfolio.RecentChange(elementType.ToAccount(), desired.Names);
+                        }
+                    }
+
+                    return total;
+                }
+                case Totals.Sector:
+                {
+                    return portfolio.RecentChange(Totals.BankAccountSector, names) + portfolio.RecentChange(Totals.SecuritySector, names);
                 }
                 default:
                 {
