@@ -7,9 +7,13 @@ using FinancialStructures.Database;
 using Common.Structure.Reporting;
 using Common.UI.ViewModelBases;
 using Common.UI;
+using FinancePortfolioDatabase.GUI.Configuration;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {
+    /// <summary>
+    /// View model for the entire display.
+    /// </summary>
     public class MainWindowViewModel : PropertyChangedBase
     {
         internal IPortfolio ProgramPortfolio = PortfolioFactory.GenerateEmpty();
@@ -19,15 +23,16 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         /// </summary>
         internal readonly IReportLogger ReportLogger;
         private readonly UiGlobals fUiGlobals;
+        private readonly IConfiguration fUserConfiguration;
 
         private OptionsToolbarViewModel fOptionsToolbarCommands;
 
+        /// <summary>
+        /// view model for the top toolbar.
+        /// </summary>
         public OptionsToolbarViewModel OptionsToolbarCommands
         {
-            get
-            {
-                return fOptionsToolbarCommands;
-            }
+            get => fOptionsToolbarCommands;
             set
             {
                 fOptionsToolbarCommands = value;
@@ -37,12 +42,12 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
 
         private ReportingWindowViewModel fReports;
 
+        /// <summary>
+        /// View model for the reports view.
+        /// </summary>
         public ReportingWindowViewModel ReportsViewModel
         {
-            get
-            {
-                return fReports;
-            }
+            get => fReports;
             set
             {
                 fReports = value;
@@ -55,16 +60,20 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         /// </summary>
         public List<object> Tabs { get; } = new List<object>(6);
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public MainWindowViewModel(UiGlobals globals)
         {
             ReportsViewModel = new ReportingWindowViewModel(globals.FileInteractionService);
             ReportLogger = new LogReporter(UpdateReport);
             fUiGlobals = globals;
             fUiGlobals.ReportLogger = ReportLogger;
+            fUserConfiguration = new UserConfiguration();
 
             OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, fUiGlobals);
             Tabs.Add(new BasicDataViewModel(ProgramPortfolio, fUiGlobals));
-            Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, fUiGlobals));
+            Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, fUiGlobals, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsDisplay]));
             Tabs.Add(new SecurityEditWindowViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, fUiGlobals));
             Tabs.Add(new ValueListWindowViewModel("Bank Accounts", ProgramPortfolio, UpdateDataCallback, fUiGlobals, Account.BankAccount));
             Tabs.Add(new ValueListWindowViewModel("Benchmarks", ProgramPortfolio, UpdateDataCallback, fUiGlobals, Account.Benchmark));
@@ -94,7 +103,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
         }
 
-        public void UpdateReport(ReportSeverity severity, ReportType type, ReportLocation location, string message)
+        private void UpdateReport(ReportSeverity severity, ReportType type, ReportLocation location, string message)
         {
             ReportsViewModel?.UpdateReport(severity, type, location, message);
         }
@@ -102,12 +111,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         /// <summary>
         /// The mechanism by which the data in <see cref="ProgramPortfolio"/> is updated. This includes a GUI update action.
         /// </summary>
-        private Action<Action<IPortfolio>> UpdateDataCallback
-        {
-            get
-            {
-                return action => action(ProgramPortfolio);
-            }
-        }
+        private Action<Action<IPortfolio>> UpdateDataCallback => action => action(ProgramPortfolio);
     }
 }

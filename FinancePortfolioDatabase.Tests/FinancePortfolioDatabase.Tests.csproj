@@ -8,7 +8,7 @@
   <Import Project="..\Build\CommonProperties.Build.props" />
 
   <ItemGroup>
-    <PackageReference Include="Common.UI" Version="1.0.7" />
+    <PackageReference Include="Common.UI" Version="1.0.8" />
     <PackageReference Include="Moq" Version="4.16.1" />
     <PackageReference Include="nunit" Version="3.13.2" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.0.0">

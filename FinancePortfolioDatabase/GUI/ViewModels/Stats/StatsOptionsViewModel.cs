@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Input;
 using FinancialStructures.Database;
 using FinancialStructures.DataExporters;
@@ -15,203 +14,91 @@ using Common.UI.Interfaces;
 using Common.UI.Services;
 using Common.UI.ViewModelBases;
 using Common.UI;
+using FinancePortfolioDatabase.GUI.Configuration;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
-    internal class StatsOptionsViewModel : PropertyChangedBase
+    /// <summary>
+    /// View model for the stats options page.
+    /// </summary>
+    public class StatsOptionsViewModel : PropertyChangedBase
     {
+        private readonly IConfiguration fUserConfiguration;
         private readonly IPortfolio Portfolio;
-
-        private UserDisplayOptions fSelectOptions;
-
-        public UserDisplayOptions SelectOptions
-        {
-            get
-            {
-                return fSelectOptions;
-            }
-            set
-            {
-                fSelectOptions = value;
-                OnPropertyChanged();
-            }
-        }
 
         private List<Selectable<string>> fDisplayConditions = new List<Selectable<string>>();
 
         public List<Selectable<string>> DisplayConditions
         {
-            get
-            {
-                return fDisplayConditions;
-            }
-            set
-            {
-                fDisplayConditions = value;
-                OnPropertyChanged();
-            }
+            get => fDisplayConditions;
+            set => SetAndNotify(ref fDisplayConditions, value, nameof(DisplayConditions));
         }
 
         private Statistic fSecuritySortingField;
         public Statistic SecuritySortingField
         {
-            get
-            {
-                return fSecuritySortingField;
-            }
-            set
-            {
-                fSecuritySortingField = value;
-                OnPropertyChanged(nameof(SecuritySortingField));
-            }
+            get => fSecuritySortingField;
+            set => SetAndNotify(ref fSecuritySortingField, value, nameof(SecuritySortingField));
         }
 
         private SortDirection fSecurityDirection;
         public SortDirection SecurityDirection
         {
-            get
-            {
-                return fSecurityDirection;
-            }
-            set
-            {
-                fSecurityDirection = value;
-                OnPropertyChanged(nameof(SecurityDirection));
-            }
+            get => fSecurityDirection;
+            set => SetAndNotify(ref fSecurityDirection, value, nameof(SecurityDirection));
         }
 
         private List<Selectable<Statistic>> fSecurityColumnNames = new List<Selectable<Statistic>>();
 
         public List<Selectable<Statistic>> SecurityColumnNames
         {
-            get
-            {
-                return fSecurityColumnNames;
-            }
-            set
-            {
-                fSecurityColumnNames = value;
-                OnPropertyChanged();
-            }
+            get => fSecurityColumnNames;
+            set => SetAndNotify(ref fSecurityColumnNames, value, nameof(SecurityColumnNames));
         }
 
         private Statistic fBankSortingField;
         public Statistic BankSortingField
         {
-            get
-            {
-                return fBankSortingField;
-            }
-            set
-            {
-                fBankSortingField = value;
-                OnPropertyChanged(nameof(BankSortingField));
-            }
+            get => fBankSortingField;
+            set => SetAndNotify(ref fBankSortingField, value, nameof(BankSortingField));
         }
 
         private SortDirection fBankDirection;
         public SortDirection BankDirection
         {
-            get
-            {
-                return fBankDirection;
-            }
-            set
-            {
-                fBankDirection = value;
-                OnPropertyChanged(nameof(BankDirection));
-            }
+            get => fBankDirection;
+            set => SetAndNotify(ref fBankDirection, value, nameof(BankDirection));
         }
 
         private List<Selectable<Statistic>> fBankColumnNames = new List<Selectable<Statistic>>();
 
         public List<Selectable<Statistic>> BankColumnNames
         {
-            get
-            {
-                return fBankColumnNames;
-            }
-            set
-            {
-                fBankColumnNames = value;
-                OnPropertyChanged();
-            }
+            get => fBankColumnNames;
+            set => SetAndNotify(ref fBankColumnNames, value, nameof(BankColumnNames));
         }
 
         private Statistic fSectorSortingField;
         public Statistic SectorSortingField
         {
-            get
-            {
-                return fSectorSortingField;
-            }
-            set
-            {
-                fSectorSortingField = value;
-                OnPropertyChanged(nameof(SectorSortingField));
-            }
+            get => fSectorSortingField;
+            set => SetAndNotify(ref fSectorSortingField, value, nameof(SectorSortingField));
         }
 
 
         private SortDirection fSectorDirection;
         public SortDirection SectorDirection
         {
-            get
-            {
-                return fSectorDirection;
-            }
-            set
-            {
-                fSectorDirection = value;
-                OnPropertyChanged(nameof(SectorDirection));
-            }
+            get => fSectorDirection;
+            set => SetAndNotify(ref fSectorDirection, value, nameof(SectorDirection));
         }
 
         private List<Selectable<Statistic>> fSectorColumnNames = new List<Selectable<Statistic>>();
 
         public List<Selectable<Statistic>> SectorColumnNames
         {
-            get
-            {
-                return fSectorColumnNames;
-            }
-            set
-            {
-                fSectorColumnNames = value;
-                OnPropertyChanged();
-            }
-        }
-
-        public static List<Statistic> SecurityFieldNames
-        {
-            get
-            {
-                return AccountStatisticsHelpers.AllStatistics().ToList();
-            }
-        }
-
-        public static List<Statistic> BankFieldNames
-        {
-            get
-            {
-                return AccountStatisticsHelpers.DefaultBankAccountStats().ToList();
-            }
-        }
-
-        public static List<Statistic> SectorFieldNames
-        {
-            get
-            {
-                return AccountStatisticsHelpers.DefaultSectorStats().ToList();
-            }
-        }
-
-        public static List<SortDirection> SortDirections
-        {
-            get
-            {
-                return Enum.GetValues(typeof(SortDirection)).Cast<SortDirection>().ToList();
-            }
+            get => fSectorColumnNames;
+            set => SetAndNotify(ref fSectorColumnNames, value, nameof(SectorColumnNames));
         }
 
         public ICommand ExportCommand
@@ -221,6 +108,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
         private void ExecuteExportCommand(ICloseable window)
         {
+            fUserConfiguration.StoreConfiguration(this);
             FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile(ExportType.Html.ToString(), Portfolio.DatabaseName(fUiGlobals.CurrentFileSystem), Portfolio.Directory(fUiGlobals.CurrentFileSystem), "Html Files|*.html|CSV Files|*.csv|All Files|*.*");
             string path = null;
 
@@ -278,42 +166,51 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         private readonly Action<string> CloseWindowAction;
         private readonly UiGlobals fUiGlobals;
 
-        public StatsOptionsViewModel(IPortfolio portfolio, IReportLogger reportLogger, Action<string> CloseWindow, UiGlobals uiGlobals)
+        public StatsOptionsViewModel(IPortfolio portfolio, IReportLogger reportLogger, Action<string> CloseWindow, UiGlobals uiGlobals, IConfiguration userConfiguration)
         {
             fUiGlobals = uiGlobals;
+            fUserConfiguration = userConfiguration;
             Portfolio = portfolio;
             ReportLogger = reportLogger;
             CloseWindowAction = CloseWindow;
             ExportCommand = new RelayCommand<ICloseable>(ExecuteExportCommand);
-
-            foreach (Statistic stat in AccountStatisticsHelpers.AllStatistics())
+            if (fUserConfiguration.HasLoaded)
             {
-                SecurityColumnNames.Add(new Selectable<Statistic>(stat, true));
+                fUserConfiguration.RestoreFromConfiguration(this);
             }
-
-            SecuritySortingField = Statistic.Company;
-
-            foreach (Statistic stat in AccountStatisticsHelpers.DefaultSectorStats())
+            else
             {
-                SectorColumnNames.Add(new Selectable<Statistic>(stat, true));
+                foreach (Statistic stat in AccountStatisticsHelpers.AllStatistics())
+                {
+                    SecurityColumnNames.Add(new Selectable<Statistic>(stat, true));
+                }
+
+                SecuritySortingField = Statistic.Company;
+
+                foreach (Statistic stat in AccountStatisticsHelpers.DefaultSectorStats())
+                {
+                    SectorColumnNames.Add(new Selectable<Statistic>(stat, true));
+                }
+
+                SectorSortingField = Statistic.Name;
+
+                foreach (Statistic stat in AccountStatisticsHelpers.DefaultBankAccountStats())
+                {
+                    BankColumnNames.Add(new Selectable<Statistic>(stat, true));
+                }
+
+                BankSortingField = Statistic.Company;
+
+                DisplayConditions.Add(new Selectable<string>("DisplayValueFunds", true));
+                DisplayConditions.Add(new Selectable<string>("Spacing", true));
+                DisplayConditions.Add(new Selectable<string>("Colours", true));
+                DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowSecurities, true));
+                DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowBankAccounts, true));
+                DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowSectors, true));
+                DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowBenchmarks, false));
+
+                fUserConfiguration.HasLoaded = true;
             }
-
-            SectorSortingField = Statistic.Name;
-
-            foreach (Statistic stat in AccountStatisticsHelpers.DefaultBankAccountStats())
-            {
-                BankColumnNames.Add(new Selectable<Statistic>(stat, true));
-            }
-
-            BankSortingField = Statistic.Company;
-
-            DisplayConditions.Add(new Selectable<string>("DisplayValueFunds", true));
-            DisplayConditions.Add(new Selectable<string>("Spacing", true));
-            DisplayConditions.Add(new Selectable<string>("Colours", true));
-            DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowSecurities, true));
-            DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowBankAccounts, true));
-            DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowSectors, true));
-            DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowBenchmarks, false));
         }
     }
 }

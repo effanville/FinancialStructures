@@ -5,6 +5,7 @@ using Common.UI.Services;
 using System.IO.Abstractions;
 using FinancePortfolioDatabase.GUI.ViewModels.Stats;
 using Common.UI;
+using FinancePortfolioDatabase.GUI.Configuration;
 
 namespace FinancePortfolioDatabase.Tests.TestHelpers
 {
@@ -19,6 +20,18 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
         protected StatsCreatorWindowViewModel ViewModel
         {
             get;
+            set;
+        }
+
+        protected UiGlobals Globals
+        {
+            get;
+            private set;
+        }
+
+        protected IConfiguration VMConfiguration
+        {
+            get;
             private set;
         }
 
@@ -27,10 +40,11 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
         {
             Mock<IFileInteractionService> fileMock = TestSetupHelper.CreateFileMock("nothing");
             Mock<IDialogCreationService> dialogMock = TestSetupHelper.CreateDialogMock();
-            Portfolio = TestSetupHelper.CreateEmptyDataBase();
+            Portfolio = TestSetupHelper.CreateBasicDataBase();
 
-            UiGlobals globals = TestSetupHelper.CreateGlobalsMock(new FileSystem(), fileMock.Object, dialogMock.Object);
-            ViewModel = new StatsCreatorWindowViewModel(Portfolio, TestSetupHelper.DummyReportLogger, globals);
+            Globals = TestSetupHelper.CreateGlobalsMock(new FileSystem(), fileMock.Object, dialogMock.Object);
+            VMConfiguration = new StatsDisplayConfiguration();
+            ViewModel = new StatsCreatorWindowViewModel(Portfolio, TestSetupHelper.DummyReportLogger, Globals, VMConfiguration);
         }
 
         [TearDown]

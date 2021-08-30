@@ -14,6 +14,9 @@ using Common.UI;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {
+    /// <summary>
+    /// View model for the top toolbar.
+    /// </summary>
     public class OptionsToolbarViewModel : ViewModelBase<IPortfolio>
     {
         private string fFileName;
@@ -23,12 +26,12 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         private readonly IReportLogger fReportLogger;
         private string fBaseCurrency;
 
+        /// <summary>
+        /// The base currency to display in the top dropdown.
+        /// </summary>
         public string BaseCurrency
         {
-            get
-            {
-                return fBaseCurrency;
-            }
+            get => fBaseCurrency;
             set
             {
                 SetAndNotify(ref fBaseCurrency, value, nameof(BaseCurrency));
@@ -38,18 +41,18 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
 
         private List<string> fCurrencies;
 
+        /// <summary>
+        /// The currencies to populate the dropdown with.
+        /// </summary>
         public List<string> Currencies
         {
-            get
-            {
-                return fCurrencies;
-            }
-            set
-            {
-                SetAndNotify(ref fCurrencies, value, nameof(Currencies));
-            }
+            get => fCurrencies;
+            set => SetAndNotify(ref fCurrencies, value, nameof(Currencies));
         }
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public OptionsToolbarViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, UiGlobals globals)
             : base("Options", portfolio)
         {
@@ -67,7 +70,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             RefreshCommand = new RelayCommand(ExecuteRefresh);
             CurrencyDropDownClosed = new RelayCommand(DropDownClosed);
         }
-
 
         public override void UpdateData(IPortfolio portfolio)
         {

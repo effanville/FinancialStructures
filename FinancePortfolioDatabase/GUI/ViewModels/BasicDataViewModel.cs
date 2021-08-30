@@ -17,23 +17,14 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         private string fPortfolioNameText;
         public string PortfolioNameText
         {
-            get
-            {
-                return fPortfolioNameText;
-            }
-            set
-            {
-                SetAndNotify(ref fPortfolioNameText, value, nameof(PortfolioNameText));
-            }
+            get => fPortfolioNameText;
+            set => SetAndNotify(ref fPortfolioNameText, value, nameof(PortfolioNameText));
         }
 
         private bool fHasValues;
         public bool HasValues
         {
-            get
-            {
-                return fHasValues;
-            }
+            get => fHasValues;
             set
             {
                 if (fHasValues != value)
@@ -45,47 +36,28 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
         }
 
-        public bool NoValues
-        {
-            get
-            {
-                return !fHasValues;
-            }
-        }
+        public bool NoValues => !fHasValues;
 
         private string fSecurityTotalText;
         public string SecurityTotalText
         {
-            get
-            {
-                return fSecurityTotalText;
-            }
-            set
-            {
-                SetAndNotify(ref fSecurityTotalText, value, nameof(SecurityTotalText));
-            }
+            get => fSecurityTotalText;
+
+            set => SetAndNotify(ref fSecurityTotalText, value, nameof(SecurityTotalText));
+
         }
 
         private string fSecurityAmountText;
         public string SecurityAmountText
         {
-            get
-            {
-                return fSecurityAmountText;
-            }
-            set
-            {
-                SetAndNotify(ref fSecurityAmountText, value, nameof(SecurityAmountText));
-            }
+            get => fSecurityAmountText;
+            set => SetAndNotify(ref fSecurityAmountText, value, nameof(SecurityAmountText));
         }
 
         private List<Labelled<TwoName, DailyValuation>> fTopSecurities;
         public List<Labelled<TwoName, DailyValuation>> TopSecurities
         {
-            get
-            {
-                return fTopSecurities;
-            }
+            get => fTopSecurities;
             set
             {
                 if (fTopSecurities != value)
@@ -99,40 +71,22 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         private string fBankAccountTotalText;
         public string BankAccountTotalText
         {
-            get
-            {
-                return fBankAccountTotalText;
-            }
-            set
-            {
-                SetAndNotify(ref fBankAccountTotalText, value, nameof(BankAccountTotalText));
-            }
+            get => fBankAccountTotalText;
+            set => SetAndNotify(ref fBankAccountTotalText, value, nameof(BankAccountTotalText));
         }
 
         private string fBankAccountAmountText;
         public string BankAccountAmountText
         {
-            get
-            {
-                return fBankAccountAmountText;
-            }
-            set
-            {
-                SetAndNotify(ref fBankAccountAmountText, value, nameof(BankAccountAmountText));
-            }
+            get => fBankAccountAmountText;
+            set => SetAndNotify(ref fBankAccountAmountText, value, nameof(BankAccountAmountText));
         }
 
         private List<Labelled<TwoName, DailyValuation>> fTopBankAccounts;
         public List<Labelled<TwoName, DailyValuation>> TopBankAccounts
         {
-            get
-            {
-                return fTopBankAccounts;
-            }
-            set
-            {
-                SetAndNotify(ref fTopBankAccounts, value, nameof(TopBankAccounts));
-            }
+            get => fTopBankAccounts;
+            set => SetAndNotify(ref fTopBankAccounts, value, nameof(TopBankAccounts));
         }
 
         public BasicDataViewModel(IPortfolio portfolio, UiGlobals globals)
