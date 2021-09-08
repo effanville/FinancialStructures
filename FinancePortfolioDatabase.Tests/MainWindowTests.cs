@@ -14,7 +14,7 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void CanSuccessfullyCreateMainViewModel()
         {
-            Assert.AreEqual(6, ViewModel.Tabs.Count);
+            Assert.AreEqual(8, ViewModel.Tabs.Count);
         }
     }
 }

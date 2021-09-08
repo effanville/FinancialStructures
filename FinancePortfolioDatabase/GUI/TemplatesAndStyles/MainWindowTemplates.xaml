@@ -7,7 +7,7 @@
                     xmlns:cvm="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Common"
                     xmlns:viewCommon="clr-namespace:FinancePortfolioDatabase.GUI.Windows"
                     xmlns:viewSecurity="clr-namespace:FinancePortfolioDatabase.GUI.Windows.Security"
-                    xmlns:viewStats="clr-namespace:FinancePortfolioDatabase.GUI.Windows.Stats">
+                    xmlns:statsView="clr-namespace:FinancePortfolioDatabase.GUI.Windows.Stats">
     <DataTemplate DataType="{x:Type vm:BasicDataViewModel}">
         <view:BasicDataView />
     </DataTemplate>
@@ -18,7 +18,25 @@
         <viewCommon:SingleValueEditWindow />
     </DataTemplate>
     <DataTemplate DataType="{x:Type vmStats:StatsCreatorWindowViewModel}">
-        <viewStats:StatsCreatorWindow />
+        <statsView:StatsCreatorWindow />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vmStats:StatsViewModel}">
+        <statsView:StatsUserControl />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vmStats:StatsOptionsViewModel}">
+        <statsView:StatsOptionsWindow />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:HtmlStatsViewerViewModel}">
+        <view:HtmlStatsViewer />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vmStats:StatisticsChartsViewModel}">
+        <statsView:StatisticsCharts />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vmStats:SecurityInvestmentViewModel}">
+        <statsView:SecurityInvestments />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vmStats:PortfolioHistoryViewModel}">
+        <statsView:PortfolioHistory />
     </DataTemplate>
     <DataTemplate DataType="{x:Type vm:ReportingWindowViewModel}">
         <view:ReportingWindow />

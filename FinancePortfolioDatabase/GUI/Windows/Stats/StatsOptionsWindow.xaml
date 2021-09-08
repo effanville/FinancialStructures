@@ -10,7 +10,7 @@
               mc:Ignorable="d"
               Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}"
               Height="450"
-              Width="380"
+              Width="600"
               MinHeight="200"
               MinWidth="200">
     <Grid>
@@ -18,18 +18,12 @@
             <gui:DisplayConstants x:Key="Consts" />
         </Grid.Resources>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" MinWidth="150"/>
+            <ColumnDefinition Width="4*" />
+            <ColumnDefinition Width="*" MinWidth="100"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <TextBlock Margin="5"
@@ -39,7 +33,6 @@
                    Text="Choose the options desired for the export."
                    TextWrapping="Wrap" />
         <ItemsControl Grid.Column="0"
-                      Grid.ColumnSpan="2"
                       Grid.Row="1"
                       ItemsSource="{Binding DisplayConditions}">
             <ItemsControl.ItemTemplate>
@@ -61,7 +54,24 @@
                 Style="{StaticResource ResourceKey=defaultButton}"
                 Command="{Binding ExportCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
-        <TextBlock Margin="5"
+        <Grid Grid.Row="1"
+              Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock Margin="5"
                    Grid.Column="0"
                    Grid.ColumnSpan="3"
                    Grid.Row="2"
@@ -145,5 +155,6 @@
                 </DataTemplate>
             </ComboBox.ItemTemplate>
         </ComboBox>
+        </Grid>
     </Grid>
 </ItemsControl>

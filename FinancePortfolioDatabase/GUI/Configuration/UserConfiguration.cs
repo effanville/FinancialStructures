@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO.Abstractions;
 using FinancePortfolioDatabase.GUI.ViewModels.Stats;
 
@@ -12,7 +13,12 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         /// <summary>
         /// Name of the child configuration for the stats window.
         /// </summary>
-        public const string StatsDisplay = nameof(StatsCreatorWindowViewModel);
+        public const string StatsDisplay = nameof(StatsViewModel);
+
+        /// <summary>
+        /// Name of the child configuration for the StatsOptions window.
+        /// </summary>
+        public const string StatsOptions = nameof(StatsOptionsViewModel);
 
         /// <inheritdoc/>
         public Dictionary<string, IConfiguration> ChildConfigurations
@@ -35,32 +41,33 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         {
             ChildConfigurations = new Dictionary<string, IConfiguration>
             {
-                { StatsDisplay, new StatsDisplayConfiguration() }
+                { StatsDisplay, new StatsDisplayConfiguration() },
+                { StatsOptions, new StatsOptionsDisplayConfiguration() }
             };
         }
 
         /// <inheritdoc/>
         public void StoreConfiguration(object viewModel)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
         public void RestoreFromConfiguration(object viewModel)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
         public void LoadConfiguration(string filePath, IFileSystem fileSystem)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
         public void SaveConfiguration(string filePath, IFileSystem fileSystem)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

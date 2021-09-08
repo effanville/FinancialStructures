@@ -2,7 +2,6 @@
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="DefaultStyles.xaml"/>
         <ResourceDictionary Source="ViewModelToViewDictionary.xaml"/>
-        <ResourceDictionary Source="MainWindowTemplates.xaml"/>
-        <ResourceDictionary Source="DialogTemplates.xaml"/>
+        <ResourceDictionary Source="MainWindowTemplates.xaml" />
     </ResourceDictionary.MergedDictionaries>
 </ResourceDictionary>

@@ -1,16 +1,16 @@
 ﻿using System.Windows.Controls;
 
-namespace FinancePortfolioDatabase.GUI.Windows.Stats
+namespace FinancePortfolioDatabase.GUI.Windows
 {
     /// <summary>
-    /// Interaction logic for StatsWindowMainTab.xaml
+    /// Interaction logic for HtmlStatsViewer.xaml
     /// </summary>
-    public partial class StatsWindowMainTab : UserControl
+    public partial class HtmlStatsViewer : UserControl
     {
         /// <summary>
         /// Construct an instance.
         /// </summary>
-        public StatsWindowMainTab()
+        public HtmlStatsViewer()
         {
             InitializeComponent();
         }

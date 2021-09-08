@@ -10,21 +10,19 @@ using Common.Structure.Extensions;
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
 using Common.UI.Commands;
-using Common.UI.Interfaces;
 using Common.UI.Services;
-using Common.UI.ViewModelBases;
 using Common.UI;
 using FinancePortfolioDatabase.GUI.Configuration;
+using FinancePortfolioDatabase.GUI.ViewModels.Common;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
     /// <summary>
     /// View model for the stats options page.
     /// </summary>
-    public class StatsOptionsViewModel : PropertyChangedBase
+    public class StatsOptionsViewModel : DataDisplayViewModelBase
     {
         private readonly IConfiguration fUserConfiguration;
-        private readonly IPortfolio Portfolio;
 
         private List<Selectable<string>> fDisplayConditions = new List<Selectable<string>>();
 
@@ -106,10 +104,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             get;
         }
 
-        private void ExecuteExportCommand(ICloseable window)
+        private void ExecuteExportCommand()
         {
             fUserConfiguration.StoreConfiguration(this);
-            FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile(ExportType.Html.ToString(), Portfolio.DatabaseName(fUiGlobals.CurrentFileSystem), Portfolio.Directory(fUiGlobals.CurrentFileSystem), "Html Files|*.html|CSV Files|*.csv|All Files|*.*");
+            FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile(ExportType.Html.ToString(), DataStore.DatabaseName(fUiGlobals.CurrentFileSystem), DataStore.Directory(fUiGlobals.CurrentFileSystem), "Html Files|*.html|CSV Files|*.csv|All Files|*.*");
             string path = null;
 
             if (result.Success != null && (bool)result.Success)
@@ -145,7 +143,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
                 UserDisplayOptions options = new UserDisplayOptions(securitySelected, BankSelected, sectorSelected, DisplayConditions, SecuritySortingField, BankSortingField, SectorSortingField, SecurityDirection, BankDirection, SectorDirection);
 
-                PortfolioStatistics stats = new PortfolioStatistics(Portfolio, options, fUiGlobals.CurrentFileSystem);
+                PortfolioStatistics stats = new PortfolioStatistics(DataStore, options, fUiGlobals.CurrentFileSystem);
                 string extension = fUiGlobals.CurrentFileSystem.Path.GetExtension(result.FilePath).Trim('.');
                 ExportType type = extension.ToEnum<ExportType>();
 
@@ -158,22 +156,21 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 _ = ReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.StatisticsPage, "Was not able to create page in place specified.");
             }
 
-            CloseWindowAction(path);
-            window.Close();
+            CloseWindowAction(new HtmlStatsViewerViewModel(DataStore, path));
         }
 
         private readonly IReportLogger ReportLogger;
-        private readonly Action<string> CloseWindowAction;
+        private readonly Action<object> CloseWindowAction;
         private readonly UiGlobals fUiGlobals;
 
-        public StatsOptionsViewModel(IPortfolio portfolio, IReportLogger reportLogger, Action<string> CloseWindow, UiGlobals uiGlobals, IConfiguration userConfiguration)
+        public StatsOptionsViewModel(IPortfolio portfolio, IReportLogger reportLogger, Action<object> CloseWindow, UiGlobals uiGlobals, IConfiguration userConfiguration)
+            : base("", Account.All, portfolio)
         {
             fUiGlobals = uiGlobals;
             fUserConfiguration = userConfiguration;
-            Portfolio = portfolio;
             ReportLogger = reportLogger;
             CloseWindowAction = CloseWindow;
-            ExportCommand = new RelayCommand<ICloseable>(ExecuteExportCommand);
+            ExportCommand = new RelayCommand(ExecuteExportCommand);
             if (fUserConfiguration.HasLoaded)
             {
                 fUserConfiguration.RestoreFromConfiguration(this);
@@ -211,6 +208,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
                 fUserConfiguration.HasLoaded = true;
             }
+        }
+
+        public override void UpdateData(IPortfolio dataToDisplay)
+        {
+            base.UpdateData(dataToDisplay);
         }
     }
 }

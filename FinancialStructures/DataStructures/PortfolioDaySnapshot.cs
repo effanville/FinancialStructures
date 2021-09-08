@@ -196,7 +196,7 @@ namespace FinancialStructures.DataStructures
             IReadOnlyList<string> sectorNames = portfolio.Sectors(Account.Security);
             foreach (string sectorName in sectorNames)
             {
-                var sectorValue = new DailyValuation(date, portfolio.TotalValue(Totals.Sector, date, new TwoName(sectorName)).Truncate());
+                var sectorValue = new DailyValuation(date, portfolio.TotalValue(Totals.Sector, date, new TwoName(null, sectorName)).Truncate());
                 SectorValues.Add(sectorName, sectorValue);
 
                 double sectorCAR = date < portfolio.FirstValueDate(Totals.Sector, new TwoName(null, sectorName)) ? 0.0 : portfolio.IRRTotal(Totals.Sector, portfolio.FirstValueDate(Totals.Sector, new TwoName(null, sectorName)), date, new TwoName(null, sectorName)).Truncate();

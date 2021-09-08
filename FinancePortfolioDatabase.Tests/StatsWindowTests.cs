@@ -4,10 +4,10 @@ using NUnit.Framework;
 
 namespace FinancePortfolioDatabase.Tests
 {
-
     /// <summary>
     /// Tests to ensure that the stats window displays what it should do.
     /// </summary>
+    [TestFixture]
     public class StatsWindowTests : StatsWindowTestHelper
     {
         /// <summary>
@@ -16,8 +16,11 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void CanLoadWithNames()
         {
-            Assert.AreEqual(2, ViewModel.StatsTabs.Count);
-            Assert.AreEqual(true, ViewModel.DisplayValueFunds);
+            Assert.Multiple(() =>
+            {
+                Assert.AreEqual(4, ViewModel.Stats.Count);
+                Assert.AreEqual(true, ViewModel.DisplayValueFunds);
+            });
         }
 
         /// <summary>
@@ -27,16 +30,16 @@ namespace FinancePortfolioDatabase.Tests
         [TestCase(true)]
         public void CanStoreConfig(bool valueFunds)
         {
-            Assert.AreEqual(2, ViewModel.StatsTabs.Count);
+            Assert.AreEqual(4, ViewModel.Stats.Count);
             Assert.AreEqual(true, ViewModel.DisplayValueFunds);
 
             ViewModel.DisplayValueFunds = valueFunds;
             Assert.AreEqual(valueFunds, ViewModel.DisplayValueFunds);
 
-            ViewModel = new StatsCreatorWindowViewModel(Portfolio, TestSetupHelper.DummyReportLogger, Globals, VMConfiguration);
+            ViewModel = new StatsViewModel(Portfolio, TestSetupHelper.DummyReportLogger, Globals, VMConfiguration);
 
             Assert.AreEqual(valueFunds, ViewModel.DisplayValueFunds);
-            Assert.AreEqual(2, ViewModel.StatsTabs.Count);
+            Assert.AreEqual(4, ViewModel.Stats.Count);
         }
     }
 }

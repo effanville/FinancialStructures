@@ -1,0 +1,62 @@
+﻿<statswindow:AutoGenColumnControl  xmlns:statswindow="clr-namespace:Common.UI.DisplayObjects;assembly=Common.UI"
+                                   x:Class="FinancePortfolioDatabase.GUI.Windows.Stats.StatsUserControl"
+                                   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                                   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                                   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                                   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                                   xmlns:cl="clr-namespace:Colouring"
+                                   xmlns:stats="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Stats"
+                                   d:DataContext="{d:DesignInstance Type=stats:StatsViewModel}"
+                                   mc:Ignorable="d"
+                                   VerticalAlignment="Stretch"
+                                   Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <CheckBox Grid.Row="0"
+                  IsChecked="{Binding DisplayValueFunds}"
+                  Margin="10,10,10,10">
+            <TextBlock Text="Only Display Funds with current value"
+                       TextWrapping="Wrap" />
+        </CheckBox>
+        <Grid VerticalAlignment="Stretch"
+              Grid.Row="1"
+              Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <ItemsControl Grid.Row="1"
+                              Margin="5"
+                              ItemsSource="{Binding StatisticNames}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Content="{Binding Instance}"
+                                      Tag="{RelativeSource FindAncestor, AncestorType={x:Type ComboBox}}"
+                                      IsChecked="{Binding Selected}" />
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+            </Grid>
+            <DataGrid Margin="5"
+                      Grid.Column="1"
+                      SelectionUnit="FullRow"
+                      CanUserAddRows="False"
+                      Height="Auto"
+                      IsReadOnly="True"
+                      CanUserDeleteRows="False"
+                      AutoGenerateColumns="True"
+                      AutoGeneratingColumn="OnAutoGeneratingColumn"
+                      GridLinesVisibility="None"
+                      ScrollViewer.VerticalScrollBarVisibility="Visible"
+                      x:Name="StatsBox"
+                      x:FieldModifier="private" />
+        </Grid>
+    </Grid>
+</statswindow:AutoGenColumnControl>

@@ -3,39 +3,30 @@ using System.Windows.Input;
 using FinancialStructures.Database;
 using Microsoft.Win32;
 using Common.UI.Commands;
+using FinancePortfolioDatabase.GUI.ViewModels.Common;
 
-namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
+namespace FinancePortfolioDatabase.GUI.ViewModels
 {
-    internal class HtmlStatsViewerViewModel : TabViewModelBase
+    internal class HtmlStatsViewerViewModel : DataDisplayViewModelBase
     {
+        public override bool Closable => true;
 
         private Uri fDisplayStats;
 
         public Uri DisplayStats
         {
-            get
-            {
-                return fDisplayStats;
-            }
-            set
-            {
-                fDisplayStats = value;
-                OnPropertyChanged();
-            }
+            get => fDisplayStats;
+            set => SetAndNotify(ref fDisplayStats, value, nameof(DisplayStats));
         }
 
         private string fStatsFilepath;
 
         public string StatsFilepath
         {
-            get
-            {
-                return fStatsFilepath;
-            }
+            get => fStatsFilepath;
             set
             {
-                fStatsFilepath = value;
-                OnPropertyChanged();
+                SetAndNotify(ref fStatsFilepath, value, nameof(StatsFilepath));
                 if (value != null)
                 {
                     DisplayStats = new Uri(fStatsFilepath);
@@ -62,12 +53,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
         }
 
-        public HtmlStatsViewerViewModel(IPortfolio portfolio, bool displayValueFunds, string filePath)
-            : base(portfolio, displayValueFunds)
+        public HtmlStatsViewerViewModel(IPortfolio portfolio, string filePath)
+            : base("Exported Stats", Account.All, portfolio)
         {
             StatsFilepath = filePath;
-            Header = "Exported Stats";
-            GenerateStatistics(displayValueFunds);
             FileSelect = new RelayCommand(ExecuteFileSelect);
         }
     }

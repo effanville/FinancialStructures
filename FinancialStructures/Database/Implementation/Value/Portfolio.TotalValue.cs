@@ -96,7 +96,7 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.Sector:
                 {
-                    return TotalValue(Totals.SecuritySector, names) + TotalValue(Totals.BankAccountSector, names);
+                    return TotalValue(Totals.SecuritySector, date, names) + TotalValue(Totals.BankAccountSector, date, names);
                 }
                 case Totals.All:
                 {
