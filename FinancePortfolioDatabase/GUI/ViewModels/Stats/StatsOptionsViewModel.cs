@@ -156,7 +156,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 _ = ReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.StatisticsPage, "Was not able to create page in place specified.");
             }
 
-            CloseWindowAction(new HtmlStatsViewerViewModel(DataStore, path));
+            CloseWindowAction(new HtmlStatsViewerViewModel(fUiGlobals, path));
         }
 
         private readonly IReportLogger ReportLogger;
