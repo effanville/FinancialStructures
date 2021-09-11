@@ -9,7 +9,7 @@ namespace FinancePortfolioDatabase.GUI.Configuration
     public interface IConfiguration
     {
         /// <summary>
-        /// A named collection of child configuration objects for the 
+        /// A named collection of child configuration objects for the
         /// current configuration.
         /// </summary>
         Dictionary<string, IConfiguration> ChildConfigurations
@@ -29,7 +29,7 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         }
 
         /// <summary>
-        /// Records the configuration o the object. 
+        /// Records the configuration o the object.
         /// </summary>
         void StoreConfiguration(object viewModel);
 

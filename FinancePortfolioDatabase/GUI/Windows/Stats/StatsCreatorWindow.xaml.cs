@@ -1,5 +1,4 @@
 ﻿using System.Windows.Controls;
-using FinancePortfolioDatabase.GUI.ViewModels.Stats;
 
 namespace FinancePortfolioDatabase.GUI.Windows.Stats
 {
@@ -14,15 +13,6 @@ namespace FinancePortfolioDatabase.GUI.Windows.Stats
         public StatsCreatorWindow()
         {
             InitializeComponent();
-        }
-
-        private void CloseTabCommand(object sender, System.Windows.RoutedEventArgs e)
-        {
-            StatsCreatorWindowViewModel VM = DataContext as StatsCreatorWindowViewModel;
-            if (TabMain.SelectedIndex != 0)
-            {
-                VM.StatsTabs.RemoveAt(TabMain.SelectedIndex);
-            }
         }
     }
 }

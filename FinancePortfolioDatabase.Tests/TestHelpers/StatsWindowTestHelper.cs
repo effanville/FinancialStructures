@@ -17,7 +17,7 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
             set;
         }
 
-        protected StatsCreatorWindowViewModel ViewModel
+        protected StatsViewModel ViewModel
         {
             get;
             set;
@@ -44,7 +44,7 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
 
             Globals = TestSetupHelper.CreateGlobalsMock(new FileSystem(), fileMock.Object, dialogMock.Object);
             VMConfiguration = new StatsDisplayConfiguration();
-            ViewModel = new StatsCreatorWindowViewModel(Portfolio, TestSetupHelper.DummyReportLogger, Globals, VMConfiguration);
+            ViewModel = new StatsViewModel(Portfolio, TestSetupHelper.DummyReportLogger, Globals, VMConfiguration, Account.All);
         }
 
         [TearDown]

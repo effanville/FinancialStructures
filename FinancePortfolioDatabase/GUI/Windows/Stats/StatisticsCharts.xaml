@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:ucdo="clr-namespace:Common.UI.DisplayObjects;assembly=Common.UI"
              xmlns:cht="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
+             xmlns:stats="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Stats"
+             d:DataContext="{d:DesignInstance Type=stats:StatisticsChartsViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">

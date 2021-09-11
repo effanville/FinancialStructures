@@ -1,20 +1,19 @@
 ﻿using System.Collections.Generic;
+using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataStructures;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
-    internal class PortfolioHistoryViewModel : TabViewModelBase
+    internal class PortfolioHistoryViewModel : DataDisplayViewModelBase
     {
+        public override bool Closable => true;
 
         private int fHistoryGapDays = 20;
         public int HistoryGapDays
         {
-            get
-            {
-                return fHistoryGapDays;
-            }
+            get => fHistoryGapDays;
             set
             {
                 fHistoryGapDays = value;
@@ -25,10 +24,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         private List<PortfolioDaySnapshot> fHistoryStats;
         public List<PortfolioDaySnapshot> HistoryStats
         {
-            get
-            {
-                return fHistoryStats;
-            }
+            get => fHistoryStats;
             set
             {
                 fHistoryStats = value;
@@ -36,17 +32,16 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
         }
 
-        public override async void GenerateStatistics(bool displayValueFunds)
+        public override async void UpdateData(IPortfolio DataStore)
         {
-            DisplayValueFunds = displayValueFunds;
-            HistoryStats = await fPortfolio.GenerateHistoryStats(HistoryGapDays).ConfigureAwait(false);
+            base.UpdateData(DataStore);
+            HistoryStats = await DataStore.GenerateHistoryStats(HistoryGapDays).ConfigureAwait(false);
         }
 
-        public PortfolioHistoryViewModel(IPortfolio portfolio, bool displayValueFunds)
-    : base(portfolio, displayValueFunds)
+        public PortfolioHistoryViewModel(IPortfolio portfolio)
+            : base("History", portfolio)
         {
-            Header = "Portfolio History";
-            GenerateStatistics(displayValueFunds);
+            UpdateData(portfolio);
         }
     }
 }

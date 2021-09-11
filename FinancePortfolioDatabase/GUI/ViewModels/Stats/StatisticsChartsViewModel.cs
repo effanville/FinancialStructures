@@ -9,47 +9,31 @@ using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataStructures;
 using Common.Structure.DataStructures;
+using FinancePortfolioDatabase.GUI.ViewModels.Common;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
-    internal class StatisticsChartsViewModel : TabViewModelBase
+    internal class StatisticsChartsViewModel : DataDisplayViewModelBase
     {
         private readonly Random rnd = new Random();
         private int fHistoryGapDays = 25;
         public int HistoryGapDays
         {
-            get
-            {
-                return fHistoryGapDays;
-            }
-            set
-            {
-                fHistoryGapDays = value;
-                OnPropertyChanged();
-            }
+            get => fHistoryGapDays;
+            set => SetAndNotify(ref fHistoryGapDays, value, nameof(HistoryGapDays));
         }
 
         private List<PortfolioDaySnapshot> fHistoryStats;
         public List<PortfolioDaySnapshot> HistoryStats
         {
-            get
-            {
-                return fHistoryStats;
-            }
-            set
-            {
-                fHistoryStats = value;
-                OnPropertyChanged();
-            }
+            get => fHistoryStats;
+            set => SetAndNotify(ref fHistoryStats, value, nameof(HistoryStats));
         }
 
         private Dictionary<string, DailyValuation> fDistributionValues;
         public Dictionary<string, DailyValuation> SecurityValues
         {
-            get
-            {
-                return fDistributionValues;
-            }
+            get => fDistributionValues;
             set
             {
                 fDistributionValues = value;
@@ -61,61 +45,36 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         private Dictionary<string, DailyValuation> fDistributionValues2;
         public Dictionary<string, DailyValuation> BankAccountValues
         {
-            get
-            {
-                return fDistributionValues2;
-            }
-            set
-            {
-                fDistributionValues2 = value;
-                OnPropertyChanged();
-            }
+            get => fDistributionValues2;
+            set => SetAndNotify(ref fDistributionValues2, value, nameof(BankAccountValues));
         }
 
         private Dictionary<string, DailyValuation> fDistributionValues3;
 
         public Dictionary<string, DailyValuation> SectorValues
         {
-            get
-            {
-                return fDistributionValues3;
-            }
-            set
-            {
-                fDistributionValues3 = value;
-                OnPropertyChanged();
-            }
+            get => fDistributionValues3;
+            set => SetAndNotify(ref fDistributionValues3, value, nameof(SectorValues));
         }
+
         private ObservableCollection<LineSeries> fIRRlines = new ObservableCollection<LineSeries>();
         public ObservableCollection<LineSeries> IRRLines
         {
-            get
-            {
-                return fIRRlines;
-            }
-            set
-            {
-                fIRRlines = value;
-                OnPropertyChanged();
-            }
+            get => fIRRlines;
+            set => SetAndNotify(ref fIRRlines, value, nameof(IRRLines));
         }
 
-        public override async void GenerateStatistics(bool displayValueFunds)
+        public override async void UpdateData(IPortfolio portfolio)
         {
-            DisplayValueFunds = displayValueFunds;
-            HistoryStats = await fPortfolio.GenerateHistoryStats(HistoryGapDays).ConfigureAwait(true);
-            if (DisplayValueFunds)
+            if (portfolio != null)
             {
-                SecurityValues = HistoryStats[HistoryStats.Count - 1].SecurityValues.Where(x => x.Value.Value > 0).ToDictionary(x => x.Key, x => x.Value);
-                BankAccountValues = HistoryStats[HistoryStats.Count - 1].BankAccValues.Where(x => x.Value.Value > 0).ToDictionary(x => x.Key, x => x.Value);
-                SectorValues = HistoryStats[HistoryStats.Count - 1].SectorValues.Where(x => x.Value.Value > 0).ToDictionary(x => x.Key, x => x.Value);
+                base.UpdateData(portfolio);
             }
-            else
-            {
-                SecurityValues = HistoryStats[HistoryStats.Count - 1].SecurityValues;
-                BankAccountValues = HistoryStats[HistoryStats.Count - 1].BankAccValues;
-                SectorValues = HistoryStats[HistoryStats.Count - 1].SectorValues;
-            }
+
+            HistoryStats = await DataStore.GenerateHistoryStats(HistoryGapDays).ConfigureAwait(true);
+            SecurityValues = HistoryStats[HistoryStats.Count - 1].SecurityValues.Where(x => x.Value.Value > 0).ToDictionary(x => x.Key, x => x.Value);
+            BankAccountValues = HistoryStats[HistoryStats.Count - 1].BankAccValues.Where(x => x.Value.Value > 0).ToDictionary(x => x.Key, x => x.Value);
+            SectorValues = HistoryStats[HistoryStats.Count - 1].SectorValues.Where(x => x.Value.Value > 0).ToDictionary(x => x.Key, x => x.Value);
 
             UpdateChart();
         }
@@ -126,7 +85,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             var newValues = new ObservableCollection<LineSeries>();
             if (HistoryStats.Count > 1)
             {
-                var sectorNames = fPortfolio.Sectors(Account.Security);
+                var sectorNames = DataStore.Sectors(Account.Security);
                 foreach (var name in sectorNames)
                 {
                     var total = HistoryStats[HistoryStats.Count - 1].SecurityValue;
@@ -161,11 +120,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
         }
 
-        public StatisticsChartsViewModel(IPortfolio portfolio, bool displayValueFunds)
-            : base(portfolio, displayValueFunds)
+        public StatisticsChartsViewModel(IPortfolio portfolio)
+            : base("Charts", Account.All, portfolio)
         {
-            Header = "Charts";
-            GenerateStatistics(displayValueFunds);
+            UpdateData(portfolio);
         }
     }
 }

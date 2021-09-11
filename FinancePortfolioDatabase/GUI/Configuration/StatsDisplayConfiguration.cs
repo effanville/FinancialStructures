@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO.Abstractions;
 using FinancePortfolioDatabase.GUI.ViewModels.Stats;
 
@@ -11,10 +12,6 @@ namespace FinancePortfolioDatabase.GUI.Configuration
     {
         private bool DisplayValueFunds;
 
-        /// <summary>
-        /// Name of the child configuration for the StatsOptions window.
-        /// </summary>
-        public const string StatsOptions = nameof(StatsOptionsViewModel);
 
         /// <summary>
         /// Flag determining whether display has loaded yet.
@@ -46,16 +43,13 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         /// </summary>
         public StatsDisplayConfiguration()
         {
-            ChildConfigurations = new Dictionary<string, IConfiguration>
-            {
-                { StatsOptions, new StatsOptionsDisplayConfiguration() }
-            };
+            ChildConfigurations = new Dictionary<string, IConfiguration>();
         }
 
         /// <inheritdoc/>
         public void StoreConfiguration(object viewModel)
         {
-            if (viewModel is StatsCreatorWindowViewModel vm)
+            if (viewModel is StatsViewModel vm)
             {
                 DisplayValueFunds = vm.DisplayValueFunds;
             }
@@ -64,7 +58,7 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         /// <inheritdoc/>
         public void RestoreFromConfiguration(object viewModel)
         {
-            if (viewModel is StatsCreatorWindowViewModel vm)
+            if (viewModel is StatsViewModel vm)
             {
                 vm.DisplayValueFunds = DisplayValueFunds;
             }
@@ -73,13 +67,13 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         /// <inheritdoc/>
         public void LoadConfiguration(string filePath, IFileSystem fileSystem)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         /// <inheritdoc/>
         public void SaveConfiguration(string filePath, IFileSystem fileSystem)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

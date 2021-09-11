@@ -44,7 +44,7 @@
                                 Width="12"
                                 Margin="2 2 0 0"
                                 Click="Button_Click">
-                            <Image Source="../TemplatesAndStyles/close.png" />
+                            <Image Source="/GUI/TemplatesAndStyles/close.png" />
                         </Button>
                     </StackPanel>
                 </DataTemplate>

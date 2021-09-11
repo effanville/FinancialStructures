@@ -56,7 +56,7 @@ namespace FinancePortfolioDatabase
             //Handling the exception within the UnhandledExcpeiton handler.
             _ = MessageBox.Show(e?.Exception?.Message + Environment.NewLine + e?.Exception?.StackTrace, "Exception Caught", MessageBoxButton.OK, MessageBoxImage.Error);
             var main = Current.MainWindow as MainWindow;
-            main.PrintErrorLog(e.Exception);
+            main.PrintErrorLog(e?.Exception);
             e.Handled = true;
         }
 

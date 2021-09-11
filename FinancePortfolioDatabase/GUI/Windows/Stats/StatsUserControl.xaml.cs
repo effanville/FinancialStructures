@@ -2,26 +2,28 @@
 using System.Data;
 using System.Linq;
 using System.Windows;
-using FinancePortfolioDatabase.GUI.ViewModels.Stats;
 using Common.UI.DisplayObjects;
+using FinancePortfolioDatabase.GUI.ViewModels.Stats;
 
 namespace FinancePortfolioDatabase.GUI.Windows.Stats
 {
     /// <summary>
-    /// Interaction logic for AccountStatistics.xaml
+    /// Interaction logic for StatsUserControl.xaml
     /// </summary>
-    internal partial class AccountStatistics : AutoGenColumnControl
+    public partial class StatsUserControl : AutoGenColumnControl
     {
-        public AccountStatistics()
+        /// <summary>
+        /// Construct an instance.
+        /// </summary>
+        public StatsUserControl()
         {
             InitializeComponent();
-
             DataContextChanged += OnDataContextChanged;
         }
 
         private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (DataContext is AccountStatisticsViewModel vm)
+            if (DataContext is StatsViewModel vm)
             {
                 vm.PropertyChanged += UpdateDataGrid;
             }
@@ -34,7 +36,7 @@ namespace FinancePortfolioDatabase.GUI.Windows.Stats
         /// </summary>
         private void UpdateDataGrid(object sender, PropertyChangedEventArgs e)
         {
-            if (DataContext is AccountStatisticsViewModel vm)
+            if (DataContext is StatsViewModel vm)
             {
                 var dt = new DataTable();
 

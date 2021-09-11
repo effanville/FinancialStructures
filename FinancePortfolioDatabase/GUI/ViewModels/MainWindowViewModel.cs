@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancePortfolioDatabase.GUI.ViewModels.Security;
 using FinancePortfolioDatabase.GUI.ViewModels.Stats;
@@ -8,6 +7,7 @@ using Common.Structure.Reporting;
 using Common.UI.ViewModelBases;
 using Common.UI;
 using FinancePortfolioDatabase.GUI.Configuration;
+using System.Collections.ObjectModel;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {
@@ -58,7 +58,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         /// <summary>
         /// The collection of tabs to hold the data and interactions for the various subwindows.
         /// </summary>
-        public List<object> Tabs { get; } = new List<object>(6);
+        public ObservableCollection<object> Tabs
+        {
+            get;
+            set;
+        } = new ObservableCollection<object>();
 
         /// <summary>
         /// Default constructor.
@@ -73,12 +77,13 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
 
             OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, fUiGlobals);
             Tabs.Add(new BasicDataViewModel(ProgramPortfolio, fUiGlobals));
-            Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, fUiGlobals, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsDisplay]));
             Tabs.Add(new SecurityEditWindowViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, fUiGlobals));
             Tabs.Add(new ValueListWindowViewModel("Bank Accounts", ProgramPortfolio, UpdateDataCallback, fUiGlobals, Account.BankAccount));
             Tabs.Add(new ValueListWindowViewModel("Benchmarks", ProgramPortfolio, UpdateDataCallback, fUiGlobals, Account.Benchmark));
             Tabs.Add(new ValueListWindowViewModel("Currencies", ProgramPortfolio, UpdateDataCallback, fUiGlobals, Account.Currency));
-
+            Tabs.Add(new StatsViewModel(ProgramPortfolio, ReportLogger, fUiGlobals, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsDisplay], Account.All));
+            Tabs.Add(new StatisticsChartsViewModel(ProgramPortfolio));
+            Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, fUiGlobals, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsOptions], AddObjectAsMainTab));
             ProgramPortfolio.PortfolioChanged += AllData_portfolioChanged;
         }
 
@@ -112,5 +117,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         /// The mechanism by which the data in <see cref="ProgramPortfolio"/> is updated. This includes a GUI update action.
         /// </summary>
         private Action<Action<IPortfolio>> UpdateDataCallback => action => action(ProgramPortfolio);
+        private Action<object> AddObjectAsMainTab => obj => Tabs.Add(obj);
     }
 }
