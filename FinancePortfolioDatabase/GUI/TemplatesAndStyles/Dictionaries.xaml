@@ -1,6 +1,11 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
     <ResourceDictionary.MergedDictionaries>
-        <ResourceDictionary Source="DefaultStyles.xaml"/>
+        <ResourceDictionary Source="DefaultStyles.xaml" />
+        <ResourceDictionary Source="ButtonStyles.xaml" />
+        <ResourceDictionary Source="DataGridStyles.xaml" />
+        <ResourceDictionary Source="ChartStyles.xaml" />
+        <ResourceDictionary Source="ScrollBarStyles.xaml" />
+        <ResourceDictionary Source="DataTemplates.xaml" />
         <ResourceDictionary Source="ViewModelToViewDictionary.xaml"/>
         <ResourceDictionary Source="MainWindowTemplates.xaml" />
     </ResourceDictionary.MergedDictionaries>

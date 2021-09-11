@@ -3,38 +3,33 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:cl="clr-namespace:Colouring"
       xmlns:stats="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Stats"
       d:DataContext="{d:DesignInstance Type=stats:StatsCreatorWindowViewModel}"
       mc:Ignorable="d"
       VerticalAlignment="Stretch"
-      Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
+      Background="{Binding Styles.BackgroundBrush}">
     <Grid.Resources>
         <ResourceDictionary>
             <BooleanToVisibilityConverter x:Key="BoolToVis" />
         </ResourceDictionary>
     </Grid.Resources>
-    <Grid Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}"
-          VerticalAlignment="Stretch">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="40" />
-            <RowDefinition Height="40" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
-        <Button Grid.Row="0"
-                    Content="Create Investment list"
-                    Style="{StaticResource ResourceKey=defaultButton}"
-                    Width="300"
-                    Command="{Binding  CreateInvestmentListCommand}" />
-            <Button Grid.Row="1"
-                    Content="Create portfolio History"
-                    Style="{StaticResource ResourceKey=defaultButton}"
-                    Width="300"
-                    Command="{Binding  ExportHistoryCommand}" />
-
-        <UserControl Grid.Row="2"
-                     Height="Auto"
-                     Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}"
-                     Content="{Binding Display}" />
-    </Grid>
+    <Grid.RowDefinitions>
+        <RowDefinition Height="40" />
+        <RowDefinition Height="40" />
+        <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <Button Grid.Row="0"
+            Content="Create Investment list"
+            Style="{StaticResource ResourceKey=defaultButton}"
+            Width="300"
+            Command="{Binding  CreateInvestmentListCommand}" />
+    <Button Grid.Row="1"
+            Content="Create portfolio History"
+            Style="{StaticResource ResourceKey=defaultButton}"
+            Width="300"
+            Command="{Binding  ExportHistoryCommand}" />
+    <UserControl Grid.Row="2"
+                 Height="Auto"
+                 Background="{Binding Styles.BackgroundBrush}"
+                 Content="{Binding Display}" />
 </Grid>

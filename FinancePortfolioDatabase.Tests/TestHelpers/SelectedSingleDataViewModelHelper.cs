@@ -60,7 +60,7 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
             Portfolio = TestSetupHelper.CreateBasicDataBase();
 
             UiGlobals globals = TestSetupHelper.CreateGlobalsMock(new FileSystem(), fileMock.Object, dialogMock.Object, TestSetupHelper.DummyReportLogger);
-            ViewModel = new SelectedSingleDataViewModel(Portfolio, DataUpdater, globals, new NameData("Barclays", "currentAccount"), AccountType);
+            ViewModel = new SelectedSingleDataViewModel(Portfolio, DataUpdater, null, globals, new NameData("Barclays", "currentAccount"), AccountType);
         }
 
         [TearDown]

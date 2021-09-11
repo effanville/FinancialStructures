@@ -7,11 +7,16 @@ using Common.Structure.Reporting;
 using Common.UI.Commands;
 using Common.UI.Services;
 using Common.UI.ViewModelBases;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {
     public class ReportingWindowViewModel : PropertyChangedBase
     {
+        public UiStyles Styles
+        {
+            get; set;
+        }
         private ErrorReports fReportsToView;
         private readonly IFileInteractionService fFileInteractionService;
         public ErrorReports ReportsToView
@@ -57,14 +62,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public ReportingWindowViewModel(IFileInteractionService fileInteractionService)
+        public ReportingWindowViewModel(IFileInteractionService fileInteractionService, UiStyles styles)
         {
+            Styles = styles;
             IsExpanded = false;
             fFileInteractionService = fileInteractionService;
             Reports = new ErrorReports();
             ReportsToView = new ErrorReports();
             ClearReportsCommand = new RelayCommand(ExecuteClearReports);
-            ClearSingleReportCommand = new RelayCommand(ExecuteClearSelectedReport);
+            DeleteCommand = new RelayCommand<KeyEventArgs>(ExecuteDeleteReport);
             ExportReportsCommand = new RelayCommand(ExecuteExportReportsCommand);
             SyncReports();
         }
@@ -87,17 +93,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         private void ExecuteClearReports()
         {
             Reports.Clear();
-            SyncReports();
-        }
-
-        public ICommand ClearSingleReportCommand
-        {
-            get;
-        }
-
-        private void ExecuteClearSelectedReport()
-        {
-            Reports.RemoveReport(IndexToDelete);
             SyncReports();
         }
 
@@ -125,6 +120,24 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
             catch (IOException)
             {
+            }
+        }
+
+        public ICommand DeleteCommand
+        {
+            get;
+            set;
+        }
+
+        private void ExecuteDeleteReport(KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete || e.Key == Key.Back)
+            {
+                if (IndexToDelete >= 0)
+                {
+                    Reports.RemoveReport(IndexToDelete);
+                    SyncReports();
+                }
             }
         }
 

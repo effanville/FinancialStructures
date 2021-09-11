@@ -3,23 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:cl="clr-namespace:Colouring"
              xmlns:vm="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels"
              d:DataContext="{d:DesignInstance Type=vm:MainWindowViewModel}"
              mc:Ignorable="d"
-             Margin="0"
-             Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
+             FontFamily="{Binding Styles.FontFamily}"
+             Background="{Binding Styles.BackgroundBrush}"
+             Foreground="{Binding Styles.ForegroundBrush}">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
     </UserControl.Resources>
     <Grid VerticalAlignment="Stretch"
-          Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
+          Background="{Binding Styles.BackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0"
-              Background="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}" />
+              Background="{Binding Styles.BackgroundSecondaryBrush}" />
         <TabControl Grid.Row="0"
                     x:Name="MainTabControl"
                     TabStripPlacement="Top"
@@ -27,20 +27,87 @@
                     ItemsSource="{Binding Tabs}"
                     SelectedIndex="0">
             <TabControl.Resources>
+                <Style  TargetType="{x:Type TabControl}">
+                    <Setter Property="Padding"
+                            Value="4,4,4,4" />
+                    <Setter Property="BorderThickness"
+                            Value="1" />
+                    <Setter Property="BorderBrush"
+                            Value="{Binding Styles.BackgroundBrush}" />
+                    <Setter Property="Background"
+                            Value="{Binding Styles.BackgroundBrush}" />
+                    <Setter Property="Foreground"
+                            Value="{Binding Styles.ForegroundBrush}" />
+                    <Setter Property="HorizontalContentAlignment"
+                            Value="Center" />
+                    <Setter Property="VerticalContentAlignment"
+                            Value="Center" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type TabControl}">
+                                <Grid ClipToBounds="true"
+                                      SnapsToDevicePixels="true"
+                                      KeyboardNavigation.TabNavigation="Local">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition Width="0" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition x:Name="RowDefinition0"
+                                                       Height="Auto" />
+                                        <RowDefinition x:Name="RowDefinition1"
+                                                       Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <TabPanel x:Name="HeaderPanel"
+                                              Grid.Column="0"
+                                              IsItemsHost="true"
+                                              Margin="2,2,2,0"
+                                              Grid.Row="0"
+                                              KeyboardNavigation.TabIndex="1"
+                                              Panel.ZIndex="1" />
+                                    <Border x:Name="ContentPanel"
+                                            BorderBrush="{TemplateBinding BorderBrush}"
+                                            BorderThickness="0"
+                                            Background="{TemplateBinding Background}"
+                                            Grid.Column="0"
+                                            KeyboardNavigation.DirectionalNavigation="Contained"
+                                            Grid.Row="1"
+                                            KeyboardNavigation.TabIndex="2"
+                                            KeyboardNavigation.TabNavigation="Local">
+                                        <ContentPresenter ContentSource="SelectedContent"
+                                                          Margin="{TemplateBinding Padding}"
+                                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                    </Border>
+                                </Grid>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
                 <Style TargetType="TabItem">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="TabItem">
                                 <Border Name="Border"
-                                        BorderThickness="1,1,1,0"
-                                        BorderBrush="Gainsboro"
+                                        BorderThickness="3,3,3,0"
+                                        BorderBrush="{Binding Styles.BackgroundBrush}"
                                         CornerRadius="4,4,0,0"
-                                        Margin="2,0">
+                                        Margin="1,0,-2,0"
+                                        HorizontalAlignment="Stretch"
+                                        VerticalAlignment="Stretch">
                                     <StackPanel Orientation="Horizontal"
-                                                Height="25"
-                                                Width="90"
+                                                Height="20"
+                                                MinWidth="50"
+                                                Margin="3"
+                                                HorizontalAlignment="Stretch"
                                                 VerticalAlignment="Stretch">
-                                        <TextBlock Text="{Binding Header}" />
+                                        <TextBlock Text="{Binding Header}"
+                                                   Margin="3,0,3,0"
+                                                   VerticalAlignment="Center"
+                                                   FontSize="{Binding Styles.LargeFontSize}"
+                                                   Foreground="{Binding Styles.ForegroundBrush}"
+                                                   FontWeight="SemiBold"
+                                                   FontStretch="UltraExpanded"
+                                                   HorizontalAlignment="Center" />
                                         <Button Background="Transparent"
                                                 BorderThickness="0"
                                                 Visibility="{Binding Closable, Converter={StaticResource BoolToVis}}"
@@ -48,7 +115,7 @@
                                                 Width="12"
                                                 Margin="2 2 0 0"
                                                 Click="CloseTabCommand">
-                                            <Image Source="../TemplatesAndStyles/close.png" />
+                                            <Image Source="/GUI/TemplatesAndStyles/close.png" />
                                         </Button>
                                     </StackPanel>
                                 </Border>
@@ -57,13 +124,13 @@
                                              Value="True">
                                         <Setter TargetName="Border"
                                                 Property="Background"
-                                                Value="GhostWhite" />
+                                                Value="{Binding Styles.BackgroundBrush}" />
                                     </Trigger>
                                     <Trigger Property="IsSelected"
                                              Value="False">
                                         <Setter TargetName="Border"
                                                 Property="Background"
-                                                Value="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}" />
+                                                Value="{Binding Styles.BackgroundSecondaryBrush}" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
@@ -71,13 +138,10 @@
                     </Setter>
                 </Style>
             </TabControl.Resources>
-            <TabControl.ItemTemplate>
-                <DataTemplate></DataTemplate>
-            </TabControl.ItemTemplate>
         </TabControl>
         <UserControl Grid.Row="1"
                      VerticalAlignment="Stretch"
-                     Background="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}"
+                     Background="{Binding Styles.BackgroundSecondaryBrush}"
                      Content="{Binding ReportsViewModel}" />
     </Grid>
 </UserControl>

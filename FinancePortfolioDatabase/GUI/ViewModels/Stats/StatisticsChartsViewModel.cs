@@ -10,6 +10,7 @@ using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataStructures;
 using Common.Structure.DataStructures;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
@@ -120,8 +121,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
         }
 
-        public StatisticsChartsViewModel(IPortfolio portfolio)
-            : base("Charts", Account.All, portfolio)
+        public StatisticsChartsViewModel(IPortfolio portfolio, UiStyles styles)
+            : base(styles, "Charts", Account.All, portfolio)
         {
             UpdateData(portfolio);
         }

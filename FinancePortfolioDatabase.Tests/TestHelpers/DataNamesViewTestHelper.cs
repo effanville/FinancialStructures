@@ -54,7 +54,7 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
             Portfolio = TestSetupHelper.CreateEmptyDataBase();
 
             UiGlobals globals = TestSetupHelper.CreateGlobalsMock(new FileSystem(), fileMock.Object, dialogMock.Object);
-            ViewModel = new DataNamesViewModel(Portfolio, DataUpdater, TestSetupHelper.DummyReportLogger, obj => { }, AccountType);
+            ViewModel = new DataNamesViewModel(Portfolio, DataUpdater, TestSetupHelper.DummyReportLogger, null, obj => { }, AccountType);
         }
 
         [TearDown]

@@ -11,6 +11,7 @@ using Common.UI.Commands;
 using Common.UI.Services;
 using Common.UI.ViewModelBases;
 using Common.UI;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {
@@ -20,6 +21,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         private readonly Account TypeOfAccount;
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
         private readonly IReportLogger fReportLogger;
+        public UiStyles Styles
+        {
+            get;
+            set;
+        }
 
         /// <inheritdoc/>
         public override bool Closable => true;
@@ -46,15 +52,20 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 
         }
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public SelectedSingleDataViewModel(
             IPortfolio portfolio,
             Action<Action<IPortfolio>> updateDataCallback,
+            UiStyles styles,
             UiGlobals globals,
             NameData selectedName,
             Account accountType)
             : base(selectedName != null ? selectedName.ToString() : "No-Name", portfolio)
         {
             fUiGlobals = globals;
+            Styles = styles;
             fReportLogger = fUiGlobals.ReportLogger;
             UpdateDataCallback = updateDataCallback;
             SelectedName = selectedName;

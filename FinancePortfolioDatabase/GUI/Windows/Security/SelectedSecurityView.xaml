@@ -9,6 +9,7 @@
              xmlns:gui="clr-namespace:FinancePortfolioDatabase.GUI"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              d:DataContext="{d:DesignInstance Type=security:SelectedSecurityViewModel}"
+             Background="{Binding Styles.BackgroundBrush}"
              mc:Ignorable="d"
              x:Name="proxyProxy"
              d:DesignHeight="450"

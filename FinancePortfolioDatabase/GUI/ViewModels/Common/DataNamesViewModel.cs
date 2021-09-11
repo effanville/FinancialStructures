@@ -13,6 +13,7 @@ using Common.Structure.DisplayClasses;
 using Common.Structure.Reporting;
 using Common.UI.Commands;
 using Common.UI.ViewModelBases;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {
@@ -21,15 +22,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
     /// </summary>
     public class DataNamesViewModel : TabViewModelBase<IPortfolio>
     {
+        public UiStyles Styles
+        {
+            get;
+            set;
+        }
+
         private readonly Account TypeOfAccount;
 
-        public bool DisplayCompany
-        {
-            get
-            {
-                return TypeOfAccount != Account.Benchmark;
-            }
-        }
+        public bool DisplayCompany => TypeOfAccount != Account.Benchmark;
 
         /// <summary>
         /// Backing field for <see cref="DataNames"/>.
@@ -41,10 +42,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         /// </summary>
         public List<SelectableEquatable<NameData>> DataNames
         {
-            get
-            {
-                return fDataNames;
-            }
+            get => fDataNames;
             set
             {
                 SetAndNotify(ref fDataNames, value, nameof(DataNames));
@@ -60,10 +58,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         /// </summary>
         public NameData PreEditSelectedName
         {
-            get
-            {
-                return fPreEditSelectedName;
-            }
+            get => fPreEditSelectedName;
             set
             {
                 SetAndNotify(ref fPreEditSelectedName, value, nameof(PreEditSelectedName));
@@ -79,10 +74,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         /// </summary>
         public SelectableEquatable<NameData> SelectedName
         {
-            get
-            {
-                return fSelectedName;
-            }
+            get => fSelectedName;
             set
             {
                 SetAndNotify(ref fSelectedName, value, nameof(SelectedName));
@@ -94,21 +86,12 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             }
         }
 
-        public bool SelectedNameSet
-        {
-            get
-            {
-                return SelectedName != null;
-            }
-        }
+        public bool SelectedNameSet => SelectedName != null;
 
         private DateTime fSelectedLatestDate;
         public DateTime SelectedLatestDate
         {
-            get
-            {
-                return fSelectedLatestDate;
-            }
+            get => fSelectedLatestDate;
             set
             {
                 SetAndNotify(ref fSelectedLatestDate, value, nameof(SelectedLatestDate));
@@ -123,10 +106,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         /// </summary>
         public List<DailyValuation> SelectedValueHistory
         {
-            get
-            {
-                return fSelectedValueHistory;
-            }
+            get => fSelectedValueHistory;
             set
             {
                 SetAndNotify(ref fSelectedValueHistory, value, nameof(SelectedValueHistory));
@@ -147,9 +127,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         /// <summary>
         /// Construct an instance.
         /// </summary>
-        public DataNamesViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, Action<object> loadSelectedData, Account accountType)
+        public DataNamesViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, IReportLogger reportLogger, UiStyles styles, Action<object> loadSelectedData, Account accountType)
             : base("Accounts", portfolio, loadSelectedData)
         {
+            Styles = styles;
             UpdateDataCallback = updateDataCallback;
             TypeOfAccount = accountType;
             ReportLogger = reportLogger;

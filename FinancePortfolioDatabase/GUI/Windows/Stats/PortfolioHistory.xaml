@@ -3,12 +3,14 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:cl="clr-namespace:Colouring"
+             xmlns:stats="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Stats"
+             d:DataContext="{d:DesignInstance Type=stats:PortfolioHistoryViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="450"
+             FontFamily="{Binding Styles.FontFamily}"
+             Background="{Binding Styles.BackgroundBrush}"
              d:DesignWidth="800">
-    <Grid VerticalAlignment="Stretch"
-          Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
+    <Grid VerticalAlignment="Stretch">
         <DataGrid Name="HistoryStatsBox"
                   Margin="5"
                   SelectionUnit="FullRow"

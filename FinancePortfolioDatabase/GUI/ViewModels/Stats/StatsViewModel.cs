@@ -9,6 +9,7 @@ using Common.Structure.DisplayClasses;
 using System;
 using System.Linq;
 using FinancialStructures.Database.Statistics;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
@@ -49,8 +50,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public StatsViewModel(IPortfolio portfolio, IReportLogger reportLogger, UiGlobals globals, IConfiguration userConfiguration, Account account = Account.All, Statistic[] statsToView = null)
-            : base("Statistics", account, portfolio)
+        public StatsViewModel(IPortfolio portfolio, IReportLogger reportLogger, UiStyles styles, UiGlobals globals, IConfiguration userConfiguration, Account account = Account.All, Statistic[] statsToView = null)
+            : base(styles, "Statistics", account, portfolio)
         {
             StatisticNames = statsToView != null ? statsToView.Select(stat => new Selectable<Statistic>(stat, true)).ToList() : AccountStatisticsHelpers.AllStatistics().Select(stat => new Selectable<Statistic>(stat, true)).ToList();
             StatisticNames.ForEach(stat => stat.SelectedChanged += OnSelectedChanged);

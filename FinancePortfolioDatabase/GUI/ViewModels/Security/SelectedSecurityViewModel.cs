@@ -18,6 +18,7 @@ using System.Linq;
 using System.Windows.Controls;
 using FinancialStructures.Statistics;
 using FinancialStructures.Database.Statistics;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 {
@@ -26,6 +27,12 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
         private readonly IReportLogger fReportLogger;
         private readonly UiGlobals fUiGlobals;
+
+        public UiStyles Styles
+        {
+            get;
+            set;
+        }
 
         internal SecurityTrade fOldSelectedTrade;
         internal SecurityTrade SelectedTrade;
@@ -66,10 +73,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             set => SetAndNotify(ref fValues, value, nameof(Values));
         }
 
-        public SelectedSecurityViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, UiGlobals globals, NameData selectedName)
+        public SelectedSecurityViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, UiStyles styles, UiGlobals globals, NameData selectedName)
             : base(selectedName != null ? selectedName.ToString() : "No-Name", portfolio)
         {
             fReportLogger = reportLogger;
+            Styles = styles;
             fUiGlobals = globals;
             SelectedName = selectedName;
             DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);

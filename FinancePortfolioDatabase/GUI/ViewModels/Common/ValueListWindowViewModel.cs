@@ -6,6 +6,7 @@ using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using Common.UI.ViewModelBases;
 using Common.UI;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {
@@ -19,13 +20,13 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         private readonly UiGlobals fUiGlobals;
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
 
-        public ValueListWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, UiGlobals globals, Account accountType)
-            : base(title, accountType, portfolio)
+        public ValueListWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, UiStyles styles, UiGlobals globals, Account accountType)
+            : base(styles, title, accountType, portfolio)
         {
             fUiGlobals = globals;
             UpdateDataCallback = updateDataCallback;
             UpdateData(portfolio);
-            Tabs.Add(new DataNamesViewModel(DataStore, updateDataCallback, fUiGlobals.ReportLogger, (name) => LoadTabFunc(name), accountType));
+            Tabs.Add(new DataNamesViewModel(DataStore, updateDataCallback, fUiGlobals.ReportLogger, styles, (name) => LoadTabFunc(name), accountType));
         }
 
         public override void UpdateData(IPortfolio portfolio)
@@ -58,7 +59,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         {
             if (obj is NameData name)
             {
-                Tabs.Add(new SelectedSingleDataViewModel(DataStore, UpdateDataCallback, fUiGlobals, name, DataType));
+                Tabs.Add(new SelectedSingleDataViewModel(DataStore, UpdateDataCallback, Styles, fUiGlobals, name, DataType));
             }
         }
     }

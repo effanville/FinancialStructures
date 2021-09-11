@@ -6,13 +6,14 @@
              xmlns:cht="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
              xmlns:common="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Common"
              d:DataContext="{d:DesignInstance Type=common:SelectedSingleDataViewModel}"
+             Background="{Binding Styles.BackgroundBrush}"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
     <Grid Width="Auto">
         <Grid.RowDefinitions>
-            <RowDefinition Height="40"></RowDefinition>
-            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="40" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -65,7 +66,7 @@
                     <cht:LineSeries ItemsSource="{Binding Path=TLVM.Valuations}"
                                     DataPointStyle="{StaticResource InvisibleDataPointBlue}"
                                     IndependentValueBinding="{Binding Path=Day}"
-                                    DependentValueBinding="{Binding Path=Value}"></cht:LineSeries>
+                                    DependentValueBinding="{Binding Path=Value}" />
                 </cht:Chart.Series>
             </cht:Chart>
         </Grid>

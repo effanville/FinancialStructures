@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.Database;
 using Common.UI.ViewModelBases;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {
@@ -8,6 +9,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
     /// </summary>
     public abstract class DataDisplayViewModelBase : ViewModelBase<IPortfolio>
     {
+        /// <summary>
+        /// The style object containing the style for the ui.
+        /// </summary>
+        public UiStyles Styles
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Whether the display can be closed or not.
         /// </summary>
@@ -24,18 +34,20 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public DataDisplayViewModelBase(string header, Account dataType, IPortfolio database)
+        public DataDisplayViewModelBase(UiStyles styles, string header, Account dataType, IPortfolio database)
             : base(header, database)
         {
+            Styles = styles;
             DataType = dataType;
         }
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public DataDisplayViewModelBase(string header, IPortfolio database)
+        public DataDisplayViewModelBase(UiStyles styles, string header, IPortfolio database)
             : base(header, database)
         {
+            Styles = styles;
             DataType = Account.All;
         }
     }

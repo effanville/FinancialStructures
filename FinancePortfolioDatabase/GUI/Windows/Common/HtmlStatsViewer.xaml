@@ -4,17 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:wb="clr-namespace:Common.UI.DisplayObjects;assembly=Common.UI"
-             xmlns:cl="clr-namespace:Colouring"
              xmlns:viewmodels="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels"
              d:DataContext="{d:DesignInstance Type=viewmodels:HtmlStatsViewerViewModel}"
              mc:Ignorable="d"
+             FontFamily="{Binding Styles.FontFamily}"
              d:DesignHeight="450"
              d:DesignWidth="800">
     <Grid Width="Auto"
           Height="Auto"
           VerticalAlignment="Stretch"
           HorizontalAlignment="Stretch"
-          Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}">
+          Background="{Binding Styles.BackgroundBrush}">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="*" />
@@ -24,10 +24,11 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Button Grid.Column="0"
+                Style="{StaticResource ResourceKey=defaultButton}"
                 Grid.Row="0"
                 Margin="5 5 5 5"
                 Content="HTML Stats to Display"
-                Command="{Binding FileSelect}"></Button>
+                Command="{Binding FileSelect}" />
         <TextBox Grid.Row="0"
                  Grid.Column="1"
                  Margin="5 5 5 5"
@@ -35,7 +36,7 @@
                  HorizontalAlignment="Stretch"
                  VerticalAlignment="Stretch"
                  VerticalContentAlignment="Center"
-                 Text="{Binding StatsFilepath}"></TextBox>
+                 Text="{Binding StatsFilepath}" />
         <WebBrowser Grid.Row="1"
                     Grid.Column="0"
                     Width="Auto"

@@ -11,6 +11,7 @@ using Common.UI.Commands;
 using Common.UI.Services;
 using Common.UI;
 using FinancePortfolioDatabase.GUI.Configuration;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
@@ -41,8 +42,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public StatsCreatorWindowViewModel(IPortfolio portfolio, IReportLogger reportLogger, UiGlobals globals, IConfiguration userConfiguration, Action<object> loadTab)
-            : base("Stats Creator", Account.All, portfolio)
+        public StatsCreatorWindowViewModel(IPortfolio portfolio, IReportLogger reportLogger, UiStyles styles, UiGlobals globals, IConfiguration userConfiguration, Action<object> loadTab)
+            : base(styles, "Stats Creator", Account.All, portfolio)
         {
             fUserConfiguration = userConfiguration;
             if (fUserConfiguration.HasLoaded)
@@ -54,7 +55,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             fUiGlobals = globals;
             ReportLogger = reportLogger;
 
-            Display = new StatsOptionsViewModel(DataStore, ReportLogger, obj => fLoadTab(obj), fUiGlobals, fUserConfiguration);
+            Display = new StatsOptionsViewModel(DataStore, ReportLogger, obj => fLoadTab(obj), Styles, fUiGlobals, fUserConfiguration);
 
             CreateInvestmentListCommand = new RelayCommand(ExecuteInvestmentListCommand);
             ExportHistoryCommand = new RelayCommand(ExecuteCreateHistory);
@@ -84,7 +85,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 }
 
                 InvestmentsExporter.Export(DataStore, result.FilePath, ReportLogger);
-                fLoadTab(new SecurityInvestmentViewModel(DataStore));
+                fLoadTab(new SecurityInvestmentViewModel(DataStore, Styles));
             }
             else
             {
@@ -104,7 +105,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
                 List<PortfolioDaySnapshot> historyStatistics = await DataStore.GenerateHistoryStats(HistoryGapDays).ConfigureAwait(false);
                 CSVHistoryWriter.WriteToCSV(historyStatistics, result.FilePath, fUiGlobals.CurrentFileSystem, ReportLogger);
-                fLoadTab(new PortfolioHistoryViewModel(DataStore));
+                fLoadTab(new PortfolioHistoryViewModel(DataStore, Styles));
             }
             else
             {

@@ -14,6 +14,7 @@ using Common.UI.Services;
 using Common.UI;
 using FinancePortfolioDatabase.GUI.Configuration;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
@@ -156,15 +157,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 _ = ReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.StatisticsPage, "Was not able to create page in place specified.");
             }
 
-            CloseWindowAction(new HtmlStatsViewerViewModel(fUiGlobals, path));
+            CloseWindowAction(new HtmlStatsViewerViewModel(Styles, fUiGlobals, path));
         }
 
         private readonly IReportLogger ReportLogger;
         private readonly Action<object> CloseWindowAction;
         private readonly UiGlobals fUiGlobals;
 
-        public StatsOptionsViewModel(IPortfolio portfolio, IReportLogger reportLogger, Action<object> CloseWindow, UiGlobals uiGlobals, IConfiguration userConfiguration)
-            : base("", Account.All, portfolio)
+        public StatsOptionsViewModel(IPortfolio portfolio, IReportLogger reportLogger, Action<object> CloseWindow, UiStyles styles, UiGlobals uiGlobals, IConfiguration userConfiguration)
+            : base(styles, "", Account.All, portfolio)
         {
             fUiGlobals = uiGlobals;
             fUserConfiguration = userConfiguration;

@@ -8,6 +8,7 @@ using FinancialStructures.NamingStructures;
 using Common.Structure.Reporting;
 using Common.UI.ViewModelBases;
 using Common.UI;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 {
@@ -20,13 +21,13 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 
         private readonly Action<Action<IPortfolio>> UpdateDataAction;
 
-        public SecurityEditWindowViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, UiGlobals globals)
-            : base("Securities", Account.Security, portfolio)
+        public SecurityEditWindowViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, UiStyles styles, UiGlobals globals)
+            : base(styles, "Securities", Account.Security, portfolio)
         {
             UpdateDataAction = updateData;
             ReportLogger = reportLogger;
             fUiGlobals = globals;
-            Tabs.Add(new DataNamesViewModel(DataStore, updateData, ReportLogger, (name) => LoadTabFunc(name), Account.Security));
+            Tabs.Add(new DataNamesViewModel(DataStore, updateData, ReportLogger, styles, (name) => LoadTabFunc(name), Account.Security));
         }
 
         public override void UpdateData(IPortfolio portfolio)
@@ -58,7 +59,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
         {
             if (obj is NameData name)
             {
-                Tabs.Add(new SelectedSecurityViewModel(DataStore, UpdateDataAction, ReportLogger, fUiGlobals, name));
+                Tabs.Add(new SelectedSecurityViewModel(DataStore, UpdateDataAction, ReportLogger, Styles, fUiGlobals, name));
             }
         }
     }

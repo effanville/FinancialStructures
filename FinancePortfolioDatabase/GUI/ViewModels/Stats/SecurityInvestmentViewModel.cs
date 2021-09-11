@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Common.Structure.DataStructures;
 using Common.Structure.NamingStructures;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
@@ -25,8 +26,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             SecuritiesInvestments = DataStore.TotalInvestments(Totals.Security);
         }
 
-        public SecurityInvestmentViewModel(IPortfolio portfolio)
-            : base("Investments", portfolio)
+        public SecurityInvestmentViewModel(IPortfolio portfolio, UiStyles styles)
+            : base(styles, "Investments", portfolio)
         {
             UpdateData(portfolio);
         }

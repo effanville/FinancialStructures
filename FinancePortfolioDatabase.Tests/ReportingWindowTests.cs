@@ -3,6 +3,10 @@ using FinancePortfolioDatabase.GUI.ViewModels;
 using FinancePortfolioDatabase.Tests.TestHelpers;
 using NUnit.Framework;
 using Common.Structure.Reporting;
+using System.Windows.Input;
+using System.Windows.Interop;
+using System;
+using System.Threading;
 
 namespace FinancePortfolioDatabase.Tests
 {
@@ -65,6 +69,7 @@ namespace FinancePortfolioDatabase.Tests
         /// Ensure the correct selected report is removed when clear single report is pressed.
         /// </summary>
         [Test]
+        [RequiresThread(ApartmentState.STA)]
         public void CanClearSingleReport()
         {
             var viewModel = CreateViewModel("nothing");
@@ -76,7 +81,8 @@ namespace FinancePortfolioDatabase.Tests
             Assert.AreEqual(2, viewModel.ReportsToView.Count(), "Viewable reports should have one report added.");
 
             viewModel.IndexToDelete = 1;
-            viewModel.ClearSingleReportCommand.Execute(3);
+            KeyEventArgs eventArgs = new KeyEventArgs(Keyboard.PrimaryDevice, new HwndSource(0, 0, 0, 0, 0, "", IntPtr.Zero), 0, Key.Delete);
+            viewModel.DeleteCommand.Execute(eventArgs);
             Assert.AreEqual(1, viewModel.Reports.GetReports().Count, "Reports should have been cleared.");
             Assert.AreEqual(1, viewModel.ReportsToView.Count(), "Viewable reports should have been cleared.");
             Assert.AreEqual(ReportType.Error, viewModel.ReportsToView.Single().ErrorType);
@@ -87,7 +93,7 @@ namespace FinancePortfolioDatabase.Tests
         private ReportingWindowViewModel CreateViewModel(string filepath, ReportSeverity reportingSeverity = ReportSeverity.Detailed)
         {
             var mockFileService = TestSetupHelper.CreateFileMock(filepath);
-            ReportingWindowViewModel viewModel = new ReportingWindowViewModel(mockFileService.Object)
+            ReportingWindowViewModel viewModel = new ReportingWindowViewModel(mockFileService.Object, null)
             {
                 ReportingSeverity = reportingSeverity
             };

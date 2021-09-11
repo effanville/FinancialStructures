@@ -6,12 +6,14 @@
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              xmlns:uic="clr-namespace:Common.UI.Converters;assembly=Common.UI"
              xmlns:commonui="clr-namespace:Common.UI;assembly=Common.UI"
+             xmlns:cl="clr-namespace:FinancePortfolioDatabase.GUI.TemplatesAndStyles"
              xmlns:gui="clr-namespace:FinancePortfolioDatabase.GUI"
              xmlns:cht="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
              xmlns:common="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Common"
              d:DataContext="{d:DesignInstance Type=common:DataNamesViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="450"
+             FontFamily="{Binding Styles.FontFamily}"
              d:DesignWidth="800">
     <Grid Height="Auto"
           Width="Auto"
@@ -27,7 +29,7 @@
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal"
@@ -35,6 +37,7 @@
                     Grid.Row="0"
                     Grid.Column="0">
             <Button Content="Download"
+                    FontSize="{Binding Styles.MediumFontSize}"
                     Style="{StaticResource ResourceKey=defaultButton}"
                     Command="{Binding DownloadCommand}"
                     ToolTip="Press here to download data for selected." />
@@ -45,6 +48,7 @@
         </StackPanel>
         <DataGrid Grid.Row="1"
                   Grid.Column="0"
+                  FontSize="{Binding Styles.SmallFontSize}"
                   Margin="5"
                   Width="Auto"
                   HorizontalAlignment="Left"
@@ -90,8 +94,22 @@
                                            CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Mode=Default, Path=CurrentItem}" />
                 </i:EventTrigger>
             </i:Interaction.Triggers>
-
             <DataGrid.Columns>
+                <DataGridTemplateColumn>
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <StackPanel DataContext="{Binding}">
+                                <Button Content="View Data"
+                                        BorderThickness="0"
+                                        Margin="0.5"
+                                        Padding="3"
+                                        Foreground="{Binding Source={x:Static cl:Colours.ForegroundBrush}}"
+                                        Background="{Binding Source={x:Static cl:Colours.DefaultButtonBrush}}"
+                                        Command="{Binding Path=DataContext.OpenTabCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Company"
                                     MinWidth="70"
                                     Visibility="{Binding Data.DisplayCompany, Converter={StaticResource BoolToVis}, Source={StaticResource proxy}}"
@@ -109,16 +127,6 @@
                 <DataGridTextColumn Header="Sectors"
                                     MinWidth="70"
                                     Binding="{Binding Path=Instance.SectorsFlat,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                <DataGridTemplateColumn>
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <StackPanel DataContext="{Binding}">
-                                <Button Content="View Data"
-                                        Command="{Binding Path=DataContext.OpenTabCommand, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type UserControl}}}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Notes"
                                     MinWidth="70"
                                     Binding="{Binding Path=Instance.Notes,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
@@ -144,6 +152,7 @@
                        VerticalAlignment="Stretch"
                        Grid.Row="0"
                        Grid.RowSpan="2"
+                       FontSize="{Binding Styles.SmallFontSize}"
                        Grid.Column="0">
                 <cht:Chart.Series>
                     <cht:LineSeries ItemsSource="{Binding Path=SelectedValueHistory}"

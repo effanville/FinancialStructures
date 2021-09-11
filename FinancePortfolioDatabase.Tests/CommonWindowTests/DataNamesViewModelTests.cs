@@ -37,7 +37,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
             IPortfolio output = TestSetupHelper.CreateBasicDataBase();
             IPortfolio portfolio = TestSetupHelper.CreateBasicDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestSetupHelper.CreateDataUpdater(portfolio);
-            DataNamesViewModel viewModel = new DataNamesViewModel(output, dataUpdater, TestSetupHelper.DummyReportLogger, TestSetupHelper.DummyOpenTab, Account.Security);
+            DataNamesViewModel viewModel = new DataNamesViewModel(output, dataUpdater, TestSetupHelper.DummyReportLogger, null, TestSetupHelper.DummyOpenTab, Account.Security);
             Assert.AreEqual(1, viewModel.DataNames.Count);
         }
 

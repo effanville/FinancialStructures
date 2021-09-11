@@ -5,6 +5,7 @@ using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using Common.UI.Commands;
 using Common.UI;
 using Common.UI.Services;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {
@@ -50,8 +51,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
         }
 
-        public HtmlStatsViewerViewModel(UiGlobals globals, string filePath)
-            : base("Exported Stats", Account.All, null)
+        public HtmlStatsViewerViewModel(UiStyles styles, UiGlobals globals, string filePath)
+            : base(styles, "Exported Stats", Account.All, null)
         {
             fGlobals = globals;
             StatsFilepath = filePath;

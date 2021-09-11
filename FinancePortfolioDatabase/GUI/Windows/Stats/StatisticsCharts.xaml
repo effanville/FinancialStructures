@@ -9,6 +9,8 @@
              d:DataContext="{d:DesignInstance Type=stats:StatisticsChartsViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="450"
+             FontFamily="{Binding Styles.FontFamily}"
+             Background="{Binding Styles.BackgroundBrush}"
              d:DesignWidth="800">
     <Grid Height="Auto"
           VerticalAlignment="Stretch"
@@ -53,7 +55,7 @@
                             Width="Auto"
                             Grid.Row="0"
                             SeriesSource="{Binding IRRLines}"
-                            Grid.Column="1"></ucdo:BindableChart>
+                            Grid.Column="1" />
         <Grid Grid.Row="1"
               Grid.Column="0">
             <Grid.ColumnDefinitions>
@@ -62,23 +64,26 @@
             </Grid.ColumnDefinitions>
             <cht:Chart Title="Security by company"
                        Height="Auto"
+                       Style="{StaticResource ChartStyle1}"
                        Width="Auto"
                        Grid.Column="0">
                 <cht:PieSeries Title="Distribution"
                                ItemsSource="{Binding Path=SecurityValues}"
                                IndependentValueBinding="{Binding Path=Key}"
-                               DependentValueBinding="{Binding Path=Value.Value}"></cht:PieSeries>
+                               DependentValueBinding="{Binding Path=Value.Value}" />
             </cht:Chart>
             <cht:Chart Title="BankAccount By Company"
                        Height="Auto"
+                       Style="{StaticResource ChartStyle1}"
                        Width="Auto"
                        Grid.Column="1">
                 <cht:PieSeries ItemsSource="{Binding Path=BankAccountValues}"
                                IndependentValueBinding="{Binding Path=Key}"
-                               DependentValueBinding="{Binding Path=Value.Value}"></cht:PieSeries>
+                               DependentValueBinding="{Binding Path=Value.Value}" />
             </cht:Chart>
         </Grid>
         <cht:Chart Title="Security By Sector"
+                   Style="{StaticResource ChartStyle1}"
                    Height="Auto"
                    Width="Auto"
                    Grid.Row="1"
@@ -92,7 +97,7 @@
             <cht:ColumnSeries Title=""
                               ItemsSource="{Binding Path=SectorValues}"
                               IndependentValueBinding="{Binding Path=Key}"
-                              DependentValueBinding="{Binding Path=Value.Value}"></cht:ColumnSeries>
+                              DependentValueBinding="{Binding Path=Value.Value}" />
         </cht:Chart>
     </Grid>
 </UserControl>

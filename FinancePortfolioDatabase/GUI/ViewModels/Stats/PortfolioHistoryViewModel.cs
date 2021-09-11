@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
@@ -38,8 +39,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             HistoryStats = await DataStore.GenerateHistoryStats(HistoryGapDays).ConfigureAwait(false);
         }
 
-        public PortfolioHistoryViewModel(IPortfolio portfolio)
-            : base("History", portfolio)
+        public PortfolioHistoryViewModel(IPortfolio portfolio, UiStyles styles)
+            : base(styles, "History", portfolio)
         {
             UpdateData(portfolio);
         }

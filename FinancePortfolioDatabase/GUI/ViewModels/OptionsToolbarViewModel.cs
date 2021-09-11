@@ -11,6 +11,7 @@ using Common.UI.Commands;
 using Common.UI.Services;
 using Common.UI.ViewModelBases;
 using Common.UI;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {
@@ -25,6 +26,12 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         private readonly Action<Action<IPortfolio>> DataUpdateCallback;
         private readonly IReportLogger fReportLogger;
         private string fBaseCurrency;
+
+        public UiStyles Styles
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// The base currency to display in the top dropdown.
@@ -53,9 +60,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public OptionsToolbarViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, UiGlobals globals)
+        public OptionsToolbarViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, UiStyles styles, UiGlobals globals)
             : base("Options", portfolio)
         {
+            Styles = styles;
             fReportLogger = globals.ReportLogger;
             fUiGlobals = globals;
             DataUpdateCallback = updateData;

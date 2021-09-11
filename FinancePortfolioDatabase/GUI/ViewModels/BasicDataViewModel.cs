@@ -8,6 +8,7 @@ using Common.Structure.Extensions;
 using Common.Structure.NamingStructures;
 using FinancialStructures.NamingStructures;
 using Common.UI;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {
@@ -89,8 +90,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             set => SetAndNotify(ref fTopBankAccounts, value, nameof(TopBankAccounts));
         }
 
-        public BasicDataViewModel(IPortfolio portfolio, UiGlobals globals)
-            : base("Overview", Account.All, portfolio)
+        public BasicDataViewModel(IPortfolio portfolio, UiStyles styles, UiGlobals globals)
+            : base(styles, "Overview", Account.All, portfolio)
         {
             fUiGlobals = globals;
             UpdateData(portfolio);

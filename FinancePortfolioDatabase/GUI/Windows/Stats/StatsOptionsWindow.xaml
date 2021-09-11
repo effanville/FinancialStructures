@@ -3,12 +3,13 @@
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-              xmlns:cl="clr-namespace:Colouring"
               xmlns:vm="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Stats"
               xmlns:gui="clr-namespace:FinancePortfolioDatabase.GUI"
               d:DataContext="{d:DesignInstance Type=vm:StatsOptionsViewModel}"
               mc:Ignorable="d"
-              Background="{Binding Source={x:Static cl:Colours.BackgroundBrush}}"
+              Background="{Binding Styles.BackgroundBrush}"
+              Foreground="{Binding Styles.ForegroundBrush}"
+              FontFamily="{Binding Styles.FontFamily}"
               Height="450"
               Width="600"
               MinHeight="200"
@@ -41,7 +42,7 @@
                                 Margin="3">
                         <CheckBox IsChecked="{Binding Selected}">
                             <TextBlock Text="{Binding Instance}"
-                                       TextWrapping="Wrap" />
+                                       TextWrapping="Wrap"/>
                         </CheckBox>
                     </StackPanel>
                 </DataTemplate>

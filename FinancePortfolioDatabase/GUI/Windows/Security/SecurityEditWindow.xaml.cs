@@ -17,7 +17,7 @@ namespace FinancePortfolioDatabase.GUI.Windows.Security
             InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void CloseTabCommand(object sender, RoutedEventArgs e)
         {
             SecurityEditWindowViewModel VM = DataContext as SecurityEditWindowViewModel;
             if (TabMain.SelectedIndex != 0)

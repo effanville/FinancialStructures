@@ -3,18 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:cl="clr-namespace:Colouring"
              xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:viewmodels="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels"
+             d:DataContext="{d:DesignInstance Type=viewmodels:OptionsToolbarViewModel}"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800"
-             Background="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}">
+             FontFamily="{Binding Styles.FontFamily}"
+             Background="{Binding Styles.BackgroundSecondaryBrush}"
+             Foreground="{Binding Styles.ForegroundBrush}">
     <Grid>
         <StackPanel Orientation="Horizontal"
-                    Background="{Binding Source={x:Static cl:Colours.BackgroundSecondaryBrush}}"
+                    Background="{Binding Styles.BackgroundSecondaryBrush}"
                     Margin="-2">
-            <ToolBarTray>
-                <ToolBar ToolTip="Database Save/Load">
+            <ToolBarTray Background="{Binding Styles.BackgroundSecondaryBrush}">
+                <ToolBar ToolTip="Database Save/Load"
+                         Background="{Binding Styles.BackgroundBrush}">
                     <Button Content="New Database"
                             Style="{StaticResource ResourceKey=defaultButtonNoMargin}"
                             Command="{Binding NewDatabaseCommand}" />
@@ -28,7 +32,8 @@
                             Style="{StaticResource ResourceKey=defaultButtonNoMargin}"
                             Command="{Binding RefreshCommand}" />
                 </ToolBar>
-                <ToolBar ToolTip="Portfolio Settings">
+                <ToolBar ToolTip="Portfolio Settings"
+                         Background="{Binding Styles.BackgroundBrush}">
                     <Button Content="Update Data"
                             Style="{StaticResource ResourceKey=defaultButtonNoMargin}"
                             Command="{Binding UpdateDataCommand}" />
@@ -36,9 +41,11 @@
                             Style="{StaticResource ResourceKey=defaultButtonNoMargin}"
                             Command="{Binding CleanDataCommand}" />
                     <Label Margin="5 5 5 5"
+                           Foreground="{Binding Styles.ForegroundBrush}"
                            Content="Base Currency" />
                     <ComboBox Margin="5 5 5 5"
                               MinWidth="50"
+                              Foreground="{Binding Styles.ForegroundBrush}"
                               ItemsSource="{Binding Currencies}"
                               SelectedValue="{Binding Path=BaseCurrency}">
                         <i:Interaction.Triggers>
@@ -49,15 +56,20 @@
                         </i:Interaction.Triggers>
                     </ComboBox>
                 </ToolBar>
-                <ToolBar ToolTip="Help Options">
-                    <Button Width="100"
-                            Height="25"
-                            HorizontalAlignment="Right"
-                            Style="{StaticResource ResourceKey=defaultButton}"
+                <ToolBar ToolTip="Help Options"
+                         Background="{Binding Styles.BackgroundBrush}">
+                    <Button HorizontalAlignment="Right"
+                            Background="{Binding Styles.BackgroundBrush}"
+                            Style="{StaticResource ResourceKey=defaultButtonNoMargin}"
                             Command="{Binding OpenHelpCommand}">
                         <StackPanel Orientation="Horizontal">
                             <Image Source="../TemplatesAndStyles/helpIcon.png" />
-                            <TextBlock Background="LightGreen">Dont Panic!</TextBlock>
+                            <TextBlock HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Foreground="LightGreen"
+                                       FontSize="{Binding Styles.MediumFontSize}"
+                                       FontWeight="UltraBold"
+                                       Text="Don't Panic!" />
                         </StackPanel>
                     </Button>
                 </ToolBar>
