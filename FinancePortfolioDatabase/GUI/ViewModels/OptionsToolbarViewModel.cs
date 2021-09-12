@@ -27,6 +27,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         private readonly IReportLogger fReportLogger;
         private string fBaseCurrency;
 
+        /// <summary>
+        /// The styles to display in the UI.
+        /// </summary>
         public UiStyles Styles
         {
             get;
@@ -79,6 +82,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             CurrencyDropDownClosed = new RelayCommand(DropDownClosed);
         }
 
+        /// <inheritdoc/>
         public override void UpdateData(IPortfolio portfolio)
         {
             _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.AddingData, $"Updating data in OptionsToolbarViewModel");
@@ -95,10 +99,14 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             BaseCurrency = portfolio.BaseCurrency;
         }
 
+        /// <summary>
+        /// Command to open the help documentation.
+        /// </summary>
         public ICommand OpenHelpCommand
         {
             get;
         }
+
         private void OpenHelpDocsCommand()
         {
             _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Unknown, $"Opening help window.");
@@ -106,6 +114,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             helpwindow.Show();
         }
 
+        /// <summary>
+        /// Command to reset database and load empty one.
+        /// </summary>
         public ICommand NewDatabaseCommand
         {
             get;
@@ -130,6 +141,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
         }
 
+        /// <summary>
+        /// Command to save the current database to file.
+        /// </summary>
         public ICommand SaveDatabaseCommand
         {
             get;
@@ -146,6 +160,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
         }
 
+        /// <summary>
+        /// Command to open file load dialog and load database from file.
+        /// </summary>
         public ICommand LoadDatabaseCommand
         {
             get;
@@ -163,6 +180,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
         }
 
+        /// <summary>
+        /// Command to instantiate the auto update of database values.
+        /// </summary>
         public ICommand UpdateDataCommand
         {
             get;
@@ -173,6 +193,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             DataUpdateCallback(async programPortfolio => await PortfolioDataUpdater.Download(Account.All, programPortfolio, null, fReportLogger).ConfigureAwait(false));
         }
 
+        /// <summary>
+        /// Command to remove unnecessary data from the database.
+        /// </summary>
         public ICommand CleanDataCommand
         {
             get;
@@ -183,6 +206,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             DataUpdateCallback(programPortfolio => programPortfolio.CleanData());
         }
 
+        /// <summary>
+        /// Command to call refresh on the ui windows.
+        /// </summary>
         public ICommand RefreshCommand
         {
             get;
@@ -194,6 +220,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             DataUpdateCallback(programPortfolio => programPortfolio.OnPortfolioChanged(false, new PortfolioEventArgs(Account.All)));
         }
 
+        /// <summary>
+        /// Command to update the base currency of the database.
+        /// </summary>
         public ICommand CurrencyDropDownClosed
         {
             get;

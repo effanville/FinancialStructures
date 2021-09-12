@@ -13,7 +13,7 @@ using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 {
     /// <summary>
-    /// View model 
+    /// View model for the listing of all securities and their data.
     /// </summary>
     public class SecurityEditWindowViewModel : DataDisplayViewModelBase
     {

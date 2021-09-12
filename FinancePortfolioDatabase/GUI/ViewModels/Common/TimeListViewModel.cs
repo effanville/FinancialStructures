@@ -10,6 +10,9 @@ using Common.UI.ViewModelBases;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {
+    /// <summary>
+    /// View model for displaying a <see cref="TimeList"/>
+    /// </summary>
     public sealed class TimeListViewModel : PropertyChangedBase
     {
         private readonly UiGlobals fUiGlobals;
@@ -20,20 +23,31 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         internal DailyValuation fOldSelectedValuation;
         internal DailyValuation SelectedValuation;
 
-        private List<DailyValuation> fUnitPrices = new List<DailyValuation>();
+        private List<DailyValuation> fValuations = new List<DailyValuation>();
+
+        /// <summary>
+        /// The list of values to display.
+        /// </summary>
         public List<DailyValuation> Valuations
         {
-            get => fUnitPrices;
-            set => SetAndNotify(ref fUnitPrices, value, nameof(Valuations));
+            get => fValuations;
+            set => SetAndNotify(ref fValuations, value, nameof(Valuations));
         }
 
         private string fValueName;
+
+        /// <summary>
+        /// The name of the type of value displayed.
+        /// </summary>
         public string ValueName
         {
             get => fValueName;
             set => SetAndNotify(ref fValueName, value, nameof(ValueName));
         }
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public TimeListViewModel(TimeList timeList, string valueName, UiGlobals globals, Action<DailyValuation> deleteValueAction, Action<DailyValuation, DailyValuation> addEditValueAction)
         {
             DeleteValueAction = deleteValueAction;
@@ -49,6 +63,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             DeleteValuationCommand = new RelayCommand<KeyEventArgs>(ExecuteDeleteValuation);
         }
 
+        /// <summary>
+        /// Routine to update the data in the display.
+        /// </summary>
         public void UpdateData(TimeList timeList)
         {
             fDisplayList = timeList;
@@ -56,6 +73,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             Valuations = timeList.Values();
         }
 
+        /// <summary>
+        /// Command called to add default values.
+        /// </summary>
         public ICommand AddDefaultDataCommand
         {
             get;
@@ -76,6 +96,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             };
         }
 
+        /// <summary>
+        /// Command to update the selected item.
+        /// </summary>
         public ICommand SelectionChangedCommand
         {
             get;
@@ -104,6 +127,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             fOldSelectedValuation = SelectedValuation?.Copy();
         }
 
+        /// <summary>
+        /// Command to add or edit data to the <see cref="TimeList"/>
+        /// </summary>
         public ICommand AddEditDataCommand
         {
             get;
@@ -118,6 +144,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             }
         }
 
+        /// <summary>
+        /// Command to delete values from the <see cref="TimeList"/>
+        /// </summary>
         public ICommand DeleteValuationCommand
         {
             get;

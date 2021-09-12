@@ -22,12 +22,18 @@ using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 {
+    /// <summary>
+    /// View model for the display of a security data.
+    /// </summary>
     public class SelectedSecurityViewModel : TabViewModelBase<IPortfolio>
     {
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
         private readonly IReportLogger fReportLogger;
         private readonly UiGlobals fUiGlobals;
 
+        /// <summary>
+        /// The styles to display in the UI.
+        /// </summary>
         public UiStyles Styles
         {
             get;
@@ -40,12 +46,19 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
         /// <inheritdoc/>
         public override bool Closable => true;
 
+        /// <summary>
+        /// The name data of the security this window details.
+        /// </summary>
         public NameData SelectedName
         {
             get;
         }
 
         private TimeListViewModel fTLVM;
+
+        /// <summary>
+        /// View Model for the unit price data of the Security.
+        /// </summary>
         public TimeListViewModel TLVM
         {
             get => fTLVM;
@@ -53,6 +66,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
         }
 
         private List<SecurityTrade> fTrades = new List<SecurityTrade>();
+
+        /// <summary>
+        /// The list of trades to display.
+        /// </summary>
         public List<SecurityTrade> Trades
         {
             get => fTrades;
@@ -60,6 +77,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
         }
 
         private AccountStatistics fSecurityStats;
+
+        /// <summary>
+        /// The statistics for the security.
+        /// </summary>
         public AccountStatistics SecurityStats
         {
             get => fSecurityStats;
@@ -67,12 +88,19 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
         }
 
         private List<DailyValuation> fValues;
+
+        /// <summary>
+        /// List of total held amount of the security.
+        /// </summary>
         public List<DailyValuation> Values
         {
             get => fValues;
             set => SetAndNotify(ref fValues, value, nameof(Values));
         }
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public SelectedSecurityViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, UiStyles styles, UiGlobals globals, NameData selectedName)
             : base(selectedName != null ? selectedName.ToString() : "No-Name", portfolio)
         {
@@ -89,7 +117,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             SelectionChangedCommand = new RelayCommand<object>(ExecuteSelectionChanged);
             UpdateDataCallback = updateData;
 
-
             if (portfolio.TryGetAccount(Account.Security, SelectedName, out IValueList desired))
             {
                 ISecurity security = desired as ISecurity;
@@ -103,6 +130,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             UpdateData(portfolio, null);
         }
 
+        /// <summary>
+        /// Command to delete a selected Trade.
+        /// </summary>
         public ICommand DeleteValuationCommand
         {
             get;
@@ -143,6 +173,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             }
         }
 
+        /// <summary>
+        /// Command to add data to the security from a csv file.
+        /// </summary>
         public ICommand AddCsvData
         {
             get;
@@ -178,6 +211,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             }
         }
 
+        /// <summary>
+        /// Command to export the data to a csv file.
+        /// </summary>
         public ICommand ExportCsvData
         {
             get;
@@ -217,6 +253,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             }
         }
 
+        /// <inheritdoc/>
         public override void UpdateData(IPortfolio dataToDisplay, Action<object> removeTab)
         {
             _ = fReportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, $"Selected Security {SelectedName} updating data.");
@@ -240,6 +277,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             }
         }
 
+        /// <inheritdoc/>
         public override void UpdateData(IPortfolio dataToDisplay)
         {
             UpdateData(dataToDisplay, null);
@@ -269,6 +307,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             fOldSelectedTrade = SelectedTrade?.Copy();
         }
 
+        /// <summary>
+        /// Command to create default values in the selected trade list.
+        /// </summary>
         public ICommand AddDefaultDataCommand
         {
             get;
@@ -285,6 +326,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             };
         }
 
+        /// <summary>
+        /// Command to update the selected trade.
+        /// </summary>
         public ICommand SelectionChangedCommand
         {
             get;
@@ -299,6 +343,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             }
         }
 
+        /// <summary>
+        /// Command to add or edit data in the Trade list.
+        /// </summary>
         public ICommand AddEditDataCommand
         {
             get;
@@ -318,6 +365,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             }
         }
 
+        /// <summary>
+        /// Command to delete a trade when key is pressed.
+        /// </summary>
         public ICommand DeleteTradeKeyDownCommand
         {
             get;

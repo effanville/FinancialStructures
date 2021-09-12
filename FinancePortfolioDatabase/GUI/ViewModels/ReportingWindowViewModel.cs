@@ -11,14 +11,25 @@ using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {
+    /// <summary>
+    /// View model for the user control that displays reports.
+    /// </summary>
     public class ReportingWindowViewModel : PropertyChangedBase
     {
+        private ErrorReports fReportsToView;
+        private readonly IFileInteractionService fFileInteractionService;
+
+        /// <summary>
+        /// The styles to display in the UI.
+        /// </summary>
         public UiStyles Styles
         {
             get; set;
         }
-        private ErrorReports fReportsToView;
-        private readonly IFileInteractionService fFileInteractionService;
+
+        /// <summary>
+        /// The reports to display in the control. This is a sublist of <see cref="Reports"/> filtered by <see cref="ReportingSeverity"/>.
+        /// </summary>
         public ErrorReports ReportsToView
         {
             get => fReportsToView;
@@ -26,18 +37,27 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         }
 
         private bool fIsExpanded;
+        /// <summary>
+        /// Whether the view is expanded or not.
+        /// </summary>
         public bool IsExpanded
         {
             get => fIsExpanded;
             set => SetAndNotify(ref fIsExpanded, value, nameof(IsExpanded));
         }
 
+        /// <summary>
+        /// Complete list of all reports stored.
+        /// </summary>
         public ErrorReports Reports
         {
             get;
             set;
         }
 
+        /// <summary>
+        /// Selected index of the reports.
+        /// </summary>
         public int IndexToDelete
         {
             get;
@@ -46,18 +66,23 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
 
         private ReportSeverity fReportingSeverity;
 
+        /// <summary>
+        /// The selected reporting severity.
+        /// </summary>
         public ReportSeverity ReportingSeverity
         {
             get => fReportingSeverity;
             set
             {
-                fReportingSeverity = value;
-                OnPropertyChanged(nameof(ReportingSeverity));
+                SetAndNotify(ref fReportingSeverity, value, nameof(ReportingSeverity));
                 SyncReports();
             }
         }
 
-        public List<ReportSeverity> EnumValues => Enum.GetValues(typeof(ReportSeverity)).Cast<ReportSeverity>().ToList();
+        /// <summary>
+        /// List of all types of ReportSeverity.
+        /// </summary>
+        public static List<ReportSeverity> ReportSeverityValues => Enum.GetValues(typeof(ReportSeverity)).Cast<ReportSeverity>().ToList();
 
         /// <summary>
         /// Default constructor.
@@ -85,6 +110,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
         }
 
+        /// <summary>
+        /// Command to clear all reports in the control.
+        /// </summary>
         public ICommand ClearReportsCommand
         {
             get;
@@ -96,6 +124,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             SyncReports();
         }
 
+        /// <summary>
+        /// Command to export reports to a csv. 
+        /// </summary>
         public ICommand ExportReportsCommand
         {
             get;
@@ -123,6 +154,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
         }
 
+        /// <summary>
+        /// Command to delete a selected report.
+        /// </summary>
         public ICommand DeleteCommand
         {
             get;
@@ -141,6 +175,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
         }
 
+        /// <summary>
+        /// Updates the reports in the window.
+        /// </summary>
         public void UpdateReport(ReportSeverity severity, ReportType type, ReportLocation location, string message)
         {
             Reports.AddErrorReport(severity, type, location, message);

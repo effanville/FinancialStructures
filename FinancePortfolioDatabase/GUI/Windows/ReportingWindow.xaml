@@ -37,7 +37,7 @@
                 <ComboBox Margin="2"
                           FontWeight="Normal"
                           FontSize="{Binding Styles.SmallFontSize}"
-                          ItemsSource="{Binding EnumValues}"
+                          ItemsSource="{Binding ReportSeverityValues}"
                           SelectedValue="{Binding Path=ReportingSeverity}" />
                 <Button Content="Export to File"
                         FontSize="{Binding Styles.SmallFontSize}"
@@ -45,8 +45,7 @@
                         Command="{Binding ExportReportsCommand}" />
             </StackPanel>
         </Grid>
-        <DataGrid Name="SecBox"
-                  SelectionUnit="FullRow"
+        <DataGrid SelectionUnit="FullRow"
                   CanUserAddRows="True"
                   CanUserDeleteRows="False"
                   AutoGenerateColumns="True"
