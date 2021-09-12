@@ -21,6 +21,7 @@
                     Grid.Row="0"
                     Grid.Column="0"
                     FontSize="{Binding Styles.MediumFontSize}"
+                    SelectedIndex="{Binding SelectedIndex}"
                     ItemsSource="{Binding Tabs}">
             <TabControl.Resources>
                 <Style  TargetType="{x:Type TabControl}">

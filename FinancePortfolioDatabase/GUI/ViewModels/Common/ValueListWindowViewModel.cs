@@ -15,11 +15,28 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
     /// </summary>
     public class ValueListWindowViewModel : DataDisplayViewModelBase
     {
-        public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
-
         private readonly UiGlobals fUiGlobals;
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
 
+        /// <summary>
+        /// The tabs to display.
+        /// </summary>
+        public ObservableCollection<object> Tabs { get; set; } = new ObservableCollection<object>();
+
+        private int fSelectedIndex;
+
+        /// <summary>
+        /// Index of the selected tab.
+        /// </summary>
+        public int SelectedIndex
+        {
+            get => fSelectedIndex;
+            set => SetAndNotify(ref fSelectedIndex, value, nameof(SelectedIndex));
+        }
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public ValueListWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, UiStyles styles, UiGlobals globals, Account accountType)
             : base(styles, title, accountType, portfolio)
         {
@@ -27,8 +44,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             UpdateDataCallback = updateDataCallback;
             UpdateData(portfolio);
             Tabs.Add(new DataNamesViewModel(DataStore, updateDataCallback, fUiGlobals.ReportLogger, styles, (name) => LoadTabFunc(name), accountType));
+
+            SelectedIndex = 0;
         }
 
+        /// <inheritdoc/>
         public override void UpdateData(IPortfolio portfolio)
         {
             base.UpdateData(portfolio);

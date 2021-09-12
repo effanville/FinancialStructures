@@ -23,7 +23,7 @@
                     FontFamily="{Binding Styles.FontFamily}"
                     ItemsSource="{Binding Tabs}"
                     Background="{Binding Styles.BackgroundBrush}"
-                    SelectedIndex="0">
+                    SelectedIndex="{Binding SelectedIndex}">
             <TabControl.Resources>
                 <Style TargetType="TabItem">
                     <Setter Property="Template">
