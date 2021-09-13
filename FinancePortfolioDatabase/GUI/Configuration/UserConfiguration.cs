@@ -16,9 +16,19 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         public const string StatsDisplay = nameof(StatsViewModel);
 
         /// <summary>
-        /// Name of the child configuration for the StatsOptions window.
+        /// Name of the child configuration for the <see cref="StatsCreatorWindowViewModel"/>.
         /// </summary>
-        public const string StatsOptions = nameof(StatsOptionsViewModel);
+        public const string StatsCreator = nameof(StatsCreatorWindowViewModel);
+
+        /// <summary>
+        /// Name of the child configuration for the <see cref="ExportStatsViewModel"/>
+        /// </summary>
+        public const string StatsOptions = nameof(ExportStatsViewModel);
+
+        /// <summary>
+        /// Name of the child configuration for the <see cref="ExportHistoryViewModel"/>
+        /// </summary>
+        public const string HistoryOptions = nameof(ExportHistoryViewModel);
 
         /// <inheritdoc/>
         public Dictionary<string, IConfiguration> ChildConfigurations
@@ -42,7 +52,7 @@ namespace FinancePortfolioDatabase.GUI.Configuration
             ChildConfigurations = new Dictionary<string, IConfiguration>
             {
                 { StatsDisplay, new StatsDisplayConfiguration() },
-                { StatsOptions, new StatsOptionsDisplayConfiguration() }
+                { StatsCreator, new StatsCreatorConfiguration() }
             };
         }
 

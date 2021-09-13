@@ -94,7 +94,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             Tabs.Add(new ValueListWindowViewModel("Currencies", ProgramPortfolio, UpdateDataCallback, Styles, fUiGlobals, Account.Currency));
             Tabs.Add(new StatsViewModel(ProgramPortfolio, Styles, fUiGlobals, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsDisplay], Account.All));
             Tabs.Add(new StatisticsChartsViewModel(ProgramPortfolio, Styles));
-            Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, Styles, fUiGlobals, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsOptions], AddObjectAsMainTab));
+            Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, Styles, fUiGlobals, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsCreator], AddObjectAsMainTab));
             ProgramPortfolio.PortfolioChanged += AllData_portfolioChanged;
         }
 

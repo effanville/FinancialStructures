@@ -21,7 +21,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
     /// <summary>
     /// View model for the stats options page.
     /// </summary>
-    public class StatsOptionsViewModel : DataDisplayViewModelBase
+    public class ExportStatsViewModel : DataDisplayViewModelBase
     {
         private readonly IConfiguration fUserConfiguration;
         private IReportLogger ReportLogger => fUiGlobals.ReportLogger;
@@ -142,7 +142,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public StatsOptionsViewModel(IPortfolio portfolio, Action<object> CloseWindow, UiStyles styles, UiGlobals uiGlobals, IConfiguration userConfiguration)
+        public ExportStatsViewModel(IPortfolio portfolio, Action<object> CloseWindow, UiStyles styles, UiGlobals uiGlobals, IConfiguration userConfiguration)
             : base(styles, "", Account.All, portfolio)
         {
             fUiGlobals = uiGlobals;
@@ -249,12 +249,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
 
             CloseWindowAction(new HtmlStatsViewerViewModel(Styles, fUiGlobals, path));
-        }
-
-        /// <inheritdoc/>
-        public override void UpdateData(IPortfolio dataToDisplay)
-        {
-            base.UpdateData(dataToDisplay);
         }
     }
 }

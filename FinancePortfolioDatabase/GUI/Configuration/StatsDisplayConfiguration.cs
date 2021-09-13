@@ -12,20 +12,8 @@ namespace FinancePortfolioDatabase.GUI.Configuration
     {
         private bool DisplayValueFunds;
 
-
-        /// <summary>
-        /// Flag determining whether display has loaded yet.
-        /// </summary>
+        /// <inheritdoc/>
         public bool HasLoaded
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
-        /// Which tab was last selected.
-        /// </summary>
-        public int SelectedTab
         {
             get;
             set;

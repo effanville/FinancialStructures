@@ -23,8 +23,11 @@
     <DataTemplate DataType="{x:Type vmStats:StatsViewModel}">
         <statsView:StatsUserControl />
     </DataTemplate>
-    <DataTemplate DataType="{x:Type vmStats:StatsOptionsViewModel}">
-        <statsView:StatsOptionsWindow />
+    <DataTemplate DataType="{x:Type vmStats:ExportHistoryViewModel}">
+        <statsView:ExportHistoryControl />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vmStats:ExportStatsViewModel}">
+        <statsView:ExportStatsControl />
     </DataTemplate>
     <DataTemplate DataType="{x:Type vm:HtmlStatsViewerViewModel}">
         <view:HtmlStatsViewer />

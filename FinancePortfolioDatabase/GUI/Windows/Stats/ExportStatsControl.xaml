@@ -1,19 +1,15 @@
-﻿<ItemsControl x:Class="FinancePortfolioDatabase.GUI.Windows.Stats.StatsOptionsWindow"
+﻿<ItemsControl x:Class="FinancePortfolioDatabase.GUI.Windows.Stats.ExportStatsControl"
               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
               xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
               xmlns:vm="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Stats"
               xmlns:gui="clr-namespace:FinancePortfolioDatabase.GUI"
-              d:DataContext="{d:DesignInstance Type=vm:StatsOptionsViewModel}"
+              d:DataContext="{d:DesignInstance Type=vm:ExportStatsViewModel}"
               mc:Ignorable="d"
               Background="{Binding Styles.BackgroundBrush}"
               Foreground="{Binding Styles.ForegroundBrush}"
-              FontFamily="{Binding Styles.FontFamily}"
-              Height="450"
-              Width="600"
-              MinHeight="200"
-              MinWidth="200">
+              FontFamily="{Binding Styles.FontFamily}">
     <Grid>
         <Grid.Resources>
             <gui:DisplayConstants x:Key="Consts" />
@@ -21,7 +17,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" MinWidth="150"/>
             <ColumnDefinition Width="4*" />
-            <ColumnDefinition Width="*" MinWidth="100"/>
+            <ColumnDefinition Width="*" MinWidth="200"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -53,6 +49,7 @@
                 Grid.Row="1"
                 Content="Export Statistics"
                 Style="{StaticResource ResourceKey=defaultButton}"
+                Width="200"
                 Command="{Binding ExportCommand}"
                 CommandParameter="{Binding RelativeSource={RelativeSource AncestorType={x:Type Window}}}" />
         <Grid Grid.Row="1"

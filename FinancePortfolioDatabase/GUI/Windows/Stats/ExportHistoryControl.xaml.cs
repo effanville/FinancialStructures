@@ -3,14 +3,14 @@
 namespace FinancePortfolioDatabase.GUI.Windows.Stats
 {
     /// <summary>
-    /// Interaction logic for StatsOptionsWindow.xaml
+    /// Interaction logic for ExportHistoryControl.xaml
     /// </summary>
-    public partial class StatsOptionsWindow : ItemsControl
+    public partial class ExportHistoryControl : UserControl
     {
         /// <summary>
-        /// Construct an instance.
+        /// Construct and instance.
         /// </summary>
-        public StatsOptionsWindow()
+        public ExportHistoryControl()
         {
             InitializeComponent();
         }

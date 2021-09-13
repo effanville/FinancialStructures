@@ -9,7 +9,7 @@ namespace FinancePortfolioDatabase.GUI.Configuration
     /// <summary>
     /// Configuration for the stats display
     /// </summary>
-    public sealed class StatsOptionsDisplayConfiguration : IConfiguration
+    public sealed class ExportStatsConfiguration : IConfiguration
     {
         // Internal configurations to store.
         private List<Selectable<string>> DisplayConditions = new List<Selectable<string>>();
@@ -41,14 +41,14 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public StatsOptionsDisplayConfiguration()
+        public ExportStatsConfiguration()
         {
         }
 
         /// <inheritdoc/>
         public void StoreConfiguration(object viewModel)
         {
-            if (viewModel is StatsOptionsViewModel vm)
+            if (viewModel is ExportStatsViewModel vm)
             {
                 SecurityColumnNames = vm.SecurityColumnNames;
                 SecuritySortingField = vm.SecuritySortingField;
@@ -66,7 +66,7 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         /// <inheritdoc/>
         public void RestoreFromConfiguration(object viewModel)
         {
-            if (HasLoaded && viewModel is StatsOptionsViewModel vm)
+            if (HasLoaded && viewModel is ExportStatsViewModel vm)
             {
                 vm.SecurityColumnNames = SecurityColumnNames;
                 vm.SecuritySortingField = SecuritySortingField;
