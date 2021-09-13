@@ -7,7 +7,7 @@
     <PublishTrimmed>false</PublishTrimmed>
     <TrimMode>CopyUsed</TrimMode>
     <UseWPF>true</UseWPF>
-    <ApplicationIcon>owl.ico</ApplicationIcon>
+    <ApplicationIcon>self_drawn_icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup>
