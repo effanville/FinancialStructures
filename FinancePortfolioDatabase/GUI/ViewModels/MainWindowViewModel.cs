@@ -25,6 +25,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             get;
             set;
         }
+
         internal IPortfolio ProgramPortfolio = PortfolioFactory.GenerateEmpty();
 
         /// <summary>
@@ -91,7 +92,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             Tabs.Add(new ValueListWindowViewModel("Bank Accounts", ProgramPortfolio, UpdateDataCallback, Styles, fUiGlobals, Account.BankAccount));
             Tabs.Add(new ValueListWindowViewModel("Benchmarks", ProgramPortfolio, UpdateDataCallback, Styles, fUiGlobals, Account.Benchmark));
             Tabs.Add(new ValueListWindowViewModel("Currencies", ProgramPortfolio, UpdateDataCallback, Styles, fUiGlobals, Account.Currency));
-            Tabs.Add(new StatsViewModel(ProgramPortfolio, ReportLogger, Styles, fUiGlobals, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsDisplay], Account.All));
+            Tabs.Add(new StatsViewModel(ProgramPortfolio, Styles, fUiGlobals, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsDisplay], Account.All));
             Tabs.Add(new StatisticsChartsViewModel(ProgramPortfolio, Styles));
             Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, Styles, fUiGlobals, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsOptions], AddObjectAsMainTab));
             ProgramPortfolio.PortfolioChanged += AllData_portfolioChanged;

@@ -85,9 +85,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         /// <inheritdoc/>
         public override void UpdateData(IPortfolio portfolio)
         {
-            _ = fReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.AddingData, $"Updating data in OptionsToolbarViewModel");
             base.UpdateData(portfolio);
-
             fFileName = fUiGlobals.CurrentFileSystem.Path.GetFileName(portfolio.FilePath);
             fDirectory = portfolio.Directory(fUiGlobals.CurrentFileSystem);
             Currencies = portfolio.Names(Account.Currency).Concat(portfolio.Companies(Account.Currency)).Distinct().ToList();

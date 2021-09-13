@@ -44,7 +44,7 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
 
             Globals = TestSetupHelper.CreateGlobalsMock(new FileSystem(), fileMock.Object, dialogMock.Object);
             VMConfiguration = new StatsDisplayConfiguration();
-            ViewModel = new StatsViewModel(Portfolio, TestSetupHelper.DummyReportLogger, null, Globals, VMConfiguration, Account.All);
+            ViewModel = new StatsViewModel(Portfolio, null, Globals, VMConfiguration, Account.All);
         }
 
         [TearDown]

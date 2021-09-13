@@ -24,12 +24,19 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         private readonly UiGlobals fUiGlobals;
 
         private StatsOptionsViewModel fDisplay;
-        public StatsOptionsViewModel Display
+
+        /// <summary>
+        /// The options for exporting an html page.
+        /// </summary>
+        public StatsOptionsViewModel StatsPageExportOptions
         {
             get => fDisplay;
-            set => SetAndNotify(ref fDisplay, value, nameof(Display));
+            set => SetAndNotify(ref fDisplay, value, nameof(StatsPageExportOptions));
         }
 
+        /// <summary>
+        /// The number of days to have between history stats.
+        /// </summary>
         public int HistoryGapDays
         {
             get;
@@ -55,7 +62,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             fUiGlobals = globals;
             ReportLogger = reportLogger;
 
-            Display = new StatsOptionsViewModel(DataStore, ReportLogger, obj => fLoadTab(obj), Styles, fUiGlobals, fUserConfiguration);
+            StatsPageExportOptions = new StatsOptionsViewModel(DataStore, obj => fLoadTab(obj), Styles, fUiGlobals, fUserConfiguration);
 
             CreateInvestmentListCommand = new RelayCommand(ExecuteInvestmentListCommand);
             ExportHistoryCommand = new RelayCommand(ExecuteCreateHistory);
@@ -65,11 +72,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         /// Command to create a csv list of all investments.
         /// </summary>
         public ICommand CreateInvestmentListCommand
-        {
-            get;
-        }
-
-        public ICommand ExportHistoryCommand
         {
             get;
         }
@@ -93,6 +95,13 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
         }
 
+        /// <summary>
+        /// Command for exporting history data.
+        /// </summary>
+        public ICommand ExportHistoryCommand
+        {
+            get;
+        }
         private async void ExecuteCreateHistory()
         {
             FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile(".csv", DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + DataStore.DatabaseName(fUiGlobals.CurrentFileSystem) + "-History.csv", DataStore.Directory(fUiGlobals.CurrentFileSystem), "CSV file|*.csv|All files|*.*");
@@ -114,10 +123,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         }
 
         /// <inheritdoc/>
-        public override void UpdateData(IPortfolio portfolio = null)
+        public override void UpdateData(IPortfolio dataToDisplay = null)
         {
-            base.UpdateData(portfolio);
-            Display.UpdateData(portfolio);
+            base.UpdateData(dataToDisplay);
+            StatsPageExportOptions.UpdateData(dataToDisplay);
 
             fUserConfiguration.StoreConfiguration(this);
         }

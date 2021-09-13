@@ -2,7 +2,6 @@
 using FinancialStructures.Statistics;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
-using Common.Structure.Reporting;
 using Common.UI;
 using FinancePortfolioDatabase.GUI.Configuration;
 using Common.Structure.DisplayClasses;
@@ -20,11 +19,13 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
     {
         private readonly IConfiguration fUserConfiguration;
         private readonly UiGlobals fUiGlobals;
-        private readonly IReportLogger ReportLogger;
-        private readonly Account fAccount;
-        private List<AccountStatistics> fSecuritiesStats;
+        private List<AccountStatistics> fStats;
 
         private bool fDisplayValueFunds = true;
+
+        /// <summary>
+        /// Should statistics for funds with non zero value be displayed.
+        /// </summary>
         public bool DisplayValueFunds
         {
             get => fDisplayValueFunds;
@@ -35,12 +36,18 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
         }
 
+        /// <summary>
+        /// The values of the statistics being displayed.
+        /// </summary>
         public List<AccountStatistics> Stats
         {
-            get => fSecuritiesStats;
-            set => SetAndNotify(ref fSecuritiesStats, value, nameof(Stats));
+            get => fStats;
+            set => SetAndNotify(ref fStats, value, nameof(Stats));
         }
 
+        /// <summary>
+        /// The statistics to display.
+        /// </summary>
         public List<Selectable<Statistic>> StatisticNames
         {
             get;
@@ -50,7 +57,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public StatsViewModel(IPortfolio portfolio, IReportLogger reportLogger, UiStyles styles, UiGlobals globals, IConfiguration userConfiguration, Account account = Account.All, Statistic[] statsToView = null)
+        public StatsViewModel(IPortfolio portfolio, UiStyles styles, UiGlobals globals, IConfiguration userConfiguration, Account account = Account.All, Statistic[] statsToView = null)
             : base(styles, "Statistics", account, portfolio)
         {
             StatisticNames = statsToView != null ? statsToView.Select(stat => new Selectable<Statistic>(stat, true)).ToList() : AccountStatisticsHelpers.AllStatistics().Select(stat => new Selectable<Statistic>(stat, true)).ToList();
@@ -63,7 +70,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
             fUserConfiguration.HasLoaded = true;
             fUiGlobals = globals;
-            ReportLogger = reportLogger;
             UpdateData(portfolio);
         }
 
@@ -84,7 +90,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
 
             Statistic[] statsToView = StatisticNames.Where(stat => stat.Selected).Select(stat => stat.Instance).ToArray();
-            Stats = DataStore.GetStats(fAccount, DisplayValueFunds, statisticsToDisplay: statsToView);
+            Stats = DataStore.GetStats(DataType, DisplayValueFunds, statisticsToDisplay: statsToView);
             fUserConfiguration.StoreConfiguration(this);
         }
     }

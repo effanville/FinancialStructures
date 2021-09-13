@@ -125,7 +125,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         }
 
         /// <summary>
-        /// Command to export reports to a csv. 
+        /// Command to export reports to a csv.
         /// </summary>
         public ICommand ExportReportsCommand
         {

@@ -36,6 +36,10 @@ namespace FinancePortfolioDatabase.GUI.Windows
             DataContext = viewModel;
         }
 
+        /// <summary>
+        /// Prints all error reports from the report logger instance.
+        /// </summary>
+        /// <param name="exception"></param>
         public void PrintErrorLog(Exception exception)
         {
             FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile("log", string.Empty, fUiGlobals.CurrentWorkingDirectory, filter: "log Files|*.log|All Files|*.*");

@@ -7,6 +7,9 @@ namespace FinancePortfolioDatabase.GUI.Windows
     /// </summary>
     public partial class TimeListView : ContentControl
     {
+        /// <summary>
+        /// Construct an instance.
+        /// </summary>
         public TimeListView()
         {
             InitializeComponent();

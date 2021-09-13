@@ -49,9 +49,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         }
 
         /// <inheritdoc/>
-        public override void UpdateData(IPortfolio portfolio)
+        public override void UpdateData(IPortfolio dataToDisplay)
         {
-            base.UpdateData(portfolio);
+            base.UpdateData(dataToDisplay);
             List<object> removableTabs = new List<object>();
             if (Tabs != null)
             {
@@ -59,7 +59,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
                 {
                     if (item is TabViewModelBase<IPortfolio> viewModel)
                     {
-                        viewModel.UpdateData(portfolio, tabItem => removableTabs.Add(tabItem));
+                        viewModel.UpdateData(dataToDisplay, tabItem => removableTabs.Add(tabItem));
                     }
                 }
 
