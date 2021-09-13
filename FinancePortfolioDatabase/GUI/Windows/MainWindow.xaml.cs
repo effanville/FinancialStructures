@@ -3,12 +3,12 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Reflection;
 using System.Windows;
-using FinancePortfolioDatabase.GUI.ViewModels;
-using Common.UI.Services;
-using FinancialStructures.Database;
 using Common.Structure.Reporting;
 using Common.UI;
+using Common.UI.Services;
+using FinancePortfolioDatabase.GUI.ViewModels;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
+using FinancialStructures.Database;
 
 namespace FinancePortfolioDatabase.GUI.Windows
 {
@@ -24,8 +24,8 @@ namespace FinancePortfolioDatabase.GUI.Windows
         /// </summary>
         public MainWindow()
         {
-            var FileInteractionService = new FileInteractionService(this);
-            var DialogCreationService = new DialogCreationService(this);
+            FileInteractionService FileInteractionService = new FileInteractionService(this);
+            DialogCreationService DialogCreationService = new DialogCreationService(this);
             fUiGlobals = new UiGlobals(null, new DispatcherInstance(), new FileSystem(), FileInteractionService, DialogCreationService, null);
             MainWindowViewModel viewModel = new MainWindowViewModel(fUiGlobals);
             InitializeComponent();

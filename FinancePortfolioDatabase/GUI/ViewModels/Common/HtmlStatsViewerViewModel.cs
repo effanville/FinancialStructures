@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Windows.Input;
-using FinancialStructures.Database;
-using FinancePortfolioDatabase.GUI.ViewModels.Common;
-using Common.UI.Commands;
 using Common.UI;
+using Common.UI.Commands;
 using Common.UI.Services;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
+using FinancePortfolioDatabase.GUI.ViewModels.Common;
+using FinancialStructures.Database;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {

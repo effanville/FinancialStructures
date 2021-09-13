@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FinancePortfolioDatabase.GUI.ViewModels.Common;
-using FinancialStructures.Database;
 using Common.Structure.DataStructures;
 using Common.Structure.Extensions;
 using Common.Structure.NamingStructures;
-using FinancialStructures.NamingStructures;
 using Common.UI;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
+using FinancePortfolioDatabase.GUI.ViewModels.Common;
+using FinancialStructures.Database;
+using FinancialStructures.FinanceStructures;
+using FinancialStructures.NamingStructures;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {
@@ -103,13 +104,13 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             HasValues = portfolio.NumberOf(Account.All) != 0;
             SecurityTotalText = $"Total Securities: {portfolio.NumberOf(Account.Security)}";
             SecurityAmountText = $"Total Value: {portfolio.TotalValue(Totals.Security).Truncate()} {portfolio.BaseCurrency}";
-            var securities = portfolio.FundsThreadSafe.ToList();
+            List<ISecurity> securities = portfolio.FundsThreadSafe.ToList();
             securities.Sort((fund, otherFund) => otherFund.Value(DateTime.Today).Value.CompareTo(fund.Value(DateTime.Today).Value));
             TopSecurities = securities.Take(5).Select(name => new Labelled<TwoName, DailyValuation>(new TwoName(name.Names.Company, name.Names.Name), name.Value(DateTime.Today))).ToList();
 
             BankAccountTotalText = $"Total Bank Accounts: {portfolio.NumberOf(Account.BankAccount)}";
             BankAccountAmountText = $"Total Value: {portfolio.TotalValue(Totals.BankAccount)} {portfolio.BaseCurrency}";
-            var bankAccounts = portfolio.BankAccountsThreadSafe.ToList();
+            List<ICashAccount> bankAccounts = portfolio.BankAccountsThreadSafe.ToList();
             bankAccounts.Sort((bank, otherBank) => otherBank.Value(DateTime.Today).Value.CompareTo(bank.Value(DateTime.Today).Value));
             TopBankAccounts = bankAccounts.Take(5).Select(name => new Labelled<TwoName, DailyValuation>(new TwoName(name.Names.Company, name.Names.Name), name.Value(DateTime.Today) ?? new DailyValuation(DateTime.Today, 0.0))).ToList();
         }

@@ -1,14 +1,14 @@
-﻿using System.Collections.Generic;
-using FinancialStructures.Statistics;
-using FinancePortfolioDatabase.GUI.ViewModels.Common;
-using FinancialStructures.Database;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Common.Structure.DisplayClasses;
 using Common.UI;
 using FinancePortfolioDatabase.GUI.Configuration;
-using Common.Structure.DisplayClasses;
-using System;
-using System.Linq;
-using FinancialStructures.Database.Statistics;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
+using FinancePortfolioDatabase.GUI.ViewModels.Common;
+using FinancialStructures.Database;
+using FinancialStructures.Database.Statistics;
+using FinancialStructures.Statistics;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {

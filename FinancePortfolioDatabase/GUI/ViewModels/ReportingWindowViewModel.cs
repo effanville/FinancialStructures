@@ -136,12 +136,12 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         {
             try
             {
-                var result = fFileInteractionService.SaveFile(".csv", "errorReports.csv");
+                FileInteractionResult result = fFileInteractionService.SaveFile(".csv", "errorReports.csv");
                 if (result.Success != null && (bool)result.Success)
                 {
                     StreamWriter writer = new StreamWriter(result.FilePath);
                     writer.WriteLine("Severity,ErrorType,Location,Message");
-                    foreach (var report in Reports.GetReports())
+                    foreach (ErrorReport report in Reports.GetReports())
                     {
                         writer.WriteLine(report.ErrorSeverity.ToString() + "," + report.ErrorType + "," + report.ErrorLocation.ToString() + "," + report.Message);
                     }

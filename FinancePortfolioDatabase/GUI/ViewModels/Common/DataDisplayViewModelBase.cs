@@ -1,6 +1,6 @@
-﻿using FinancialStructures.Database;
-using Common.UI.ViewModelBases;
+﻿using Common.UI.ViewModelBases;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
+using FinancialStructures.Database;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {

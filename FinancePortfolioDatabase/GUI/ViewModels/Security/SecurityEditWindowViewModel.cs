@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Common.Structure.Reporting;
+using Common.UI;
+using Common.UI.ViewModelBases;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
-using Common.Structure.Reporting;
-using Common.UI.ViewModelBases;
-using Common.UI;
-using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 {

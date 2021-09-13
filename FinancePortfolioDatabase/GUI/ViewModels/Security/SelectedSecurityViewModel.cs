@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
-using FinancialStructures.Database;
-using FinancialStructures.Database.Download;
-using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
 using Common.Structure.DataStructures;
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
+using Common.UI;
 using Common.UI.Commands;
 using Common.UI.Services;
 using Common.UI.ViewModelBases;
-using Common.UI;
-using FinancePortfolioDatabase.GUI.ViewModels.Common;
-using System.Linq;
-using System.Windows.Controls;
-using FinancialStructures.Statistics;
-using FinancialStructures.Database.Statistics;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
+using FinancePortfolioDatabase.GUI.ViewModels.Common;
+using FinancialStructures.Database;
+using FinancialStructures.Database.Download;
+using FinancialStructures.Database.Statistics;
+using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceStructures;
+using FinancialStructures.NamingStructures;
+using FinancialStructures.Statistics;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 {

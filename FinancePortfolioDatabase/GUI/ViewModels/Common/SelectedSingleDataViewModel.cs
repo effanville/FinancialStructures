@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Input;
-using FinancialStructures.Database;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
 using Common.Structure.DataStructures;
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
+using Common.UI;
 using Common.UI.Commands;
 using Common.UI.Services;
 using Common.UI.ViewModelBases;
-using Common.UI;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
+using FinancialStructures.Database;
+using FinancialStructures.FinanceStructures;
+using FinancialStructures.NamingStructures;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {

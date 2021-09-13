@@ -1,20 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Input;
-using FinancialStructures.Database;
-using FinancialStructures.DataExporters;
-using FinancialStructures.DataExporters.ExportOptions;
-using FinancialStructures.Statistics;
 using Common.Structure.DisplayClasses;
 using Common.Structure.Extensions;
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
+using Common.UI;
 using Common.UI.Commands;
 using Common.UI.Services;
-using Common.UI;
 using FinancePortfolioDatabase.GUI.Configuration;
-using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
+using FinancePortfolioDatabase.GUI.ViewModels.Common;
+using FinancialStructures.Database;
+using FinancialStructures.DataExporters;
+using FinancialStructures.DataExporters.ExportOptions;
+using FinancialStructures.Statistics;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {

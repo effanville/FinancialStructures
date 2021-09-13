@@ -4,16 +4,16 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using FinancialStructures.Database;
-using FinancialStructures.Database.Download;
-using FinancialStructures.Database.Statistics;
-using FinancialStructures.NamingStructures;
 using Common.Structure.DataStructures;
 using Common.Structure.DisplayClasses;
 using Common.Structure.Reporting;
 using Common.UI.Commands;
 using Common.UI.ViewModelBases;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
+using FinancialStructures.Database;
+using FinancialStructures.Database.Download;
+using FinancialStructures.Database.Statistics;
+using FinancialStructures.NamingStructures;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {
@@ -151,7 +151,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
                 return dataToDisplay.LatestDate(TypeOfAccount, name) == DateTime.Today || dataToDisplay.LatestValue(TypeOfAccount, name) == 0.0;
             }
 
-            var values = dataToDisplay.NameData(TypeOfAccount).Select(name => new SelectableEquatable<NameData>(name, IsUpdated(name))).ToList();
+            List<SelectableEquatable<NameData>> values = dataToDisplay.NameData(TypeOfAccount).Select(name => new SelectableEquatable<NameData>(name, IsUpdated(name))).ToList();
             DataNames = null;
             DataNames = values;
             DataNames.Sort((a, b) => a.Instance.CompareTo(b.Instance));

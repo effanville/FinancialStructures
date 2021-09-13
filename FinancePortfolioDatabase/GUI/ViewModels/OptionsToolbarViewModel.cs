@@ -3,15 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
-using FinanceWindows;
-using FinancialStructures.Database;
-using FinancialStructures.Database.Download;
 using Common.Structure.Reporting;
+using Common.UI;
 using Common.UI.Commands;
 using Common.UI.Services;
 using Common.UI.ViewModelBases;
-using Common.UI;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
+using FinanceWindows;
+using FinancialStructures.Database;
+using FinancialStructures.Database.Download;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {

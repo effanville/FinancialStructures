@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Windows.Input;
+using Common.Structure.Reporting;
+using Common.UI;
+using Common.UI.Commands;
+using Common.UI.Services;
+using FinancePortfolioDatabase.GUI.Configuration;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
 using FinancialStructures.DataExporters;
-using Common.Structure.Reporting;
-using Common.UI.Commands;
-using Common.UI.Services;
-using Common.UI;
-using FinancePortfolioDatabase.GUI.Configuration;
-using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {

@@ -1,14 +1,14 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using Common.Structure.Reporting;
+using Common.UI;
+using Common.UI.ViewModelBases;
+using FinancePortfolioDatabase.GUI.Configuration;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancePortfolioDatabase.GUI.ViewModels.Security;
 using FinancePortfolioDatabase.GUI.ViewModels.Stats;
 using FinancialStructures.Database;
-using Common.Structure.Reporting;
-using Common.UI.ViewModelBases;
-using Common.UI;
-using FinancePortfolioDatabase.GUI.Configuration;
-using System.Collections.ObjectModel;
-using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {

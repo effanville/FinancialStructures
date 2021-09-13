@@ -5,12 +5,12 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls.DataVisualization.Charting;
 using System.Windows.Media;
+using Common.Structure.DataStructures;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
+using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataStructures;
-using Common.Structure.DataStructures;
-using FinancePortfolioDatabase.GUI.ViewModels.Common;
-using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
@@ -83,13 +83,13 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         public void UpdateChart()
         {
             IRRLines = null;
-            var newValues = new ObservableCollection<LineSeries>();
+            ObservableCollection<LineSeries> newValues = new ObservableCollection<LineSeries>();
             if (HistoryStats.Count > 1)
             {
-                var sectorNames = DataStore.Sectors(Account.Security);
-                foreach (var name in sectorNames)
+                IReadOnlyList<string> sectorNames = DataStore.Sectors(Account.Security);
+                foreach (string name in sectorNames)
                 {
-                    var total = HistoryStats[HistoryStats.Count - 1].SecurityValue;
+                    DailyValuation total = HistoryStats[HistoryStats.Count - 1].SecurityValue;
                     if (HistoryStats[HistoryStats.Count - 1].SectorValues[name].Value > 0.1 * total.Value)
                     {
                         List<KeyValuePair<DateTime, double>> pc = new List<KeyValuePair<DateTime, double>>();
@@ -107,7 +107,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                         };
                         Style style = new Style(typeof(DataPoint));
                         Setter st1 = new Setter(DataPoint.TemplateProperty, null);
-                        Byte[] b = new Byte[3];
+                        byte[] b = new byte[3];
                         rnd.NextBytes(b);
                         Setter back = new Setter(DataPoint.BackgroundProperty, new SolidColorBrush(Color.FromRgb(b[0], b[1], b[2])));
                         style.Setters.Add(st1);
