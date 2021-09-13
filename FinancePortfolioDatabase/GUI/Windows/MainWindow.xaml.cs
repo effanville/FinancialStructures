@@ -8,6 +8,7 @@ using Common.UI.Services;
 using FinancialStructures.Database;
 using Common.Structure.Reporting;
 using Common.UI;
+using FinancePortfolioDatabase.GUI.ViewModels.Common;
 
 namespace FinancePortfolioDatabase.GUI.Windows
 {
@@ -86,6 +87,18 @@ namespace FinancePortfolioDatabase.GUI.Windows
             if (result == MessageBoxResult.Cancel)
             {
                 e.Cancel = true;
+            }
+        }
+
+        private void CloseTabCommand(object sender, RoutedEventArgs e)
+        {
+            MainWindowViewModel VM = DataContext as MainWindowViewModel;
+            if (MainTabControl.SelectedIndex != 0)
+            {
+                if (VM.Tabs[MainTabControl.SelectedIndex] is DataDisplayViewModelBase vmBase && vmBase.Closable)
+                {
+                    VM.Tabs.RemoveAt(MainTabControl.SelectedIndex);
+                }
             }
         }
     }
