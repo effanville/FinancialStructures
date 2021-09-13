@@ -7,7 +7,6 @@
              xmlns:uic="clr-namespace:Common.UI.Converters;assembly=Common.UI"
              xmlns:commonui="clr-namespace:Common.UI;assembly=Common.UI"
              xmlns:cl="clr-namespace:FinancePortfolioDatabase.GUI.TemplatesAndStyles"
-             xmlns:gui="clr-namespace:FinancePortfolioDatabase.GUI"
              xmlns:cht="http://schemas.microsoft.com/winfx/2006/xaml/presentation/toolkit"
              xmlns:common="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Common"
              d:DataContext="{d:DesignInstance Type=common:DataNamesViewModel}"
@@ -20,7 +19,6 @@
           VerticalAlignment="Stretch"
           HorizontalAlignment="Stretch">
         <Grid.Resources>
-            <gui:NameDataConverter x:Key="nameConverter" />
             <uic:StringToUKDateConverter x:Key="StringToUKDate" />
             <BooleanToVisibilityConverter x:Key="BoolToVis" />
         </Grid.Resources>
