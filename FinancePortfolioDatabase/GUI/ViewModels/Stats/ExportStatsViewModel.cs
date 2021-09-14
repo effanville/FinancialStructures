@@ -185,6 +185,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowBenchmarks, false));
 
                 fUserConfiguration.HasLoaded = true;
+                fUserConfiguration.StoreConfiguration(this);
             }
         }
 

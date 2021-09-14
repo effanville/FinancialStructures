@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
+using System.Runtime.Serialization;
 using FinancePortfolioDatabase.GUI.ViewModels.Stats;
 
 namespace FinancePortfolioDatabase.GUI.Configuration
@@ -8,9 +9,11 @@ namespace FinancePortfolioDatabase.GUI.Configuration
     /// <summary>
     /// Configuration object for the <see cref="StatsCreatorWindowViewModel"/>
     /// </summary>
+    [DataContract]
     public sealed class StatsCreatorConfiguration : IConfiguration
     {
         /// <inheritdoc/>
+        [DataMember]
         public Dictionary<string, IConfiguration> ChildConfigurations
         {
             get;
@@ -18,6 +21,7 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         }
 
         /// <inheritdoc/>
+        [DataMember]
         public bool HasLoaded
         {
             get;
@@ -37,20 +41,8 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         }
 
         /// <inheritdoc/>
-        public void LoadConfiguration(string filePath, IFileSystem fileSystem)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc/>
         public void RestoreFromConfiguration(object viewModel)
         {
-        }
-
-        /// <inheritdoc/>
-        public void SaveConfiguration(string filePath, IFileSystem fileSystem)
-        {
-            throw new NotImplementedException();
         }
 
         /// <inheritdoc/>

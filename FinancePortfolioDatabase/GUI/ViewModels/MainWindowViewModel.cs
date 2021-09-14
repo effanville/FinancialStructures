@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Reflection;
 using Common.Structure.Reporting;
 using Common.UI;
 using Common.UI.ViewModelBases;
@@ -33,7 +34,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         /// </summary>
         internal readonly IReportLogger ReportLogger;
         private readonly UiGlobals fUiGlobals;
-        private readonly IConfiguration fUserConfiguration;
+        private UserConfiguration fUserConfiguration;
+        private string fConfigLocation;
 
         private OptionsToolbarViewModel fOptionsToolbarCommands;
 
@@ -84,7 +86,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             ReportLogger = new LogReporter(UpdateReport);
             fUiGlobals = globals;
             fUiGlobals.ReportLogger = ReportLogger;
-            fUserConfiguration = new UserConfiguration();
+
+            LoadConfig();
 
             OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, Styles, fUiGlobals);
             Tabs.Add(new BasicDataViewModel(ProgramPortfolio, Styles, fUiGlobals));
@@ -96,6 +99,22 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             Tabs.Add(new StatisticsChartsViewModel(ProgramPortfolio, Styles));
             Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, Styles, fUiGlobals, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsCreator], AddObjectAsMainTab));
             ProgramPortfolio.PortfolioChanged += AllData_portfolioChanged;
+        }
+
+        private void LoadConfig()
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            var name = assembly.GetName();
+            fConfigLocation = fUiGlobals.CurrentFileSystem.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), name.Name, "user.config");
+            fUserConfiguration = UserConfiguration.LoadFromUserConfigFile(fConfigLocation, fUiGlobals.CurrentFileSystem, ReportLogger);
+        }
+
+        /// <summary>
+        /// Saves the user configuration to the local appData folder.
+        /// </summary>
+        public void SaveConfig()
+        {
+            fUserConfiguration.SaveConfiguration(fConfigLocation, fUiGlobals.CurrentFileSystem);
         }
 
         private void AllData_portfolioChanged(object sender, PortfolioEventArgs e)

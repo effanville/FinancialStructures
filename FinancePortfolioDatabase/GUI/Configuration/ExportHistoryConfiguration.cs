@@ -1,6 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO.Abstractions;
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using FinancePortfolioDatabase.GUI.ViewModels.Stats;
 
 namespace FinancePortfolioDatabase.GUI.Configuration
@@ -8,11 +7,14 @@ namespace FinancePortfolioDatabase.GUI.Configuration
     /// <summary>
     /// Configuration for the <see cref="ExportHistoryViewModel"/>.
     /// </summary>
+    [DataContract]
     public sealed class ExportHistoryConfiguration : IConfiguration
     {
-        private int HistoryGapDays;
+        [DataMember]
+        internal int HistoryGapDays;
 
         /// <inheritdoc/>
+        [DataMember(EmitDefaultValue = false)]
         public Dictionary<string, IConfiguration> ChildConfigurations
         {
             get;
@@ -20,6 +22,7 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         }
 
         /// <inheritdoc/>
+        [DataMember]
         public bool HasLoaded
         {
             get;
@@ -31,12 +34,7 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         /// </summary>
         public ExportHistoryConfiguration()
         {
-        }
-
-        /// <inheritdoc/>
-        public void LoadConfiguration(string filePath, IFileSystem fileSystem)
-        {
-            throw new NotImplementedException();
+            ChildConfigurations = new Dictionary<string, IConfiguration>();
         }
 
         /// <inheritdoc/>
@@ -46,12 +44,6 @@ namespace FinancePortfolioDatabase.GUI.Configuration
             {
                 vm.HistoryGapDays = HistoryGapDays;
             }
-        }
-
-        /// <inheritdoc/>
-        public void SaveConfiguration(string filePath, IFileSystem fileSystem)
-        {
-            throw new NotImplementedException();
         }
 
         /// <inheritdoc/>

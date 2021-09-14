@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.IO.Abstractions;
 using System.Reflection;
@@ -66,10 +67,10 @@ namespace FinancePortfolioDatabase.GUI.Windows
         /// This should really check if the data has changed or not, but this
         /// is not currently possible.
         /// </remarks>
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void Window_Closing(object sender, CancelEventArgs e)
         {
             MainWindowViewModel VM = DataContext as MainWindowViewModel;
-
+            VM.SaveConfig();
             MessageBoxResult result = VM.ProgramPortfolio.IsAlteredSinceSave
                 ? fUiGlobals.DialogCreationService.ShowMessageBox("Data has changed since last saved. Would you like to save changes before closing?", $"Closing {Title}.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning)
                 : fUiGlobals.DialogCreationService.ShowMessageBox("There is a small chance that the data has changed since last save (due to neglect on my part). Would you like to save before closing?", $"Closing {Title}.", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
@@ -77,7 +78,7 @@ namespace FinancePortfolioDatabase.GUI.Windows
             if (result == MessageBoxResult.Yes)
             {
                 FileInteractionResult savingResult = fUiGlobals.FileInteractionService.SaveFile("xml", fUiGlobals.CurrentFileSystem.Path.GetFileName(VM.ProgramPortfolio.FilePath), VM.ProgramPortfolio.Directory(fUiGlobals.CurrentFileSystem), "XML Files|*.xml|All Files|*.*");
-                if (savingResult.Success != null && (bool)savingResult.Success)
+                if (savingResult.Success.HasValue && savingResult.Success.Value)
                 {
                     VM.ProgramPortfolio.FilePath = savingResult.FilePath;
                     MainWindowViewModel vm = DataContext as MainWindowViewModel;
