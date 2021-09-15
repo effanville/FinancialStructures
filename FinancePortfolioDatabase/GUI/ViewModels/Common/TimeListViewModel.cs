@@ -64,7 +64,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         public void UpdateData(TimeList timeList)
         {
             Valuations = null;
-            Valuations = timeList.Values();
+            Valuations = timeList?.Values() ?? new List<DailyValuation>();
         }
 
         /// <summary>
