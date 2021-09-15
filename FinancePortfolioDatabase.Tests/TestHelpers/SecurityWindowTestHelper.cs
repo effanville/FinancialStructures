@@ -14,22 +14,13 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
 {
     public abstract class SecurityWindowTestHelper
     {
-        private Action<Action<IPortfolio>> DataUpdater
-        {
-            get
-            {
-                return action => action(Portfolio);
-            }
-        }
+        private Action<Action<IPortfolio>> DataUpdater => action => action(Portfolio);
 
         private IPortfolio fPortfolio;
 
         protected IPortfolio Portfolio
         {
-            get
-            {
-                return fPortfolio;
-            }
+            get => fPortfolio;
             set
             {
                 fPortfolio = value;
@@ -72,7 +63,7 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
             Portfolio = TestSetupHelper.CreateEmptyDataBase();
 
             UiGlobals globals = TestSetupHelper.CreateGlobalsMock(new FileSystem(), fileMock.Object, dialogMock.Object);
-            ViewModel = new SecurityEditWindowViewModel(Portfolio, DataUpdater, TestSetupHelper.DummyReportLogger, null, globals);
+            ViewModel = new SecurityEditWindowViewModel(globals, null, Portfolio, DataUpdater);
         }
 
         [TearDown]

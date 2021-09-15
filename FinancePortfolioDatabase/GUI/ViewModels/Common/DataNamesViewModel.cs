@@ -4,32 +4,50 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using FinancialStructures.Database;
-using FinancialStructures.Database.Download;
-using FinancialStructures.Database.Statistics;
-using FinancialStructures.NamingStructures;
 using Common.Structure.DataStructures;
 using Common.Structure.DisplayClasses;
 using Common.Structure.Reporting;
 using Common.UI.Commands;
 using Common.UI.ViewModelBases;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
+using FinancialStructures.Database;
+using FinancialStructures.Database.Download;
+using FinancialStructures.Database.Statistics;
+using FinancialStructures.NamingStructures;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {
     /// <summary>
     /// Data store behind view for a list of names and associated update name methods.
     /// </summary>
-    public class DataNamesViewModel : TabViewModelBase<IPortfolio>
+    public sealed class DataNamesViewModel : TabViewModelBase<IPortfolio>
     {
+        /// <summary>
+        /// Function which updates the main data store.
+        /// </summary>
+        private readonly Action<Action<IPortfolio>> UpdateDataCallback;
+
+        /// <summary>
+        /// Logs any possible issues in the routines here back to the user.
+        /// </summary>
+        private readonly IReportLogger ReportLogger;
+
+        private UiStyles fStyles;
+
+        /// <summary>
+        /// The style object containing the style for the ui.
+        /// </summary>
         public UiStyles Styles
         {
-            get;
-            set;
+            get => fStyles;
+            set => SetAndNotify(ref fStyles, value, nameof(Styles));
         }
 
         private readonly Account TypeOfAccount;
 
+        /// <summary>
+        /// Whether a company column should be displayed.
+        /// </summary>
         public bool DisplayCompany => TypeOfAccount != Account.Benchmark;
 
         /// <summary>
@@ -43,11 +61,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         public List<SelectableEquatable<NameData>> DataNames
         {
             get => fDataNames;
-            set
-            {
-                SetAndNotify(ref fDataNames, value, nameof(DataNames));
-                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, "Set Datanames");
-            }
+            set => SetAndNotify(ref fDataNames, value, nameof(DataNames));
         }
 
         private NameData fPreEditSelectedName;
@@ -59,11 +73,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         public NameData PreEditSelectedName
         {
             get => fPreEditSelectedName;
-            set
-            {
-                SetAndNotify(ref fPreEditSelectedName, value, nameof(PreEditSelectedName));
-                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, "Set PreEditSelectedName");
-            }
+            set => SetAndNotify(ref fPreEditSelectedName, value, nameof(PreEditSelectedName));
         }
 
         private SelectableEquatable<NameData> fSelectedName;
@@ -78,7 +88,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             set
             {
                 SetAndNotify(ref fSelectedName, value, nameof(SelectedName));
-                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, "Set SelectedName");
                 if (SelectedName != null)
                 {
                     OnPropertyChanged(nameof(SelectedNameSet));
@@ -86,18 +95,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             }
         }
 
+        /// <summary>
+        /// Whether a selection has been made.
+        /// </summary>
         public bool SelectedNameSet => SelectedName != null;
-
-        private DateTime fSelectedLatestDate;
-        public DateTime SelectedLatestDate
-        {
-            get => fSelectedLatestDate;
-            set
-            {
-                SetAndNotify(ref fSelectedLatestDate, value, nameof(SelectedLatestDate));
-                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, "Set SelectedLatestDate");
-            }
-        }
 
         private List<DailyValuation> fSelectedValueHistory;
 
@@ -107,22 +108,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         public List<DailyValuation> SelectedValueHistory
         {
             get => fSelectedValueHistory;
-            set
-            {
-                SetAndNotify(ref fSelectedValueHistory, value, nameof(SelectedValueHistory));
-                _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, "Set ValueHistory");
-            }
+            set => SetAndNotify(ref fSelectedValueHistory, value, nameof(SelectedValueHistory));
         }
-
-        /// <summary>
-        /// Function which updates the main data store.
-        /// </summary>
-        private readonly Action<Action<IPortfolio>> UpdateDataCallback;
-
-        /// <summary>
-        /// Logs any possible issues in the routines here back to the user.
-        /// </summary>
-        private readonly IReportLogger ReportLogger;
 
         /// <summary>
         /// Construct an instance.
@@ -157,17 +144,16 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         /// <summary>
         /// Updates the data in this view model from the given portfolio.
         /// </summary>
-        public override void UpdateData(IPortfolio portfolio, Action<object> removeTab)
+        public override void UpdateData(IPortfolio dataToDisplay, Action<object> removeTab)
         {
-            _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, $"Updating DataView for {TypeOfAccount} list.");
-            base.UpdateData(portfolio);
+            base.UpdateData(dataToDisplay);
 
             bool IsUpdated(NameData name)
             {
-                return portfolio.LatestDate(TypeOfAccount, name) == DateTime.Today || portfolio.LatestValue(TypeOfAccount, name) == 0.0;
+                return dataToDisplay.LatestDate(TypeOfAccount, name) == DateTime.Today || dataToDisplay.LatestValue(TypeOfAccount, name) == 0.0;
             }
 
-            var values = portfolio.NameData(TypeOfAccount).Select(name => new SelectableEquatable<NameData>(name, IsUpdated(name))).ToList();
+            List<SelectableEquatable<NameData>> values = dataToDisplay.NameData(TypeOfAccount).Select(name => new SelectableEquatable<NameData>(name, IsUpdated(name))).ToList();
             DataNames = null;
             DataNames = values;
             DataNames.Sort((a, b) => a.Instance.CompareTo(b.Instance));
@@ -182,9 +168,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         /// <summary>
         /// Updates the data in this view model from the given portfolio.
         /// </summary>
-        public override void UpdateData(IPortfolio portfolio)
+        public override void UpdateData(IPortfolio dataToDisplay)
         {
-            UpdateData(portfolio, null);
+            UpdateData(dataToDisplay, null);
         }
 
         /// <summary>
@@ -204,6 +190,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             }
         }
 
+        /// <summary>
+        /// Command to add default values to any new names added.
+        /// </summary>
         public ICommand AddDefaultDataCommand
         {
             get;
@@ -276,7 +265,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             bool edited = false;
             if (SelectedName != null && SelectedName.Instance != null)
             {
-                var selectedInstance = SelectedName.Instance; //rowName.Instance;
+                NameData selectedInstance = SelectedName.Instance; //rowName.Instance;
                 if (!DataStore.NameData(TypeOfAccount).Any(item => item.Name == PreEditSelectedName?.Name && item.Company == PreEditSelectedName?.Company))
                 {
                     _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.AddingData, $"Adding {selectedInstance} to the database");
@@ -308,6 +297,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         {
             get;
         }
+
         private void ExecuteDelete()
         {
             _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData, $"Deleting {SelectedName} from the database");

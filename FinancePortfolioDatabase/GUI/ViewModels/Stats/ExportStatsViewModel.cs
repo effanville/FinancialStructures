@@ -1,32 +1,35 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Input;
-using FinancialStructures.Database;
-using FinancialStructures.DataExporters;
-using FinancialStructures.DataExporters.ExportOptions;
-using FinancialStructures.Statistics;
 using Common.Structure.DisplayClasses;
 using Common.Structure.Extensions;
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
+using Common.UI;
 using Common.UI.Commands;
 using Common.UI.Services;
-using Common.UI;
 using FinancePortfolioDatabase.GUI.Configuration;
-using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
+using FinancePortfolioDatabase.GUI.ViewModels.Common;
+using FinancialStructures.Database;
+using FinancialStructures.DataExporters;
+using FinancialStructures.DataExporters.ExportOptions;
+using FinancialStructures.Statistics;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
     /// <summary>
     /// View model for the stats options page.
     /// </summary>
-    public class StatsOptionsViewModel : DataDisplayViewModelBase
+    public class ExportStatsViewModel : DataDisplayViewModelBase
     {
-        private readonly IConfiguration fUserConfiguration;
+        private readonly Action<object> CloseWindowAction;
 
         private List<Selectable<string>> fDisplayConditions = new List<Selectable<string>>();
 
+        /// <summary>
+        /// Miscellaneous selections for how the exported file should look.
+        /// </summary>
         public List<Selectable<string>> DisplayConditions
         {
             get => fDisplayConditions;
@@ -34,6 +37,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         }
 
         private Statistic fSecuritySortingField;
+
+        /// <summary>
+        /// The statistic to sort the security data by.
+        /// </summary>
         public Statistic SecuritySortingField
         {
             get => fSecuritySortingField;
@@ -41,6 +48,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         }
 
         private SortDirection fSecurityDirection;
+
+        /// <summary>
+        /// The direction to sort the Security data in.
+        /// </summary>
         public SortDirection SecurityDirection
         {
             get => fSecurityDirection;
@@ -49,6 +60,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
         private List<Selectable<Statistic>> fSecurityColumnNames = new List<Selectable<Statistic>>();
 
+        /// <summary>
+        /// The possible columns for security export, and which ones are selected.
+        /// </summary>
         public List<Selectable<Statistic>> SecurityColumnNames
         {
             get => fSecurityColumnNames;
@@ -56,6 +70,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         }
 
         private Statistic fBankSortingField;
+
+        /// <summary>
+        /// The statistic to sort the bank account data by.
+        /// </summary>
         public Statistic BankSortingField
         {
             get => fBankSortingField;
@@ -63,6 +81,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         }
 
         private SortDirection fBankDirection;
+
+        /// <summary>
+        /// The direction to sort the Bank Account data in.
+        /// </summary>
         public SortDirection BankDirection
         {
             get => fBankDirection;
@@ -71,6 +93,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
         private List<Selectable<Statistic>> fBankColumnNames = new List<Selectable<Statistic>>();
 
+        /// <summary>
+        /// The possible columns for bank account export, and which ones are selected.
+        /// </summary>
         public List<Selectable<Statistic>> BankColumnNames
         {
             get => fBankColumnNames;
@@ -78,6 +103,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         }
 
         private Statistic fSectorSortingField;
+
+        /// <summary>
+        /// The statistic to sort the sector data by.
+        /// </summary>
         public Statistic SectorSortingField
         {
             get => fSectorSortingField;
@@ -86,6 +115,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
 
         private SortDirection fSectorDirection;
+
+        /// <summary>
+        /// The direction to sort the Sector data in.
+        /// </summary>
         public SortDirection SectorDirection
         {
             get => fSectorDirection;
@@ -94,12 +127,66 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
         private List<Selectable<Statistic>> fSectorColumnNames = new List<Selectable<Statistic>>();
 
+        /// <summary>
+        /// The possible columns for sector export, and which ones are selected.
+        /// </summary>
         public List<Selectable<Statistic>> SectorColumnNames
         {
             get => fSectorColumnNames;
             set => SetAndNotify(ref fSectorColumnNames, value, nameof(SectorColumnNames));
         }
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public ExportStatsViewModel(UiGlobals globals, UiStyles styles, IConfiguration userConfiguration, IPortfolio portfolio, Action<object> CloseWindow)
+            : base(globals, styles, userConfiguration, portfolio, "", Account.All)
+        {
+            CloseWindowAction = CloseWindow;
+            ExportCommand = new RelayCommand(ExecuteExportCommand);
+            if (fUserConfiguration.HasLoaded)
+            {
+                fUserConfiguration.RestoreFromConfiguration(this);
+            }
+            else
+            {
+                foreach (Statistic stat in AccountStatisticsHelpers.AllStatistics())
+                {
+                    SecurityColumnNames.Add(new Selectable<Statistic>(stat, true));
+                }
+
+                SecuritySortingField = Statistic.Company;
+
+                foreach (Statistic stat in AccountStatisticsHelpers.DefaultSectorStats())
+                {
+                    SectorColumnNames.Add(new Selectable<Statistic>(stat, true));
+                }
+
+                SectorSortingField = Statistic.Name;
+
+                foreach (Statistic stat in AccountStatisticsHelpers.DefaultBankAccountStats())
+                {
+                    BankColumnNames.Add(new Selectable<Statistic>(stat, true));
+                }
+
+                BankSortingField = Statistic.Company;
+
+                DisplayConditions.Add(new Selectable<string>("DisplayValueFunds", true));
+                DisplayConditions.Add(new Selectable<string>("Spacing", true));
+                DisplayConditions.Add(new Selectable<string>("Colours", true));
+                DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowSecurities, true));
+                DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowBankAccounts, true));
+                DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowSectors, true));
+                DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowBenchmarks, false));
+
+                fUserConfiguration.HasLoaded = true;
+                fUserConfiguration.StoreConfiguration(this);
+            }
+        }
+
+        /// <summary>
+        /// Command to instantiate the export of statistics.
+        /// </summary>
         public ICommand ExportCommand
         {
             get;
@@ -158,62 +245,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
 
             CloseWindowAction(new HtmlStatsViewerViewModel(Styles, fUiGlobals, path));
-        }
-
-        private readonly IReportLogger ReportLogger;
-        private readonly Action<object> CloseWindowAction;
-        private readonly UiGlobals fUiGlobals;
-
-        public StatsOptionsViewModel(IPortfolio portfolio, IReportLogger reportLogger, Action<object> CloseWindow, UiStyles styles, UiGlobals uiGlobals, IConfiguration userConfiguration)
-            : base(styles, "", Account.All, portfolio)
-        {
-            fUiGlobals = uiGlobals;
-            fUserConfiguration = userConfiguration;
-            ReportLogger = reportLogger;
-            CloseWindowAction = CloseWindow;
-            ExportCommand = new RelayCommand(ExecuteExportCommand);
-            if (fUserConfiguration.HasLoaded)
-            {
-                fUserConfiguration.RestoreFromConfiguration(this);
-            }
-            else
-            {
-                foreach (Statistic stat in AccountStatisticsHelpers.AllStatistics())
-                {
-                    SecurityColumnNames.Add(new Selectable<Statistic>(stat, true));
-                }
-
-                SecuritySortingField = Statistic.Company;
-
-                foreach (Statistic stat in AccountStatisticsHelpers.DefaultSectorStats())
-                {
-                    SectorColumnNames.Add(new Selectable<Statistic>(stat, true));
-                }
-
-                SectorSortingField = Statistic.Name;
-
-                foreach (Statistic stat in AccountStatisticsHelpers.DefaultBankAccountStats())
-                {
-                    BankColumnNames.Add(new Selectable<Statistic>(stat, true));
-                }
-
-                BankSortingField = Statistic.Company;
-
-                DisplayConditions.Add(new Selectable<string>("DisplayValueFunds", true));
-                DisplayConditions.Add(new Selectable<string>("Spacing", true));
-                DisplayConditions.Add(new Selectable<string>("Colours", true));
-                DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowSecurities, true));
-                DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowBankAccounts, true));
-                DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowSectors, true));
-                DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowBenchmarks, false));
-
-                fUserConfiguration.HasLoaded = true;
-            }
-        }
-
-        public override void UpdateData(IPortfolio dataToDisplay)
-        {
-            base.UpdateData(dataToDisplay);
         }
     }
 }

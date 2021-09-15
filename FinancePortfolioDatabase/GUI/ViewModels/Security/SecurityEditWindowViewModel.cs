@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Common.UI;
+using Common.UI.ViewModelBases;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
-using Common.Structure.Reporting;
-using Common.UI.ViewModelBases;
-using Common.UI;
-using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 {
@@ -18,7 +17,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
     public class SecurityEditWindowViewModel : DataDisplayViewModelBase
     {
         /// <summary>
-        /// The tabs to display, with the Security names, and 
+        /// The tabs to display, with the Security names, and
         /// selected security data.
         /// </summary>
         public ObservableCollection<object> Tabs
@@ -38,28 +37,23 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             set => SetAndNotify(ref fSelectedIndex, value, nameof(SelectedIndex));
         }
 
-        private readonly IReportLogger ReportLogger;
-        private readonly UiGlobals fUiGlobals;
-
         private readonly Action<Action<IPortfolio>> UpdateDataAction;
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public SecurityEditWindowViewModel(IPortfolio portfolio, Action<Action<IPortfolio>> updateData, IReportLogger reportLogger, UiStyles styles, UiGlobals globals)
-            : base(styles, "Securities", Account.Security, portfolio)
+        public SecurityEditWindowViewModel(UiGlobals globals, UiStyles styles, IPortfolio portfolio, Action<Action<IPortfolio>> updateData)
+            : base(globals, styles, portfolio, "Securities", Account.Security)
         {
             UpdateDataAction = updateData;
-            ReportLogger = reportLogger;
-            fUiGlobals = globals;
             Tabs.Add(new DataNamesViewModel(DataStore, updateData, ReportLogger, styles, (name) => LoadTabFunc(name), Account.Security));
             SelectedIndex = 0;
         }
 
         /// <inheritdoc/>
-        public override void UpdateData(IPortfolio portfolio)
+        public override void UpdateData(IPortfolio dataToDisplay)
         {
-            base.UpdateData(portfolio);
+            base.UpdateData(dataToDisplay);
             List<object> removableTabs = new List<object>();
             if (Tabs != null)
             {
@@ -67,7 +61,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
                 {
                     if (Tabs[tabIndex] is TabViewModelBase<IPortfolio> viewModel)
                     {
-                        viewModel.UpdateData(portfolio, tabItem => removableTabs.Add(tabItem));
+                        viewModel.UpdateData(dataToDisplay, tabItem => removableTabs.Add(tabItem));
                     }
                 }
                 if (removableTabs.Any())

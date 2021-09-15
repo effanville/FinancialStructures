@@ -1,16 +1,16 @@
 ﻿using System.Windows.Controls;
 
-namespace FinancePortfolioDatabase.GUI.Windows
+namespace FinancePortfolioDatabase.GUI.Windows.Stats
 {
     /// <summary>
-    /// Interaction logic for TimeListView.xaml
+    /// Interaction logic for StatsOptionsWindow.xaml
     /// </summary>
-    public partial class TimeListView : ContentControl
+    public partial class ExportStatsControl : ItemsControl
     {
         /// <summary>
         /// Construct an instance.
         /// </summary>
-        public TimeListView()
+        public ExportStatsControl()
         {
             InitializeComponent();
         }

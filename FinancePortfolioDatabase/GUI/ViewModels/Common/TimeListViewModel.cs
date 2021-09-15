@@ -4,7 +4,6 @@ using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Common.Structure.DataStructures;
-using Common.UI;
 using Common.UI.Commands;
 using Common.UI.ViewModelBases;
 
@@ -15,8 +14,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
     /// </summary>
     public sealed class TimeListViewModel : PropertyChangedBase
     {
-        private readonly UiGlobals fUiGlobals;
-        private TimeList fDisplayList;
         private readonly Action<DailyValuation> DeleteValueAction;
         private readonly Action<DailyValuation, DailyValuation> AddEditValueAction;
 
@@ -48,19 +45,17 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public TimeListViewModel(TimeList timeList, string valueName, UiGlobals globals, Action<DailyValuation> deleteValueAction, Action<DailyValuation, DailyValuation> addEditValueAction)
+        public TimeListViewModel(TimeList timeList, string valueName, Action<DailyValuation> deleteValueAction, Action<DailyValuation, DailyValuation> addEditValueAction)
         {
             DeleteValueAction = deleteValueAction;
             AddEditValueAction = addEditValueAction;
-            fDisplayList = timeList;
-            fUiGlobals = globals;
             ValueName = valueName;
             PreEditCommand = new RelayCommand(ExecutePreEdit);
             AddEditDataCommand = new RelayCommand(ExecuteAddEditData);
             SelectionChangedCommand = new RelayCommand<object>(ExecuteSelectionChanged);
             AddDefaultDataCommand = new RelayCommand<AddingNewItemEventArgs>(e => DataGrid_AddingNewItem(null, e));
-
             DeleteValuationCommand = new RelayCommand<KeyEventArgs>(ExecuteDeleteValuation);
+            UpdateData(timeList);
         }
 
         /// <summary>
@@ -68,7 +63,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         /// </summary>
         public void UpdateData(TimeList timeList)
         {
-            fDisplayList = timeList;
             Valuations = null;
             Valuations = timeList.Values();
         }

@@ -1,30 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Input;
-using FinancialStructures.Database;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
 using Common.Structure.DataStructures;
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
+using Common.UI;
 using Common.UI.Commands;
 using Common.UI.Services;
 using Common.UI.ViewModelBases;
-using Common.UI;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
+using FinancialStructures.Database;
+using FinancialStructures.FinanceStructures;
+using FinancialStructures.NamingStructures;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {
+    /// <summary>
+    /// View model to display a list with one value.
+    /// </summary>
     public class SelectedSingleDataViewModel : TabViewModelBase<IPortfolio>
     {
         private readonly UiGlobals fUiGlobals;
         private readonly Account TypeOfAccount;
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
         private readonly IReportLogger fReportLogger;
+
+        private UiStyles fStyles;
+
+        /// <summary>
+        /// The style object containing the style for the ui.
+        /// </summary>
         public UiStyles Styles
         {
-            get;
-            set;
+            get => fStyles;
+            set => SetAndNotify(ref fStyles, value, nameof(Styles));
         }
 
         /// <inheritdoc/>
@@ -38,18 +47,19 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         public NameData SelectedName
         {
             get => fSelectedName;
-
             set => SetAndNotify(ref fSelectedName, value, nameof(SelectedName));
 
         }
 
         private TimeListViewModel fTLVM;
+
+        /// <summary>
+        /// View Model for the values.
+        /// </summary>
         public TimeListViewModel TLVM
         {
             get => fTLVM;
-
             set => SetAndNotify(ref fTLVM, value, nameof(TLVM));
-
         }
 
         /// <summary>
@@ -71,14 +81,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             SelectedName = selectedName;
             TypeOfAccount = accountType;
 
-            if (portfolio.TryGetAccount(accountType, SelectedName, out IValueList desired))
-            {
-                TLVM = new TimeListViewModel(desired.Values, "Value", globals, value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditData(SelectedName, old, newVal));
-            }
-            else
-            {
-                TLVM = new TimeListViewModel(null, "Value", globals, value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditData(SelectedName, old, newVal));
-            }
+            TLVM = portfolio.TryGetAccount(accountType, SelectedName, out IValueList desired)
+                ? new TimeListViewModel(desired.Values, "Value", value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditData(SelectedName, old, newVal))
+                : new TimeListViewModel(null, "Value", value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditData(SelectedName, old, newVal));
+
             UpdateData(portfolio);
 
             DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);
@@ -123,6 +129,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             }
         }
 
+        /// <summary>
+        /// Command to delete data from the value list.
+        /// </summary>
         public ICommand DeleteValuationCommand
         {
             get;
@@ -145,6 +154,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             }
         }
 
+        /// <summary>
+        /// Command to add data from a csv file.
+        /// </summary>
         public ICommand AddCsvData
         {
             get;
@@ -178,6 +190,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             }
         }
 
+        /// <summary>
+        /// Command to export data to a csv file.
+        /// </summary>
         public ICommand ExportCsvData
         {
             get;

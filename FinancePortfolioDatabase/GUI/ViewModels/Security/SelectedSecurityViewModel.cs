@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Controls;
 using System.Windows.Input;
-using FinancialStructures.Database;
-using FinancialStructures.Database.Download;
-using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
 using Common.Structure.DataStructures;
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
+using Common.UI;
 using Common.UI.Commands;
 using Common.UI.Services;
 using Common.UI.ViewModelBases;
-using Common.UI;
-using FinancePortfolioDatabase.GUI.ViewModels.Common;
-using System.Linq;
-using System.Windows.Controls;
-using FinancialStructures.Statistics;
-using FinancialStructures.Database.Statistics;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
+using FinancePortfolioDatabase.GUI.ViewModels.Common;
+using FinancialStructures.Database;
+using FinancialStructures.Database.Download;
+using FinancialStructures.Database.Statistics;
+using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceStructures;
+using FinancialStructures.NamingStructures;
+using FinancialStructures.Statistics;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 {
@@ -31,13 +31,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
         private readonly IReportLogger fReportLogger;
         private readonly UiGlobals fUiGlobals;
 
+        private UiStyles fStyles;
+
         /// <summary>
-        /// The styles to display in the UI.
+        /// The style object containing the style for the ui.
         /// </summary>
         public UiStyles Styles
         {
-            get;
-            set;
+            get => fStyles;
+            set => SetAndNotify(ref fStyles, value, nameof(Styles));
         }
 
         internal SecurityTrade fOldSelectedTrade;
@@ -120,11 +122,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             if (portfolio.TryGetAccount(Account.Security, SelectedName, out IValueList desired))
             {
                 ISecurity security = desired as ISecurity;
-                TLVM = new TimeListViewModel(security.UnitPrice, "UnitPrice", globals, value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditUnitPriceData(SelectedName, old, newVal));
+                TLVM = new TimeListViewModel(security.UnitPrice, "UnitPrice", value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditUnitPriceData(SelectedName, old, newVal));
             }
             else
             {
-                TLVM = new TimeListViewModel(null, "UnitPrice", globals, value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditUnitPriceData(SelectedName, old, newVal));
+                TLVM = new TimeListViewModel(null, "UnitPrice", value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditUnitPriceData(SelectedName, old, newVal));
             }
 
             UpdateData(portfolio, null);

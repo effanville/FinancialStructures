@@ -18,18 +18,27 @@
         <RowDefinition Height="40" />
         <RowDefinition Height="*" />
     </Grid.RowDefinitions>
-    <Button Grid.Row="0"
-            Content="Create Investment list"
-            Style="{StaticResource ResourceKey=defaultButton}"
-            Width="300"
-            Command="{Binding  CreateInvestmentListCommand}" />
-    <Button Grid.Row="1"
-            Content="Create portfolio History"
-            Style="{StaticResource ResourceKey=defaultButton}"
-            Width="300"
-            Command="{Binding  ExportHistoryCommand}" />
+    <Border Grid.Row="0"
+            BorderThickness="2"
+            Height="Auto"
+            BorderBrush="{Binding Styles.BackgroundSecondaryBrush}"
+            Background="{Binding Styles.BackgroundBrush}">
+        <Button Grid.Row="0"
+                Content="Create Investment list"
+                Style="{StaticResource ResourceKey=defaultButton}"
+                Width="300"
+                Command="{Binding  CreateInvestmentListCommand}" />
+    </Border>
+    <UserControl Grid.Row="1"
+                 Height="Auto"
+                 BorderThickness="2"
+                 BorderBrush="{Binding Styles.BackgroundSecondaryBrush}"
+                 Background="{Binding Styles.BackgroundBrush}"
+                 Content="{Binding ExportHistoryOptions}" />
     <UserControl Grid.Row="2"
                  Height="Auto"
+                 BorderThickness="2"
+                 BorderBrush="{Binding Styles.BackgroundSecondaryBrush}"
                  Background="{Binding Styles.BackgroundBrush}"
-                 Content="{Binding Display}" />
+                 Content="{Binding StatsPageExportOptions}" />
 </Grid>

@@ -1,9 +1,11 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Windows;
 using Common.UI.DisplayObjects;
 using FinancePortfolioDatabase.GUI.ViewModels.Stats;
+using FinancialStructures.Statistics;
 
 namespace FinancePortfolioDatabase.GUI.Windows.Stats
 {
@@ -38,17 +40,17 @@ namespace FinancePortfolioDatabase.GUI.Windows.Stats
         {
             if (DataContext is StatsViewModel vm)
             {
-                var dt = new DataTable();
+                DataTable dt = new DataTable();
 
                 // First add the column header names from the statistics names.
-                var stat = vm.Stats.First().Statistics;
-                foreach (var value in stat)
+                List<IStatistic> stat = vm.Stats.First().Statistics;
+                foreach (IStatistic value in stat)
                 {
                     dt.Columns.Add(new DataColumn(value.StatType.ToString(), value.IsNumeric ? typeof(double) : typeof(string)));
                 }
 
                 // Now add the statistics values.
-                foreach (var val in vm.Stats)
+                foreach (AccountStatistics val in vm.Stats)
                 {
                     _ = dt.Rows.Add(val.StatValuesAsObjects.ToArray());
                 }

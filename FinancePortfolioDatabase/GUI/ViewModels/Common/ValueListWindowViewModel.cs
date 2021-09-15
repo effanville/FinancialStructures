@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Common.UI;
+using Common.UI.ViewModelBases;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
-using Common.UI.ViewModelBases;
-using Common.UI;
-using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {
@@ -15,7 +15,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
     /// </summary>
     public class ValueListWindowViewModel : DataDisplayViewModelBase
     {
-        private readonly UiGlobals fUiGlobals;
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
 
         /// <summary>
@@ -37,10 +36,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public ValueListWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, UiStyles styles, UiGlobals globals, Account accountType)
-            : base(styles, title, accountType, portfolio)
+        public ValueListWindowViewModel(UiGlobals globals, UiStyles styles, IPortfolio portfolio, string title, Account accountType, Action<Action<IPortfolio>> updateDataCallback)
+            : base(globals, styles, portfolio, title, accountType)
         {
-            fUiGlobals = globals;
             UpdateDataCallback = updateDataCallback;
             UpdateData(portfolio);
             Tabs.Add(new DataNamesViewModel(DataStore, updateDataCallback, fUiGlobals.ReportLogger, styles, (name) => LoadTabFunc(name), accountType));
@@ -49,9 +47,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         }
 
         /// <inheritdoc/>
-        public override void UpdateData(IPortfolio portfolio)
+        public override void UpdateData(IPortfolio dataToDisplay)
         {
-            base.UpdateData(portfolio);
+            base.UpdateData(dataToDisplay);
             List<object> removableTabs = new List<object>();
             if (Tabs != null)
             {
@@ -59,7 +57,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
                 {
                     if (item is TabViewModelBase<IPortfolio> viewModel)
                     {
-                        viewModel.UpdateData(portfolio, tabItem => removableTabs.Add(tabItem));
+                        viewModel.UpdateData(dataToDisplay, tabItem => removableTabs.Add(tabItem));
                     }
                 }
 

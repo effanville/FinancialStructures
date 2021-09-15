@@ -36,7 +36,7 @@ namespace FinancePortfolioDatabase.Tests
             ViewModel.DisplayValueFunds = valueFunds;
             Assert.AreEqual(valueFunds, ViewModel.DisplayValueFunds);
 
-            ViewModel = new StatsViewModel(Portfolio, TestSetupHelper.DummyReportLogger, null, Globals, VMConfiguration);
+            ViewModel = new StatsViewModel(Globals, null, VMConfiguration, Portfolio);
 
             Assert.AreEqual(valueFunds, ViewModel.DisplayValueFunds);
             Assert.AreEqual(4, ViewModel.Stats.Count);

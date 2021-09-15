@@ -19,12 +19,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         private ErrorReports fReportsToView;
         private readonly IFileInteractionService fFileInteractionService;
 
+        private UiStyles fStyles;
+
         /// <summary>
-        /// The styles to display in the UI.
+        /// The style object containing the style for the ui.
         /// </summary>
         public UiStyles Styles
         {
-            get; set;
+            get => fStyles;
+            set => SetAndNotify(ref fStyles, value, nameof(Styles));
         }
 
         /// <summary>
@@ -125,7 +128,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         }
 
         /// <summary>
-        /// Command to export reports to a csv. 
+        /// Command to export reports to a csv.
         /// </summary>
         public ICommand ExportReportsCommand
         {
@@ -136,12 +139,12 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         {
             try
             {
-                var result = fFileInteractionService.SaveFile(".csv", "errorReports.csv");
+                FileInteractionResult result = fFileInteractionService.SaveFile(".csv", "errorReports.csv");
                 if (result.Success != null && (bool)result.Success)
                 {
                     StreamWriter writer = new StreamWriter(result.FilePath);
                     writer.WriteLine("Severity,ErrorType,Location,Message");
-                    foreach (var report in Reports.GetReports())
+                    foreach (ErrorReport report in Reports.GetReports())
                     {
                         writer.WriteLine(report.ErrorSeverity.ToString() + "," + report.ErrorType + "," + report.ErrorLocation.ToString() + "," + report.Message);
                     }

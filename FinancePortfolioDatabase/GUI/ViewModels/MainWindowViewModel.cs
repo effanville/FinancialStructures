@@ -1,14 +1,15 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Reflection;
+using Common.Structure.Reporting;
+using Common.UI;
+using Common.UI.ViewModelBases;
+using FinancePortfolioDatabase.GUI.Configuration;
+using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancePortfolioDatabase.GUI.ViewModels.Security;
 using FinancePortfolioDatabase.GUI.ViewModels.Stats;
 using FinancialStructures.Database;
-using Common.Structure.Reporting;
-using Common.UI.ViewModelBases;
-using Common.UI;
-using FinancePortfolioDatabase.GUI.Configuration;
-using System.Collections.ObjectModel;
-using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {
@@ -18,13 +19,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
     public class MainWindowViewModel : PropertyChangedBase
     {
         /// <summary>
-        /// The styles for the Ui.
+        /// The mechanism by which the data in <see cref="ProgramPortfolio"/> is updated. This includes a GUI update action.
         /// </summary>
-        public UiStyles Styles
-        {
-            get;
-            set;
-        }
+        private Action<Action<IPortfolio>> UpdateDataCallback => action => action(ProgramPortfolio);
+        private Action<object> AddObjectAsMainTab => obj => Tabs.Add(obj);
+
         internal IPortfolio ProgramPortfolio = PortfolioFactory.GenerateEmpty();
 
         /// <summary>
@@ -32,7 +31,19 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         /// </summary>
         internal readonly IReportLogger ReportLogger;
         private readonly UiGlobals fUiGlobals;
-        private readonly IConfiguration fUserConfiguration;
+        private UserConfiguration fUserConfiguration;
+        private string fConfigLocation;
+
+        private UiStyles fStyles;
+
+        /// <summary>
+        /// The styles for the Ui.
+        /// </summary>
+        public UiStyles Styles
+        {
+            get => fStyles;
+            set => SetAndNotify(ref fStyles, value, nameof(Styles));
+        }
 
         private OptionsToolbarViewModel fOptionsToolbarCommands;
 
@@ -42,11 +53,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         public OptionsToolbarViewModel OptionsToolbarCommands
         {
             get => fOptionsToolbarCommands;
-            set
-            {
-                fOptionsToolbarCommands = value;
-                OnPropertyChanged();
-            }
+            set => SetAndNotify(ref fOptionsToolbarCommands, value, nameof(OptionsToolbarCommands));
         }
 
         private ReportingWindowViewModel fReports;
@@ -57,11 +64,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         public ReportingWindowViewModel ReportsViewModel
         {
             get => fReports;
-            set
-            {
-                fReports = value;
-                OnPropertyChanged();
-            }
+            set => SetAndNotify(ref fReports, value, nameof(ReportsViewModel));
         }
 
         /// <summary>
@@ -83,30 +86,44 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             ReportLogger = new LogReporter(UpdateReport);
             fUiGlobals = globals;
             fUiGlobals.ReportLogger = ReportLogger;
-            fUserConfiguration = new UserConfiguration();
 
-            OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, Styles, fUiGlobals);
-            Tabs.Add(new BasicDataViewModel(ProgramPortfolio, Styles, fUiGlobals));
-            Tabs.Add(new SecurityEditWindowViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, Styles, fUiGlobals));
-            Tabs.Add(new ValueListWindowViewModel("Bank Accounts", ProgramPortfolio, UpdateDataCallback, Styles, fUiGlobals, Account.BankAccount));
-            Tabs.Add(new ValueListWindowViewModel("Benchmarks", ProgramPortfolio, UpdateDataCallback, Styles, fUiGlobals, Account.Benchmark));
-            Tabs.Add(new ValueListWindowViewModel("Currencies", ProgramPortfolio, UpdateDataCallback, Styles, fUiGlobals, Account.Currency));
-            Tabs.Add(new StatsViewModel(ProgramPortfolio, ReportLogger, Styles, fUiGlobals, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsDisplay], Account.All));
+            LoadConfig();
+
+            OptionsToolbarCommands = new OptionsToolbarViewModel(fUiGlobals, Styles, ProgramPortfolio, UpdateDataCallback);
+            Tabs.Add(new BasicDataViewModel(fUiGlobals, Styles, ProgramPortfolio));
+            Tabs.Add(new SecurityEditWindowViewModel(fUiGlobals, Styles, ProgramPortfolio, UpdateDataCallback));
+            Tabs.Add(new ValueListWindowViewModel(fUiGlobals, Styles, ProgramPortfolio, "Bank Accounts", Account.BankAccount, UpdateDataCallback));
+            Tabs.Add(new ValueListWindowViewModel(fUiGlobals, Styles, ProgramPortfolio, "Benchmarks", Account.Benchmark, UpdateDataCallback));
+            Tabs.Add(new ValueListWindowViewModel(fUiGlobals, Styles, ProgramPortfolio, "Currencies", Account.Currency, UpdateDataCallback));
+            Tabs.Add(new StatsViewModel(fUiGlobals, Styles, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsDisplay], ProgramPortfolio, Account.All));
             Tabs.Add(new StatisticsChartsViewModel(ProgramPortfolio, Styles));
-            Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, ReportLogger, Styles, fUiGlobals, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsOptions], AddObjectAsMainTab));
+            Tabs.Add(new StatsCreatorWindowViewModel(fUiGlobals, Styles, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsCreator], ProgramPortfolio, AddObjectAsMainTab));
             ProgramPortfolio.PortfolioChanged += AllData_portfolioChanged;
+        }
+
+        private void LoadConfig()
+        {
+            Assembly assembly = Assembly.GetExecutingAssembly();
+            AssemblyName name = assembly.GetName();
+            fConfigLocation = fUiGlobals.CurrentFileSystem.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), name.Name, "user.config");
+            fUserConfiguration = UserConfiguration.LoadFromUserConfigFile(fConfigLocation, fUiGlobals.CurrentFileSystem, ReportLogger);
+        }
+
+        /// <summary>
+        /// Saves the user configuration to the local appData folder.
+        /// </summary>
+        public void SaveConfig()
+        {
+            fUserConfiguration.SaveConfiguration(fConfigLocation, fUiGlobals.CurrentFileSystem);
         }
 
         private void AllData_portfolioChanged(object sender, PortfolioEventArgs e)
         {
             foreach (object tab in Tabs)
             {
-                if (tab is DataDisplayViewModelBase vm)
+                if (tab is DataDisplayViewModelBase vm && e.ShouldUpdate(vm.DataType))
                 {
-                    if (e.ShouldUpdate(vm.DataType))
-                    {
-                        fUiGlobals.CurrentDispatcher?.Invoke(() => vm.UpdateData(ProgramPortfolio));
-                    }
+                    fUiGlobals.CurrentDispatcher?.Invoke(() => vm.UpdateData(ProgramPortfolio));
                 }
             }
 
@@ -122,11 +139,5 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         {
             ReportsViewModel?.UpdateReport(severity, type, location, message);
         }
-
-        /// <summary>
-        /// The mechanism by which the data in <see cref="ProgramPortfolio"/> is updated. This includes a GUI update action.
-        /// </summary>
-        private Action<Action<IPortfolio>> UpdateDataCallback => action => action(ProgramPortfolio);
-        private Action<object> AddObjectAsMainTab => obj => Tabs.Add(obj);
     }
 }

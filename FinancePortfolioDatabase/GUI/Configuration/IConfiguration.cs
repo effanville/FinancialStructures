@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO.Abstractions;
 
 namespace FinancePortfolioDatabase.GUI.Configuration
 {
@@ -38,15 +37,5 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         /// </summary>
         /// <param name="viewModel"></param>
         void RestoreFromConfiguration(object viewModel);
-
-        /// <summary>
-        /// Reads the configuration from a saved path.
-        /// </summary>
-        void LoadConfiguration(string filePath, IFileSystem fileSystem);
-
-        /// <summary>
-        /// Saves the configuration to file.
-        /// </summary>
-        void SaveConfiguration(string filePath, IFileSystem fileSystem);
     }
 }

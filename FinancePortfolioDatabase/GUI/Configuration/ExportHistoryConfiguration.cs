@@ -5,13 +5,21 @@ using FinancePortfolioDatabase.GUI.ViewModels.Stats;
 namespace FinancePortfolioDatabase.GUI.Configuration
 {
     /// <summary>
-    /// Configuration for the stats display
+    /// Configuration for the <see cref="ExportHistoryViewModel"/>.
     /// </summary>
     [DataContract]
-    public sealed class StatsDisplayConfiguration : IConfiguration
+    public sealed class ExportHistoryConfiguration : IConfiguration
     {
         [DataMember]
-        internal bool DisplayValueFunds;
+        internal int HistoryGapDays;
+
+        /// <inheritdoc/>
+        [DataMember(EmitDefaultValue = false)]
+        public Dictionary<string, IConfiguration> ChildConfigurations
+        {
+            get;
+            set;
+        }
 
         /// <inheritdoc/>
         [DataMember]
@@ -21,37 +29,29 @@ namespace FinancePortfolioDatabase.GUI.Configuration
             set;
         }
 
-        /// <inheritdoc/>
-        [DataMember]
-        public Dictionary<string, IConfiguration> ChildConfigurations
-        {
-            get;
-            set;
-        }
-
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public StatsDisplayConfiguration()
+        public ExportHistoryConfiguration()
         {
             ChildConfigurations = new Dictionary<string, IConfiguration>();
         }
 
         /// <inheritdoc/>
-        public void StoreConfiguration(object viewModel)
+        public void RestoreFromConfiguration(object viewModel)
         {
-            if (viewModel is StatsViewModel vm)
+            if (viewModel is ExportHistoryViewModel vm)
             {
-                DisplayValueFunds = vm.DisplayValueFunds;
+                vm.HistoryGapDays = HistoryGapDays;
             }
         }
 
         /// <inheritdoc/>
-        public void RestoreFromConfiguration(object viewModel)
+        public void StoreConfiguration(object viewModel)
         {
-            if (viewModel is StatsViewModel vm)
+            if (viewModel is ExportHistoryViewModel vm)
             {
-                vm.DisplayValueFunds = DisplayValueFunds;
+                HistoryGapDays = vm.HistoryGapDays;
             }
         }
     }

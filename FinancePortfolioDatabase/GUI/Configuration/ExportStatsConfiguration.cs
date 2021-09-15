@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.IO.Abstractions;
+using System.Runtime.Serialization;
 using Common.Structure.DisplayClasses;
 using FinancePortfolioDatabase.GUI.ViewModels.Stats;
 using FinancialStructures.Statistics;
@@ -9,21 +9,34 @@ namespace FinancePortfolioDatabase.GUI.Configuration
     /// <summary>
     /// Configuration for the stats display
     /// </summary>
-    public sealed class StatsOptionsDisplayConfiguration : IConfiguration
+    [DataContract]
+    public sealed class ExportStatsConfiguration : IConfiguration
     {
         // Internal configurations to store.
+        [DataMember]
         private List<Selectable<string>> DisplayConditions = new List<Selectable<string>>();
+        [DataMember]
         private Statistic SecuritySortingField;
+        [DataMember]
         private SortDirection SecurityDirection;
+        [DataMember]
         private List<Selectable<Statistic>> SecurityColumnNames = new List<Selectable<Statistic>>();
+        [DataMember]
         private Statistic BankSortingField;
+
+        [DataMember]
         private SortDirection BankDirection;
+        [DataMember]
         private List<Selectable<Statistic>> BankColumnNames = new List<Selectable<Statistic>>();
+        [DataMember]
         private Statistic SectorSortingField;
+        [DataMember]
         private SortDirection SectorDirection;
+        [DataMember]
         private List<Selectable<Statistic>> SectorColumnNames = new List<Selectable<Statistic>>();
 
         /// <inheritdoc/>
+        [DataMember]
         public bool HasLoaded
         {
             get;
@@ -31,6 +44,7 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         }
 
         /// <inheritdoc/>
+        [DataMember]
         public Dictionary<string, IConfiguration> ChildConfigurations
         {
             get;
@@ -41,14 +55,14 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public StatsOptionsDisplayConfiguration()
+        public ExportStatsConfiguration()
         {
         }
 
         /// <inheritdoc/>
         public void StoreConfiguration(object viewModel)
         {
-            if (viewModel is StatsOptionsViewModel vm)
+            if (viewModel is ExportStatsViewModel vm)
             {
                 SecurityColumnNames = vm.SecurityColumnNames;
                 SecuritySortingField = vm.SecuritySortingField;
@@ -66,7 +80,7 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         /// <inheritdoc/>
         public void RestoreFromConfiguration(object viewModel)
         {
-            if (HasLoaded && viewModel is StatsOptionsViewModel vm)
+            if (HasLoaded && viewModel is ExportStatsViewModel vm)
             {
                 vm.SecurityColumnNames = SecurityColumnNames;
                 vm.SecuritySortingField = SecuritySortingField;
@@ -79,18 +93,6 @@ namespace FinancePortfolioDatabase.GUI.Configuration
                 vm.BankDirection = BankDirection;
                 vm.DisplayConditions = DisplayConditions;
             }
-        }
-
-        /// <inheritdoc/>
-        public void LoadConfiguration(string filePath, IFileSystem fileSystem)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        /// <inheritdoc/>
-        public void SaveConfiguration(string filePath, IFileSystem fileSystem)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }
