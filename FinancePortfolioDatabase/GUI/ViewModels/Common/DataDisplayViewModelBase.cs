@@ -9,13 +9,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
     /// </summary>
     public abstract class DataDisplayViewModelBase : ViewModelBase<IPortfolio>
     {
+        private UiStyles fStyles;
+
         /// <summary>
         /// The style object containing the style for the ui.
         /// </summary>
         public UiStyles Styles
         {
-            get;
-            set;
+            get => fStyles;
+            set => SetAndNotify(ref fStyles, value, nameof(Styles));
         }
 
         /// <summary>

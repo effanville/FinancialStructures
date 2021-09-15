@@ -34,13 +34,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         private UserConfiguration fUserConfiguration;
         private string fConfigLocation;
 
+        private UiStyles fStyles;
+
         /// <summary>
         /// The styles for the Ui.
         /// </summary>
         public UiStyles Styles
         {
-            get;
-            set;
+            get => fStyles;
+            set => SetAndNotify(ref fStyles, value, nameof(Styles));
         }
 
         private OptionsToolbarViewModel fOptionsToolbarCommands;

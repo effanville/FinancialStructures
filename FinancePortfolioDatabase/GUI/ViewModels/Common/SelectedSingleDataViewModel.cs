@@ -25,13 +25,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
         private readonly IReportLogger fReportLogger;
 
+        private UiStyles fStyles;
+
         /// <summary>
-        /// The styles to use to display.
+        /// The style object containing the style for the ui.
         /// </summary>
         public UiStyles Styles
         {
-            get;
-            set;
+            get => fStyles;
+            set => SetAndNotify(ref fStyles, value, nameof(Styles));
         }
 
         /// <inheritdoc/>

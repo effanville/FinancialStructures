@@ -19,12 +19,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         private ErrorReports fReportsToView;
         private readonly IFileInteractionService fFileInteractionService;
 
+        private UiStyles fStyles;
+
         /// <summary>
-        /// The styles to display in the UI.
+        /// The style object containing the style for the ui.
         /// </summary>
         public UiStyles Styles
         {
-            get; set;
+            get => fStyles;
+            set => SetAndNotify(ref fStyles, value, nameof(Styles));
         }
 
         /// <summary>

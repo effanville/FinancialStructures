@@ -31,13 +31,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
         private readonly IReportLogger fReportLogger;
         private readonly UiGlobals fUiGlobals;
 
+        private UiStyles fStyles;
+
         /// <summary>
-        /// The styles to display in the UI.
+        /// The style object containing the style for the ui.
         /// </summary>
         public UiStyles Styles
         {
-            get;
-            set;
+            get => fStyles;
+            set => SetAndNotify(ref fStyles, value, nameof(Styles));
         }
 
         internal SecurityTrade fOldSelectedTrade;
