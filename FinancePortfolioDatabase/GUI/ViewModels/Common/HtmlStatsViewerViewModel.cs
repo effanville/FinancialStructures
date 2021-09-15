@@ -11,7 +11,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
 {
     internal class HtmlStatsViewerViewModel : DataDisplayViewModelBase
     {
-        private readonly UiGlobals fGlobals;
         public override bool Closable => true;
 
         private Uri fDisplayStats;
@@ -44,7 +43,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
 
         private void ExecuteFileSelect()
         {
-            FileInteractionResult result = fGlobals.FileInteractionService.OpenFile("html", filter: "HTML file|*.html;*.htm|All files|*.*");
+            FileInteractionResult result = fUiGlobals.FileInteractionService.OpenFile("html", filter: "HTML file|*.html;*.htm|All files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
                 StatsFilepath = result.FilePath;
@@ -52,9 +51,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         }
 
         public HtmlStatsViewerViewModel(UiStyles styles, UiGlobals globals, string filePath)
-            : base(styles, "Exported Stats", Account.All, null)
+            : base(globals, styles, null, "Exported Stats", Account.All)
         {
-            fGlobals = globals;
             StatsFilepath = filePath;
             FileSelect = new RelayCommand(ExecuteFileSelect);
         }

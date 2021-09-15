@@ -22,7 +22,7 @@ namespace FinancePortfolioDatabase.Tests
             Mock<IDialogCreationService> dialogMock = TestSetupHelper.CreateDialogMock(MessageBoxResult.Yes);
             IPortfolio portfolio = TestSetupHelper.CreateBasicDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestSetupHelper.CreateDataUpdater(portfolio);
-            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, null, TestSetupHelper.CreateGlobalsMock(fileSystem, fileMock.Object, dialogMock.Object));
+            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(TestSetupHelper.CreateGlobalsMock(fileSystem, fileMock.Object, dialogMock.Object), null, portfolio, dataUpdater);
             viewModel.NewDatabaseCommand.Execute(1);
             //Check that data held is an empty database
 
@@ -45,7 +45,7 @@ namespace FinancePortfolioDatabase.Tests
             Mock<IDialogCreationService> dialogMock = TestSetupHelper.CreateDialogMock();
             IPortfolio portfolio = TestSetupHelper.CreateEmptyDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestSetupHelper.CreateDataUpdater(portfolio);
-            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, null, TestSetupHelper.CreateGlobalsMock(tempFileSystem, fileMock.Object, dialogMock.Object));
+            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(TestSetupHelper.CreateGlobalsMock(tempFileSystem, fileMock.Object, dialogMock.Object), null, portfolio, dataUpdater);
             viewModel.LoadDatabaseCommand.Execute(1);
             //Input prespecified example database
 
@@ -69,7 +69,7 @@ namespace FinancePortfolioDatabase.Tests
             Mock<IDialogCreationService> dialogMock = TestSetupHelper.CreateDialogMock();
             IPortfolio portfolio = TestSetupHelper.CreateEmptyDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestSetupHelper.CreateDataUpdater(portfolio);
-            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, null, TestSetupHelper.CreateGlobalsMock(tempFileSystem, fileMock.Object, dialogMock.Object));
+            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(TestSetupHelper.CreateGlobalsMock(tempFileSystem, fileMock.Object, dialogMock.Object), null, portfolio, dataUpdater);
             viewModel.LoadDatabaseCommand.Execute(1);
             //Input prespecified example database
 
@@ -95,7 +95,7 @@ namespace FinancePortfolioDatabase.Tests
             Mock<IDialogCreationService> dialogMock = TestSetupHelper.CreateDialogMock();
             IPortfolio portfolio = TestSetupHelper.CreateEmptyDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestSetupHelper.CreateDataUpdater(portfolio);
-            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, null, TestSetupHelper.CreateGlobalsMock(fileSystem, fileMock.Object, dialogMock.Object));
+            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(TestSetupHelper.CreateGlobalsMock(fileSystem, fileMock.Object, dialogMock.Object), null, portfolio, dataUpdater);
             viewModel.OpenHelpCommand.Execute(1);
             //Input prespecified example database
 
@@ -116,7 +116,7 @@ namespace FinancePortfolioDatabase.Tests
             Mock<IDialogCreationService> dialogMock = TestSetupHelper.CreateDialogMock();
             IPortfolio portfolio = TestSetupHelper.CreateBasicDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestSetupHelper.CreateDataUpdater(portfolio);
-            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, null, TestSetupHelper.CreateGlobalsMock(tempFileSystem, fileMock.Object, dialogMock.Object));
+            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(TestSetupHelper.CreateGlobalsMock(tempFileSystem, fileMock.Object, dialogMock.Object), null, portfolio, dataUpdater);
             viewModel.SaveDatabaseCommand.Execute(1);
             //Input prespecified example database
 
@@ -136,7 +136,7 @@ namespace FinancePortfolioDatabase.Tests
             Mock<IDialogCreationService> dialogMock = TestSetupHelper.CreateDialogMock();
             IPortfolio portfolio = TestSetupHelper.CreateEmptyDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestSetupHelper.CreateDataUpdater(portfolio);
-            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, null, TestSetupHelper.CreateGlobalsMock(fileSystem, fileMock.Object, dialogMock.Object));
+            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(TestSetupHelper.CreateGlobalsMock(fileSystem, fileMock.Object, dialogMock.Object), null, portfolio, dataUpdater);
             viewModel.UpdateDataCommand.Execute(1);
             //Input prespecified example database
 
@@ -154,7 +154,7 @@ namespace FinancePortfolioDatabase.Tests
             Mock<IDialogCreationService> dialogMock = TestSetupHelper.CreateDialogMock(MessageBoxResult.Yes);
             IPortfolio portfolio = TestSetupHelper.CreateBasicDataBase();
             Action<Action<IPortfolio>> dataUpdater = TestSetupHelper.CreateDataUpdater(portfolio);
-            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(portfolio, dataUpdater, null, TestSetupHelper.CreateGlobalsMock(fileSystem, fileMock.Object, dialogMock.Object));
+            OptionsToolbarViewModel viewModel = new OptionsToolbarViewModel(TestSetupHelper.CreateGlobalsMock(fileSystem, fileMock.Object, dialogMock.Object), null, portfolio, dataUpdater);
             viewModel.RefreshCommand.Execute(1);
             //Check that data held is an empty database
 

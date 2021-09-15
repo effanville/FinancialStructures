@@ -40,7 +40,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         }
 
         public PortfolioHistoryViewModel(IPortfolio portfolio, UiStyles styles)
-            : base(styles, "History", portfolio)
+            : base(null, styles, portfolio, "History")
         {
             UpdateData(portfolio);
         }

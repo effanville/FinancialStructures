@@ -17,9 +17,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
     /// </summary>
     public class StatsCreatorWindowViewModel : DataDisplayViewModelBase
     {
-        private readonly IConfiguration fUserConfiguration;
-        private readonly UiGlobals fUiGlobals;
-
         private ExportHistoryViewModel fHistoryExport;
 
         /// <summary>
@@ -47,8 +44,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public StatsCreatorWindowViewModel(IPortfolio portfolio, UiStyles styles, UiGlobals globals, IConfiguration userConfiguration, Action<object> loadTab)
-            : base(styles, "Stats Creator", Account.All, portfolio)
+        public StatsCreatorWindowViewModel(UiGlobals globals, UiStyles styles, IConfiguration userConfiguration, IPortfolio portfolio, Action<object> loadTab)
+            : base(globals, styles, userConfiguration, portfolio, "Stats Creator", Account.All)
         {
             fUserConfiguration = userConfiguration;
             if (fUserConfiguration.HasLoaded)
@@ -61,10 +58,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
 
             fLoadTab = loadTab;
-            fUiGlobals = globals;
 
-            StatsPageExportOptions = new ExportStatsViewModel(DataStore, obj => fLoadTab(obj), Styles, fUiGlobals, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsOptions]);
-            ExportHistoryOptions = new ExportHistoryViewModel(DataStore, obj => fLoadTab(obj), Styles, fUiGlobals, fUserConfiguration.ChildConfigurations[UserConfiguration.HistoryOptions]);
+            StatsPageExportOptions = new ExportStatsViewModel(fUiGlobals, Styles, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsOptions], DataStore, obj => fLoadTab(obj));
+            ExportHistoryOptions = new ExportHistoryViewModel(fUiGlobals, Styles, fUserConfiguration.ChildConfigurations[UserConfiguration.HistoryOptions], DataStore, obj => fLoadTab(obj));
             CreateInvestmentListCommand = new RelayCommand(ExecuteInvestmentListCommand);
         }
 

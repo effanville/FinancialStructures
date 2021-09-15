@@ -122,7 +122,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         }
 
         public StatisticsChartsViewModel(IPortfolio portfolio, UiStyles styles)
-            : base(styles, "Charts", Account.All, portfolio)
+            : base(null, styles, portfolio, "Charts", Account.All)
         {
             UpdateData(portfolio);
         }

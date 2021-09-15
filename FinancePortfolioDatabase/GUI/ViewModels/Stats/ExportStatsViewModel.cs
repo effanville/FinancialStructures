@@ -23,10 +23,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
     /// </summary>
     public class ExportStatsViewModel : DataDisplayViewModelBase
     {
-        private readonly IConfiguration fUserConfiguration;
-        private IReportLogger ReportLogger => fUiGlobals.ReportLogger;
         private readonly Action<object> CloseWindowAction;
-        private readonly UiGlobals fUiGlobals;
 
         private List<Selectable<string>> fDisplayConditions = new List<Selectable<string>>();
 
@@ -142,11 +139,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public ExportStatsViewModel(IPortfolio portfolio, Action<object> CloseWindow, UiStyles styles, UiGlobals uiGlobals, IConfiguration userConfiguration)
-            : base(styles, "", Account.All, portfolio)
+        public ExportStatsViewModel(UiGlobals globals, UiStyles styles, IConfiguration userConfiguration, IPortfolio portfolio, Action<object> CloseWindow)
+            : base(globals, styles, userConfiguration, portfolio, "", Account.All)
         {
-            fUiGlobals = uiGlobals;
-            fUserConfiguration = userConfiguration;
             CloseWindowAction = CloseWindow;
             ExportCommand = new RelayCommand(ExecuteExportCommand);
             if (fUserConfiguration.HasLoaded)

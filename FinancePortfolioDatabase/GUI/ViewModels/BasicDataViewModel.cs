@@ -15,7 +15,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
 {
     internal class BasicDataViewModel : DataDisplayViewModelBase
     {
-        private readonly UiGlobals fUiGlobals;
         private string fPortfolioNameText;
         public string PortfolioNameText
         {
@@ -91,10 +90,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             set => SetAndNotify(ref fTopBankAccounts, value, nameof(TopBankAccounts));
         }
 
-        public BasicDataViewModel(IPortfolio portfolio, UiStyles styles, UiGlobals globals)
-            : base(styles, "Overview", Account.All, portfolio)
+        public BasicDataViewModel(UiGlobals globals, UiStyles styles, IPortfolio portfolio)
+            : base(globals, styles, portfolio, "Overview", Account.All)
         {
-            fUiGlobals = globals;
             UpdateData(portfolio);
         }
 

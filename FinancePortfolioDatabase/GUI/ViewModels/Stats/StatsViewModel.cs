@@ -17,8 +17,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
     /// </summary>
     public class StatsViewModel : DataDisplayViewModelBase
     {
-        private readonly IConfiguration fUserConfiguration;
-        private readonly UiGlobals fUiGlobals;
         private List<AccountStatistics> fStats;
 
         private bool fDisplayValueFunds = true;
@@ -57,19 +55,17 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public StatsViewModel(IPortfolio portfolio, UiStyles styles, UiGlobals globals, IConfiguration userConfiguration, Account account = Account.All, Statistic[] statsToView = null)
-            : base(styles, "Statistics", account, portfolio)
+        public StatsViewModel(UiGlobals globals, UiStyles styles, IConfiguration userConfiguration, IPortfolio portfolio, Account account = Account.All, Statistic[] statsToView = null)
+            : base(globals, styles, userConfiguration, portfolio, "Statistics", account)
         {
             StatisticNames = statsToView != null ? statsToView.Select(stat => new Selectable<Statistic>(stat, true)).ToList() : AccountStatisticsHelpers.AllStatistics().Select(stat => new Selectable<Statistic>(stat, true)).ToList();
             StatisticNames.ForEach(stat => stat.SelectedChanged += OnSelectedChanged);
-            fUserConfiguration = userConfiguration;
             if (fUserConfiguration.HasLoaded)
             {
                 fUserConfiguration.RestoreFromConfiguration(this);
             }
 
             fUserConfiguration.HasLoaded = true;
-            fUiGlobals = globals;
             UpdateData(portfolio);
         }
 

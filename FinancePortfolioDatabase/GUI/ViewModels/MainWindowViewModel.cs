@@ -89,15 +89,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
 
             LoadConfig();
 
-            OptionsToolbarCommands = new OptionsToolbarViewModel(ProgramPortfolio, UpdateDataCallback, Styles, fUiGlobals);
-            Tabs.Add(new BasicDataViewModel(ProgramPortfolio, Styles, fUiGlobals));
-            Tabs.Add(new SecurityEditWindowViewModel(ProgramPortfolio, UpdateDataCallback, ReportLogger, Styles, fUiGlobals));
-            Tabs.Add(new ValueListWindowViewModel("Bank Accounts", ProgramPortfolio, UpdateDataCallback, Styles, fUiGlobals, Account.BankAccount));
-            Tabs.Add(new ValueListWindowViewModel("Benchmarks", ProgramPortfolio, UpdateDataCallback, Styles, fUiGlobals, Account.Benchmark));
-            Tabs.Add(new ValueListWindowViewModel("Currencies", ProgramPortfolio, UpdateDataCallback, Styles, fUiGlobals, Account.Currency));
-            Tabs.Add(new StatsViewModel(ProgramPortfolio, Styles, fUiGlobals, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsDisplay], Account.All));
+            OptionsToolbarCommands = new OptionsToolbarViewModel(fUiGlobals, Styles, ProgramPortfolio, UpdateDataCallback);
+            Tabs.Add(new BasicDataViewModel(fUiGlobals, Styles, ProgramPortfolio));
+            Tabs.Add(new SecurityEditWindowViewModel(fUiGlobals, Styles, ProgramPortfolio, UpdateDataCallback));
+            Tabs.Add(new ValueListWindowViewModel(fUiGlobals, Styles, ProgramPortfolio, "Bank Accounts", Account.BankAccount, UpdateDataCallback));
+            Tabs.Add(new ValueListWindowViewModel(fUiGlobals, Styles, ProgramPortfolio, "Benchmarks", Account.Benchmark, UpdateDataCallback));
+            Tabs.Add(new ValueListWindowViewModel(fUiGlobals, Styles, ProgramPortfolio, "Currencies", Account.Currency, UpdateDataCallback));
+            Tabs.Add(new StatsViewModel(fUiGlobals, Styles, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsDisplay], ProgramPortfolio, Account.All));
             Tabs.Add(new StatisticsChartsViewModel(ProgramPortfolio, Styles));
-            Tabs.Add(new StatsCreatorWindowViewModel(ProgramPortfolio, Styles, fUiGlobals, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsCreator], AddObjectAsMainTab));
+            Tabs.Add(new StatsCreatorWindowViewModel(fUiGlobals, Styles, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsCreator], ProgramPortfolio, AddObjectAsMainTab));
             ProgramPortfolio.PortfolioChanged += AllData_portfolioChanged;
         }
 

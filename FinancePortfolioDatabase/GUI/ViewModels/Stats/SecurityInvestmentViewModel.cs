@@ -27,7 +27,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         }
 
         public SecurityInvestmentViewModel(IPortfolio portfolio, UiStyles styles)
-            : base(styles, "Investments", portfolio)
+            : base(null, styles, portfolio, "Investments")
         {
             UpdateData(portfolio);
         }

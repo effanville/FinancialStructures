@@ -15,7 +15,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
     /// </summary>
     public class ValueListWindowViewModel : DataDisplayViewModelBase
     {
-        private readonly UiGlobals fUiGlobals;
         private readonly Action<Action<IPortfolio>> UpdateDataCallback;
 
         /// <summary>
@@ -37,10 +36,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public ValueListWindowViewModel(string title, IPortfolio portfolio, Action<Action<IPortfolio>> updateDataCallback, UiStyles styles, UiGlobals globals, Account accountType)
-            : base(styles, title, accountType, portfolio)
+        public ValueListWindowViewModel(UiGlobals globals, UiStyles styles, IPortfolio portfolio, string title, Account accountType, Action<Action<IPortfolio>> updateDataCallback)
+            : base(globals, styles, portfolio, title, accountType)
         {
-            fUiGlobals = globals;
             UpdateDataCallback = updateDataCallback;
             UpdateData(portfolio);
             Tabs.Add(new DataNamesViewModel(DataStore, updateDataCallback, fUiGlobals.ReportLogger, styles, (name) => LoadTabFunc(name), accountType));

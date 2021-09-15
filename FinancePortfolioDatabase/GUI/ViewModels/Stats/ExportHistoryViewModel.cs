@@ -20,10 +20,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
     /// </summary>
     public sealed class ExportHistoryViewModel : DataDisplayViewModelBase
     {
-        private readonly IConfiguration fUserConfiguration;
-        private IReportLogger ReportLogger => fUiGlobals.ReportLogger;
         private readonly Action<object> fCloseWindowAction;
-        private readonly UiGlobals fUiGlobals;
 
         private int fHistoryGapDays;
 
@@ -39,12 +36,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         /// <summary>
         /// Default Constructor.
         /// </summary>
-        public ExportHistoryViewModel(IPortfolio portfolio, Action<object> CloseWindow, UiStyles styles, UiGlobals globals, IConfiguration userConfiguration)
-            : base(styles, "", Account.All, portfolio)
+        public ExportHistoryViewModel(UiGlobals globals, UiStyles styles, IConfiguration userConfiguration, IPortfolio portfolio, Action<object> CloseWindow)
+            : base(globals, styles, userConfiguration, portfolio, "", Account.All)
         {
-            fUiGlobals = globals;
             fCloseWindowAction = CloseWindow;
-            fUserConfiguration = userConfiguration;
             if (fUserConfiguration.HasLoaded)
             {
                 fUserConfiguration.RestoreFromConfiguration(this);

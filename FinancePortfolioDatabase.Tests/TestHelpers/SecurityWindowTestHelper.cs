@@ -72,7 +72,7 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
             Portfolio = TestSetupHelper.CreateEmptyDataBase();
 
             UiGlobals globals = TestSetupHelper.CreateGlobalsMock(new FileSystem(), fileMock.Object, dialogMock.Object);
-            ViewModel = new SecurityEditWindowViewModel(Portfolio, DataUpdater, TestSetupHelper.DummyReportLogger, null, globals);
+            ViewModel = new SecurityEditWindowViewModel(globals, null, Portfolio, DataUpdater);
         }
 
         [TearDown]
