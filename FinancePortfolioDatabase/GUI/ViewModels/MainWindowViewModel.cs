@@ -19,13 +19,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
     public class MainWindowViewModel : PropertyChangedBase
     {
         /// <summary>
-        /// The styles for the Ui.
+        /// The mechanism by which the data in <see cref="ProgramPortfolio"/> is updated. This includes a GUI update action.
         /// </summary>
-        public UiStyles Styles
-        {
-            get;
-            set;
-        }
+        private Action<Action<IPortfolio>> UpdateDataCallback => action => action(ProgramPortfolio);
+        private Action<object> AddObjectAsMainTab => obj => Tabs.Add(obj);
 
         internal IPortfolio ProgramPortfolio = PortfolioFactory.GenerateEmpty();
 
@@ -37,6 +34,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         private UserConfiguration fUserConfiguration;
         private string fConfigLocation;
 
+        /// <summary>
+        /// The styles for the Ui.
+        /// </summary>
+        public UiStyles Styles
+        {
+            get;
+            set;
+        }
+
         private OptionsToolbarViewModel fOptionsToolbarCommands;
 
         /// <summary>
@@ -45,11 +51,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         public OptionsToolbarViewModel OptionsToolbarCommands
         {
             get => fOptionsToolbarCommands;
-            set
-            {
-                fOptionsToolbarCommands = value;
-                OnPropertyChanged();
-            }
+            set => SetAndNotify(ref fOptionsToolbarCommands, value, nameof(OptionsToolbarCommands));
         }
 
         private ReportingWindowViewModel fReports;
@@ -60,11 +62,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         public ReportingWindowViewModel ReportsViewModel
         {
             get => fReports;
-            set
-            {
-                fReports = value;
-                OnPropertyChanged();
-            }
+            set => SetAndNotify(ref fReports, value, nameof(ReportsViewModel));
         }
 
         /// <summary>
@@ -104,7 +102,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         private void LoadConfig()
         {
             Assembly assembly = Assembly.GetExecutingAssembly();
-            var name = assembly.GetName();
+            AssemblyName name = assembly.GetName();
             fConfigLocation = fUiGlobals.CurrentFileSystem.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), name.Name, "user.config");
             fUserConfiguration = UserConfiguration.LoadFromUserConfigFile(fConfigLocation, fUiGlobals.CurrentFileSystem, ReportLogger);
         }
@@ -121,12 +119,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         {
             foreach (object tab in Tabs)
             {
-                if (tab is DataDisplayViewModelBase vm)
+                if (tab is DataDisplayViewModelBase vm && e.ShouldUpdate(vm.DataType))
                 {
-                    if (e.ShouldUpdate(vm.DataType))
-                    {
-                        fUiGlobals.CurrentDispatcher?.Invoke(() => vm.UpdateData(ProgramPortfolio));
-                    }
+                    fUiGlobals.CurrentDispatcher?.Invoke(() => vm.UpdateData(ProgramPortfolio));
                 }
             }
 
@@ -142,11 +137,5 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         {
             ReportsViewModel?.UpdateReport(severity, type, location, message);
         }
-
-        /// <summary>
-        /// The mechanism by which the data in <see cref="ProgramPortfolio"/> is updated. This includes a GUI update action.
-        /// </summary>
-        private Action<Action<IPortfolio>> UpdateDataCallback => action => action(ProgramPortfolio);
-        private Action<object> AddObjectAsMainTab => obj => Tabs.Add(obj);
     }
 }
