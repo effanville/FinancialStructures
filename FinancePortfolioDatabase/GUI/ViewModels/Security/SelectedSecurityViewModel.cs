@@ -122,11 +122,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             if (portfolio.TryGetAccount(Account.Security, SelectedName, out IValueList desired))
             {
                 ISecurity security = desired as ISecurity;
-                TLVM = new TimeListViewModel(security.UnitPrice, "UnitPrice", globals, value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditUnitPriceData(SelectedName, old, newVal));
+                TLVM = new TimeListViewModel(security.UnitPrice, "UnitPrice", value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditUnitPriceData(SelectedName, old, newVal));
             }
             else
             {
-                TLVM = new TimeListViewModel(null, "UnitPrice", globals, value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditUnitPriceData(SelectedName, old, newVal));
+                TLVM = new TimeListViewModel(null, "UnitPrice", value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditUnitPriceData(SelectedName, old, newVal));
             }
 
             UpdateData(portfolio, null);

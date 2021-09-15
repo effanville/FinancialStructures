@@ -82,8 +82,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             TypeOfAccount = accountType;
 
             TLVM = portfolio.TryGetAccount(accountType, SelectedName, out IValueList desired)
-                ? new TimeListViewModel(desired.Values, "Value", globals, value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditData(SelectedName, old, newVal))
-                : new TimeListViewModel(null, "Value", globals, value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditData(SelectedName, old, newVal));
+                ? new TimeListViewModel(desired.Values, "Value", value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditData(SelectedName, old, newVal))
+                : new TimeListViewModel(null, "Value", value => DeleteValue(SelectedName, value), (old, newVal) => ExecuteAddEditData(SelectedName, old, newVal));
 
             UpdateData(portfolio);
 

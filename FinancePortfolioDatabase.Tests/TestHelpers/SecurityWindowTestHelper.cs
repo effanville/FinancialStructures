@@ -14,22 +14,13 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
 {
     public abstract class SecurityWindowTestHelper
     {
-        private Action<Action<IPortfolio>> DataUpdater
-        {
-            get
-            {
-                return action => action(Portfolio);
-            }
-        }
+        private Action<Action<IPortfolio>> DataUpdater => action => action(Portfolio);
 
         private IPortfolio fPortfolio;
 
         protected IPortfolio Portfolio
         {
-            get
-            {
-                return fPortfolio;
-            }
+            get => fPortfolio;
             set
             {
                 fPortfolio = value;
