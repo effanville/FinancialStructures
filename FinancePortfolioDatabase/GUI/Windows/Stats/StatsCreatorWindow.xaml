@@ -18,11 +18,17 @@
         <RowDefinition Height="40" />
         <RowDefinition Height="*" />
     </Grid.RowDefinitions>
-    <Button Grid.Row="0"
-            Content="Create Investment list"
-            Style="{StaticResource ResourceKey=defaultButton}"
-            Width="300"
-            Command="{Binding  CreateInvestmentListCommand}" />
+    <Border Grid.Row="0"
+            BorderThickness="2"
+            Height="Auto"
+            BorderBrush="{Binding Styles.BackgroundSecondaryBrush}"
+            Background="{Binding Styles.BackgroundBrush}">
+        <Button Grid.Row="0"
+                Content="Create Investment list"
+                Style="{StaticResource ResourceKey=defaultButton}"
+                Width="300"
+                Command="{Binding  CreateInvestmentListCommand}" />
+    </Border>
     <UserControl Grid.Row="1"
                  Height="Auto"
                  BorderThickness="2"
