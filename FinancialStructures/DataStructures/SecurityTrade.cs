@@ -20,6 +20,9 @@ namespace FinancialStructures.DataStructures
             set;
         }
 
+        /// <summary>
+        /// The company name associated to this trade.
+        /// </summary>
         [XmlAttribute]
         public string Company
         {
@@ -27,6 +30,9 @@ namespace FinancialStructures.DataStructures
             set => Names.Company = value;
         }
 
+        /// <summary>
+        /// The secondary name of the security associated to this trade.
+        /// </summary>
         [XmlAttribute]
         public string Name
         {
@@ -34,6 +40,9 @@ namespace FinancialStructures.DataStructures
             set => Names.Name = value;
         }
 
+        /// <summary>
+        /// The names associated to this trade.
+        /// </summary>
         [XmlIgnore]
         public TwoName Names
         {
@@ -41,6 +50,9 @@ namespace FinancialStructures.DataStructures
             set;
         }
 
+        /// <summary>
+        /// The day this trade took place on.
+        /// </summary>
         [XmlAttribute]
         public DateTime Day
         {
@@ -48,6 +60,9 @@ namespace FinancialStructures.DataStructures
             set;
         }
 
+        /// <summary>
+        /// The total cost of this trade.
+        /// </summary>
         public double TotalCost
         {
             get

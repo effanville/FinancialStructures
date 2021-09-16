@@ -39,13 +39,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// The total value of this security on this day.
         /// </summary>
-        public double Value
-        {
-            get
-            {
-                return UnitPrice * ShareNo;
-            }
-        }
+        public double Value => UnitPrice * ShareNo;
 
         /// <summary>
         /// The value of an investment made on this day.
@@ -56,6 +50,9 @@ namespace FinancialStructures.DataStructures
             set;
         }
 
+        /// <summary>
+        /// Any trade that took place on this day.
+        /// </summary>
         public SecurityTrade Trade
         {
             get;

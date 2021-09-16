@@ -86,14 +86,19 @@ namespace FinancialStructures.DataStructures
             get;
         } = new Dictionary<string, DailyValuation>();
 
+        /// <summary>
+        /// Header values for this object.
+        /// </summary>
+        /// <returns></returns>
         public List<string> ExportHeaders()
         {
-            List<string> headers = new List<string>();
-            headers.Add("Date");
-            headers.Add("TotalValue");
-            headers.Add("BankTotal");
-
-            headers.Add("SecurityTotal");
+            List<string> headers = new List<string>
+            {
+                "Date",
+                "TotalValue",
+                "BankTotal",
+                "SecurityTotal"
+            };
 
             foreach (var value in SecurityValues)
             {
@@ -113,13 +118,19 @@ namespace FinancialStructures.DataStructures
             return headers;
         }
 
+        /// <summary>
+        /// Values to export for this.
+        /// </summary>
+        /// <returns></returns>
         public List<string> ExportValues()
         {
-            List<string> values = new List<string>();
-            values.Add(TotalValue.Day.ToUkDateString());
-            values.Add(TotalValue.Value.ToString());
-            values.Add(BankAccValue.Value.ToString());
-            values.Add(SecurityValue.Value.ToString());
+            List<string> values = new List<string>
+            {
+                TotalValue.Day.ToUkDateString(),
+                TotalValue.Value.ToString(),
+                BankAccValue.Value.ToString(),
+                SecurityValue.Value.ToString()
+            };
 
             foreach (var value in SecurityValues)
             {
