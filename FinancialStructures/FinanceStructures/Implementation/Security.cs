@@ -21,6 +21,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public TimeList Investments { get; set; } = new TimeList();
 
+        /// <inheritdoc/>
         public List<SecurityTrade> SecurityTrades
         {
             get;
