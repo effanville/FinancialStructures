@@ -29,10 +29,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <inheritdoc/>
         public List<StockDay> Valuations
         {
-            get
-            {
-                return fValuations;
-            }
+            get => fValuations;
             set
             {
                 fValuations = value;

@@ -31,8 +31,20 @@ namespace FinancialStructures.StockStructures
         /// The closing value.
         /// </summary>
         Close,
+
+        /// <summary>
+        /// The ratio of the Days high to the days open prices.
+        /// </summary>
         HighOpen,
+
+        /// <summary>
+        /// The ratio of the days low to the days open prices.
+        /// </summary>
         LowOpen,
+
+        /// <summary>
+        /// The ratio of the Days close to the days opening price.
+        /// </summary>
         CloseOpen,
 
         /// <summary>

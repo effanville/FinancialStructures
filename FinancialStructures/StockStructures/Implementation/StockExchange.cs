@@ -117,7 +117,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <inheritdoc/>
         public bool CheckValidity()
         {
-            if (Stocks.Count() == 0)
+            if (Stocks.Count == 0)
             {
                 return false;
             }
@@ -237,13 +237,12 @@ namespace FinancialStructures.StockStructures.Implementation
             }
         }
 
-        private int DateToYahooInt(DateTime date)
+        private static int DateToYahooInt(DateTime date)
         {
             return int.Parse((date - new DateTime(1970, 1, 1)).TotalSeconds.ToString());
-            throw new NotImplementedException();
         }
 
-        private DateTime YahooIntToDate(int yahooInt)
+        private static DateTime YahooIntToDate(int yahooInt)
         {
             return new DateTime(1970, 1, 1).AddSeconds(yahooInt);
         }
@@ -314,7 +313,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <inheritdoc/>
         public void Configure(string stockFilePath, IFileSystem fileSystem, IReportLogger logger = null)
         {
-            string[] fileContents = new string[] { };
+            string[] fileContents = Array.Empty<string>();
             try
             {
                 fileContents = fileSystem.File.ReadAllLines(stockFilePath);
