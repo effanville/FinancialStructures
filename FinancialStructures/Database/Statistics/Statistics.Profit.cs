@@ -128,7 +128,7 @@ namespace FinancialStructures.Database.Statistics
                 {
                     if (portfolio.TryGetAccount(elementType, names, out IValueList desired))
                     {
-                        if (desired is ICashAccount cashAcc)
+                        if (desired is IExchangableValueList cashAcc)
                         {
                             if (cashAcc.Any())
                             {

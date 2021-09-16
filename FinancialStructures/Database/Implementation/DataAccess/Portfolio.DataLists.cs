@@ -70,7 +70,7 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Account.BankAccount:
                 {
-                    foreach (ICashAccount acc in BankAccounts)
+                    foreach (IExchangableValueList acc in BankAccounts)
                     {
                         if (acc.Names.Company == company)
                         {
@@ -116,7 +116,7 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Account.BankAccount:
                 {
-                    foreach (ICashAccount cashAccount in BankAccountsThreadSafe)
+                    foreach (IExchangableValueList cashAccount in BankAccountsThreadSafe)
                     {
                         if (cashAccount.IsSectorLinked(sectorName))
                         {

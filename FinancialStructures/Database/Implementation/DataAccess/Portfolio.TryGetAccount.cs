@@ -26,7 +26,7 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case (Account.BankAccount):
                 {
-                    foreach (ICashAccount sec in BankAccountsThreadSafe)
+                    foreach (IExchangableValueList sec in BankAccountsThreadSafe)
                     {
                         if (names.IsEqualTo(sec.Names))
                         {

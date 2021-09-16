@@ -8,7 +8,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
     /// <summary>
     /// An account simulating a bank account.
     /// </summary>
-    public class CashAccount : ValueList, ICashAccount
+    public class CashAccount : ValueList, IExchangableValueList
     {
         internal override void OnDataEdit(object edited, EventArgs e)
         {
@@ -16,7 +16,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public new ICashAccount Copy()
+        public override IValueList Copy()
         {
             return new CashAccount(Names, Values);
         }

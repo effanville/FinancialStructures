@@ -47,7 +47,7 @@ namespace FinancialStructures.Database.Statistics
                     }
                     case Account.BankAccount:
                     {
-                        foreach (ICashAccount acc in portfolio.BankAccountsThreadSafe)
+                        foreach (IExchangableValueList acc in portfolio.BankAccountsThreadSafe)
                         {
                             var latest = acc.LatestValue();
                             if ((displayValueFunds && latest?.Value > 0) || !displayValueFunds)

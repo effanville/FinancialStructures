@@ -103,7 +103,7 @@ namespace FinancialStructures.Database.Statistics
                     double earlierValue = 0;
                     double laterValue = 0;
 
-                    foreach (ICashAccount bankAccount in portfolio.BankAccountsThreadSafe)
+                    foreach (IExchangableValueList bankAccount in portfolio.BankAccountsThreadSafe)
                     {
                         ICurrency currency = portfolio.Currency(bankAccount.Names.Currency);
                         earlierValue += bankAccount.Value(earlierTime, currency).Value;

@@ -72,7 +72,7 @@ namespace FinancialStructures.Database.Implementation
 
         /// <inheritdoc/>
         [XmlIgnore]
-        public IReadOnlyList<ICashAccount> BankAccountsThreadSafe
+        public IReadOnlyList<IExchangableValueList> BankAccountsThreadSafe
         {
             get
             {

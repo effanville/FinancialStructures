@@ -57,7 +57,7 @@ namespace FinancialStructures.Database
         /// threadsafe manner.
         /// </para>
         /// </summary>
-        IReadOnlyList<ICashAccount> BankAccountsThreadSafe
+        IReadOnlyList<IExchangableValueList> BankAccountsThreadSafe
         {
             get;
         }

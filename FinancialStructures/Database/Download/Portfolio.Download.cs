@@ -82,7 +82,7 @@ namespace FinancialStructures.Database.Download
                     downloadTasks.Add(DownloadLatestValue(sec.Names, value => sec.SetData(DateTime.Today, value, reportLogger), reportLogger));
                 }
             }
-            foreach (ICashAccount acc in portfo.BankAccountsThreadSafe)
+            foreach (IExchangableValueList acc in portfo.BankAccountsThreadSafe)
             {
                 if (!string.IsNullOrEmpty(acc.Names.Url))
                 {

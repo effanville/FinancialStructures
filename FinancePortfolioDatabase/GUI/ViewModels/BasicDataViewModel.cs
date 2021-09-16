@@ -108,7 +108,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
 
             BankAccountTotalText = $"Total Bank Accounts: {portfolio.NumberOf(Account.BankAccount)}";
             BankAccountAmountText = $"Total Value: {portfolio.TotalValue(Totals.BankAccount)} {portfolio.BaseCurrency}";
-            List<ICashAccount> bankAccounts = portfolio.BankAccountsThreadSafe.ToList();
+            List<IExchangableValueList> bankAccounts = portfolio.BankAccountsThreadSafe.ToList();
             bankAccounts.Sort((bank, otherBank) => otherBank.Value(DateTime.Today).Value.CompareTo(bank.Value(DateTime.Today).Value));
             TopBankAccounts = bankAccounts.Take(5).Select(name => new Labelled<TwoName, DailyValuation>(new TwoName(name.Names.Company, name.Names.Name), name.Value(DateTime.Today) ?? new DailyValuation(DateTime.Today, 0.0))).ToList();
         }

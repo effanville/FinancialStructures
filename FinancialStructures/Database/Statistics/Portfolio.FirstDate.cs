@@ -67,7 +67,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Totals.BankAccount:
                 {
-                    foreach (ICashAccount cashAccount in portfolio.BankAccountsThreadSafe)
+                    foreach (IExchangableValueList cashAccount in portfolio.BankAccountsThreadSafe)
                     {
                         if (cashAccount.Any())
                         {
