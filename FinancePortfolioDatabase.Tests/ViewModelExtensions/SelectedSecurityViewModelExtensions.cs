@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -48,6 +49,8 @@ namespace FinancePortfolioDatabase.Tests.ViewModelExtensions
         public static void DeleteSelectedTrade(this SelectedSecurityViewModel viewModel, IPortfolio portfolio)
         {
             KeyEventArgs eventArgs = new KeyEventArgs(Keyboard.PrimaryDevice, new HwndSource(0, 0, 0, 0, 0, "", IntPtr.Zero), 0, Key.Delete);
+            eventArgs.RoutedEvent = EventManager.RegisterRoutedEvent("Click", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(DataGridCell));
+            eventArgs.Source = new DataGridCell();
             viewModel.DeleteTradeKeyDownCommand?.Execute(eventArgs);
             viewModel.UpdateData(portfolio);
         }
@@ -84,6 +87,8 @@ namespace FinancePortfolioDatabase.Tests.ViewModelExtensions
         public static void DeleteSelected(this SelectedSecurityViewModel viewModel, IPortfolio portfolio)
         {
             KeyEventArgs eventArgs = new KeyEventArgs(Keyboard.PrimaryDevice, new HwndSource(0, 0, 0, 0, 0, "", IntPtr.Zero), 0, Key.Delete);
+            eventArgs.RoutedEvent = EventManager.RegisterRoutedEvent("Click", RoutingStrategy.Bubble, typeof(RoutedEventHandler),typeof(DataGridCell));
+            eventArgs.Source = new DataGridCell();
             viewModel.TLVM.DeleteValuationCommand?.Execute(eventArgs);
             viewModel.UpdateData(portfolio);
         }

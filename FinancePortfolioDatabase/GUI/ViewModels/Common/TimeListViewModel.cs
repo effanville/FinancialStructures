@@ -151,9 +151,12 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         {
             if (e.Key == Key.Delete || e.Key == Key.Back)
             {
-                if (SelectedValuation != null)
+                if (e.OriginalSource is DataGridCell dgCell)
                 {
-                    DeleteValueAction(SelectedValuation);
+                    if (SelectedValuation != null)
+                    {
+                        DeleteValueAction(SelectedValuation);
+                    }
                 }
             }
         }

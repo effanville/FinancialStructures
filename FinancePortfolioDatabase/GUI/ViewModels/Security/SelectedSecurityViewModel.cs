@@ -380,13 +380,16 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
         {
             if (e.Key == Key.Delete || e.Key == Key.Back)
             {
-                if (SelectedName != null && SelectedTrade != null)
+                if (e.OriginalSource is DataGridCell)
                 {
-                    UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteTradeData(Account.Security, SelectedName, SelectedTrade.Day, fReportLogger));
-                }
-                else
-                {
-                    _ = fReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.DeletingData, "No Account was selected when trying to delete data.");
+                    if (SelectedName != null && SelectedTrade != null)
+                    {
+                        UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteTradeData(Account.Security, SelectedName, SelectedTrade.Day, fReportLogger));
+                    }
+                    else
+                    {
+                        _ = fReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.DeletingData, "No Account was selected when trying to delete data.");
+                    }
                 }
             }
         }
