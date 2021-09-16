@@ -17,9 +17,12 @@ namespace FinancialStructures.Database.Implementation
         /// </remarks>
         public IPortfolio Copy()
         {
-            Portfolio PortfoCopy = new Portfolio();
-            PortfoCopy.BaseCurrency = BaseCurrency;
-            PortfoCopy.FilePath = FilePath;
+            Portfolio PortfoCopy = new Portfolio
+            {
+                BaseCurrency = BaseCurrency,
+                FilePath = FilePath
+            };
+
             foreach (Security security in Funds)
             {
                 PortfoCopy.Funds.Add((Security)security.Copy());

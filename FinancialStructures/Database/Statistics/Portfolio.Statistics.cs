@@ -10,6 +10,9 @@ namespace FinancialStructures.Database.Statistics
     /// </summary>
     public static partial class PortfolioStatisticGenerators
     {
+        /// <summary>
+        /// Generates history values for an <see cref="IPortfolio"/> at a day interval of <paramref name="daysGap"/>.
+        /// </summary>
         public static async Task<List<PortfolioDaySnapshot>> GenerateHistoryStats(this IPortfolio portfolio, int daysGap)
         {
             List<PortfolioDaySnapshot> outputs = new List<PortfolioDaySnapshot>();
