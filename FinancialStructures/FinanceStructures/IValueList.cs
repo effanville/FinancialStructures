@@ -10,7 +10,7 @@ namespace FinancialStructures.FinanceStructures
     /// <summary>
     /// A named list containing values.
     /// </summary>
-    public interface IValueList : ICSVAccess, IComparable
+    public interface IValueList : ICSVAccess, IComparable, IComparable<IValueList>, IEquatable<IValueList>
     {
         /// <summary>
         /// The Name data for this list, including company, name and urls.
@@ -33,11 +33,6 @@ namespace FinancialStructures.FinanceStructures
         /// Provides a short string representing the <see cref="IValueList"/>
         /// </summary>
         string ToString();
-
-        /// <summary>
-        /// Compares another <see cref="IValueList"/> and determines if they both have the same name and company.
-        /// </summary>
-        bool IsEqualTo(IValueList otherAccount);
 
         /// <summary>
         /// Returns a copy of this <see cref="IValueList"/>.

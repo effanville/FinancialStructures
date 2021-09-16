@@ -102,20 +102,37 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public override bool IsEqualTo(IValueList otherList)
+        public override bool Equals(IValueList otherList)
         {
             if (otherList is ISecurity otherSecurity)
             {
-                return IsEqualTo(otherSecurity);
+                return Equals(otherSecurity);
             }
 
             return false;
         }
 
         /// <inheritdoc/>
-        public bool IsEqualTo(ISecurity otherSecurity)
+        public bool Equals(ISecurity otherSecurity)
         {
-            return base.IsEqualTo(otherSecurity);
+            return base.Equals(otherSecurity);
+        }
+
+        /// <inheritdoc />
+        public override int CompareTo(IValueList other)
+        {
+            if (other is ISecurity otherSecurity)
+            {
+                return base.CompareTo(otherSecurity);
+            }
+
+            return 0;
+        }
+
+        /// <inheritdoc/>
+        public int CompareTo(ISecurity other)
+        {
+            return base.CompareTo(other);
         }
     }
 }

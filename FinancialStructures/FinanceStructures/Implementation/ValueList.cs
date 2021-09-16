@@ -143,9 +143,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public virtual bool IsEqualTo(IValueList otherAccount)
+        public virtual bool Equals(IValueList other)
         {
-            return Names.IsEqualTo(otherAccount.Names);
+            return Names.IsEqualTo(other.Names);
         }
 
         /// <inheritdoc />
@@ -153,10 +153,16 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
             if (obj is IValueList otherList)
             {
-                return Names.CompareTo(otherList.Names);
+                return CompareTo(otherList);
             }
 
             return 0;
+        }
+
+        /// <inheritdoc />
+        public virtual int CompareTo(IValueList other)
+        {
+            return Names.CompareTo(other.Names);
         }
     }
 }

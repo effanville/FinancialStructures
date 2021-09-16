@@ -12,7 +12,7 @@ namespace FinancialStructures.FinanceStructures
     /// <summary>
     /// A named entity with Share, unit price and investment lists to detail price history.
     /// </summary>
-    public interface ISecurity : ICSVAccess, IExchangableValueList, IValueList
+    public interface ISecurity : ICSVAccess, IExchangableValueList, IValueList, IEquatable<ISecurity>, IComparable<ISecurity>
     {
         /// <summary>
         /// The Share data for this Security
@@ -46,10 +46,6 @@ namespace FinancialStructures.FinanceStructures
             get;
         }
 
-        /// <summary>
-        /// Compares another <see cref="ISecurity"/> and determines if they both have the same name and company.
-        /// </summary>
-        bool IsEqualTo(ISecurity otherSecurity);
         /// <summary>
         /// Produces a list of data for visual display purposes. Display in the base currency
         /// of the fund ( so this does not modify values due to currency)
