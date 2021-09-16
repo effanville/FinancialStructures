@@ -10,9 +10,24 @@ namespace FinancialStructures.DataExporters.ExportOptions
     /// </summary>
     public class UserDisplayOptions
     {
+        /// <summary>
+        /// String to display for showing securities.
+        /// </summary>
         public const string ShowSecurities = "ShowSecurites";
+
+        /// <summary>
+        /// String to display for showing bank accounts.
+        /// </summary>
         public const string ShowBankAccounts = "ShowBankAccounts";
+
+        /// <summary>
+        /// String to display for showing sectors.
+        /// </summary>
         public const string ShowSectors = "ShowSectors";
+
+        /// <summary>
+        /// String to display for showing benchmarks.
+        /// </summary>
         public const string ShowBenchmarks = "ShowBenchmarks";
 
         /// <summary>
@@ -116,14 +131,16 @@ namespace FinancialStructures.DataExporters.ExportOptions
         /// <returns></returns>
         public static UserDisplayOptions DefaultOptions()
         {
-            var options = new List<Selectable<string>>();
-            options.Add(new Selectable<string>(nameof(DisplayValueFunds), true));
-            options.Add(new Selectable<string>(nameof(Spacing), true));
-            options.Add(new Selectable<string>(nameof(Colours), true));
-            options.Add(new Selectable<string>(ShowSecurities, true));
-            options.Add(new Selectable<string>(ShowBankAccounts, true));
-            options.Add(new Selectable<string>(ShowSectors, true));
-            options.Add(new Selectable<string>(ShowBenchmarks, true));
+            var options = new List<Selectable<string>>
+            {
+                new Selectable<string>(nameof(DisplayValueFunds), true),
+                new Selectable<string>(nameof(Spacing), true),
+                new Selectable<string>(nameof(Colours), true),
+                new Selectable<string>(ShowSecurities, true),
+                new Selectable<string>(ShowBankAccounts, true),
+                new Selectable<string>(ShowSectors, true),
+                new Selectable<string>(ShowBenchmarks, true)
+            };
             return new UserDisplayOptions(AccountStatisticsHelpers.AllStatistics().ToList(), AccountStatisticsHelpers.DefaultBankAccountStats().ToList(), AccountStatisticsHelpers.DefaultSectorStats().ToList(), options);
         }
     }

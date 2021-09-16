@@ -145,6 +145,7 @@ namespace FinancialStructures.DataExporters
         /// <summary>
         /// Exports the statistics to a file.
         /// </summary>
+        /// <param name="fileSystem">The file system interface to use.</param>
         /// <param name="filePath">The path exporting to.</param>
         /// <param name="exportType">The type of export.</param>
         /// <param name="options">Various options the user has specified.</param>
