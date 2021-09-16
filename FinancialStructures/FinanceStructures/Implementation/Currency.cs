@@ -10,7 +10,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
     /// </summary>
     public class Currency : ValueList, ICurrency
     {
-        internal override void OnDataEdit(object edited, EventArgs e)
+        /// <inheritdoc/>
+        protected override void OnDataEdit(object edited, EventArgs e)
         {
             base.OnDataEdit(edited, new PortfolioEventArgs(Account.Currency));
         }

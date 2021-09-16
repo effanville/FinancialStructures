@@ -99,12 +99,12 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Event that controls when data is edited.
         /// </summary>
-        public virtual event EventHandler<PortfolioEventArgs> DataEdit;
+        public event EventHandler<PortfolioEventArgs> DataEdit;
 
         /// <summary>
         /// Raises the <see cref="DataEdit"/> event.
         /// </summary>
-        internal virtual void OnDataEdit(object edited, EventArgs e)
+        protected virtual void OnDataEdit(object edited, EventArgs e)
         {
             var args = e is PortfolioEventArgs pe ? pe : new PortfolioEventArgs();
             DataEdit?.Invoke(edited, args);

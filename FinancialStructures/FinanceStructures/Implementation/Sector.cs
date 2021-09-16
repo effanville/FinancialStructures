@@ -16,7 +16,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
     /// </remarks>
     public class Sector : ValueList, IValueList
     {
-        internal override void OnDataEdit(object edited, EventArgs e)
+        /// <inheritdoc/>
+        protected override void OnDataEdit(object edited, EventArgs e)
         {
             base.OnDataEdit(edited, new PortfolioEventArgs(Account.Benchmark));
         }

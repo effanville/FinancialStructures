@@ -62,17 +62,10 @@ namespace FinancialStructures.FinanceStructures.Implementation
             SetupEventListening();
         }
 
-        /// <summary>
-        /// Event that controls when data is edited.
-        /// </summary>
-        public override event EventHandler<PortfolioEventArgs> DataEdit;
-
-        /// <summary>
-        /// Raises the <see cref="DataEdit"/> event.
-        /// </summary>
-        internal override void OnDataEdit(object edited, EventArgs e)
+        /// <inheritdoc/>
+        protected override void OnDataEdit(object edited, EventArgs e)
         {
-            DataEdit?.Invoke(edited, new PortfolioEventArgs(Account.Security));
+            base.OnDataEdit(edited, new PortfolioEventArgs(Account.Security));
         }
 
         /// <summary>

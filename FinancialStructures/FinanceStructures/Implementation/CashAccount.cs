@@ -10,7 +10,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
     /// </summary>
     public class CashAccount : ValueList, IExchangableValueList
     {
-        internal override void OnDataEdit(object edited, EventArgs e)
+        /// <inheritdoc/>
+        protected override void OnDataEdit(object edited, EventArgs e)
         {
             base.OnDataEdit(edited, new PortfolioEventArgs(Account.BankAccount));
         }
