@@ -24,15 +24,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
         [XmlIgnore]
         public string Name
         {
-            get
-            {
-                return Names.Name;
-            }
+            get => Names.Name;
 
-            set
-            {
-                Names.Name = value;
-            }
+            set => Names.Name = value;
         }
 
         /// <summary>
@@ -41,15 +35,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
         [XmlIgnore]
         public string Company
         {
-            get
-            {
-                return Names.Company;
-            }
+            get => Names.Company;
 
-            set
-            {
-                Names.Company = value;
-            }
+            set => Names.Company = value;
         }
 
         /// <summary>
@@ -58,15 +46,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
         [XmlIgnore]
         public string Url
         {
-            get
-            {
-                return Names.Url;
-            }
+            get => Names.Url;
 
-            set
-            {
-                Names.Url = value;
-            }
+            set => Names.Url = value;
         }
 
         /// <summary>
@@ -75,14 +57,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
         [XmlIgnore]
         public string Currency
         {
-            get
-            {
-                return Names.Currency;
-            }
-            set
-            {
-                Names.Currency = value;
-            }
+            get => Names.Currency;
+            set => Names.Currency = value;
         }
 
         /// <inheritdoc />

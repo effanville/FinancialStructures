@@ -24,14 +24,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public TimeList Amounts
         {
-            get
-            {
-                return Values;
-            }
-            set
-            {
-                Values = value;
-            }
+            get => Values;
+            set => Values = value;
         }
 
         /// <summary>
