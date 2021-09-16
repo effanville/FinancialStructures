@@ -47,15 +47,16 @@ namespace FinancePortfolioDatabase.GUI.Windows
             FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile("log", string.Empty, fUiGlobals.CurrentWorkingDirectory, filter: "log Files|*.log|All Files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
-                using (StreamWriter stream = new StreamWriter(result.FilePath))
+                using (Stream stream = fUiGlobals.CurrentFileSystem.FileStream.Create(result.FilePath, FileMode.Create))
+                using (TextWriter writer = new StreamWriter(stream))
                 {
                     foreach (ErrorReport report in fUiGlobals.ReportLogger.Reports.GetReports())
                     {
-                        stream.WriteLine(report.ToString());
+                        writer.WriteLine(report.ToString());
                     }
 
-                    stream.WriteLine(exception.Message);
-                    stream.WriteLine(exception.StackTrace);
+                    writer.WriteLine(exception.Message);
+                    writer.WriteLine(exception.StackTrace);
                 }
             }
         }
