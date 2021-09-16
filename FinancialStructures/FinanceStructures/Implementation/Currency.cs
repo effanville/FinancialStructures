@@ -40,7 +40,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public new ICurrency Copy()
+        public override IValueList Copy()
         {
             return new Currency(Names, Values);
         }
