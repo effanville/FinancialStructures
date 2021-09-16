@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Input;
 using Common.Structure.Reporting;
 using Common.UI;
@@ -9,9 +8,7 @@ using FinancePortfolioDatabase.GUI.Configuration;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
-using FinancialStructures.Database.Statistics;
-using FinancialStructures.DataExporters;
-using FinancialStructures.DataStructures;
+using FinancialStructures.DataExporters.History;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
@@ -62,7 +59,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             get;
         }
 
-        private async void ExecuteCreateHistory()
+        private void ExecuteCreateHistory()
         {
             fUserConfiguration.StoreConfiguration(this);
             FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile(".csv", DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + DataStore.DatabaseName(fUiGlobals.CurrentFileSystem) + "-History.csv", DataStore.Directory(fUiGlobals.CurrentFileSystem), "CSV file|*.csv|All files|*.*");
@@ -73,8 +70,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                     result.FilePath += ".csv";
                 }
 
-                List<PortfolioDaySnapshot> historyStatistics = await DataStore.GenerateHistoryStats(HistoryGapDays).ConfigureAwait(false);
-                CSVHistoryWriter.WriteToCSV(historyStatistics, result.FilePath, fUiGlobals.CurrentFileSystem, ReportLogger);
+                var history = new PortfolioHistory(DataStore, HistoryGapDays);
+                history.ExportToFile(result.FilePath, fUiGlobals.CurrentFileSystem);
                 fCloseWindowAction(new PortfolioHistoryViewModel(DataStore, Styles));
             }
             else
