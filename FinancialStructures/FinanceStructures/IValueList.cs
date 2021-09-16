@@ -81,11 +81,12 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Returns the latest valuation on or before the date <paramref name="date"/>.
         /// </summary>
-        /// <param name="date">The date to query the value for.</param>
         DailyValuation NearestEarlierValuation(DateTime date);
 
         /// <summary>
         /// Calculates the compound annual rate of the Value list.
+        /// This is the compound rate from the value on <paramref name="earlierTime"/>
+        /// to reach the value at <paramref name="laterTime"/>.
         /// </summary>
         /// <param name="earlierTime">The start time.</param>
         /// <param name="laterTime">The end time.</param>

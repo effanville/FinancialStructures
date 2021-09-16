@@ -18,7 +18,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public override IValueList Copy()
         {
-            return new CashAccount(Names, Values);
+            return new CashAccount(Names.Copy(), Values);
         }
 
         /// <inheritdoc/>
@@ -53,7 +53,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Parameterless constructor for serialisation.
         /// </summary>
-        private CashAccount()
+        internal CashAccount()
             : base()
         {
         }

@@ -30,7 +30,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// An empty constructor.
         /// </summary>
-        private Security()
+        internal Security()
         {
             Names = new NameData();
         }
