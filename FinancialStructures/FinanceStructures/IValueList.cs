@@ -30,11 +30,6 @@ namespace FinancialStructures.FinanceStructures
         }
 
         /// <summary>
-        /// Provides a short string representing the <see cref="IValueList"/>
-        /// </summary>
-        string ToString();
-
-        /// <summary>
         /// Returns a copy of this <see cref="IValueList"/>.
         /// </summary>
         IValueList Copy();
