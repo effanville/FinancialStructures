@@ -50,12 +50,6 @@ namespace FinancialStructures.FinanceStructures
         /// Compares another <see cref="ISecurity"/> and determines if they both have the same name and company.
         /// </summary>
         bool IsEqualTo(ISecurity otherSecurity);
-
-        /// <summary>
-        /// Returns a copy of this <see cref="ISecurity"/>.
-        /// </summary>
-        new ISecurity Copy();
-
         /// <summary>
         /// Produces a list of data for visual display purposes. Display in the base currency
         /// of the fund ( so this does not modify values due to currency)

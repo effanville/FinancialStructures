@@ -79,7 +79,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public new ISecurity Copy()
+        public override IValueList Copy()
         {
             return new Security(Names, Shares, UnitPrice, Investments);
         }
