@@ -33,22 +33,10 @@ namespace FinancialStructures.Statistics
         }
 
         /// <inheritdoc/>
-        public bool IsNumeric
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public bool IsNumeric => false;
 
         /// <inheritdoc/>
-        public object ValueAsObject
-        {
-            get
-            {
-                return IsNumeric ? (object)Value : (object)StringValue;
-            }
-        }
+        public object ValueAsObject => IsNumeric ? (object)Value : (object)StringValue;
 
         /// <inheritdoc/>
         public void Calculate(IPortfolio portfolio, Account account, TwoName name)

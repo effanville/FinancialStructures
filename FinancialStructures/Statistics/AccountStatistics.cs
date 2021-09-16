@@ -32,13 +32,7 @@ namespace FinancialStructures.Statistics
         /// <summary>
         /// Returns a list of the statistic values in object form.
         /// </summary>
-        public List<object> StatValuesAsObjects
-        {
-            get
-            {
-                return Statistics.Select(stat => stat.ValueAsObject).ToList();
-            }
-        }
+        public List<object> StatValuesAsObjects => Statistics.Select(stat => stat.ValueAsObject).ToList();
 
         /// <summary>
         /// The statistics calculated for this account.
@@ -53,6 +47,9 @@ namespace FinancialStructures.Statistics
         {
         }
 
+        /// <summary>
+        /// Default constructor for statistics for a <see cref="Account"/> object.
+        /// </summary>
         public AccountStatistics(IPortfolio portfolio, Account account, TwoName name, Statistic[] statsToGenerate)
         {
             NameData = name;
@@ -64,6 +61,13 @@ namespace FinancialStructures.Statistics
             }
         }
 
+        /// <summary>
+        /// Default constructor for statistics for a <see cref="Totals"/>
+        /// </summary>
+        /// <param name="portfolio"></param>
+        /// <param name="total"></param>
+        /// <param name="name"></param>
+        /// <param name="statsToGenerate"></param>
         public AccountStatistics(IPortfolio portfolio, Totals total, TwoName name, Statistic[] statsToGenerate)
         {
             NameData = name;

@@ -16,13 +16,7 @@ namespace FinancialStructures.Statistics
         /// <summary>
         /// <inheritdoc/> Overrides default by truncating to 4 d.p.
         /// </summary>
-        public override string StringValue
-        {
-            get
-            {
-                return Value.Truncate(4).ToString();
-            }
-        }
+        public override string StringValue => Value.Truncate(4).ToString();
 
         /// <summary>
         /// Default constructor setting Statistic type.
