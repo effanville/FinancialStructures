@@ -50,7 +50,7 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case (Account.Benchmark):
                 {
-                    foreach (ISector sector in BenchMarksThreadSafe)
+                    foreach (IValueList sector in BenchMarksThreadSafe)
                     {
                         if (sector.Names.Name == names.Name)
                         {

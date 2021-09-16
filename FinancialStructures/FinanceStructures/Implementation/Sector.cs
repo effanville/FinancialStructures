@@ -5,7 +5,7 @@ using Common.Structure.DataStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {
-    public class Sector : ValueList, ISector
+    public class Sector : ValueList, IValueList
     {
         internal override void OnDataEdit(object edited, EventArgs e)
         {
@@ -30,7 +30,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
         }
 
-        public new ISector Copy()
+        /// <inheritdoc/>
+        public override IValueList Copy()
         {
             return new Sector(Names, Values);
         }

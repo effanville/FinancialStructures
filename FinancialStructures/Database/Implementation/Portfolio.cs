@@ -112,7 +112,7 @@ namespace FinancialStructures.Database.Implementation
 
         /// <inheritdoc/>
         [XmlIgnore]
-        public IReadOnlyList<ISector> BenchMarksThreadSafe
+        public IReadOnlyList<IValueList> BenchMarksThreadSafe
         {
             get
             {

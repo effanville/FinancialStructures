@@ -66,7 +66,7 @@ namespace FinancialStructures.Database.Statistics
                     }
                     case Account.Benchmark:
                     {
-                        foreach (ISector acc in portfolio.BenchMarksThreadSafe)
+                        foreach (IValueList acc in portfolio.BenchMarksThreadSafe)
                         {
                             var latest = acc.LatestValue();
                             if ((displayValueFunds && latest?.Value > 0) || !displayValueFunds)

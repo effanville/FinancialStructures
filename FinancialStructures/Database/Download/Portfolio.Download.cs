@@ -96,7 +96,7 @@ namespace FinancialStructures.Database.Download
                     downloadTasks.Add(DownloadLatestValue(currency.Names, value => currency.SetData(DateTime.Today, value, reportLogger), reportLogger));
                 }
             }
-            foreach (ISector sector in portfo.BenchMarksThreadSafe)
+            foreach (IValueList sector in portfo.BenchMarksThreadSafe)
             {
                 if (!string.IsNullOrEmpty(sector.Names.Url))
                 {

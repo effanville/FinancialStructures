@@ -73,7 +73,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Sector benchmarks for comparison of held data.
         /// </summary>
-        IReadOnlyList<ISector> BenchMarksThreadSafe
+        IReadOnlyList<IValueList> BenchMarksThreadSafe
         {
             get;
         }
