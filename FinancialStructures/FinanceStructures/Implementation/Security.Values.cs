@@ -76,7 +76,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
                     if (!UnitPrice.TryGetValue(sharesValuation.Day, out double _))
                     {
                         _ = Investments.TryGetValue(sharesValuation.Day, out double invest);
-                        SecurityDayData thisday = new SecurityDayData(sharesValuation.Day, double.NaN, sharesValuation.Value, invest);
+                        double unitPriceInterpolation = UnitPrice.Value(sharesValuation.Day).Value;
+                        SecurityDayData thisday = new SecurityDayData(sharesValuation.Day, unitPriceInterpolation, sharesValuation.Value, invest);
                         output.Add(thisday);
                     }
                 }
@@ -87,7 +88,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 {
                     if (!UnitPrice.TryGetValue(investmentValuation.Day, out double _) && !Shares.TryGetValue(investmentValuation.Day, out double _))
                     {
-                        SecurityDayData thisday = new SecurityDayData(investmentValuation.Day, double.NaN, double.NaN, investmentValuation.Value);
+                        double shares = Shares.NearestEarlierValue(investmentValuation.Day).Value;
+                        double unitPriceInterpolation = UnitPrice.Value(investmentValuation.Day).Value;
+                        SecurityDayData thisday = new SecurityDayData(investmentValuation.Day, unitPriceInterpolation, shares, investmentValuation.Value);
 
                         output.Add(thisday);
                     }

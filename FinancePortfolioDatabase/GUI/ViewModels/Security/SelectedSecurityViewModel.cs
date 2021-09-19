@@ -117,6 +117,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             DownloadCommand = new RelayCommand(ExecuteDownloadCommand);
             AddEditDataCommand = new RelayCommand(ExecuteAddEditData);
             SelectionChangedCommand = new RelayCommand<object>(ExecuteSelectionChanged);
+            AddDefaultDataCommand = new RelayCommand<AddingNewItemEventArgs>(e => DataGrid_AddingNewItem(null, e));
             UpdateDataCallback = updateData;
 
             if (portfolio.TryGetAccount(Account.Security, SelectedName, out IValueList desired))
@@ -323,7 +324,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             e.NewItem = new SecurityTrade()
             {
                 TradeType = TradeType.Buy,
-                Names = SelectedName,
+                Names = SelectedName.ToTwoName(),
                 Day = DateTime.Today
             };
         }
