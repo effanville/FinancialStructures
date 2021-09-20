@@ -79,6 +79,13 @@ namespace FinancialStructures.FinanceStructures.Implementation
             Investments.DataEdit += OnDataEdit;
         }
 
+        private void RemoveEventListening()
+        {
+            UnitPrice.DataEdit -= OnDataEdit;
+            Shares.DataEdit -= OnDataEdit;
+            Investments.DataEdit -= OnDataEdit;
+        }
+
         /// <inheritdoc/>
         public override IValueList Copy()
         {
