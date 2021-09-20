@@ -2,7 +2,6 @@
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
-using FinancialStructures.Database.Statistics;
 using FinancialStructures.DataExporters.History;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
@@ -36,7 +35,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         public override void UpdateData(IPortfolio DataStore)
         {
             base.UpdateData(DataStore);
-            var history = new PortfolioHistory(DataStore, HistoryGapDays);
+            var history = new PortfolioHistory(DataStore, new PortfolioHistorySettings(HistoryGapDays, false, false));
             HistoryStats = history.Snapshots;
         }
 

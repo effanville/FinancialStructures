@@ -28,31 +28,37 @@ namespace FinancialStructures.DataExporters.History
         /// Creates the portfolio history.
         /// </summary>
         /// <param name="portfolio">The portfolio to create history for.</param>
-        /// <param name="snapshotIncrement"></param>
-        public PortfolioHistory(IPortfolio portfolio, int snapshotIncrement = 20)
+        public PortfolioHistory(IPortfolio portfolio)
         {
-            GenerateHistoryStats(portfolio, snapshotIncrement);
+            GenerateHistoryStats(portfolio, new PortfolioHistorySettings());
         }
 
         /// <summary>
-        /// Generates history values for an <see cref="IPortfolio"/> at a day interval of <paramref name="snapshotIncrement"/>.
+        /// Creates the portfolio history.
         /// </summary>
-        private void GenerateHistoryStats(IPortfolio portfolio, int snapshotIncrement)
+        /// <param name="portfolio">The portfolio to create history for.</param>
+        /// <param name="settings">The settings for the history.</param>
+        public PortfolioHistory(IPortfolio portfolio, PortfolioHistorySettings settings)
+        {
+            GenerateHistoryStats(portfolio, settings);
+        }
+
+        private void GenerateHistoryStats(IPortfolio portfolio, PortfolioHistorySettings settings)
         {
             List<PortfolioDaySnapshot> outputs = new List<PortfolioDaySnapshot>();
-            if (!snapshotIncrement.Equals(0))
+            if (!settings.SnapshotIncrement.Equals(0))
             {
                 DateTime calculationDate = portfolio.FirstValueDate(Totals.All);
 
                 while (calculationDate < DateTime.Today)
                 {
-                    PortfolioDaySnapshot calcuationDateStatistics = new PortfolioDaySnapshot(calculationDate, portfolio);
+                    PortfolioDaySnapshot calcuationDateStatistics = new PortfolioDaySnapshot(calculationDate, portfolio, settings.GenerateSecurityRates, settings.GenerateSectorRates);
                     outputs.Add(calcuationDateStatistics);
-                    calculationDate = calculationDate.AddDays(snapshotIncrement);
+                    calculationDate = calculationDate.AddDays(settings.SnapshotIncrement);
                 }
                 if (calculationDate == DateTime.Today)
                 {
-                    PortfolioDaySnapshot calcuationDateStatistics = new PortfolioDaySnapshot(calculationDate, portfolio);
+                    PortfolioDaySnapshot calcuationDateStatistics = new PortfolioDaySnapshot(calculationDate, portfolio, settings.GenerateSecurityRates, settings.GenerateSectorRates);
                     outputs.Add(calcuationDateStatistics);
                 }
             }

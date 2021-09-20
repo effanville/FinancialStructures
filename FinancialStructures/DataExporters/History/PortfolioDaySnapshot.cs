@@ -172,19 +172,19 @@ namespace FinancialStructures.DataExporters.History
         /// </summary>
         /// <param name="date"></param>
         /// <param name="portfolio"></param>
-        public PortfolioDaySnapshot(DateTime date, IPortfolio portfolio)
+        public PortfolioDaySnapshot(DateTime date, IPortfolio portfolio, bool generateSecurityRates, bool generateSectorRates)
         {
             Date = date;
             TotalValue = portfolio.TotalValue(Totals.All, date);
             BankAccValue = portfolio.TotalValue(Totals.BankAccount, date);
             SecurityValue = portfolio.TotalValue(Totals.Security, date);
 
-            AddSecurityValues(date, portfolio);
+            AddSecurityValues(date, portfolio, generateSecurityRates);
             AddBankAccountValues(date, portfolio);
-            AddSectorTotalValues(date, portfolio);
+            AddSectorTotalValues(date, portfolio, generateSectorRates);
         }
 
-        private void AddSecurityValues(DateTime date, IPortfolio portfolio)
+        private void AddSecurityValues(DateTime date, IPortfolio portfolio, bool generateRates)
         {
             List<string> companyNames = portfolio.Companies(Account.Security).ToList();
             companyNames.Sort();
@@ -192,11 +192,15 @@ namespace FinancialStructures.DataExporters.History
             foreach (string companyName in companyNames)
             {
                 SecurityValues.Add(companyName, portfolio.TotalValue(Totals.SecurityCompany, date, new TwoName(companyName)));
-                Security1YrCar.Add(companyName, portfolio.IRRTotal(Totals.SecurityCompany, date.AddDays(-365), date, new TwoName(companyName)));
 
-                var firstDate = portfolio.FirstValueDate(Totals.SecurityCompany, new TwoName(companyName));
-                double totalIRR = date < firstDate ? 0.0 : portfolio.IRRTotal(Totals.SecurityCompany, firstDate, date, new TwoName(companyName));
-                SecurityTotalCar.Add(companyName, totalIRR);
+                if (generateRates)
+                {
+                    Security1YrCar.Add(companyName, portfolio.IRRTotal(Totals.SecurityCompany, date.AddDays(-365), date, new TwoName(companyName)));
+
+                    var firstDate = portfolio.FirstValueDate(Totals.SecurityCompany, new TwoName(companyName));
+                    double totalIRR = date < firstDate ? 0.0 : portfolio.IRRTotal(Totals.SecurityCompany, firstDate, date, new TwoName(companyName));
+                    SecurityTotalCar.Add(companyName, totalIRR);
+                }
             }
         }
 
@@ -210,16 +214,19 @@ namespace FinancialStructures.DataExporters.History
             }
         }
 
-        private void AddSectorTotalValues(DateTime date, IPortfolio portfolio)
+        private void AddSectorTotalValues(DateTime date, IPortfolio portfolio, bool generateRates)
         {
             IReadOnlyList<string> sectorNames = portfolio.Sectors(Account.Security);
             foreach (string sectorName in sectorNames)
             {
                 SectorValues.Add(sectorName, portfolio.TotalValue(Totals.Sector, date, new TwoName(null, sectorName)));
 
-                var firstDate = portfolio.FirstValueDate(Totals.Sector, new TwoName(null, sectorName));
-                double sectorCAR = date < firstDate ? 0.0 : portfolio.IRRTotal(Totals.Sector, firstDate, date, new TwoName(null, sectorName));
-                CurrentSectorTotalCar.Add(sectorName, sectorCAR);
+                if (generateRates)
+                {
+                    var firstDate = portfolio.FirstValueDate(Totals.Sector, new TwoName(null, sectorName));
+                    double sectorCAR = date < firstDate ? 0.0 : portfolio.IRRTotal(Totals.Sector, firstDate, date, new TwoName(null, sectorName));
+                    CurrentSectorTotalCar.Add(sectorName, sectorCAR);
+                }
             }
         }
     }

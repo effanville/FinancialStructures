@@ -70,7 +70,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                     result.FilePath += ".csv";
                 }
 
-                var history = new PortfolioHistory(DataStore, HistoryGapDays);
+                var history = new PortfolioHistory(DataStore, new PortfolioHistorySettings(HistoryGapDays, false, false));
                 history.ExportToFile(result.FilePath, fUiGlobals.CurrentFileSystem);
                 fCloseWindowAction(new PortfolioHistoryViewModel(DataStore, Styles));
             }
