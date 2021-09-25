@@ -9,6 +9,7 @@ using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
 using FinancialStructures.DataExporters;
+using FinancialStructures.DataExporters.Investments;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
@@ -81,8 +82,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 {
                     result.FilePath += ".csv";
                 }
-
-                InvestmentsExporter.Export(DataStore, result.FilePath, fUiGlobals.ReportLogger);
+                var portfolioInvestments = new PortfolioInvestments(DataStore, new PortfoliInvestmentsSettings());
+                portfolioInvestments.ExportToFile(result.FilePath, fUiGlobals.CurrentFileSystem, ReportLogger);
                 fLoadTab(new SecurityInvestmentViewModel(DataStore, Styles));
             }
             else
