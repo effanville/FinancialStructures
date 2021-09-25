@@ -8,7 +8,6 @@ using FinancePortfolioDatabase.GUI.Configuration;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
-using FinancialStructures.DataExporters;
 using FinancialStructures.DataExporters.Investments;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats

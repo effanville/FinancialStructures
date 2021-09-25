@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FinancialStructures.Statistics;
 
-namespace FinancialStructures.DataExporters.ExportOptions
+namespace FinancialStructures.DataExporters.Statistics
 {
     /// <summary>
     /// Contains display options for a table of statistics.
