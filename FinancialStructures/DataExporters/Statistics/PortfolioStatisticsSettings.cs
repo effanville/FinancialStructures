@@ -84,7 +84,7 @@ namespace FinancialStructures.DataExporters.Statistics
         {
             return new PortfolioStatisticsSettings(
                 includeBenchmarks: true,
-                displayValueFunds: true,
+                displayValueFunds: false,
                 includeSecurities: true,
                 Statistic.Company,
                 SortDirection.Descending,
