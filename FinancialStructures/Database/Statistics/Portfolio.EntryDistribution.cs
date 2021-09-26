@@ -122,7 +122,7 @@ namespace FinancialStructures.Database.Statistics
                 case Totals.BankAccount:
                 {
                     var total = new Dictionary<DateTime, int>();
-                    foreach (ICashAccount cashAccount in portfolio.BankAccountsThreadSafe)
+                    foreach (IExchangableValueList cashAccount in portfolio.BankAccountsThreadSafe)
                     {
                         foreach (var value in cashAccount.Values.Values())
                         {

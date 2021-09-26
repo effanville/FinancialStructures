@@ -2,8 +2,7 @@
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
-using FinancialStructures.Database.Statistics;
-using FinancialStructures.DataStructures;
+using FinancialStructures.DataExporters.History;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
@@ -33,10 +32,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
         }
 
-        public override async void UpdateData(IPortfolio DataStore)
+        public override void UpdateData(IPortfolio DataStore)
         {
             base.UpdateData(DataStore);
-            HistoryStats = await DataStore.GenerateHistoryStats(HistoryGapDays).ConfigureAwait(false);
+            var history = new PortfolioHistory(DataStore, new PortfolioHistorySettings(HistoryGapDays, false, false));
+            HistoryStats = history.Snapshots;
         }
 
         public PortfolioHistoryViewModel(IPortfolio portfolio, UiStyles styles)

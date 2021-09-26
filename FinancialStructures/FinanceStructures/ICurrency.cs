@@ -28,10 +28,5 @@
         /// Also inverts the names in the currency pair.
         /// </summary>
         ICurrency Inverted();
-
-        /// <summary>
-        /// Makes a copy of the current currency.
-        /// </summary>
-        new ICurrency Copy();
     }
 }

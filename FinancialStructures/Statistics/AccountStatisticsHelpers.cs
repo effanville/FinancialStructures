@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FinancialStructures.DataExporters.ExportOptions;
+using FinancialStructures.DataExporters.Statistics;
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Statistics

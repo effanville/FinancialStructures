@@ -30,22 +30,10 @@ namespace FinancialStructures.Statistics
         }
 
         /// <inheritdoc/>
-        public bool IsNumeric
-        {
-            get
-            {
-                return true;
-            }
-        }
+        public bool IsNumeric => true;
 
         /// <inheritdoc/>
-        public object ValueAsObject
-        {
-            get
-            {
-                return (object)ToString();
-            }
-        }
+        public object ValueAsObject => (object)ToString();
 
         /// <summary>
         /// Constructor of an instance.

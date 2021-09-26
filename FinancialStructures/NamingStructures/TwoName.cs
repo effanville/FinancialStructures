@@ -7,22 +7,13 @@ namespace FinancialStructures.NamingStructures
     /// </summary>
     public class TwoName : IComparable, IComparable<TwoName>, IEquatable<TwoName>
     {
-        private string fCompany;
-        private string fName;
-
         /// <summary>
         /// The primary name (the company name)
         /// </summary>
         public string Company
         {
-            get
-            {
-                return fCompany;
-            }
-            set
-            {
-                fCompany = value;
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -30,14 +21,8 @@ namespace FinancialStructures.NamingStructures
         /// </summary>
         public string Name
         {
-            get
-            {
-                return fName;
-            }
-            set
-            {
-                fName = value;
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -45,8 +30,8 @@ namespace FinancialStructures.NamingStructures
         /// </summary>
         public TwoName(string primaryName, string secondaryName)
         {
-            fCompany = primaryName;
-            fName = secondaryName;
+            Company = primaryName;
+            Name = secondaryName;
         }
 
         /// <summary>
@@ -54,7 +39,7 @@ namespace FinancialStructures.NamingStructures
         /// </summary>
         public TwoName(string primaryName)
         {
-            fCompany = primaryName;
+            Company = primaryName;
         }
 
         /// <summary>
@@ -67,7 +52,6 @@ namespace FinancialStructures.NamingStructures
         /// <summary>
         /// Display of names.
         /// </summary>
-        /// <returns></returns>
         public override string ToString()
         {
             if (string.IsNullOrEmpty(Company) && string.IsNullOrEmpty(Name))
@@ -86,6 +70,7 @@ namespace FinancialStructures.NamingStructures
             return $"{Company}-{Name}";
         }
 
+        /// <inheritdoc/>
         public int CompareTo(TwoName other)
         {
             if (Company == other.Company)

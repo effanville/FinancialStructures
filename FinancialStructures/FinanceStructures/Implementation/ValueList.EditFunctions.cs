@@ -13,8 +13,6 @@ namespace FinancialStructures.FinanceStructures.Implementation
     /// </summary>
     public partial class ValueList
     {
-
-
         /// <inheritdoc/>
         public virtual bool EditNameData(NameData newNames)
         {

@@ -43,7 +43,7 @@ namespace FinancialStructures.Database.Implementation
                             total += sec.Value(date, currency).Value;
                         }
                     }
-                    foreach (ICashAccount acc in BankAccountsThreadSafe)
+                    foreach (IExchangableValueList acc in BankAccountsThreadSafe)
                     {
                         if (acc.Any() && acc.Names.Currency == names.Name)
                         {
@@ -56,7 +56,7 @@ namespace FinancialStructures.Database.Implementation
                 case Totals.BankAccount:
                 {
                     double sum = 0;
-                    foreach (ICashAccount acc in BankAccountsThreadSafe)
+                    foreach (IExchangableValueList acc in BankAccountsThreadSafe)
                     {
                         if (acc.Any())
                         {
@@ -84,7 +84,7 @@ namespace FinancialStructures.Database.Implementation
                 {
                     double sum = 0;
 
-                    foreach (ICashAccount fund in BankAccountsThreadSafe)
+                    foreach (IExchangableValueList fund in BankAccountsThreadSafe)
                     {
                         if (fund.IsSectorLinked(names))
                         {
@@ -125,7 +125,7 @@ namespace FinancialStructures.Database.Implementation
                         return double.NaN;
                     }
                     double value = 0;
-                    foreach (ICashAccount account in bankAccounts)
+                    foreach (IExchangableValueList account in bankAccounts)
                     {
                         if (account != null && account.Any())
                         {

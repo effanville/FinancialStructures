@@ -21,6 +21,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public TimeList Investments { get; set; } = new TimeList();
 
+        /// <inheritdoc/>
         public List<SecurityTrade> SecurityTrades
         {
             get;
@@ -30,7 +31,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// An empty constructor.
         /// </summary>
-        private Security()
+        internal Security()
         {
             Names = new NameData();
         }
@@ -62,17 +63,10 @@ namespace FinancialStructures.FinanceStructures.Implementation
             SetupEventListening();
         }
 
-        /// <summary>
-        /// Event that controls when data is edited.
-        /// </summary>
-        public override event EventHandler<PortfolioEventArgs> DataEdit;
-
-        /// <summary>
-        /// Raises the <see cref="DataEdit"/> event.
-        /// </summary>
-        internal override void OnDataEdit(object edited, EventArgs e)
+        /// <inheritdoc/>
+        protected override void OnDataEdit(object edited, EventArgs e)
         {
-            DataEdit?.Invoke(edited, new PortfolioEventArgs(Account.Security));
+            base.OnDataEdit(edited, new PortfolioEventArgs(Account.Security));
         }
 
         /// <summary>
@@ -85,8 +79,15 @@ namespace FinancialStructures.FinanceStructures.Implementation
             Investments.DataEdit += OnDataEdit;
         }
 
+        private void RemoveEventListening()
+        {
+            UnitPrice.DataEdit -= OnDataEdit;
+            Shares.DataEdit -= OnDataEdit;
+            Investments.DataEdit -= OnDataEdit;
+        }
+
         /// <inheritdoc/>
-        public new ISecurity Copy()
+        public override IValueList Copy()
         {
             return new Security(Names, Shares, UnitPrice, Investments);
         }
@@ -109,20 +110,37 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public override bool IsEqualTo(IValueList otherList)
+        public override bool Equals(IValueList otherList)
         {
             if (otherList is ISecurity otherSecurity)
             {
-                return IsEqualTo(otherSecurity);
+                return Equals(otherSecurity);
             }
 
             return false;
         }
 
         /// <inheritdoc/>
-        public bool IsEqualTo(ISecurity otherSecurity)
+        public bool Equals(ISecurity otherSecurity)
         {
-            return base.IsEqualTo(otherSecurity);
+            return base.Equals(otherSecurity);
+        }
+
+        /// <inheritdoc />
+        public override int CompareTo(IValueList other)
+        {
+            if (other is ISecurity otherSecurity)
+            {
+                return base.CompareTo(otherSecurity);
+            }
+
+            return 0;
+        }
+
+        /// <inheritdoc/>
+        public int CompareTo(ISecurity other)
+        {
+            return base.CompareTo(other);
         }
     }
 }

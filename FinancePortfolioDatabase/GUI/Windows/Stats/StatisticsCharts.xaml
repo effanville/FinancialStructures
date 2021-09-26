@@ -34,18 +34,18 @@
                 <cht:LineSeries Title="Total"
                                 ItemsSource="{Binding Path=HistoryStats}"
                                 DataPointStyle="{StaticResource InvisibleDataPointBlue}"
-                                IndependentValueBinding="{Binding Path=TotalValue.Day}"
-                                DependentValueBinding="{Binding Path=TotalValue.Value}"></cht:LineSeries>
+                                IndependentValueBinding="{Binding Path=Date}"
+                                DependentValueBinding="{Binding Path=TotalValue}"></cht:LineSeries>
                 <cht:LineSeries Title="Total Securities"
                                 ItemsSource="{Binding Path=HistoryStats}"
                                 DataPointStyle="{StaticResource InvisibleDataPointRed}"
-                                IndependentValueBinding="{Binding Path=SecurityValue.Day}"
-                                DependentValueBinding="{Binding Path=SecurityValue.Value}"></cht:LineSeries>
+                                IndependentValueBinding="{Binding Path=Date}"
+                                DependentValueBinding="{Binding Path=SecurityValue}"></cht:LineSeries>
                 <cht:LineSeries Title="Total BankAccounts"
                                 ItemsSource="{Binding Path=HistoryStats}"
                                 DataPointStyle="{StaticResource InvisibleDataPointGreen}"
-                                IndependentValueBinding="{Binding Path=BankAccValue.Day}"
-                                DependentValueBinding="{Binding Path=BankAccValue.Value}"></cht:LineSeries>
+                                IndependentValueBinding="{Binding Path=Date}"
+                                DependentValueBinding="{Binding Path=BankAccValue}"></cht:LineSeries>
             </cht:Chart.Series>
         </cht:Chart>
         <ucdo:BindableChart x:Name="securityCarChart"
@@ -70,7 +70,7 @@
                 <cht:PieSeries Title="Distribution"
                                ItemsSource="{Binding Path=SecurityValues}"
                                IndependentValueBinding="{Binding Path=Key}"
-                               DependentValueBinding="{Binding Path=Value.Value}" />
+                               DependentValueBinding="{Binding Path=Value}" />
             </cht:Chart>
             <cht:Chart Title="BankAccount By Company"
                        Height="Auto"
@@ -79,7 +79,7 @@
                        Grid.Column="1">
                 <cht:PieSeries ItemsSource="{Binding Path=BankAccountValues}"
                                IndependentValueBinding="{Binding Path=Key}"
-                               DependentValueBinding="{Binding Path=Value.Value}" />
+                               DependentValueBinding="{Binding Path=Value}" />
             </cht:Chart>
         </Grid>
         <cht:Chart Title="Security By Sector"
@@ -97,7 +97,7 @@
             <cht:ColumnSeries Title=""
                               ItemsSource="{Binding Path=SectorValues}"
                               IndependentValueBinding="{Binding Path=Key}"
-                              DependentValueBinding="{Binding Path=Value.Value}" />
+                              DependentValueBinding="{Binding Path=Value}" />
         </cht:Chart>
     </Grid>
 </UserControl>

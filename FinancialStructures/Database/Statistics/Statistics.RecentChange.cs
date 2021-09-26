@@ -54,7 +54,7 @@ namespace FinancialStructures.Database.Statistics
                 case Totals.BankAccount:
                 {
                     double total = 0.0;
-                    foreach (ICashAccount cashAccount in portfolio.BankAccountsThreadSafe)
+                    foreach (IExchangableValueList cashAccount in portfolio.BankAccountsThreadSafe)
                     {
                         total += portfolio.RecentChange(elementType.ToAccount(), cashAccount.Names);
                     }
@@ -77,7 +77,7 @@ namespace FinancialStructures.Database.Statistics
                 case Totals.BankAccountSector:
                 {
                     double total = 0;
-                    foreach (ICashAccount desired in portfolio.BankAccountsThreadSafe)
+                    foreach (IExchangableValueList desired in portfolio.BankAccountsThreadSafe)
                     {
                         if (desired.IsSectorLinked(names) && desired.Any())
                         {
@@ -131,7 +131,7 @@ namespace FinancialStructures.Database.Statistics
                     {
                         if (desired.Any())
                         {
-                            var cashAcc = (ICashAccount)desired;
+                            var cashAcc = (IExchangableValueList)desired;
                             ICurrency currency = portfolio.Currency(elementType, cashAcc);
                             DailyValuation needed = cashAcc.LatestValue(currency);
                             if (needed.Value > 0)

@@ -41,22 +41,12 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public bool TryAddOrEditInvestment(DateTime oldDate, DateTime date, double investment, SecurityTrade trade, IReportLogger reportLogger = null)
-        {
-            bool editInvestments = AddOrEditData(Investments, oldDate, date, investment, reportLogger);
-            if (trade != null)
-            {
-                AddOrEditTrade(oldDate, trade);
-            }
-
-            return editInvestments && EnsureDataConsistency(reportLogger);
-        }
-
-        /// <inheritdoc/>
         public bool TryAddOrEditTradeData(SecurityTrade oldTrade, SecurityTrade newTrade, IReportLogger reportLogger = null)
         {
             AddOrEditTrade(oldTrade.Day, newTrade);
-            return EnsureDataConsistency(reportLogger);
+            EnsureDataConsistency(reportLogger);
+            OnDataEdit(this, new EventArgs());
+            return true;
         }
 
         private void AddOrEditTrade(DateTime oldDate, SecurityTrade trade)
@@ -122,6 +112,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 && EnsureDataConsistency(reportLogger);
         }
 
+        /// <inheritdoc/>
         public bool TryDeleteTradeData(DateTime date, IReportLogger reportLogger = null)
         {
             return SecurityTrades.RemoveAll(trade => trade.Day.Equals(date)) != 0;
@@ -139,11 +130,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// One should not change Inv = 0 or Inv > 0  to ensure that dividend reivestments are not accidentally included in a new investment.
         /// This though causes a problem if a value is deleted.
         /// </summary>
-        /// <remarks>
-        /// This should be called throughout, whenever one updates the data stored in the Security.
-        /// </remarks>
         public bool EnsureDataConsistency(IReportLogger reportLogger = null)
         {
+            RemoveEventListening();
             CleanData();
             for (int index = 0; index < SecurityTrades.Count; index++)
             {
@@ -208,6 +197,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 previousNumShares = shareValue.Value;
             }
 
+            SetupEventListening();
             return true;
         }
     }

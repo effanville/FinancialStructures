@@ -57,7 +57,7 @@ namespace FinancialStructures.Database
         /// threadsafe manner.
         /// </para>
         /// </summary>
-        IReadOnlyList<ICashAccount> BankAccountsThreadSafe
+        IReadOnlyList<IExchangableValueList> BankAccountsThreadSafe
         {
             get;
         }
@@ -73,7 +73,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Sector benchmarks for comparison of held data.
         /// </summary>
-        IReadOnlyList<ISector> BenchMarksThreadSafe
+        IReadOnlyList<IValueList> BenchMarksThreadSafe
         {
             get;
         }

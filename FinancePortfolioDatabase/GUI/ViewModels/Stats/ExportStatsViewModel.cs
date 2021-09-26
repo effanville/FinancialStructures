@@ -12,8 +12,7 @@ using FinancePortfolioDatabase.GUI.Configuration;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
-using FinancialStructures.DataExporters;
-using FinancialStructures.DataExporters.ExportOptions;
+using FinancialStructures.DataExporters.Statistics;
 using FinancialStructures.Statistics;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
@@ -26,6 +25,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         private readonly Action<object> CloseWindowAction;
 
         private List<Selectable<string>> fDisplayConditions = new List<Selectable<string>>();
+
+        private const string ShowSecurities = "ShowSecurites";
+        private const string ShowBankAccounts = "ShowBankAccounts";
+
+        private const string ShowSectors = "ShowSectors";
+        private const string ShowBenchmarks = "ShowBenchmarks";
+        private const string ValueFunds = "DisplayValueFunds";
+        private const string Colouring = "Colours";
+        private const string Spacing = "Spacing";
 
         /// <summary>
         /// Miscellaneous selections for how the exported file should look.
@@ -171,13 +179,13 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
                 BankSortingField = Statistic.Company;
 
-                DisplayConditions.Add(new Selectable<string>("DisplayValueFunds", true));
-                DisplayConditions.Add(new Selectable<string>("Spacing", true));
-                DisplayConditions.Add(new Selectable<string>("Colours", true));
-                DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowSecurities, true));
-                DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowBankAccounts, true));
-                DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowSectors, true));
-                DisplayConditions.Add(new Selectable<string>(UserDisplayOptions.ShowBenchmarks, false));
+                DisplayConditions.Add(new Selectable<string>(ValueFunds, true));
+                DisplayConditions.Add(new Selectable<string>(Spacing, true));
+                DisplayConditions.Add(new Selectable<string>(Colouring, true));
+                DisplayConditions.Add(new Selectable<string>(ShowSecurities, true));
+                DisplayConditions.Add(new Selectable<string>(ShowBankAccounts, true));
+                DisplayConditions.Add(new Selectable<string>(ShowSectors, true));
+                DisplayConditions.Add(new Selectable<string>(ShowBenchmarks, false));
 
                 fUserConfiguration.HasLoaded = true;
                 fUserConfiguration.StoreConfiguration(this);
@@ -229,13 +237,27 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                     }
                 }
 
-                UserDisplayOptions options = new UserDisplayOptions(securitySelected, BankSelected, sectorSelected, DisplayConditions, SecuritySortingField, BankSortingField, SectorSortingField, SecurityDirection, BankDirection, SectorDirection);
+                var settings = new PortfolioStatisticsSettings(
+                    SelectableHelpers.GetData(DisplayConditions, ShowBenchmarks),
+                    SelectableHelpers.GetData(DisplayConditions, ValueFunds),
+                    SelectableHelpers.GetData(DisplayConditions, ShowSecurities),
+                    SecuritySortingField,
+                    SecurityDirection,
+                    securitySelected,
+                    SelectableHelpers.GetData(DisplayConditions, ShowBankAccounts),
+                    BankSortingField,
+                    BankDirection,
+                    BankSelected,
+                    SelectableHelpers.GetData(DisplayConditions, ShowSectors),
+                    SectorSortingField,
+                    SectorDirection,
+                    sectorSelected);
 
-                PortfolioStatistics stats = new PortfolioStatistics(DataStore, options, fUiGlobals.CurrentFileSystem);
+                PortfolioStatistics stats = new PortfolioStatistics(DataStore, settings, fUiGlobals.CurrentFileSystem);
                 string extension = fUiGlobals.CurrentFileSystem.Path.GetExtension(result.FilePath).Trim('.');
                 ExportType type = extension.ToEnum<ExportType>();
 
-                stats.ExportToFile(fUiGlobals.CurrentFileSystem, result.FilePath, type, options, ReportLogger);
+                stats.ExportToFile(fUiGlobals.CurrentFileSystem, result.FilePath, type, new PortfolioStatisticsExportSettings(SelectableHelpers.GetData(DisplayConditions, Spacing), SelectableHelpers.GetData(DisplayConditions, Colouring)), ReportLogger);
 
                 _ = ReportLogger.LogUseful(ReportType.Information, ReportLocation.StatisticsPage, "Created statistics page");
             }

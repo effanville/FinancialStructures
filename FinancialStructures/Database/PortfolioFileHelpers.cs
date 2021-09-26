@@ -1,4 +1,5 @@
-﻿using System.IO.Abstractions;
+﻿using System.IO;
+using System.IO.Abstractions;
 
 namespace FinancialStructures.Database
 {
@@ -21,6 +22,14 @@ namespace FinancialStructures.Database
         public static string DatabaseName(this IPortfolio portfolio, IFileSystem fileSystem)
         {
             return fileSystem.Path.GetFileNameWithoutExtension(portfolio.FilePath);
+        }
+
+        /// <summary>
+        /// The file name of the database location (considered the name).
+        /// </summary>
+        public static string DatabaseName(this IPortfolio portfolio)
+        {
+            return Path.GetFileNameWithoutExtension(portfolio.FilePath);
         }
     }
 }

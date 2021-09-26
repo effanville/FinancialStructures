@@ -23,13 +23,13 @@
                   ScrollViewer.VerticalScrollBarVisibility="Visible">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Date"
-                                    Binding="{Binding TotalValue.Day, StringFormat=\{0:dd.MM.yyyy\}}" />
+                                    Binding="{Binding Date, StringFormat=\{0:dd.MM.yyyy\}}" />
                 <DataGridTextColumn Header="Total Values"
-                                    Binding="{Binding TotalValue.Value}" />
+                                    Binding="{Binding TotalValue}" />
                 <DataGridTextColumn Header="Securities"
-                                    Binding="{Binding SecurityValue.Value}" />
+                                    Binding="{Binding SecurityValue}" />
                 <DataGridTextColumn Header="BankAccounts"
-                                    Binding="{Binding BankAccValue.Value}" />
+                                    Binding="{Binding BankAccValue}" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

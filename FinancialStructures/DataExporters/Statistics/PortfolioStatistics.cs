@@ -5,13 +5,12 @@ using System.IO.Abstractions;
 using System.Linq;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
-using FinancialStructures.DataExporters.ExportOptions;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Statistics;
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
 
-namespace FinancialStructures.DataExporters
+namespace FinancialStructures.DataExporters.Statistics
 {
     /// <summary>
     /// Container for statistics on a portfolio.
@@ -19,7 +18,7 @@ namespace FinancialStructures.DataExporters
     public class PortfolioStatistics
     {
         private readonly string fDatabaseName;
-        private readonly UserDisplayOptions fDisplayOptions;
+        private readonly PortfolioStatisticsSettings fDisplayOptions;
 
         /// <summary>
         /// Totals of different types held in portfolio.
@@ -103,10 +102,10 @@ namespace FinancialStructures.DataExporters
         /// <summary>
         /// Constructor from a portfolio.
         /// </summary>
-        public PortfolioStatistics(IPortfolio portfolio, UserDisplayOptions displayOptions, IFileSystem fileSystem)
+        public PortfolioStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings, IFileSystem fileSystem)
         {
             fDatabaseName = portfolio.DatabaseName(fileSystem);
-            fDisplayOptions = displayOptions;
+            fDisplayOptions = settings;
             GenerateStatistics(portfolio);
         }
 
@@ -145,11 +144,12 @@ namespace FinancialStructures.DataExporters
         /// <summary>
         /// Exports the statistics to a file.
         /// </summary>
+        /// <param name="fileSystem">The file system interface to use.</param>
         /// <param name="filePath">The path exporting to.</param>
         /// <param name="exportType">The type of export.</param>
-        /// <param name="options">Various options the user has specified.</param>
+        /// <param name="settings">Various options for the export.</param>
         /// <param name="LogReporter">Returns information on success or failure.</param>
-        public void ExportToFile(IFileSystem fileSystem, string filePath, ExportType exportType, UserDisplayOptions options, IReportLogger LogReporter)
+        public void ExportToFile(IFileSystem fileSystem, string filePath, ExportType exportType, PortfolioStatisticsExportSettings settings, IReportLogger LogReporter)
         {
             try
             {
@@ -158,13 +158,13 @@ namespace FinancialStructures.DataExporters
                 {
                     if (exportType == ExportType.Html)
                     {
-                        fileWriter.CreateHTMLHeader($"Statement for funds as of {DateTime.Today.ToShortDateString()}", fDisplayOptions.Colours);
+                        fileWriter.CreateHTMLHeader($"Statement for funds as of {DateTime.Today.ToShortDateString()}", settings.Colours);
                         fileWriter.WriteLine($"<h1>{fDatabaseName} - Statement on {DateTime.Today.ToShortDateString()}</h1>");
                     }
 
-                    fileWriter.WriteTableFromEnumerable(exportType, options.BankAccountDisplayOptions.DisplayFieldNames(), PortfolioTotals.Select(data => data.Statistics), false);
+                    fileWriter.WriteTableFromEnumerable(exportType, fDisplayOptions.BankAccountDisplayOptions.DisplayFieldNames(), PortfolioTotals.Select(data => data.Statistics), false);
 
-                    if (options.SecurityDisplayOptions.ShouldDisplay)
+                    if (fDisplayOptions.SecurityDisplayOptions.ShouldDisplay)
                     {
                         fileWriter.WriteTitle(exportType, "Funds Data", HtmlTag.h2);
                         List<AccountStatistics> securityDataToWrite = IndividualSecurityStats;
@@ -178,15 +178,15 @@ namespace FinancialStructures.DataExporters
                             }
                         }
 
-                        securityDataToWrite.Sort(options.SecurityDisplayOptions);
+                        securityDataToWrite.Sort(fDisplayOptions.SecurityDisplayOptions);
                         securityDataToWrite.AddRange(PortfolioSecurityStats);
 
-                        SpacingAdd(options.Spacing, options.SecurityDisplayOptions.SortingField, ref securityDataToWrite);
+                        SpacingAdd(settings.Spacing, fDisplayOptions.SecurityDisplayOptions.SortingField, ref securityDataToWrite);
 
-                        fileWriter.WriteTableFromEnumerable(exportType, options.SecurityDisplayOptions.DisplayFieldNames(), securityDataToWrite.Select(data => data.Statistics), true);
+                        fileWriter.WriteTableFromEnumerable(exportType, fDisplayOptions.SecurityDisplayOptions.DisplayFieldNames(), securityDataToWrite.Select(data => data.Statistics), true);
                     }
 
-                    if (options.BankAccountDisplayOptions.ShouldDisplay)
+                    if (fDisplayOptions.BankAccountDisplayOptions.ShouldDisplay)
                     {
                         fileWriter.WriteTitle(exportType, "Bank Accounts Data", HtmlTag.h2);
                         List<AccountStatistics> bankAccountDataToWrite = BankAccountStats;
@@ -200,24 +200,24 @@ namespace FinancialStructures.DataExporters
                             }
                         }
 
-                        bankAccountDataToWrite.Sort(options.BankAccountDisplayOptions);
+                        bankAccountDataToWrite.Sort(fDisplayOptions.BankAccountDisplayOptions);
                         bankAccountDataToWrite.AddRange(BankAccountTotalStats);
 
-                        SpacingAdd(options.Spacing, options.BankAccountDisplayOptions.SortingField, ref bankAccountDataToWrite);
+                        SpacingAdd(settings.Spacing, fDisplayOptions.BankAccountDisplayOptions.SortingField, ref bankAccountDataToWrite);
 
-                        fileWriter.WriteTableFromEnumerable(exportType, options.BankAccountDisplayOptions.DisplayFieldNames(), bankAccountDataToWrite.Select(data => data.Statistics), true);
+                        fileWriter.WriteTableFromEnumerable(exportType, fDisplayOptions.BankAccountDisplayOptions.DisplayFieldNames(), bankAccountDataToWrite.Select(data => data.Statistics), true);
                     }
 
-                    if (options.SectorDisplayOptions.ShouldDisplay)
+                    if (fDisplayOptions.SectorDisplayOptions.ShouldDisplay)
                     {
                         fileWriter.WriteTitle(exportType, "Analysis By Sector", HtmlTag.h2);
                         List<AccountStatistics> sectorDataToWrite = SectorStats;
 
-                        sectorDataToWrite.Sort(options.SectorDisplayOptions);
+                        sectorDataToWrite.Sort(fDisplayOptions.SectorDisplayOptions);
 
-                        SectorSpacingAdd(options.Spacing, options.SectorDisplayOptions.SortingField, ref sectorDataToWrite);
+                        SectorSpacingAdd(settings.Spacing, fDisplayOptions.SectorDisplayOptions.SortingField, ref sectorDataToWrite);
 
-                        fileWriter.WriteTableFromEnumerable(exportType, options.SectorDisplayOptions.DisplayFieldNames(), sectorDataToWrite.Select(data => data.Statistics), true);
+                        fileWriter.WriteTableFromEnumerable(exportType, fDisplayOptions.SectorDisplayOptions.DisplayFieldNames(), sectorDataToWrite.Select(data => data.Statistics), true);
                     }
 
                     if (exportType == ExportType.Html)

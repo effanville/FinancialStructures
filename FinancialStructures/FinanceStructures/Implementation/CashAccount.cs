@@ -8,30 +8,25 @@ namespace FinancialStructures.FinanceStructures.Implementation
     /// <summary>
     /// An account simulating a bank account.
     /// </summary>
-    public class CashAccount : ValueList, ICashAccount
+    public class CashAccount : ValueList, IExchangableValueList
     {
-        internal override void OnDataEdit(object edited, EventArgs e)
+        /// <inheritdoc/>
+        protected override void OnDataEdit(object edited, EventArgs e)
         {
             base.OnDataEdit(edited, new PortfolioEventArgs(Account.BankAccount));
         }
 
         /// <inheritdoc/>
-        public new ICashAccount Copy()
+        public override IValueList Copy()
         {
-            return new CashAccount(Names, Values);
+            return new CashAccount(Names.Copy(), Values);
         }
 
         /// <inheritdoc/>
         public TimeList Amounts
         {
-            get
-            {
-                return Values;
-            }
-            set
-            {
-                Values = value;
-            }
+            get => Values;
+            set => Values = value;
         }
 
         /// <summary>
@@ -53,7 +48,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Parameterless constructor for serialisation.
         /// </summary>
-        private CashAccount()
+        internal CashAccount()
             : base()
         {
         }

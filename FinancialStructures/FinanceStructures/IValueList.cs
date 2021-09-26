@@ -10,7 +10,7 @@ namespace FinancialStructures.FinanceStructures
     /// <summary>
     /// A named list containing values.
     /// </summary>
-    public interface IValueList : ICSVAccess, IComparable
+    public interface IValueList : ICSVAccess, IComparable, IComparable<IValueList>, IEquatable<IValueList>
     {
         /// <summary>
         /// The Name data for this list, including company, name and urls.
@@ -28,16 +28,6 @@ namespace FinancialStructures.FinanceStructures
         {
             get;
         }
-
-        /// <summary>
-        /// Provides a short string representing the <see cref="IValueList"/>
-        /// </summary>
-        string ToString();
-
-        /// <summary>
-        /// Compares another <see cref="IValueList"/> and determines if they both have the same name and company.
-        /// </summary>
-        bool IsEqualTo(IValueList otherAccount);
 
         /// <summary>
         /// Returns a copy of this <see cref="IValueList"/>.
@@ -81,11 +71,12 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Returns the latest valuation on or before the date <paramref name="date"/>.
         /// </summary>
-        /// <param name="date">The date to query the value for.</param>
         DailyValuation NearestEarlierValuation(DateTime date);
 
         /// <summary>
         /// Calculates the compound annual rate of the Value list.
+        /// This is the compound rate from the value on <paramref name="earlierTime"/>
+        /// to reach the value at <paramref name="laterTime"/>.
         /// </summary>
         /// <param name="earlierTime">The start time.</param>
         /// <param name="laterTime">The end time.</param>

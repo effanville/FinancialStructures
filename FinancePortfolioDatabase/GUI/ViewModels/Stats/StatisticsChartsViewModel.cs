@@ -5,12 +5,10 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls.DataVisualization.Charting;
 using System.Windows.Media;
-using Common.Structure.DataStructures;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
-using FinancialStructures.Database.Statistics;
-using FinancialStructures.DataStructures;
+using FinancialStructures.DataExporters.History;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
@@ -31,8 +29,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             set => SetAndNotify(ref fHistoryStats, value, nameof(HistoryStats));
         }
 
-        private Dictionary<string, DailyValuation> fDistributionValues;
-        public Dictionary<string, DailyValuation> SecurityValues
+        private Dictionary<string, double> fDistributionValues;
+        public Dictionary<string, double> SecurityValues
         {
             get => fDistributionValues;
             set
@@ -43,16 +41,16 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         }
 
 
-        private Dictionary<string, DailyValuation> fDistributionValues2;
-        public Dictionary<string, DailyValuation> BankAccountValues
+        private Dictionary<string, double> fDistributionValues2;
+        public Dictionary<string, double> BankAccountValues
         {
             get => fDistributionValues2;
             set => SetAndNotify(ref fDistributionValues2, value, nameof(BankAccountValues));
         }
 
-        private Dictionary<string, DailyValuation> fDistributionValues3;
+        private Dictionary<string, double> fDistributionValues3;
 
-        public Dictionary<string, DailyValuation> SectorValues
+        public Dictionary<string, double> SectorValues
         {
             get => fDistributionValues3;
             set => SetAndNotify(ref fDistributionValues3, value, nameof(SectorValues));
@@ -65,17 +63,18 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             set => SetAndNotify(ref fIRRlines, value, nameof(IRRLines));
         }
 
-        public override async void UpdateData(IPortfolio portfolio)
+        public override void UpdateData(IPortfolio portfolio)
         {
             if (portfolio != null)
             {
                 base.UpdateData(portfolio);
             }
 
-            HistoryStats = await DataStore.GenerateHistoryStats(HistoryGapDays).ConfigureAwait(true);
-            SecurityValues = HistoryStats[HistoryStats.Count - 1].SecurityValues.Where(x => x.Value.Value > 0).ToDictionary(x => x.Key, x => x.Value);
-            BankAccountValues = HistoryStats[HistoryStats.Count - 1].BankAccValues.Where(x => x.Value.Value > 0).ToDictionary(x => x.Key, x => x.Value);
-            SectorValues = HistoryStats[HistoryStats.Count - 1].SectorValues.Where(x => x.Value.Value > 0).ToDictionary(x => x.Key, x => x.Value);
+            var history = new PortfolioHistory(DataStore, new PortfolioHistorySettings(20, false, true));
+            HistoryStats = history.Snapshots;
+            SecurityValues = HistoryStats[HistoryStats.Count - 1].SecurityValues.Where(x => x.Value > 0).ToDictionary(x => x.Key, x => x.Value);
+            BankAccountValues = HistoryStats[HistoryStats.Count - 1].BankAccValues.Where(x => x.Value > 0).ToDictionary(x => x.Key, x => x.Value);
+            SectorValues = HistoryStats[HistoryStats.Count - 1].SectorValues.Where(x => x.Value > 0).ToDictionary(x => x.Key, x => x.Value);
 
             UpdateChart();
         }
@@ -89,13 +88,13 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 IReadOnlyList<string> sectorNames = DataStore.Sectors(Account.Security);
                 foreach (string name in sectorNames)
                 {
-                    DailyValuation total = HistoryStats[HistoryStats.Count - 1].SecurityValue;
-                    if (HistoryStats[HistoryStats.Count - 1].SectorValues[name].Value > 0.1 * total.Value)
+                    double total = HistoryStats[HistoryStats.Count - 1].SecurityValue;
+                    if (HistoryStats[HistoryStats.Count - 1].SectorValues[name] > 0.1 * total)
                     {
                         List<KeyValuePair<DateTime, double>> pc = new List<KeyValuePair<DateTime, double>>();
                         for (int time = 0; time < HistoryStats.Count; time++)
                         {
-                            pc.Add(new KeyValuePair<DateTime, double>(HistoryStats[time].SectorCar[name].Day, HistoryStats[time].SectorCar[name].Value));
+                            pc.Add(new KeyValuePair<DateTime, double>(HistoryStats[time].Date, HistoryStats[time].CurrentSectorTotalCar[name]));
                         }
 
                         LineSeries series1 = new LineSeries

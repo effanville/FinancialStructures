@@ -4,6 +4,9 @@ using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Statistics
 {
+    /// <summary>
+    /// Holds static extension classes generating statistics for the portfolio.
+    /// </summary>
     public static partial class PortfolioStatisticGenerators
     {
         /// <summary>
@@ -67,7 +70,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Totals.BankAccount:
                 {
-                    foreach (ICashAccount cashAccount in portfolio.BankAccountsThreadSafe)
+                    foreach (IExchangableValueList cashAccount in portfolio.BankAccountsThreadSafe)
                     {
                         if (cashAccount.Any())
                         {

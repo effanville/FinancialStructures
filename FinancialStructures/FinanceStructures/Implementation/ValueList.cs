@@ -24,15 +24,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
         [XmlIgnore]
         public string Name
         {
-            get
-            {
-                return Names.Name;
-            }
+            get => Names.Name;
 
-            set
-            {
-                Names.Name = value;
-            }
+            set => Names.Name = value;
         }
 
         /// <summary>
@@ -41,15 +35,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
         [XmlIgnore]
         public string Company
         {
-            get
-            {
-                return Names.Company;
-            }
+            get => Names.Company;
 
-            set
-            {
-                Names.Company = value;
-            }
+            set => Names.Company = value;
         }
 
         /// <summary>
@@ -58,15 +46,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
         [XmlIgnore]
         public string Url
         {
-            get
-            {
-                return Names.Url;
-            }
+            get => Names.Url;
 
-            set
-            {
-                Names.Url = value;
-            }
+            set => Names.Url = value;
         }
 
         /// <summary>
@@ -75,14 +57,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
         [XmlIgnore]
         public string Currency
         {
-            get
-            {
-                return Names.Currency;
-            }
-            set
-            {
-                Names.Currency = value;
-            }
+            get => Names.Currency;
+            set => Names.Currency = value;
         }
 
         /// <inheritdoc />
@@ -123,12 +99,12 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Event that controls when data is edited.
         /// </summary>
-        public virtual event EventHandler<PortfolioEventArgs> DataEdit;
+        public event EventHandler<PortfolioEventArgs> DataEdit;
 
         /// <summary>
         /// Raises the <see cref="DataEdit"/> event.
         /// </summary>
-        internal virtual void OnDataEdit(object edited, EventArgs e)
+        protected virtual void OnDataEdit(object edited, EventArgs e)
         {
             var args = e is PortfolioEventArgs pe ? pe : new PortfolioEventArgs();
             DataEdit?.Invoke(edited, args);
@@ -167,9 +143,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public virtual bool IsEqualTo(IValueList otherAccount)
+        public virtual bool Equals(IValueList other)
         {
-            return Names.IsEqualTo(otherAccount.Names);
+            return Names.IsEqualTo(other.Names);
         }
 
         /// <inheritdoc />
@@ -177,10 +153,16 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
             if (obj is IValueList otherList)
             {
-                return Names.CompareTo(otherList.Names);
+                return CompareTo(otherList);
             }
 
             return 0;
+        }
+
+        /// <inheritdoc />
+        public virtual int CompareTo(IValueList other)
+        {
+            return Names.CompareTo(other.Names);
         }
     }
 }

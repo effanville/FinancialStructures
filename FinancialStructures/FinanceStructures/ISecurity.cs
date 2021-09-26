@@ -12,7 +12,7 @@ namespace FinancialStructures.FinanceStructures
     /// <summary>
     /// A named entity with Share, unit price and investment lists to detail price history.
     /// </summary>
-    public interface ISecurity : ICSVAccess, IExchangableValueList, IValueList
+    public interface ISecurity : ICSVAccess, IExchangableValueList, IValueList, IEquatable<ISecurity>, IComparable<ISecurity>
     {
         /// <summary>
         /// The Share data for this Security
@@ -45,16 +45,6 @@ namespace FinancialStructures.FinanceStructures
         {
             get;
         }
-
-        /// <summary>
-        /// Compares another <see cref="ISecurity"/> and determines if they both have the same name and company.
-        /// </summary>
-        bool IsEqualTo(ISecurity otherSecurity);
-
-        /// <summary>
-        /// Returns a copy of this <see cref="ISecurity"/>.
-        /// </summary>
-        new ISecurity Copy();
 
         /// <summary>
         /// Produces a list of data for visual display purposes. Display in the base currency
@@ -124,14 +114,18 @@ namespace FinancialStructures.FinanceStructures
         /// Tries to add data for the date specified if it doesnt exist, or edits data if it exists.
         /// If cannot add any value that one wants to, then doesn't add all the values chosen.
         /// </summary>
-        /// <param name="oldDate">The existing date held.</param>
-        /// <param name="date">The date to add data to.</param>
-        /// <param name="investment">The value of the investment.</param>
-        /// <param name="trade">The details of any trade on this date.</param>
+        /// <param name="oldTrade">The existing trade held.</param>
+        /// <param name="newTrade">The new trade to overwrite the old with.</param>
         /// <param name="reportLogger">An optional logger to log progress.</param>
         /// <returns>Was adding or editing successful.</returns>
         bool TryAddOrEditTradeData(SecurityTrade oldTrade, SecurityTrade newTrade, IReportLogger reportLogger = null);
 
+        /// <summary>
+        /// Attempts to delete trade data on the date given.
+        /// </summary>
+        /// <param name="date">The date to delete data on</param>
+        /// <param name="reportLogger">An optional logger to log progress.</param>
+        /// <returns>True if has deleted, false if failed to delete.</returns>
         bool TryDeleteTradeData(DateTime date, IReportLogger reportLogger = null);
 
         /// <summary>
@@ -139,6 +133,12 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         void CleanData();
 
+        /// <summary>
+        /// Routine to ensure the data held, the <see cref="Investments"/>, the <see cref="Shares"/> and the <see cref="SecurityTrades"/>
+        /// values are all in sync.
+        /// </summary>
+        /// <param name="reportLogger">An optional logger to log progress.</param>
+        /// <returns>Always returns true.</returns>
         bool EnsureDataConsistency(IReportLogger reportLogger = null);
     }
 }

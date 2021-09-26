@@ -9,8 +9,6 @@ namespace FinancialStructures.NamingStructures
     /// </summary>
     public class NameData : TwoName, IEquatable<NameData>
     {
-        private HashSet<string> fSectors;
-
         /// <summary>
         /// Website associated to account.
         /// </summary>
@@ -34,14 +32,8 @@ namespace FinancialStructures.NamingStructures
         /// </summary>
         public HashSet<string> Sectors
         {
-            get
-            {
-                return fSectors;
-            }
-            set
-            {
-                fSectors = value;
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -50,10 +42,7 @@ namespace FinancialStructures.NamingStructures
         [XmlIgnore]
         public string SectorsFlat
         {
-            get
-            {
-                return fSectors != null ? string.Join(",", fSectors) : null;
-            }
+            get => Sectors != null ? string.Join(",", Sectors) : null;
             set
             {
                 HashSet<string> sectorList = new HashSet<string>();
