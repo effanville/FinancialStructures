@@ -170,8 +170,10 @@ namespace FinancialStructures.DataExporters.History
         /// <summary>
         /// Constructor which generates the snapshot.
         /// </summary>
-        /// <param name="date"></param>
-        /// <param name="portfolio"></param>
+        /// <param name="date">The date to take a snapshot on.</param>
+        /// <param name="portfolio">The portfolio to take a snapshot of.</param>
+        /// <param name="generateSecurityRates">Should security rates be calculated.</param>
+        /// <param name="generateSectorRates">Should sector rates be calculated.</param>
         public PortfolioDaySnapshot(DateTime date, IPortfolio portfolio, bool generateSecurityRates, bool generateSectorRates)
         {
             Date = date;

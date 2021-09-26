@@ -4,6 +4,9 @@ using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Statistics
 {
+    /// <summary>
+    /// Holds static extension classes generating statistics for the portfolio.
+    /// </summary>
     public static partial class PortfolioStatisticGenerators
     {
         /// <summary>
