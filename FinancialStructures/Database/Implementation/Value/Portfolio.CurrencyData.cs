@@ -17,8 +17,20 @@ namespace FinancialStructures.Database.Implementation
                 case Account.BankAccount:
                 {
                     string currencyName = valueList.Names.Currency;
-                    ICurrency currency = CurrenciesThreadSafe.FirstOrDefault(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == BaseCurrency);
-                    return currency ?? CurrenciesThreadSafe.FirstOrDefault(cur => cur.BaseCurrency == BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted();
+                    var currencies = CurrenciesThreadSafe;
+                    foreach (var curr in currencies)
+                    {
+                        if (curr.BaseCurrency == currencyName && curr.QuoteCurrency == BaseCurrency)
+                        {
+                            return curr;
+                        }
+                        else if (curr.BaseCurrency == BaseCurrency && curr.QuoteCurrency == currencyName)
+                        {
+                            return curr.Inverted();
+                        }
+                    }
+
+                    return null;
                 }
                 case Account.Currency:
                 {
