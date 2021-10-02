@@ -21,7 +21,7 @@ namespace FinancialStructures.Statistics
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Totals total, TwoName name)
         {
-            Value = (100 * portfolio.IRRTotal(total, DateTime.Today.AddMonths(-6), DateTime.Today, name));
+            Value = (100 * portfolio.TotalIRR(total, DateTime.Today.AddMonths(-6), DateTime.Today, name));
         }
     }
 }

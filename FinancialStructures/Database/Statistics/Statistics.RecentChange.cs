@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
-using Common.Structure.DataStructures;
+using FinancialStructures.FinanceStructures.Statistics;
+using System.Linq;
 
 namespace FinancialStructures.Database.Statistics
 {
@@ -10,9 +11,9 @@ namespace FinancialStructures.Database.Statistics
         /// <summary>
         /// returns the total profit in the portfolio.
         /// </summary>
-        public static double RecentChange(this IPortfolio portfolio, Totals elementType = Totals.Security, TwoName names = null)
+        public static double RecentChange(this IPortfolio portfolio, Totals totals = Totals.Security, TwoName names = null)
         {
-            switch (elementType)
+            switch (totals)
             {
                 case Totals.All:
                 {
@@ -20,55 +21,26 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Totals.Security:
                 {
-                    double total = 0;
-                    foreach (ISecurity desired in portfolio.FundsThreadSafe)
-                    {
-                        if (desired.Any())
-                        {
-                            total += portfolio.RecentChange(elementType.ToAccount(), desired.Names);
-                        }
-                    }
-
-                    return total;
+                    return RecentChangeOf(portfolio.FundsThreadSafe, portfolio, totals);
                 }
                 case Totals.SecurityCompany:
+                case Totals.BankAccountCompany:
                 {
-                    double total = 0;
-
-                    IReadOnlyList<IValueList> securities = portfolio.CompanyAccounts(Account.Security, names?.Company);
-                    if (securities.Count == 0)
-                    {
-                        return double.NaN;
-                    }
-
-                    foreach (ISecurity desired in securities)
-                    {
-                        if (desired.Any())
-                        {
-                            total += portfolio.RecentChange(elementType.ToAccount(), desired.Names);
-                        }
-                    }
-
-                    return total;
+                    return RecentChangeOf(portfolio.CompanyAccounts(totals.ToAccount(), names?.Company), portfolio, totals);
                 }
                 case Totals.BankAccount:
                 {
-                    double total = 0.0;
-                    foreach (IExchangableValueList cashAccount in portfolio.BankAccountsThreadSafe)
-                    {
-                        total += portfolio.RecentChange(elementType.ToAccount(), cashAccount.Names);
-                    }
-
-                    return total;
+                    return RecentChangeOf(portfolio.BankAccountsThreadSafe, portfolio, totals);
                 }
                 case Totals.SecuritySector:
                 {
                     double total = 0;
-                    foreach (ISecurity desired in portfolio.FundsThreadSafe)
+                    foreach (ISecurity security in portfolio.FundsThreadSafe)
                     {
-                        if (desired.IsSectorLinked(names) && desired.Any())
+                        if (security.IsSectorLinked(names) && security.Any())
                         {
-                            total += portfolio.RecentChange(elementType.ToAccount(), desired.Names);
+                            ICurrency currency = portfolio.Currency(totals.ToAccount(), security);
+                            total += security.RecentChange(currency);
                         }
                     }
 
@@ -77,11 +49,12 @@ namespace FinancialStructures.Database.Statistics
                 case Totals.BankAccountSector:
                 {
                     double total = 0;
-                    foreach (IExchangableValueList desired in portfolio.BankAccountsThreadSafe)
+                    foreach (IExchangableValueList bankAccount in portfolio.BankAccountsThreadSafe)
                     {
-                        if (desired.IsSectorLinked(names) && desired.Any())
+                        if (bankAccount.IsSectorLinked(names) && bankAccount.Any())
                         {
-                            total += portfolio.RecentChange(elementType.ToAccount(), desired.Names);
+                            ICurrency currency = portfolio.Currency(totals.ToAccount(), bankAccount);
+                            total += bankAccount.RecentChange(currency);
                         }
                     }
 
@@ -91,11 +64,35 @@ namespace FinancialStructures.Database.Statistics
                 {
                     return portfolio.RecentChange(Totals.BankAccountSector, names) + portfolio.RecentChange(Totals.SecuritySector, names);
                 }
+                case Totals.Company:
+                {
+                    return portfolio.RecentChange(Totals.SecurityCompany, names) + portfolio.RecentChange(Totals.BankAccountCompany, names);
+                }
+                case Totals.Benchmark:
+                case Totals.Currency:
+                case Totals.CurrencySector:
+                case Totals.SecurityCurrency:
+                case Totals.BankAccountCurrency:
                 default:
                 {
                     return 0.0;
                 }
             }
+        }
+
+        private static double RecentChangeOf(IReadOnlyList<IValueList> accounts, IPortfolio portfolio, Totals totals)
+        {
+            double total = 0;
+            foreach (IExchangableValueList valueList in accounts)
+            {
+                if (valueList.Any())
+                {
+                    ICurrency currency = portfolio.Currency(totals.ToAccount(), valueList);
+                    total += valueList.RecentChange(currency);
+                }
+            }
+
+            return total;
         }
 
         /// <summary>
@@ -106,58 +103,22 @@ namespace FinancialStructures.Database.Statistics
             switch (elementType)
             {
                 case Account.Security:
-                {
-                    if (portfolio.TryGetAccount(Account.Security, names, out IValueList security))
-                    {
-                        if (security.Any())
-                        {
-                            var desired = security as ISecurity;
-                            ICurrency currency = portfolio.Currency(Account.Security, desired);
-                            DailyValuation needed = desired.LatestValue(currency);
-                            if (needed.Value > 0)
-                            {
-                                return needed.Value - desired.RecentPreviousValue(needed.Day, currency).Value;
-                            }
-
-                            return 0.0;
-                        }
-                    }
-
-                    break;
-                }
                 case Account.BankAccount:
                 {
-                    if (portfolio.TryGetAccount(elementType, names, out IValueList desired))
+                    if (portfolio.TryGetAccount(Account.Security, names, out IValueList account) && account.Any())
                     {
-                        if (desired.Any())
-                        {
-                            var cashAcc = (IExchangableValueList)desired;
-                            ICurrency currency = portfolio.Currency(elementType, cashAcc);
-                            DailyValuation needed = cashAcc.LatestValue(currency);
-                            if (needed.Value > 0)
-                            {
-                                return needed.Value - cashAcc.RecentPreviousValue(needed.Day, currency).Value;
-                            }
-
-                            return 0.0;
-                        }
+                        var exchangeValueList = account as IExchangableValueList;
+                        ICurrency currency = portfolio.Currency(elementType, exchangeValueList);
+                        return exchangeValueList.RecentChange(currency);
                     }
+
                     break;
                 }
                 default:
                 {
-                    if (portfolio.TryGetAccount(elementType, names, out IValueList desired))
+                    if (portfolio.TryGetAccount(elementType, names, out IValueList valueList) && valueList.Any())
                     {
-                        if (desired.Any())
-                        {
-                            DailyValuation needed = desired.LatestValue();
-                            if (needed.Value > 0)
-                            {
-                                return needed.Value - desired.RecentPreviousValue(needed.Day).Value;
-                            }
-
-                            return 0.0;
-                        }
+                        return valueList.RecentChange();
                     }
                     break;
                 }

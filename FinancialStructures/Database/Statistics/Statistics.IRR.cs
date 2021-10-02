@@ -12,91 +12,33 @@ namespace FinancialStructures.Database.Statistics
         /// <summary>
         /// Calculates the total IRR for the portfolio and the account type given over the time frame specified.
         /// </summary>
-        public static double IRRTotal(this IPortfolio portfolio, Totals total, TwoName name = null)
+        public static double TotalIRR(this IPortfolio portfolio, Totals total, TwoName name = null)
         {
             DateTime earlierTime = portfolio.FirstValueDate(total, name);
             DateTime laterTime = portfolio.LatestDate(total, name);
-            return portfolio.IRRTotal(total, earlierTime, laterTime, name);
+            return portfolio.TotalIRR(total, earlierTime, laterTime, name);
         }
 
         /// <summary>
         /// Calculates the total IRR for the portfolio and the account type given over the time frame specified.
         /// </summary>
-        public static double IRRTotal(this IPortfolio portfolio, Totals accountType, DateTime earlierTime, DateTime laterTime, TwoName name = null)
+        public static double TotalIRR(this IPortfolio portfolio, Totals accountType, DateTime earlierTime, DateTime laterTime, TwoName name = null)
         {
             switch (accountType)
             {
                 case Totals.All:
                 case Totals.Security:
                 {
-                    if (portfolio.NumberOf(Account.Security) == 0)
-                    {
-                        return double.NaN;
-                    }
-                    double earlierValue = 0;
-                    double laterValue = 0;
-                    List<DailyValuation> Investments = new List<DailyValuation>();
-
-                    foreach (ISecurity security in portfolio.FundsThreadSafe)
-                    {
-                        if (security.Any())
-                        {
-                            ICurrency currency = portfolio.Currency(security.Names.Currency);
-                            earlierValue += security.Value(earlierTime, currency).Value;
-                            laterValue += security.Value(laterTime, currency).Value;
-                            Investments.AddRange(security.InvestmentsBetween(earlierTime, laterTime, currency));
-                        }
-                    }
-
-                    return FinancialFunctions.IRRTime(new DailyValuation(earlierTime, earlierValue), Investments, new DailyValuation(laterTime, laterValue));
+                    return TotalSecurityIRROf(portfolio.FundsThreadSafe, portfolio, earlierTime, laterTime);
                 }
                 case Totals.SecurityCompany:
                 {
-                    IReadOnlyList<IValueList> securities = portfolio.CompanyAccounts(Account.Security, name.Company);
-                    if (securities.Count == 0)
-                    {
-                        return double.NaN;
-                    }
-                    double earlierValue = 0;
-                    double laterValue = 0;
-                    List<DailyValuation> Investments = new List<DailyValuation>();
-
-                    foreach (ISecurity security in securities)
-                    {
-                        if (security.Any())
-                        {
-                            ICurrency currency = portfolio.Currency(security.Names.Currency);
-                            earlierValue += security.Value(earlierTime, currency).Value;
-                            laterValue += security.Value(laterTime, currency).Value;
-                            Investments.AddRange(security.InvestmentsBetween(earlierTime, laterTime, currency));
-                        }
-                    }
-
-                    return FinancialFunctions.IRRTime(new DailyValuation(earlierTime, earlierValue), Investments, new DailyValuation(laterTime, laterValue));
+                    return TotalSecurityIRROf(portfolio.CompanyAccounts(Account.Security, name.Company), portfolio, earlierTime, laterTime);
                 }
                 case Totals.Sector:
                 case Totals.SecuritySector:
                 {
-                    IReadOnlyList<IValueList> securities = portfolio.SectorAccounts(Account.Security, name);
-                    if (securities.Count == 0)
-                    {
-                        return double.NaN;
-                    }
-                    double earlierValue = 0;
-                    double laterValue = 0;
-                    List<DailyValuation> Investments = new List<DailyValuation>();
-
-                    foreach (ISecurity security in securities)
-                    {
-                        if (security.Any())
-                        {
-                            earlierValue += security.NearestEarlierValuation(earlierTime).Value;
-                            laterValue += security.NearestEarlierValuation(laterTime).Value;
-                            Investments.AddRange(security.InvestmentsBetween(earlierTime, laterTime));
-                        }
-                    }
-
-                    return FinancialFunctions.IRRTime(new DailyValuation(earlierTime, earlierValue), Investments, new DailyValuation(laterTime, laterValue));
+                    return TotalSecurityIRROf(portfolio.SectorAccounts(Account.Security, name), portfolio, earlierTime, laterTime);
                 }
                 case Totals.BankAccount:
                 {
@@ -150,6 +92,30 @@ namespace FinancialStructures.Database.Statistics
                     return 0.0;
                 }
             }
+        }
+
+        private static double TotalSecurityIRROf(IReadOnlyList<IValueList> securities, IPortfolio portfolio, DateTime earlierTime, DateTime laterTime)
+        {
+            if (securities.Count == 0)
+            {
+                return double.NaN;
+            }
+            double earlierValue = 0;
+            double laterValue = 0;
+            List<DailyValuation> investments = new List<DailyValuation>();
+
+            foreach (ISecurity security in securities)
+            {
+                if (security.Any())
+                {
+                    ICurrency currency = portfolio.Currency(security.Names.Currency);
+                    earlierValue += security.Value(earlierTime, currency).Value;
+                    laterValue += security.Value(laterTime, currency).Value;
+                    investments.AddRange(security.InvestmentsBetween(earlierTime, laterTime, currency));
+                }
+            }
+
+            return FinancialFunctions.IRRTime(new DailyValuation(earlierTime, earlierValue), investments, new DailyValuation(laterTime, laterValue));
         }
 
         /// <summary>

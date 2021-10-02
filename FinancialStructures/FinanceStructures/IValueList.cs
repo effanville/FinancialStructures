@@ -46,11 +46,15 @@ namespace FinancialStructures.FinanceStructures
 
         /// <summary>
         /// The latest value and date stored in the value list.
+        /// <para/>
+        /// If no entries are held, returns null.
         /// </summary>
         DailyValuation LatestValue();
 
         /// <summary>
         /// The earliest value and date storend in this value list.
+        /// <para/>
+        /// If no entries are held, returns null.
         /// </summary>
         DailyValuation FirstValue();
 

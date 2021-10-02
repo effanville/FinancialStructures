@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 
@@ -18,92 +19,55 @@ namespace FinancialStructures.Database.Statistics
         /// <returns></returns>
         public static DateTime LatestDate(this IPortfolio portfolio, Totals elementType, TwoName name = null)
         {
-            DateTime output = DateTime.MinValue;
             switch (elementType)
             {
                 case Totals.Security:
                 {
-                    foreach (ISecurity sec in portfolio.FundsThreadSafe)
-                    {
-                        if (sec.Any())
-                        {
-                            DateTime securityEarliest = sec.LatestValue().Day;
-                            if (securityEarliest > output)
-                            {
-                                output = securityEarliest;
-                            }
-                        }
-                    }
-
-                    break;
+                    return LatestDateOf(portfolio.FundsThreadSafe);
                 }
                 case Totals.SecurityCompany:
                 {
-                    foreach (ISecurity sec in portfolio.CompanyAccounts(Account.Security, name.Company))
-                    {
-                        if (sec.Any() && sec.LatestValue().Day > output)
-                        {
-                            output = sec.LatestValue().Day;
-                        }
-                    }
-
-                    break;
+                    return LatestDateOf(portfolio.CompanyAccounts(Account.Security, name.Company));
                 }
                 case Totals.Sector:
                 case Totals.SecuritySector:
                 {
-                    foreach (ISecurity sector in portfolio.SectorAccounts(Account.Security, name))
-                    {
-                        if (sector.Any() && sector.LatestValue().Day > output)
-                        {
-                            output = sector.LatestValue().Day;
-                        }
-                    }
-
-                    break;
+                    return LatestDateOf(portfolio.SectorAccounts(Account.Security, name));
                 }
                 case Totals.BankAccount:
                 {
-                    foreach (IExchangableValueList cashAccount in portfolio.BankAccountsThreadSafe)
-                    {
-                        if (cashAccount.Any() && cashAccount.LatestValue().Day > output)
-                        {
-                            output = cashAccount.LatestValue().Day;
-                        }
-                    }
-
-                    break;
+                    return LatestDateOf(portfolio.BankAccountsThreadSafe);
                 }
                 case Totals.Benchmark:
                 {
-                    foreach (IValueList benchmark in portfolio.BenchMarksThreadSafe)
-                    {
-                        if (benchmark.Any() && benchmark.LatestValue().Day > output)
-                        {
-                            output = benchmark.LatestValue().Day;
-                        }
-                    }
-
-                    break;
+                    return LatestDateOf(portfolio.BenchMarksThreadSafe);
                 }
                 case Totals.Currency:
                 {
-                    foreach (IExchangableValueList currency in portfolio.CurrenciesThreadSafe)
-                    {
-                        if (currency.Any() && currency.LatestValue().Day > output)
-                        {
-                            output = currency.LatestValue().Day;
-                        }
-                    }
-
-                    break;
+                    return LatestDateOf(portfolio.CurrenciesThreadSafe);
                 }
                 case Totals.All:
+                default:
                 {
                     var earlySecurity = portfolio.LatestDate(Totals.Security);
                     var earlyBank = portfolio.LatestDate(Totals.BankAccount);
-                    output = earlySecurity > earlyBank ? earlySecurity : earlyBank;
-                    break;
+                    return earlySecurity > earlyBank ? earlySecurity : earlyBank;
+                }
+            }
+        }
+
+        private static DateTime LatestDateOf(IReadOnlyList<IValueList> accounts)
+        {
+            DateTime output = DateTime.MinValue;
+            foreach (ISecurity sec in accounts)
+            {
+                if (sec.Any())
+                {
+                    DateTime securityEarliest = sec.LatestValue().Day;
+                    if (securityEarliest > output)
+                    {
+                        output = securityEarliest;
+                    }
                 }
             }
 

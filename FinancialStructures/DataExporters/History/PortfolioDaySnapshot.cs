@@ -197,10 +197,10 @@ namespace FinancialStructures.DataExporters.History
 
                 if (generateRates)
                 {
-                    Security1YrCar.Add(companyName, portfolio.IRRTotal(Totals.SecurityCompany, date.AddDays(-365), date, new TwoName(companyName)));
+                    Security1YrCar.Add(companyName, portfolio.TotalIRR(Totals.SecurityCompany, date.AddDays(-365), date, new TwoName(companyName)));
 
                     var firstDate = portfolio.FirstValueDate(Totals.SecurityCompany, new TwoName(companyName));
-                    double totalIRR = date < firstDate ? 0.0 : portfolio.IRRTotal(Totals.SecurityCompany, firstDate, date, new TwoName(companyName));
+                    double totalIRR = date < firstDate ? 0.0 : portfolio.TotalIRR(Totals.SecurityCompany, firstDate, date, new TwoName(companyName));
                     SecurityTotalCar.Add(companyName, totalIRR);
                 }
             }
@@ -226,7 +226,7 @@ namespace FinancialStructures.DataExporters.History
                 if (generateRates)
                 {
                     var firstDate = portfolio.FirstValueDate(Totals.Sector, new TwoName(null, sectorName));
-                    double sectorCAR = date < firstDate ? 0.0 : portfolio.IRRTotal(Totals.Sector, firstDate, date, new TwoName(null, sectorName));
+                    double sectorCAR = date < firstDate ? 0.0 : portfolio.TotalIRR(Totals.Sector, firstDate, date, new TwoName(null, sectorName));
                     CurrentSectorTotalCar.Add(sectorName, sectorCAR);
                 }
             }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using FinancialStructures.FinanceStructures;
+using FinancialStructures.FinanceStructures.Statistics;
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Statistics
@@ -9,132 +10,143 @@ namespace FinancialStructures.Database.Statistics
         /// <summary>
         /// returns the total profit in the portfolio.
         /// </summary>
-        public static double TotalProfit(this IPortfolio portfolio, Totals elementType, TwoName names = null)
+        public static double TotalProfit(this IPortfolio portfolio, Totals totals, TwoName names = null)
         {
-            double total = 0;
-            switch (elementType)
+            switch (totals)
             {
                 case Totals.Security:
                 {
+                    double total = 0;
                     foreach (ISecurity security in portfolio.FundsThreadSafe)
                     {
                         if (security.Any())
                         {
-                            total += portfolio.Profit(elementType.ToAccount(), security.Names);
+                            ICurrency currency = portfolio.Currency(totals.ToAccount(), security);
+                            total += security.Profit(currency);
                         }
                     }
-                    break;
+
+                    return total;
                 }
                 case Totals.SecurityCompany:
                 {
+                    double total = 0;
                     IReadOnlyList<IValueList> securities = portfolio.CompanyAccounts(Account.Security, names.Company);
-                    double value = 0;
                     foreach (ISecurity security in securities)
                     {
                         if (security.Any())
                         {
-                            ICurrency currency = portfolio.Currency(Account.Security, security);
-                            value += security.LatestValue(currency).Value - security.TotalInvestment(currency);
+                            var accountType = totals.ToAccount();
+                            ICurrency currency = portfolio.Currency(accountType, security);
+                            total += security.Profit(currency, accountType);
+                            ;
                         }
                     }
 
-                    return value;
+                    return total;
                 }
                 case Totals.BankAccount:
                 {
+                    double total = 0;
                     foreach (var account in portfolio.BankAccountsThreadSafe)
                     {
                         if (account.Any())
                         {
-                            total += portfolio.Profit(elementType.ToAccount(), account.Names);
+                            var accountType = totals.ToAccount();
+                            ICurrency currency = portfolio.Currency(accountType, account);
+                            total += account.Profit(currency, accountType);
                         }
                     }
-                    break;
+
+                    return total;
+                }
+                case Totals.BankAccountCompany:
+                {
+                    double total = 0;
+                    IReadOnlyList<IValueList> bankAccounts = portfolio.CompanyAccounts(Account.BankAccount, names.Company);
+                    foreach (IExchangableValueList account in bankAccounts)
+                    {
+                        if (account.Any())
+                        {
+                            var accountType = totals.ToAccount();
+                            ICurrency currency = portfolio.Currency(accountType, account);
+                            total += account.Profit(currency, accountType);
+                        }
+                    }
+
+                    return total;
                 }
                 case Totals.Benchmark:
                 {
+                    double total = 0;
                     foreach (IValueList benchmark in portfolio.BenchMarksThreadSafe)
                     {
                         if (benchmark.Any())
                         {
-                            total += portfolio.Profit(elementType.ToAccount(), benchmark.Names);
+                            total += benchmark.Profit();
                         }
                     }
-                    break;
+
+                    return total;
                 }
                 case Totals.Currency:
                 {
+                    double total = 0;
                     foreach (IValueList currency in portfolio.CurrenciesThreadSafe)
                     {
                         if (currency.Any())
                         {
-                            total += portfolio.Profit(elementType.ToAccount(), currency.Names);
+                            total += currency.Profit();
                         }
                     }
-                    break;
+
+                    return total;
                 }
                 case Totals.Sector:
                 case Totals.SecuritySector:
                 {
+                    double total = 0;
                     foreach (ISecurity security in portfolio.SectorAccounts(Account.Security, names))
                     {
-                        if (security.Any())
-                        {
-                            total += security.LatestValue().Value - security.TotalInvestment();
-                        }
+                        ICurrency currency = portfolio.Currency(totals.ToAccount(), security);
+                        total += security.Profit(currency);
                     }
-                    break;
+
+                    return total;
                 }
                 case Totals.All:
                 {
-                    return portfolio.TotalProfit(Totals.Security) + portfolio.TotalProfit(Totals.BankAccount);
+                    return portfolio.TotalProfit(Totals.Security, names) + portfolio.TotalProfit(Totals.BankAccount, names);
                 }
-
-                case Totals.BankAccountCompany:
                 case Totals.Company:
+                {
+                    return portfolio.TotalProfit(Totals.SecurityCompany, names) + portfolio.TotalProfit(Totals.BankAccountCompany, names);
+                }
                 case Totals.BankAccountSector:
                 case Totals.CurrencySector:
                 case Totals.SecurityCurrency:
                 case Totals.BankAccountCurrency:
                 default:
-                    break;
+                    return double.NaN;
             }
-
-            return total;
         }
 
         /// <summary>
         /// Returns the profit of the company over its lifetime in the portfolio.
         /// </summary>
-        public static double Profit(this IPortfolio portfolio, Account elementType, TwoName names)
+        public static double Profit(this IPortfolio portfolio, Account account, TwoName names)
         {
-            switch (elementType)
+            switch (account)
             {
                 case Account.Security:
-                {
-                    if (portfolio.TryGetAccount(elementType, names, out IValueList desired))
-                    {
-                        if (desired.Any())
-                        {
-                            var security = desired as ISecurity;
-                            ICurrency currency = portfolio.Currency(Account.Security, security);
-                            return security.LatestValue(currency).Value - security.TotalInvestment(currency);
-                        }
-                    }
-
-                    return double.NaN;
-                }
                 case Account.BankAccount:
                 {
-                    if (portfolio.TryGetAccount(elementType, names, out IValueList desired))
+                    if (portfolio.TryGetAccount(account, names, out IValueList desired))
                     {
                         if (desired is IExchangableValueList cashAcc)
                         {
-                            if (cashAcc.Any())
-                            {
-                                ICurrency currency = portfolio.Currency(elementType, cashAcc);
-                                return cashAcc.LatestValue(currency).Value - cashAcc.FirstValue(currency).Value;
-                            }
+                            ICurrency currency = portfolio.Currency(account, desired);
+                            return cashAcc.Profit(currency, account);
                         }
                     }
 
@@ -143,12 +155,9 @@ namespace FinancialStructures.Database.Statistics
                 case Account.Currency:
                 case Account.Benchmark:
                 {
-                    if (portfolio.TryGetAccount(elementType, names, out IValueList desired))
+                    if (portfolio.TryGetAccount(account, names, out IValueList desired))
                     {
-                        if (desired.Any())
-                        {
-                            return desired.LatestValue().Value - desired.FirstValue().Value;
-                        }
+                        return desired.Profit();
                     }
 
                     return double.NaN;

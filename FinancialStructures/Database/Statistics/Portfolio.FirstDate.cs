@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 
@@ -15,110 +16,57 @@ namespace FinancialStructures.Database.Statistics
         /// <param name="portfolio">The database to query</param>
         /// <param name="elementType">The type of element to search for. All searches for Bank accounts and securities.</param>
         /// <param name="name">An ancillary name to use in the case of Sectors</param>
-        /// <returns></returns>
         public static DateTime FirstValueDate(this IPortfolio portfolio, Totals elementType, TwoName name = null)
         {
-            DateTime output = DateTime.Today;
             switch (elementType)
             {
                 case Totals.Security:
                 {
-                    foreach (ISecurity sec in portfolio.FundsThreadSafe)
-                    {
-                        if (sec.Any())
-                        {
-                            DateTime securityEarliest = sec.FirstValue().Day;
-                            if (securityEarliest < output)
-                            {
-                                output = securityEarliest;
-                            }
-                        }
-                    }
-
-                    break;
+                    return FirstValueOf(portfolio.FundsThreadSafe);
                 }
                 case Totals.SecurityCompany:
                 {
-                    foreach (ISecurity sec in portfolio.CompanyAccounts(Account.Security, name.Company))
-                    {
-                        if (sec.Any())
-                        {
-                            if (sec.FirstValue().Day < output)
-                            {
-                                output = sec.FirstValue().Day;
-                            }
-                        }
-                    }
-
-                    break;
+                    return FirstValueOf(portfolio.CompanyAccounts(Account.Security, name.Company));
                 }
                 case Totals.Sector:
                 case Totals.SecuritySector:
                 {
-                    foreach (ISecurity sector in portfolio.SectorAccounts(Account.Security, name))
-                    {
-                        if (sector.Any())
-                        {
-                            if (sector.FirstValue().Day < output)
-                            {
-                                output = sector.FirstValue().Day;
-                            }
-                        }
-                    }
-
-                    break;
+                    return FirstValueOf(portfolio.SectorAccounts(Account.Security, name));
                 }
                 case Totals.BankAccount:
                 {
-                    foreach (IExchangableValueList cashAccount in portfolio.BankAccountsThreadSafe)
-                    {
-                        if (cashAccount.Any())
-                        {
-                            if (cashAccount.FirstValue().Day < output)
-                            {
-                                output = cashAccount.FirstValue().Day;
-                            }
-                        }
-                    }
-
-                    break;
+                    return FirstValueOf(portfolio.BankAccountsThreadSafe);
                 }
                 case Totals.Benchmark:
                 {
-                    foreach (IValueList benchMark in portfolio.BenchMarksThreadSafe)
-                    {
-                        if (benchMark.Any())
-                        {
-                            if (benchMark.FirstValue().Day < output)
-                            {
-                                output = benchMark.FirstValue().Day;
-                            }
-                        }
-                    }
-
-                    break;
+                    return FirstValueOf(portfolio.BenchMarksThreadSafe);
                 }
                 case Totals.Currency:
                 {
-                    foreach (IValueList currency in portfolio.CurrenciesThreadSafe)
-                    {
-                        if (currency.Any())
-                        {
-                            if (currency.FirstValue().Day < output)
-                            {
-                                output = currency.FirstValue().Day;
-                            }
-                        }
-                    }
-
-                    break;
+                    return FirstValueOf(portfolio.CurrenciesThreadSafe);
                 }
                 case Totals.All:
+                default:
                 {
                     var earlySecurity = portfolio.FirstValueDate(Totals.Security);
                     var earlyBank = portfolio.FirstValueDate(Totals.BankAccount);
-                    output = earlySecurity < earlyBank ? earlySecurity : earlyBank;
-                    break;
+                    return earlySecurity < earlyBank ? earlySecurity : earlyBank;
+                }
+            }
+        }
+
+        private static DateTime FirstValueOf(IReadOnlyList<IValueList> accounts)
+        {
+            DateTime output = DateTime.MaxValue;
+            foreach (IValueList valueList in accounts)
+            {
+                if (valueList.Any())
+                {
+                    DateTime earliest = valueList.FirstValue().Day;
+                    if (earliest < output)
+                    {
+                        output = earliest;
+                    }
                 }
             }
 
@@ -136,10 +84,10 @@ namespace FinancialStructures.Database.Statistics
         {
             if (portfolio.TryGetAccount(elementType, name, out var desired))
             {
-                return desired.FirstValue()?.Day ?? DateTime.MinValue;
+                return desired.FirstValue()?.Day ?? DateTime.MaxValue;
             }
 
-            return DateTime.MinValue;
+            return DateTime.MaxValue;
         }
     }
 }
