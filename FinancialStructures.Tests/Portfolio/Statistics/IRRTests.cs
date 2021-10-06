@@ -26,7 +26,7 @@ namespace FinancialStructures.Tests.Database.Statistics
         [TestCase(TestDatabaseName.TwoSec, Totals.BankAccount, "2011/1/1", "2019/1/1", 0.0)]
         public void IRRPortfolioTests(TestDatabaseName databaseName, Totals totals, DateTime earlier, DateTime later, double expected)
         {
-            var portfolio = TestDatabase.Databases[databaseName];
+            IPortfolio portfolio = TestDatabase.Databases[databaseName];
             Assert.AreEqual(expected, portfolio.TotalIRR(totals, earlier, later));
         }
     }

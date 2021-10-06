@@ -10,8 +10,10 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 
         public CurrencyConstructor(string company, string name, string currency = null, string url = null, string sectors = null)
         {
-            var names = new NameData(company, name, currency, url);
-            names.SectorsFlat = sectors;
+            NameData names = new NameData(company, name, currency, url)
+            {
+                SectorsFlat = sectors
+            };
             item = new Currency(names);
         }
 

@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.Database;
+using FinancialStructures.Database.Implementation;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
@@ -11,12 +12,12 @@ namespace FinancialStructures.Tests.Database.DataAccess
         [Test]
         public void TryGetSecurity()
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity("Company", "name");
 
-            var portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
-            bool result = portfolio.TryGetAccount(Account.Security, new TwoName("Company", "name"), out var desired);
+            bool result = portfolio.TryGetAccount(Account.Security, new TwoName("Company", "name"), out FinanceStructures.IValueList desired);
 
             Assert.AreEqual(true, result);
             Assert.IsNotNull(desired);
@@ -27,12 +28,12 @@ namespace FinancialStructures.Tests.Database.DataAccess
         [Test]
         public void TryGetNoSecurity()
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity("Company", "name");
 
-            var portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
-            bool result = portfolio.TryGetAccount(Account.Security, new TwoName("Company", "NewName"), out var desired);
+            bool result = portfolio.TryGetAccount(Account.Security, new TwoName("Company", "NewName"), out FinanceStructures.IValueList desired);
 
             Assert.AreEqual(false, result);
             Assert.IsNull(desired);
@@ -41,12 +42,12 @@ namespace FinancialStructures.Tests.Database.DataAccess
         [Test]
         public void TryGetSector()
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName("Company", "name");
 
-            var portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
-            bool result = portfolio.TryGetAccount(Account.Benchmark, new TwoName("Company", "name"), out var desired);
+            bool result = portfolio.TryGetAccount(Account.Benchmark, new TwoName("Company", "name"), out FinanceStructures.IValueList desired);
 
             Assert.AreEqual(true, result);
             Assert.IsNotNull(desired);
@@ -57,12 +58,12 @@ namespace FinancialStructures.Tests.Database.DataAccess
         [Test]
         public void TryGetNoSector()
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName("Company", "name");
 
-            var portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
-            bool result = portfolio.TryGetAccount(Account.Benchmark, new TwoName("NewCompany", "NewName"), out var desired);
+            bool result = portfolio.TryGetAccount(Account.Benchmark, new TwoName("NewCompany", "NewName"), out FinanceStructures.IValueList desired);
 
             Assert.AreEqual(false, result);
             Assert.IsNull(desired);

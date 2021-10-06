@@ -1,4 +1,6 @@
-﻿using FinancialStructures.Database;
+﻿using System.Collections.Generic;
+using FinancialStructures.Database;
+using FinancialStructures.Database.Implementation;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 
@@ -18,10 +20,10 @@ namespace FinancialStructures.Tests.Database
             {
                 sectors = new string[0];
             }
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             constructor = constructor.WithSecurity("company1", "name1", sectors: firstSecuritySectors).WithSecurity("company2", "name2", sectors: secondSecuritySectors);
-            var database = constructor.Database;
-            var sectings = database.Sectors(Account.Security);
+            Portfolio database = constructor.Database;
+            IReadOnlyList<string> sectings = database.Sectors(Account.Security);
 
             Assert.AreEqual(sectors.Length, sectings.Count);
             for (int i = 0; i < sectors.Length; i++)

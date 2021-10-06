@@ -10,7 +10,7 @@ namespace FinancialStructures.Tests.DataExporters.Statistics
         [Test]
         public void EnsureDefaults()
         {
-            var options = PortfolioStatisticsSettings.DefaultSettings();
+            PortfolioStatisticsSettings options = PortfolioStatisticsSettings.DefaultSettings();
 
             Assert.AreEqual(SortDirection.Descending, options.SecurityDisplayOptions.SortingDirection);
             Assert.AreEqual(SortDirection.Descending, options.BankAccountDisplayOptions.SortingDirection);
@@ -24,7 +24,7 @@ namespace FinancialStructures.Tests.DataExporters.Statistics
         [Test]
         public void EnsureExportDefaults()
         {
-            var options = PortfolioStatisticsExportSettings.DefaultSettings();
+            PortfolioStatisticsExportSettings options = PortfolioStatisticsExportSettings.DefaultSettings();
 
             Assert.IsFalse(options.Spacing);
             Assert.IsFalse(options.Colours);

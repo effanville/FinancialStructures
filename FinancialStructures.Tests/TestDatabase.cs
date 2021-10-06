@@ -8,7 +8,7 @@ namespace FinancialStructures.Tests
     public static class TestDatabase
     {
         private static Dictionary<TestDatabaseName, IPortfolio> fDatabases;
-        private static string TestFilePath = "c:/temp/saved.xml";
+        private static readonly string TestFilePath = "c:/temp/saved.xml";
         public static Dictionary<TestDatabaseName, IPortfolio> Databases
         {
             get
@@ -17,7 +17,7 @@ namespace FinancialStructures.Tests
                 {
                     fDatabases = new Dictionary<TestDatabaseName, IPortfolio>();
 
-                    var constructor = new DatabaseConstructor(TestFilePath);
+                    DatabaseConstructor constructor = new DatabaseConstructor(TestFilePath);
                     _ = constructor.WithDefaultBankAccount();
                     fDatabases.Add(TestDatabaseName.OneBank, constructor.Database.Copy());
 
@@ -91,13 +91,13 @@ namespace FinancialStructures.Tests
 
         public static TwoName DefaultName(Account acctype)
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             return constructor.DefaultName(acctype);
         }
 
         public static TwoName SecondaryName(Account acctype)
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             return constructor.SecondaryName(acctype);
         }
     }

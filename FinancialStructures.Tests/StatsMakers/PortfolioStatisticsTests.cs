@@ -13,13 +13,13 @@ namespace FinancialStructures.Tests.DataExporters.Statistics
         [Test]
         public void CanGenerateWithSingleDataValues()
         {
-            var generator = new DatabaseConstructor();
+            DatabaseConstructor generator = new DatabaseConstructor();
             string secCompany = "company1";
             _ = generator.WithSecurity(secCompany, "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0 }, numberUnits: new[] { 12.0 });
 
             string bankCompany = "Bank";
             _ = generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0 });
-            var stats = new PortfolioStatistics(generator.Database, PortfolioStatisticsSettings.DefaultSettings(), new FileSystem());
+            PortfolioStatistics stats = new PortfolioStatistics(generator.Database, PortfolioStatisticsSettings.DefaultSettings(), new FileSystem());
 
             Assert.AreEqual(1, stats.IndividualSecurityStats.Count);
             Assert.AreEqual(secCompany, stats.IndividualSecurityStats.First().NameData.Company);

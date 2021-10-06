@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.Database;
+using FinancialStructures.Database.Implementation;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
@@ -12,10 +13,10 @@ namespace FinancialStructures.Tests.Database
         {
             string company = "Company";
             string name = "Name";
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity(company, name);
 
-            var portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
             bool exists = portfolio.Exists(Account.Security, new TwoName(company, name));
 
@@ -27,10 +28,10 @@ namespace FinancialStructures.Tests.Database
         {
             string company = "Company";
             string name = "Name";
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity(company, name);
 
-            var portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
             bool exists = portfolio.Exists(Account.Security, new TwoName("Man", name));
 
@@ -42,10 +43,10 @@ namespace FinancialStructures.Tests.Database
         {
             string company = "Company";
             string name = "Name";
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName(company, name);
 
-            var portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
             bool exists = portfolio.Exists(Account.Benchmark, new TwoName(company, name));
 
@@ -57,10 +58,10 @@ namespace FinancialStructures.Tests.Database
         {
             string company = "Company";
             string name = "Name";
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName(company, name);
 
-            var portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
             bool exists = portfolio.Exists(Account.Benchmark, new TwoName("Man", name));
 

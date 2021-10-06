@@ -38,8 +38,8 @@ namespace FinancialStructures.Tests.Database.Statistics
         [TestCaseSource(nameof(FractionTestCases))]
         public void FractionTest(TestDatabaseName databaseName, Totals totals, Account account, NameOrder order, DateTime date, double expectedValue)
         {
-            var portfolio = TestDatabase.Databases[databaseName];
-            var actual = portfolio.Fraction(totals, account, TestDatabase.Name(account, order), date);
+            IPortfolio portfolio = TestDatabase.Databases[databaseName];
+            double actual = portfolio.Fraction(totals, account, TestDatabase.Name(account, order), date);
             Assert.AreEqual(expectedValue, actual);
         }
 
@@ -73,8 +73,8 @@ namespace FinancialStructures.Tests.Database.Statistics
         [TestCaseSource(nameof(TotalFractionTestCases))]
         public void TotalFractionTest(TestDatabaseName databaseName, Totals totals, TwoName names, DateTime date, double expectedValue)
         {
-            var portfolio = TestDatabase.Databases[databaseName];
-            var actual = portfolio.TotalFraction(totals, names, date);
+            IPortfolio portfolio = TestDatabase.Databases[databaseName];
+            double actual = portfolio.TotalFraction(totals, names, date);
             Assert.AreEqual(expectedValue, actual);
         }
     }

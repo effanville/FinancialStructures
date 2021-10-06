@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Common.Structure.Reporting;
 using FinancialStructures.Database;
+using FinancialStructures.Database.Implementation;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
-using Common.Structure.Reporting;
 
 namespace FinancialStructures.Tests.Database.AccountEdit
 {
@@ -19,10 +20,10 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanEditSecurityName()
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity(BaseCompanyName, BaseName);
 
-            var database = constructor.Database;
+            Portfolio database = constructor.Database;
 
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
@@ -34,10 +35,10 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanEditSecurityUrl()
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity(BaseCompanyName, BaseName, url: "http://www.google.com");
 
-            var database = constructor.Database;
+            Portfolio database = constructor.Database;
 
             string newUrl = "http://www.amazon.com";
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, url: newUrl));
@@ -51,10 +52,10 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanEditSecurityCurrency()
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity(BaseCompanyName, BaseName, currency: "Pounds");
 
-            var database = constructor.Database;
+            Portfolio database = constructor.Database;
 
             string newCurrency = "Dollars";
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, currency: newCurrency));
@@ -68,20 +69,20 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanEditSecuritySectors()
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity(BaseCompanyName, BaseName);
 
-            var database = constructor.Database;
+            Portfolio database = constructor.Database;
 
-            var sectorValues = new HashSet<string>() { "Cats", "Dogs" };
+            HashSet<string> sectorValues = new HashSet<string>() { "Cats", "Dogs" };
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName, sectors: sectorValues));
 
             NameData accountNames = database.Funds.First().Names;
             Assert.AreEqual(NewName, accountNames.Name);
             Assert.AreEqual(NewCompanyName, accountNames.Company);
 
-            var actualSectors = accountNames.Sectors.ToList();
-            var expectedSectors = sectorValues.ToList();
+            List<string> actualSectors = accountNames.Sectors.ToList();
+            List<string> expectedSectors = sectorValues.ToList();
             Assert.AreEqual(sectorValues.Count, actualSectors.Count);
             for (int sectorIndex = 0; sectorIndex < sectorValues.Count; sectorIndex++)
             {
@@ -92,10 +93,10 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanEditSectorName()
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName(BaseCompanyName, BaseName);
 
-            var database = constructor.Database;
+            Portfolio database = constructor.Database;
 
             _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
@@ -107,10 +108,10 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanEditBankAccountName()
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithBankAccount(BaseCompanyName, BaseName);
 
-            var database = constructor.Database;
+            Portfolio database = constructor.Database;
 
             _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
@@ -122,10 +123,10 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanEditBankAccountUrl()
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithBankAccount(BaseCompanyName, BaseName, url: "http://www.google.com");
 
-            var database = constructor.Database;
+            Portfolio database = constructor.Database;
 
             string newUrl = "http://www.amazon.com";
             _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, url: newUrl));
@@ -139,10 +140,10 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanEditBankAccountCurrency()
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithBankAccount(BaseCompanyName, BaseName, currency: "Pounds");
 
-            var database = constructor.Database;
+            Portfolio database = constructor.Database;
 
             string newCurrency = "Dollars";
             _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, currency: newCurrency));
@@ -156,20 +157,20 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanEditBankAccountSectors()
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithBankAccount(BaseCompanyName, BaseName);
 
-            var database = constructor.Database;
+            Portfolio database = constructor.Database;
 
-            var sectorValues = new HashSet<string>() { "Cats", "Dogs" };
+            HashSet<string> sectorValues = new HashSet<string>() { "Cats", "Dogs" };
             _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName, sectors: sectorValues));
 
             NameData accountNames = database.BankAccounts.First().Names;
             Assert.AreEqual(NewName, accountNames.Name);
             Assert.AreEqual(NewCompanyName, accountNames.Company);
 
-            var actualSectors = accountNames.Sectors.ToList();
-            var expectedSectors = sectorValues.ToList();
+            List<string> actualSectors = accountNames.Sectors.ToList();
+            List<string> expectedSectors = sectorValues.ToList();
             Assert.AreEqual(sectorValues.Count, actualSectors.Count);
             for (int sectorIndex = 0; sectorIndex < sectorValues.Count; sectorIndex++)
             {
@@ -180,10 +181,10 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanEditCurrencyName()
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithCurrencyFromName(BaseCompanyName, BaseName);
 
-            var database = constructor.Database;
+            Portfolio database = constructor.Database;
 
             _ = database.TryEditName(Account.Currency, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
@@ -195,10 +196,10 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void ReportsSecurityCorrect()
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity(BaseCompanyName, BaseName);
-            var reports = new List<ErrorReport>();
-            var database = constructor.Database;
+            List<ErrorReport> reports = new List<ErrorReport>();
+            Portfolio database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
@@ -218,15 +219,15 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void EditingSecurityFailReports()
         {
-            var constructor = new DatabaseConstructor();
-            var reports = new List<ErrorReport>();
-            var database = constructor.Database;
+            DatabaseConstructor constructor = new DatabaseConstructor();
+            List<ErrorReport> reports = new List<ErrorReport>();
+            Portfolio database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
             Assert.AreEqual(1, reports.Count);
 
-            var report = reports.First();
+            ErrorReport report = reports.First();
             Assert.AreEqual(ReportType.Error, report.ErrorType);
             Assert.AreEqual(ReportLocation.EditingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Useful, report.ErrorSeverity);
@@ -236,10 +237,10 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void ReportsSectorCorrect()
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName(BaseCompanyName, BaseName);
-            var reports = new List<ErrorReport>();
-            var database = constructor.Database;
+            List<ErrorReport> reports = new List<ErrorReport>();
+            Portfolio database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
@@ -259,15 +260,15 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void EditingSectorFailReports()
         {
-            var constructor = new DatabaseConstructor();
-            var reports = new List<ErrorReport>();
-            var database = constructor.Database;
+            DatabaseConstructor constructor = new DatabaseConstructor();
+            List<ErrorReport> reports = new List<ErrorReport>();
+            Portfolio database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
             Assert.AreEqual(1, reports.Count);
 
-            var report = reports.First();
+            ErrorReport report = reports.First();
             Assert.AreEqual(ReportType.Error, report.ErrorType);
             Assert.AreEqual(ReportLocation.EditingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Useful, report.ErrorSeverity);

@@ -16,7 +16,7 @@ namespace FinancialStructures.Tests.Database.Statistics
         [TestCase(TestDatabaseName.TwoBankCur, Account.Currency, NameOrder.Default, 0.017699999999999994)]
         public void ProfitTest(TestDatabaseName databaseName, Account totals, NameOrder order, double expectedValue)
         {
-            var portfolio = TestDatabase.Databases[databaseName];
+            IPortfolio portfolio = TestDatabase.Databases[databaseName];
             Assert.AreEqual(expectedValue, portfolio.Profit(totals, TestDatabase.Name(totals, order)));
         }
 
@@ -29,7 +29,7 @@ namespace FinancialStructures.Tests.Database.Statistics
         [TestCase(TestDatabaseName.TwoSecCur, Totals.Security, 1042.4239939064075)]
         public void TotalProfitTests(TestDatabaseName databaseName, Totals totals, double expectedValue)
         {
-            var portfolio = TestDatabase.Databases[databaseName];
+            IPortfolio portfolio = TestDatabase.Databases[databaseName];
             Assert.AreEqual(expectedValue, portfolio.TotalProfit(totals));
         }
     }

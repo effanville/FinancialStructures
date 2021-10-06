@@ -38,8 +38,8 @@ namespace FinancialStructures.Tests.Database.Statistics
         [TestCaseSource(nameof(TotalInvestmentsCases))]
         public void TotalInvestmentsTests(TestDatabaseName databaseName, Totals totals, List<Labelled<TwoName, DailyValuation>> expected)
         {
-            var portfolio = TestDatabase.Databases[databaseName];
-            var investments = portfolio.TotalInvestments(totals);
+            IPortfolio portfolio = TestDatabase.Databases[databaseName];
+            List<Labelled<TwoName, DailyValuation>> investments = portfolio.TotalInvestments(totals);
             CollectionAssert.AreEqual(expected, investments);
         }
 
@@ -67,8 +67,8 @@ namespace FinancialStructures.Tests.Database.Statistics
         [TestCaseSource(nameof(InvestmentsCases))]
         public void InvestmentTests(TestDatabaseName databaseName, Account account, TwoName name, List<Labelled<TwoName, DailyValuation>> expected)
         {
-            var portfolio = TestDatabase.Databases[databaseName];
-            var investments = portfolio.Investments(account, name);
+            IPortfolio portfolio = TestDatabase.Databases[databaseName];
+            List<Labelled<TwoName, DailyValuation>> investments = portfolio.Investments(account, name);
             CollectionAssert.AreEqual(expected, investments);
         }
     }

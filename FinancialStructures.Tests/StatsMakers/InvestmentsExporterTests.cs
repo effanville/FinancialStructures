@@ -3,7 +3,7 @@
 namespace FinancialStructures.Tests.StatsMakers
 {
     [TestFixture]
-    class InvestmentsExporterTests
+    internal class InvestmentsExporterTests
     {
         [Test]
         [Ignore("Currently cannot create into a dummy folder structure.")]

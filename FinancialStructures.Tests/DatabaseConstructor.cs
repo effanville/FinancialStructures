@@ -1,9 +1,9 @@
 ﻿using System;
+using System.IO.Abstractions;
 using FinancialStructures.Database;
-using FinancialStructures.NamingStructures;
 using FinancialStructures.Database.Implementation;
 using FinancialStructures.FinanceStructures.Implementation;
-using System.IO.Abstractions;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Tests.TestDatabaseConstructor
 {
@@ -12,9 +12,11 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
         internal Portfolio Database;
         public DatabaseConstructor(string filePath = null, string currency = null)
         {
-            Database = new Portfolio();
-            Database.FilePath = filePath ?? null;
-            Database.BaseCurrency = currency ?? DefaultCurrencyName;
+            Database = new Portfolio
+            {
+                FilePath = filePath ?? null,
+                BaseCurrency = currency ?? DefaultCurrencyName
+            };
         }
 
         public DatabaseConstructor LoadDatabaseFromFilepath(IFileSystem fileSystem, string filepath)
@@ -185,7 +187,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 
         public DatabaseConstructor WithCurrencyFromNameAndData(string company, string name, string currency = null, string url = null, DateTime[] date = null, double[] value = null)
         {
-            var bankConstructor = new CurrencyConstructor(company, name, currency, url);
+            CurrencyConstructor bankConstructor = new CurrencyConstructor(company, name, currency, url);
             if (date != null)
             {
                 for (int i = 0; i < date.Length; i++)
@@ -206,7 +208,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 
         public DatabaseConstructor WithSectorFromNameAndData(string company, string name, string currency = null, string url = null, DateTime[] date = null, double[] value = null)
         {
-            var bankConstructor = new SectorConstructor(company, name, currency, url);
+            SectorConstructor bankConstructor = new SectorConstructor(company, name, currency, url);
             if (date != null)
             {
                 for (int i = 0; i < date.Length; i++)

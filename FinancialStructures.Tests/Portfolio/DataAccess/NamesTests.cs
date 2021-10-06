@@ -1,4 +1,7 @@
-﻿using FinancialStructures.Database;
+﻿using System.Collections.Generic;
+using FinancialStructures.Database;
+using FinancialStructures.Database.Implementation;
+using FinancialStructures.NamingStructures;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 
@@ -13,7 +16,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
             {
                 case Account.Security:
                 {
-                    var constructor = new DatabaseConstructor();
+                    DatabaseConstructor constructor = new DatabaseConstructor();
                     _ = constructor.WithSecurity(company1, name1);
                     _ = constructor.WithSecurity(company2, name2);
                     _ = constructor.WithSecurity(company3, name3);
@@ -21,7 +24,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
                 }
                 case Account.Benchmark:
                 {
-                    var constructor = new DatabaseConstructor();
+                    DatabaseConstructor constructor = new DatabaseConstructor();
                     _ = constructor.WithSectorFromName(company1, name1);
                     _ = constructor.WithSectorFromName(company2, name2);
                     _ = constructor.WithSectorFromName(company3, name3);
@@ -29,7 +32,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
                 }
                 case Account.BankAccount:
                 {
-                    var constructor = new DatabaseConstructor();
+                    DatabaseConstructor constructor = new DatabaseConstructor();
                     _ = constructor.WithBankAccount(company1, name1);
                     _ = constructor.WithBankAccount(company2, name2);
                     _ = constructor.WithBankAccount(company3, name3);
@@ -37,7 +40,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
                 }
                 case Account.Currency:
                 {
-                    var constructor = new DatabaseConstructor();
+                    DatabaseConstructor constructor = new DatabaseConstructor();
                     _ = constructor.WithCurrencyFromName(company1, name1);
                     _ = constructor.WithCurrencyFromName(company2, name2);
                     _ = constructor.WithCurrencyFromName(company3, name3);
@@ -54,10 +57,10 @@ namespace FinancialStructures.Tests.Database.DataAccess
         [TestCase(Account.Currency, "company1", "name1", "company2", "name2", "company3", "name3")]
         public void NameDataTests(Account elementType, string company1, string name1, string company2, string name2, string company3, string name3)
         {
-            var constructor = CreateThreeAccounts(elementType, company1, name1, company2, name2, company3, name3);
-            var database = constructor.Database;
+            DatabaseConstructor constructor = CreateThreeAccounts(elementType, company1, name1, company2, name2, company3, name3);
+            Portfolio database = constructor.Database;
 
-            var names = database.NameData(elementType);
+            IReadOnlyList<NameData> names = database.NameData(elementType);
             Assert.AreEqual(3, names.Count);
 
             Assert.AreEqual(company1, names[0].Company);
@@ -75,10 +78,10 @@ namespace FinancialStructures.Tests.Database.DataAccess
         [TestCase(Account.Currency, "company1", "name1", "company2", "name2", "company3", "name3")]
         public void NamesTests(Account elementType, string company1, string name1, string company2, string name2, string company3, string name3)
         {
-            var constructor = CreateThreeAccounts(elementType, company1, name1, company2, name2, company3, name3);
-            var database = constructor.Database;
+            DatabaseConstructor constructor = CreateThreeAccounts(elementType, company1, name1, company2, name2, company3, name3);
+            Portfolio database = constructor.Database;
 
-            var names = database.Names(elementType);
+            IReadOnlyList<string> names = database.Names(elementType);
             Assert.AreEqual(3, names.Count);
 
             Assert.AreEqual(name1, names[0]);
@@ -92,10 +95,10 @@ namespace FinancialStructures.Tests.Database.DataAccess
         [TestCase(Account.Currency, "company1", "name1", "company2", "name2", "company3", "name3")]
         public void CompaniesTests(Account elementType, string company1, string name1, string company2, string name2, string company3, string name3)
         {
-            var constructor = CreateThreeAccounts(elementType, company1, name1, company2, name2, company3, name3);
-            var database = constructor.Database;
+            DatabaseConstructor constructor = CreateThreeAccounts(elementType, company1, name1, company2, name2, company3, name3);
+            Portfolio database = constructor.Database;
 
-            var names = database.Companies(elementType);
+            IReadOnlyList<string> names = database.Companies(elementType);
             Assert.AreEqual(3, names.Count);
 
             Assert.AreEqual(company1, names[0]);

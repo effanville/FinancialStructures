@@ -16,7 +16,7 @@ namespace FinancialStructures.Tests.Database.Value
         [TestCase(TestDatabaseName.OneSecOneBank, Totals.BankAccount, 101.1)]
         public void LatestTotalValueTests(TestDatabaseName databaseName, Totals totals, double expectedValue)
         {
-            var portfolio = TestDatabase.Databases[databaseName];
+            IPortfolio portfolio = TestDatabase.Databases[databaseName];
             Assert.AreEqual(expectedValue, portfolio.TotalValue(totals));
         }
 
@@ -54,7 +54,7 @@ namespace FinancialStructures.Tests.Database.Value
         [TestCase(TestDatabaseName.TwoSecTwoBank, Totals.All, "2018/10/23", 37785.153651090215)]
         public void TotalValueTest(TestDatabaseName databaseName, Totals totals, DateTime date, double expectedValue)
         {
-            var portfolio = TestDatabase.Databases[databaseName];
+            IPortfolio portfolio = TestDatabase.Databases[databaseName];
             Assert.AreEqual(expectedValue, portfolio.TotalValue(totals, date));
         }
 
@@ -77,7 +77,7 @@ namespace FinancialStructures.Tests.Database.Value
         [TestCase(TestDatabaseName.OneBank, Account.BankAccount, Totals.BankAccount, "2020/5/1", 101.09999999999999)]
         public void TotalValueAndSingleValueAgreeTest(TestDatabaseName databaseName, Account account, Totals totals, DateTime date, double expectedValue)
         {
-            var portfolio = TestDatabase.Databases[databaseName];
+            IPortfolio portfolio = TestDatabase.Databases[databaseName];
             Assert.AreEqual(expectedValue, portfolio.Value(account, TestDatabase.Name(account, NameOrder.Default), date), "Value not correct");
             Assert.AreEqual(expectedValue, portfolio.TotalValue(totals, date), "TotalValue not correct.");
         }

@@ -20,7 +20,7 @@ namespace FinancialStructures.Tests.Database.Statistics
         [TestCase(TestDatabaseName.TwoSecTwoBank, Totals.BankAccount, 253.79999999999995)]
         public void TotalRecentChangeTests(TestDatabaseName databaseName, Totals totals, double expectedValue)
         {
-            var portfolio = TestDatabase.Databases[databaseName];
+            IPortfolio portfolio = TestDatabase.Databases[databaseName];
             Assert.AreEqual(expectedValue, portfolio.RecentChange(totals));
         }
 
@@ -33,7 +33,7 @@ namespace FinancialStructures.Tests.Database.Statistics
         [TestCase(TestDatabaseName.TwoBankCur, Account.Currency, NameOrder.Default, 0.0086999999999999994)]
         public void RecentChangeTests(TestDatabaseName databaseName, Account totals, NameOrder order, double expectedValue)
         {
-            var portfolio = TestDatabase.Databases[databaseName];
+            IPortfolio portfolio = TestDatabase.Databases[databaseName];
             Assert.AreEqual(expectedValue, portfolio.RecentChange(totals, TestDatabase.Name(totals, order)));
         }
     }

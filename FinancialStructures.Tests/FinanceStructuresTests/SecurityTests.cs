@@ -128,9 +128,9 @@ namespace FinancialStructures.Tests.FinanceStructuresTests
 
             Assert.Multiple(() =>
             {
-                foreach (var (Date, UnitPrice, ShareNo, Investment) in expectedValues)
+                foreach ((DateTime Date, double UnitPrice, double ShareNo, double Investment) in expectedValues)
                 {
-                    var dayData = sut.DayData(Date);
+                    SecurityDayData dayData = sut.DayData(Date);
                     Assert.AreEqual(Investment, dayData.NewInvestment, $"{Date} Investment value wrong");
                     Assert.AreEqual(ShareNo, dayData.ShareNo, $"{Date} Num Shares value wrong");
                     Assert.AreEqual(UnitPrice, dayData.UnitPrice, $"{Date} Unit Price wrong");
@@ -172,9 +172,9 @@ namespace FinancialStructures.Tests.FinanceStructuresTests
 
             Assert.Multiple(() =>
             {
-                foreach (var (Date, UnitPrice, ShareNo, Investment) in expectedValues)
+                foreach ((DateTime Date, double UnitPrice, double ShareNo, double Investment) in expectedValues)
                 {
-                    var dayData = sut.DayData(Date);
+                    SecurityDayData dayData = sut.DayData(Date);
                     Assert.AreEqual(Investment, dayData.NewInvestment, $"{Date} Investment value wrong");
                     Assert.AreEqual(ShareNo, dayData.ShareNo, $"{Date} Num Shares value wrong");
                     Assert.AreEqual(UnitPrice, dayData.UnitPrice, $"{Date} Unit Price wrong");

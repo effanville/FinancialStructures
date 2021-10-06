@@ -3,7 +3,7 @@
 namespace FinancialStructures.Tests.StatsMakers
 {
     [TestFixture]
-    class CSVHIstoryWriterTests
+    internal class CSVHIstoryWriterTests
     {
         [Test]
         [Ignore("Currently cannot create into a dummy folder structure.")]

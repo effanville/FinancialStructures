@@ -20,8 +20,10 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 
         private BankAccountConstructor(string company, string name, string currency = null, string url = null, string sectors = null)
         {
-            var names = new NameData(company, name, currency, url);
-            names.SectorsFlat = sectors;
+            NameData names = new NameData(company, name, currency, url)
+            {
+                SectorsFlat = sectors
+            };
             Item = new CashAccount(names);
         }
 
@@ -48,7 +50,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 
         public static BankAccountConstructor FromNameAndData(string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] dates = null, double[] values = null)
         {
-            var bankConstructor = new BankAccountConstructor(company, name, currency, url, sectors);
+            BankAccountConstructor bankConstructor = new BankAccountConstructor(company, name, currency, url, sectors);
             if (dates != null)
             {
                 for (int i = 0; i < dates.Length; i++)

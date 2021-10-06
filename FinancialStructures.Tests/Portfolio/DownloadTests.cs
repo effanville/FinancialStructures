@@ -11,7 +11,11 @@ namespace FinancialStructures.Tests.Database
         public void CanDownload(string url)
         {
             double value = 0;
-            void getValue(double v) => value = v;
+            void getValue(double v)
+            {
+                value = v;
+            }
+
             PortfolioDataUpdater.DownloadLatestValue(new NameData("company", "name", url: url), getValue, null).Wait();
 
             Assert.AreNotEqual(0, value);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Common.Structure.DataStructures;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
@@ -127,9 +128,9 @@ namespace FinancialStructures.Tests.FinanceStructuresTests
 
             Assert.Multiple(() =>
             {
-                foreach (var (Date, Value) in expectedValues)
+                foreach ((DateTime Date, double Value) in expectedValues)
                 {
-                    var dayData = sut.Value(Date, null);
+                    DailyValuation dayData = sut.Value(Date, null);
                     Assert.AreEqual(Value, dayData.Value, $"{Date} Vsalue wrong");
                 }
             });
