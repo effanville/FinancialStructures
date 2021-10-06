@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using Common.UI;
 using FinancePortfolioDatabase.GUI.ViewModels;
@@ -11,13 +10,7 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
     public abstract class MainWindowViewModelTestHelper
     {
 
-        protected IPortfolio Portfolio
-        {
-            get
-            {
-                return ViewModel?.ProgramPortfolio;
-            }
-        }
+        protected IPortfolio Portfolio => ViewModel?.ProgramPortfolio;
 
         protected MainWindowViewModel ViewModel
         {
@@ -28,7 +21,7 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
         [SetUp]
         public void Setup()
         {
-            var tempFileSystem = new MockFileSystem();
+            MockFileSystem tempFileSystem = new MockFileSystem();
             string file = File.ReadAllText(TestConstants.ExampleDatabaseLocation + "\\BasicTestDatabase.xml");
             string testPath = "c:/temp/database.xml";
 

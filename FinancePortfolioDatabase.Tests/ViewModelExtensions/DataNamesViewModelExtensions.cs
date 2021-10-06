@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Windows.Controls;
+using Common.Structure.DisplayClasses;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.NamingStructures;
-using Common.Structure.DisplayClasses;
 
 namespace FinancePortfolioDatabase.Tests.ViewModelExtensions
 {
@@ -30,7 +30,7 @@ namespace FinancePortfolioDatabase.Tests.ViewModelExtensions
             viewModel.SelectItem(null);
             viewModel.AddDefaultDataCommand?.Execute(new AddingNewItemEventArgs());
             viewModel.DataNames.Add(new SelectableEquatable<NameData>(new NameData(), false));
-            var newItem = viewModel.DataNames.Last();
+            SelectableEquatable<NameData> newItem = viewModel.DataNames.Last();
             viewModel.SelectItem(newItem.Instance);
             viewModel.BeginEdit();
 

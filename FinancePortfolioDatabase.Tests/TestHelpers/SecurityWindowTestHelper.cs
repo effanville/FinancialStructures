@@ -1,14 +1,14 @@
 ﻿using System;
-using FinancePortfolioDatabase.GUI.ViewModels.Security;
-using FinancialStructures.Database;
-using Moq;
-using NUnit.Framework;
-using Common.UI.Services;
 using System.IO.Abstractions;
 using System.Linq;
-using FinancePortfolioDatabase.GUI.ViewModels.Common;
-using FinancialStructures.NamingStructures;
 using Common.UI;
+using Common.UI.Services;
+using FinancePortfolioDatabase.GUI.ViewModels.Common;
+using FinancePortfolioDatabase.GUI.ViewModels.Security;
+using FinancialStructures.Database;
+using FinancialStructures.NamingStructures;
+using Moq;
+using NUnit.Framework;
 
 namespace FinancePortfolioDatabase.Tests.TestHelpers
 {

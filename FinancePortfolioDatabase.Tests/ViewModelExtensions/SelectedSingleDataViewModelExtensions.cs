@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Windows.Controls;
+using Common.Structure.DataStructures;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
-using Common.Structure.DataStructures;
 
 namespace FinancePortfolioDatabase.Tests.ViewModelExtensions
 {
@@ -16,7 +16,7 @@ namespace FinancePortfolioDatabase.Tests.ViewModelExtensions
             viewModel.SelectItem(null);
             viewModel.TLVM.AddDefaultDataCommand?.Execute(new AddingNewItemEventArgs());
             viewModel.TLVM.Valuations.Add(new DailyValuation());
-            var newItem = viewModel.TLVM.Valuations.Last();
+            DailyValuation newItem = viewModel.TLVM.Valuations.Last();
             viewModel.SelectItem(newItem);
             viewModel.BeginEdit();
 

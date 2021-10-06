@@ -2,11 +2,11 @@
 using System.Linq;
 using System.Threading;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
+using FinancePortfolioDatabase.Tests.TestHelpers;
+using FinancePortfolioDatabase.Tests.ViewModelExtensions;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using NUnit.Framework;
-using FinancePortfolioDatabase.Tests.ViewModelExtensions;
-using FinancePortfolioDatabase.Tests.TestHelpers;
 
 namespace FinancePortfolioDatabase.Tests.CommonWindowTests
 {
@@ -56,7 +56,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
             Portfolio = TestSetupHelper.CreateBasicDataBase();
 
             ViewModel.SelectItem(null);
-            var newItem = ViewModel.AddNewItem();
+            NameData newItem = ViewModel.AddNewItem();
 
             ViewModel.BeginEdit();
             newItem.Company = "company";
@@ -72,7 +72,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         public void CanEditSecurityName()
         {
             Portfolio = TestSetupHelper.CreateBasicDataBase();
-            var item = ViewModel.DataNames[0].Instance;
+            NameData item = ViewModel.DataNames[0].Instance;
             ViewModel.SelectItem(item);
             ViewModel.BeginEdit();
             item.Company = "NewCompany";
@@ -88,7 +88,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         public void CanEditSecurityNameAndUrl()
         {
             Portfolio = TestSetupHelper.CreateBasicDataBase();
-            var item = ViewModel.DataNames[0].Instance;
+            NameData item = ViewModel.DataNames[0].Instance;
             ViewModel.SelectItem(item);
             ViewModel.BeginEdit();
             item.Company = "NewCompany";
@@ -106,7 +106,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         [Ignore("IncompeteArchitecture - Downloader does not currently allow for use in test environment.")]
         public void CanDownloadSecurity()
         {
-            var item = new NameData("Fidelity", "China");
+            NameData item = new NameData("Fidelity", "China");
             ViewModel.SelectItem(item);
             ViewModel.DownloadSelected();
 
@@ -121,7 +121,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
             Assert.AreEqual(1, ViewModel.DataStore.FundsThreadSafe.Count);
             Assert.AreEqual(1, Portfolio.FundsThreadSafe.Count);
 
-            var item = new NameData("Fidelity", "China");
+            NameData item = new NameData("Fidelity", "China");
             ViewModel.SelectItem(item);
             ViewModel.DeleteSelected();
             Assert.AreEqual(0, ViewModel.DataStore.FundsThreadSafe.Count);

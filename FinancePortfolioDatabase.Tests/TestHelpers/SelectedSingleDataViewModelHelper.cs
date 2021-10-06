@@ -1,33 +1,24 @@
 ﻿using System;
+using System.IO.Abstractions;
+using Common.UI;
+using Common.UI.Services;
+using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
+using FinancialStructures.NamingStructures;
 using Moq;
 using NUnit.Framework;
-using Common.UI.Services;
-using System.IO.Abstractions;
-using FinancePortfolioDatabase.GUI.ViewModels.Common;
-using FinancialStructures.NamingStructures;
-using Common.UI;
 
 namespace FinancePortfolioDatabase.Tests.TestHelpers
 {
     public abstract class SelectedSingleDataViewModelHelper
     {
-        private Action<Action<IPortfolio>> DataUpdater
-        {
-            get
-            {
-                return action => action(Portfolio);
-            }
-        }
+        private Action<Action<IPortfolio>> DataUpdater => action => action(Portfolio);
 
         private IPortfolio fPortfolio;
 
         protected IPortfolio Portfolio
         {
-            get
-            {
-                return fPortfolio;
-            }
+            get => fPortfolio;
             set
             {
                 fPortfolio = value;

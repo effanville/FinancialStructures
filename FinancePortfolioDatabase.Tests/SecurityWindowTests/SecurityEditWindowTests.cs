@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
+using FinancePortfolioDatabase.GUI.ViewModels.Security;
 using FinancePortfolioDatabase.Tests.TestHelpers;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
@@ -57,9 +58,9 @@ namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
             ViewModel.LoadTabFunc(newData);
 
             Assert.AreEqual(2, ViewModel.Tabs.Count);
-            var dataNames = DataNames;
+            DataNamesViewModel dataNames = DataNames;
             Assert.AreEqual(1, dataNames.DataNames.Count);
-            var selected = SelectedViewModel(newData);
+            SelectedSecurityViewModel selected = SelectedViewModel(newData);
             Assert.IsNotNull(selected);
             Assert.AreEqual(1, selected.TLVM.Valuations.Count);
         }

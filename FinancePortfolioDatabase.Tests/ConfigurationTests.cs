@@ -59,16 +59,16 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void CanLoadConfig()
         {
-            var tempFileSystem = new MockFileSystem();
+            MockFileSystem tempFileSystem = new MockFileSystem();
             string testPath = "c:/temp/user.config";
             string file = File.ReadAllText(TestConstants.ExampleDatabaseLocation + "\\user.config");
             tempFileSystem.AddFile(testPath, new MockFileData(file));
-            var config = UserConfiguration.LoadFromUserConfigFile(testPath, tempFileSystem);
+            UserConfiguration config = UserConfiguration.LoadFromUserConfigFile(testPath, tempFileSystem);
 
             Assert.AreEqual(2, config.ChildConfigurations.Count);
             Assert.Multiple(() =>
             {
-                var statsVM = config.ChildConfigurations[UserConfiguration.StatsDisplay] as StatsDisplayConfiguration;
+                StatsDisplayConfiguration statsVM = config.ChildConfigurations[UserConfiguration.StatsDisplay] as StatsDisplayConfiguration;
                 Assert.AreEqual(0, statsVM.ChildConfigurations.Count);
                 Assert.AreEqual(true, statsVM.HasLoaded);
                 Assert.AreEqual(true, statsVM.DisplayValueFunds);
@@ -76,13 +76,13 @@ namespace FinancePortfolioDatabase.Tests
 
             Assert.Multiple(() =>
             {
-                var statsCreatorVM = config.ChildConfigurations[UserConfiguration.StatsCreator] as StatsCreatorConfiguration;
+                StatsCreatorConfiguration statsCreatorVM = config.ChildConfigurations[UserConfiguration.StatsCreator] as StatsCreatorConfiguration;
                 Assert.AreEqual(2, statsCreatorVM.ChildConfigurations.Count);
 
-                var exportStats = statsCreatorVM.ChildConfigurations[UserConfiguration.StatsOptions] as ExportStatsConfiguration;
+                ExportStatsConfiguration exportStats = statsCreatorVM.ChildConfigurations[UserConfiguration.StatsOptions] as ExportStatsConfiguration;
                 Assert.AreEqual(true, exportStats.HasLoaded);
 
-                var exportHistory = statsCreatorVM.ChildConfigurations[UserConfiguration.HistoryOptions] as ExportHistoryConfiguration;
+                ExportHistoryConfiguration exportHistory = statsCreatorVM.ChildConfigurations[UserConfiguration.HistoryOptions] as ExportHistoryConfiguration;
                 Assert.AreEqual(20, exportHistory.HistoryGapDays);
                 Assert.AreEqual(true, exportHistory.HasLoaded);
             });
@@ -91,14 +91,14 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void CanLoadWithoutConfigFile()
         {
-            var tempFileSystem = new MockFileSystem();
+            MockFileSystem tempFileSystem = new MockFileSystem();
             string testPath = "c:/temp/user.config";
-            var config = UserConfiguration.LoadFromUserConfigFile(testPath, tempFileSystem);
+            UserConfiguration config = UserConfiguration.LoadFromUserConfigFile(testPath, tempFileSystem);
 
             Assert.AreEqual(2, config.ChildConfigurations.Count);
             Assert.Multiple(() =>
             {
-                var statsVM = config.ChildConfigurations[UserConfiguration.StatsDisplay] as StatsDisplayConfiguration;
+                StatsDisplayConfiguration statsVM = config.ChildConfigurations[UserConfiguration.StatsDisplay] as StatsDisplayConfiguration;
                 Assert.AreEqual(0, statsVM.ChildConfigurations.Count);
                 Assert.AreEqual(false, statsVM.HasLoaded);
                 Assert.AreEqual(false, statsVM.DisplayValueFunds);
@@ -106,13 +106,13 @@ namespace FinancePortfolioDatabase.Tests
 
             Assert.Multiple(() =>
             {
-                var statsCreatorVM = config.ChildConfigurations[UserConfiguration.StatsCreator] as StatsCreatorConfiguration;
+                StatsCreatorConfiguration statsCreatorVM = config.ChildConfigurations[UserConfiguration.StatsCreator] as StatsCreatorConfiguration;
                 Assert.AreEqual(2, statsCreatorVM.ChildConfigurations.Count);
 
-                var exportStats = statsCreatorVM.ChildConfigurations[UserConfiguration.StatsOptions] as ExportStatsConfiguration;
+                ExportStatsConfiguration exportStats = statsCreatorVM.ChildConfigurations[UserConfiguration.StatsOptions] as ExportStatsConfiguration;
                 Assert.AreEqual(false, exportStats.HasLoaded);
 
-                var exportHistory = statsCreatorVM.ChildConfigurations[UserConfiguration.HistoryOptions] as ExportHistoryConfiguration;
+                ExportHistoryConfiguration exportHistory = statsCreatorVM.ChildConfigurations[UserConfiguration.HistoryOptions] as ExportHistoryConfiguration;
                 Assert.AreEqual(0, exportHistory.HistoryGapDays);
                 Assert.AreEqual(false, exportHistory.HasLoaded);
             });
@@ -121,8 +121,8 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void CanSaveConfig()
         {
-            var tempFileSystem = new MockFileSystem();
-            var config = new UserConfiguration();
+            MockFileSystem tempFileSystem = new MockFileSystem();
+            UserConfiguration config = new UserConfiguration();
             string testPath = "c:/temp/saved/user.config";
             config.SaveConfiguration(testPath, tempFileSystem);
 
@@ -133,20 +133,20 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void RoundTripTest()
         {
-            var tempFileSystem = new MockFileSystem();
-            var config = new UserConfiguration();
+            MockFileSystem tempFileSystem = new MockFileSystem();
+            UserConfiguration config = new UserConfiguration();
             string testPath = "c:/temp/saved/user.config";
             config.SaveConfiguration(testPath, tempFileSystem);
 
             string file = tempFileSystem.File.ReadAllText(testPath);
             Assert.AreEqual(DefaultSerializedConfiguration, file);
 
-            var newConfig = UserConfiguration.LoadFromUserConfigFile(testPath, tempFileSystem);
+            UserConfiguration newConfig = UserConfiguration.LoadFromUserConfigFile(testPath, tempFileSystem);
 
             Assert.AreEqual(2, newConfig.ChildConfigurations.Count);
             Assert.Multiple(() =>
             {
-                var statsVM = newConfig.ChildConfigurations[UserConfiguration.StatsDisplay] as StatsDisplayConfiguration;
+                StatsDisplayConfiguration statsVM = newConfig.ChildConfigurations[UserConfiguration.StatsDisplay] as StatsDisplayConfiguration;
                 Assert.AreEqual(0, statsVM.ChildConfigurations.Count);
                 Assert.AreEqual(false, statsVM.HasLoaded);
                 Assert.AreEqual(false, statsVM.DisplayValueFunds);
@@ -154,13 +154,13 @@ namespace FinancePortfolioDatabase.Tests
 
             Assert.Multiple(() =>
             {
-                var statsCreatorVM = newConfig.ChildConfigurations[UserConfiguration.StatsCreator] as StatsCreatorConfiguration;
+                StatsCreatorConfiguration statsCreatorVM = newConfig.ChildConfigurations[UserConfiguration.StatsCreator] as StatsCreatorConfiguration;
                 Assert.AreEqual(2, statsCreatorVM.ChildConfigurations.Count);
 
-                var exportStats = statsCreatorVM.ChildConfigurations[UserConfiguration.StatsOptions] as ExportStatsConfiguration;
+                ExportStatsConfiguration exportStats = statsCreatorVM.ChildConfigurations[UserConfiguration.StatsOptions] as ExportStatsConfiguration;
                 Assert.AreEqual(false, exportStats.HasLoaded);
 
-                var exportHistory = statsCreatorVM.ChildConfigurations[UserConfiguration.HistoryOptions] as ExportHistoryConfiguration;
+                ExportHistoryConfiguration exportHistory = statsCreatorVM.ChildConfigurations[UserConfiguration.HistoryOptions] as ExportHistoryConfiguration;
                 Assert.AreEqual(0, exportHistory.HistoryGapDays);
                 Assert.AreEqual(false, exportHistory.HasLoaded);
             });

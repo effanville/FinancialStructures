@@ -1,14 +1,14 @@
 ﻿using System;
+using System.IO;
+using System.IO.Abstractions;
+using System.IO.Abstractions.TestingHelpers;
 using System.Windows;
+using Common.UI.Services;
+using FinancePortfolioDatabase.GUI.ViewModels;
+using FinancePortfolioDatabase.Tests.TestHelpers;
 using FinancialStructures.Database;
 using Moq;
 using NUnit.Framework;
-using Common.UI.Services;
-using FinancePortfolioDatabase.GUI.ViewModels;
-using System.IO.Abstractions;
-using FinancePortfolioDatabase.Tests.TestHelpers;
-using System.IO.Abstractions.TestingHelpers;
-using System.IO;
 
 namespace FinancePortfolioDatabase.Tests
 {
@@ -17,7 +17,7 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void CanOpenNewDatabase()
         {
-            var fileSystem = new FileSystem();
+            FileSystem fileSystem = new FileSystem();
             Mock<IFileInteractionService> fileMock = TestSetupHelper.CreateFileMock("notNeeded");
             Mock<IDialogCreationService> dialogMock = TestSetupHelper.CreateDialogMock(MessageBoxResult.Yes);
             IPortfolio portfolio = TestSetupHelper.CreateBasicDataBase();
@@ -35,7 +35,7 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void CanOpenDatabase()
         {
-            var tempFileSystem = new MockFileSystem();
+            MockFileSystem tempFileSystem = new MockFileSystem();
             string file = File.ReadAllText(TestConstants.ExampleDatabaseLocation + "\\BasicTestDatabase.xml");
             string testPath = "c:/temp/saved.xml";
 
@@ -58,7 +58,7 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void CanOpenAndSaveDatabase()
         {
-            var tempFileSystem = new MockFileSystem();
+            MockFileSystem tempFileSystem = new MockFileSystem();
             string file = File.ReadAllText(TestConstants.ExampleDatabaseLocation + "\\BasicTestDatabase.xml");
             string testPath = "c:/temp/database.xml";
             string savePath = "c:/temp/saved.xml";
@@ -81,7 +81,7 @@ namespace FinancePortfolioDatabase.Tests
 
             viewModel.SaveDatabaseCommand.Execute(1);
 
-            var savedFile = tempFileSystem.GetFile(savePath);
+            MockFileData savedFile = tempFileSystem.GetFile(savePath);
             Assert.AreEqual(file, savedFile.TextContents);
         }
 
@@ -89,7 +89,7 @@ namespace FinancePortfolioDatabase.Tests
         [Ignore("IncompeteArchitecture - Requires improvements in dialog creation to be able to run.")]
         public void CanOpenHelpDocsPage()
         {
-            var fileSystem = new FileSystem();
+            FileSystem fileSystem = new FileSystem();
             string testFilePath = TestConstants.ExampleDatabaseLocation + "\\BasicTestDatabase.xml";
             Mock<IFileInteractionService> fileMock = TestSetupHelper.CreateFileMock(testFilePath);
             Mock<IDialogCreationService> dialogMock = TestSetupHelper.CreateDialogMock();
@@ -108,7 +108,7 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void CanSaveDatabase()
         {
-            var tempFileSystem = new MockFileSystem();
+            MockFileSystem tempFileSystem = new MockFileSystem();
             string file = File.ReadAllText(TestConstants.ExampleDatabaseLocation + "\\BasicTestDatabase.xml");
             string testPath = "c:/temp/database.xml";
 
@@ -130,7 +130,7 @@ namespace FinancePortfolioDatabase.Tests
         [Ignore("IncompeteArchitecture - Downloader does not currently allow for use in test environment.")]
         public void CanUpdateDatabase()
         {
-            var fileSystem = new FileSystem();
+            FileSystem fileSystem = new FileSystem();
             string testFilePath = TestConstants.ExampleDatabaseLocation + "\\BasicTestDatabase.xml";
             Mock<IFileInteractionService> fileMock = TestSetupHelper.CreateFileMock(testFilePath);
             Mock<IDialogCreationService> dialogMock = TestSetupHelper.CreateDialogMock();
@@ -149,7 +149,7 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void CanRefreshDatabase()
         {
-            var fileSystem = new FileSystem();
+            FileSystem fileSystem = new FileSystem();
             Mock<IFileInteractionService> fileMock = TestSetupHelper.CreateFileMock("notNeeded");
             Mock<IDialogCreationService> dialogMock = TestSetupHelper.CreateDialogMock(MessageBoxResult.Yes);
             IPortfolio portfolio = TestSetupHelper.CreateBasicDataBase();

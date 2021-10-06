@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancePortfolioDatabase.GUI.ViewModels.Security;
 using FinancialStructures.NamingStructures;
@@ -12,13 +13,13 @@ namespace FinancePortfolioDatabase.Tests.ViewModelExtensions
     {
         public static DataNamesViewModel DataNames(this SecurityEditWindowViewModel viewModel)
         {
-            var desiredViewModel = viewModel.Tabs.Where(vm => vm is DataNamesViewModel svm);
+            IEnumerable<object> desiredViewModel = viewModel.Tabs.Where(vm => vm is DataNamesViewModel svm);
             return desiredViewModel.First() as DataNamesViewModel;
         }
 
         public static SelectedSecurityViewModel SelectedTab(this SecurityEditWindowViewModel viewModel, NameData name)
         {
-            var desiredViewModel = viewModel.Tabs.Where(vm => vm is SelectedSecurityViewModel svm && svm.SelectedName.Equals(name));
+            IEnumerable<object> desiredViewModel = viewModel.Tabs.Where(vm => vm is SelectedSecurityViewModel svm && svm.SelectedName.Equals(name));
             return desiredViewModel.First() as SelectedSecurityViewModel;
         }
     }

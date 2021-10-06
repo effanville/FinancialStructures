@@ -1,9 +1,9 @@
 ﻿using FinancePortfolioDatabase.GUI.ViewModels.Common;
+using FinancePortfolioDatabase.Tests.TestHelpers;
+using FinancePortfolioDatabase.Tests.ViewModelExtensions;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using NUnit.Framework;
-using FinancePortfolioDatabase.Tests.ViewModelExtensions;
-using FinancePortfolioDatabase.Tests.TestHelpers;
 
 namespace FinancePortfolioDatabase.Tests.CommonWindowTests
 {

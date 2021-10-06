@@ -1,11 +1,11 @@
-﻿using FinancialStructures.Database;
+﻿using System.IO.Abstractions;
+using Common.UI;
+using Common.UI.Services;
+using FinancePortfolioDatabase.GUI.Configuration;
+using FinancePortfolioDatabase.GUI.ViewModels.Stats;
+using FinancialStructures.Database;
 using Moq;
 using NUnit.Framework;
-using Common.UI.Services;
-using System.IO.Abstractions;
-using FinancePortfolioDatabase.GUI.ViewModels.Stats;
-using Common.UI;
-using FinancePortfolioDatabase.GUI.Configuration;
 
 namespace FinancePortfolioDatabase.Tests.TestHelpers
 {

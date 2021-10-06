@@ -22,7 +22,7 @@ namespace FinancePortfolioDatabase.Tests.ViewModelExtensions
             viewModel.SelectTrade(null);
             viewModel.AddDefaultDataCommand?.Execute(new AddingNewItemEventArgs());
             viewModel.Trades.Add(new SecurityTrade());
-            var newItem = viewModel.Trades.Last();
+            SecurityTrade newItem = viewModel.Trades.Last();
             viewModel.SelectTrade(newItem);
             viewModel.BeginEdit();
 
@@ -48,9 +48,11 @@ namespace FinancePortfolioDatabase.Tests.ViewModelExtensions
         [STAThread]
         public static void DeleteSelectedTrade(this SelectedSecurityViewModel viewModel, IPortfolio portfolio)
         {
-            KeyEventArgs eventArgs = new KeyEventArgs(Keyboard.PrimaryDevice, new HwndSource(0, 0, 0, 0, 0, "", IntPtr.Zero), 0, Key.Delete);
-            eventArgs.RoutedEvent = EventManager.RegisterRoutedEvent("Click", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(DataGridCell));
-            eventArgs.Source = new DataGridCell();
+            KeyEventArgs eventArgs = new KeyEventArgs(Keyboard.PrimaryDevice, new HwndSource(0, 0, 0, 0, 0, "", IntPtr.Zero), 0, Key.Delete)
+            {
+                RoutedEvent = EventManager.RegisterRoutedEvent("Click", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(DataGridCell)),
+                Source = new DataGridCell()
+            };
             viewModel.DeleteTradeKeyDownCommand?.Execute(eventArgs);
             viewModel.UpdateData(portfolio);
         }
@@ -60,7 +62,7 @@ namespace FinancePortfolioDatabase.Tests.ViewModelExtensions
             viewModel.SelectUnitPrice(null);
             viewModel.TLVM.AddDefaultDataCommand?.Execute(new AddingNewItemEventArgs());
             viewModel.TLVM.Valuations.Add(new DailyValuation());
-            var newItem = viewModel.TLVM.Valuations.Last();
+            DailyValuation newItem = viewModel.TLVM.Valuations.Last();
             viewModel.SelectUnitPrice(newItem);
             viewModel.BeginEdit();
 
@@ -86,9 +88,11 @@ namespace FinancePortfolioDatabase.Tests.ViewModelExtensions
         [STAThread]
         public static void DeleteSelected(this SelectedSecurityViewModel viewModel, IPortfolio portfolio)
         {
-            KeyEventArgs eventArgs = new KeyEventArgs(Keyboard.PrimaryDevice, new HwndSource(0, 0, 0, 0, 0, "", IntPtr.Zero), 0, Key.Delete);
-            eventArgs.RoutedEvent = EventManager.RegisterRoutedEvent("AnotherClick", RoutingStrategy.Bubble, typeof(RoutedEventHandler),typeof(DataGridCell));
-            eventArgs.Source = new DataGridCell();
+            KeyEventArgs eventArgs = new KeyEventArgs(Keyboard.PrimaryDevice, new HwndSource(0, 0, 0, 0, 0, "", IntPtr.Zero), 0, Key.Delete)
+            {
+                RoutedEvent = EventManager.RegisterRoutedEvent("AnotherClick", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(DataGridCell)),
+                Source = new DataGridCell()
+            };
             viewModel.TLVM.DeleteValuationCommand?.Execute(eventArgs);
             viewModel.UpdateData(portfolio);
         }

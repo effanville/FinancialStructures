@@ -1,24 +1,18 @@
 ﻿using System;
+using System.IO.Abstractions;
+using Common.UI;
+using Common.UI.Services;
 using FinancePortfolioDatabase.GUI.ViewModels.Security;
 using FinancialStructures.Database;
+using FinancialStructures.NamingStructures;
 using Moq;
 using NUnit.Framework;
-using Common.UI.Services;
-using System.IO.Abstractions;
-using FinancialStructures.NamingStructures;
-using Common.UI;
 
 namespace FinancePortfolioDatabase.Tests.TestHelpers
 {
     public abstract class SelectedSecurityTestHelper
     {
-        private Action<Action<IPortfolio>> DataUpdater
-        {
-            get
-            {
-                return action => action(Portfolio);
-            }
-        }
+        private Action<Action<IPortfolio>> DataUpdater => action => action(Portfolio);
 
         protected IPortfolio Portfolio
         {

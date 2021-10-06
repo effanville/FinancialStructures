@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Structure.DisplayClasses;
+using FinancePortfolioDatabase.Tests.TestHelpers;
+using FinancePortfolioDatabase.Tests.ViewModelExtensions;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using NUnit.Framework;
-using Common.Structure.DisplayClasses;
-using FinancePortfolioDatabase.Tests.ViewModelExtensions;
-using FinancePortfolioDatabase.Tests.TestHelpers;
 
 namespace FinancePortfolioDatabase.Tests.CommonWindowTests
 {
@@ -43,7 +43,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         public void CanEditName()
         {
             Portfolio = TestSetupHelper.CreateBasicDataBase();
-            var item = ViewModel.DataNames[0].Instance;
+            NameData item = ViewModel.DataNames[0].Instance;
             ViewModel.SelectItem(item);
             ViewModel.BeginEdit();
             item.Company = "NewCompany";
@@ -60,12 +60,12 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         public void CanDownload()
         {
             Portfolio = TestSetupHelper.CreateBasicDataBase();
-            var item = ViewModel.DataNames.First();
+            SelectableEquatable<NameData> item = ViewModel.DataNames.First();
             ViewModel.SelectItem(item.Instance);
             ViewModel.DownloadSelected();
 
             Assert.AreEqual(1, ViewModel.DataNames.Count);
-            bool account = Portfolio.TryGetAccount(Account.BankAccount, new TwoName("Barclays", "currentAccount"), out var sec);
+            bool account = Portfolio.TryGetAccount(Account.BankAccount, new TwoName("Barclays", "currentAccount"), out FinancialStructures.FinanceStructures.IValueList sec);
             Assert.AreEqual(2, sec.Values.Count());
         }
 
@@ -75,7 +75,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
             Portfolio = TestSetupHelper.CreateBasicDataBase();
             Assert.AreEqual(1, ViewModel.DataStore.FundsThreadSafe.Count);
             Assert.AreEqual(1, Portfolio.BankAccountsThreadSafe.Count);
-            var item = new NameData("Barclays", "currentAccount");
+            NameData item = new NameData("Barclays", "currentAccount");
             ViewModel.SelectItem(item);
             ViewModel.DeleteSelected();
             Assert.AreEqual(0, ViewModel.DataStore.BankAccountsThreadSafe.Count);

@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Linq;
+using Common.Structure.DataStructures;
+using FinancePortfolioDatabase.Tests.TestHelpers;
+using FinancePortfolioDatabase.Tests.ViewModelExtensions;
 using FinancialStructures.Database;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using NUnit.Framework;
-using FinancialStructures.FinanceStructures;
-using FinancePortfolioDatabase.Tests.ViewModelExtensions;
-using FinancePortfolioDatabase.Tests.TestHelpers;
 
 namespace FinancePortfolioDatabase.Tests.CommonWindowTests
 {
@@ -31,7 +32,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         {
             Assert.AreEqual(1, ViewModel.TLVM.Valuations.Count);
             ViewModel.SelectItem(null);
-            var newItem = ViewModel.AddNewItem();
+            DailyValuation newItem = ViewModel.AddNewItem();
 
             ViewModel.BeginEdit();
             newItem.Day = new DateTime(2002, 1, 1);
@@ -46,7 +47,7 @@ namespace FinancePortfolioDatabase.Tests.CommonWindowTests
         public void CanEditValue()
         {
             Assert.AreEqual(1, ViewModel.TLVM.Valuations.Count);
-            var item = ViewModel.TLVM.Valuations[0];
+            DailyValuation item = ViewModel.TLVM.Valuations[0];
             ViewModel.SelectItem(item);
             ViewModel.BeginEdit();
             item.Day = new DateTime(2000, 1, 1);

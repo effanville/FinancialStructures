@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Windows;
+using Common.Structure.DataStructures;
+using Common.Structure.Reporting;
+using Common.UI;
+using Common.UI.Services;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 using Moq;
-using Common.Structure.DataStructures;
-using Common.Structure.Reporting;
-using Common.UI.Services;
-using Common.UI;
 
 namespace FinancePortfolioDatabase.Tests.TestHelpers
 {
@@ -57,13 +57,7 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
             return dispatcherMock;
         }
 
-        internal static Action<object> DummyOpenTab
-        {
-            get
-            {
-                return action => OpenTab();
-            }
-        }
+        internal static Action<object> DummyOpenTab => action => OpenTab();
 
         private static void OpenTab()
         {

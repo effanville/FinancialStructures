@@ -14,10 +14,7 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
 
         protected IPortfolio Portfolio
         {
-            get
-            {
-                return fPortfolio;
-            }
+            get => fPortfolio;
             set
             {
                 fPortfolio = value;

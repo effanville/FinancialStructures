@@ -1,12 +1,12 @@
+using System;
 using System.Linq;
+using System.Threading;
+using System.Windows.Input;
+using System.Windows.Interop;
+using Common.Structure.Reporting;
 using FinancePortfolioDatabase.GUI.ViewModels;
 using FinancePortfolioDatabase.Tests.TestHelpers;
 using NUnit.Framework;
-using Common.Structure.Reporting;
-using System.Windows.Input;
-using System.Windows.Interop;
-using System;
-using System.Threading;
 
 namespace FinancePortfolioDatabase.Tests
 {
@@ -21,7 +21,7 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void ReportsSync()
         {
-            var viewModel = CreateViewModel("nothing");
+            ReportingWindowViewModel viewModel = CreateViewModel("nothing");
             viewModel.Reports.AddErrorReport(ReportSeverity.Critical, ReportType.Error, ReportLocation.Unknown, "Is this added?");
             viewModel.SyncReports();
 
@@ -37,7 +37,7 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void CanAddReport()
         {
-            var viewModel = CreateViewModel("nothing");
+            ReportingWindowViewModel viewModel = CreateViewModel("nothing");
             viewModel.UpdateReport(ReportSeverity.Useful, ReportType.Error, ReportLocation.Unknown, "Is this added?");
 
             Assert.AreEqual(1, viewModel.Reports.GetReports().Count, "Reports should have a report added.");
@@ -53,7 +53,7 @@ namespace FinancePortfolioDatabase.Tests
         [Test]
         public void CanClearReports()
         {
-            var viewModel = CreateViewModel("nothing");
+            ReportingWindowViewModel viewModel = CreateViewModel("nothing");
             viewModel.UpdateReport(ReportSeverity.Useful, ReportType.Error, ReportLocation.Unknown, "Is this added?");
             viewModel.UpdateReport(ReportSeverity.Useful, ReportType.Error, ReportLocation.Unknown, "Is this also added?");
 
@@ -72,7 +72,7 @@ namespace FinancePortfolioDatabase.Tests
         [RequiresThread(ApartmentState.STA)]
         public void CanClearSingleReport()
         {
-            var viewModel = CreateViewModel("nothing");
+            ReportingWindowViewModel viewModel = CreateViewModel("nothing");
 
             viewModel.UpdateReport(ReportSeverity.Useful, ReportType.Error, ReportLocation.Unknown, "Is this added?");
             viewModel.UpdateReport(ReportSeverity.Useful, ReportType.Error, ReportLocation.Unknown, "Is this also added?");
@@ -92,7 +92,7 @@ namespace FinancePortfolioDatabase.Tests
 
         private ReportingWindowViewModel CreateViewModel(string filepath, ReportSeverity reportingSeverity = ReportSeverity.Detailed)
         {
-            var mockFileService = TestSetupHelper.CreateFileMock(filepath);
+            Moq.Mock<Common.UI.Services.IFileInteractionService> mockFileService = TestSetupHelper.CreateFileMock(filepath);
             ReportingWindowViewModel viewModel = new ReportingWindowViewModel(mockFileService.Object, null)
             {
                 ReportingSeverity = reportingSeverity

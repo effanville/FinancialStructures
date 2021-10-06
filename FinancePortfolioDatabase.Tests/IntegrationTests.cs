@@ -1,12 +1,12 @@
-﻿using FinancialStructures.Database;
-using FinancePortfolioDatabase.Tests.TestHelpers;
-using NUnit.Framework;
-using FinancePortfolioDatabase.GUI.ViewModels.Common;
+﻿using Common.Structure.DisplayClasses;
 using FinancePortfolioDatabase.GUI.ViewModels;
+using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancePortfolioDatabase.GUI.ViewModels.Security;
-using FinancialStructures.NamingStructures;
-using Common.Structure.DisplayClasses;
+using FinancePortfolioDatabase.Tests.TestHelpers;
 using FinancePortfolioDatabase.Tests.ViewModelExtensions;
+using FinancialStructures.Database;
+using FinancialStructures.NamingStructures;
+using NUnit.Framework;
 
 namespace FinancePortfolioDatabase.Tests
 {
@@ -46,12 +46,12 @@ namespace FinancePortfolioDatabase.Tests
         public void AddingSecurityUpdatesSuccessfully()
         {
             SecurityEditWindowViewModel securityViewModel = ViewModel.SecurityWindow();
-            var securityNames = securityViewModel.Tabs[0] as DataNamesViewModel;
-            var selectedInitialName = new SelectableEquatable<NameData>(new NameData(), false);
+            DataNamesViewModel securityNames = securityViewModel.Tabs[0] as DataNamesViewModel;
+            SelectableEquatable<NameData> selectedInitialName = new SelectableEquatable<NameData>(new NameData(), false);
             securityNames.DataNames.Add(selectedInitialName);
             securityNames.SelectionChangedCommand.Execute(selectedInitialName);
 
-            var selectedEditedName = new Selectable<NameData>(new NameData("Forgotton", "New"), false);
+            Selectable<NameData> selectedEditedName = new Selectable<NameData>(new NameData("Forgotton", "New"), false);
             securityNames.CreateCommand.Execute(selectedEditedName);
 
             Assert.AreEqual(1, securityNames.DataNames.Count);
