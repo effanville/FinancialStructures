@@ -78,7 +78,7 @@ namespace FinancialStructures.Statistics
         /// <returns>A statistic with the relevant type and no value set.</returns>
         public static IStatistic Generate(Statistic statTypeToGenerate, IPortfolio portfolio, Account account, TwoName name)
         {
-            var stats = Generate(statTypeToGenerate);
+            IStatistic stats = Generate(statTypeToGenerate);
             stats.Calculate(portfolio, account, name);
             return stats;
         }
@@ -93,7 +93,7 @@ namespace FinancialStructures.Statistics
         /// <returns>A statistic with the relevant type and no value set.</returns>
         public static IStatistic Generate(Statistic statTypeToGenerate, IPortfolio portfolio, Totals totals, TwoName name)
         {
-            var stats = Generate(statTypeToGenerate);
+            IStatistic stats = Generate(statTypeToGenerate);
             stats.Calculate(portfolio, totals, name);
             return stats;
         }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Common.Structure.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Statistics;
@@ -43,7 +44,7 @@ namespace FinancialStructures.Database.Statistics
                 }
                 case Account.All:
                 {
-                    var stats = new List<AccountStatistics>();
+                    List<AccountStatistics> stats = new List<AccountStatistics>();
                     stats.AddRange(portfolio.GetStats(Account.Security, displayValueFunds, displayTotals, statisticsToDisplay));
                     stats.AddRange(portfolio.GetStats(Account.BankAccount, displayValueFunds, displayTotals, statisticsToDisplay));
                     stats.Sort();
@@ -54,10 +55,10 @@ namespace FinancialStructures.Database.Statistics
 
         private static List<AccountStatistics> GenerateFromList(IReadOnlyList<IValueList> values, IPortfolio portfolio, Account account, bool displayValueFunds, bool displayTotals, Statistic[] statisticsToDisplay)
         {
-            var stats = new List<AccountStatistics>();
+            List<AccountStatistics> stats = new List<AccountStatistics>();
             foreach (IValueList security in values)
             {
-                var latest = security.LatestValue();
+                DailyValuation latest = security.LatestValue();
                 if ((displayValueFunds && latest?.Value > 0) || !displayValueFunds)
                 {
                     stats.Add(new AccountStatistics(portfolio, account, security.Names, statisticsToDisplay));
@@ -82,7 +83,7 @@ namespace FinancialStructures.Database.Statistics
         /// <param name="statisticsToDisplay">The array of statistics to be displayed.</param>
         public static List<AccountStatistics> GetStats(this IPortfolio portfolio, Account account, TwoName name, Statistic[] statisticsToDisplay = null)
         {
-            var stats = new List<AccountStatistics>();
+            List<AccountStatistics> stats = new List<AccountStatistics>();
             if (portfolio != null)
             {
                 switch (account)
@@ -134,7 +135,7 @@ namespace FinancialStructures.Database.Statistics
             {
                 case Totals.All:
                 {
-                    var stats = new List<AccountStatistics>
+                    List<AccountStatistics> stats = new List<AccountStatistics>
                     {
                         new AccountStatistics(portfolio, total, new NameData("Totals", "All"), statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics())
                     };
@@ -166,7 +167,7 @@ namespace FinancialStructures.Database.Statistics
 
         private static List<AccountStatistics> GenerateFromList(IReadOnlyList<string> values, IPortfolio portfolio, Totals totals, bool displayValueFunds, Statistic[] statisticsToDisplay)
         {
-            var stats = new List<AccountStatistics>();
+            List<AccountStatistics> stats = new List<AccountStatistics>();
             foreach (string company in values)
             {
                 double latest = portfolio.TotalValue(totals, new TwoName(company));
@@ -190,7 +191,7 @@ namespace FinancialStructures.Database.Statistics
         {
             if (portfolio != null)
             {
-                var stats = new List<AccountStatistics>();
+                List<AccountStatistics> stats = new List<AccountStatistics>();
                 switch (total)
                 {
                     case Totals.All:

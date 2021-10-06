@@ -36,7 +36,7 @@ namespace FinancialStructures.Database.Statistics
                     {
                         if (security.Any())
                         {
-                            var accountType = totals.ToAccount();
+                            Account accountType = totals.ToAccount();
                             ICurrency currency = portfolio.Currency(accountType, security);
                             total += security.Profit(currency, accountType);
                             ;
@@ -48,11 +48,11 @@ namespace FinancialStructures.Database.Statistics
                 case Totals.BankAccount:
                 {
                     double total = 0;
-                    foreach (var account in portfolio.BankAccountsThreadSafe)
+                    foreach (IExchangableValueList account in portfolio.BankAccountsThreadSafe)
                     {
                         if (account.Any())
                         {
-                            var accountType = totals.ToAccount();
+                            Account accountType = totals.ToAccount();
                             ICurrency currency = portfolio.Currency(accountType, account);
                             total += account.Profit(currency, accountType);
                         }
@@ -68,7 +68,7 @@ namespace FinancialStructures.Database.Statistics
                     {
                         if (account.Any())
                         {
-                            var accountType = totals.ToAccount();
+                            Account accountType = totals.ToAccount();
                             ICurrency currency = portfolio.Currency(accountType, account);
                             total += account.Profit(currency, accountType);
                         }

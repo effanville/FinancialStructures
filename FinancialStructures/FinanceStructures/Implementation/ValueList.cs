@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Xml.Serialization;
+using Common.Structure.DataStructures;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
-using Common.Structure.DataStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {
@@ -106,7 +106,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// </summary>
         protected virtual void OnDataEdit(object edited, EventArgs e)
         {
-            var args = e is PortfolioEventArgs pe ? pe : new PortfolioEventArgs();
+            PortfolioEventArgs args = e is PortfolioEventArgs pe ? pe : new PortfolioEventArgs();
             DataEdit?.Invoke(edited, args);
         }
 

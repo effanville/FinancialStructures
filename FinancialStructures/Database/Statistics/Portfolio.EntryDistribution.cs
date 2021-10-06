@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Common.Structure.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 
@@ -44,12 +45,12 @@ namespace FinancialStructures.Database.Statistics
 
         private static Dictionary<DateTime, int> EntryDistributionOf(IReadOnlyList<ISecurity> accounts)
         {
-            var totals = new Dictionary<DateTime, int>();
+            Dictionary<DateTime, int> totals = new Dictionary<DateTime, int>();
             foreach (ISecurity desired in accounts)
             {
                 if (desired.Any())
                 {
-                    foreach (var value in desired.Shares.Values())
+                    foreach (DailyValuation value in desired.Shares.Values())
                     {
                         if (totals.TryGetValue(value.Day, out _))
                         {
@@ -61,7 +62,7 @@ namespace FinancialStructures.Database.Statistics
                         }
                     }
 
-                    foreach (var priceValue in desired.UnitPrice.Values())
+                    foreach (DailyValuation priceValue in desired.UnitPrice.Values())
                     {
                         if (totals.TryGetValue(priceValue.Day, out _))
                         {
@@ -73,7 +74,7 @@ namespace FinancialStructures.Database.Statistics
                         }
                     }
 
-                    foreach (var investmentValue in desired.Investments.Values())
+                    foreach (DailyValuation investmentValue in desired.Investments.Values())
                     {
                         if (totals.TryGetValue(investmentValue.Day, out _))
                         {
@@ -92,10 +93,10 @@ namespace FinancialStructures.Database.Statistics
 
         private static Dictionary<DateTime, int> EntryDistributionOf(IReadOnlyList<IValueList> accounts)
         {
-            var totals = new Dictionary<DateTime, int>();
+            Dictionary<DateTime, int> totals = new Dictionary<DateTime, int>();
             foreach (IValueList cashAccount in accounts)
             {
-                foreach (var value in cashAccount.Values.Values())
+                foreach (DailyValuation value in cashAccount.Values.Values())
                 {
                     if (totals.TryGetValue(value.Day, out _))
                     {

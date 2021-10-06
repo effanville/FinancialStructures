@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Common.Structure.DataStructures;
+using Common.Structure.NamingStructures;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.NamingStructures;
@@ -16,10 +19,10 @@ namespace FinancialStructures.Statistics
         public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
         {
             double sum = 0.0;
-            var investments = portfolio.Investments(account, name);
+            List<Labelled<TwoName, DailyValuation>> investments = portfolio.Investments(account, name);
             if (investments != null && investments.Any())
             {
-                foreach (var investment in investments)
+                foreach (Labelled<TwoName, DailyValuation> investment in investments)
                 {
                     sum += investment.Instance.Value;
                 }
@@ -32,10 +35,10 @@ namespace FinancialStructures.Statistics
         public override void Calculate(IPortfolio portfolio, Totals total, TwoName name)
         {
             double sum = 0.0;
-            var investments = portfolio.TotalInvestments(total, name);
+            List<Labelled<TwoName, DailyValuation>> investments = portfolio.TotalInvestments(total, name);
             if (investments != null && investments.Any())
             {
-                foreach (var investment in investments)
+                foreach (Labelled<TwoName, DailyValuation> investment in investments)
                 {
                     sum += investment.Instance.Value;
                 }

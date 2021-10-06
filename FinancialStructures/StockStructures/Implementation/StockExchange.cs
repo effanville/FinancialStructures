@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Linq;
-using FinancialStructures.NamingStructures;
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
 using Common.Structure.WebAccess;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.StockStructures.Implementation
 {

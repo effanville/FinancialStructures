@@ -1,7 +1,7 @@
 ﻿using System;
-using FinancialStructures.NamingStructures;
-using Common.Structure.Extensions;
 using System.Xml.Serialization;
+using Common.Structure.Extensions;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.DataStructures
 {

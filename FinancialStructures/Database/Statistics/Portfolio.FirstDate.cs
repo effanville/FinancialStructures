@@ -48,8 +48,8 @@ namespace FinancialStructures.Database.Statistics
                 case Totals.All:
                 default:
                 {
-                    var earlySecurity = portfolio.FirstValueDate(Totals.Security);
-                    var earlyBank = portfolio.FirstValueDate(Totals.BankAccount);
+                    DateTime earlySecurity = portfolio.FirstValueDate(Totals.Security);
+                    DateTime earlyBank = portfolio.FirstValueDate(Totals.BankAccount);
                     return earlySecurity < earlyBank ? earlySecurity : earlyBank;
                 }
             }
@@ -82,7 +82,7 @@ namespace FinancialStructures.Database.Statistics
         /// <returns></returns>
         public static DateTime FirstDate(this IPortfolio portfolio, Account elementType, TwoName name)
         {
-            if (portfolio.TryGetAccount(elementType, name, out var desired))
+            if (portfolio.TryGetAccount(elementType, name, out IValueList desired))
             {
                 return desired.FirstValue()?.Day ?? DateTime.MaxValue;
             }

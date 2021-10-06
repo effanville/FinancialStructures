@@ -1,8 +1,8 @@
-﻿using System.Linq;
+﻿using Common.Structure.Extensions;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
-using Common.Structure.Extensions;
 
 namespace FinancialStructures.Statistics
 {
@@ -16,7 +16,7 @@ namespace FinancialStructures.Statistics
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
         {
-            if (!portfolio.TryGetAccount(account, name, out var bankAcc))
+            if (!portfolio.TryGetAccount(account, name, out IValueList bankAcc))
             {
                 return;
             }
@@ -27,7 +27,7 @@ namespace FinancialStructures.Statistics
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Totals total, TwoName name)
         {
-            Value = (portfolio.LatestDate(total, name) - portfolio.FirstValueDate(total, name)).Days / ((double)365 * portfolio.EntryDistribution(total, name).Count());
+            Value = (portfolio.LatestDate(total, name) - portfolio.FirstValueDate(total, name)).Days / ((double)365 * portfolio.EntryDistribution(total, name).Count);
         }
 
         /// <inheritdoc/>

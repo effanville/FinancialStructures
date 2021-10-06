@@ -34,7 +34,7 @@ namespace FinancialStructures.Statistics
         public bool IsNumeric => false;
 
         /// <inheritdoc/>
-        public object ValueAsObject => IsNumeric ? (object)Value : (object)StringValue;
+        public object ValueAsObject => IsNumeric ? Value : StringValue;
 
         /// <inheritdoc/>
         public void Calculate(IPortfolio portfolio, Account account, TwoName name)

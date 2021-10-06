@@ -1,6 +1,6 @@
-﻿using FinancialStructures.Database;
+﻿using Common.Structure.Extensions;
+using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
-using Common.Structure.Extensions;
 
 namespace FinancialStructures.Statistics
 {
@@ -33,7 +33,7 @@ namespace FinancialStructures.Statistics
         public bool IsNumeric => true;
 
         /// <inheritdoc/>
-        public object ValueAsObject => (object)ToString();
+        public object ValueAsObject => ToString();
 
         /// <summary>
         /// Constructor of an instance.

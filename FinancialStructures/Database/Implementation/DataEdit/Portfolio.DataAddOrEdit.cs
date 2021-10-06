@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using Common.Structure.DataStructures;
+using Common.Structure.Reporting;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
-using Common.Structure.DataStructures;
-using Common.Structure.Reporting;
 
 namespace FinancialStructures.Database.Implementation
 {
@@ -13,7 +13,7 @@ namespace FinancialStructures.Database.Implementation
         /// <inheritdoc/>
         public bool TryAddOrEditTradeData(Account elementType, TwoName names, SecurityTrade oldTrade, SecurityTrade newTrade, IReportLogger reportLogger = null)
         {
-            var funds = FundsThreadSafe;
+            IReadOnlyList<ISecurity> funds = FundsThreadSafe;
             for (int fundIndex = 0; fundIndex < NumberOf(Account.Security); fundIndex++)
             {
                 if (names.IsEqualTo(funds[fundIndex].Names))
@@ -29,7 +29,7 @@ namespace FinancialStructures.Database.Implementation
         /// <inheritdoc/>
         public bool TryAddOrEditDataToSecurity(TwoName names, DateTime oldDate, DateTime date, double shares, double unitPrice, double investment, SecurityTrade trade, IReportLogger reportLogger = null)
         {
-            var funds = FundsThreadSafe;
+            IReadOnlyList<ISecurity> funds = FundsThreadSafe;
             for (int fundIndex = 0; fundIndex < NumberOf(Account.Security); fundIndex++)
             {
                 if (names.IsEqualTo(funds[fundIndex].Names))

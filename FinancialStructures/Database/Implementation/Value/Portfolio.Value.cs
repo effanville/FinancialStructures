@@ -24,7 +24,7 @@ namespace FinancialStructures.Database.Implementation
                         return double.NaN;
                     }
 
-                    var security = desired as ISecurity;
+                    ISecurity security = desired as ISecurity;
                     ICurrency currency = Currency(Account.Security, security);
                     return security.Value(date, currency)?.Value ?? 0.0;
                 }
@@ -47,7 +47,7 @@ namespace FinancialStructures.Database.Implementation
                         return double.NaN;
                     }
 
-                    var bankAccount = account as IExchangableValueList;
+                    IExchangableValueList bankAccount = account as IExchangableValueList;
                     ICurrency currency = Currency(elementType, bankAccount);
                     return bankAccount.NearestEarlierValuation(date, currency)?.Value ?? 0.0;
 

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
+using Common.Structure.Reporting;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.StockStructures.Implementation;
-using Common.Structure.Reporting;
 
 namespace FinancialStructures.StockStructures
 {

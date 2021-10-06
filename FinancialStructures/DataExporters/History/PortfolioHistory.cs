@@ -32,7 +32,7 @@ namespace FinancialStructures.DataExporters.History
         /// <param name="portfolio">The portfolio to create history for.</param>
         public PortfolioHistory(IPortfolio portfolio)
         {
-            var settings = new PortfolioHistorySettings();
+            PortfolioHistorySettings settings = new PortfolioHistorySettings();
             if (ShouldMultiThread(portfolio, settings, forceMultiThreading: false))
             {
                 GenerateHistoryStatsMulti(portfolio, settings);
@@ -81,7 +81,7 @@ namespace FinancialStructures.DataExporters.History
 
         private static List<DateTime> PrepareTimes(IPortfolio portfolio, PortfolioHistorySettings settings)
         {
-            var times = new List<DateTime>();
+            List<DateTime> times = new List<DateTime>();
             if (!settings.SnapshotIncrement.Equals(0))
             {
                 DateTime calculationDate = portfolio.FirstValueDate(Totals.All);
@@ -101,7 +101,7 @@ namespace FinancialStructures.DataExporters.History
         private void GenerateHistoryStats(IPortfolio portfolio, PortfolioHistorySettings settings)
         {
             List<PortfolioDaySnapshot> outputs = new List<PortfolioDaySnapshot>();
-            foreach (var time in PrepareTimes(portfolio, settings))
+            foreach (DateTime time in PrepareTimes(portfolio, settings))
             {
                 PortfolioDaySnapshot calcuationDateStatistics = new PortfolioDaySnapshot(time, portfolio, settings.GenerateSecurityRates, settings.GenerateSectorRates);
                 outputs.Add(calcuationDateStatistics);
@@ -113,13 +113,13 @@ namespace FinancialStructures.DataExporters.History
 
         private void GenerateHistoryStatsMulti(IPortfolio portfolio, PortfolioHistorySettings settings)
         {
-            var bag = new ConcurrentBag<PortfolioDaySnapshot>();
-            var tasks = new List<Task>();
-            foreach (var time in PrepareTimes(portfolio, settings))
+            ConcurrentBag<PortfolioDaySnapshot> bag = new ConcurrentBag<PortfolioDaySnapshot>();
+            List<Task> tasks = new List<Task>();
+            foreach (DateTime time in PrepareTimes(portfolio, settings))
             {
-                var task = Task.Run(() =>
+                Task task = Task.Run(() =>
                 {
-                    var snapshot = new PortfolioDaySnapshot(time, portfolio, settings.GenerateSecurityRates, settings.GenerateSectorRates);
+                    PortfolioDaySnapshot snapshot = new PortfolioDaySnapshot(time, portfolio, settings.GenerateSecurityRates, settings.GenerateSectorRates);
                     bag.Add(snapshot);
                 });
                 tasks.Add(task);

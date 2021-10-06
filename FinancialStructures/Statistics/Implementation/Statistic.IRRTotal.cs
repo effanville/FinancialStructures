@@ -1,5 +1,5 @@
-﻿using FinancialStructures.Database.Statistics;
-using FinancialStructures.Database;
+﻿using FinancialStructures.Database;
+using FinancialStructures.Database.Statistics;
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Statistics

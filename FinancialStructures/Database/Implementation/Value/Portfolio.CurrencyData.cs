@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Implementation;
 
@@ -17,8 +18,8 @@ namespace FinancialStructures.Database.Implementation
                 case Account.BankAccount:
                 {
                     string currencyName = valueList.Names.Currency;
-                    var currencies = CurrenciesThreadSafe;
-                    foreach (var curr in currencies)
+                    IReadOnlyList<ICurrency> currencies = CurrenciesThreadSafe;
+                    foreach (ICurrency curr in currencies)
                     {
                         if (curr.BaseCurrency == currencyName && curr.QuoteCurrency == BaseCurrency)
                         {

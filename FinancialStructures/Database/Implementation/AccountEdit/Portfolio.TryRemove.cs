@@ -1,6 +1,6 @@
-﻿using FinancialStructures.FinanceStructures.Implementation;
+﻿using Common.Structure.Reporting;
+using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
-using Common.Structure.Reporting;
 
 namespace FinancialStructures.Database.Implementation
 {

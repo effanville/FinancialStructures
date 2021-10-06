@@ -15,7 +15,7 @@ namespace FinancialStructures.Statistics
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
         {
-            if (!portfolio.TryGetAccount(account, name, out var desired))
+            if (!portfolio.TryGetAccount(account, name, out IValueList desired))
             {
                 Value = 0.0;
             }

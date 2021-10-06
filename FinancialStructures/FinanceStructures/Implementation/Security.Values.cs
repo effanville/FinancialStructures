@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using FinancialStructures.DataStructures;
-using Common.Structure.DataStructures;
 using System.Linq;
-using FinancialStructures.NamingStructures;
+using Common.Structure.DataStructures;
 using Common.Structure.NamingStructures;
+using FinancialStructures.DataStructures;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {
@@ -18,7 +18,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             _ = UnitPrice.TryGetValue(day, out double unitPrice);
             _ = Shares.TryGetValue(day, out double shares);
             _ = Investments.TryGetValue(day, out double invest);
-            var trade = SecurityTrades.Where(t => t.Day.Equals(day)).FirstOrDefault();
+            SecurityTrade trade = SecurityTrades.Where(t => t.Day.Equals(day)).FirstOrDefault();
             return new SecurityDayData(day, unitPrice, shares, invest, trade);
         }
 
@@ -45,9 +45,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// </summary>
         public override List<DailyValuation> ListOfValues()
         {
-            var output = GetDataForDisplay();
+            IReadOnlyList<SecurityDayData> output = GetDataForDisplay();
             List<DailyValuation> thing = new List<DailyValuation>();
-            foreach (var dateValue in output)
+            foreach (SecurityDayData dateValue in output)
             {
                 thing.Add(new DailyValuation(dateValue.Date, dateValue.Value));
             }

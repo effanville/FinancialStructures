@@ -243,7 +243,7 @@ namespace FinancialStructures.Database.Implementation
         /// <inheritdoc/>
         public void CleanData()
         {
-            foreach (var security in FundsThreadSafe)
+            foreach (ISecurity security in FundsThreadSafe)
             {
                 security.CleanData();
             }

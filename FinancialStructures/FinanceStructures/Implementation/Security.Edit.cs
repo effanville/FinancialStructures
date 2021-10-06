@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
-using FinancialStructures.DataStructures;
 using Common.Structure.DataStructures;
 using Common.Structure.Reporting;
-using System.Globalization;
+using FinancialStructures.DataStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {

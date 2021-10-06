@@ -1,7 +1,8 @@
-﻿using FinancialStructures.Database;
+﻿using Common.Structure.Extensions;
+using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
-using Common.Structure.Extensions;
 
 namespace FinancialStructures.Statistics
 {
@@ -36,12 +37,12 @@ namespace FinancialStructures.Statistics
         public bool IsNumeric => false;
 
         /// <inheritdoc/>
-        public object ValueAsObject => IsNumeric ? (object)Value : (object)StringValue;
+        public object ValueAsObject => IsNumeric ? Value : StringValue;
 
         /// <inheritdoc/>
         public void Calculate(IPortfolio portfolio, Account account, TwoName name)
         {
-            if (!portfolio.TryGetAccount(account, name, out var desired))
+            if (!portfolio.TryGetAccount(account, name, out IValueList desired))
             {
                 return;
             }

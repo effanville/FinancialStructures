@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
 using Common.Structure.DataStructures;
 using Common.Structure.FinanceFunctions;
+using FinancialStructures.FinanceStructures;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Statistics
 {
@@ -129,7 +129,7 @@ namespace FinancialStructures.Database.Statistics
                 {
                     if (portfolio.TryGetAccount(accountType, names, out IValueList account))
                     {
-                        var desired = account as ISecurity;
+                        ISecurity desired = account as ISecurity;
                         if (desired.Any())
                         {
                             ICurrency currency = portfolio.Currency(Account.Security, desired);
@@ -171,7 +171,7 @@ namespace FinancialStructures.Database.Statistics
                 {
                     if (portfolio.TryGetAccount(accountType, names, out IValueList account))
                     {
-                        var desired = account as ISecurity;
+                        ISecurity desired = account as ISecurity;
                         if (desired.Any())
                         {
                             ICurrency currency = portfolio.Currency(Account.Security, desired);

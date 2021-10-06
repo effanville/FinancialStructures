@@ -54,9 +54,9 @@ namespace FinancialStructures.Statistics
         {
             NameData = name;
 
-            foreach (var stat in statsToGenerate)
+            foreach (Statistic stat in statsToGenerate)
             {
-                var stats = StatisticFactory.Generate(stat, portfolio, account, name);
+                IStatistic stats = StatisticFactory.Generate(stat, portfolio, account, name);
                 Statistics.Add(stats);
             }
         }
@@ -72,16 +72,16 @@ namespace FinancialStructures.Statistics
         {
             NameData = name;
 
-            foreach (var stat in statsToGenerate)
+            foreach (Statistic stat in statsToGenerate)
             {
-                var stats = StatisticFactory.Generate(stat, portfolio, total, name);
+                IStatistic stats = StatisticFactory.Generate(stat, portfolio, total, name);
                 Statistics.Add(stats);
             }
         }
 
         internal IStatistic GetStatistic(Statistic field)
         {
-            foreach (var stat in Statistics)
+            foreach (IStatistic stat in Statistics)
             {
                 if (stat.StatType == field)
                 {

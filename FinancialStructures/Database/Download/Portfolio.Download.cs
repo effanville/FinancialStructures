@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
 using Common.Structure.Reporting;
 using Common.Structure.WebAccess;
+using FinancialStructures.FinanceStructures;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Download
 {
@@ -24,7 +24,7 @@ namespace FinancialStructures.Database.Download
         /// <returns></returns>
         public static async Task Download(Account accountType, IPortfolio portfolio, TwoName names, IReportLogger reportLogger = null)
         {
-            var downloadTasks = new List<Task>();
+            List<Task> downloadTasks = new List<Task>();
             if (accountType == Account.All)
             {
                 downloadTasks.AddRange(DownloadPortfolioLatest(portfolio, reportLogger));
@@ -74,7 +74,7 @@ namespace FinancialStructures.Database.Download
 
         private static List<Task> DownloadPortfolioLatest(IPortfolio portfo, IReportLogger reportLogger)
         {
-            var downloadTasks = new List<Task>();
+            List<Task> downloadTasks = new List<Task>();
             foreach (ISecurity sec in portfo.FundsThreadSafe)
             {
                 if (!string.IsNullOrEmpty(sec.Names.Url))

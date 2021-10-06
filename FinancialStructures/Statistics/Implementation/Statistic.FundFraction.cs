@@ -1,8 +1,8 @@
 ﻿using System;
-using FinancialStructures.Database.Statistics;
-using FinancialStructures.Database;
-using FinancialStructures.NamingStructures;
 using Common.Structure.Extensions;
+using FinancialStructures.Database;
+using FinancialStructures.Database.Statistics;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Statistics
 {

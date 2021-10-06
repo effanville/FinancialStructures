@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Common.Structure.Extensions;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.NamingStructures;
-using Common.Structure.Extensions;
-using System.Linq;
 
 namespace FinancialStructures.DataExporters.History
 {
@@ -110,17 +110,17 @@ namespace FinancialStructures.DataExporters.History
                 "SecurityTotal"
             };
 
-            foreach (var value in SecurityValues)
+            foreach (KeyValuePair<string, double> value in SecurityValues)
             {
                 headers.Add(value.Key);
             }
 
-            foreach (var value in BankAccValues)
+            foreach (KeyValuePair<string, double> value in BankAccValues)
             {
                 headers.Add(value.Key);
             }
 
-            foreach (var value in SectorValues)
+            foreach (KeyValuePair<string, double> value in SectorValues)
             {
                 headers.Add(value.Key);
             }
@@ -142,17 +142,17 @@ namespace FinancialStructures.DataExporters.History
                 SecurityValue.TruncateToString()
             };
 
-            foreach (var value in SecurityValues)
+            foreach (KeyValuePair<string, double> value in SecurityValues)
             {
                 values.Add(value.Value.TruncateToString());
             }
 
-            foreach (var value in BankAccValues)
+            foreach (KeyValuePair<string, double> value in BankAccValues)
             {
                 values.Add(value.Value.TruncateToString());
             }
 
-            foreach (var value in SectorValues)
+            foreach (KeyValuePair<string, double> value in SectorValues)
             {
                 values.Add(value.Value.TruncateToString());
             }
@@ -199,7 +199,7 @@ namespace FinancialStructures.DataExporters.History
                 {
                     Security1YrCar.Add(companyName, portfolio.TotalIRR(Totals.SecurityCompany, date.AddDays(-365), date, new TwoName(companyName)));
 
-                    var firstDate = portfolio.FirstValueDate(Totals.SecurityCompany, new TwoName(companyName));
+                    DateTime firstDate = portfolio.FirstValueDate(Totals.SecurityCompany, new TwoName(companyName));
                     double totalIRR = date < firstDate ? 0.0 : portfolio.TotalIRR(Totals.SecurityCompany, firstDate, date, new TwoName(companyName));
                     SecurityTotalCar.Add(companyName, totalIRR);
                 }
@@ -225,7 +225,7 @@ namespace FinancialStructures.DataExporters.History
 
                 if (generateRates)
                 {
-                    var firstDate = portfolio.FirstValueDate(Totals.Sector, new TwoName(null, sectorName));
+                    DateTime firstDate = portfolio.FirstValueDate(Totals.Sector, new TwoName(null, sectorName));
                     double sectorCAR = date < firstDate ? 0.0 : portfolio.TotalIRR(Totals.Sector, firstDate, date, new TwoName(null, sectorName));
                     CurrentSectorTotalCar.Add(sectorName, sectorCAR);
                 }

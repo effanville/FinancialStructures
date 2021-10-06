@@ -22,7 +22,7 @@ namespace FinancialStructures.Database.Implementation
         /// <inheritdoc/>
         public IReadOnlyList<string> Sectors(Account elementType)
         {
-            var sectors = NameData(elementType).SelectMany(name => name.Sectors).Distinct().ToList();
+            List<string> sectors = NameData(elementType).SelectMany(name => name.Sectors).Distinct().ToList();
             sectors.Sort();
             return sectors;
         }

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using FinancialStructures.DataStructures;
 using Common.Structure.DataStructures;
 using Common.Structure.FileAccess;
-using Common.Structure.Reporting;
-using FinancialStructures.NamingStructures;
 using Common.Structure.NamingStructures;
+using Common.Structure.Reporting;
+using FinancialStructures.DataStructures;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.FinanceStructures
 {

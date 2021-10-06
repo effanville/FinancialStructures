@@ -1,4 +1,5 @@
 ﻿using FinancialStructures.Database;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Statistics
@@ -34,7 +35,7 @@ namespace FinancialStructures.Statistics
         public bool IsNumeric => false;
 
         /// <inheritdoc/>
-        public object ValueAsObject => IsNumeric ? (object)Value : (object)StringValue;
+        public object ValueAsObject => IsNumeric ? Value : StringValue;
 
         /// <inheritdoc/>
         public void Calculate(IPortfolio portfolio, Account account, TwoName name)
@@ -45,7 +46,7 @@ namespace FinancialStructures.Statistics
                 case Account.BankAccount:
                 case Account.Currency:
                 {
-                    if (!portfolio.TryGetAccount(account, name, out var desired))
+                    if (!portfolio.TryGetAccount(account, name, out IValueList desired))
                     {
                         return;
                     }

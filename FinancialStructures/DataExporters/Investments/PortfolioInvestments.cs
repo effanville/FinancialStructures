@@ -53,7 +53,7 @@ namespace FinancialStructures.DataExporters.Investments
                 using (StreamWriter fileWriter = new StreamWriter(stream))
                 {
                     List<List<string>> valuesToWrite = new List<List<string>>();
-                    foreach (var stats in Investments)
+                    foreach (Labelled<TwoName, DailyValuation> stats in Investments)
                     {
                         valuesToWrite.Add(new List<string> { stats.Instance.Day.ToShortDateString(), stats.Label.Company, stats.Label.Name, stats.Instance.Value.ToString() });
                     }

@@ -49,8 +49,8 @@ namespace FinancialStructures.Database.Statistics
                 case Totals.All:
                 default:
                 {
-                    var earlySecurity = portfolio.LatestDate(Totals.Security);
-                    var earlyBank = portfolio.LatestDate(Totals.BankAccount);
+                    DateTime earlySecurity = portfolio.LatestDate(Totals.Security);
+                    DateTime earlyBank = portfolio.LatestDate(Totals.BankAccount);
                     return earlySecurity > earlyBank ? earlySecurity : earlyBank;
                 }
             }
@@ -83,7 +83,7 @@ namespace FinancialStructures.Database.Statistics
         /// <returns></returns>
         public static DateTime LatestDate(this IPortfolio portfolio, Account elementType, TwoName name)
         {
-            if (portfolio.TryGetAccount(elementType, name, out var desired))
+            if (portfolio.TryGetAccount(elementType, name, out IValueList desired))
             {
                 return desired.LatestValue()?.Day ?? DateTime.MinValue;
             }

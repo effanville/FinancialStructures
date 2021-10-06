@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
 using FinancialStructures.FinanceStructures.Statistics;
-using System.Linq;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Statistics
 {
@@ -107,7 +106,7 @@ namespace FinancialStructures.Database.Statistics
                 {
                     if (portfolio.TryGetAccount(Account.Security, names, out IValueList account) && account.Any())
                     {
-                        var exchangeValueList = account as IExchangableValueList;
+                        IExchangableValueList exchangeValueList = account as IExchangableValueList;
                         ICurrency currency = portfolio.Currency(elementType, exchangeValueList);
                         return exchangeValueList.RecentChange(currency);
                     }

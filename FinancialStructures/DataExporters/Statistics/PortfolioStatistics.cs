@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
+using Common.Structure.FileAccess;
+using Common.Structure.Reporting;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Statistics;
-using Common.Structure.FileAccess;
-using Common.Structure.Reporting;
 
 namespace FinancialStructures.DataExporters.Statistics
 {
