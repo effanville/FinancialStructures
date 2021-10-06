@@ -43,7 +43,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <summary>
-        /// Retrieves data in a list ordered by date.
+        /// Retrieves a copy of all the data in a list ordered by date.
         /// </summary>
         public virtual List<DailyValuation> ListOfValues()
         {

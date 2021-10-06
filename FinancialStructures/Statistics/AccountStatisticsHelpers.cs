@@ -90,11 +90,48 @@ namespace FinancialStructures.Statistics
         }
 
         /// <summary>
+        /// Returns those statistic types suitable for securities.
+        /// </summary>
+        public static Statistic[] DefaultSecurityStats()
+        {
+            return new Statistic[]
+            {
+                Statistic.Company,
+                Statistic.Name,
+                Statistic.LatestValue,
+                Statistic.UnitPrice,
+                Statistic.NumberUnits,
+                Statistic.RecentChange,
+                Statistic.FundFraction,
+                Statistic.FundCompanyFraction,
+                Statistic.Investment,
+                Statistic.Profit,
+                Statistic.IRR3M,
+                Statistic.IRR6M,
+                Statistic.IRR1Y,
+                Statistic.IRR5Y,
+                Statistic.IRRTotal,
+                Statistic.Sectors,
+                Statistic.FirstDate,
+                Statistic.LatestDate,
+                Statistic.NumberEntries,
+                Statistic.EntryYearDensity,
+                Statistic.Notes
+            };
+        }
+
+        /// <summary>
         /// Returns those statistic types suitable for Bank Accounts.
         /// </summary>
         public static Statistic[] DefaultBankAccountStats()
         {
-            return new Statistic[] { Statistic.Company, Statistic.Name, Statistic.LatestValue, Statistic.Notes };
+            return new Statistic[]
+            {
+                Statistic.Company,
+                Statistic.Name,
+                Statistic.LatestValue,
+                Statistic.Notes
+            };
         }
 
         /// <summary>
@@ -102,7 +139,23 @@ namespace FinancialStructures.Statistics
         /// </summary>
         public static Statistic[] DefaultSectorStats()
         {
-            return new Statistic[] { Statistic.Company, Statistic.Name, Statistic.LatestValue, Statistic.RecentChange, Statistic.Profit, Statistic.IRR3M, Statistic.IRR6M, Statistic.IRR1Y, Statistic.IRR5Y, Statistic.IRRTotal, Statistic.NumberOfAccounts, Statistic.FirstDate, Statistic.LatestDate, Statistic.Notes };
+            return new Statistic[]
+            {
+                Statistic.Company,
+                Statistic.Name,
+                Statistic.LatestValue,
+                Statistic.RecentChange,
+                Statistic.Profit,
+                Statistic.IRR3M,
+                Statistic.IRR6M,
+                Statistic.IRR1Y,
+                Statistic.IRR5Y,
+                Statistic.IRRTotal,
+                Statistic.NumberOfAccounts,
+                Statistic.FirstDate,
+                Statistic.LatestDate,
+                Statistic.Notes
+            };
         }
 
         /// <summary>
@@ -110,7 +163,15 @@ namespace FinancialStructures.Statistics
         /// </summary>
         public static Statistic[] DefaultDatabaseStatistics()
         {
-            return new Statistic[] { Statistic.Company, Statistic.Name, Statistic.FirstDate, Statistic.LatestDate, Statistic.NumberEntries, Statistic.EntryYearDensity };
+            return new Statistic[]
+            {
+                Statistic.Company,
+                Statistic.Name,
+                Statistic.FirstDate,
+                Statistic.LatestDate,
+                Statistic.NumberEntries,
+                Statistic.EntryYearDensity
+            };
         }
     }
 }

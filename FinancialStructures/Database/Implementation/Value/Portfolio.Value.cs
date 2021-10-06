@@ -17,7 +17,7 @@ namespace FinancialStructures.Database.Implementation
         {
             switch (elementType)
             {
-                case (Account.Security):
+                case Account.Security:
                 {
                     if (!TryGetAccount(Account.Security, name, out IValueList desired) || !desired.Any())
                     {
@@ -28,17 +28,19 @@ namespace FinancialStructures.Database.Implementation
                     ICurrency currency = Currency(Account.Security, security);
                     return security.Value(date, currency)?.Value ?? 0.0;
                 }
-                case (Account.Currency):
-                case (Account.Benchmark):
+                case Account.Currency:
+                case Account.Benchmark:
                 {
                     if (!TryGetAccount(elementType, name, out IValueList desired))
                     {
+                        // If doesnt exist, the default here is 1.0, as these values would
+                        // be used in a multiplicative instance.
                         return 1.0;
                     }
 
                     return desired.Value(date)?.Value ?? 0.0;
                 }
-                case (Account.BankAccount):
+                case Account.BankAccount:
                 {
                     if (!TryGetAccount(elementType, name, out IValueList account))
                     {

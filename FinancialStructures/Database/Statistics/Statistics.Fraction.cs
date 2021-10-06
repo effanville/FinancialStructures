@@ -24,7 +24,6 @@ namespace FinancialStructures.Database.Statistics
             return 0.0;
         }
 
-
         /// <summary>
         /// Returns the fraction of investments in the Totals out of the value in the portfolio.
         /// </summary>

@@ -21,100 +21,55 @@ namespace FinancialStructures.Database.Statistics
         /// <param name="statisticsToDisplay">The array of statistics to be displayed</param>
         public static List<AccountStatistics> GetStats(this IPortfolio portfolio, Account account, bool displayValueFunds, bool displayTotals = true, Statistic[] statisticsToDisplay = null)
         {
-            if (portfolio != null)
+            switch (account)
             {
-                var stats = new List<AccountStatistics>();
-                switch (account)
+                case Account.Security:
+                default:
                 {
-                    case Account.Security:
-                    default:
-                    {
-                        foreach (ISecurity security in portfolio.FundsThreadSafe)
-                        {
-                            var latest = security.LatestValue();
-                            if ((displayValueFunds && latest?.Value > 0) || !displayValueFunds)
-                            {
-                                stats.Add(new AccountStatistics(portfolio, account, security.Names, statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics()));
-                            }
-                        }
+                    return GenerateFromList(portfolio.FundsThreadSafe, portfolio, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats());
 
-                        stats.Sort();
-                        if (displayTotals)
-                        {
-                            stats.Add(new AccountStatistics(portfolio, Totals.Security, new NameData("Totals", ""), statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics()));
-                        }
-                        break;
-                    }
-                    case Account.BankAccount:
-                    {
-                        foreach (IExchangableValueList acc in portfolio.BankAccountsThreadSafe)
-                        {
-                            var latest = acc.LatestValue();
-                            if ((displayValueFunds && latest?.Value > 0) || !displayValueFunds)
-                            {
-                                stats.Add(new AccountStatistics(portfolio, account, acc.Names, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
-                            }
-                        }
-
-                        stats.Sort();
-
-                        if (displayTotals)
-                        {
-                            stats.Add(new AccountStatistics(portfolio, Totals.BankAccount, new NameData("Totals", ""), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
-                        }
-                        break;
-                    }
-                    case Account.Benchmark:
-                    {
-                        foreach (IValueList acc in portfolio.BenchMarksThreadSafe)
-                        {
-                            var latest = acc.LatestValue();
-                            if ((displayValueFunds && latest?.Value > 0) || !displayValueFunds)
-                            {
-                                stats.Add(new AccountStatistics(portfolio, account, acc.Names, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats()));
-                            }
-                        }
-
-                        stats.Sort();
-
-                        if (displayTotals)
-                        {
-
-                            stats.Add(new AccountStatistics(portfolio, Totals.Benchmark, new NameData("Totals", ""), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats()));
-                        }
-                        break;
-                    }
-                    case Account.Currency:
-                    {
-                        foreach (ICurrency acc in portfolio.CurrenciesThreadSafe)
-                        {
-                            var latest = acc.LatestValue();
-                            if ((displayValueFunds && latest?.Value > 0) || !displayValueFunds)
-                            {
-                                stats.Add(new AccountStatistics(portfolio, account, acc.Names, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
-                            }
-                        }
-
-                        stats.Sort();
-                        if (displayTotals)
-                        {
-                            stats.Add(new AccountStatistics(portfolio, Totals.Currency, new NameData("Totals", ""), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
-                        }
-                        break;
-                    }
-                    case Account.All:
-                    {
-                        stats.AddRange(portfolio.GetStats(Account.Security, displayValueFunds, displayTotals, statisticsToDisplay));
-                        stats.AddRange(portfolio.GetStats(Account.BankAccount, displayValueFunds, displayTotals, statisticsToDisplay));
-                        stats.Sort();
-                        break;
-                    }
                 }
+                case Account.BankAccount:
+                {
+                    return GenerateFromList(portfolio.BankAccountsThreadSafe, portfolio, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats());
+                }
+                case Account.Benchmark:
+                {
+                    return GenerateFromList(portfolio.BenchMarksThreadSafe, portfolio, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats());
+                }
+                case Account.Currency:
+                {
+                    return GenerateFromList(portfolio.CurrenciesThreadSafe, portfolio, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats());
+                }
+                case Account.All:
+                {
+                    var stats = new List<AccountStatistics>();
+                    stats.AddRange(portfolio.GetStats(Account.Security, displayValueFunds, displayTotals, statisticsToDisplay));
+                    stats.AddRange(portfolio.GetStats(Account.BankAccount, displayValueFunds, displayTotals, statisticsToDisplay));
+                    stats.Sort();
+                    return stats;
+                }
+            }
+        }
 
-                return stats;
+        private static List<AccountStatistics> GenerateFromList(IReadOnlyList<IValueList> values, IPortfolio portfolio, Account account, bool displayValueFunds, bool displayTotals, Statistic[] statisticsToDisplay)
+        {
+            var stats = new List<AccountStatistics>();
+            foreach (IValueList security in values)
+            {
+                var latest = security.LatestValue();
+                if ((displayValueFunds && latest?.Value > 0) || !displayValueFunds)
+                {
+                    stats.Add(new AccountStatistics(portfolio, account, security.Names, statisticsToDisplay));
+                }
             }
 
-            return null;
+            stats.Sort();
+            if (displayTotals)
+            {
+                stats.Add(new AccountStatistics(portfolio, account.ToTotals(), new NameData("Totals", ""), statisticsToDisplay));
+            }
+            return stats;
         }
 
         /// <summary>
@@ -135,7 +90,7 @@ namespace FinancialStructures.Database.Statistics
                     case Account.Security:
                     default:
                     {
-                        stats.Add(new AccountStatistics(portfolio, account, name, statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics()));
+                        stats.Add(new AccountStatistics(portfolio, account, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats()));
 
                         break;
                     }
@@ -175,71 +130,52 @@ namespace FinancialStructures.Database.Statistics
         /// <param name="statisticsToDisplay">The array of statistics to be displayed.</param>
         public static List<AccountStatistics> GetStats(this IPortfolio portfolio, Totals total, bool displayValueFunds = true, Statistic[] statisticsToDisplay = null)
         {
-            if (portfolio != null)
+            switch (total)
             {
-                var stats = new List<AccountStatistics>();
-                switch (total)
+                case Totals.All:
                 {
-                    case Totals.All:
+                    var stats = new List<AccountStatistics>
                     {
-                        stats.Add(new AccountStatistics(portfolio, total, new NameData("Totals", "All"), statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics()));
-                        break;
-                    }
-                    case Totals.Security:
-                    case Totals.SecurityCompany:
-                    case Totals.SecuritySector:
-                    default:
-                    {
-                        foreach (string company in portfolio.Companies(total.ToAccount()))
-                        {
-                            double latest = portfolio.TotalValue(total, new TwoName(company));
-                            if ((displayValueFunds && latest > 0) || !displayValueFunds)
-                            {
-                                stats.Add(new AccountStatistics(portfolio, total, new NameData(company, "Totals"), statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics()));
-                            }
-                        }
-
-                        break;
-                    }
-                    case Totals.BankAccount:
-                    case Totals.BankAccountCompany:
-                    {
-                        foreach (string bankAccount in portfolio.Companies(total.ToAccount()))
-                        {
-                            double latest = portfolio.TotalValue(total, new TwoName(bankAccount));
-                            if ((displayValueFunds && latest > 0) || !displayValueFunds)
-                            {
-                                stats.Add(new AccountStatistics(portfolio, total, new NameData(bankAccount, "Totals"), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
-                            }
-                        }
-                        break;
-                    }
-                    case Totals.BankAccountSector:
-                    {
-                        foreach (string bankAccount in portfolio.Companies(total.ToAccount()))
-                        {
-                            double latest = portfolio.TotalValue(total, new TwoName(bankAccount));
-                            if ((displayValueFunds && latest > 0) || !displayValueFunds)
-                            {
-                                stats.Add(new AccountStatistics(portfolio, total, new NameData(bankAccount, "Totals"), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats()));
-                            }
-                        }
-                        break;
-                    }
-                    case Totals.Benchmark:
-                    {
-                        break;
-                    }
-                    case Totals.Currency:
-                    {
-                        break;
-                    }
+                        new AccountStatistics(portfolio, total, new NameData("Totals", "All"), statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics())
+                    };
+                    return stats;
                 }
-
-                return stats;
+                case Totals.Security:
+                case Totals.SecurityCompany:
+                case Totals.SecuritySector:
+                default:
+                {
+                    return GenerateFromList(portfolio.Companies(total.ToAccount()), portfolio, total, displayValueFunds, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats());
+                }
+                case Totals.BankAccount:
+                case Totals.BankAccountCompany:
+                {
+                    return GenerateFromList(portfolio.Companies(total.ToAccount()), portfolio, total, displayValueFunds, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats());
+                }
+                case Totals.BankAccountSector:
+                {
+                    return GenerateFromList(portfolio.Companies(total.ToAccount()), portfolio, total, displayValueFunds, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats());
+                }
+                case Totals.Benchmark:
+                case Totals.Currency:
+                {
+                    return null;
+                }
             }
+        }
 
-            return null;
+        private static List<AccountStatistics> GenerateFromList(IReadOnlyList<string> values, IPortfolio portfolio, Totals totals, bool displayValueFunds, Statistic[] statisticsToDisplay)
+        {
+            var stats = new List<AccountStatistics>();
+            foreach (string company in values)
+            {
+                double latest = portfolio.TotalValue(totals, new TwoName(company));
+                if ((displayValueFunds && latest > 0) || !displayValueFunds)
+                {
+                    stats.Add(new AccountStatistics(portfolio, totals, new NameData(company, "Totals"), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats()));
+                }
+            }
+            return stats;
         }
 
         /// <summary>
@@ -261,7 +197,7 @@ namespace FinancialStructures.Database.Statistics
                     default:
                     case Totals.Security:
                     {
-                        stats.Add(new AccountStatistics(portfolio, total, new TwoName("Totals", total.ToString()), statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics()));
+                        stats.Add(new AccountStatistics(portfolio, total, new TwoName("Totals", total.ToString()), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats()));
                         break;
                     }
                     case Totals.BankAccount:
@@ -279,7 +215,7 @@ namespace FinancialStructures.Database.Statistics
                     case Totals.SecuritySector:
                     case Totals.SecurityCompany:
                     {
-                        stats.Add(new AccountStatistics(portfolio, total, name, statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics()));
+                        stats.Add(new AccountStatistics(portfolio, total, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats()));
                         break;
                     }
                     case Totals.Sector:

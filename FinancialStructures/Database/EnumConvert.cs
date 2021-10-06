@@ -76,7 +76,6 @@
             }
         }
 
-
         /// <summary>
         /// Converts a Account enum to a Totals enum.
         /// </summary>
