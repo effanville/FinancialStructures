@@ -41,9 +41,9 @@ namespace FinancialStructures.Tests.Database.DataAccess
                 case Account.Currency:
                 {
                     DatabaseConstructor constructor = new DatabaseConstructor();
-                    _ = constructor.WithCurrencyFromName(company1, name1);
-                    _ = constructor.WithCurrencyFromName(company2, name2);
-                    _ = constructor.WithCurrencyFromName(company3, name3);
+                    _ = constructor.WithCurrency(company1, name1);
+                    _ = constructor.WithCurrency(company2, name2);
+                    _ = constructor.WithCurrency(company3, name3);
                     return constructor;
                 }
                 default:

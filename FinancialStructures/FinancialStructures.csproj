@@ -5,6 +5,7 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PublishTrimmed>true</PublishTrimmed>
     <TrimMode>CopyUsed</TrimMode>
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>

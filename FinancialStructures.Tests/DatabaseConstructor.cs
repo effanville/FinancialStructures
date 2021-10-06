@@ -121,6 +121,31 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             }
         }
 
+        public DatabaseConstructor WithAccountFromName(Account accType, string company, string name, string currency = null, string url = null, string sectors = null)
+        {
+            switch (accType)
+            {
+                case Account.Security:
+                {
+                    return WithSecurity(company, name, currency, url, sectors);
+                }
+                case Account.BankAccount:
+                {
+                    return WithBankAccount(company, name, currency, url, sectors);
+                }
+                case Account.Currency:
+                {
+                    return WithCurrencyFromNameAndData(company, name, currency, url);
+                }
+                case Account.Benchmark:
+                {
+                    return WithSectorFromName(company, name, currency, url);
+                }
+                default:
+                    return null;
+            }
+        }
+
         public DatabaseConstructor WithDefaultSecurity()
         {
             Database.Funds.Add(SecurityConstructor.Default().Item);
@@ -179,7 +204,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             return WithCurrencyFromNameAndData(DefaultCurrencyCompany, DefaultCurrencyName, date: DefaultCurrencyDateTimes, value: DefaultCurrencyValues);
         }
 
-        public DatabaseConstructor WithCurrencyFromName(string company, string name, string url = null, string sectors = null)
+        public DatabaseConstructor WithCurrency(string company, string name, string url = null, string sectors = null)
         {
             Database.Currencies.Add(new CurrencyConstructor(company, name, null, url, sectors).item);
             return this;

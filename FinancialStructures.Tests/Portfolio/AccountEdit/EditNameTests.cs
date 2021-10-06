@@ -12,81 +12,56 @@ namespace FinancialStructures.Tests.Database.AccountEdit
     [TestFixture]
     public sealed class EditNameTests
     {
-        private readonly string BaseCompanyName = "someCompany";
-        private readonly string BaseName = "someName";
-        private readonly string NewCompanyName = "newCompany";
-        private readonly string NewName = "newName";
+        private const string BaseCompanyName = "someCompany";
+        private const string BaseName = "someName";
+        private const string NewCompanyName = "newCompany";
+        private const string NewName = "newName";
 
-        [Test]
-        public void CanEditSecurityName()
+        private static IEnumerable<TestCaseData> SecurityCases()
         {
             DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity(BaseCompanyName, BaseName);
-
-            Portfolio database = constructor.Database;
-
-            _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
-
-            NameData accountNames = database.Funds.First().Names;
-            Assert.AreEqual(NewName, accountNames.Name);
-            Assert.AreEqual(NewCompanyName, accountNames.Company);
-        }
-
-        [Test]
-        public void CanEditSecurityUrl()
-        {
-            DatabaseConstructor constructor = new DatabaseConstructor();
+            yield return new TestCaseData(constructor.Database, NewCompanyName, NewName, null, null, new HashSet<string>()).SetName("CanEditSecurityName");
+            constructor = new DatabaseConstructor();
+            _ = constructor.WithSecurity(BaseCompanyName, BaseName);
+            yield return new TestCaseData(constructor.Database, NewCompanyName, NewName, null, null, null).SetName("CanEditSecurityNameNullSectors");
+            constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity(BaseCompanyName, BaseName, url: "http://www.google.com");
-
-            Portfolio database = constructor.Database;
-
-            string newUrl = "http://www.amazon.com";
-            _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, url: newUrl));
-
-            NameData accountNames = database.Funds.First().Names;
-            Assert.AreEqual(BaseName, accountNames.Name);
-            Assert.AreEqual(BaseCompanyName, accountNames.Company);
-            Assert.AreEqual(newUrl, accountNames.Url);
-        }
-
-        [Test]
-        public void CanEditSecurityCurrency()
-        {
-            DatabaseConstructor constructor = new DatabaseConstructor();
-            _ = constructor.WithSecurity(BaseCompanyName, BaseName, currency: "Pounds");
-
-            Portfolio database = constructor.Database;
-
-            string newCurrency = "Dollars";
-            _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, currency: newCurrency));
-
-            NameData accountNames = database.Funds.First().Names;
-            Assert.AreEqual(BaseName, accountNames.Name);
-            Assert.AreEqual(BaseCompanyName, accountNames.Company);
-            Assert.AreEqual(newCurrency, accountNames.Currency);
-        }
-
-        [Test]
-        public void CanEditSecuritySectors()
-        {
-            DatabaseConstructor constructor = new DatabaseConstructor();
+            yield return new TestCaseData(constructor.Database, BaseCompanyName, BaseName, "http://www.amazon.com", null, new HashSet<string>()).SetName("CanEditSecurityUrl");
+            constructor = new DatabaseConstructor();
+            _ = constructor.WithSecurity(BaseCompanyName, BaseName, currency: "poinds");
+            yield return new TestCaseData(constructor.Database, BaseCompanyName, BaseName, null, "dollars", new HashSet<string>()).SetName("CanEditSecurityCurrency");
+            constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity(BaseCompanyName, BaseName);
+            yield return new TestCaseData(constructor.Database, BaseCompanyName, BaseName, null, null, new HashSet<string>() { "Cats", "Dogs" }).SetName("CanEditSecuritySectors");
+            constructor = new DatabaseConstructor();
+            _ = constructor.WithSecurity(BaseCompanyName, BaseName);
+            yield return new TestCaseData(constructor.Database, BaseCompanyName, BaseName, "http://www.cats.com", "dollars", new HashSet<string>() { "Cats", "Dogs" }).SetName("CanEditSecurity");
+        }
 
-            Portfolio database = constructor.Database;
+        [TestCaseSource(nameof(SecurityCases))]
+        public void CanEditSecurity(IPortfolio database, string newComp, string newName, string newUrl, string newCurrency, HashSet<string> newSectors)
+        {
+            _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(newComp, newName, newCurrency, newUrl, newSectors));
 
-            HashSet<string> sectorValues = new HashSet<string>() { "Cats", "Dogs" };
-            _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName, sectors: sectorValues));
-
-            NameData accountNames = database.Funds.First().Names;
-            Assert.AreEqual(NewName, accountNames.Name);
-            Assert.AreEqual(NewCompanyName, accountNames.Company);
-
+            NameData accountNames = database.FundsThreadSafe.First().Names;
+            Assert.AreEqual(newName, accountNames.Name);
+            Assert.AreEqual(newComp, accountNames.Company);
+            Assert.AreEqual(newUrl, accountNames.Url);
+            Assert.AreEqual(newCurrency, accountNames.Currency);
             List<string> actualSectors = accountNames.Sectors.ToList();
-            List<string> expectedSectors = sectorValues.ToList();
-            Assert.AreEqual(sectorValues.Count, actualSectors.Count);
-            for (int sectorIndex = 0; sectorIndex < sectorValues.Count; sectorIndex++)
+            if (newSectors != null)
             {
-                Assert.AreEqual(expectedSectors[sectorIndex], actualSectors[sectorIndex]);
+                List<string> expectedSectors = newSectors.ToList();
+                Assert.AreEqual(newSectors.Count, actualSectors.Count);
+                for (int sectorIndex = 0; sectorIndex < newSectors.Count; sectorIndex++)
+                {
+                    Assert.AreEqual(expectedSectors[sectorIndex], actualSectors[sectorIndex]);
+                }
+            }
+            else
+            {
+                Assert.AreEqual(0, actualSectors.Count);
             }
         }
 
@@ -182,7 +157,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         public void CanEditCurrencyName()
         {
             DatabaseConstructor constructor = new DatabaseConstructor();
-            _ = constructor.WithCurrencyFromName(BaseCompanyName, BaseName);
+            _ = constructor.WithCurrency(BaseCompanyName, BaseName);
 
             Portfolio database = constructor.Database;
 

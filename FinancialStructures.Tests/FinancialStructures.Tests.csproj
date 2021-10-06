@@ -25,8 +25,4 @@
     <ProjectReference Include="..\FinancialStructures\FinancialStructures.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="FinanceStructuresTests\NewFolder\" />
-  </ItemGroup>
-
 </Project>

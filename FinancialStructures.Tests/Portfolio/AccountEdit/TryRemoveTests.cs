@@ -58,7 +58,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         public void CanRemoveCurrency()
         {
             DatabaseConstructor constructor = new DatabaseConstructor();
-            _ = constructor.WithCurrencyFromName(BaseCompanyName, BaseName);
+            _ = constructor.WithCurrency(BaseCompanyName, BaseName);
 
             Portfolio database = constructor.Database;
 
