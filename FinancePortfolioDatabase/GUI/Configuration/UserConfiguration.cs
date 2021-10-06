@@ -76,7 +76,7 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         /// </summary>
         public static UserConfiguration LoadFromUserConfigFile(string filePath, IFileSystem fileSystem, IReportLogger logger = null)
         {
-            var userConfig = new UserConfiguration();
+            UserConfiguration userConfig = new UserConfiguration();
             if (fileSystem.File.Exists(filePath))
             {
                 userConfig.LoadConfiguration(filePath, fileSystem, logger);
@@ -102,11 +102,11 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         {
             try
             {
-                var serializer = new DataContractSerializer(typeof(UserConfiguration), fExpectedConfigurationTypes);
+                DataContractSerializer serializer = new DataContractSerializer(typeof(UserConfiguration), fExpectedConfigurationTypes);
                 using (Stream stream = fileSystem.FileStream.Create(filePath, FileMode.Open))
-                using (var reader = new XmlTextReader(stream))
+                using (XmlTextReader reader = new XmlTextReader(stream))
                 {
-                    var configuration = (UserConfiguration)serializer.ReadObject(reader);
+                    UserConfiguration configuration = (UserConfiguration)serializer.ReadObject(reader);
                     ChildConfigurations = configuration.ChildConfigurations;
                 }
             }
@@ -123,9 +123,9 @@ namespace FinancePortfolioDatabase.GUI.Configuration
             {
                 string dir = fileSystem.Path.GetDirectoryName(filePath);
                 _ = fileSystem.Directory.CreateDirectory(dir);
-                var serializer = new DataContractSerializer(typeof(UserConfiguration), fExpectedConfigurationTypes);
+                DataContractSerializer serializer = new DataContractSerializer(typeof(UserConfiguration), fExpectedConfigurationTypes);
                 using (Stream stream = fileSystem.FileStream.Create(filePath, FileMode.Create))
-                using (var writer = new XmlTextWriter(stream, Encoding.UTF8))
+                using (XmlTextWriter writer = new XmlTextWriter(stream, Encoding.UTF8))
                 {
                     writer.Formatting = Formatting.Indented; // indent the Xml so it's human readable
                     serializer.WriteObject(writer, this);

@@ -237,7 +237,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                     }
                 }
 
-                var settings = new PortfolioStatisticsSettings(
+                PortfolioStatisticsSettings settings = new PortfolioStatisticsSettings(
                     SelectableHelpers.GetData(DisplayConditions, ShowBenchmarks),
                     SelectableHelpers.GetData(DisplayConditions, ValueFunds),
                     SelectableHelpers.GetData(DisplayConditions, ShowSecurities),

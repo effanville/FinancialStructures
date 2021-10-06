@@ -81,7 +81,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 {
                     result.FilePath += ".csv";
                 }
-                var portfolioInvestments = new PortfolioInvestments(DataStore, new PortfoliInvestmentsSettings());
+                PortfolioInvestments portfolioInvestments = new PortfolioInvestments(DataStore, new PortfoliInvestmentsSettings());
                 portfolioInvestments.ExportToFile(result.FilePath, fUiGlobals.CurrentFileSystem, ReportLogger);
                 fLoadTab(new SecurityInvestmentViewModel(DataStore, Styles));
             }
