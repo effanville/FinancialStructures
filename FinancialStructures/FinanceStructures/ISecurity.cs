@@ -47,6 +47,11 @@ namespace FinancialStructures.FinanceStructures
         }
 
         /// <summary>
+        /// Produces the data for the security on the day specified.
+        /// </summary>
+        SecurityDayData DayData(DateTime day);
+
+        /// <summary>
         /// Produces a list of data for visual display purposes. Display in the base currency
         /// of the fund ( so this does not modify values due to currency)
         /// </summary>
