@@ -44,7 +44,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         public bool TryAddOrEditTradeData(SecurityTrade oldTrade, SecurityTrade newTrade, IReportLogger reportLogger = null)
         {
             AddOrEditTrade(oldTrade.Day, newTrade);
-            EnsureDataConsistency(reportLogger);
+            _ = EnsureDataConsistency(reportLogger);
             OnDataEdit(this, new EventArgs());
             return true;
         }
@@ -141,7 +141,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 // Investment on that day should correspond also.
                 SecurityTrade trade = SecurityTrades[index];
 
-                DailyValuation sharesPreviousValue = Shares.RecentPreviousValue(trade.Day) ?? new DailyValuation(DateTime.Today, 0);
+                DailyValuation sharesPreviousValue = Shares.ValueBefore(trade.Day) ?? new DailyValuation(DateTime.Today, 0);
                 bool hasShareValue = Shares.TryGetValue(trade.Day, out double shareValue);
 
                 double expectedNumberShares = sharesPreviousValue.Value + trade.NumberShares;
@@ -160,12 +160,12 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 {
                     if (!SecurityTrades.Any(trade => trade.Day == investmentValue.Day))
                     {
-                        DailyValuation sharesCurrentValue = Shares.NearestEarlierValue(investmentValue.Day);
-                        DailyValuation sharesPreviousValue = Shares.RecentPreviousValue(investmentValue.Day) ?? new DailyValuation(DateTime.Today, 0);
+                        DailyValuation sharesCurrentValue = Shares.ValueOnOrBefore(investmentValue.Day);
+                        DailyValuation sharesPreviousValue = Shares.ValueBefore(investmentValue.Day) ?? new DailyValuation(DateTime.Today, 0);
                         if (sharesCurrentValue != null)
                         {
                             double numShares = sharesCurrentValue.Value - sharesPreviousValue.Value;
-                            double unitPrice = UnitPrice.NearestEarlierValue(investmentValue.Day).Value;
+                            double unitPrice = UnitPrice.ValueOnOrBefore(investmentValue.Day).Value;
                             double value = numShares * unitPrice;
                             Investments.SetData(investmentValue.Day, value, reportLogger);
                             TradeType trade = value > 0 ? TradeType.Buy : TradeType.Sell;
@@ -191,7 +191,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 {
                     if (!SecurityTrades.Any(trade => trade.Day == shareValue.Day))
                     {
-                        SecurityTrades.Add(new SecurityTrade(TradeType.Dividend, Names, shareValue.Day, shareDiff, UnitPrice.NearestEarlierValue(shareValue.Day).Value, 0.0));
+                        SecurityTrades.Add(new SecurityTrade(TradeType.Dividend, Names, shareValue.Day, shareDiff, UnitPrice.ValueOnOrBefore(shareValue.Day).Value, 0.0));
                     }
                 }
                 previousNumShares = shareValue.Value;

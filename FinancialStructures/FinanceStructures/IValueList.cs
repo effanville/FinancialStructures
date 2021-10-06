@@ -70,12 +70,12 @@ namespace FinancialStructures.FinanceStructures
         /// Returns the most recent value to <paramref name="date"/> that is prior to that date.
         /// This value is strictly prior to <paramref name="date"/>.
         /// </summary>
-        DailyValuation RecentPreviousValue(DateTime date);
+        DailyValuation ValueBefore(DateTime date);
 
         /// <summary>
         /// Returns the latest valuation on or before the date <paramref name="date"/>.
         /// </summary>
-        DailyValuation NearestEarlierValuation(DateTime date);
+        DailyValuation ValuationOnOrBefore(DateTime date);
 
         /// <summary>
         /// Calculates the compound annual rate of the Value list.

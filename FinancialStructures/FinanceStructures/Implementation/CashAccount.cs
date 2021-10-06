@@ -76,9 +76,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public DailyValuation RecentPreviousValue(DateTime date, ICurrency currency)
+        public DailyValuation ValueBefore(DateTime date, ICurrency currency)
         {
-            DailyValuation val = Values.RecentPreviousValue(date);
+            DailyValuation val = Values.ValueBefore(date);
 
             if (val == null)
             {
@@ -104,9 +104,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public DailyValuation NearestEarlierValuation(DateTime date, ICurrency currency = null)
+        public DailyValuation ValuationOnOrBefore(DateTime date, ICurrency currency = null)
         {
-            DailyValuation value = Values.NearestEarlierValue(date);
+            DailyValuation value = Values.ValueOnOrBefore(date);
             value.Value *= GetCurrencyValue(value.Day, currency);
             return value;
         }

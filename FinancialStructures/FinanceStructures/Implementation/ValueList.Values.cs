@@ -25,9 +25,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public virtual DailyValuation RecentPreviousValue(DateTime date)
+        public virtual DailyValuation ValueBefore(DateTime date)
         {
-            DailyValuation val = Values.RecentPreviousValue(date);
+            DailyValuation val = Values.ValueBefore(date);
             if (val == null)
             {
                 return new DailyValuation(date, 0.0);
@@ -37,9 +37,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public virtual DailyValuation NearestEarlierValuation(DateTime date)
+        public virtual DailyValuation ValuationOnOrBefore(DateTime date)
         {
-            return Values.NearestEarlierValue(date);
+            return Values.ValueOnOrBefore(date);
         }
 
         /// <summary>

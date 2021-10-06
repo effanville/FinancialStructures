@@ -15,7 +15,7 @@ namespace FinancialStructures.FinanceStructures.Statistics
             DailyValuation needed = valueList.LatestValue();
             if (needed.Value > 0)
             {
-                return needed.Value - valueList.RecentPreviousValue(needed.Day).Value;
+                return needed.Value - valueList.ValueBefore(needed.Day).Value;
             }
 
             return 0.0;
@@ -29,7 +29,7 @@ namespace FinancialStructures.FinanceStructures.Statistics
             DailyValuation needed = valueList.LatestValue(currency);
             if (needed.Value > 0)
             {
-                return needed.Value - valueList.RecentPreviousValue(needed.Day, currency).Value;
+                return needed.Value - valueList.ValueBefore(needed.Day, currency).Value;
             }
 
             return 0.0;

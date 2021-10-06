@@ -81,45 +81,45 @@ namespace FinancialStructures.FinanceStructures.Implementation
         public DailyValuation Value(DateTime date, ICurrency currency)
         {
             DailyValuation perSharePrice = UnitPrice.Value(date);
-            double value = perSharePrice?.Value * Shares.NearestEarlierValue(date).Value * GetCurrencyValue(date, currency) ?? 0.0;
+            double value = perSharePrice?.Value * Shares.ValueOnOrBefore(date).Value * GetCurrencyValue(date, currency) ?? 0.0;
             return new DailyValuation(date, value);
         }
 
         /// <inheritdoc/>
-        public override DailyValuation RecentPreviousValue(DateTime date)
+        public override DailyValuation ValueBefore(DateTime date)
         {
-            return RecentPreviousValue(date, null);
+            return ValueBefore(date, null);
         }
 
         /// <inheritdoc/>
-        public DailyValuation RecentPreviousValue(DateTime date, ICurrency currency)
+        public DailyValuation ValueBefore(DateTime date, ICurrency currency)
         {
-            DailyValuation val = UnitPrice.RecentPreviousValue(date);
+            DailyValuation val = UnitPrice.ValueBefore(date);
             if (val == null)
             {
                 return new DailyValuation(date, 0.0);
             }
 
-            double latestValue = Shares.NearestEarlierValue(date).Value * val.Value * GetCurrencyValue(val.Day, currency);
+            double latestValue = Shares.ValueOnOrBefore(date).Value * val.Value * GetCurrencyValue(val.Day, currency);
             return new DailyValuation(date, latestValue);
         }
 
         /// <inheritdoc/>
-        public override DailyValuation NearestEarlierValuation(DateTime date)
+        public override DailyValuation ValuationOnOrBefore(DateTime date)
         {
-            return NearestEarlierValuation(date, null);
+            return ValuationOnOrBefore(date, null);
         }
 
         /// <inheritdoc/>
-        public DailyValuation NearestEarlierValuation(DateTime date, ICurrency currency)
+        public DailyValuation ValuationOnOrBefore(DateTime date, ICurrency currency)
         {
-            DailyValuation val = UnitPrice.NearestEarlierValue(date);
+            DailyValuation val = UnitPrice.ValueOnOrBefore(date);
             if (val == null)
             {
                 return new DailyValuation(date, 0.0);
             }
 
-            double latestValue = Shares.NearestEarlierValue(date).Value * val.Value * GetCurrencyValue(val.Day, currency);
+            double latestValue = Shares.ValueOnOrBefore(date).Value * val.Value * GetCurrencyValue(val.Day, currency);
             return new DailyValuation(date, latestValue);
         }
 

@@ -63,7 +63,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             {
                 foreach (DailyValuation unitPriceValuation in UnitPrice.GetValuesBetween(UnitPrice.FirstDate(), UnitPrice.LatestDate()))
                 {
-                    double shares = Shares.NearestEarlierValue(unitPriceValuation.Day).Value;
+                    double shares = Shares.ValueOnOrBefore(unitPriceValuation.Day).Value;
                     _ = Investments.TryGetValue(unitPriceValuation.Day, out double invest);
                     SecurityDayData thisday = new SecurityDayData(unitPriceValuation.Day, unitPriceValuation.Value, shares, invest);
                     output.Add(thisday);
@@ -88,7 +88,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 {
                     if (!UnitPrice.TryGetValue(investmentValuation.Day, out double _) && !Shares.TryGetValue(investmentValuation.Day, out double _))
                     {
-                        double shares = Shares.NearestEarlierValue(investmentValuation.Day).Value;
+                        double shares = Shares.ValueOnOrBefore(investmentValuation.Day).Value;
                         double unitPriceInterpolation = UnitPrice.Value(investmentValuation.Day)?.Value ?? 0.0;
                         SecurityDayData thisday = new SecurityDayData(investmentValuation.Day, unitPriceInterpolation, shares, investmentValuation.Value);
 

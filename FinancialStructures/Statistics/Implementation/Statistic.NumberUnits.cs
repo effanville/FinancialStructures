@@ -21,7 +21,7 @@ namespace FinancialStructures.Statistics
             }
             if (desired is ISecurity security)
             {
-                Value = security.Shares.NearestEarlierValue(DateTime.Today).Value;
+                Value = security.Shares.ValueOnOrBefore(DateTime.Today).Value;
             }
         }
 
