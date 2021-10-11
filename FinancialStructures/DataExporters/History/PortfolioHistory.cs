@@ -94,6 +94,10 @@ namespace FinancialStructures.DataExporters.History
                 {
                     times.Add(calculationDate);
                 }
+                if (calculationDate == DateTime.MaxValue && !times.Contains(DateTime.Today))
+                {
+                    times.Add(DateTime.Today);
+                }
             }
             return times;
         }
