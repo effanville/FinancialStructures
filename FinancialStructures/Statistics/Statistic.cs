@@ -36,6 +36,11 @@
         NumberUnits,
 
         /// <summary>
+        /// The mean price paid for the shares.
+        /// </summary>
+        MeanSharePrice,
+
+        /// <summary>
         /// The recent change.
         /// </summary>
         RecentChange,

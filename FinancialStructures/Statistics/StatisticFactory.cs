@@ -49,6 +49,8 @@ namespace FinancialStructures.Statistics
                     return new StatisticNumberUnits();
                 case Statistic.UnitPrice:
                     return new StatisticUnitPrice();
+                case Statistic.MeanSharePrice:
+                    return new StatisticMeanSharePrice();
                 case Statistic.Sectors:
                     return new StatisticSectors();
                 case Statistic.NumberOfAccounts:
