@@ -15,8 +15,10 @@
     </Grid.Resources>
     <Grid.RowDefinitions>
         <RowDefinition Height="40" />
-        <RowDefinition Height="40" />
-        <RowDefinition Height="*" />
+        <RowDefinition Height="*"
+                       MinHeight="60"/>
+        <RowDefinition Height="3*"
+                       MinHeight="220"/>
     </Grid.RowDefinitions>
     <Border Grid.Row="0"
             BorderThickness="2"

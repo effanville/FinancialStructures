@@ -172,28 +172,39 @@ namespace FinancialStructures.DataExporters.History
         /// </summary>
         /// <param name="date">The date to take a snapshot on.</param>
         /// <param name="portfolio">The portfolio to take a snapshot of.</param>
+        /// <param name="includeSecurityValues">Should security values be calculated.</param>
+        /// <param name="includeBankValues">Should bank account values be calculated.</param>
+        /// <param name="includeSectorValues">Should sector values be calculated.</param>
         /// <param name="generateSecurityRates">Should security rates be calculated.</param>
         /// <param name="generateSectorRates">Should sector rates be calculated.</param>
-        public PortfolioDaySnapshot(DateTime date, IPortfolio portfolio, bool generateSecurityRates, bool generateSectorRates)
+        public PortfolioDaySnapshot(DateTime date, IPortfolio portfolio, bool includeSecurityValues, bool includeBankValues, bool includeSectorValues, bool generateSecurityRates, bool generateSectorRates)
         {
             Date = date;
             TotalValue = portfolio.TotalValue(Totals.All, date);
             BankAccValue = portfolio.TotalValue(Totals.BankAccount, date);
             SecurityValue = portfolio.TotalValue(Totals.Security, date);
 
-            AddSecurityValues(date, portfolio, generateSecurityRates);
-            AddBankAccountValues(date, portfolio);
-            AddSectorTotalValues(date, portfolio, generateSectorRates);
+            AddSecurityValues(date, portfolio, includeSecurityValues, generateSecurityRates);
+            AddBankAccountValues(date, portfolio, includeBankValues);
+            AddSectorTotalValues(date, portfolio, includeSectorValues, generateSectorRates);
         }
 
-        private void AddSecurityValues(DateTime date, IPortfolio portfolio, bool generateRates)
+        private void AddSecurityValues(DateTime date, IPortfolio portfolio, bool includeValues, bool generateRates)
         {
+            if (!includeValues && !generateRates)
+            {
+                return;
+            }
+
             List<string> companyNames = portfolio.Companies(Account.Security).ToList();
             companyNames.Sort();
 
             foreach (string companyName in companyNames)
             {
-                SecurityValues.Add(companyName, portfolio.TotalValue(Totals.SecurityCompany, date, new TwoName(companyName)));
+                if (includeValues)
+                {
+                    SecurityValues.Add(companyName, portfolio.TotalValue(Totals.SecurityCompany, date, new TwoName(companyName)));
+                }
 
                 if (generateRates)
                 {
@@ -206,8 +217,13 @@ namespace FinancialStructures.DataExporters.History
             }
         }
 
-        private void AddBankAccountValues(DateTime date, IPortfolio portfolio)
+        private void AddBankAccountValues(DateTime date, IPortfolio portfolio, bool includeValues)
         {
+            if (!includeValues)
+            {
+                return;
+            }
+
             List<string> companyBankNames = portfolio.Companies(Account.BankAccount).ToList();
             companyBankNames.Sort();
             foreach (string companyName in companyBankNames)
@@ -216,12 +232,20 @@ namespace FinancialStructures.DataExporters.History
             }
         }
 
-        private void AddSectorTotalValues(DateTime date, IPortfolio portfolio, bool generateRates)
+        private void AddSectorTotalValues(DateTime date, IPortfolio portfolio, bool includeValues, bool generateRates)
         {
+            if (!includeValues && !generateRates)
+            {
+                return;
+            }
+
             IReadOnlyList<string> sectorNames = portfolio.Sectors(Account.Security);
             foreach (string sectorName in sectorNames)
             {
-                SectorValues.Add(sectorName, portfolio.TotalValue(Totals.Sector, date, new TwoName(null, sectorName)));
+                if (includeValues)
+                {
+                    SectorValues.Add(sectorName, portfolio.TotalValue(Totals.Sector, date, new TwoName(null, sectorName)));
+                }
 
                 if (generateRates)
                 {

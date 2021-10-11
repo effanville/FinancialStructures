@@ -70,7 +70,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 base.UpdateData(portfolio);
             }
 
-            PortfolioHistory history = new PortfolioHistory(DataStore, new PortfolioHistorySettings(20, false, true));
+            PortfolioHistory history = new PortfolioHistory(DataStore, new PortfolioHistorySettings(20, generateSecurityRates: false, generateSectorRates: true));
             HistoryStats = history.Snapshots;
             SecurityValues = HistoryStats[HistoryStats.Count - 1].SecurityValues.Where(x => x.Value > 0).ToDictionary(x => x.Key, x => x.Value);
             BankAccountValues = HistoryStats[HistoryStats.Count - 1].BankAccValues.Where(x => x.Value > 0).ToDictionary(x => x.Key, x => x.Value);

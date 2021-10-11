@@ -13,6 +13,15 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         [DataMember]
         internal int HistoryGapDays;
 
+        [DataMember]
+        internal bool GenerateSecurityValues;
+
+        [DataMember]
+        internal bool GenerateBankAccountValues;
+
+        [DataMember]
+        internal bool GenerateSectorValues;
+
         /// <inheritdoc/>
         [DataMember(EmitDefaultValue = false)]
         public Dictionary<string, IConfiguration> ChildConfigurations
@@ -43,6 +52,9 @@ namespace FinancePortfolioDatabase.GUI.Configuration
             if (viewModel is ExportHistoryViewModel vm)
             {
                 vm.HistoryGapDays = HistoryGapDays;
+                vm.GenerateSecurityValues = GenerateSecurityValues;
+                vm.GenerateBankAccountValues = GenerateBankAccountValues;
+                vm.GenerateSectorValues = GenerateSectorValues;
             }
         }
 
@@ -52,6 +64,9 @@ namespace FinancePortfolioDatabase.GUI.Configuration
             if (viewModel is ExportHistoryViewModel vm)
             {
                 HistoryGapDays = vm.HistoryGapDays;
+                GenerateSecurityValues = vm.GenerateSecurityValues;
+                GenerateBankAccountValues = vm.GenerateBankAccountValues;
+                GenerateSectorValues = vm.GenerateSectorValues;
             }
         }
     }

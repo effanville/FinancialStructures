@@ -30,6 +30,39 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             set => SetAndNotify(ref fHistoryGapDays, value, nameof(HistoryGapDays));
         }
 
+        private bool fGenerateSecurityValues;
+
+        /// <summary>
+        /// Should values for Securities be generated.
+        /// </summary>
+        public bool GenerateSecurityValues
+        {
+            get => fGenerateSecurityValues;
+            set => SetAndNotify(ref fGenerateSecurityValues, value, nameof(GenerateSecurityValues));
+        }
+
+        private bool fGenerateBankAccountValues;
+
+        /// <summary>
+        /// Should values for BankAccounts be generated.
+        /// </summary>
+        public bool GenerateBankAccountValues
+        {
+            get => fGenerateBankAccountValues;
+            set => SetAndNotify(ref fGenerateBankAccountValues, value, nameof(GenerateBankAccountValues));
+        }
+
+        private bool fGenerateSectorValues;
+
+        /// <summary>
+        /// Should values for Sectors be generated.
+        /// </summary>
+        public bool GenerateSectorValues
+        {
+            get => fGenerateSectorValues;
+            set => SetAndNotify(ref fGenerateSectorValues, value, nameof(GenerateSectorValues));
+        }
+
         /// <summary>
         /// Default Constructor.
         /// </summary>
@@ -65,12 +98,12 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile(".csv", DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + DataStore.DatabaseName(fUiGlobals.CurrentFileSystem) + "-History.csv", DataStore.Directory(fUiGlobals.CurrentFileSystem), "CSV file|*.csv|All files|*.*");
             if (result.Success != null && (bool)result.Success)
             {
-                if (!result.FilePath.EndsWith(".csv"))
+                if (!result.FilePath.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
                 {
                     result.FilePath += ".csv";
                 }
 
-                PortfolioHistory history = new PortfolioHistory(DataStore, new PortfolioHistorySettings(HistoryGapDays, false, false));
+                PortfolioHistory history = new PortfolioHistory(DataStore, new PortfolioHistorySettings(HistoryGapDays, GenerateSecurityValues, GenerateBankAccountValues, GenerateSectorValues, generateSecurityRates: false, generateSectorRates: false));
                 history.ExportToFile(result.FilePath, fUiGlobals.CurrentFileSystem);
                 fCloseWindowAction(new PortfolioHistoryViewModel(DataStore, Styles));
             }
