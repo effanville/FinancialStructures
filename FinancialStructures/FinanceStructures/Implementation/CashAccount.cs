@@ -107,6 +107,11 @@ namespace FinancialStructures.FinanceStructures.Implementation
         public DailyValuation ValuationOnOrBefore(DateTime date, ICurrency currency = null)
         {
             DailyValuation value = Values.ValueOnOrBefore(date);
+            if (value == null)
+            {
+                return new DailyValuation(date, 0.0);
+            }
+
             value.Value *= GetCurrencyValue(value.Day, currency);
             return value;
         }
