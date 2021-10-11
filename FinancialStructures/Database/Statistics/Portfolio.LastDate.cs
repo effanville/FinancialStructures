@@ -59,7 +59,7 @@ namespace FinancialStructures.Database.Statistics
         private static DateTime LatestDateOf(IReadOnlyList<IValueList> accounts)
         {
             DateTime output = DateTime.MinValue;
-            foreach (ISecurity sec in accounts)
+            foreach (IValueList sec in accounts)
             {
                 if (sec.Any())
                 {
