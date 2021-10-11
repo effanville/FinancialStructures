@@ -21,7 +21,7 @@ namespace FinancialStructures.Statistics
             }
             if (desired is ISecurity security)
             {
-                Value = security.UnitPrice.ValueOnOrBefore(DateTime.Today).Value;
+                Value = security.UnitPrice.ValueOnOrBefore(DateTime.Today)?.Value ?? 0.0;
             }
         }
 
