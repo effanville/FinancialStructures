@@ -261,7 +261,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
         {
             _ = fReportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DatabaseAccess, $"Selected Security {SelectedName} updating data.");
             base.UpdateData(dataToDisplay);
-
             if (SelectedName != null)
             {
                 if (!dataToDisplay.Exists(Account.Security, SelectedName))
@@ -274,7 +273,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
 
                 ISecurity security = desired as ISecurity;
                 TLVM?.UpdateData(security.UnitPrice);
-                Trades = security.SecurityTrades.ToList();
+                Trades = security.Trades.ToList();
                 SecurityStats = dataToDisplay.GetStats(Account.Security, SelectedName, AccountStatisticsHelpers.AllStatistics()).Single();
                 Values = dataToDisplay.NumberData(Account.Security, SelectedName, fReportLogger).ToList();
             }

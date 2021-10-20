@@ -119,7 +119,7 @@
                         <DataGridTextColumn Header="Prices"
                                             MinWidth="50"
                                             Binding="{Binding Path=UnitPrice, UpdateSourceTrigger=LostFocus}" />
-                        <DataGridTextColumn Header="SharesBought"
+                        <DataGridTextColumn Header="Num Shares"
                                             MinWidth="50"
                                             Binding="{Binding Path=NumberShares, UpdateSourceTrigger=LostFocus}" />
                         <DataGridTextColumn Header="Trade costs"

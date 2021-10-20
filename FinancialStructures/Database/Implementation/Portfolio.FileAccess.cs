@@ -3,6 +3,7 @@ using System.Linq;
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
 using FinancialStructures.FinanceStructures;
+using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.SavingClasses;
 
 namespace FinancialStructures.Database.Implementation
@@ -58,9 +59,9 @@ namespace FinancialStructures.Database.Implementation
                     _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, $" Failed to load new database from {filePath}. {error}.");
                 }
 
-                foreach (ISecurity sec in FundsThreadSafe)
+                foreach (Security sec in FundsThreadSafe)
                 {
-                    _ = sec.EnsureDataConsistency();
+                    _ = sec.EnsureOnLoadDataConsistency();
                 }
 
                 return;

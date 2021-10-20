@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Common.Structure.DataStructures;
 using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
@@ -12,6 +13,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
     /// </summary>
     public partial class Security : ValueList, ISecurity
     {
+        private readonly object TradesLock = new object();
+
         /// <inheritdoc/>
         public TimeList Shares { get; set; } = new TimeList();
 
@@ -21,13 +24,22 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public TimeList Investments { get; set; } = new TimeList();
 
-        /// <inheritdoc/>
-        public List<SecurityTrade> SecurityTrades
-        {
-            get;
-            set;
-        } = new List<SecurityTrade>();
+        /// <summary>
+        /// The list of Trades made in this <see cref="ISecurity"/>.
+        /// </summary>
+        public List<SecurityTrade> SecurityTrades { get; set; } = new List<SecurityTrade>();
 
+        /// <inheritdoc/>
+        public IReadOnlyList<SecurityTrade> Trades
+        {
+            get
+            {
+                lock (TradesLock)
+                {
+                    return SecurityTrades.Select(trade => trade.Copy()).ToList();
+                }
+            }
+        }
         /// <summary>
         /// An empty constructor.
         /// </summary>

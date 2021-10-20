@@ -51,14 +51,26 @@ namespace FinancialStructures.FinanceStructures.Implementation
 
         private void AddOrEditTrade(DateTime oldDate, SecurityTrade trade)
         {
-            if (!SecurityTrades.Any(existingTrade => existingTrade.Day == oldDate))
+            lock (TradesLock)
             {
-                SecurityTrades.Add(trade);
-            }
-            else
-            {
-                SecurityTrade tradeToEdit = SecurityTrades.First(existingTrade => existingTrade.Day == oldDate);
-                tradeToEdit = trade;
+                if (!SecurityTrades.Any(existingTrade => existingTrade.Day.Equals(oldDate)))
+                {
+                    SecurityTrades.Add(trade);
+                }
+                else
+                {
+                    foreach (var tradeVal in SecurityTrades)
+                    {
+                        if (tradeVal.Day.Equals(oldDate))
+                        {
+                            tradeVal.Day = trade.Day;
+                            tradeVal.NumberShares = trade.NumberShares;
+                            tradeVal.UnitPrice = trade.UnitPrice;
+                            tradeVal.TradeCosts = trade.TradeCosts;
+                            tradeVal.TradeType = trade.TradeType;
+                        }
+                    }
+                }
             }
         }
 
@@ -126,11 +138,69 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <summary>
-        /// Upon a new/edit investment, one needs to recompute the values of the investments
+        /// Upon a new/edit trade, one needs to recompute the values of the investments
         /// One should not change Inv = 0 or Inv > 0  to ensure that dividend reivestments are not accidentally included in a new investment.
         /// This though causes a problem if a value is deleted.
         /// </summary>
-        public bool EnsureDataConsistency(IReportLogger reportLogger = null)
+        internal bool EnsureDataConsistency(IReportLogger reportLogger = null)
+        {
+            RemoveEventListening();
+            CleanData();
+            for (int index = 0; index < SecurityTrades.Count; index++)
+            {
+                // When a trade is present, number of shares bought/sold should correspond to share number difference before
+                // and after.
+                // Investment on that day should correspond also.
+                SecurityTrade trade = SecurityTrades[index];
+
+                DailyValuation sharesPreviousValue = Shares.ValueBefore(trade.Day) ?? new DailyValuation(DateTime.Today, 0);
+                bool hasShareValue = Shares.TryGetValue(trade.Day, out double shareValue);
+
+                double expectedNumberShares = sharesPreviousValue.Value + trade.NumberShares;
+                if ((hasShareValue && !Equals(shareValue, expectedNumberShares)) || !hasShareValue)
+                {
+                    Shares.SetData(trade.Day, expectedNumberShares);
+                }
+
+                Investments.SetData(trade.Day, trade.TotalCost, reportLogger);
+            }
+
+            // now cycle through Investments removing values that no longer have trades.
+            for (int index = 0; index < Investments.Count(); index++)
+            {
+                DailyValuation investmentValue = Investments[index];
+                if (!SecurityTrades.Any(trade => trade.Day == investmentValue.Day))
+                {
+                    if (Investments.TryDeleteValue(investmentValue.Day, reportLogger))
+                    {
+                        index--;
+                    }
+                }
+            }
+
+            // now cycle through shares removing values that no longer have trades.
+            for (int index = 0; index < Shares.Count(); index++)
+            {
+                DailyValuation shareValue = Shares[index];
+                if (!SecurityTrades.Any(trade => trade.Day == shareValue.Day))
+                {
+                    if (Shares.TryDeleteValue(shareValue.Day, reportLogger))
+                    {
+                        index--;
+                    }
+                }
+            }
+            SetupEventListening();
+            return true;
+        }
+
+        /// <summary>
+        /// Upon a load of security from file, one needs to recompute the values of the investments
+        /// One should not change Inv = 0 or Inv > 0  to ensure that dividend reivestments are not accidentally included in a new investment.
+        /// This though causes a problem if a value is deleted.
+        /// One adds new trades here if trades do not exist to deal with migrating from an old xml form.
+        /// </summary>
+        internal bool EnsureOnLoadDataConsistency(IReportLogger reportLogger = null)
         {
             RemoveEventListening();
             CleanData();

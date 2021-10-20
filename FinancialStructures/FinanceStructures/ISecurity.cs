@@ -41,7 +41,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// The list of Trades made in this <see cref="ISecurity"/>.
         /// </summary>
-        List<SecurityTrade> SecurityTrades
+        IReadOnlyList<SecurityTrade> Trades
         {
             get;
         }
@@ -137,13 +137,5 @@ namespace FinancialStructures.FinanceStructures
         /// Removes unnecessary investment and Share number values to reduce size.
         /// </summary>
         void CleanData();
-
-        /// <summary>
-        /// Routine to ensure the data held, the <see cref="Investments"/>, the <see cref="Shares"/> and the <see cref="SecurityTrades"/>
-        /// values are all in sync.
-        /// </summary>
-        /// <param name="reportLogger">An optional logger to log progress.</param>
-        /// <returns>Always returns true.</returns>
-        bool EnsureDataConsistency(IReportLogger reportLogger = null);
     }
 }

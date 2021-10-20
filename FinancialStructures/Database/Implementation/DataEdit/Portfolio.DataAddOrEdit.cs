@@ -18,7 +18,6 @@ namespace FinancialStructures.Database.Implementation
             {
                 if (names.IsEqualTo(funds[fundIndex].Names))
                 {
-                    _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Security `{names.Company}'-`{names.Name}' has data on date .");
                     return funds[fundIndex].TryAddOrEditTradeData(oldTrade, newTrade, reportLogger);
                 }
             }
@@ -34,7 +33,6 @@ namespace FinancialStructures.Database.Implementation
             {
                 if (names.IsEqualTo(funds[fundIndex].Names))
                 {
-                    _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Security `{names.Company}'-`{names.Name}' has data on date .");
                     return funds[fundIndex].AddOrEditData(oldDate, date, unitPrice, shares, investment, trade, reportLogger);
                 }
             }

@@ -16,7 +16,7 @@ namespace FinancialStructures.FinanceStructures.Statistics
         {
             double sum = 0.0;
             double numShares = 0.0;
-            foreach (var trade in security.SecurityTrades)
+            foreach (var trade in security.Trades)
             {
                 if (trade.TradeType == tradeType)
                 {
