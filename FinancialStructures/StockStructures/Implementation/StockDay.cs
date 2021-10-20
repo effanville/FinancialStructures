@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Xml.Serialization;
 
 namespace FinancialStructures.StockStructures.Implementation
 {
@@ -10,6 +11,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <summary>
         /// The start time of the interval this data is about.
         /// </summary>
+        [XmlAttribute(AttributeName = "T")]
         public DateTime Time
         {
             get;
@@ -19,6 +21,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <summary>
         /// The length of time of the interval this data is about.
         /// </summary>
+        [XmlAttribute(AttributeName = "D")]
         public TimeSpan Duration
         {
             get;
@@ -28,6 +31,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <summary>
         /// The opening price in the interval.
         /// </summary>
+        [XmlAttribute(AttributeName = "O")]
         public double Open
         {
             get;
@@ -37,6 +41,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <summary>
         /// The high value in this interval
         /// </summary>
+        [XmlAttribute(AttributeName = "H")]
         public double High
         {
             get;
@@ -46,6 +51,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <summary>
         /// The low value in this interval.
         /// </summary>
+        [XmlAttribute(AttributeName = "L")]
         public double Low
         {
             get;
@@ -55,6 +61,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <summary>
         /// The closing value in this interval.
         /// </summary>
+        [XmlAttribute(AttributeName = "C")]
         public double Close
         {
             get;
@@ -64,6 +71,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <summary>
         /// The trading volume experienced in the interval.
         /// </summary>
+        [XmlAttribute(AttributeName = "V")]
         public double Volume
         {
             get;
@@ -116,6 +124,11 @@ namespace FinancialStructures.StockStructures.Implementation
             }
         }
 
+        /// <inheritdoc/>
+        public override string ToString()
+        {
+            return $"{Time}-O{Open}-H{High}-L{Low}-C{Close}-V{Volume}";
+        }
 
         /// <inheritdoc/>
         public int CompareTo(StockDay obj)
