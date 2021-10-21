@@ -22,7 +22,7 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         }
 
         /// <inheritdoc/>
-        [DataMember]
+        [DataMember(EmitDefaultValue = false)]
         public Dictionary<string, IConfiguration> ChildConfigurations
         {
             get;

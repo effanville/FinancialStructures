@@ -30,7 +30,6 @@ namespace FinancePortfolioDatabase.Tests
               <BankColumnNames xmlns:d8p1=""http://schemas.datacontract.org/2004/07/Common.Structure.DisplayClasses"" />
               <BankDirection>Ascending</BankDirection>
               <BankSortingField>AccountType</BankSortingField>
-              <ChildConfigurations i:nil=""true"" />
               <DisplayConditions xmlns:d8p1=""http://schemas.datacontract.org/2004/07/Common.Structure.DisplayClasses"" />
               <HasLoaded>false</HasLoaded>
               <SectorColumnNames xmlns:d8p1=""http://schemas.datacontract.org/2004/07/Common.Structure.DisplayClasses"" />
@@ -45,6 +44,9 @@ namespace FinancePortfolioDatabase.Tests
             <d2p1:Key>ExportHistoryViewModel</d2p1:Key>
             <d2p1:Value i:type=""ExportHistoryConfiguration"">
               <ChildConfigurations />
+              <GenerateBankAccountValues>false</GenerateBankAccountValues>
+              <GenerateSectorValues>false</GenerateSectorValues>
+              <GenerateSecurityValues>false</GenerateSecurityValues>
               <HasLoaded>false</HasLoaded>
               <HistoryGapDays>0</HistoryGapDays>
             </d2p1:Value>

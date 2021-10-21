@@ -28,5 +28,8 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
     <_Parameter1>FinancialStructures.Tests</_Parameter1>
     </AssemblyAttribute>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>FinancePortfolioDatabase.Tests</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 </Project>

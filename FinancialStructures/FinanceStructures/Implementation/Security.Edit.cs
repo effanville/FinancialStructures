@@ -200,7 +200,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// This though causes a problem if a value is deleted.
         /// One adds new trades here if trades do not exist to deal with migrating from an old xml form.
         /// </summary>
-        internal bool EnsureOnLoadDataConsistency(IReportLogger reportLogger = null)
+        internal void EnsureOnLoadDataConsistency(IReportLogger reportLogger = null)
         {
             RemoveEventListening();
             CleanData();
@@ -268,7 +268,6 @@ namespace FinancialStructures.FinanceStructures.Implementation
             }
 
             SetupEventListening();
-            return true;
         }
     }
 }

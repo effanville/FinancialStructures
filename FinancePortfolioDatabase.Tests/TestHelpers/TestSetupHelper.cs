@@ -7,6 +7,8 @@ using Common.Structure.Reporting;
 using Common.UI;
 using Common.UI.Services;
 using FinancialStructures.Database;
+using FinancialStructures.DataStructures;
+using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
 using Moq;
 
@@ -75,7 +77,8 @@ namespace FinancePortfolioDatabase.Tests.TestHelpers
         {
             portfolio.FilePath = "TestFilePath";
             _ = portfolio.TryAdd(Account.Security, new NameData("Fidelity", "China", "GBP", "https://markets.ft.com/data/funds/tearsheet/summary?s=gb00b5lxgg05:gbx", new HashSet<string>() { "Bonds", "UK" }), DummyReportLogger);
-            _ = portfolio.TryAddOrEditDataToSecurity(new TwoName("Fidelity", "China"), new DateTime(2000, 1, 1), new DateTime(2000, 1, 1), 1, 1, 1, null);
+            var secName = new TwoName("Fidelity", "China");
+            _ = portfolio.TryAddOrEditDataToSecurity(secName, new DateTime(2000, 1, 1), new DateTime(2000, 1, 1), 1, 1, 1, new SecurityTrade(TradeType.Buy, secName, new DateTime(2000, 1, 1), 1, 1, 2));
             _ = portfolio.TryAdd(Account.BankAccount, new NameData("Barclays", "currentAccount", url: "https://markets.ft.com/data/funds/tearsheet/summary?s=gb00b5lxgg05:gbx"), DummyReportLogger);
             _ = portfolio.TryAddOrEditData(Account.BankAccount, new NameData("Barclays", "currentAccount"), new DailyValuation(new DateTime(2000, 1, 1), 1), new DailyValuation(new DateTime(2000, 1, 1), 1));
             _ = portfolio.TryAdd(Account.Currency, new NameData(string.Empty, "GBP"), DummyReportLogger);

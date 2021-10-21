@@ -63,7 +63,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             {
                 foreach (DailyValuation unitPriceValuation in UnitPrice.GetValuesBetween(UnitPrice.FirstDate(), UnitPrice.LatestDate()))
                 {
-                    double shares = Shares.ValueOnOrBefore(unitPriceValuation.Day).Value;
+                    double shares = Shares.ValueOnOrBefore(unitPriceValuation.Day)?.Value ?? 0.0;
                     _ = Investments.TryGetValue(unitPriceValuation.Day, out double invest);
                     SecurityDayData thisday = new SecurityDayData(unitPriceValuation.Day, unitPriceValuation.Value, shares, invest);
                     output.Add(thisday);

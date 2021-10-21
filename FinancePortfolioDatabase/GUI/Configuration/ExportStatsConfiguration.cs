@@ -13,26 +13,26 @@ namespace FinancePortfolioDatabase.GUI.Configuration
     public sealed class ExportStatsConfiguration : IConfiguration
     {
         // Internal configurations to store.
-        [DataMember]
+        [DataMember(EmitDefaultValue = false)]
         private List<Selectable<string>> DisplayConditions = new List<Selectable<string>>();
         [DataMember]
         private Statistic SecuritySortingField;
         [DataMember]
         private SortDirection SecurityDirection;
-        [DataMember]
+        [DataMember(EmitDefaultValue = false)]
         private List<Selectable<Statistic>> SecurityColumnNames = new List<Selectable<Statistic>>();
         [DataMember]
         private Statistic BankSortingField;
 
         [DataMember]
         private SortDirection BankDirection;
-        [DataMember]
+        [DataMember(EmitDefaultValue = false)]
         private List<Selectable<Statistic>> BankColumnNames = new List<Selectable<Statistic>>();
         [DataMember]
         private Statistic SectorSortingField;
         [DataMember]
         private SortDirection SectorDirection;
-        [DataMember]
+        [DataMember(EmitDefaultValue = false)]
         private List<Selectable<Statistic>> SectorColumnNames = new List<Selectable<Statistic>>();
 
         /// <inheritdoc/>
@@ -44,7 +44,7 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         }
 
         /// <inheritdoc/>
-        [DataMember]
+        [DataMember(EmitDefaultValue = false)]
         public Dictionary<string, IConfiguration> ChildConfigurations
         {
             get;

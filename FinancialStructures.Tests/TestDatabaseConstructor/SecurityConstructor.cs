@@ -1,4 +1,5 @@
 ﻿using System;
+using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
 
@@ -38,8 +39,10 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             if (investment != 0)
             {
                 Item.Investments.SetData(date, investment);
+                Item.SecurityTrades.Add(new SecurityTrade(investment > 0 ? TradeType.Buy : TradeType.Sell, Item.Names.ToTwoName(), date, numberUnits, sharePrice, 0.0));
             }
 
+            Item.EnsureOnLoadDataConsistency();
             return this;
         }
 

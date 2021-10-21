@@ -61,7 +61,7 @@ namespace FinancialStructures.Database.Implementation
 
                 foreach (Security sec in FundsThreadSafe)
                 {
-                    _ = sec.EnsureOnLoadDataConsistency();
+                    sec.EnsureOnLoadDataConsistency();
                 }
 
                 return;

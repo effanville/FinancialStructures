@@ -62,7 +62,7 @@ namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
             ISecurity security = valueList as ISecurity;
             Assert.AreEqual(0, security.Values.Count());
             Assert.AreEqual(1, security.UnitPrice.Count());
-            Assert.AreEqual(0, security.SecurityTrades.Count);
+            Assert.AreEqual(0, security.Trades.Count);
         }
 
         [Test]
@@ -121,7 +121,7 @@ namespace FinancePortfolioDatabase.Tests.SecurityWindowTests
             ISecurity security = valueList as ISecurity;
             Assert.AreEqual(0, security.Values.Count());
             Assert.AreEqual(0, security.UnitPrice.Count());
-            Assert.AreEqual(1, security.SecurityTrades.Count);
+            Assert.AreEqual(1, security.Trades.Count);
         }
     }
 }

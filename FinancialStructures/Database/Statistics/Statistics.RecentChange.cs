@@ -104,7 +104,7 @@ namespace FinancialStructures.Database.Statistics
                 case Account.Security:
                 case Account.BankAccount:
                 {
-                    if (portfolio.TryGetAccount(Account.Security, names, out IValueList account) && account.Any())
+                    if (portfolio.TryGetAccount(elementType, names, out IValueList account) && account.Any())
                     {
                         IExchangableValueList exchangeValueList = account as IExchangableValueList;
                         ICurrency currency = portfolio.Currency(elementType, exchangeValueList);

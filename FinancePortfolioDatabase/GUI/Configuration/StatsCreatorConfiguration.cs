@@ -11,7 +11,7 @@ namespace FinancePortfolioDatabase.GUI.Configuration
     public sealed class StatsCreatorConfiguration : IConfiguration
     {
         /// <inheritdoc/>
-        [DataMember]
+        [DataMember(EmitDefaultValue = false)]
         public Dictionary<string, IConfiguration> ChildConfigurations
         {
             get;
