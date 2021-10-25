@@ -202,12 +202,13 @@ namespace FinancialStructures.StockStructures.Implementation
                     {
                         int yahooInt = int.Parse(FindAndGetSingleValue(dayValues, "date").ToString());
                         DateTime date = YahooIntToDate(yahooInt);
+                        var localDate = date.ToLocalTime();
                         double open = FindAndGetSingleValue(dayValues, "open", false);
                         double high = FindAndGetSingleValue(dayValues, "high", false);
                         double low = FindAndGetSingleValue(dayValues, "low", false);
                         double close = FindAndGetSingleValue(dayValues, "close", false);
                         double volume = FindAndGetSingleValue(dayValues, "volume", false);
-                        stock.AddValue(date, open, high, low, close, volume);
+                        stock.AddValue(localDate, open, high, low, close, volume);
                         dataLeft = dataLeft.Substring(dayEndIndex);
                         numberEntriesAdded++;
                     }
