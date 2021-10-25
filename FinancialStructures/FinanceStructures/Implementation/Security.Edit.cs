@@ -155,14 +155,14 @@ namespace FinancialStructures.FinanceStructures.Implementation
 
                 DailyValuation sharesPreviousValue = Shares.ValueBefore(trade.Day) ?? new DailyValuation(DateTime.Today, 0);
                 bool hasShareValue = Shares.TryGetValue(trade.Day, out double shareValue);
-
-                double expectedNumberShares = sharesPreviousValue.Value + trade.NumberShares;
+                double sign = trade.TradeType == TradeType.Buy ? 1.0 : trade.TradeType == TradeType.Sell ? -1.0 : 0.0;
+                double expectedNumberShares = sharesPreviousValue.Value + sign * trade.NumberShares;
                 if ((hasShareValue && !Equals(shareValue, expectedNumberShares)) || !hasShareValue)
                 {
                     Shares.SetData(trade.Day, expectedNumberShares);
                 }
 
-                Investments.SetData(trade.Day, trade.TotalCost, reportLogger);
+                Investments.SetData(trade.Day, sign * trade.TotalCost, reportLogger);
             }
 
             // now cycle through Investments removing values that no longer have trades.
