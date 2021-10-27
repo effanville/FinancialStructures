@@ -100,7 +100,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 return new DailyValuation(date, 0.0);
             }
 
-            double latestValue = Shares.ValueOnOrBefore(date).Value * val.Value * GetCurrencyValue(val.Day, currency);
+            double latestValue = Shares.ValueOnOrBefore(date)?.Value * val.Value * GetCurrencyValue(val.Day, currency) ?? 0.0;
             return new DailyValuation(date, latestValue);
         }
 
@@ -119,7 +119,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 return new DailyValuation(date, 0.0);
             }
 
-            double latestValue = Shares.ValueOnOrBefore(date).Value * val.Value * GetCurrencyValue(val.Day, currency);
+            double latestValue = Shares.ValueOnOrBefore(date)?.Value * val.Value * GetCurrencyValue(val.Day, currency) ?? 0.0;
             return new DailyValuation(date, latestValue);
         }
 
