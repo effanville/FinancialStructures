@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using Common.Structure.DataStructures;
+using Common.Structure.Extensions;
 using Common.Structure.Reporting;
 using FinancialStructures.DataStructures;
 
@@ -157,11 +158,11 @@ namespace FinancialStructures.FinanceStructures.Implementation
 
                 DailyValuation sharesPreviousValue = Shares.ValueBefore(trade.Day) ?? new DailyValuation(DateTime.Today, 0);
                 bool hasShareValue = Shares.TryGetValue(trade.Day, out double shareValue);
-                double sign = trade.TradeType == TradeType.Buy ? 1.0 : trade.TradeType == TradeType.Sell ? -1.0 : 0.0;
+                double sign = trade.TradeType == TradeType.Sell ? -1.0 : 1.0;
                 double expectedNumberShares = sharesPreviousValue.Value + sign * trade.NumberShares;
-                if ((hasShareValue && !Equals(shareValue, expectedNumberShares)) || !hasShareValue)
+                if ((hasShareValue && !Equals(shareValue, expectedNumberShares, 1e-4)) || !hasShareValue)
                 {
-                    Shares.SetData(trade.Day, expectedNumberShares);
+                    Shares.SetData(trade.Day, expectedNumberShares.Truncate(4));
                 }
 
                 Investments.SetData(trade.Day, sign * trade.TotalCost, reportLogger);
@@ -212,17 +213,22 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 // and after.
                 // Investment on that day should correspond also.
                 SecurityTrade trade = SecurityTrades[index];
+                if (trade.TradeType == TradeType.Sell)
+                {
+                    trade.NumberShares = Math.Abs(trade.NumberShares);
+                }
 
                 DailyValuation sharesPreviousValue = Shares.ValueBefore(trade.Day) ?? new DailyValuation(DateTime.Today, 0);
                 bool hasShareValue = Shares.TryGetValue(trade.Day, out double shareValue);
 
-                double expectedNumberShares = sharesPreviousValue.Value + trade.NumberShares;
-                if ((hasShareValue && !Equals(shareValue, expectedNumberShares)) || !hasShareValue)
+                double sign = trade.TradeType == TradeType.Sell ? -1.0 : 1.0;
+                double expectedNumberShares = sharesPreviousValue.Value + sign * trade.NumberShares;
+                if ((hasShareValue && !Equals(shareValue, expectedNumberShares, 1e-4)) || !hasShareValue)
                 {
-                    Shares.SetData(trade.Day, expectedNumberShares);
+                    Shares.SetData(trade.Day, expectedNumberShares.Truncate(4));
                 }
 
-                Investments.SetData(trade.Day, trade.TotalCost, reportLogger);
+                Investments.SetData(trade.Day, sign * trade.TotalCost, reportLogger);
             }
 
             for (int index = 0; index < Investments.Count(); index++)
@@ -241,7 +247,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                             double value = numShares * unitPrice;
                             Investments.SetData(investmentValue.Day, value, reportLogger);
                             TradeType trade = value > 0 ? TradeType.Buy : TradeType.Sell;
-                            SecurityTrades.Add(new SecurityTrade(trade, Names, investmentValue.Day, numShares, unitPrice, 0.0));
+                            SecurityTrades.Add(new SecurityTrade(trade, Names, investmentValue.Day, Math.Abs(numShares), unitPrice, 0.0));
                         }
                     }
                 }
@@ -258,6 +264,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             for (int index = 0; index < Shares.Count(); index++)
             {
                 DailyValuation shareValue = Shares[index];
+                Shares.SetData(shareValue.Day, shareValue.Value.Truncate(4));
                 double shareDiff = shareValue.Value - previousNumShares;
                 if (shareDiff != 0.0)
                 {
@@ -270,6 +277,16 @@ namespace FinancialStructures.FinanceStructures.Implementation
             }
 
             SetupEventListening();
+        }
+
+        private static bool Equals(double a, double b, double tol)
+        {
+            if (Math.Abs(a - b) < tol)
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
