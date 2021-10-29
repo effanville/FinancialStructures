@@ -18,6 +18,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal"
                     Height="40"
@@ -37,20 +38,23 @@
                     Command="{Binding ExportCsvData}"
                     ToolTip="Exports data from the selected account to a csv file." />
         </StackPanel>
+        <ContentControl Grid.Row="1"
+                        Grid.Column="0"
+                        Width="Auto"
+                        Content="{Binding TLVM}" />
+        <DataGrid Grid.Row="1"
+                  Grid.Column="1"
+                  ItemsSource="{Binding Stats.Statistics}"
+                  AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Statistic"
+                                    Binding="{Binding Path=StatType}" />
+                <DataGridTextColumn Header="Value"
+                                    Binding="{Binding Path=ValueAsObject}" />
+            </DataGrid.Columns>
+        </DataGrid>
         <Grid Grid.Row="1"
-              Grid.Column="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
-            <ContentControl Grid.Row="1"
-                            Grid.Column="0"
-                            Content="{Binding TLVM}" />
-        </Grid>
-        <Grid Grid.Row="1"
-              Grid.Column="1"
+              Grid.Column="2"
               Width="Auto"
               Height="Auto"
               VerticalAlignment="Stretch"

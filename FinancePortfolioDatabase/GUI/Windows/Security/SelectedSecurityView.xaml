@@ -53,24 +53,20 @@
                 Grid.Row="1">
             <Grid >
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="20"
-                                   MaxHeight="20" />
+                    <RowDefinition Height="*" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Grid.Row="0"
-                           Grid.Column="0"
-                           Grid.ColumnSpan="2"
-                           Text="Edit" />
                 <ContentControl Content="{Binding TLVM}"
-                                Grid.Row="1"
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
                                 Grid.Column="0" />
                 <DataGrid ItemsSource="{Binding Path=Trades, Mode=TwoWay}"
                           AutoGenerateColumns="False"
-                          Grid.Row="1"
+                          Grid.Row="0"
                           Grid.Column="1">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="BeginningEdit">
@@ -129,6 +125,17 @@
                                             MinWidth="50"
                                             IsReadOnly="True"
                                             Binding="{Binding Path=TotalCost, UpdateSourceTrigger=LostFocus}" />
+                    </DataGrid.Columns>
+                </DataGrid>
+                <DataGrid Grid.Row="1"
+                          Grid.Column="1"
+                          ItemsSource="{Binding SecurityStats.Statistics}"
+                          AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Statistic"
+                                            Binding="{Binding Path=StatType}"/>
+                        <DataGridTextColumn Header="Value"
+                                            Binding="{Binding Path=ValueAsObject}" />
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

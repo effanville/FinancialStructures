@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Input;
 using Common.Structure.DataStructures;
 using Common.Structure.FileAccess;
@@ -10,8 +11,10 @@ using Common.UI.Services;
 using Common.UI.ViewModelBases;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancialStructures.Database;
+using FinancialStructures.Database.Statistics;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
+using FinancialStructures.Statistics;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {
@@ -62,6 +65,17 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             set => SetAndNotify(ref fTLVM, value, nameof(TLVM));
         }
 
+        private AccountStatistics fStats;
+
+        /// <summary>
+        /// The statistics for the account.
+        /// </summary>
+        public AccountStatistics Stats
+        {
+            get => fStats;
+            set => SetAndNotify(ref fStats, value, nameof(Stats));
+        }
+
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -88,6 +102,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             UpdateData(portfolio);
 
             DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);
+            Stats = portfolio.GetStats(TypeOfAccount, SelectedName, AccountStatisticsHelpers.AllStatistics()).Single();
             AddCsvData = new RelayCommand(ExecuteAddCsvData);
             ExportCsvData = new RelayCommand(ExecuteExportCsvData);
 
