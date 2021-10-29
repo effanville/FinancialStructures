@@ -43,6 +43,10 @@ namespace FinancialStructures.Statistics
                     return new StatisticIRR1Y();
                 case Statistic.IRR5Y:
                     return new StatisticIRR5Y();
+                case Statistic.DrawDown:
+                    return new StatisticDrawDown();
+                case Statistic.MDD:
+                    return new StatisticMDD();
                 case Statistic.IRRTotal:
                     return new StatisticIRRTotal();
                 case Statistic.NumberUnits:

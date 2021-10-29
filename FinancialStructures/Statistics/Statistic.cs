@@ -91,6 +91,16 @@
         IRRTotal,
 
         /// <summary>
+        /// The DrawDown of this.
+        /// </summary>
+        DrawDown,
+
+        /// <summary>
+        /// The Maximum Drawdown of this.
+        /// </summary>
+        MDD,
+
+        /// <summary>
         /// The sectors recorded in this.
         /// </summary>
         Sectors,
