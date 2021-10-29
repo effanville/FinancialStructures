@@ -14,7 +14,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
     internal class StatisticsChartsViewModel : DataDisplayViewModelBase
     {
-        private readonly Random rnd = new Random();
         private int fHistoryGapDays = 25;
         public int HistoryGapDays
         {
@@ -81,6 +80,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
         public void UpdateChart()
         {
+            var rnd = new Random(12345);
             IRRLines = null;
             ObservableCollection<LineSeries> newValues = new ObservableCollection<LineSeries>();
             if (HistoryStats.Count > 1)
