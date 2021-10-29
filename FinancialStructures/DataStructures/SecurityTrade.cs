@@ -8,7 +8,7 @@ namespace FinancialStructures.DataStructures
     /// <summary>
     /// Contains all information about a Stock trade.
     /// </summary>
-    public class SecurityTrade
+    public class SecurityTrade : IComparable, IComparable<SecurityTrade>, IEquatable<SecurityTrade>
     {
         /// <summary>
         /// The type of this trade.
@@ -82,9 +82,10 @@ namespace FinancialStructures.DataStructures
         }
 
         /// <summary>
-        ///
+        /// The number of shares this trade deals with.
+        /// <para/>
+        /// For Buy or sell this is a positive value. A dividend value is signed.
         /// </summary>
-
         [XmlAttribute]
         public double NumberShares
         {
@@ -95,7 +96,6 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// The price of the underlying that this trade was enacted at.
         /// </summary>
-
         [XmlAttribute]
         public double UnitPrice
         {
@@ -107,7 +107,6 @@ namespace FinancialStructures.DataStructures
         /// The cost of performing this trade. Encompasses all fixed costs and
         /// percentage costs.
         /// </summary>
-
         [XmlAttribute]
         public double TradeCosts
         {
@@ -156,6 +155,60 @@ namespace FinancialStructures.DataStructures
         public override string ToString()
         {
             return Day.ToUkDateString() + "-" + TradeType.ToString() + "-" + Names.Company + "-" + Names.Name + "-" + TotalCost + "-" + NumberShares + "-" + UnitPrice + "-" + TradeCosts;
+        }
+
+        /// <inheritdoc/>
+        public int CompareTo(SecurityTrade other)
+        {
+            return DateTime.Compare(Day, other.Day);
+        }
+
+        /// <summary>
+        /// Method of comparison. Compares dates.
+        /// </summary>
+        public virtual int CompareTo(object obj)
+        {
+            if (obj is SecurityTrade val)
+            {
+                return CompareTo(val);
+            }
+
+            return 0;
+        }
+
+        /// <inheritdoc/>
+        public override bool Equals(object obj)
+        {
+            if (obj is SecurityTrade other)
+            {
+                return Equals(other);
+            }
+
+            return false;
+        }
+
+        /// <inheritdoc/>
+        public bool Equals(SecurityTrade other)
+        {
+            return TradeType.Equals(other.TradeType)
+                && Names.Equals(other.Names)
+                && Day.Equals(other.Day)
+                && NumberShares.Equals(other.NumberShares)
+                && UnitPrice.Equals(other.UnitPrice)
+                && TradeCosts.Equals(other.TradeCosts);
+        }
+
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            int hashCode = 17;
+            hashCode = 23 * hashCode + TradeType.GetHashCode();
+            hashCode = 23 * hashCode + Names.GetHashCode();
+            hashCode = 23 * hashCode + Day.GetHashCode();
+            hashCode = 23 * hashCode + NumberShares.GetHashCode();
+            hashCode = 23 * hashCode + UnitPrice.GetHashCode();
+            hashCode = 23 * hashCode + TradeCosts.GetHashCode();
+            return hashCode;
         }
     }
 }

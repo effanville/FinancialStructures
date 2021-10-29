@@ -71,6 +71,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
                         }
                     }
                 }
+
+                SecurityTrades.Sort();
             }
         }
 
