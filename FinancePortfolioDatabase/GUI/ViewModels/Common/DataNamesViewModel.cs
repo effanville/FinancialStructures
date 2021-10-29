@@ -121,7 +121,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             UpdateDataCallback = updateDataCallback;
             TypeOfAccount = accountType;
             ReportLogger = reportLogger;
-            DataNames = portfolio.NameData(accountType).Select(name => new SelectableEquatable<NameData>(name, portfolio.LatestDate(accountType, name) == DateTime.Today)).ToList();
+            DataNames = portfolio.NameData(accountType).Select(name => new SelectableEquatable<NameData>(name, IsUpdated(portfolio, name))).ToList();
             DataNames.Sort();
 
             SelectionChangedCommand = new RelayCommand<object>(ExecuteSelectionChanged);
@@ -141,6 +141,16 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             get;
         }
 
+        private bool IsUpdated(IPortfolio dataToDisplay, NameData name)
+        {
+            bool result = dataToDisplay.LatestDate(TypeOfAccount, name) == DateTime.Today || dataToDisplay.LatestValue(TypeOfAccount, name) == 0.0;
+
+            if (!result)
+            {
+            }
+            return result;
+        }
+
         /// <summary>
         /// Updates the data in this view model from the given portfolio.
         /// </summary>
@@ -148,12 +158,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         {
             base.UpdateData(dataToDisplay);
 
-            bool IsUpdated(NameData name)
-            {
-                return dataToDisplay.LatestDate(TypeOfAccount, name) == DateTime.Today || dataToDisplay.LatestValue(TypeOfAccount, name) == 0.0;
-            }
-
-            List<SelectableEquatable<NameData>> values = dataToDisplay.NameData(TypeOfAccount).Select(name => new SelectableEquatable<NameData>(name, IsUpdated(name))).ToList();
+            List<SelectableEquatable<NameData>> values = dataToDisplay.NameData(TypeOfAccount).Select(name => new SelectableEquatable<NameData>(name, IsUpdated(dataToDisplay, name))).ToList();
             DataNames = null;
             DataNames = values;
             DataNames.Sort((a, b) => a.Instance.CompareTo(b.Instance));
