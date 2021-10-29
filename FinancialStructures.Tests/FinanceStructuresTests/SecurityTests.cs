@@ -47,7 +47,7 @@ namespace FinancialStructures.Tests.FinanceStructuresTests
                     (new DateTime(2012, 5, 1), 125.2, 17.300000000000001, 0.0),
                     (new DateTime(2015, 4, 3), 90.599999999999994, 4.0, 0.0),
                     (new DateTime(2018, 5, 6), 77.700000000000003, 5.7000000000000002, 0.0),
-                    (new DateTime(2020, 1, 1), 101.09999999999999, 99.799999999999997, 0.0)
+                    (new DateTime(2020, 1, 1), 101.09999999999999, 15.5, 0.0)
                 }).SetName("Three");
             yield return new TestCaseData(
                 SecurityConstructor.Default().Item,
@@ -76,12 +76,12 @@ namespace FinancialStructures.Tests.FinanceStructuresTests
                 (new DateTime(2009, 1, 1), 12.7, 100.0, 101.0, 10.0, 12.3, 5.0),
                 new[] {
                     (new DateTime(2009, 1, 1), 12.7, 10.0, 128.0),
-                    (new DateTime(2010, 1, 1), 100.0, 102.0, 200.0),
-                    (new DateTime(2011, 1, 1), 100.0, 101.5, 0.0),
-                    (new DateTime(2012, 5, 1), 125.2, 117.3, 0.0),
-                    (new DateTime(2015, 4, 3), 90.599999999999994, 104.0, 0.0),
-                    (new DateTime(2018, 5, 6), 77.70, 105.7, 0.0),
-                    (new DateTime(2020, 1, 1), 101.09999999999999, 105.5, 0.0)
+                    (new DateTime(2010, 1, 1), 100.0, 12.0, 200.0),
+                    (new DateTime(2011, 1, 1), 100.0, 11.5, 0.0),
+                    (new DateTime(2012, 5, 1), 125.2, 27.3, 0.0),
+                    (new DateTime(2015, 4, 3), 90.599999999999994, 14.0, 0.0),
+                    (new DateTime(2018, 5, 6), 77.70, 15.7, 0.0),
+                    (new DateTime(2020, 1, 1), 101.09999999999999, 15.5, 0.0)
                 }).SetName("Six");
             yield return new TestCaseData(
                 SecurityConstructor.Secondary().Item,
@@ -91,9 +91,9 @@ namespace FinancialStructures.Tests.FinanceStructuresTests
                     (new DateTime(2010, 1, 5), 1010.0,  2.0, 2020.0),
                     (new DateTime(2011, 2, 1), 1110.0, 2.5, 0.0),
                     (new DateTime(2012, 5, 5), 1215.2, 19.8, 21022.960000000003),
-                    (new DateTime(2016, 4, 3), 900.6, 102.7, 0.0),
-                    (new DateTime(2019, 5, 6), 1770.7, 102.9, 0.0),
-                    (new DateTime(2020, 1, 1), 1001.1, 105.7, 0.0)
+                    (new DateTime(2016, 4, 3), 900.6, 32.5, 0.0),
+                    (new DateTime(2019, 5, 6), 1770.7, 32.7, 0.0),
+                    (new DateTime(2020, 1, 1), 1001.1, 35.5, 0.0)
                 }).SetName("Seven");
             yield return new TestCaseData(
                 SecurityConstructor.Secondary().Item,
@@ -116,8 +116,8 @@ namespace FinancialStructures.Tests.FinanceStructuresTests
                     (new DateTime(2011, 2, 1), 1110.0, 2.5, 0.0),
                     (new DateTime(2012, 5, 5), 1215.2, 19.8, 21022.960000000003),
                     (new DateTime(2016, 4, 3), 900.6, 22.5, 0.0),
-                    (new DateTime(2019, 5, 6), 1770.7, 100.2, 0.0),
-                    (new DateTime(2020, 1, 1), 1001.1, 103.0, 0.0)
+                    (new DateTime(2019, 5, 6), 1770.7, 32.7, 0.0),
+                    (new DateTime(2020, 1, 1), 1001.1, 35.5, 0.0)
                 }).SetName("Nine");
         }
 
