@@ -139,16 +139,17 @@ namespace FinancialStructures.StockStructures.Implementation
                 StockExchange database = XmlFileAccess.ReadFromXmlFile<StockExchange>(fileSystem, filePath, out string error);
                 if (database != null)
                 {
+                    _ = reportLogger?.LogUseful(ReportType.Information, ReportLocation.Loading, $"Loaded StockExchange from {filePath}.");
                     Stocks = database.Stocks;
                 }
                 else
                 {
-                    _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.Loading, $"No Database Loaded from {filePath}. Error {error}.");
+                    _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.Loading, $"No StockExchange Loaded from {filePath}. Error {error}.");
                 }
                 return;
             }
 
-            _ = reportLogger?.LogUseful(ReportType.Information, ReportLocation.Loading, "Loaded Empty New Database.");
+            _ = reportLogger?.LogUseful(ReportType.Information, ReportLocation.Loading, "Loaded Empty New StockExchange.");
             Stocks = new List<Stock>();
         }
 
@@ -162,7 +163,11 @@ namespace FinancialStructures.StockStructures.Implementation
         public void SaveStockExchange(string filePath, IFileSystem fileSystem, IReportLogger reportLogger)
         {
             XmlFileAccess.WriteToXmlFile<StockExchange>(fileSystem, filePath, this, out string error);
-            if (error != null)
+            if (error == null)
+            {
+                _ = reportLogger?.LogUseful(ReportType.Information, ReportLocation.Saving, $"Saved StockExchange at {filePath}");
+            }
+            else
             {
                 _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.Saving, error);
             }
@@ -197,12 +202,13 @@ namespace FinancialStructures.StockStructures.Implementation
                     {
                         int yahooInt = int.Parse(FindAndGetSingleValue(dayValues, "date").ToString());
                         DateTime date = YahooIntToDate(yahooInt);
+                        var localDate = date.ToLocalTime();
                         double open = FindAndGetSingleValue(dayValues, "open", false);
                         double high = FindAndGetSingleValue(dayValues, "high", false);
                         double low = FindAndGetSingleValue(dayValues, "low", false);
                         double close = FindAndGetSingleValue(dayValues, "close", false);
                         double volume = FindAndGetSingleValue(dayValues, "volume", false);
-                        stock.AddValue(date, open, high, low, close, volume);
+                        stock.AddValue(localDate, open, high, low, close, volume);
                         dataLeft = dataLeft.Substring(dayEndIndex);
                         numberEntriesAdded++;
                     }
@@ -320,12 +326,13 @@ namespace FinancialStructures.StockStructures.Implementation
             }
             catch (Exception ex)
             {
-                _ = logger?.LogUsefulError(ReportLocation.AddingData, $"Failed to read from file located at {stockFilePath}: {ex.Message}");
+                _ = logger?.LogUsefulError(ReportLocation.AddingData, $"Failed to read from file located at {stockFilePath}: {ex.Message}.");
             }
 
             if (fileContents.Length == 0)
             {
                 _ = logger?.LogUsefulError(ReportLocation.AddingData, "Nothing in file selected, but expected stock company, name, url data.");
+                return;
             }
 
             foreach (string line in fileContents)
@@ -333,6 +340,8 @@ namespace FinancialStructures.StockStructures.Implementation
                 string[] inputs = line.Split(',');
                 AddStock(inputs, logger);
             }
+
+            _ = logger?.LogUseful(ReportType.Information, ReportLocation.AddingData, $"Configured StockExchange from file {stockFilePath}.");
         }
 
         private void AddStock(string[] parameters, IReportLogger logger = null)

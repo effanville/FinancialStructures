@@ -67,16 +67,6 @@ namespace FinancialStructures.StockStructures
         void Configure(string stockFilePath, IReportLogger logger = null);
 
         /// <summary>
-        /// Loads the <see cref="StockExchange"/> from the file specified.
-        /// </summary>
-        void LoadStockExchange(string filePath, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Saves the <see cref="StockExchange"/> to the file specified.
-        /// </summary>
-        void SaveStockExchange(string filePath, IReportLogger reportLogger = null);
-
-        /// <summary>
         /// Instantiates a <see cref="StockExchange"/> from a file
         /// where each line is
         /// Ticker, Company,Name,Url
@@ -86,13 +76,22 @@ namespace FinancialStructures.StockStructures
         /// <summary>
         /// Loads the <see cref="StockExchange"/> from the file specified.
         /// </summary>
+        void LoadStockExchange(string filePath, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Loads the <see cref="StockExchange"/> from the file specified.
+        /// </summary>
         void LoadStockExchange(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Saves the <see cref="StockExchange"/> to the file specified.
         /// </summary>
-        void SaveStockExchange(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null);
+        void SaveStockExchange(string filePath, IReportLogger reportLogger = null);
 
+        /// <summary>
+        /// Saves the <see cref="StockExchange"/> to the file specified.
+        /// </summary>
+        void SaveStockExchange(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Downloads data for the stock exchange between the dates provided.
