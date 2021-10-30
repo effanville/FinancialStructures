@@ -21,6 +21,11 @@
         Name,
 
         /// <summary>
+        /// The currency.
+        /// </summary>
+        Currency,
+
+        /// <summary>
         /// The LatestValue held.
         /// </summary>
         LatestValue,
@@ -114,6 +119,11 @@
         /// The first date held.
         /// </summary>
         FirstDate,
+
+        /// <summary>
+        /// The last date an investment was made.
+        /// </summary>
+        LastInvestmentDate,
 
         /// <summary>
         /// The latest date held.

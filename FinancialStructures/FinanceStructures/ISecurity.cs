@@ -73,6 +73,12 @@ namespace FinancialStructures.FinanceStructures
         double TotalInvestment(ICurrency currency = null);
 
         /// <summary>
+        /// Returns the last investment in the <see cref="ISecurity"/>.
+        /// </summary>
+        /// <returns></returns>
+        DailyValuation LastInvestment(ICurrency currency = null);
+
+        /// <summary>
         /// Returns a list of all investments with the name of the security.
         /// </summary>
         /// <param name="currency">An optional currency to exchange the value with.</param>

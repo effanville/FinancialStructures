@@ -23,6 +23,8 @@ namespace FinancialStructures.Statistics
                     return new StatisticCompany();
                 case Statistic.Name:
                     return new StatisticName();
+                case Statistic.Currency:
+                    return new StatisticCurrency();
                 case Statistic.LatestValue:
                     return new StatisticLatestValue();
                 case Statistic.RecentChange:
@@ -61,6 +63,8 @@ namespace FinancialStructures.Statistics
                     return new StatisticNumberOfAccounts();
                 case Statistic.FirstDate:
                     return new StatisticFirstDate();
+                case Statistic.LastInvestmentDate:
+                    return new StatisticLastInvestmentDate();
                 case Statistic.LatestDate:
                     return new StatisticLatestDate();
                 case Statistic.NumberEntries:

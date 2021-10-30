@@ -60,15 +60,15 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public DailyValuation FirstValue(ICurrency currency)
         {
-            DailyValuation firstDate = UnitPrice.FirstValuation();
-            if (firstDate == null)
+            DailyValuation sharesFirstDate = Shares.FirstValuation();
+            if (sharesFirstDate == null)
             {
                 return null;
             }
 
-            double latestValue = firstDate.Value * Shares.FirstValue() * GetCurrencyValue(firstDate.Day, currency);
+            double latestValue = sharesFirstDate.Value * UnitPrice.Value(sharesFirstDate.Day)?.Value * GetCurrencyValue(sharesFirstDate.Day, currency) ?? double.NaN;
 
-            return new DailyValuation(firstDate.Day, latestValue);
+            return new DailyValuation(sharesFirstDate.Day, latestValue);
         }
 
         /// <inheritdoc/>
