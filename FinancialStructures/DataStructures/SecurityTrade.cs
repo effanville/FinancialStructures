@@ -67,17 +67,12 @@ namespace FinancialStructures.DataStructures
         {
             get
             {
-                if (TradeType == TradeType.Buy)
-                {
-                    return NumberShares * UnitPrice + TradeCosts;
-                }
-
                 if (TradeType == TradeType.Sell)
                 {
                     return NumberShares * UnitPrice - TradeCosts;
                 }
 
-                return 0.0;
+                return NumberShares * UnitPrice + TradeCosts;
             }
         }
 

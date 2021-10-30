@@ -72,7 +72,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                         }
                     }
                 }
-
+                OnDataEdit(SecurityTrades, new EventArgs());
                 SecurityTrades.Sort();
             }
         }
@@ -130,7 +130,13 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public bool TryDeleteTradeData(DateTime date, IReportLogger reportLogger = null)
         {
-            return SecurityTrades.RemoveAll(trade => trade.Day.Equals(date)) != 0;
+            bool edited = SecurityTrades.RemoveAll(trade => trade.Day.Equals(date)) != 0 && EnsureDataConsistency(reportLogger);
+            if (edited)
+            {
+                OnDataEdit(SecurityTrades, new EventArgs());
+            }
+
+            return edited;
         }
 
         /// <inheritdoc/>
@@ -156,13 +162,16 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 // Investment on that day should correspond also.
                 SecurityTrade trade = SecurityTrades[index];
 
-                DailyValuation sharesPreviousValue = Shares.ValueBefore(trade.Day) ?? new DailyValuation(DateTime.Today, 0);
-                bool hasShareValue = Shares.TryGetValue(trade.Day, out double shareValue);
-                double sign = trade.TradeType == TradeType.Sell ? -1.0 : 1.0;
-                double expectedNumberShares = sharesPreviousValue.Value + sign * trade.NumberShares;
-                if ((hasShareValue && !Equals(shareValue, expectedNumberShares, 1e-4)) || !hasShareValue)
+                double sign = trade.TradeType.Sign();
+                if (trade.TradeType != TradeType.CashPayout)
                 {
-                    Shares.SetData(trade.Day, expectedNumberShares.Truncate(4));
+                    DailyValuation sharesPreviousValue = Shares.ValueBefore(trade.Day) ?? new DailyValuation(DateTime.Today, 0);
+                    bool hasShareValue = Shares.TryGetValue(trade.Day, out double shareValue);
+                    double expectedNumberShares = sharesPreviousValue.Value + sign * trade.NumberShares;
+                    if ((hasShareValue && !Equals(shareValue, expectedNumberShares, 1e-4)) || !hasShareValue)
+                    {
+                        Shares.SetData(trade.Day, expectedNumberShares.Truncate(4));
+                    }
                 }
 
                 Investments.SetData(trade.Day, sign * trade.TotalCost, reportLogger);
@@ -213,19 +222,23 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 // and after.
                 // Investment on that day should correspond also.
                 SecurityTrade trade = SecurityTrades[index];
-                if (trade.TradeType == TradeType.Sell)
-                {
-                    trade.NumberShares = Math.Abs(trade.NumberShares);
-                }
+                double sign = trade.TradeType.Sign();
 
-                DailyValuation sharesPreviousValue = Shares.ValueBefore(trade.Day) ?? new DailyValuation(DateTime.Today, 0);
-                bool hasShareValue = Shares.TryGetValue(trade.Day, out double shareValue);
-
-                double sign = trade.TradeType == TradeType.Sell ? -1.0 : 1.0;
-                double expectedNumberShares = sharesPreviousValue.Value + sign * trade.NumberShares;
-                if ((hasShareValue && !Equals(shareValue, expectedNumberShares, 1e-4)) || !hasShareValue)
+                if (trade.TradeType != TradeType.CashPayout)
                 {
-                    Shares.SetData(trade.Day, expectedNumberShares.Truncate(4));
+                    if (trade.TradeType == TradeType.Sell)
+                    {
+                        trade.NumberShares = Math.Abs(trade.NumberShares);
+                    }
+
+                    DailyValuation sharesPreviousValue = Shares.ValueBefore(trade.Day) ?? new DailyValuation(DateTime.Today, 0);
+                    bool hasShareValue = Shares.TryGetValue(trade.Day, out double shareValue);
+
+                    double expectedNumberShares = sharesPreviousValue.Value + sign * trade.NumberShares;
+                    if ((hasShareValue && !Equals(shareValue, expectedNumberShares, 1e-4)) || !hasShareValue)
+                    {
+                        Shares.SetData(trade.Day, expectedNumberShares.Truncate(4));
+                    }
                 }
 
                 Investments.SetData(trade.Day, sign * trade.TotalCost, reportLogger);

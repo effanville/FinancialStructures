@@ -18,6 +18,11 @@
         /// <summary>
         /// The trade was a dividend investment.
         /// </summary>
-        Dividend
+        Dividend,
+
+        /// <summary>
+        /// The trade was a payout in cash.
+        /// </summary>
+        CashPayout
     }
 }
