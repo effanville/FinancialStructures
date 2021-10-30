@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Windows.Input;
-
 using Common.Structure.Reporting;
 using Common.UI;
 using Common.UI.Commands;
@@ -43,6 +42,17 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             set => SetAndNotify(ref fDisplay, value, nameof(StatsPageExportOptions));
         }
 
+        private ExportReportViewModel fExportReport;
+
+        /// <summary>
+        /// The options for exporting an html page.
+        /// </summary>
+        public ExportReportViewModel ExportReportOptions
+        {
+            get => fExportReport;
+            set => SetAndNotify(ref fExportReport, value, nameof(ExportReportOptions));
+        }
+
         private readonly Action<object> fLoadTab;
 
         /// <summary>
@@ -65,6 +75,12 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             fLoadTab = loadTab;
 
             StatsPageExportOptions = new ExportStatsViewModel(fUiGlobals, Styles, fUserConfiguration.ChildConfigurations[UserConfiguration.StatsOptions], DataStore, obj => fLoadTab(obj));
+            if (!fUserConfiguration.ChildConfigurations.TryGetValue(UserConfiguration.ReportOptions, out _))
+            {
+                fUserConfiguration.ChildConfigurations.Add(UserConfiguration.ReportOptions, new ExportReportConfiguration());
+            }
+
+            ExportReportOptions = new ExportReportViewModel(fUiGlobals, Styles, fUserConfiguration.ChildConfigurations[UserConfiguration.ReportOptions], DataStore, obj => fLoadTab(obj));
             ExportHistoryOptions = new ExportHistoryViewModel(fUiGlobals, Styles, fUserConfiguration.ChildConfigurations[UserConfiguration.HistoryOptions], DataStore, obj => fLoadTab(obj));
             CreateInvestmentListCommand = new RelayCommand(ExecuteInvestmentListCommand);
         }
@@ -86,7 +102,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 {
                     result.FilePath += ".csv";
                 }
-                PortfolioInvestments portfolioInvestments = new PortfolioInvestments(DataStore, new PortfoliInvestmentsSettings());
+                PortfolioInvestments portfolioInvestments = new PortfolioInvestments(DataStore, new PortfolioInvestmentSettings());
                 portfolioInvestments.ExportToFile(result.FilePath, fUiGlobals.CurrentFileSystem, ReportLogger);
                 fLoadTab(new SecurityInvestmentViewModel(DataStore, Styles));
             }

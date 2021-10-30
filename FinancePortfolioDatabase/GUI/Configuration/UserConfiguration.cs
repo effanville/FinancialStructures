@@ -15,7 +15,7 @@ namespace FinancePortfolioDatabase.GUI.Configuration
     /// Contains user specific configuration for the ui.
     /// </summary>
     [DataContract]
-    public sealed class UserConfiguration : IConfiguration
+    public sealed partial class UserConfiguration : IConfiguration
     {
         private readonly IReadOnlyList<Migration<UserConfiguration>> fMigrations;
         private readonly Type[] fExpectedConfigurationTypes = new Type[]
@@ -23,7 +23,8 @@ namespace FinancePortfolioDatabase.GUI.Configuration
             typeof(StatsDisplayConfiguration),
             typeof(StatsCreatorConfiguration),
             typeof(ExportHistoryConfiguration),
-            typeof(ExportStatsConfiguration)
+            typeof(ExportStatsConfiguration),
+            typeof(ExportReportConfiguration)
         };
 
         /// <summary>
@@ -45,6 +46,11 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         /// Name of the child configuration for the <see cref="ExportHistoryViewModel"/>
         /// </summary>
         public const string HistoryOptions = nameof(ExportHistoryViewModel);
+
+        /// <summary>
+        /// Name of the child configuration for the <see cref="ExportHistoryViewModel"/>
+        /// </summary>
+        public const string ReportOptions = nameof(ExportReportViewModel);
 
         /// <summary>
         /// The version of the program this version is associated to.
@@ -81,6 +87,12 @@ namespace FinancePortfolioDatabase.GUI.Configuration
                 { StatsDisplay, new StatsDisplayConfiguration() },
                 { StatsCreator, new StatsCreatorConfiguration() }
             };
+            fMigrations = new List<Migration<UserConfiguration>>() { new Migration<UserConfiguration>(new Version(), AddExportCommandMigration) };
+        }
+
+        private void AddExportCommandMigration(UserConfiguration config)
+        {
+            config.ChildConfigurations[StatsCreator].ChildConfigurations.Add(ReportOptions, new ExportReportConfiguration());
         }
 
         /// <summary>

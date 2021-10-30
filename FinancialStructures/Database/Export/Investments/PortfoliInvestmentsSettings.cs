@@ -5,7 +5,7 @@ namespace FinancialStructures.Database.Export.Investments
     /// <summary>
     /// Settings for generating portfolio investments <see cref="PortfolioInvestments"/>
     /// </summary>
-    public sealed class PortfoliInvestmentsSettings
+    public sealed class PortfolioInvestmentSettings
     {
         /// <summary>
         /// The type of <see cref="Totals"/> to generate investments for.
@@ -28,7 +28,7 @@ namespace FinancialStructures.Database.Export.Investments
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public PortfoliInvestmentsSettings(Totals totalsType = Totals.Security, TwoName name = null)
+        public PortfolioInvestmentSettings(Totals totalsType = Totals.Security, TwoName name = null)
         {
             TotalsType = totalsType;
             Name = name;
