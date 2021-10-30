@@ -98,24 +98,7 @@ namespace FinancialStructures.Database.Statistics
                 valuations.Add(new DailyValuation(date, value));
             }
 
-            double maximumDrawDown = 0.0;
-            double peakValue = double.MinValue;
-            for (int i = 0; i < values.Count; i++)
-            {
-                double value = valuations[i].Value;
-                if (value > peakValue)
-                {
-                    peakValue = value;
-                }
-
-                double drawDown = 100.0 * (peakValue - value) / peakValue;
-                if (drawDown > maximumDrawDown)
-                {
-                    maximumDrawDown = drawDown;
-                }
-            }
-
-            return maximumDrawDown;
+            return MDD(valuations);
         }
 
         /// <summary>
@@ -146,24 +129,7 @@ namespace FinancialStructures.Database.Statistics
                     }
 
                     List<DailyValuation> values = desired.ListOfValues().Where(value => value.Day >= earlierTime && value.Day <= laterTime && !value.Value.Equals(0.0)).ToList();
-                    double maximumDrawDown = 0.0;
-                    double peakValue = double.MinValue;
-                    for (int i = 0; i < values.Count; i++)
-                    {
-                        double value = values[i].Value;
-                        if (value > peakValue)
-                        {
-                            peakValue = value;
-                        }
-
-                        double drawDown = 100.0 * (peakValue - value) / peakValue;
-                        if (drawDown > maximumDrawDown)
-                        {
-                            maximumDrawDown = drawDown;
-                        }
-                    }
-
-                    return maximumDrawDown;
+                    return MDD(values);
                 }
                 case Account.All:
                 default:
@@ -171,6 +137,38 @@ namespace FinancialStructures.Database.Statistics
                     return 0.0;
                 }
             }
+        }
+
+        /// <summary>
+        /// Calculate the MDD of a list of values.
+        /// </summary>
+        /// <param name="values"></param>
+        /// <returns></returns>
+        public static double MDD(List<DailyValuation> values)
+        {
+            if (values.Any())
+            {
+                double maximumDrawDown = 0.0;
+                double peakValue = double.MinValue;
+                for (int i = 0; i < values.Count; i++)
+                {
+                    double value = values[i].Value;
+                    if (value > peakValue)
+                    {
+                        peakValue = value;
+                    }
+
+                    double drawDown = 100.0 * (peakValue - value) / peakValue;
+                    if (drawDown > maximumDrawDown)
+                    {
+                        maximumDrawDown = drawDown;
+                    }
+                }
+
+                return maximumDrawDown;
+            }
+
+            return double.NaN;
         }
     }
 }

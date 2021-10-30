@@ -16,7 +16,7 @@ namespace FinancialStructures.Database.Statistics
         {
             DateTime earlierTime = portfolio.FirstValueDate(total, name);
             DateTime laterTime = portfolio.LatestDate(total, name);
-            return portfolio.TotalMDD(total, earlierTime, laterTime, name);
+            return portfolio.TotalDrawdown(total, earlierTime, laterTime, name);
         }
 
         /// <summary>
@@ -95,23 +95,11 @@ namespace FinancialStructures.Database.Statistics
                 {
                     value += sec.Value(date).Value;
                 }
+
                 valuations.Add(new DailyValuation(date, value));
             }
 
-            double maximumDrawDown = 0.0;
-            double peakValue = double.MinValue;
-            for (int i = 0; i < values.Count; i++)
-            {
-                double value = valuations[i].Value;
-                if (value > peakValue)
-                {
-                    peakValue = value;
-                }
-
-            }
-
-            double drawDown = 100.0 * (peakValue - valuations.Last().Value) / peakValue;
-            return maximumDrawDown;
+            return Drawdown(valuations);
         }
 
         /// <summary>
@@ -142,17 +130,7 @@ namespace FinancialStructures.Database.Statistics
                     }
 
                     List<DailyValuation> values = desired.ListOfValues().Where(value => value.Day >= earlierTime && value.Day <= laterTime && !value.Value.Equals(0.0)).ToList();
-                    double peakValue = double.MinValue;
-                    for (int i = 0; i < values.Count; i++)
-                    {
-                        double value = values[i].Value;
-                        if (value > peakValue)
-                        {
-                            peakValue = value;
-                        }
-                    }
-                    double drawDown = 100.0 * (peakValue - values.Last().Value) / peakValue;
-                    return drawDown;
+                    return Drawdown(values);
                 }
                 case Account.All:
                 default:
@@ -160,6 +138,29 @@ namespace FinancialStructures.Database.Statistics
                     return 0.0;
                 }
             }
+        }
+
+        /// <summary>
+        /// Calculates the DrawDown of a list of values.
+        /// </summary>
+        public static double Drawdown(List<DailyValuation> values)
+        {
+            if (values.Any())
+            {
+                double peakValue = double.MinValue;
+                for (int i = 0; i < values.Count; i++)
+                {
+                    double value = values[i].Value;
+                    if (value > peakValue)
+                    {
+                        peakValue = value;
+                    }
+                }
+
+                return 100.0 * (peakValue - values.Last().Value) / peakValue;
+            }
+
+            return double.NaN;
         }
     }
 }
