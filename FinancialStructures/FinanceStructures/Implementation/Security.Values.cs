@@ -24,7 +24,12 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public DailyValuation LastInvestment(ICurrency currency)
         {
-            return Investments.Values().Last();
+            if (Investments.Any())
+            {
+                return Investments.Values().Last();
+            }
+
+            return null;
         }
 
         /// <inheritdoc/>

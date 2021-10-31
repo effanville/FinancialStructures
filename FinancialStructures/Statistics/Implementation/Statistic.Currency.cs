@@ -43,8 +43,9 @@ namespace FinancialStructures.Statistics
             if (!portfolio.TryGetAccount(account, name, out IValueList desired))
             {
                 StringValue = null;
+                return;
             }
-            StringValue = desired.Names.Currency;
+            StringValue = desired.Names?.Currency;
         }
 
         /// <inheritdoc/>
