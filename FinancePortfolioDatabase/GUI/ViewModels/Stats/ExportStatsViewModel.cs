@@ -203,7 +203,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         private void ExecuteExportCommand()
         {
             fUserConfiguration.StoreConfiguration(this);
-            FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile(ExportType.Html.ToString(), DataStore.DatabaseName(fUiGlobals.CurrentFileSystem), DataStore.Directory(fUiGlobals.CurrentFileSystem), "Html Files|*.html|CSV Files|*.csv|All Files|*.*");
+            FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile(ExportType.Html.ToString().ToLower(), DataStore.DatabaseName(fUiGlobals.CurrentFileSystem), DataStore.Directory(fUiGlobals.CurrentFileSystem), "Html Files|*.html|CSV Files|*.csv|All Files|*.*");
             string path = null;
 
             if (result.Success != null && (bool)result.Success)
