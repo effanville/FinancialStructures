@@ -1,4 +1,5 @@
-﻿using Common.Structure.Extensions;
+﻿using System.Globalization;
+using Common.Structure.Extensions;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
 
@@ -9,6 +10,8 @@ namespace FinancialStructures.Statistics
     /// </summary>
     internal class StatisticBase : IStatistic
     {
+        protected string fCurrency;
+
         /// <inheritdoc/>
         public Statistic StatType
         {
@@ -61,7 +64,42 @@ namespace FinancialStructures.Statistics
         /// <inheritdoc/>
         public override string ToString()
         {
-            return IsNumeric ? Value.TruncateToString() : StringValue;
+            if (!IsNumeric)
+            {
+                return StringValue;
+            }
+
+            if (fCurrency == null)
+            {
+                return Value.TruncateToString();
+            }
+
+            string format = FormatName();
+            if (format == fCurrency)
+            {
+                return $"{fCurrency}{Value.TruncateToString()}";
+            }
+
+            CultureInfo culture = CultureInfo.CreateSpecificCulture(format);
+            return Value.ToString("C2", culture);
+        }
+
+        private string FormatName()
+        {
+            switch (fCurrency)
+            {
+                case "GBP":
+                case "£":
+                    return "en-GB";
+                case "HKD":
+                    return "zh-HK";
+                case "USD":
+                    return "en-US";
+                case "SAR":
+                    return "en-ZA";
+                default:
+                    return fCurrency;
+            }
         }
     }
 }

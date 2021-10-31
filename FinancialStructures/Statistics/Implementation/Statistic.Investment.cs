@@ -28,6 +28,7 @@ namespace FinancialStructures.Statistics
                 }
             }
 
+            fCurrency = portfolio.BaseCurrency;
             Value = sum;
         }
 
@@ -44,6 +45,7 @@ namespace FinancialStructures.Statistics
                 }
             }
 
+            fCurrency = portfolio.BaseCurrency;
             Value = sum;
         }
     }

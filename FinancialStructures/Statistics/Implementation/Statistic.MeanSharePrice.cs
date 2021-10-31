@@ -22,6 +22,7 @@ namespace FinancialStructures.Statistics
             }
             if (desired is ISecurity security)
             {
+                fCurrency = portfolio.BaseCurrency;
                 Value = security.MeanSharePrice(TradeType.Buy);
             }
         }

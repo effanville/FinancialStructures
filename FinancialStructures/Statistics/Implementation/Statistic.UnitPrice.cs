@@ -22,6 +22,7 @@ namespace FinancialStructures.Statistics
             if (desired is ISecurity security)
             {
                 Value = security.UnitPrice.ValueOnOrBefore(DateTime.Today)?.Value ?? 0.0;
+                fCurrency = security.Names.Currency;
             }
         }
 

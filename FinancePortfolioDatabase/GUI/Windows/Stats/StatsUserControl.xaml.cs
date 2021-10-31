@@ -46,7 +46,7 @@ namespace FinancePortfolioDatabase.GUI.Windows.Stats
                 List<IStatistic> stat = vm.Stats.First().Statistics;
                 foreach (IStatistic value in stat)
                 {
-                    dt.Columns.Add(new DataColumn(value.StatType.ToString(), value.IsNumeric ? typeof(double) : typeof(string)));
+                    dt.Columns.Add(new DataColumn(value.StatType.ToString(), typeof(string)));
                 }
 
                 // Now add the statistics values.
