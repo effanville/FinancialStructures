@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System.IO.Abstractions.TestingHelpers;
+using FinancialStructures.DataExporters.History;
+using NUnit.Framework;
 
 namespace FinancialStructures.Tests.StatsMakers
 {
@@ -6,9 +8,17 @@ namespace FinancialStructures.Tests.StatsMakers
     internal class CSVHIstoryWriterTests
     {
         [Test]
-        [Ignore("Currently cannot create into a dummy folder structure.")]
         public void CanGenerate()
         {
+            var portfolio = TestDatabase.Databases[TestDatabaseName.OneSecOneBank];
+            var history = new PortfolioHistory(portfolio, new PortfolioHistorySettings());
+            MockFileSystem tempFileSystem = new MockFileSystem();
+            string savePath = "c:/temp/saved.csv";
+
+            history.ExportToFile(savePath, tempFileSystem);
+            string file = tempFileSystem.File.ReadAllText(savePath);
+
+            Assert.IsNotEmpty(file);
         }
     }
 }

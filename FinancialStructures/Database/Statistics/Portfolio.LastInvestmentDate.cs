@@ -56,7 +56,7 @@ namespace FinancialStructures.Database.Statistics
                 if (valueList.Any())
                 {
                     ICurrency currency = portfolio.Currency(Account.Security, valueList);
-                    DateTime latest = valueList.LastInvestment(currency).Day;
+                    DateTime latest = valueList.LastInvestment(currency)?.Day ?? DateTime.MinValue;
                     if (latest > output)
                     {
                         output = latest;
