@@ -65,6 +65,8 @@ namespace FinancialStructures.Statistics
                     return new StatisticFirstDate();
                 case Statistic.LastInvestmentDate:
                     return new StatisticLastInvestmentDate();
+                case Statistic.LastPurchaseDate:
+                    return new StatisticLastPurchaseDate();
                 case Statistic.LatestDate:
                     return new StatisticLatestDate();
                 case Statistic.NumberEntries:

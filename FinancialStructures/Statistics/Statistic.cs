@@ -126,6 +126,11 @@
         LastInvestmentDate,
 
         /// <summary>
+        /// The last date a purchase was made.
+        /// </summary>
+        LastPurchaseDate,
+
+        /// <summary>
         /// The latest date held.
         /// </summary>
         LatestDate,
