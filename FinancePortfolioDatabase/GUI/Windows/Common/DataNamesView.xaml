@@ -28,6 +28,7 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal"
@@ -130,8 +131,15 @@
                                     Binding="{Binding Path=Instance.Notes,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </DataGrid.Columns>
         </DataGrid>
+        <GridSplitter Grid.Row="1"
+                      Grid.Column="1"
+                      HorizontalAlignment="Center"
+                      VerticalAlignment="Stretch"
+                      ShowsPreview="True"
+                      Background="{Binding Styles.BackgroundSecondaryBrush}"
+                      Width="5"/>
         <Grid Grid.Row="1"
-              Grid.Column="1"
+              Grid.Column="2"
               Visibility="{Binding Path=SelectedNameSet, Converter={StaticResource BoolToVis}}"
               Width="Auto"
               Height="Auto"
