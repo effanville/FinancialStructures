@@ -131,6 +131,7 @@ namespace FinancialStructures.DataExporters.History
 
             Task.WhenAll(tasks).Wait();
             Snapshots = bag.ToList();
+            Snapshots.Sort();
         }
 
         /// <summary>

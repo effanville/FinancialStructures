@@ -11,7 +11,7 @@ namespace FinancialStructures.DataExporters.History
     /// <summary>
     /// Stores all values and some IRRs of a portfolio on a given day
     /// </summary>
-    public sealed class PortfolioDaySnapshot
+    public sealed class PortfolioDaySnapshot : IComparable, IComparable<PortfolioDaySnapshot>
     {
         /// <summary>
         /// The Date for the snapshot.
@@ -210,8 +210,8 @@ namespace FinancialStructures.DataExporters.History
                 {
                     Security1YrCar.Add(companyName, portfolio.TotalIRR(Totals.SecurityCompany, date.AddDays(-365), date, new TwoName(companyName)));
 
-                    DateTime firstDate = portfolio.FirstValueDate(Totals.SecurityCompany, new TwoName(companyName));
-                    double totalIRR = date < firstDate ? 0.0 : portfolio.TotalIRR(Totals.SecurityCompany, firstDate, date, new TwoName(companyName));
+                    DateTime firstCompanyDate = portfolio.FirstValueDate(Totals.SecurityCompany, new TwoName(companyName));
+                    double totalIRR = date < firstCompanyDate ? 0.0 : portfolio.TotalIRR(Totals.SecurityCompany, firstCompanyDate, date, new TwoName(companyName));
                     SecurityTotalCar.Add(companyName, totalIRR);
                 }
             }
@@ -254,6 +254,25 @@ namespace FinancialStructures.DataExporters.History
                     CurrentSectorTotalCar.Add(sectorName, sectorCAR);
                 }
             }
+        }
+
+        /// <inheritdoc/>
+        public int CompareTo(PortfolioDaySnapshot other)
+        {
+            return DateTime.Compare(Date, other.Date);
+        }
+
+        /// <summary>
+        /// Method of comparison. Compares dates.
+        /// </summary>
+        public int CompareTo(object obj)
+        {
+            if (obj is PortfolioDaySnapshot val)
+            {
+                return CompareTo(val);
+            }
+
+            return 0;
         }
     }
 }
