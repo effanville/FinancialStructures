@@ -45,6 +45,12 @@ namespace FinancialStructures.DataExporters.History
             get;
         }
 
+        public double TotalSecurityIRR
+        {
+            get;
+            private set;
+        }
+
         /// <summary>
         /// The totals held in each of the securities.
         /// </summary>
@@ -199,6 +205,15 @@ namespace FinancialStructures.DataExporters.History
             List<string> companyNames = portfolio.Companies(Account.Security).ToList();
             companyNames.Sort();
 
+            var firstDate = portfolio.FirstValueDate(Totals.Security);
+            if (firstDate > date)
+            {
+                TotalSecurityIRR = 0;
+            }
+            else
+            {
+                TotalSecurityIRR = portfolio.TotalIRR(Totals.Security, firstDate, date);
+            }
             foreach (string companyName in companyNames)
             {
                 if (includeValues)
