@@ -50,7 +50,6 @@ namespace FinancialStructures.Database.Implementation
                     }
 
                     WireDataChangedEvents();
-                    OnPortfolioChanged(this, new PortfolioEventArgs(changedPortfolio: true));
                     Saving();
                     _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Loading, $"Loaded new database from {filePath}");
                 }
@@ -64,6 +63,7 @@ namespace FinancialStructures.Database.Implementation
                     sec.EnsureOnLoadDataConsistency();
                 }
 
+                OnPortfolioChanged(this, new PortfolioEventArgs(changedPortfolio: true));
                 return;
             }
 
