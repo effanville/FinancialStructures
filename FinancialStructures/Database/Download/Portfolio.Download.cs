@@ -245,7 +245,7 @@ namespace FinancialStructures.Database.Download
 
                 return false;
             };
-            int number = 30;
+            int number = 28;
             string searchString = $"data-reactid=\"{number}\"><span class=\"Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)\" data-reactid=\"{number + 1}\">";
             int poundsValue = data.IndexOf(searchString);
             if (poundsValue != -1)
