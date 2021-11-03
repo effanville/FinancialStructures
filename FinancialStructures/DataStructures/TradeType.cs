@@ -21,6 +21,11 @@
         Dividend,
 
         /// <summary>
+        /// The price of one share was changed.
+        /// </summary>
+        ShareReprice,
+
+        /// <summary>
         /// The trade was a payout in cash.
         /// </summary>
         CashPayout

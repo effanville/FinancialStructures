@@ -71,7 +71,10 @@ namespace FinancialStructures.DataStructures
                 {
                     return NumberShares * UnitPrice - TradeCosts;
                 }
-
+                if (TradeType == TradeType.ShareReprice)
+                {
+                    return 0.0;
+                }
                 return NumberShares * UnitPrice + TradeCosts;
             }
         }

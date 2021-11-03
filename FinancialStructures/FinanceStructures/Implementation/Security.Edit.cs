@@ -16,36 +16,39 @@ namespace FinancialStructures.FinanceStructures.Implementation
     public partial class Security
     {
         /// <inheritdoc/>
-        public override bool TryEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null)
+        public override bool TryEditData(DateTime oldDate, DateTime newDate, double value, IReportLogger logger = null)
         {
-            return AddOrEditData(UnitPrice, oldDate, date, value, reportLogger) & EnsureDataConsistency(reportLogger);
+            bool edited = AddOrEditData(UnitPrice, oldDate, newDate, value, logger);
+            EnsureDataConsistency(oldDate, logger);
+            return edited;
         }
 
         /// <inheritdoc/>
-        public override void SetData(DateTime date, double value, IReportLogger loggerLogger = null)
+        public override void SetData(DateTime date, double value, IReportLogger logger = null)
         {
-            _ = AddOrEditData(UnitPrice, date, date, value, loggerLogger) & EnsureDataConsistency(loggerLogger);
+            _ = AddOrEditData(UnitPrice, date, date, value, logger);
+            EnsureDataConsistency(date, logger);
         }
 
         /// <inheritdoc/>
-        public bool AddOrEditData(DateTime oldDate, DateTime date, double unitPrice, double shares, double investment = 0, SecurityTrade trade = null, IReportLogger reportLogger = null)
+        public bool AddOrEditData(DateTime oldDate, DateTime newDate, double unitPrice, double shares, double investment = 0, SecurityTrade trade = null, IReportLogger reportLogger = null)
         {
-            bool editUnitPrice = AddOrEditData(UnitPrice, oldDate, date, unitPrice, reportLogger);
-            bool editShares = AddOrEditData(Shares, oldDate, date, shares, reportLogger);
-            bool editInvestments = AddOrEditData(Investments, oldDate, date, investment, reportLogger);
+            bool editUnitPrice = AddOrEditData(UnitPrice, oldDate, newDate, unitPrice, reportLogger);
+            bool editShares = AddOrEditData(Shares, oldDate, newDate, shares, reportLogger);
+            bool editInvestments = AddOrEditData(Investments, oldDate, newDate, investment, reportLogger);
             if (trade != null)
             {
                 AddOrEditTrade(oldDate, trade);
             }
-
-            return editUnitPrice & editShares & editInvestments && EnsureDataConsistency(reportLogger);
+            EnsureDataConsistency(oldDate, reportLogger);
+            return editUnitPrice & editShares & editInvestments;
         }
 
         /// <inheritdoc/>
         public bool TryAddOrEditTradeData(SecurityTrade oldTrade, SecurityTrade newTrade, IReportLogger reportLogger = null)
         {
             AddOrEditTrade(oldTrade.Day, newTrade);
-            _ = EnsureDataConsistency(reportLogger);
+            EnsureDataConsistency(oldTrade.Day, reportLogger);
             OnDataEdit(this, new EventArgs());
             return true;
         }
@@ -121,16 +124,18 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// </summary>
         public override bool TryDeleteData(DateTime date, IReportLogger reportLogger = null)
         {
-            return UnitPrice.TryDeleteValue(date, reportLogger)
-                & Shares.TryDeleteValue(date, reportLogger)
-                & Investments.TryDeleteValue(date, reportLogger)
-                && EnsureDataConsistency(reportLogger);
+            bool unitDel = UnitPrice.TryDeleteValue(date, reportLogger);
+            bool sharesDel = Shares.TryDeleteValue(date, reportLogger);
+            bool invDel = Investments.TryDeleteValue(date, reportLogger);
+            EnsureDataConsistency(date, reportLogger);
+            return unitDel & sharesDel & invDel;
         }
 
         /// <inheritdoc/>
         public bool TryDeleteTradeData(DateTime date, IReportLogger reportLogger = null)
         {
-            bool edited = SecurityTrades.RemoveAll(trade => trade.Day.Equals(date)) != 0 && EnsureDataConsistency(reportLogger);
+            bool edited = SecurityTrades.RemoveAll(trade => trade.Day.Equals(date)) != 0;
+            EnsureDataConsistency(date, reportLogger);
             if (edited)
             {
                 OnDataEdit(SecurityTrades, new EventArgs());
@@ -147,23 +152,21 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <summary>
-        /// Upon a new/edit trade, one needs to recompute the values of the investments
-        /// One should not change Inv = 0 or Inv > 0  to ensure that dividend reivestments are not accidentally included in a new investment.
-        /// This though causes a problem if a value is deleted.
+        /// Upon a new/edit/Delete trade, one needs to recompute the values of the investments for that trade.
         /// </summary>
-        internal bool EnsureDataConsistency(IReportLogger reportLogger = null)
+        internal void EnsureDataConsistency(DateTime dateAltered, IReportLogger reportLogger = null)
         {
             RemoveEventListening();
             CleanData();
-            for (int index = 0; index < SecurityTrades.Count; index++)
-            {
-                // When a trade is present, number of shares bought/sold should correspond to share number difference before
-                // and after.
-                // Investment on that day should correspond also.
-                SecurityTrade trade = SecurityTrades[index];
+            // When a trade is present, number of shares bought/sold should correspond to share number difference before
+            // and after.
+            // Investment on that day should correspond also.
 
+            SecurityTrade trade = SecurityTrades.FirstOrDefault(t => t.Day.Equals(dateAltered));
+            if (trade != null)
+            {
                 double sign = trade.TradeType.Sign();
-                if (trade.TradeType != TradeType.CashPayout)
+                if (!trade.TradeType.Equals(TradeType.CashPayout) && !trade.TradeType.Equals(TradeType.Dividend))
                 {
                     DailyValuation sharesPreviousValue = Shares.ValueBefore(trade.Day) ?? new DailyValuation(DateTime.Today, 0);
                     bool hasShareValue = Shares.TryGetValue(trade.Day, out double shareValue);
@@ -174,14 +177,20 @@ namespace FinancialStructures.FinanceStructures.Implementation
                     }
                 }
 
-                Investments.SetData(trade.Day, sign * trade.TotalCost, reportLogger);
+                if (trade.TradeType != TradeType.ShareReprice)
+                {
+                    Investments.SetData(trade.Day, sign * trade.TotalCost, reportLogger);
+                }
             }
 
             // now cycle through Investments removing values that no longer have trades.
             for (int index = 0; index < Investments.Count(); index++)
             {
                 DailyValuation investmentValue = Investments[index];
-                if (!SecurityTrades.Any(trade => trade.Day == investmentValue.Day))
+                bool noTrade = SecurityTrades.Any(trade => trade.Day.Equals(investmentValue.Day));
+                bool shareRepriceTrade = SecurityTrades.Any(trade => trade.Day.Equals(investmentValue.Day) && trade.TradeType.Equals(TradeType.ShareReprice));
+                if (!noTrade
+                    | shareRepriceTrade)
                 {
                     if (Investments.TryDeleteValue(investmentValue.Day, reportLogger))
                     {
@@ -194,7 +203,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
             for (int index = 0; index < Shares.Count(); index++)
             {
                 DailyValuation shareValue = Shares[index];
-                if (!SecurityTrades.Any(trade => trade.Day == shareValue.Day))
+                if (!SecurityTrades.Any(trade => trade.Day.Equals(shareValue.Day))
+                    || SecurityTrades.Any(trade => trade.Day.Equals(shareValue.Day) && (trade.TradeType.Equals(TradeType.CashPayout) || trade.TradeType.Equals(TradeType.Dividend))))
                 {
                     if (Shares.TryDeleteValue(shareValue.Day, reportLogger))
                     {
@@ -202,8 +212,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
                     }
                 }
             }
+
             SetupEventListening();
-            return true;
         }
 
         /// <summary>
@@ -224,7 +234,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 SecurityTrade trade = SecurityTrades[index];
                 double sign = trade.TradeType.Sign();
 
-                if (trade.TradeType != TradeType.CashPayout)
+                if (!trade.TradeType.Equals(TradeType.CashPayout) && !trade.TradeType.Equals(TradeType.ShareReprice))
                 {
                     if (trade.TradeType == TradeType.Sell)
                     {
@@ -283,7 +293,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 {
                     if (!SecurityTrades.Any(trade => trade.Day == shareValue.Day))
                     {
-                        SecurityTrades.Add(new SecurityTrade(TradeType.Dividend, Names, shareValue.Day, shareDiff, UnitPrice.ValueOnOrBefore(shareValue.Day).Value, 0.0));
+                        SecurityTrades.Add(new SecurityTrade(TradeType.ShareReprice, Names, shareValue.Day, shareDiff, UnitPrice.ValueOnOrBefore(shareValue.Day).Value, 0.0));
                     }
                 }
                 previousNumShares = shareValue.Value;
