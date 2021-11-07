@@ -41,6 +41,30 @@ namespace FinancialStructures.Database
         }
 
         /// <summary>
+        /// A collection of notes for the portfolio.
+        /// </summary>
+        IReadOnlyList<Note> Notes
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Add a note to the list of notes <see cref="Notes"/>.
+        /// </summary>
+        void AddNote(DateTime timeStamp, string note);
+
+        /// <summary>
+        /// Delete a note from the list of notes <see cref="Notes"/>.
+        /// </summary>
+        bool RemoveNote(Note note);
+
+        /// <summary>
+        /// Delete a note from the list of notes <see cref="Notes"/>
+        /// at the index specified.
+        /// </summary>
+        void RemoveNote(int noteIndex);
+
+        /// <summary>
         /// Securities stored in this database.
         /// This is a shallow copy of the actual list, accessed in a
         /// threadsafe manner.

@@ -20,7 +20,8 @@ namespace FinancePortfolioDatabase.Tests
             Assert.Multiple(() =>
             {
                 Assert.IsFalse(ViewModel.HasValues);
-                Assert.AreEqual(ViewModel.PortfolioNameText, "Unsaved database loaded");
+                Assert.AreEqual(ViewModel.PortfolioNameText, "Unsaved database");
+                Assert.AreEqual(0, ViewModel.Notes.Count);
             });
         }
 
@@ -34,12 +35,13 @@ namespace FinancePortfolioDatabase.Tests
             Assert.Multiple(() =>
             {
                 Assert.IsTrue(ViewModel.HasValues);
-                Assert.AreEqual("Portfolio: TestFilePath loaded.", ViewModel.PortfolioNameText);
+                Assert.AreEqual("TestFilePath", ViewModel.PortfolioNameText);
                 Assert.AreEqual("Total Securities: 1", ViewModel.SecurityTotalText);
                 Assert.AreEqual("Total Value: 1 ", ViewModel.SecurityAmountText);
 
                 Assert.AreEqual("Total Bank Accounts: 1", ViewModel.BankAccountTotalText);
                 Assert.AreEqual("Total Value: 1 ", ViewModel.BankAccountAmountText);
+                Assert.AreEqual(0, ViewModel.Notes.Count);
             });
         }
 

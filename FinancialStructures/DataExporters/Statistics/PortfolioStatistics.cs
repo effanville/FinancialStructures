@@ -7,6 +7,7 @@ using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Statistics;
+using FinancialStructures.DataStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Statistics;
 
@@ -36,7 +37,7 @@ namespace FinancialStructures.DataExporters.Statistics
         {
             get;
             set;
-        } = new List<AccountStatistics>();
+        }
 
         /// <summary>
         /// List of statistics of each company performance
@@ -45,7 +46,7 @@ namespace FinancialStructures.DataExporters.Statistics
         {
             get;
             set;
-        } = new List<AccountStatistics>();
+        }
 
         /// <summary>
         /// List of statistics of each company performance
@@ -54,7 +55,7 @@ namespace FinancialStructures.DataExporters.Statistics
         {
             get;
             set;
-        } = new List<AccountStatistics>();
+        }
 
         /// <summary>
         /// Each specified sectors performance.
@@ -72,7 +73,7 @@ namespace FinancialStructures.DataExporters.Statistics
         {
             get;
             set;
-        } = new List<AccountStatistics>();
+        }
 
         /// <summary>
         /// Statistics for each company holding bank accounts.
@@ -81,7 +82,7 @@ namespace FinancialStructures.DataExporters.Statistics
         {
             get;
             set;
-        } = new List<AccountStatistics>();
+        }
 
         /// <summary>
         /// Total statistics for each BankAccount.
@@ -90,7 +91,16 @@ namespace FinancialStructures.DataExporters.Statistics
         {
             get;
             set;
-        } = new List<AccountStatistics>();
+        }
+
+        /// <summary>
+        /// Any notes for the portfolio.
+        /// </summary>
+        public List<Note> PortfolioNotes
+        {
+            get;
+            set;
+        }
 
         /// <summary>
         /// Default empty constructor.
@@ -139,6 +149,8 @@ namespace FinancialStructures.DataExporters.Statistics
                     SectorStats.AddRange(portfolio.GetStats(Account.Benchmark, new TwoName("Benchmark", sectorName), statisticsToDisplay: sectorData));
                 }
             }
+
+            PortfolioNotes = portfolio.Notes.ToList();
         }
 
         /// <summary>
@@ -162,7 +174,7 @@ namespace FinancialStructures.DataExporters.Statistics
                         fileWriter.WriteLine($"<h1>{fDatabaseName} - Statement on {DateTime.Today.ToShortDateString()}</h1>");
                     }
 
-                    fileWriter.WriteTableFromEnumerable(exportType, fDisplayOptions.BankAccountDisplayOptions.DisplayFieldNames(), PortfolioTotals.Select(data => data.Statistics), false);
+                    fileWriter.WriteTableFromEnumerable(exportType, fDisplayOptions.BankAccountDisplayOptions.DisplayFieldNames(), PortfolioTotals.Select(data => data.Statistics), headerFirstColumn: false);
 
                     if (fDisplayOptions.SecurityDisplayOptions.ShouldDisplay)
                     {
@@ -183,7 +195,7 @@ namespace FinancialStructures.DataExporters.Statistics
 
                         SpacingAdd(settings.Spacing, fDisplayOptions.SecurityDisplayOptions.SortingField, ref securityDataToWrite);
 
-                        fileWriter.WriteTableFromEnumerable(exportType, fDisplayOptions.SecurityDisplayOptions.DisplayFieldNames(), securityDataToWrite.Select(data => data.Statistics), true);
+                        fileWriter.WriteTableFromEnumerable(exportType, fDisplayOptions.SecurityDisplayOptions.DisplayFieldNames(), securityDataToWrite.Select(data => data.Statistics), headerFirstColumn: true);
                     }
 
                     if (fDisplayOptions.BankAccountDisplayOptions.ShouldDisplay)
@@ -205,7 +217,7 @@ namespace FinancialStructures.DataExporters.Statistics
 
                         SpacingAdd(settings.Spacing, fDisplayOptions.BankAccountDisplayOptions.SortingField, ref bankAccountDataToWrite);
 
-                        fileWriter.WriteTableFromEnumerable(exportType, fDisplayOptions.BankAccountDisplayOptions.DisplayFieldNames(), bankAccountDataToWrite.Select(data => data.Statistics), true);
+                        fileWriter.WriteTableFromEnumerable(exportType, fDisplayOptions.BankAccountDisplayOptions.DisplayFieldNames(), bankAccountDataToWrite.Select(data => data.Statistics), headerFirstColumn: true);
                     }
 
                     if (fDisplayOptions.SectorDisplayOptions.ShouldDisplay)
@@ -217,8 +229,11 @@ namespace FinancialStructures.DataExporters.Statistics
 
                         SectorSpacingAdd(settings.Spacing, fDisplayOptions.SectorDisplayOptions.SortingField, ref sectorDataToWrite);
 
-                        fileWriter.WriteTableFromEnumerable(exportType, fDisplayOptions.SectorDisplayOptions.DisplayFieldNames(), sectorDataToWrite.Select(data => data.Statistics), true);
+                        fileWriter.WriteTableFromEnumerable(exportType, fDisplayOptions.SectorDisplayOptions.DisplayFieldNames(), sectorDataToWrite.Select(data => data.Statistics), headerFirstColumn: true);
                     }
+
+                    fileWriter.WriteTitle(exportType, "Portfolio Notes", HtmlTag.h2);
+                    fileWriter.WriteTable(exportType, PortfolioNotes, headerFirstColumn: false);
 
                     if (exportType == ExportType.Html)
                     {

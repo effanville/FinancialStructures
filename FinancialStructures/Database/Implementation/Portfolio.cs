@@ -145,6 +145,7 @@ namespace FinancialStructures.Database.Implementation
             BankAccounts = portfolio.BankAccounts;
             Currencies = portfolio.Currencies;
             BenchMarks = portfolio.BenchMarks;
+            NotesInternal = portfolio.NotesInternal;
         }
 
         /// <summary>
