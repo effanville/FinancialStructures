@@ -5,6 +5,7 @@ using Cake.Frosting;
 namespace Build
 {
     [TaskName("CopyPublish")]
+    [IsDependentOn(typeof(NugetPublishTask))]
     [IsDependentOn(typeof(PublishTask))]
     public sealed class CopyPublishTask : FrostingTask<BuildContext>
     {
