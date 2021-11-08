@@ -29,6 +29,7 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
+        [XmlElement(ElementName = "FilePath")]
         public string FilePath
         {
             get;
@@ -36,6 +37,7 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
+        [XmlElement(ElementName = "BaseCurrency")]
         public string BaseCurrency
         {
             get;
@@ -43,6 +45,7 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
+        [XmlArray(ElementName = "Funds")]
         public List<Security> Funds
         {
             get;
@@ -64,6 +67,7 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
+        [XmlArray(ElementName = "BankAccounts")]
         public List<CashAccount> BankAccounts
         {
             get;
@@ -84,6 +88,7 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
+        [XmlArray(ElementName = "Currencies")]
         public List<Currency> Currencies
         {
             get;
@@ -104,6 +109,7 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
+        [XmlArray(ElementName = "BenchMarks")]
         public List<Sector> BenchMarks
         {
             get;
