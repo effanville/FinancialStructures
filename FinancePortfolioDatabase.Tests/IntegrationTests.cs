@@ -28,7 +28,7 @@ namespace FinancePortfolioDatabase.Tests
             Assert.AreEqual(1, ViewModel.ProgramPortfolio.BenchMarksThreadSafe.Count);
 
             BasicDataViewModel dataView = ViewModel.Tabs[0] as BasicDataViewModel;
-            Assert.AreEqual("Portfolio: saved loaded.", dataView.PortfolioNameText);
+            Assert.AreEqual("saved", dataView.PortfolioNameText);
             Assert.AreEqual("Total Securities: 1", dataView.SecurityTotalText);
             Assert.AreEqual("Total Bank Accounts: 1", dataView.BankAccountTotalText);
 

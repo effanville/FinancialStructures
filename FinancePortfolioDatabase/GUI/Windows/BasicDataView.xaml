@@ -10,6 +10,7 @@
              xmlns:financeportfoliodatabase="clr-namespace:FinancePortfolioDatabase"
              xmlns:System="clr-namespace:System;assembly=mscorlib"
              xmlns:viewmodels="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels"
+             xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
              d:DataContext="{d:DesignInstance Type=viewmodels:BasicDataViewModel}"
              mc:Ignorable="d"
              HorizontalAlignment="Stretch"
@@ -39,82 +40,161 @@
                                Grid.Column="0" />
                     <TextBlock Text="{Binding Label.Name}"
                                Grid.Column="1" />
-                    <TextBlock Text="{Binding Instance.Value, StringFormat=N2}"
+                    <TextBlock Text="{Binding Instance.Value, StringFormat=C2}"
                                Grid.Column="2" />
                 </Grid>
             </DataTemplate>
         </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*" />
-            <RowDefinition Height="10*" />
+            <RowDefinition Height="Auto"
+                           MinHeight="40"/>
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0"
-                   Margin="10 1 1 1"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Center"
-                   Text="{Binding PortfolioNameText}" />
-        <Grid Grid.Row="1"
-              Visibility="{Binding HasValues, Converter={StaticResource BoolToVis}}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0">
+        <Border Grid.Row="0"
+                BorderBrush="{Binding Styles.BackgroundSecondaryBrush}"
+                BorderThickness="2">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="5*" />
+                </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="10*" />
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                           Grid.Column="0"
+                           Margin="5"
+                           FontWeight="DemiBold"
+                           Text="Portfolio Overview:" />
+                <TextBlock Grid.Row="0"
+                           Grid.Column="1"
+                           Margin="5"
+                           HorizontalAlignment="Left"
+                           FontWeight="DemiBold"
+                           Text="{Binding PortfolioNameText}" />
+                <Grid Grid.Row="1"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="2"
+                      Visibility="{Binding HasValues, Converter={StaticResource BoolToVis}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0"
+                                   Margin="10 5 10 5"
+                                   Text="{Binding SecurityTotalText}" />
+                        <TextBlock Grid.Row="1"
+                                   Margin="10 5 10 5"
+                                   Text="{Binding SecurityAmountText}" />
+                        <TextBlock Grid.Row="2"
+                                   Margin="10 5 10 5"
+                                   Text="Top Securities:" />
+                        <ItemsControl Grid.Row="3"
+                                      ItemsSource="{Binding TopSecurities}"
+                                      Margin="10 5 10 5" />
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0"
+                                   Margin="10 5 10 5"
+                                   Text="{Binding BankAccountTotalText, StringFormat=C2}" />
+                        <TextBlock Grid.Row="1"
+                                   Margin="10 5 10 5"
+                                   Text="{Binding BankAccountAmountText, StringFormat=C2}" />
+                        <TextBlock Grid.Row="2"
+                                   Margin="10 5 10 5"
+                                   Text="Top Securities:" />
+                        <ItemsControl Grid.Row="3"
+                                      ItemsSource="{Binding TopBankAccounts}"
+                                      Margin="10 5 10 5" />
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Border>
+        <Border Grid.Row="1"
+                BorderBrush="{Binding Styles.BackgroundSecondaryBrush}"
+                BorderThickness="2"
+                Visibility="{Binding HasValues, Converter={StaticResource BoolToVis}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
-                           Margin="10 5 10 5"
-                           Text="Securities"
-                           Background="{Binding Styles.BackgroundBrush}" />
-                <TextBlock Grid.Row="1"
-                           Margin="10 5 10 5"
-                           Text="{Binding SecurityTotalText}" />
-                <TextBlock Grid.Row="2"
-                           Margin="10 5 10 5"
-                           Text="{Binding SecurityAmountText}" />
-                <TextBlock Grid.Row="3"
-                           Margin="10 5 10 5"
-                           Text="Top Securities:" />
-                <ItemsControl Grid.Row="4"
-                              ItemsSource="{Binding TopSecurities}"
-                              Margin="10 5 10 5" />
+                           Margin="5"
+                           FontWeight="DemiBold"
+                           Text="Portfolio Notes:" />
+                <DataGrid Grid.Row="1"
+                      FontSize="{Binding Styles.SmallFontSize}"
+                      Margin="5"
+                      MinWidth="600"
+                      HorizontalAlignment="Left"
+                      SelectionUnit="FullRow"
+                      SelectionMode="Extended"
+                      CanUserAddRows="True"
+                      IsReadOnly="False"
+                      CanUserDeleteRows="False"
+                      AutoGenerateColumns="False"
+                          ItemsSource="{Binding Path=Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          DataContext="{Binding}"
+                          ScrollViewer.VerticalScrollBarVisibility="Visible"
+                      ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="RowEditEnding">
+                            <i:InvokeCommandAction Command="{Binding CreateCommand}" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="SelectionChanged">
+                            <i:InvokeCommandAction Command="{Binding Path=SelectionChangedCommand}"
+                                                   CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Mode=Default, Path=CurrentItem}" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="PreviewKeyDown">
+                            <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=DeleteValuationCommand}"
+                                                   PassEventArgsToCommand="True" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="KeyDown">
+                            <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=DeleteValuationCommand}"
+                                                   PassEventArgsToCommand="True" />
+                        </i:EventTrigger>
+                        <i:EventTrigger EventName="AddingNewItem">
+                            <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=AddDefaultDataCommand}"
+                                                   PassEventArgsToCommand="True" />
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <DataGrid.Columns>
+                    <DataGridTextColumn Header="TimeStamp"
+                                        MinWidth="100"
+                                            Binding="{Binding Path=TimeStamp, Converter={StaticResource StringToUKDate}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridTextColumn Header="Note"
+                                        MinWidth="600"
+                                            Binding="{Binding Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </DataGrid.Columns>
+                </DataGrid>
             </Grid>
-            <Grid Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0"
-                           Margin="10 5 10 5"
-                           Text="BankAccounts"
-                           Background="{Binding Styles.BackgroundBrush}" />
-                <TextBlock Grid.Row="1"
-                           Margin="10 5 10 5"
-                           Text="{Binding BankAccountTotalText}" />
-                <TextBlock Grid.Row="2"
-                           Margin="10 5 10 5"
-                           Text="{Binding BankAccountAmountText}" />
-                <TextBlock Grid.Row="3"
-                           Margin="10 5 10 5"
-                           Text="Top Securities:" />
-                <ItemsControl Grid.Row="4"
-                              ItemsSource="{Binding TopBankAccounts}"
-                              Margin="10 5 10 5" />
-            </Grid>
-        </Grid>
-        <Grid Grid.Row="1"
+        </Border>
+        <Border Grid.Row="1"
+                BorderBrush="{Binding Styles.BackgroundSecondaryBrush}"
+                BorderThickness="2"
               Visibility="{Binding NoValues, Converter={StaticResource BoolToVis}}">
             <TextBlock Text="To get started, &#10; 1. Save your database in a convenient location by clicking at the top on the Save Database button.&#10; 2. Navigate to each page on the left hand side&#10; 3. Start adding Bank Accounts or Securities to the database.&#10; 4. Remember to save so you don't lose your data."
                        TextWrapping="WrapWithOverflow"
                        Margin="20" />
-        </Grid>
+        </Border>
     </Grid>
 </UserControl>
