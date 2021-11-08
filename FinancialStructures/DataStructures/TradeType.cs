@@ -6,6 +6,11 @@
     public enum TradeType
     {
         /// <summary>
+        /// It is not known the type of the trade. This is the default.
+        /// </summary>
+        Unknown,
+
+        /// <summary>
         /// The trade was a buy.
         /// </summary>
         Buy,
@@ -16,9 +21,14 @@
         Sell,
 
         /// <summary>
-        /// The trade was a dividend investment.
+        /// The trade was a dividend payout.
         /// </summary>
         Dividend,
+
+        /// <summary>
+        /// The trade was a dividend payout that was reinvested.
+        /// </summary>
+        DividendReinvestment,
 
         /// <summary>
         /// The price of one share was changed.
