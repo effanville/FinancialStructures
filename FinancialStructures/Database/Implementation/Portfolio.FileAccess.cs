@@ -2,7 +2,6 @@
 using System.Linq;
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
-using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.SavingClasses;
 

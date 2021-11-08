@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+
 using Common.Structure.DataStructures;
 using Common.Structure.NamingStructures;
+
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
-using FinancialStructures.Database.Statistics;
+using FinancialStructures.Database.Extensions.Values;
 using FinancialStructures.NamingStructures;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats

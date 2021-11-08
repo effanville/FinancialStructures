@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 using Common.Structure.DisplayClasses;
 using FinancePortfolioDatabase.GUI.ViewModels.Stats;
-using FinancialStructures.Statistics;
+using FinancialStructures.Database.Statistics;
 
 namespace FinancePortfolioDatabase.GUI.Configuration
 {

@@ -12,6 +12,7 @@ using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinanceWindows;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Download;
+using FinancialStructures.Database.Extensions;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels
 {

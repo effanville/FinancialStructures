@@ -11,10 +11,11 @@ using Common.UI.Services;
 using Common.UI.ViewModelBases;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancialStructures.Database;
+using FinancialStructures.Database.Extensions;
+using FinancialStructures.Database.Extensions.Statistics;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.Statistics;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {

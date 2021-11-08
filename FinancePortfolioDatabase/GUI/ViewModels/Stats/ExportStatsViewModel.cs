@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Input;
+
 using Common.Structure.DisplayClasses;
 using Common.Structure.Extensions;
 using Common.Structure.FileAccess;
@@ -8,12 +9,15 @@ using Common.Structure.Reporting;
 using Common.UI;
 using Common.UI.Commands;
 using Common.UI.Services;
+
 using FinancePortfolioDatabase.GUI.Configuration;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
+
 using FinancialStructures.Database;
-using FinancialStructures.DataExporters.Statistics;
-using FinancialStructures.Statistics;
+using FinancialStructures.Database.Extensions;
+using FinancialStructures.Database.Statistics;
+using FinancialStructures.Database.Export.Statistics;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
