@@ -1,5 +1,6 @@
 ﻿using System.IO.Abstractions;
 using FinancialStructures.Database;
+using FinancialStructures.Database.Extensions;
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.Database

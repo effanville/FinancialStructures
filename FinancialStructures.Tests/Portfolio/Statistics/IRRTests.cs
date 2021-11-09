@@ -1,6 +1,6 @@
 ﻿using System;
 using FinancialStructures.Database;
-using FinancialStructures.Database.Statistics;
+using FinancialStructures.Database.Extensions.Rates;
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.Database.Statistics

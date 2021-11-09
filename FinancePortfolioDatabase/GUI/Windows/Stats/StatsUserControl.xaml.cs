@@ -5,7 +5,7 @@ using System.Linq;
 using System.Windows;
 using Common.UI.DisplayObjects;
 using FinancePortfolioDatabase.GUI.ViewModels.Stats;
-using FinancialStructures.Statistics;
+using FinancialStructures.Database.Statistics;
 
 namespace FinancePortfolioDatabase.GUI.Windows.Stats
 {

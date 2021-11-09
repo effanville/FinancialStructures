@@ -1,5 +1,5 @@
 ﻿using System.IO.Abstractions.TestingHelpers;
-using FinancialStructures.DataExporters.Investments;
+using FinancialStructures.Database.Export.Investments;
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.StatsMakers

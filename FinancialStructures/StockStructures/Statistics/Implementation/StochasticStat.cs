@@ -2,13 +2,15 @@
 
 namespace FinancialStructures.StockStructures.Statistics.Implementation
 {
-    public class StochasticStat : IStockStatistic
+    internal class StochasticStat : IStockStatistic
     {
+        /// <inheritdoc/>
         public int BurnInTime
         {
             get;
         }
 
+        /// <inheritdoc/>
         public StockStatisticType TypeOfStatistic
         {
             get;
@@ -22,6 +24,7 @@ namespace FinancialStructures.StockStructures.Statistics.Implementation
             TypeOfStatistic = statisticType;
         }
 
+        /// <inheritdoc/>
         public double Calculate(DateTime date, IStock stock)
         {
             return stock.Stochastic(date, BurnInTime);

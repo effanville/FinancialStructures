@@ -1,6 +1,6 @@
 ﻿using System;
 using FinancialStructures.Database;
-using FinancialStructures.Database.Statistics;
+using FinancialStructures.Database.Extensions.Values;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;

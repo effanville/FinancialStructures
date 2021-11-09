@@ -1,5 +1,5 @@
-﻿using FinancialStructures.DataExporters.Statistics;
-using FinancialStructures.Statistics;
+﻿using FinancialStructures.Database.Statistics;
+using FinancialStructures.Database.Export.Statistics;
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.DataExporters.Statistics

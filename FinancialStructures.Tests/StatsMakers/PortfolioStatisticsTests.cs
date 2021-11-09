@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO.Abstractions;
 using System.Linq;
-using FinancialStructures.DataExporters.Statistics;
+using FinancialStructures.Database.Export.Statistics;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 

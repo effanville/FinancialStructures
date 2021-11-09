@@ -9,7 +9,7 @@ using Common.UI;
 using Common.UI.Services;
 using FinancePortfolioDatabase.GUI.ViewModels;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
-using FinancialStructures.Database;
+using FinancialStructures.Database.Extensions;
 
 namespace FinancePortfolioDatabase.GUI.Windows
 {
