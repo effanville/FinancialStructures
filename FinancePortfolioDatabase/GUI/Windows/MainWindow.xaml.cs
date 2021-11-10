@@ -79,7 +79,7 @@ namespace FinancePortfolioDatabase.GUI.Windows
             if (result == MessageBoxResult.Yes)
             {
                 FileInteractionResult savingResult = fUiGlobals.FileInteractionService.SaveFile("xml", fUiGlobals.CurrentFileSystem.Path.GetFileName(VM.ProgramPortfolio.FilePath), VM.ProgramPortfolio.Directory(fUiGlobals.CurrentFileSystem), "XML Files|*.xml|All Files|*.*");
-                if (savingResult.Success.HasValue && savingResult.Success.Value)
+                if (savingResult.Success)
                 {
                     VM.ProgramPortfolio.FilePath = savingResult.FilePath;
                     MainWindowViewModel vm = DataContext as MainWindowViewModel;

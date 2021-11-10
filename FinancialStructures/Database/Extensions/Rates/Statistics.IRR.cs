@@ -119,7 +119,7 @@ namespace FinancialStructures.Database.Extensions.Rates
                 }
             }
 
-            return FinancialFunctions.IRRTime(new DailyValuation(earlierTime, earlierValue), investments, new DailyValuation(laterTime, laterValue));
+            return FinancialFunctions.IRR(new DailyValuation(earlierTime, earlierValue), investments, new DailyValuation(laterTime, laterValue));
         }
 
         /// <summary>

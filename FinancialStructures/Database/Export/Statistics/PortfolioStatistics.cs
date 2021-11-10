@@ -6,7 +6,7 @@ using System.Linq;
 
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
-
+using Common.Structure.ReportWriting;
 using FinancialStructures.Database.Extensions;
 using FinancialStructures.Database.Extensions.Statistics;
 using FinancialStructures.Database.Statistics;

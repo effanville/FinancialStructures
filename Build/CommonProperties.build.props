@@ -23,6 +23,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-      <PackageReference Include="Common.Structure" Version="1.0.12" />
+      <PackageReference Include="Common.Structure" Version="1.0.15" />
   </ItemGroup>
 </Project>
