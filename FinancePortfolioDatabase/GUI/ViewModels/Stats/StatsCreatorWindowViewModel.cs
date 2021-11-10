@@ -79,7 +79,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         private void ExecuteInvestmentListCommand()
         {
             FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile(".csv", DataStore.DatabaseName(fUiGlobals.CurrentFileSystem) + "-CSVStats.csv", DataStore.Directory(fUiGlobals.CurrentFileSystem), "CSV file|*.csv|All files|*.*");
-            if (result.Success != null && (bool)result.Success)
+            if (result.Success)
             {
                 if (!result.FilePath.EndsWith(".csv"))
                 {

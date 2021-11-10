@@ -137,7 +137,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         {
             _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Saving, $"Saving database {fFileName} called.");
             FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile("xml", fFileName, fDirectory, "XML Files|*.xml|All Files|*.*");
-            if (result.Success != null && (bool)result.Success)
+            if (result.Success)
             {
                 DataUpdateCallback(programPortfolio => programPortfolio.FilePath = result.FilePath);
                 DataUpdateCallback(programPortfolio => programPortfolio.SavePortfolio(result.FilePath, fUiGlobals.CurrentFileSystem, ReportLogger));
@@ -156,7 +156,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         {
             _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Loading, $"Loading database called.");
             FileInteractionResult result = fUiGlobals.FileInteractionService.OpenFile("xml", filter: "XML Files|*.xml|All Files|*.*");
-            if (result.Success != null && (bool)result.Success)
+            if (result.Success)
             {
                 DataUpdateCallback(programPortfolio => programPortfolio.Clear());
                 DataUpdateCallback(programPortfolio => programPortfolio.FilePath = result.FilePath);

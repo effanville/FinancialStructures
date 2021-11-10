@@ -4,9 +4,13 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
+
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
+using Common.Structure.ReportWriting;
+
 using FinancialStructures.Database.Extensions.Values;
 
 namespace FinancialStructures.Database.Export.History
@@ -154,15 +158,19 @@ namespace FinancialStructures.Database.Export.History
 
             try
             {
+                List<List<string>> valuesToWrite = new List<List<string>>();
+                foreach (PortfolioDaySnapshot statistic in Snapshots)
+                {
+                    valuesToWrite.Add(statistic.ExportValues());
+                }
+
+                StringBuilder sb = new StringBuilder();
+                TableWriting.WriteTableFromEnumerable(sb, ExportType.Csv, Snapshots[0].ExportHeaders(), valuesToWrite, false);
+
                 using (Stream stream = fileSystem.FileStream.Create(filePath, FileMode.Create))
                 using (StreamWriter fileWriter = new StreamWriter(stream))
                 {
-                    List<List<string>> valuesToWrite = new List<List<string>>();
-                    foreach (PortfolioDaySnapshot statistic in Snapshots)
-                    {
-                        valuesToWrite.Add(statistic.ExportValues());
-                    }
-                    fileWriter.WriteTableFromEnumerable(ExportType.Csv, Snapshots[0].ExportHeaders(), valuesToWrite, false);
+                    fileWriter.Write(sb);
                 }
 
                 _ = reportLogger?.LogUseful(ReportType.Information, ReportLocation.StatisticsPage, $"Successfully exported history to {filePath}.");

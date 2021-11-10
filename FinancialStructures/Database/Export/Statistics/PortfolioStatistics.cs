@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
-
+using System.Text;
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
 using Common.Structure.ReportWriting;
@@ -167,82 +167,12 @@ namespace FinancialStructures.Database.Export.Statistics
         {
             try
             {
+                StringBuilder sb = ExportString(true, exportType, settings);
+
                 using (Stream stream = fileSystem.FileStream.Create(filePath, FileMode.Create))
                 using (StreamWriter fileWriter = new StreamWriter(stream))
                 {
-                    if (exportType == ExportType.Html)
-                    {
-                        fileWriter.CreateHTMLHeader($"Statement for funds as of {DateTime.Today.ToShortDateString()}", settings.Colours);
-                        fileWriter.WriteLine($"<h1>{fDatabaseName} - Statement on {DateTime.Today.ToShortDateString()}</h1>");
-                    }
-
-                    fileWriter.WriteTableFromEnumerable(exportType, fDisplayOptions.BankAccountDisplayOptions.DisplayFieldNames(), PortfolioTotals.Select(data => data.Statistics), headerFirstColumn: false);
-
-                    if (fDisplayOptions.SecurityDisplayOptions.ShouldDisplay)
-                    {
-                        fileWriter.WriteTitle(exportType, "Funds Data", HtmlTag.h2);
-                        List<AccountStatistics> securityDataToWrite = IndividualSecurityStats;
-
-                        foreach (AccountStatistics companyStatistic in CompanyTotalsStats)
-                        {
-                            int number = securityDataToWrite.Count(datum => datum.NameData.Company.Equals(companyStatistic.NameData.Company, StringComparison.Ordinal));
-                            if (number > 1)
-                            {
-                                securityDataToWrite.Add(companyStatistic);
-                            }
-                        }
-
-                        securityDataToWrite.Sort(fDisplayOptions.SecurityDisplayOptions.SortingField, fDisplayOptions.SectorDisplayOptions.SortingDirection);
-                        securityDataToWrite.AddRange(PortfolioSecurityStats);
-
-                        SpacingAdd(settings.Spacing, fDisplayOptions.SecurityDisplayOptions.SortingField, ref securityDataToWrite);
-
-                        fileWriter.WriteTableFromEnumerable(exportType, fDisplayOptions.SecurityDisplayOptions.DisplayFieldNames(), securityDataToWrite.Select(data => data.Statistics), headerFirstColumn: true);
-                    }
-
-                    if (fDisplayOptions.BankAccountDisplayOptions.ShouldDisplay)
-                    {
-                        fileWriter.WriteTitle(exportType, "Bank Accounts Data", HtmlTag.h2);
-                        List<AccountStatistics> bankAccountDataToWrite = BankAccountStats;
-
-                        foreach (AccountStatistics companyStatistic in BankAccountCompanyStats)
-                        {
-                            int number = bankAccountDataToWrite.Count(datum => datum.NameData.Company.Equals(companyStatistic.NameData.Company, StringComparison.Ordinal));
-                            if (number > 1)
-                            {
-                                bankAccountDataToWrite.Add(companyStatistic);
-                            }
-                        }
-
-                        bankAccountDataToWrite.Sort(fDisplayOptions.BankAccountDisplayOptions.SortingField, fDisplayOptions.BankAccountDisplayOptions.SortingDirection);
-                        bankAccountDataToWrite.AddRange(BankAccountTotalStats);
-
-                        SpacingAdd(settings.Spacing, fDisplayOptions.BankAccountDisplayOptions.SortingField, ref bankAccountDataToWrite);
-
-                        fileWriter.WriteTableFromEnumerable(exportType, fDisplayOptions.BankAccountDisplayOptions.DisplayFieldNames(), bankAccountDataToWrite.Select(data => data.Statistics), headerFirstColumn: true);
-                    }
-
-                    if (fDisplayOptions.SectorDisplayOptions.ShouldDisplay)
-                    {
-                        fileWriter.WriteTitle(exportType, "Analysis By Sector", HtmlTag.h2);
-                        List<AccountStatistics> sectorDataToWrite = SectorStats;
-
-                        sectorDataToWrite.Sort(fDisplayOptions.SectorDisplayOptions.SortingField, fDisplayOptions.SectorDisplayOptions.SortingDirection);
-
-                        SectorSpacingAdd(settings.Spacing, fDisplayOptions.SectorDisplayOptions.SortingField, ref sectorDataToWrite);
-
-                        fileWriter.WriteTableFromEnumerable(exportType, fDisplayOptions.SectorDisplayOptions.DisplayFieldNames(), sectorDataToWrite.Select(data => data.Statistics), headerFirstColumn: true);
-                    }
-
-                    fileWriter.WriteTitle(exportType, "Portfolio Notes", HtmlTag.h2);
-                    fileWriter.WriteTable(exportType, PortfolioNotes, headerFirstColumn: false);
-
-                    if (exportType == ExportType.Html)
-                    {
-                        fileWriter.CreateHTMLFooter();
-                    }
-
-                    fileWriter.Close();
+                    fileWriter.WriteLine(sb.ToString());
                 }
             }
             catch (IOException exception)
@@ -252,6 +182,87 @@ namespace FinancialStructures.Database.Export.Statistics
             }
 
             _ = LogReporter.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.StatisticsPage, "Successfully exported statistics page.");
+        }
+
+        /// <summary>
+        /// Creates the string with all stats.
+        /// </summary>
+        public StringBuilder ExportString(bool includeHtmlHeaders, ExportType exportType, PortfolioStatisticsExportSettings settings)
+        {
+            StringBuilder sb = new StringBuilder();
+            if (includeHtmlHeaders && exportType == ExportType.Html)
+            {
+                TextWriting.CreateHTMLHeader(sb, $"Statement for funds as of {DateTime.Today.ToShortDateString()}", settings.Colours);
+                _ = sb.AppendLine($"<h1>{fDatabaseName} - Statement on {DateTime.Today.ToShortDateString()}</h1>");
+            }
+
+            TableWriting.WriteTableFromEnumerable(sb, exportType, fDisplayOptions.BankAccountDisplayOptions.DisplayFieldNames(), PortfolioTotals.Select(data => data.Statistics), headerFirstColumn: false);
+
+            if (fDisplayOptions.SecurityDisplayOptions.ShouldDisplay)
+            {
+                TextWriting.WriteTitle(sb, exportType, "Funds Data", HtmlTag.h2);
+                List<AccountStatistics> securityDataToWrite = IndividualSecurityStats;
+
+                foreach (AccountStatistics companyStatistic in CompanyTotalsStats)
+                {
+                    int number = securityDataToWrite.Count(datum => datum.NameData.Company.Equals(companyStatistic.NameData.Company, StringComparison.Ordinal));
+                    if (number > 1)
+                    {
+                        securityDataToWrite.Add(companyStatistic);
+                    }
+                }
+
+                securityDataToWrite.Sort(fDisplayOptions.SecurityDisplayOptions.SortingField, fDisplayOptions.SectorDisplayOptions.SortingDirection);
+                securityDataToWrite.AddRange(PortfolioSecurityStats);
+
+                SpacingAdd(settings.Spacing, fDisplayOptions.SecurityDisplayOptions.SortingField, ref securityDataToWrite);
+
+                TableWriting.WriteTableFromEnumerable(sb, exportType, fDisplayOptions.SecurityDisplayOptions.DisplayFieldNames(), securityDataToWrite.Select(data => data.Statistics), headerFirstColumn: true);
+            }
+
+            if (fDisplayOptions.BankAccountDisplayOptions.ShouldDisplay)
+            {
+                TextWriting.WriteTitle(sb, exportType, "Bank Accounts Data", HtmlTag.h2);
+                List<AccountStatistics> bankAccountDataToWrite = BankAccountStats;
+
+                foreach (AccountStatistics companyStatistic in BankAccountCompanyStats)
+                {
+                    int number = bankAccountDataToWrite.Count(datum => datum.NameData.Company.Equals(companyStatistic.NameData.Company, StringComparison.Ordinal));
+                    if (number > 1)
+                    {
+                        bankAccountDataToWrite.Add(companyStatistic);
+                    }
+                }
+
+                bankAccountDataToWrite.Sort(fDisplayOptions.BankAccountDisplayOptions.SortingField, fDisplayOptions.BankAccountDisplayOptions.SortingDirection);
+                bankAccountDataToWrite.AddRange(BankAccountTotalStats);
+
+                SpacingAdd(settings.Spacing, fDisplayOptions.BankAccountDisplayOptions.SortingField, ref bankAccountDataToWrite);
+
+                TableWriting.WriteTableFromEnumerable(sb, exportType, fDisplayOptions.BankAccountDisplayOptions.DisplayFieldNames(), bankAccountDataToWrite.Select(data => data.Statistics), headerFirstColumn: true);
+            }
+
+            if (fDisplayOptions.SectorDisplayOptions.ShouldDisplay)
+            {
+                TextWriting.WriteTitle(sb, exportType, "Analysis By Sector", HtmlTag.h2);
+                List<AccountStatistics> sectorDataToWrite = SectorStats;
+
+                sectorDataToWrite.Sort(fDisplayOptions.SectorDisplayOptions.SortingField, fDisplayOptions.SectorDisplayOptions.SortingDirection);
+
+                SectorSpacingAdd(settings.Spacing, fDisplayOptions.SectorDisplayOptions.SortingField, ref sectorDataToWrite);
+
+                TableWriting.WriteTableFromEnumerable(sb, exportType, fDisplayOptions.SectorDisplayOptions.DisplayFieldNames(), sectorDataToWrite.Select(data => data.Statistics), headerFirstColumn: true);
+            }
+
+            TextWriting.WriteTitle(sb, exportType, "Portfolio Notes", HtmlTag.h2);
+            TableWriting.WriteTable(sb, exportType, PortfolioNotes, headerFirstColumn: false);
+
+            if (includeHtmlHeaders && exportType == ExportType.Html)
+            {
+                TextWriting.CreateHTMLFooter(sb);
+            }
+
+            return sb;
         }
 
         /// <summary>

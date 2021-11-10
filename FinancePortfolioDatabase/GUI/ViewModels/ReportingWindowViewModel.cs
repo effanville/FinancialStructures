@@ -140,7 +140,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             try
             {
                 FileInteractionResult result = fFileInteractionService.SaveFile(".csv", "errorReports.csv");
-                if (result.Success != null && (bool)result.Success)
+                if (result.Success)
                 {
                     StreamWriter writer = new StreamWriter(result.FilePath);
                     writer.WriteLine("Severity,ErrorType,Location,Message");

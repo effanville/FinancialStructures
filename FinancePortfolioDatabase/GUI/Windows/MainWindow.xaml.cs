@@ -45,7 +45,7 @@ namespace FinancePortfolioDatabase.GUI.Windows
         public void PrintErrorLog(Exception exception)
         {
             FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile("log", string.Empty, fUiGlobals.CurrentWorkingDirectory, filter: "log Files|*.log|All Files|*.*");
-            if (result.Success != null && (bool)result.Success)
+            if (result.Success)
             {
                 using (Stream stream = fUiGlobals.CurrentFileSystem.FileStream.Create(result.FilePath, FileMode.Create))
                 using (TextWriter writer = new StreamWriter(stream))

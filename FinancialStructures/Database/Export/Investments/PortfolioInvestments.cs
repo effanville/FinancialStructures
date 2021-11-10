@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
+using System.Text;
 
 using Common.Structure.DataStructures;
 using Common.Structure.FileAccess;
 using Common.Structure.NamingStructures;
 using Common.Structure.Reporting;
+using Common.Structure.ReportWriting;
 
 using FinancialStructures.Database.Extensions.Values;
 using FinancialStructures.NamingStructures;
@@ -50,16 +52,19 @@ namespace FinancialStructures.Database.Export.Investments
         {
             try
             {
+                List<List<string>> valuesToWrite = new List<List<string>>();
+                foreach (Labelled<TwoName, DailyValuation> stats in Investments)
+                {
+                    valuesToWrite.Add(new List<string> { stats.Instance.Day.ToShortDateString(), stats.Label.Company, stats.Label.Name, stats.Instance.Value.ToString() });
+                }
+
+                StringBuilder sb = new StringBuilder();
+                TableWriting.WriteTableFromEnumerable(sb, ExportType.Csv, new List<string> { "Date", "Company", "Name", "Investment Amount" }, valuesToWrite, false);
+
                 using (Stream stream = fileSystem.FileStream.Create(filePath, FileMode.Create))
                 using (StreamWriter fileWriter = new StreamWriter(stream))
                 {
-                    List<List<string>> valuesToWrite = new List<List<string>>();
-                    foreach (Labelled<TwoName, DailyValuation> stats in Investments)
-                    {
-                        valuesToWrite.Add(new List<string> { stats.Instance.Day.ToShortDateString(), stats.Label.Company, stats.Label.Name, stats.Instance.Value.ToString() });
-                    }
-
-                    fileWriter.WriteTableFromEnumerable(ExportType.Csv, new List<string> { "Date", "Company", "Name", "Investment Amount" }, valuesToWrite, false);
+                    fileWriter.WriteLine(sb.ToString());
                 }
 
                 _ = reportLogger?.LogUseful(ReportType.Information, ReportLocation.StatisticsPage, $"Successfully exported history to {filePath}.");

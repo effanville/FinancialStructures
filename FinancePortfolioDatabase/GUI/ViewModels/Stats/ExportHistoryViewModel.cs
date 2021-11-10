@@ -97,7 +97,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         {
             fUserConfiguration.StoreConfiguration(this);
             FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile(".csv", DateTime.Today.Year + "-" + DateTime.Today.Month + "-" + DateTime.Today.Day + "-" + DataStore.DatabaseName(fUiGlobals.CurrentFileSystem) + "-History.csv", DataStore.Directory(fUiGlobals.CurrentFileSystem), "CSV file|*.csv|All files|*.*");
-            if (result.Success != null && (bool)result.Success)
+            if (result.Success)
             {
                 if (!result.FilePath.EndsWith(".csv", StringComparison.OrdinalIgnoreCase))
                 {

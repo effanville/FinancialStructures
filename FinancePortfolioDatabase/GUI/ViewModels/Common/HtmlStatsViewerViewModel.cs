@@ -44,7 +44,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         private void ExecuteFileSelect()
         {
             FileInteractionResult result = fUiGlobals.FileInteractionService.OpenFile("html", filter: "HTML file|*.html;*.htm|All files|*.*");
-            if (result.Success != null && (bool)result.Success)
+            if (result.Success)
             {
                 StatsFilepath = result.FilePath;
             }

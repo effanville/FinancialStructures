@@ -185,7 +185,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
                 FileInteractionResult result = fUiGlobals.FileInteractionService.OpenFile("csv", filter: "Csv Files|*.csv|All Files|*.*");
                 List<object> outputs = null;
                 bool exists = DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out IValueList account);
-                if (result.Success != null && (bool)result.Success && exists)
+                if (result.Success && exists)
                 {
                     outputs = CsvReaderWriter.ReadFromCsv(account, result.FilePath, fReportLogger);
                 }
@@ -219,7 +219,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             if (fSelectedName != null)
             {
                 FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile("csv", string.Empty, DataStore.Directory(fUiGlobals.CurrentFileSystem), "Csv Files|*.csv|All Files|*.*");
-                if (result.Success != null && (bool)result.Success)
+                if (result.Success)
                 {
                     if (DataStore.TryGetAccount(TypeOfAccount, fSelectedName, out IValueList account))
                     {

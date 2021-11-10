@@ -210,7 +210,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             FileInteractionResult result = fUiGlobals.FileInteractionService.SaveFile(ExportType.Html.ToString().ToLower(), DataStore.DatabaseName(fUiGlobals.CurrentFileSystem), DataStore.Directory(fUiGlobals.CurrentFileSystem), "Html Files|*.html|CSV Files|*.csv|All Files|*.*");
             string path = null;
 
-            if (result.Success != null && (bool)result.Success)
+            if (result.Success)
             {
                 path = result.FilePath;
 
