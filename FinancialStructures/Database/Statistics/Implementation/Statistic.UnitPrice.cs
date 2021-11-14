@@ -1,4 +1,5 @@
 ﻿using System;
+
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 
@@ -20,7 +21,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
             }
             if (desired is ISecurity security)
             {
-                Value = security.UnitPrice.ValueOnOrBefore(DateTime.Today)?.Value ?? 0.0;
+                Value = (double)(security.UnitPrice.ValueOnOrBefore(DateTime.Today)?.Value ?? 0.0m);
                 fCurrency = security.Names.Currency;
             }
         }

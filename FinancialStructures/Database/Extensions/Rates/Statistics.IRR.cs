@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Common.Structure.DataStructures;
-using Common.Structure.FinanceFunctions;
+using Common.Structure.MathLibrary.Finance;
 using FinancialStructures.Database.Extensions.Values;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
@@ -46,8 +46,8 @@ namespace FinancialStructures.Database.Extensions.Rates
                 }
                 case Totals.BankAccount:
                 {
-                    double earlierValue = 0;
-                    double laterValue = 0;
+                    decimal earlierValue = 0;
+                    decimal laterValue = 0;
 
                     foreach (IExchangableValueList bankAccount in portfolio.BankAccountsThreadSafe)
                     {
@@ -56,12 +56,12 @@ namespace FinancialStructures.Database.Extensions.Rates
                         laterValue += bankAccount.Value(laterTime, currency).Value;
                     }
 
-                    return FinancialFunctions.CAR(new DailyValuation(earlierTime, earlierValue), new DailyValuation(laterTime, laterValue));
+                    return FinanceFunctions.CAR(new DailyValuation(earlierTime, earlierValue), new DailyValuation(laterTime, laterValue));
                 }
                 case Totals.Benchmark:
                 {
-                    double earlierValue = 0;
-                    double laterValue = 0;
+                    decimal earlierValue = 0;
+                    decimal laterValue = 0;
 
                     foreach (IValueList benchmark in portfolio.BenchMarksThreadSafe)
                     {
@@ -69,12 +69,12 @@ namespace FinancialStructures.Database.Extensions.Rates
                         laterValue += benchmark.Value(laterTime).Value;
                     }
 
-                    return FinancialFunctions.CAR(new DailyValuation(earlierTime, earlierValue), new DailyValuation(laterTime, laterValue));
+                    return FinanceFunctions.CAR(new DailyValuation(earlierTime, earlierValue), new DailyValuation(laterTime, laterValue));
                 }
                 case Totals.Currency:
                 {
-                    double earlierValue = 0;
-                    double laterValue = 0;
+                    decimal earlierValue = 0;
+                    decimal laterValue = 0;
 
                     foreach (ICurrency currency in portfolio.CurrenciesThreadSafe)
                     {
@@ -82,7 +82,7 @@ namespace FinancialStructures.Database.Extensions.Rates
                         laterValue += currency.Value(laterTime).Value;
                     }
 
-                    return FinancialFunctions.CAR(new DailyValuation(earlierTime, earlierValue), new DailyValuation(laterTime, laterValue));
+                    return FinanceFunctions.CAR(new DailyValuation(earlierTime, earlierValue), new DailyValuation(laterTime, laterValue));
                 }
 
                 case Totals.BankAccountCompany:
@@ -104,8 +104,9 @@ namespace FinancialStructures.Database.Extensions.Rates
             {
                 return double.NaN;
             }
-            double earlierValue = 0;
-            double laterValue = 0;
+
+            decimal earlierValue = 0;
+            decimal laterValue = 0;
             List<DailyValuation> investments = new List<DailyValuation>();
 
             foreach (ISecurity security in securities)
@@ -119,7 +120,7 @@ namespace FinancialStructures.Database.Extensions.Rates
                 }
             }
 
-            return FinancialFunctions.IRR(new DailyValuation(earlierTime, earlierValue), investments, new DailyValuation(laterTime, laterValue));
+            return FinanceFunctions.IRR(new DailyValuation(earlierTime, earlierValue), investments, new DailyValuation(laterTime, laterValue));
         }
 
         /// <summary>

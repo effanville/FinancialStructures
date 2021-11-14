@@ -1,4 +1,5 @@
 ﻿using System;
+
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
@@ -10,16 +11,16 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
         public const string DefaultName = "UK Stock";
         public const string DefaultCompany = "BlackRock";
         public static readonly DateTime[] DefaultDates = new DateTime[] { new DateTime(2010, 1, 1), new DateTime(2011, 1, 1), new DateTime(2012, 5, 1), new DateTime(2015, 4, 3), new DateTime(2018, 5, 6), new DateTime(2020, 1, 1) };
-        public static readonly double[] DefaultShareValues = new double[] { 2.0, 1.5, 17.3, 4, 5.7, 5.5 };
-        public static readonly double[] DefaultUnitPrices = new double[] { 100.0, 100.0, 125.2, 90.6, 77.7, 101.1 };
-        public static readonly double[] DefaultInvestments = new double[] { 100.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+        public static readonly decimal[] DefaultShareValues = new decimal[] { 2.0m, 1.5m, 17.3m, 4, 5.7m, 5.5m };
+        public static readonly decimal[] DefaultUnitPrices = new decimal[] { 100.0m, 100.0m, 125.2m, 90.6m, 77.7m, 101.1m };
+        public static readonly decimal[] DefaultInvestments = new decimal[] { 100.0m, 0.0m, 0.0m, 0.0m, 0.0m, 0.0m };
 
         public const string SecondaryName = "China Stock";
         public const string SecondaryCompany = "Prudential";
         public static readonly DateTime[] SecondaryDates = new DateTime[] { new DateTime(2010, 1, 5), new DateTime(2011, 2, 1), new DateTime(2012, 5, 5), new DateTime(2016, 4, 3), new DateTime(2019, 5, 6), new DateTime(2020, 1, 1) };
-        public static readonly double[] SecondaryShareValues = new double[] { 2.0, 2.5, 17.3, 22.5, 22.7, 25.5 };
-        public static readonly double[] SecondaryUnitPrices = new double[] { 1010.0, 1110.0, 1215.2, 900.6, 1770.7, 1001.1 };
-        public static readonly double[] SecondaryInvestments = new double[] { 2020.0, 0.0, 21022.96, 0.0, 0.0, 0.0 };
+        public static readonly decimal[] SecondaryShareValues = new decimal[] { 2.0m, 2.5m, 17.3m, 22.5m, 22.7m, 25.5m };
+        public static readonly decimal[] SecondaryUnitPrices = new decimal[] { 1010.0m, 1110.0m, 1215.2m, 900.6m, 1770.7m, 1001.1m };
+        public static readonly decimal[] SecondaryInvestments = new decimal[] { 2020.0m, 0.0m, 21022.96m, 0.0m, 0.0m, 0.0m };
 
         public Security Item;
 
@@ -32,14 +33,14 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             Item = new Security(names);
         }
 
-        private SecurityConstructor WithData(DateTime date, double sharePrice, double numberUnits, double investment = 0)
+        private SecurityConstructor WithData(DateTime date, decimal sharePrice, decimal numberUnits, decimal investment = 0)
         {
             Item.Shares.SetData(date, numberUnits);
             Item.UnitPrice.SetData(date, sharePrice);
             if (investment != 0)
             {
                 Item.Investments.SetData(date, investment);
-                Item.SecurityTrades.Add(new SecurityTrade(investment > 0 ? TradeType.Buy : TradeType.Sell, Item.Names.ToTwoName(), date, numberUnits, sharePrice, 0.0));
+                Item.SecurityTrades.Add(new SecurityTrade(investment > 0 ? TradeType.Buy : TradeType.Sell, Item.Names.ToTwoName(), date, numberUnits, sharePrice, 0.0m));
             }
 
             Item.EnsureOnLoadDataConsistency();
@@ -61,7 +62,16 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             return new SecurityConstructor(company, name, currency, url, sectors);
         }
 
-        public static SecurityConstructor FromNameAndData(string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] dates = null, double[] sharePrice = null, double[] numberUnits = null, double[] investment = null)
+        public static SecurityConstructor FromNameAndData(
+            string company,
+            string name,
+            string currency = null,
+            string url = null,
+            string sectors = null,
+            DateTime[] dates = null,
+            decimal[] sharePrice = null,
+            decimal[] numberUnits = null,
+            decimal[] investment = null)
         {
             SecurityConstructor securityConstructor = new SecurityConstructor(company, name, currency, url, sectors);
             if (dates != null)
@@ -70,7 +80,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
                 {
                     if (dates[i] != default(DateTime))
                     {
-                        _ = securityConstructor.WithData(dates[i], sharePrice[i], numberUnits?[i] ?? 0.0, investment?[i] ?? 0.0);
+                        _ = securityConstructor.WithData(dates[i], sharePrice[i], numberUnits?[i] ?? 0.0m, investment?[i] ?? 0.0m);
                     }
                 }
             }

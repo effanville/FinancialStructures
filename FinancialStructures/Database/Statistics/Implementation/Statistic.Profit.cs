@@ -14,12 +14,13 @@ namespace FinancialStructures.Database.Statistics.Implementation
         public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
         {
             fCurrency = portfolio.BaseCurrency;
+            Value = (double)portfolio.Profit(account, name);
         }
 
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Totals total, TwoName name)
         {
-            Value = portfolio.TotalProfit(total, name);
+            Value = (double)portfolio.TotalProfit(total, name);
             fCurrency = portfolio.BaseCurrency;
         }
     }

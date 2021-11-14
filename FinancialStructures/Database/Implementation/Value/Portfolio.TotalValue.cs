@@ -8,19 +8,19 @@ namespace FinancialStructures.Database.Implementation
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public double TotalValue(Totals elementType, TwoName names = null)
+        public decimal TotalValue(Totals elementType, TwoName names = null)
         {
             return TotalValue(elementType, DateTime.Today, names);
         }
 
         /// <inheritdoc/>
-        public double TotalValue(Totals elementType, DateTime date, TwoName names = null)
+        public decimal TotalValue(Totals elementType, DateTime date, TwoName names = null)
         {
             switch (elementType)
             {
                 case Totals.Security:
                 {
-                    double total = 0;
+                    decimal total = 0;
                     foreach (ISecurity sec in FundsThreadSafe)
                     {
                         if (sec.Any())
@@ -34,7 +34,7 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.Currency:
                 {
-                    double total = 0;
+                    decimal total = 0;
                     foreach (ISecurity sec in FundsThreadSafe)
                     {
                         if (sec.Any() && sec.Names.Currency == names.Name)
@@ -55,7 +55,7 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.BankAccount:
                 {
-                    double sum = 0;
+                    decimal sum = 0;
                     foreach (IExchangableValueList acc in BankAccountsThreadSafe)
                     {
                         if (acc.Any())
@@ -69,7 +69,7 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.SecuritySector:
                 {
-                    double sum = 0;
+                    decimal sum = 0;
                     foreach (ISecurity fund in FundsThreadSafe)
                     {
                         if (fund.IsSectorLinked(names))
@@ -82,7 +82,7 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.BankAccountSector:
                 {
-                    double sum = 0;
+                    decimal sum = 0;
 
                     foreach (IExchangableValueList fund in BankAccountsThreadSafe)
                     {
@@ -104,14 +104,14 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.SecurityCompany:
                 {
-                    IReadOnlyList<IValueList> securities = CompanyAccounts(Account.Security, names.Company);
-                    double value = 0;
-                    foreach (ISecurity security in securities)
+                    IReadOnlyList<IValueList> companyAccounts = CompanyAccounts(elementType.ToAccount(), names.Company);
+                    decimal value = 0;
+                    foreach (IExchangableValueList valueList in companyAccounts)
                     {
-                        if (security.Any())
+                        if (valueList.Any())
                         {
-                            ICurrency currency = Currency(Account.Security, security);
-                            value += security.Value(date, currency).Value;
+                            ICurrency currency = Currency(elementType.ToAccount(), valueList);
+                            value += valueList.Value(date, currency).Value;
                         }
                     }
 
@@ -122,9 +122,9 @@ namespace FinancialStructures.Database.Implementation
                     IReadOnlyList<IValueList> bankAccounts = CompanyAccounts(Account.BankAccount, names.Company);
                     if (bankAccounts.Count == 0)
                     {
-                        return double.NaN;
+                        return 0.0m;
                     }
-                    double value = 0;
+                    decimal value = 0;
                     foreach (IExchangableValueList account in bankAccounts)
                     {
                         if (account != null && account.Any())
@@ -149,7 +149,7 @@ namespace FinancialStructures.Database.Implementation
                     break;
             }
 
-            return 0.0;
+            return 0.0m;
         }
     }
 }

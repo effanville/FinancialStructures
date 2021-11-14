@@ -91,14 +91,12 @@ namespace FinancialStructures.Tests
 
         public static TwoName DefaultName(Account acctype)
         {
-            DatabaseConstructor constructor = new DatabaseConstructor();
-            return constructor.DefaultName(acctype);
+            return DatabaseConstructor.DefaultName(acctype);
         }
 
         public static TwoName SecondaryName(Account acctype)
         {
-            DatabaseConstructor constructor = new DatabaseConstructor();
-            return constructor.SecondaryName(acctype);
+            return DatabaseConstructor.SecondaryName(acctype);
         }
     }
 }

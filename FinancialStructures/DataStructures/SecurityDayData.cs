@@ -21,7 +21,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// The unit price of on this day.
         /// </summary>
-        public double UnitPrice
+        public decimal UnitPrice
         {
             get;
             set;
@@ -30,7 +30,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// The number of shares held on this day.
         /// </summary>
-        public double ShareNo
+        public decimal ShareNo
         {
             get;
             set;
@@ -39,12 +39,12 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// The total value of this security on this day.
         /// </summary>
-        public double Value => UnitPrice * ShareNo;
+        public decimal Value => UnitPrice * ShareNo;
 
         /// <summary>
         /// The value of an investment made on this day.
         /// </summary>
-        public double NewInvestment
+        public decimal NewInvestment
         {
             get;
             set;
@@ -70,7 +70,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Create a <see cref="SecurityDayData"/> from the specified values.
         /// </summary>
-        public SecurityDayData(DateTime date, double unitPrice, double shareNo, double newInvestment, SecurityTrade trade = null)
+        public SecurityDayData(DateTime date, decimal unitPrice, decimal shareNo, decimal newInvestment, SecurityTrade trade = null)
         {
             Date = date;
             UnitPrice = unitPrice;

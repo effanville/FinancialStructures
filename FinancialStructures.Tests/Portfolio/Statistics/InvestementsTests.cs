@@ -35,7 +35,7 @@ namespace FinancialStructures.Tests.Database.Statistics
             yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.Security, new List<Labelled<TwoName, DailyValuation>> {
                 new Labelled<TwoName, DailyValuation>(new TwoName(SecurityConstructor.DefaultCompany, SecurityConstructor.DefaultName), new DailyValuation(new DateTime(2010, 1, 1), 200)),
                 new Labelled<TwoName, DailyValuation>(new TwoName(SecurityConstructor.SecondaryCompany, SecurityConstructor.SecondaryName), new DailyValuation( new DateTime(2010, 1, 5), 2020)),
-                new Labelled<TwoName, DailyValuation>(new TwoName(SecurityConstructor.SecondaryCompany, SecurityConstructor.SecondaryName), new DailyValuation(new DateTime(2012, 5, 5), 21022.960000000003))
+                new Labelled<TwoName, DailyValuation>(new TwoName(SecurityConstructor.SecondaryCompany, SecurityConstructor.SecondaryName), new DailyValuation(new DateTime(2012, 5, 5), 21022.9600m))
             });
         }
 
@@ -69,7 +69,7 @@ namespace FinancialStructures.Tests.Database.Statistics
             yield return new TestCaseData(TestDatabaseName.TwoSec, Account.Security, TestDatabase.Name(Account.Security, NameOrder.Secondary), new List<Labelled<TwoName, DailyValuation>>
             {
                 new Labelled<TwoName, DailyValuation>(new TwoName(SecurityConstructor.SecondaryCompany, SecurityConstructor.SecondaryName), new DailyValuation( new DateTime(2010, 1, 5), 2020)),
-                new Labelled<TwoName, DailyValuation>(new TwoName(SecurityConstructor.SecondaryCompany, SecurityConstructor.SecondaryName), new DailyValuation(new DateTime(2012, 5, 5), 21022.960000000003))
+                new Labelled<TwoName, DailyValuation>(new TwoName(SecurityConstructor.SecondaryCompany, SecurityConstructor.SecondaryName), new DailyValuation(new DateTime(2012, 5, 5), 21022.9600m))
             });
         }
 

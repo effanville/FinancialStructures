@@ -20,7 +20,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
             }
             if (desired is ISecurity security)
             {
-                Value = security.Shares.ValueOnOrBefore(DateTime.Today)?.Value ?? 0.0;
+                Value = (double)(security.Shares.ValueOnOrBefore(DateTime.Today)?.Value ?? 0.0m);
             }
         }
 

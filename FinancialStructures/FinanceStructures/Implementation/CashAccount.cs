@@ -57,7 +57,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         public DailyValuation Value(DateTime date, ICurrency currency = null)
         {
             DailyValuation perSharePrice = Values.ValueZeroBefore(date);
-            double value = perSharePrice?.Value * GetCurrencyValue(date, currency) ?? 0.0;
+            decimal value = perSharePrice?.Value * GetCurrencyValue(date, currency) ?? 0.0m;
             return new DailyValuation(date, value);
         }
 
@@ -67,10 +67,10 @@ namespace FinancialStructures.FinanceStructures.Implementation
             DailyValuation latestDate = Values.LatestValuation();
             if (latestDate == null)
             {
-                return new DailyValuation(DateTime.Today, 0.0);
+                return new DailyValuation(DateTime.Today, 0.0m);
             }
 
-            double latestValue = latestDate.Value * GetCurrencyValue(latestDate.Day, currency);
+            decimal latestValue = latestDate.Value * GetCurrencyValue(latestDate.Day, currency);
 
             return new DailyValuation(latestDate.Day, latestValue);
         }
@@ -82,7 +82,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
 
             if (val == null)
             {
-                return new DailyValuation(date, 0.0);
+                return new DailyValuation(date, 0.0m);
             }
 
             val.Value *= GetCurrencyValue(val.Day, currency);
@@ -95,10 +95,10 @@ namespace FinancialStructures.FinanceStructures.Implementation
             DailyValuation firstDate = Values.FirstValuation();
             if (firstDate == null)
             {
-                return new DailyValuation(DateTime.Today, 0.0);
+                return new DailyValuation(DateTime.Today, 0.0m);
             }
 
-            double latestValue = firstDate.Value * GetCurrencyValue(firstDate.Day, currency);
+            decimal latestValue = firstDate.Value * GetCurrencyValue(firstDate.Day, currency);
 
             return new DailyValuation(firstDate.Day, latestValue);
         }
@@ -109,16 +109,23 @@ namespace FinancialStructures.FinanceStructures.Implementation
             DailyValuation value = Values.ValueOnOrBefore(date);
             if (value == null)
             {
-                return new DailyValuation(date, 0.0);
+                return new DailyValuation(date, 0.0m);
             }
-
-            value.Value *= GetCurrencyValue(value.Day, currency);
+            var currencyValue = GetCurrencyValue(value.Day, currency);
+            value.Value *= currencyValue;
             return value;
         }
 
-        private static double GetCurrencyValue(DateTime date, ICurrency currency)
+        private static decimal GetCurrencyValue(DateTime date, ICurrency currency)
         {
-            return currency == null ? 1.0 : currency.Value(date)?.Value ?? 1.0;
+            return currency == null ? 1.0m : currency.Value(date)?.Value ?? 1.0m;
+        }
+
+        private static decimal TruncateDecimal(decimal value, int precision)
+        {
+            decimal step = (decimal)Math.Pow(10, precision);
+            decimal tmp = Math.Truncate(step * value);
+            return tmp / step;
         }
     }
 }

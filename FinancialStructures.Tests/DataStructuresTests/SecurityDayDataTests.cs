@@ -19,7 +19,7 @@ namespace FinancialStructures.Tests.DataStructuresTests
 
         [TestCase("1/1/2019", 1, 1, 1, "01/01/2019, 1, 1, 1")]
         [TestCase("1/1/2015", 1.45, 2.2, 3.4, "01/01/2015, 1.45, 2.2, 3.4")]
-        public void ToStringTests(DateTime first, double unit, double share, double inv, string expected)
+        public void ToStringTests(DateTime first, decimal unit, decimal share, decimal inv, string expected)
         {
             SecurityDayData one = new SecurityDayData(first, unit, share, inv);
             Assert.AreEqual(expected, one.ToString());

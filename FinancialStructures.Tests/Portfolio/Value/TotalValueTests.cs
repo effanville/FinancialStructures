@@ -17,6 +17,7 @@ namespace FinancialStructures.Tests.Database.Value
         public void LatestTotalValueTests(TestDatabaseName databaseName, Totals totals, double expectedValue)
         {
             IPortfolio portfolio = TestDatabase.Databases[databaseName];
+            Assert.That(portfolio.TotalValue(totals), Is.EqualTo(expectedValue).Within(1e-12m));
             Assert.AreEqual(expectedValue, portfolio.TotalValue(totals));
         }
 
@@ -55,7 +56,7 @@ namespace FinancialStructures.Tests.Database.Value
         public void TotalValueTest(TestDatabaseName databaseName, Totals totals, DateTime date, double expectedValue)
         {
             IPortfolio portfolio = TestDatabase.Databases[databaseName];
-            Assert.AreEqual(expectedValue, portfolio.TotalValue(totals, date));
+            Assert.That(portfolio.TotalValue(totals, date), Is.EqualTo(expectedValue).Within(1e-10m));
         }
 
         [TestCase(TestDatabaseName.OneSec, Account.Security, Totals.Security, "2009/1/2", 0.0)]
@@ -78,8 +79,8 @@ namespace FinancialStructures.Tests.Database.Value
         public void TotalValueAndSingleValueAgreeTest(TestDatabaseName databaseName, Account account, Totals totals, DateTime date, double expectedValue)
         {
             IPortfolio portfolio = TestDatabase.Databases[databaseName];
-            Assert.AreEqual(expectedValue, portfolio.Value(account, TestDatabase.Name(account, NameOrder.Default), date), "Value not correct");
-            Assert.AreEqual(expectedValue, portfolio.TotalValue(totals, date), "TotalValue not correct.");
+            Assert.That(portfolio.Value(account, TestDatabase.Name(account, NameOrder.Default), date), Is.EqualTo(expectedValue).Within(1e-12m), "Value not correct");
+            Assert.That(portfolio.TotalValue(totals, date), Is.EqualTo(expectedValue).Within(1e-12m), "TotalValue not correct.");
         }
     }
 }

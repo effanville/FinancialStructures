@@ -200,7 +200,8 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Adds the desired data to the security if it can.
         /// </summary>
-        bool TryAddOrEditDataToSecurity(TwoName names, DateTime oldDate, DateTime date, double shares, double unitPrice, double investment, SecurityTrade trade, IReportLogger reportLogger = null);
+        [Obsolete("Should use the add or edit trade data method instead.")]
+        bool TryAddOrEditDataToSecurity(TwoName names, DateTime oldDate, DateTime date, decimal shares, decimal unitPrice, decimal investment, SecurityTrade trade, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Adds the desired trade data if it can.
@@ -316,7 +317,7 @@ namespace FinancialStructures.Database
         /// <param name="elementType">The type of element to find.</param>
         /// <param name="name">The name of the element to find.</param>
         /// <returns>The latest value if it exists.</returns>
-        double LatestValue(Account elementType, TwoName name);
+        decimal LatestValue(Account elementType, TwoName name);
 
         /// <summary>
         /// Get the value of the selected element on the date provided. For a sector the name is only the surname
@@ -325,7 +326,7 @@ namespace FinancialStructures.Database
         /// <param name="name">The name of the element to find.</param>
         /// <param name="date">The date on which to find the value.</param>
         /// <returns>The  value if it exists.</returns>
-        double Value(Account elementType, TwoName name, DateTime date);
+        decimal Value(Account elementType, TwoName name, DateTime date);
 
         /// <summary>
         /// Total value of all accounts of type specified today.
@@ -333,7 +334,7 @@ namespace FinancialStructures.Database
         /// <param name="elementType">The type to find the total of.</param>
         /// <param name="names">Any name associated with this total, e.g. the Sector name</param>
         /// <returns>The total value held on today.</returns>
-        double TotalValue(Totals elementType, TwoName names = null);
+        decimal TotalValue(Totals elementType, TwoName names = null);
 
         /// <summary>
         /// Total value of all accounts of type specified on date given.
@@ -342,7 +343,7 @@ namespace FinancialStructures.Database
         /// <param name="date">The date to find the total on.</param>
         /// <param name="names">Any name associated with this total, e.g. the Sector name</param>
         /// <returns>The total value held.</returns>
-        double TotalValue(Totals elementType, DateTime date, TwoName names = null);
+        decimal TotalValue(Totals elementType, DateTime date, TwoName names = null);
 
         /// <summary>
         /// returns the currency associated to the account.

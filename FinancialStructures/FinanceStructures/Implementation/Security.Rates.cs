@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using Common.Structure.DataStructures;
-using Common.Structure.FinanceFunctions;
+using Common.Structure.MathLibrary.Finance;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {
     public partial class Security
     {
         /// <inheritdoc/>
-        public double TotalInvestment(ICurrency currency = null)
+        public decimal TotalInvestment(ICurrency currency = null)
         {
             List<DailyValuation> investments = InvestmentsBetween(FirstValue().Day, LatestValue().Day, currency);
-            double sum = 0;
+            decimal sum = 0;
             foreach (DailyValuation investment in investments)
             {
                 sum += investment.Value;
             }
+
             return sum;
         }
 
@@ -46,7 +47,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 return null;
             }
 
-            double latestValue = latestDate.Value * Shares.LatestValue() * GetCurrencyValue(latestDate.Day, currency);
+            decimal latestValue = latestDate.Value * Shares.LatestValue() * GetCurrencyValue(latestDate.Day, currency) ?? 0.0m;
 
             return new DailyValuation(latestDate.Day, latestValue);
         }
@@ -66,7 +67,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 return null;
             }
 
-            double latestValue = sharesFirstDate.Value * UnitPrice.Value(sharesFirstDate.Day)?.Value * GetCurrencyValue(sharesFirstDate.Day, currency) ?? double.NaN;
+            decimal latestValue = sharesFirstDate.Value * UnitPrice.Value(sharesFirstDate.Day)?.Value * GetCurrencyValue(sharesFirstDate.Day, currency) ?? 0.0m;
 
             return new DailyValuation(sharesFirstDate.Day, latestValue);
         }
@@ -81,7 +82,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         public DailyValuation Value(DateTime date, ICurrency currency)
         {
             DailyValuation perSharePrice = UnitPrice.Value(date);
-            double value = perSharePrice?.Value * Shares.ValueOnOrBefore(date)?.Value * GetCurrencyValue(date, currency) ?? 0.0;
+            decimal value = perSharePrice?.Value * Shares.ValueOnOrBefore(date)?.Value * GetCurrencyValue(date, currency) ?? 0.0m;
             return new DailyValuation(date, value);
         }
 
@@ -97,10 +98,10 @@ namespace FinancialStructures.FinanceStructures.Implementation
             DailyValuation val = UnitPrice.ValueBefore(date);
             if (val == null)
             {
-                return new DailyValuation(date, 0.0);
+                return new DailyValuation(date, 0.0m);
             }
 
-            double latestValue = Shares.ValueOnOrBefore(date)?.Value * val.Value * GetCurrencyValue(val.Day, currency) ?? 0.0;
+            decimal latestValue = Shares.ValueOnOrBefore(date)?.Value * val.Value * GetCurrencyValue(val.Day, currency) ?? 0.0m;
             return new DailyValuation(date, latestValue);
         }
 
@@ -116,10 +117,10 @@ namespace FinancialStructures.FinanceStructures.Implementation
             DailyValuation val = UnitPrice.ValueOnOrBefore(date);
             if (val == null)
             {
-                return new DailyValuation(date, 0.0);
+                return new DailyValuation(date, 0.0m);
             }
 
-            double latestValue = Shares.ValueOnOrBefore(date)?.Value * val.Value * GetCurrencyValue(val.Day, currency) ?? 0.0;
+            decimal latestValue = Shares.ValueOnOrBefore(date)?.Value * val.Value * GetCurrencyValue(val.Day, currency) ?? 0.0m;
             return new DailyValuation(date, latestValue);
         }
 
@@ -132,7 +133,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public double CAR(DateTime earlierTime, DateTime laterTime, ICurrency currency)
         {
-            return FinancialFunctions.CAR(Value(earlierTime, currency), Value(laterTime, currency));
+            return FinanceFunctions.CAR(Value(earlierTime, currency), Value(laterTime, currency));
         }
 
         /// <inheritdoc/>
@@ -143,7 +144,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 List<DailyValuation> invs = InvestmentsBetween(earlierDate, laterDate, currency);
                 DailyValuation latestTime = Value(laterDate, currency);
                 DailyValuation firstTime = Value(earlierDate, currency);
-                return FinancialFunctions.IRR(firstTime, invs, latestTime);
+                return FinanceFunctions.IRR(firstTime, invs, latestTime);
             }
             return double.NaN;
         }

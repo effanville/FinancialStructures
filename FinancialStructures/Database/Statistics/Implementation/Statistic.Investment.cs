@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+
 using Common.Structure.DataStructures;
 using Common.Structure.NamingStructures;
+
 using FinancialStructures.Database.Extensions.Values;
 using FinancialStructures.NamingStructures;
 
@@ -17,7 +19,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
         {
-            double sum = 0.0;
+            decimal sum = 0.0m;
             List<Labelled<TwoName, DailyValuation>> investments = portfolio.Investments(account, name);
             if (investments != null && investments.Any())
             {
@@ -28,13 +30,13 @@ namespace FinancialStructures.Database.Statistics.Implementation
             }
 
             fCurrency = portfolio.BaseCurrency;
-            Value = sum;
+            Value = (double)sum;
         }
 
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, Totals total, TwoName name)
         {
-            double sum = 0.0;
+            decimal sum = 0.0m;
             List<Labelled<TwoName, DailyValuation>> investments = portfolio.TotalInvestments(total, name);
             if (investments != null && investments.Any())
             {
@@ -45,7 +47,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
             }
 
             fCurrency = portfolio.BaseCurrency;
-            Value = sum;
+            Value = (double)sum;
         }
     }
 }

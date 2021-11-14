@@ -37,10 +37,10 @@ namespace FinancePortfolioDatabase.Tests
                 Assert.IsTrue(ViewModel.HasValues);
                 Assert.AreEqual("TestFilePath", ViewModel.PortfolioNameText);
                 Assert.AreEqual("Total Securities: 1", ViewModel.SecurityTotalText);
-                Assert.AreEqual("Total Value: 1 ", ViewModel.SecurityAmountText);
+                Assert.AreEqual("Total Value: 1.0 ", ViewModel.SecurityAmountText);
 
                 Assert.AreEqual("Total Bank Accounts: 1", ViewModel.BankAccountTotalText);
-                Assert.AreEqual("Total Value: 1 ", ViewModel.BankAccountAmountText);
+                Assert.AreEqual("Total Value: 1.0 ", ViewModel.BankAccountAmountText);
                 Assert.AreEqual(0, ViewModel.Notes.Count);
             });
         }
@@ -63,10 +63,10 @@ namespace FinancePortfolioDatabase.Tests
 
                 Assert.IsTrue(ViewModel.HasValues);
                 Assert.AreEqual("Total Securities: 1", ViewModel.SecurityTotalText);
-                Assert.AreEqual("Total Value: 1 ", ViewModel.SecurityAmountText);
+                Assert.AreEqual("Total Value: 1.0 ", ViewModel.SecurityAmountText);
 
                 Assert.AreEqual("Total Bank Accounts: 1", ViewModel.BankAccountTotalText);
-                Assert.AreEqual("Total Value: 1 ", ViewModel.BankAccountAmountText);
+                Assert.AreEqual("Total Value: 1.0 ", ViewModel.BankAccountAmountText);
             });
         }
     }

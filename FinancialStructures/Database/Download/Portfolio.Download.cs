@@ -126,7 +126,7 @@ namespace FinancialStructures.Database.Download
         /// <summary>
         /// Downloads the latest value from the website stored in <paramref name="names"/> url field.
         /// </summary>
-        internal static async Task DownloadLatestValue(NameData names, Action<double> updateValue, IReportLogger reportLogger = null)
+        internal static async Task DownloadLatestValue(NameData names, Action<decimal> updateValue, IReportLogger reportLogger = null)
         {
             string data = await WebDownloader.DownloadFromURLasync(names.Url, reportLogger).ConfigureAwait(false);
             if (string.IsNullOrEmpty(data))
@@ -134,48 +134,51 @@ namespace FinancialStructures.Database.Download
                 _ = reportLogger?.LogUsefulError(ReportLocation.Downloading, $"{names.Company}-{names.Name}: could not download data from {names.Url}");
                 return;
             }
-            if (!ProcessDownloadString(names.Url, data, reportLogger, out double value))
+            if (!ProcessDownloadString(names.Url, data, reportLogger, out decimal? value))
             {
                 return;
             }
 
-            updateValue(value);
+            updateValue(value.Value);
         }
 
-        private static bool ProcessDownloadString(string url, string data, IReportLogger reportLogger, out double value)
+        private static bool ProcessDownloadString(string url, string data, IReportLogger reportLogger, out decimal? value)
         {
-            value = double.NaN;
+            value = null;
             switch (AddressType(url))
             {
                 case Website.FT:
                 {
                     value = ProcessFromFT(data);
-                    if (double.IsNaN(value))
+                    if (value == null)
                     {
                         _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from FT url: {url}");
                         return false;
                     }
+
                     return true;
                 }
                 case Website.Yahoo:
                 {
                     value = ProcessFromYahoo(data);
-                    if (double.IsNaN(value))
+                    if (value == null)
                     {
                         _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from Yahoo url: {url}");
                         return false;
                     }
+
                     return true;
                 }
                 default:
                 case Website.Morningstar:
                 {
                     value = ProcessFromMorningstar(data);
-                    if (double.IsNaN(value))
+                    if (value == null)
                     {
                         _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from Morningstar url: {url}");
                         return false;
                     }
+
                     return true;
                 }
                 case Website.Google:
@@ -186,7 +189,7 @@ namespace FinancialStructures.Database.Download
             }
         }
 
-        private static double ProcessFromMorningstar(string data)
+        private static decimal? ProcessFromMorningstar(string data)
         {
             bool continuer(char c)
             {
@@ -208,11 +211,10 @@ namespace FinancialStructures.Database.Download
                 string str = new string(digits);
                 if (string.IsNullOrEmpty(str))
                 {
-                    return double.NaN;
+                    return null;
                 }
-                double i = double.Parse(str);
-                i /= 100;
-                return i;
+
+                return decimal.Parse(str) / 100.0m;
             }
             string searchName = "<td class=\"line text\">" + Pounds;
             int poundsValue = data.IndexOf(searchName);
@@ -224,17 +226,16 @@ namespace FinancialStructures.Database.Download
                 string str = new string(digits);
                 if (string.IsNullOrEmpty(str))
                 {
-                    return double.NaN;
+                    return null;
                 }
-                double i = double.Parse(str);
 
-                return i;
+                return decimal.Parse(str);
             }
 
-            return double.NaN;
+            return null;
         }
 
-        private static double ProcessFromYahoo(string data)
+        private static decimal? ProcessFromYahoo(string data)
         {
             bool continuer(char c)
             {
@@ -257,20 +258,20 @@ namespace FinancialStructures.Database.Download
                 string str = new string(digits);
                 if (string.IsNullOrEmpty(str))
                 {
-                    return double.NaN;
+                    return null;
                 }
-                double i = double.Parse(str);
+                decimal i = decimal.Parse(str);
                 if (data.Contains("GBp"))
                 {
-                    i /= 100.0;
+                    i /= 100.0m;
                 }
                 return i;
             }
 
-            return double.NaN;
+            return null;
         }
 
-        private static double ProcessFromFT(string data)
+        private static decimal? ProcessFromFT(string data)
         {
             bool continuer(char c)
             {
@@ -292,10 +293,10 @@ namespace FinancialStructures.Database.Download
                 string str = new string(digits);
                 if (string.IsNullOrEmpty(str))
                 {
-                    return double.NaN;
+                    return null;
                 }
-                double i = double.Parse(str);
-                return i;
+
+                return decimal.Parse(str);
             }
 
             int penceValue = data.IndexOf("Price (GBX)");
@@ -308,13 +309,13 @@ namespace FinancialStructures.Database.Download
                 string str = new string(digits);
                 if (string.IsNullOrEmpty(str))
                 {
-                    return double.NaN;
+                    return null;
                 }
-                double i = double.Parse(str);
-                return i / 100.0;
+                decimal i = decimal.Parse(str);
+                return i / 100.0m;
             }
 
-            return double.NaN;
+            return null;
         }
     }
 }

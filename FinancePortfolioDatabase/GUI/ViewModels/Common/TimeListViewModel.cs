@@ -86,7 +86,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             e.NewItem = new DailyValuation()
             {
                 Day = DateTime.Today,
-                Value = latest?.Value ?? 0.0
+                Value = latest?.Value ?? 0.0m
             };
         }
 

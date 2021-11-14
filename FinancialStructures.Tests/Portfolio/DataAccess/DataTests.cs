@@ -20,7 +20,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
         {
             DatabaseConstructor generator = new DatabaseConstructor();
             string secCompany = "company1";
-            generator.WithSecurity(secCompany, "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0 }, numberUnits: new[] { 12.0 });
+            _ = generator.WithSecurity(secCompany, "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0m }, numberUnits: new[] { 12.0m });
             Portfolio database = generator.Database;
 
             IReadOnlyList<SecurityDayData> data = database.SecurityData(new TwoName(secCompany, "name1"));
@@ -35,7 +35,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
         {
             DatabaseConstructor generator = new DatabaseConstructor();
             string secCompany = "company1";
-            generator.WithSecurity(secCompany, "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0 }, numberUnits: new[] { 12.0 });
+            _ = generator.WithSecurity(secCompany, "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0m }, numberUnits: new[] { 12.0m });
 
             Portfolio database = generator.Database;
 
@@ -50,7 +50,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
             DatabaseConstructor generator = new DatabaseConstructor();
 
             string bankCompany = "Bank";
-            generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0 });
+            _ = generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0m });
             Portfolio database = generator.Database;
 
             IReadOnlyList<DailyValuation> data = database.NumberData(Account.BankAccount, new NameData(bankCompany, "AccountName"));
@@ -65,7 +65,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
             DatabaseConstructor generator = new DatabaseConstructor();
 
             string bankCompany = "Bank";
-            generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0 });
+            _ = generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0m });
             Portfolio database = generator.Database;
 
             IReadOnlyList<DailyValuation> data = database.NumberData(Account.BankAccount, new NameData(bankCompany, "name"));
@@ -81,7 +81,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
             List<ErrorReport> reports = new List<ErrorReport>();
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             string bankCompany = "Bank";
-            generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0 });
+            _ = generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0m });
             Portfolio database = generator.Database;
 
             IReadOnlyList<DailyValuation> data = database.NumberData(Account.BankAccount, new NameData(bankCompany, "name"), logging);

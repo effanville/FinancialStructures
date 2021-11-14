@@ -22,7 +22,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public virtual bool TryEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null)
+        public virtual bool TryEditData(DateTime oldDate, DateTime date, decimal value, IReportLogger reportLogger = null)
         {
             if (Values.ValueExists(oldDate, out _))
             {
@@ -34,7 +34,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public virtual void SetData(DateTime date, double value, IReportLogger logger = null)
+        public virtual void SetData(DateTime date, decimal value, IReportLogger logger = null)
         {
             Values.SetData(date, value, logger);
         }
@@ -55,7 +55,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                     break;
                 }
 
-                DailyValuation line = new DailyValuation(DateTime.Parse(dayValuation[0]), double.Parse(dayValuation[1]));
+                DailyValuation line = new DailyValuation(DateTime.Parse(dayValuation[0]), decimal.Parse(dayValuation[1]));
                 dailyValuations.Add(line);
             }
 

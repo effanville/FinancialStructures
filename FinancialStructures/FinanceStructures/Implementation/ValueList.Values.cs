@@ -30,7 +30,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             DailyValuation val = Values.ValueBefore(date);
             if (val == null)
             {
-                return new DailyValuation(date, 0.0);
+                return new DailyValuation(date, 0.0m);
             }
 
             return val;

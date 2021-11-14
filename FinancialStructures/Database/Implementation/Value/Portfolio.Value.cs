@@ -1,4 +1,5 @@
 ﻿using System;
+
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 
@@ -7,13 +8,13 @@ namespace FinancialStructures.Database.Implementation
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public double LatestValue(Account elementType, TwoName name)
+        public decimal LatestValue(Account elementType, TwoName name)
         {
             return Value(elementType, name, DateTime.Today);
         }
 
         /// <inheritdoc/>
-        public double Value(Account elementType, TwoName name, DateTime date)
+        public decimal Value(Account elementType, TwoName name, DateTime date)
         {
             switch (elementType)
             {
@@ -21,12 +22,12 @@ namespace FinancialStructures.Database.Implementation
                 {
                     if (!TryGetAccount(Account.Security, name, out IValueList desired) || !desired.Any())
                     {
-                        return double.NaN;
+                        return 0.0m;
                     }
 
                     ISecurity security = desired as ISecurity;
                     ICurrency currency = Currency(Account.Security, security);
-                    return security.Value(date, currency)?.Value ?? 0.0;
+                    return security.Value(date, currency)?.Value ?? 0.0m;
                 }
                 case Account.Currency:
                 case Account.Benchmark:
@@ -35,25 +36,25 @@ namespace FinancialStructures.Database.Implementation
                     {
                         // If doesnt exist, the default here is 1.0, as these values would
                         // be used in a multiplicative instance.
-                        return 1.0;
+                        return 1.0m;
                     }
 
-                    return desired.Value(date)?.Value ?? 0.0;
+                    return desired.Value(date)?.Value ?? 0.0m;
                 }
                 case Account.BankAccount:
                 {
                     if (!TryGetAccount(elementType, name, out IValueList account))
                     {
-                        return double.NaN;
+                        return 0.0m;
                     }
 
                     IExchangableValueList bankAccount = account as IExchangableValueList;
                     ICurrency currency = Currency(elementType, bankAccount);
-                    return bankAccount.ValuationOnOrBefore(date, currency)?.Value ?? 0.0;
+                    return bankAccount.ValuationOnOrBefore(date, currency)?.Value ?? 0.0m;
 
                 }
                 default:
-                    return 0.0;
+                    return 0.0m;
             }
         }
     }

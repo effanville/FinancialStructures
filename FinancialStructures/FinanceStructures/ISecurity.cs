@@ -70,7 +70,7 @@ namespace FinancialStructures.FinanceStructures
         /// all values in <see cref="Investments"/>.
         /// </summary>
         /// <param name="currency">An optional currency to exchange the value with.</param>
-        double TotalInvestment(ICurrency currency = null);
+        decimal TotalInvestment(ICurrency currency = null);
 
         /// <summary>
         /// Returns the last investment in the <see cref="ISecurity"/>.
@@ -119,7 +119,7 @@ namespace FinancialStructures.FinanceStructures
         /// <param name="trade">The details of any trade on this date.</param>
         /// <param name="reportLogger">An optional logger to log progress.</param>
         /// <returns>Was adding or editing successful.</returns>
-        bool AddOrEditData(DateTime oldDate, DateTime date, double unitPrice, double shares, double investment = 0.0, SecurityTrade trade = null, IReportLogger reportLogger = null);
+        bool AddOrEditData(DateTime oldDate, DateTime date, decimal unitPrice, decimal shares, decimal investment = 0.0m, SecurityTrade trade = null, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Tries to add data for the date specified if it doesnt exist, or edits data if it exists.

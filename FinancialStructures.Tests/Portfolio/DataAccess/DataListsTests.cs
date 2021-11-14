@@ -17,8 +17,8 @@ namespace FinancialStructures.Tests.Database.DataAccess
         {
             DatabaseConstructor generator = new DatabaseConstructor();
             string secCompany = "company1";
-            _ = generator.WithSecurity(secCompany, "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0 }, numberUnits: new[] { 12.0 });
-            _ = generator.WithSecurity("otherCompany", "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0 }, numberUnits: new[] { 12.0 });
+            _ = generator.WithSecurity(secCompany, "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0m }, numberUnits: new[] { 12.0m });
+            _ = generator.WithSecurity("otherCompany", "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0m }, numberUnits: new[] { 12.0m });
 
             IReadOnlyList<IValueList> data = generator.Database.CompanyAccounts(Account.Security, secCompany);
 
@@ -31,7 +31,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
         {
             DatabaseConstructor generator = new DatabaseConstructor();
             string secCompany = "company1";
-            _ = generator.WithSecurity(secCompany, "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0 }, numberUnits: new[] { 12.0 });
+            _ = generator.WithSecurity(secCompany, "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0m }, numberUnits: new[] { 12.0m });
 
             IReadOnlyList<IValueList> data = generator.Database.CompanyAccounts(Account.Security, "other");
             Assert.AreEqual(0, data.Count);
@@ -43,7 +43,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
             DatabaseConstructor generator = new DatabaseConstructor();
 
             string bankCompany = "Bank";
-            _ = generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0 });
+            _ = generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0m });
 
             IReadOnlyList<IValueList> data = generator.Database.CompanyAccounts(Account.BankAccount, bankCompany);
 
@@ -57,7 +57,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
             DatabaseConstructor generator = new DatabaseConstructor();
 
             string bankCompany = "Bank";
-            _ = generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0 });
+            _ = generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0m });
             Portfolio database = generator.Database;
 
             IReadOnlyList<IValueList> data = database.CompanyAccounts(Account.BankAccount, "name");

@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Common.Structure.DataStructures;
 using Common.Structure.Reporting;
+
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
@@ -26,7 +28,7 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
-        public bool TryAddOrEditDataToSecurity(TwoName names, DateTime oldDate, DateTime date, double shares, double unitPrice, double investment, SecurityTrade trade, IReportLogger reportLogger = null)
+        public bool TryAddOrEditDataToSecurity(TwoName names, DateTime oldDate, DateTime date, decimal shares, decimal unitPrice, decimal investment, SecurityTrade trade, IReportLogger reportLogger = null)
         {
             IReadOnlyList<ISecurity> funds = FundsThreadSafe;
             for (int fundIndex = 0; fundIndex < NumberOf(Account.Security); fundIndex++)

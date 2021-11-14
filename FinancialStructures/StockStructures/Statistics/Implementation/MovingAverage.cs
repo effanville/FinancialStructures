@@ -1,5 +1,5 @@
 ﻿using System;
-using Common.Structure.Mathematics;
+using Common.Structure.MathLibrary.Vectors;
 
 namespace FinancialStructures.StockStructures.Statistics.Implementation
 {

@@ -28,8 +28,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             set => SetAndNotify(ref fHistoryStats, value, nameof(HistoryStats));
         }
 
-        private Dictionary<string, double> fDistributionValues;
-        public Dictionary<string, double> SecurityValues
+        private Dictionary<string, decimal> fDistributionValues;
+        public Dictionary<string, decimal> SecurityValues
         {
             get => fDistributionValues;
             set
@@ -40,16 +40,16 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         }
 
 
-        private Dictionary<string, double> fDistributionValues2;
-        public Dictionary<string, double> BankAccountValues
+        private Dictionary<string, decimal> fDistributionValues2;
+        public Dictionary<string, decimal> BankAccountValues
         {
             get => fDistributionValues2;
             set => SetAndNotify(ref fDistributionValues2, value, nameof(BankAccountValues));
         }
 
-        private Dictionary<string, double> fDistributionValues3;
+        private Dictionary<string, decimal> fDistributionValues3;
 
-        public Dictionary<string, double> SectorValues
+        public Dictionary<string, decimal> SectorValues
         {
             get => fDistributionValues3;
             set => SetAndNotify(ref fDistributionValues3, value, nameof(SectorValues));
@@ -88,8 +88,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 IReadOnlyList<string> sectorNames = DataStore.Sectors(Account.Security);
                 foreach (string name in sectorNames)
                 {
-                    double total = HistoryStats[HistoryStats.Count - 1].SecurityValue;
-                    if (HistoryStats[HistoryStats.Count - 1].SectorValues[name] > 0.1 * total)
+                    decimal total = HistoryStats[HistoryStats.Count - 1].SecurityValue;
+                    if (HistoryStats[HistoryStats.Count - 1].SectorValues[name] > 0.1m * total)
                     {
                         List<KeyValuePair<DateTime, double>> pc = new List<KeyValuePair<DateTime, double>>();
                         for (int time = 0; time < HistoryStats.Count; time++)

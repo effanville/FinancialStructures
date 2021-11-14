@@ -14,7 +14,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             item = new Sector(names);
         }
 
-        public SectorConstructor WithData(DateTime date, double valueToAdd)
+        public SectorConstructor WithData(DateTime date, decimal valueToAdd)
         {
             item.Values.SetData(date, valueToAdd);
             return this;

@@ -143,7 +143,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 
         private bool IsUpdated(IPortfolio dataToDisplay, NameData name)
         {
-            bool result = dataToDisplay.LatestDate(TypeOfAccount, name) == DateTime.Today || dataToDisplay.LatestValue(TypeOfAccount, name) == 0.0;
+            bool result = dataToDisplay.LatestDate(TypeOfAccount, name) == DateTime.Today || dataToDisplay.LatestValue(TypeOfAccount, name).Equals(0.0m);
 
             if (!result)
             {

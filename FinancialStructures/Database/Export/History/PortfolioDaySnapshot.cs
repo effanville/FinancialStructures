@@ -24,7 +24,7 @@ namespace FinancialStructures.Database.Export.History
         /// <summary>
         /// The total value held in the portfolio.
         /// </summary>
-        public double TotalValue
+        public decimal TotalValue
         {
             get;
         }
@@ -32,7 +32,7 @@ namespace FinancialStructures.Database.Export.History
         /// <summary>
         /// The total held in BankAccounts.
         /// </summary>
-        public double BankAccValue
+        public decimal BankAccValue
         {
             get;
         }
@@ -40,7 +40,7 @@ namespace FinancialStructures.Database.Export.History
         /// <summary>
         /// The total held in securities.
         /// </summary>
-        public double SecurityValue
+        public decimal SecurityValue
         {
             get;
         }
@@ -57,11 +57,11 @@ namespace FinancialStructures.Database.Export.History
         /// <summary>
         /// The totals held in each of the securities.
         /// </summary>
-        public IDictionary<string, double> SecurityValues
+        public IDictionary<string, decimal> SecurityValues
         {
             get;
             set;
-        } = new Dictionary<string, double>();
+        } = new Dictionary<string, decimal>();
 
         /// <summary>
         /// The IRR values for all security companies over the last year.
@@ -84,18 +84,18 @@ namespace FinancialStructures.Database.Export.History
         /// <summary>
         /// The total values for all bank account companies.
         /// </summary>
-        public Dictionary<string, double> BankAccValues
+        public Dictionary<string, decimal> BankAccValues
         {
             get;
-        } = new Dictionary<string, double>();
+        } = new Dictionary<string, decimal>();
 
         /// <summary>
         /// The total values held in each sector.
         /// </summary>
-        public Dictionary<string, double> SectorValues
+        public Dictionary<string, decimal> SectorValues
         {
             get;
-        } = new Dictionary<string, double>();
+        } = new Dictionary<string, decimal>();
 
         /// <summary>
         /// The total CAR for each sector.
@@ -119,17 +119,17 @@ namespace FinancialStructures.Database.Export.History
                 "SecurityTotal"
             };
 
-            foreach (KeyValuePair<string, double> value in SecurityValues)
+            foreach (KeyValuePair<string, decimal> value in SecurityValues)
             {
                 headers.Add(value.Key);
             }
 
-            foreach (KeyValuePair<string, double> value in BankAccValues)
+            foreach (KeyValuePair<string, decimal> value in BankAccValues)
             {
                 headers.Add(value.Key);
             }
 
-            foreach (KeyValuePair<string, double> value in SectorValues)
+            foreach (KeyValuePair<string, decimal> value in SectorValues)
             {
                 headers.Add(value.Key);
             }
@@ -151,17 +151,17 @@ namespace FinancialStructures.Database.Export.History
                 SecurityValue.TruncateToString()
             };
 
-            foreach (KeyValuePair<string, double> value in SecurityValues)
+            foreach (KeyValuePair<string, decimal> value in SecurityValues)
             {
                 values.Add(value.Value.TruncateToString());
             }
 
-            foreach (KeyValuePair<string, double> value in BankAccValues)
+            foreach (KeyValuePair<string, decimal> value in BankAccValues)
             {
                 values.Add(value.Value.TruncateToString());
             }
 
-            foreach (KeyValuePair<string, double> value in SectorValues)
+            foreach (KeyValuePair<string, decimal> value in SectorValues)
             {
                 values.Add(value.Value.TruncateToString());
             }
@@ -286,5 +286,6 @@ namespace FinancialStructures.Database.Export.History
 
             return 0;
         }
+
     }
 }

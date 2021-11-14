@@ -9,12 +9,12 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
         public const string DefaultName = "Current";
         public const string DefaultCompany = "Santander";
         public static readonly DateTime[] DefaultDates = new DateTime[] { new DateTime(2010, 1, 1), new DateTime(2011, 1, 1), new DateTime(2012, 5, 1), new DateTime(2015, 4, 3), new DateTime(2018, 5, 6), new DateTime(2020, 1, 1) };
-        public static readonly double[] DefaultValues = new double[] { 100.0, 100.0, 125.2, 90.6, 77.7, 101.1 };
+        public static readonly decimal[] DefaultValues = new decimal[] { 100.0m, 100.0m, 125.2m, 90.6m, 77.7m, 101.1m };
 
         public const string SecondaryName = "Current";
         public const string SecondaryCompany = "Halifax";
         public static readonly DateTime[] SecondaryDates = new DateTime[] { new DateTime(2010, 1, 1), new DateTime(2011, 1, 1), new DateTime(2012, 5, 1), new DateTime(2015, 4, 3), new DateTime(2018, 5, 6), new DateTime(2020, 1, 1) };
-        public static readonly double[] SecondaryValues = new double[] { 1100.0, 2100.0, 1125.2, 900.6, 770.7, 1001.1 };
+        public static readonly decimal[] SecondaryValues = new decimal[] { 1100.0m, 2100.0m, 1125.2m, 900.6m, 770.7m, 1001.1m };
 
         public CashAccount Item;
 
@@ -27,7 +27,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             Item = new CashAccount(names);
         }
 
-        private BankAccountConstructor WithData(DateTime date, double price)
+        private BankAccountConstructor WithData(DateTime date, decimal price)
         {
             Item.Amounts.SetData(date, price);
             return this;
@@ -48,7 +48,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             return new BankAccountConstructor(company, name, currency, url, sectors);
         }
 
-        public static BankAccountConstructor FromNameAndData(string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] dates = null, double[] values = null)
+        public static BankAccountConstructor FromNameAndData(string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] dates = null, decimal[] values = null)
         {
             BankAccountConstructor bankConstructor = new BankAccountConstructor(company, name, currency, url, sectors);
             if (dates != null)

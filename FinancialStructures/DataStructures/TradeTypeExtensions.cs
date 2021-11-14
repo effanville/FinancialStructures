@@ -10,13 +10,13 @@
         /// This is the sign in the sense of whether the trade details 
         /// money leaving the account or not.
         /// </summary>
-        public static double Sign(this TradeType tradeType)
+        public static decimal Sign(this TradeType tradeType)
         {
             return tradeType == TradeType.Sell
                 || tradeType == TradeType.CashPayout
                 || tradeType == TradeType.Dividend
-                    ? -1.0
-                    : 1.0;
+                    ? -1.0m
+                    : 1.0m;
         }
 
         /// <summary>

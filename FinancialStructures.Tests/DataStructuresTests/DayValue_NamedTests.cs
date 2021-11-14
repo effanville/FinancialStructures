@@ -26,7 +26,7 @@ namespace FinancialStructures.Tests.DataStructuresTests
         [TestCase("name", null, "12/5/2019", 5, "name-05/12/2019, 5")]
         [TestCase("name", "company", "12/5/2019", 0, "company-name-05/12/2019, 0")]
         [TestCase("", "company", "12/5/2019", 5, "company-05/12/2019, 5")]
-        public void ToStringTests(string name1, string company1, DateTime date, double value, string expected)
+        public void ToStringTests(string name1, string company1, DateTime date, decimal value, string expected)
         {
             Labelled<TwoName, DailyValuation> one = new Labelled<TwoName, DailyValuation>(new TwoName(company1, name1), new DailyValuation(date, value));
             Assert.AreEqual(expected, one.ToString());

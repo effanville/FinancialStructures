@@ -178,7 +178,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
             List<AccountStatistics> stats = new List<AccountStatistics>();
             foreach (string company in values)
             {
-                double latest = portfolio.TotalValue(totals, new TwoName(company));
+                decimal latest = portfolio.TotalValue(totals, new TwoName(company));
                 if ((displayValueFunds && latest > 0) || !displayValueFunds)
                 {
                     stats.Add(new AccountStatistics(portfolio, totals, new NameData(company, "Totals"), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats()));

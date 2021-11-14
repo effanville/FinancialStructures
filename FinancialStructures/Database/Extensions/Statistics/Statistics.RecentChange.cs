@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Statistics;
 using FinancialStructures.NamingStructures;
@@ -10,7 +11,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
         /// <summary>
         /// returns the total profit in the portfolio.
         /// </summary>
-        public static double RecentChange(this IPortfolio portfolio, Totals totals = Totals.Security, TwoName names = null)
+        public static decimal RecentChange(this IPortfolio portfolio, Totals totals = Totals.Security, TwoName names = null)
         {
             switch (totals)
             {
@@ -33,7 +34,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 }
                 case Totals.SecuritySector:
                 {
-                    double total = 0;
+                    decimal total = 0;
                     foreach (ISecurity security in portfolio.FundsThreadSafe)
                     {
                         if (security.IsSectorLinked(names) && security.Any())
@@ -47,7 +48,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 }
                 case Totals.BankAccountSector:
                 {
-                    double total = 0;
+                    decimal total = 0;
                     foreach (IExchangableValueList bankAccount in portfolio.BankAccountsThreadSafe)
                     {
                         if (bankAccount.IsSectorLinked(names) && bankAccount.Any())
@@ -74,14 +75,14 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 case Totals.BankAccountCurrency:
                 default:
                 {
-                    return 0.0;
+                    return 0.0m;
                 }
             }
         }
 
-        private static double RecentChangeOf(IReadOnlyList<IValueList> accounts, IPortfolio portfolio, Totals totals)
+        private static decimal RecentChangeOf(IReadOnlyList<IValueList> accounts, IPortfolio portfolio, Totals totals)
         {
-            double total = 0;
+            decimal total = 0;
             foreach (IExchangableValueList valueList in accounts)
             {
                 if (valueList.Any())
@@ -97,7 +98,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
         /// <summary>
         /// returns the change between the most recent two valuations of the security.
         /// </summary>
-        public static double RecentChange(this IPortfolio portfolio, Account elementType, TwoName names)
+        public static decimal RecentChange(this IPortfolio portfolio, Account elementType, TwoName names)
         {
             switch (elementType)
             {
@@ -123,7 +124,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 }
             }
 
-            return double.NaN;
+            return 0.0m;
         }
     }
 }

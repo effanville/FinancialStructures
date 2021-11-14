@@ -10,11 +10,11 @@ namespace FinancialStructures.FinanceStructures.Statistics
         /// <summary>
         /// Calculates the difference between the first and last values of a <see cref="IValueList"/>.
         /// </summary>
-        public static double Profit(this IValueList valueList)
+        public static decimal Profit(this IValueList valueList)
         {
             if (!valueList.Any())
             {
-                return double.NaN;
+                return 0.0m;
             }
 
             return valueList.LatestValue().Value - valueList.FirstValue().Value;
@@ -23,11 +23,11 @@ namespace FinancialStructures.FinanceStructures.Statistics
         /// <summary>
         /// Calculates the difference between the last and investment of a <see cref="IExchangableValueList"/>.
         /// </summary>
-        public static double Profit(this IExchangableValueList valueList, ICurrency currency, Account elementType)
+        public static decimal Profit(this IExchangableValueList valueList, ICurrency currency, Account elementType)
         {
             if (!valueList.Any())
             {
-                return double.NaN;
+                return 0.0m;
             }
 
             switch (elementType)
@@ -49,11 +49,11 @@ namespace FinancialStructures.FinanceStructures.Statistics
         /// <summary>
         /// Calculates the difference between the last two values of a <see cref="IExchangableValueList"/>.
         /// </summary>
-        public static double Profit(this ISecurity valueList, ICurrency currency)
+        public static decimal Profit(this ISecurity valueList, ICurrency currency)
         {
             if (!valueList.Any())
             {
-                return double.NaN;
+                return 0.0m;
             }
 
             return valueList.LatestValue(currency).Value - valueList.TotalInvestment(currency);

@@ -10,7 +10,7 @@ namespace FinancialStructures.FinanceStructures.Statistics
         /// <summary>
         /// Calculates the difference between the last two values of a <see cref="IValueList"/>.
         /// </summary>
-        public static double RecentChange(this IValueList valueList)
+        public static decimal RecentChange(this IValueList valueList)
         {
             DailyValuation needed = valueList.LatestValue();
             if (needed.Value > 0)
@@ -18,13 +18,13 @@ namespace FinancialStructures.FinanceStructures.Statistics
                 return needed.Value - valueList.ValueBefore(needed.Day).Value;
             }
 
-            return 0.0;
+            return 0.0m;
         }
 
         /// <summary>
         /// Calculates the difference between the last two values of a <see cref="IExchangableValueList"/>.
         /// </summary>
-        public static double RecentChange(this IExchangableValueList valueList, ICurrency currency)
+        public static decimal RecentChange(this IExchangableValueList valueList, ICurrency currency)
         {
             DailyValuation needed = valueList.LatestValue(currency);
             if (needed.Value > 0)
@@ -32,7 +32,7 @@ namespace FinancialStructures.FinanceStructures.Statistics
                 return needed.Value - valueList.ValueBefore(needed.Day, currency).Value;
             }
 
-            return 0.0;
+            return 0.0m;
         }
     }
 }

@@ -80,7 +80,7 @@ namespace FinancialStructures.Database.Statistics
             }
 
             CultureInfo culture = CultureInfo.CreateSpecificCulture(format);
-            return Value.ToString("C2", culture);
+            return Value.ToString("C", culture);
         }
 
         private string FormatName()

@@ -25,7 +25,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             return this;
         }
 
-        public TwoName DefaultName(Account acctype)
+        public static TwoName DefaultName(Account acctype)
         {
             switch (acctype)
             {
@@ -42,7 +42,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             }
         }
 
-        public TwoName SecondaryName(Account account)
+        public static TwoName SecondaryName(Account account)
         {
             switch (account)
             {
@@ -50,6 +50,9 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
                     return new TwoName(SecurityConstructor.SecondaryCompany, SecurityConstructor.SecondaryName);
                 case Account.BankAccount:
                     return new TwoName(BankAccountConstructor.SecondaryCompany, BankAccountConstructor.SecondaryName);
+                case Account.All:
+                case Account.Benchmark:
+                case Account.Currency:
                 default:
                     return null;
             }
@@ -65,6 +68,8 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
                     return WithDefaultBankAccount();
                 case Account.Currency:
                     return WithDefaultCurrency();
+                case Account.All:
+                case Account.Benchmark:
                 default:
                     return null;
             }
@@ -100,7 +105,17 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             return this;
         }
 
-        public DatabaseConstructor WithAccountFromNameAndData(Account accType, string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] dates = null, double[] sharePrice = null, double[] numberUnits = null, double[] investment = null)
+        public DatabaseConstructor WithAccountFromNameAndData(
+            Account accType,
+            string company,
+            string name,
+            string currency = null,
+            string url = null,
+            string sectors = null,
+            DateTime[] dates = null,
+            decimal[] sharePrice = null,
+            decimal[] numberUnits = null,
+            decimal[] investment = null)
         {
             switch (accType)
             {
@@ -164,7 +179,16 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             return this;
         }
 
-        public DatabaseConstructor WithSecurity(string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] dates = null, double[] sharePrice = null, double[] numberUnits = null, double[] investment = null)
+        public DatabaseConstructor WithSecurity(
+            string company,
+            string name,
+            string currency = null,
+            string url = null,
+            string sectors = null,
+            DateTime[] dates = null,
+            decimal[] sharePrice = null,
+            decimal[] numberUnits = null,
+            decimal[] investment = null)
         {
             Database.Funds.Add(SecurityConstructor.FromNameAndData(company, name, currency, url, sectors, dates, sharePrice, numberUnits, investment).Item);
             return this;
@@ -188,7 +212,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             return this;
         }
 
-        public DatabaseConstructor WithBankAccount(string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] dates = null, double[] values = null)
+        public DatabaseConstructor WithBankAccount(string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] dates = null, decimal[] values = null)
         {
             Database.BankAccounts.Add(BankAccountConstructor.FromNameAndData(company, name, currency, url, sectors, dates: dates, values: values).Item);
             return this;
@@ -197,7 +221,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
         public const string DefaultCurrencyCompany = "HKD";
         public const string DefaultCurrencyName = "GBP";
         public readonly DateTime[] DefaultCurrencyDateTimes = new DateTime[] { new DateTime(2011, 11, 1), new DateTime(2018, 1, 14), new DateTime(2020, 8, 3) };
-        public readonly double[] DefaultCurrencyValues = new double[] { 0.081, 0.09, 0.0987 };
+        public readonly decimal[] DefaultCurrencyValues = new decimal[] { 0.081m, 0.09m, 0.0987m };
 
         public DatabaseConstructor WithDefaultCurrency()
         {
@@ -210,14 +234,14 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             return this;
         }
 
-        public DatabaseConstructor WithCurrencyFromNameAndData(string company, string name, string currency = null, string url = null, DateTime[] date = null, double[] value = null)
+        public DatabaseConstructor WithCurrencyFromNameAndData(string company, string name, string currency = null, string url = null, DateTime[] date = null, decimal[] value = null)
         {
             CurrencyConstructor bankConstructor = new CurrencyConstructor(company, name, currency, url);
             if (date != null)
             {
                 for (int i = 0; i < date.Length; i++)
                 {
-                    bankConstructor.WithData(date[i], value[i]);
+                    _ = bankConstructor.WithData(date[i], value[i]);
                 }
             }
 
@@ -231,14 +255,14 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             return this;
         }
 
-        public DatabaseConstructor WithSectorFromNameAndData(string company, string name, string currency = null, string url = null, DateTime[] date = null, double[] value = null)
+        public DatabaseConstructor WithSectorFromNameAndData(string company, string name, string currency = null, string url = null, DateTime[] date = null, decimal[] value = null)
         {
             SectorConstructor bankConstructor = new SectorConstructor(company, name, currency, url);
             if (date != null)
             {
                 for (int i = 0; i < date.Length; i++)
                 {
-                    bankConstructor.WithData(date[i], value[i]);
+                    _ = bankConstructor.WithData(date[i], value[i]);
                 }
             }
 

@@ -1,8 +1,10 @@
 ﻿using System;
+
 using FinancialStructures.Database;
 using FinancialStructures.Database.Implementation;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Tests.TestDatabaseConstructor;
+
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.Database.Value
@@ -29,10 +31,17 @@ namespace FinancialStructures.Tests.Database.Value
         {
             Account accountType = totalsType.ToAccount();
             DatabaseConstructor constructor = new DatabaseConstructor();
-            constructor.WithDefaultFromType(accountType);
-            constructor.WithSecondaryFromType(accountType);
-            TwoName defaultName = constructor.DefaultName(accountType);
-            constructor.WithAccountFromNameAndData(accountType, defaultName.Company, defaultName.Name, dates: new DateTime[] { new DateTime(2010, 1, 1) }, sharePrice: new double[] { 50 }, numberUnits: new double[] { 100 }, investment: new double[] { 0 });
+            TwoName defaultName = DatabaseConstructor.DefaultName(accountType);
+            _ = constructor.WithDefaultFromType(accountType)
+                .WithSecondaryFromType(accountType)
+                .WithAccountFromNameAndData(
+                    accountType,
+                    defaultName.Company,
+                    defaultName.Name,
+                    dates: new DateTime[] { new DateTime(2010, 1, 1) },
+                    sharePrice: new decimal[] { 50 },
+                    numberUnits: new decimal[] { 100 },
+                    investment: new decimal[] { 0 });
             Portfolio portfolio = constructor.Database;
             Assert.AreEqual(expectedValue, portfolio.TotalValue(totalsType, DateTime.Today, defaultName));
         }

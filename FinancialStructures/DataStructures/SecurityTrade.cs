@@ -63,7 +63,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// The total cost of this trade.
         /// </summary>
-        public double TotalCost
+        public decimal TotalCost
         {
             get
             {
@@ -73,7 +73,7 @@ namespace FinancialStructures.DataStructures
                 }
                 if (TradeType == TradeType.ShareReprice)
                 {
-                    return 0.0;
+                    return 0.0m;
                 }
                 return NumberShares * UnitPrice + TradeCosts;
             }
@@ -85,7 +85,7 @@ namespace FinancialStructures.DataStructures
         /// For Buy or sell this is a positive value. A dividend value is signed.
         /// </summary>
         [XmlAttribute]
-        public double NumberShares
+        public decimal NumberShares
         {
             get;
             set;
@@ -95,7 +95,7 @@ namespace FinancialStructures.DataStructures
         /// The price of the underlying that this trade was enacted at.
         /// </summary>
         [XmlAttribute]
-        public double UnitPrice
+        public decimal UnitPrice
         {
             get;
             set;
@@ -106,7 +106,7 @@ namespace FinancialStructures.DataStructures
         /// percentage costs.
         /// </summary>
         [XmlAttribute]
-        public double TradeCosts
+        public decimal TradeCosts
         {
             get;
             set;
@@ -131,7 +131,7 @@ namespace FinancialStructures.DataStructures
         /// <summary>
         /// Create an instance filling in all data.
         /// </summary>
-        public SecurityTrade(TradeType type, TwoName names, DateTime day, double numShares, double price, double costs)
+        public SecurityTrade(TradeType type, TwoName names, DateTime day, decimal numShares, decimal price, decimal costs)
         {
             TradeType = type;
             Names = names;

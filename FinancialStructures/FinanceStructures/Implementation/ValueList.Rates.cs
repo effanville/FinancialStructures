@@ -1,5 +1,5 @@
 ﻿using System;
-using Common.Structure.FinanceFunctions;
+using Common.Structure.MathLibrary.Finance;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {
@@ -10,7 +10,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// </summary>
         public virtual double CAR(DateTime earlierTime, DateTime laterTime)
         {
-            return FinancialFunctions.CAR(Value(earlierTime), Value(laterTime));
+            return FinanceFunctions.CAR(Value(earlierTime), Value(laterTime));
         }
     }
 }

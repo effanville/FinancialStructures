@@ -12,10 +12,10 @@ namespace FinancialStructures.FinanceStructures.Statistics
         /// <para/>
         /// This is (Sum_Trades (price * numShares)) / total shares held
         /// </summary>
-        public static double MeanSharePrice(this ISecurity security, TradeType tradeType)
+        public static decimal MeanSharePrice(this ISecurity security, TradeType tradeType)
         {
-            double sum = 0.0;
-            double numShares = 0.0;
+            decimal sum = 0.0m;
+            decimal numShares = 0.0m;
             foreach (var trade in security.Trades)
             {
                 if (trade.TradeType == tradeType)
@@ -24,7 +24,10 @@ namespace FinancialStructures.FinanceStructures.Statistics
                     numShares += trade.NumberShares;
                 }
             }
-
+            if (sum.Equals(0.0m))
+            {
+                return 0.0m;
+            }
             return sum / numShares;
         }
     }

@@ -43,7 +43,7 @@ namespace FinancialStructures.Tests.Database.DataEdit
         public void CanEditToSecurity()
         {
             DatabaseConstructor constructor = new DatabaseConstructor();
-            _ = constructor.WithSecurity("Company", "Name", dates: new DateTime[] { new DateTime(2010, 1, 1) }, sharePrice: new double[] { 2.0 }, numberUnits: new double[] { 100.0 }, investment: new double[] { 0.0 });
+            _ = constructor.WithSecurity("Company", "Name", dates: new DateTime[] { new DateTime(2010, 1, 1) }, sharePrice: new decimal[] { 2.0m }, numberUnits: new decimal[] { 100.0m }, investment: new decimal[] { 0.0m });
 
             Portfolio portfolio = constructor.Database;
 
@@ -57,7 +57,7 @@ namespace FinancialStructures.Tests.Database.DataEdit
         public void CanEditToSector()
         {
             DatabaseConstructor constructor = new DatabaseConstructor();
-            _ = constructor.WithSectorFromNameAndData("Company", "Name", date: new DateTime[] { new DateTime(2010, 1, 1) }, value: new double[] { 2.0 });
+            _ = constructor.WithSectorFromNameAndData("Company", "Name", date: new DateTime[] { new DateTime(2010, 1, 1) }, value: new decimal[] { 2.0m });
 
             Portfolio portfolio = constructor.Database;
             bool success = portfolio.TryAddOrEditData(Account.Benchmark, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 2), new DailyValuation(new DateTime(2010, 1, 1), 1));
@@ -101,7 +101,7 @@ namespace FinancialStructures.Tests.Database.DataEdit
         public void CanEditToSecurity2()
         {
             DatabaseConstructor constructor = new DatabaseConstructor();
-            _ = constructor.WithSecurity("Company", "Name", dates: new DateTime[] { new DateTime(2010, 1, 1) }, sharePrice: new double[] { 2.0 }, numberUnits: new double[] { 100.0 }, investment: new double[] { 0.0 });
+            _ = constructor.WithSecurity("Company", "Name", dates: new DateTime[] { new DateTime(2010, 1, 1) }, sharePrice: new decimal[] { 2.0m }, numberUnits: new decimal[] { 100.0m }, investment: new decimal[] { 0.0m });
 
             Portfolio portfolio = constructor.Database;
 
@@ -115,11 +115,11 @@ namespace FinancialStructures.Tests.Database.DataEdit
         public void CanEditToSector2()
         {
             DatabaseConstructor constructor = new DatabaseConstructor();
-            _ = constructor.WithSectorFromNameAndData("Company", "Name", date: new DateTime[] { new DateTime(2010, 1, 1) }, value: new double[] { 2.0 });
+            _ = constructor.WithSectorFromNameAndData("Company", "Name", date: new DateTime[] { new DateTime(2010, 1, 1) }, value: new decimal[] { 2.0m });
 
             Portfolio portfolio = constructor.Database;
 
-            bool success = portfolio.TryAddOrEditData(Account.Benchmark, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 2.0), new DailyValuation(new DateTime(2011, 1, 1), 1));
+            bool success = portfolio.TryAddOrEditData(Account.Benchmark, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 2.0m), new DailyValuation(new DateTime(2011, 1, 1), 1));
 
             Assert.IsTrue(success);
             Assert.AreEqual(1, portfolio.BenchMarks.Single().Count());

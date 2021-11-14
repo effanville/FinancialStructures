@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+
 using Common.Structure.DataStructures;
-using Common.Structure.Extensions;
 using Common.Structure.Reporting;
+
 using FinancialStructures.DataStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation
@@ -16,7 +17,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
     public partial class Security
     {
         /// <inheritdoc/>
-        public override bool TryEditData(DateTime oldDate, DateTime newDate, double value, IReportLogger logger = null)
+        public override bool TryEditData(DateTime oldDate, DateTime newDate, decimal value, IReportLogger logger = null)
         {
             bool edited = AddOrEditData(UnitPrice, oldDate, newDate, value, logger);
             EnsureDataConsistency(logger);
@@ -24,14 +25,14 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public override void SetData(DateTime date, double value, IReportLogger logger = null)
+        public override void SetData(DateTime date, decimal value, IReportLogger logger = null)
         {
             _ = AddOrEditData(UnitPrice, date, date, value, logger);
             EnsureDataConsistency(logger);
         }
 
         /// <inheritdoc/>
-        public bool AddOrEditData(DateTime oldDate, DateTime newDate, double unitPrice, double shares, double investment = 0, SecurityTrade trade = null, IReportLogger reportLogger = null)
+        public bool AddOrEditData(DateTime oldDate, DateTime newDate, decimal unitPrice, decimal shares, decimal investment = 0, SecurityTrade trade = null, IReportLogger reportLogger = null)
         {
             bool editUnitPrice = AddOrEditData(UnitPrice, oldDate, newDate, unitPrice, reportLogger);
             bool editShares = AddOrEditData(Shares, oldDate, newDate, shares, reportLogger);
@@ -81,7 +82,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             }
         }
 
-        private static bool AddOrEditData(TimeList list, DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null)
+        private static bool AddOrEditData(TimeList list, DateTime oldDate, DateTime date, decimal value, IReportLogger reportLogger = null)
         {
             if (list.ValueExists(oldDate, out _))
             {
@@ -104,7 +105,11 @@ namespace FinancialStructures.FinanceStructures.Implementation
                     break;
                 }
 
-                SecurityDayData line = new SecurityDayData(DateTime.Parse(dayValuation[0], CultureInfo.InvariantCulture), double.Parse(dayValuation[1], CultureInfo.InvariantCulture), double.Parse(dayValuation[2], CultureInfo.InvariantCulture), double.Parse(dayValuation[3], CultureInfo.InvariantCulture));
+                SecurityDayData line = new SecurityDayData(
+                    DateTime.Parse(dayValuation[0], CultureInfo.InvariantCulture),
+                    decimal.Parse(dayValuation[1], CultureInfo.InvariantCulture),
+                    decimal.Parse(dayValuation[2], CultureInfo.InvariantCulture),
+                    decimal.Parse(dayValuation[3], CultureInfo.InvariantCulture));
                 dailyValuations.Add(line);
             }
 
@@ -195,7 +200,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                         double expectedNumberShares = sharesPreviousValue.Value + sign * trade.NumberShares;
                         if ((hasShareValue && !Equals(shareValue, expectedNumberShares, 1e-4)) || !hasShareValue)
                         {
-                            Shares.SetData(trade.Day, expectedNumberShares.Truncate(4));
+                            Shares.SetData(trade.Day, expectedNumberShares);
                         }
                     }
                     else
@@ -248,7 +253,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 // and after.
                 // Investment on that day should correspond also.
                 SecurityTrade trade = SecurityTrades[index];
-                double sign = trade.TradeType.Sign();
+                decimal sign = trade.TradeType.Sign();
 
                 if (trade.TradeType.IsShareNumberAlteringTradeType())
                 {
@@ -258,12 +263,12 @@ namespace FinancialStructures.FinanceStructures.Implementation
                     }
 
                     DailyValuation sharesPreviousValue = Shares.ValueBefore(trade.Day) ?? new DailyValuation(DateTime.Today, 0);
-                    bool hasShareValue = Shares.TryGetValue(trade.Day, out double shareValue);
+                    bool hasShareValue = Shares.TryGetValue(trade.Day, out decimal shareValue);
 
-                    double expectedNumberShares = sharesPreviousValue.Value + sign * trade.NumberShares;
-                    if ((hasShareValue && !Equals(shareValue, expectedNumberShares, 1e-4)) || !hasShareValue)
+                    decimal expectedNumberShares = sharesPreviousValue.Value + sign * trade.NumberShares;
+                    if ((hasShareValue && !Equals(shareValue, expectedNumberShares)) || !hasShareValue)
                     {
-                        Shares.SetData(trade.Day, expectedNumberShares.Truncate(4));
+                        Shares.SetData(trade.Day, expectedNumberShares);
                     }
                 }
 
@@ -284,12 +289,12 @@ namespace FinancialStructures.FinanceStructures.Implementation
                         DailyValuation sharesPreviousValue = Shares.ValueBefore(investmentValue.Day) ?? new DailyValuation(DateTime.Today, 0);
                         if (sharesCurrentValue != null)
                         {
-                            double numShares = sharesCurrentValue.Value - sharesPreviousValue.Value;
-                            double unitPrice = UnitPrice.ValueOnOrBefore(investmentValue.Day).Value;
-                            double value = numShares * unitPrice;
+                            decimal numShares = sharesCurrentValue.Value - sharesPreviousValue.Value;
+                            decimal unitPrice = UnitPrice.ValueOnOrBefore(investmentValue.Day).Value;
+                            decimal value = numShares * unitPrice;
                             Investments.SetData(investmentValue.Day, value, reportLogger);
                             TradeType trade = value > 0 ? TradeType.Buy : TradeType.Sell;
-                            SecurityTrades.Add(new SecurityTrade(trade, Names, investmentValue.Day, Math.Abs(numShares), unitPrice, 0.0));
+                            SecurityTrades.Add(new SecurityTrade(trade, Names, investmentValue.Day, Math.Abs(numShares), unitPrice, 0.0m));
                         }
                     }
                 }
@@ -302,33 +307,23 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 }
             }
 
-            double previousNumShares = 0.0;
+            decimal previousNumShares = 0.0m;
             for (int index = 0; index < Shares.Count(); index++)
             {
                 DailyValuation shareValue = Shares[index];
-                Shares.SetData(shareValue.Day, shareValue.Value.Truncate(4));
-                double shareDiff = shareValue.Value - previousNumShares;
-                if (shareDiff != 0.0)
+                Shares.SetData(shareValue.Day, shareValue.Value);
+                decimal shareDiff = shareValue.Value - previousNumShares;
+                if (!shareDiff.Equals(0.0m))
                 {
                     if (!SecurityTrades.Any(trade => trade.Day == shareValue.Day))
                     {
-                        SecurityTrades.Add(new SecurityTrade(TradeType.ShareReprice, Names, shareValue.Day, shareDiff, UnitPrice.ValueOnOrBefore(shareValue.Day).Value, 0.0));
+                        SecurityTrades.Add(new SecurityTrade(TradeType.ShareReprice, Names, shareValue.Day, shareDiff, UnitPrice.ValueOnOrBefore(shareValue.Day).Value, 0.0m));
                     }
                 }
                 previousNumShares = shareValue.Value;
             }
 
             SetupEventListening();
-        }
-
-        private static bool Equals(double a, double b, double tol)
-        {
-            if (Math.Abs(a - b) < tol)
-            {
-                return true;
-            }
-
-            return false;
         }
     }
 }

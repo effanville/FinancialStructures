@@ -18,19 +18,19 @@ namespace FinancialStructures.Tests.Database.Statistics
 
             yield return new TestCaseData(TestDatabaseName.OneBank, Totals.BankAccount, Account.BankAccount, NameOrder.Default, new DateTime(2015, 5, 4), 1.0);
 
-            yield return new TestCaseData(TestDatabaseName.TwoSecTwoBank, Totals.All, Account.BankAccount, NameOrder.Default, new DateTime(2015, 5, 4), 0.0043886111604674429);
+            yield return new TestCaseData(TestDatabaseName.TwoSecTwoBank, Totals.All, Account.BankAccount, NameOrder.Default, new DateTime(2015, 5, 4), 0.0043886111604674437);
 
             yield return new TestCaseData(TestDatabaseName.TwoSecTwoBank, Totals.Security, Account.BankAccount, NameOrder.Default, new DateTime(2015, 5, 4), 0.0046099493496925678);
 
-            yield return new TestCaseData(TestDatabaseName.TwoSecTwoBank, Totals.Security, Account.Security, NameOrder.Default, new DateTime(2015, 5, 4), 0.018367705675060717);
+            yield return new TestCaseData(TestDatabaseName.TwoSecTwoBank, Totals.Security, Account.Security, NameOrder.Default, new DateTime(2015, 5, 4), 0.018367705675060721);
 
-            yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.Security, Account.Security, NameOrder.Default, new DateTime(2015, 5, 4), 0.018367705675060717);
+            yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.Security, Account.Security, NameOrder.Default, new DateTime(2015, 5, 4), 0.018367705675060721);
 
             yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.BankAccount, Account.Security, NameOrder.Default, new DateTime(2015, 5, 4), double.NaN);
 
             yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.Security, Account.Security, NameOrder.Secondary, new DateTime(2015, 5, 4), 0.98163229432493937);
 
-            yield return new TestCaseData(TestDatabaseName.TwoSecCur, Totals.Security, Account.Security, NameOrder.Default, new DateTime(2015, 5, 4), 0.17855191841350632);
+            yield return new TestCaseData(TestDatabaseName.TwoSecCur, Totals.Security, Account.Security, NameOrder.Default, new DateTime(2015, 5, 4), 0.17855191841350634);
 
             yield return new TestCaseData(TestDatabaseName.TwoSecCur, Totals.Security, Account.Security, NameOrder.Secondary, new DateTime(2015, 5, 4), 0.82144808158649374);
         }
@@ -61,7 +61,7 @@ namespace FinancialStructures.Tests.Database.Statistics
 
             yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.BankAccount, new TwoName(), new DateTime(2015, 5, 4), 0.0);
 
-            yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.SecurityCompany, TestDatabase.Name(Account.Security, NameOrder.Default), new DateTime(2015, 5, 4), 0.018367705675060717);
+            yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.SecurityCompany, TestDatabase.Name(Account.Security, NameOrder.Default), new DateTime(2015, 5, 4), 0.018367705675060721);
 
             yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.SecurityCompany, TestDatabase.Name(Account.Security, NameOrder.Secondary), new DateTime(2015, 5, 4), 0.98163229432493937);
 

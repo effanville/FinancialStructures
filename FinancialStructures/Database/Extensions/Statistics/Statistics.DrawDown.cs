@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Common.Structure.DataStructures;
+using Common.Structure.MathLibrary.Finance;
 using FinancialStructures.Database.Extensions.Values;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
@@ -91,7 +92,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
             List<DailyValuation> valuations = new List<DailyValuation>();
             foreach (DateTime date in values)
             {
-                double value = 0.0;
+                decimal value = 0.0m;
                 foreach (IValueList sec in securities)
                 {
                     value += sec.Value(date).Value;
@@ -100,7 +101,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 valuations.Add(new DailyValuation(date, value));
             }
 
-            return Drawdown(valuations);
+            return (double)FinanceFunctions.Drawdown(valuations);
         }
 
         /// <summary>
@@ -131,7 +132,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                     }
 
                     List<DailyValuation> values = desired.ListOfValues().Where(value => value.Day >= earlierTime && value.Day <= laterTime && !value.Value.Equals(0.0)).ToList();
-                    return Drawdown(values);
+                    return (double)FinanceFunctions.Drawdown(values);
                 }
                 case Account.All:
                 default:
@@ -139,29 +140,6 @@ namespace FinancialStructures.Database.Extensions.Statistics
                     return 0.0;
                 }
             }
-        }
-
-        /// <summary>
-        /// Calculates the DrawDown of a list of values.
-        /// </summary>
-        public static double Drawdown(List<DailyValuation> values)
-        {
-            if (values.Any())
-            {
-                double peakValue = double.MinValue;
-                for (int i = 0; i < values.Count; i++)
-                {
-                    double value = values[i].Value;
-                    if (value > peakValue)
-                    {
-                        peakValue = value;
-                    }
-                }
-
-                return 100.0 * (peakValue - values.Last().Value) / peakValue;
-            }
-
-            return double.NaN;
         }
     }
 }

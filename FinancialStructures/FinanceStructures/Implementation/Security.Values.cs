@@ -15,9 +15,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// </summary>
         public SecurityDayData DayData(DateTime day)
         {
-            _ = UnitPrice.TryGetValue(day, out double unitPrice);
-            _ = Shares.TryGetValue(day, out double shares);
-            _ = Investments.TryGetValue(day, out double invest);
+            _ = UnitPrice.TryGetValue(day, out decimal unitPrice);
+            _ = Shares.TryGetValue(day, out decimal shares);
+            _ = Investments.TryGetValue(day, out decimal invest);
             SecurityTrade trade = SecurityTrades.Where(t => t.Day.Equals(day)).FirstOrDefault();
             return new SecurityDayData(day, unitPrice, shares, invest, trade);
         }
@@ -73,8 +73,8 @@ namespace FinancialStructures.FinanceStructures.Implementation
             {
                 foreach (DailyValuation unitPriceValuation in UnitPrice.GetValuesBetween(UnitPrice.FirstDate(), UnitPrice.LatestDate()))
                 {
-                    double shares = Shares.ValueOnOrBefore(unitPriceValuation.Day)?.Value ?? 0.0;
-                    _ = Investments.TryGetValue(unitPriceValuation.Day, out double invest);
+                    decimal shares = Shares.ValueOnOrBefore(unitPriceValuation.Day)?.Value ?? 0.0m;
+                    _ = Investments.TryGetValue(unitPriceValuation.Day, out decimal invest);
                     SecurityDayData thisday = new SecurityDayData(unitPriceValuation.Day, unitPriceValuation.Value, shares, invest);
                     output.Add(thisday);
                 }
@@ -83,10 +83,10 @@ namespace FinancialStructures.FinanceStructures.Implementation
             {
                 foreach (DailyValuation sharesValuation in Shares.GetValuesBetween(Shares.FirstDate(), Shares.LatestDate()))
                 {
-                    if (!UnitPrice.TryGetValue(sharesValuation.Day, out double _))
+                    if (!UnitPrice.TryGetValue(sharesValuation.Day, out decimal _))
                     {
-                        _ = Investments.TryGetValue(sharesValuation.Day, out double invest);
-                        double unitPriceInterpolation = UnitPrice.Value(sharesValuation.Day)?.Value ?? 0.0;
+                        _ = Investments.TryGetValue(sharesValuation.Day, out decimal invest);
+                        decimal unitPriceInterpolation = UnitPrice.Value(sharesValuation.Day)?.Value ?? 0.0m;
                         SecurityDayData thisday = new SecurityDayData(sharesValuation.Day, unitPriceInterpolation, sharesValuation.Value, invest);
                         output.Add(thisday);
                     }
@@ -96,10 +96,10 @@ namespace FinancialStructures.FinanceStructures.Implementation
             {
                 foreach (DailyValuation investmentValuation in Investments.GetValuesBetween(Investments.FirstDate(), Investments.LatestDate()))
                 {
-                    if (!UnitPrice.TryGetValue(investmentValuation.Day, out double _) && !Shares.TryGetValue(investmentValuation.Day, out double _))
+                    if (!UnitPrice.TryGetValue(investmentValuation.Day, out decimal _) && !Shares.TryGetValue(investmentValuation.Day, out decimal _))
                     {
-                        double shares = Shares.ValueOnOrBefore(investmentValuation.Day).Value;
-                        double unitPriceInterpolation = UnitPrice.Value(investmentValuation.Day)?.Value ?? 0.0;
+                        decimal shares = Shares.ValueOnOrBefore(investmentValuation.Day).Value;
+                        decimal unitPriceInterpolation = UnitPrice.Value(investmentValuation.Day)?.Value ?? 0.0m;
                         SecurityDayData thisday = new SecurityDayData(investmentValuation.Day, unitPriceInterpolation, shares, investmentValuation.Value);
 
                         output.Add(thisday);
@@ -110,9 +110,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return output;
         }
 
-        private static double GetCurrencyValue(DateTime date, ICurrency currency)
+        private static decimal GetCurrencyValue(DateTime date, ICurrency currency)
         {
-            return currency == null ? 1.0 : currency.Value(date)?.Value ?? 1.0;
+            return currency == null ? 1.0m : currency.Value(date)?.Value ?? 1.0m;
         }
     }
 }
