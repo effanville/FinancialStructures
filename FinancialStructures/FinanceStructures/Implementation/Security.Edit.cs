@@ -192,7 +192,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             {
                 DailyValuation investmentValue = Investments[index];
                 bool noTrade = SecurityTrades.Any(trade => trade.Day.Equals(investmentValue.Day));
-                bool shareRepriceTrade = SecurityTrades.Any(trade => trade.Day.Equals(investmentValue.Day) && trade.TradeType.Equals(TradeType.ShareReprice));
+                bool shareRepriceTrade = SecurityTrades.Any(trade => trade.Day.Equals(investmentValue.Day) && !trade.TradeType.IsInvestmentTradeType());
                 if (!noTrade
                     | shareRepriceTrade)
                 {
@@ -208,7 +208,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             {
                 DailyValuation shareValue = Shares[index];
                 if (!SecurityTrades.Any(trade => trade.Day.Equals(shareValue.Day))
-                    || SecurityTrades.Any(trade => trade.Day.Equals(shareValue.Day) && (trade.TradeType.Equals(TradeType.CashPayout) || trade.TradeType.Equals(TradeType.Dividend))))
+                    || SecurityTrades.Any(trade => trade.Day.Equals(shareValue.Day) && !trade.TradeType.IsShareNumberAlteringTradeType()))
                 {
                     if (Shares.TryDeleteValue(shareValue.Day, reportLogger))
                     {
