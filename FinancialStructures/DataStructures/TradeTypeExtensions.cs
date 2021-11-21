@@ -7,12 +7,17 @@
     {
         /// <summary>
         /// Returns the sign for calculations with this trade type.
+        /// This is the sign in the sense of whether the trade details 
+        /// money leaving the account or not.
         /// </summary>
         public static double Sign(this TradeType tradeType)
         {
-            return tradeType == TradeType.Sell || tradeType == TradeType.CashPayout ? -1.0 : 1.0;
+            return tradeType == TradeType.Sell
+                || tradeType == TradeType.CashPayout
+                || tradeType == TradeType.Dividend
+                    ? -1.0
+                    : 1.0;
         }
-
 
         /// <summary>
         /// Does the <see cref="TradeType"/> correspond to a type of trade pertaining

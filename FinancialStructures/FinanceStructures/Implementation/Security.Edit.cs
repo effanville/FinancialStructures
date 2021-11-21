@@ -162,16 +162,35 @@ namespace FinancialStructures.FinanceStructures.Implementation
             // When a trade is present, number of shares bought/sold should correspond to share number difference before
             // and after.
             // Investment on that day should correspond also.
+			
+            // First remove all share values that dont have a trade value.
+			// Do this first to ensure that share totals when editing trades are correct.
+            for (int index = 0; index < Shares.Count(); index++)
+            {
+                DailyValuation shareValue = Shares[index];
+                if (!SecurityTrades.Any(trade => trade.Day.Equals(shareValue.Day)))
+                {
+                    if (Shares.TryDeleteValue(shareValue.Day, reportLogger))
+                    {
+                        index--;
+                    }
+                }
+            }
 
             // Cycle through all trades as trade can impact later share numbers.
+            // Requires trades to be sorted in date order. (this should be a no-op)
+            SecurityTrades.Sort();
             foreach (SecurityTrade trade in SecurityTrades)
             {
                 if (trade != null)
                 {
                     double sign = trade.TradeType.Sign();
+
+                    // if trade should alter number of shares, then alter
+                    // if it shouldnt then remove the shares.
                     if (trade.TradeType.IsShareNumberAlteringTradeType())
                     {
-                        DailyValuation sharesPreviousValue = Shares.ValueBefore(trade.Day) ?? new DailyValuation(DateTime.Today, 0);
+                        DailyValuation sharesPreviousValue = Shares.ValueBefore(trade.Day) ?? new DailyValuation(trade.Day, 0);
                         bool hasShareValue = Shares.TryGetValue(trade.Day, out double shareValue);
                         double expectedNumberShares = sharesPreviousValue.Value + sign * trade.NumberShares;
                         if ((hasShareValue && !Equals(shareValue, expectedNumberShares, 1e-4)) || !hasShareValue)
@@ -179,10 +198,20 @@ namespace FinancialStructures.FinanceStructures.Implementation
                             Shares.SetData(trade.Day, expectedNumberShares.Truncate(4));
                         }
                     }
+                    else
+                    {
+                        _ = Shares.TryDeleteValue(trade.Day, reportLogger);
+                    }
 
+                    // if trade should have investment value, then set the value, if it
+                    // shouldnt have value then remove.
                     if (trade.TradeType.IsInvestmentTradeType())
                     {
                         Investments.SetData(trade.Day, sign * trade.TotalCost, reportLogger);
+                    }
+                    else
+                    {
+                        _ = Investments.TryDeleteValue(trade.Day, reportLogger);
                     }
                 }
             }
@@ -191,26 +220,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
             for (int index = 0; index < Investments.Count(); index++)
             {
                 DailyValuation investmentValue = Investments[index];
-                bool noTrade = SecurityTrades.Any(trade => trade.Day.Equals(investmentValue.Day));
-                bool shareRepriceTrade = SecurityTrades.Any(trade => trade.Day.Equals(investmentValue.Day) && !trade.TradeType.IsInvestmentTradeType());
-                if (!noTrade
-                    | shareRepriceTrade)
+                if (!SecurityTrades.Any(trade => trade.Day.Equals(investmentValue.Day)))
                 {
                     if (Investments.TryDeleteValue(investmentValue.Day, reportLogger))
-                    {
-                        index--;
-                    }
-                }
-            }
-
-            // now cycle through shares removing values that no longer have trades.
-            for (int index = 0; index < Shares.Count(); index++)
-            {
-                DailyValuation shareValue = Shares[index];
-                if (!SecurityTrades.Any(trade => trade.Day.Equals(shareValue.Day))
-                    || SecurityTrades.Any(trade => trade.Day.Equals(shareValue.Day) && !trade.TradeType.IsShareNumberAlteringTradeType()))
-                {
-                    if (Shares.TryDeleteValue(shareValue.Day, reportLogger))
                     {
                         index--;
                     }
