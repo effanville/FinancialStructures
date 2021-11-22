@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -11,6 +12,7 @@ using Common.UI;
 using Common.UI.Commands;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
+using FinancialStructures;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Extensions;
 using FinancialStructures.DataStructures;
@@ -124,13 +126,14 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             PortfolioNameText = string.IsNullOrWhiteSpace(portfolio.DatabaseName(fUiGlobals.CurrentFileSystem)) ? "Unsaved database" : $"{portfolio.DatabaseName(fUiGlobals.CurrentFileSystem)}";
             HasValues = portfolio.NumberOf(Account.All) != 0;
             SecurityTotalText = $"Total Securities: {portfolio.NumberOf(Account.Security)}";
-            SecurityAmountText = $"Total Value: {portfolio.TotalValue(Totals.Security)} {portfolio.BaseCurrency}";
+            CultureInfo culture = CurrencyCultureHelpers.CurrencyCultureInfo(portfolio.BaseCurrency);
+            SecurityAmountText = $"Total Value: {portfolio.TotalValue(Totals.Security).ToString("C2", culture)}";
             List<ISecurity> securities = portfolio.FundsThreadSafe.ToList();
             securities.Sort((fund, otherFund) => otherFund.Value(DateTime.Today).Value.CompareTo(fund.Value(DateTime.Today).Value));
             TopSecurities = securities.Take(5).Select(name => new Labelled<TwoName, DailyValuation>(new TwoName(name.Names.Company, name.Names.Name), name.Value(DateTime.Today))).ToList();
 
             BankAccountTotalText = $"Total Bank Accounts: {portfolio.NumberOf(Account.BankAccount)}";
-            BankAccountAmountText = $"Total Value: {portfolio.TotalValue(Totals.BankAccount)} {portfolio.BaseCurrency}";
+            BankAccountAmountText = $"Total Value: {portfolio.TotalValue(Totals.BankAccount).ToString("C2", culture)}";
             List<IExchangableValueList> bankAccounts = portfolio.BankAccountsThreadSafe.ToList();
             bankAccounts.Sort((bank, otherBank) => otherBank.Value(DateTime.Today).Value.CompareTo(bank.Value(DateTime.Today).Value));
             TopBankAccounts = bankAccounts.Take(5).Select(name => new Labelled<TwoName, DailyValuation>(new TwoName(name.Names.Company, name.Names.Name), name.Value(DateTime.Today) ?? new DailyValuation(DateTime.Today, 0.0m))).ToList();

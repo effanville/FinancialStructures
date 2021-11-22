@@ -73,32 +73,13 @@ namespace FinancialStructures.Database.Statistics
                 return Value.TruncateToString();
             }
 
-            string format = FormatName();
-            if (format == fCurrency)
+            CultureInfo culture = CurrencyCultureHelpers.CurrencyCultureInfo(fCurrency);
+            if (culture == null)
             {
                 return $"{fCurrency}{Value.TruncateToString()}";
             }
 
-            CultureInfo culture = CultureInfo.CreateSpecificCulture(format);
             return Value.ToString("C", culture);
-        }
-
-        private string FormatName()
-        {
-            switch (fCurrency)
-            {
-                case "GBP":
-                case "£":
-                    return "en-GB";
-                case "HKD":
-                    return "zh-HK";
-                case "USD":
-                    return "en-US";
-                case "SAR":
-                    return "en-ZA";
-                default:
-                    return fCurrency;
-            }
         }
     }
 }
