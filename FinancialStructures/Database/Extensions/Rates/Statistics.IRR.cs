@@ -26,23 +26,23 @@ namespace FinancialStructures.Database.Extensions.Rates
         /// <summary>
         /// Calculates the total IRR for the portfolio and the account type given over the time frame specified.
         /// </summary>
-        public static double TotalIRR(this IPortfolio portfolio, Totals accountType, DateTime earlierTime, DateTime laterTime, TwoName name = null)
+        public static double TotalIRR(this IPortfolio portfolio, Totals accountType, DateTime earlierTime, DateTime laterTime, TwoName name = null, int numIterations = 10)
         {
             switch (accountType)
             {
                 case Totals.All:
                 case Totals.Security:
                 {
-                    return TotalSecurityIRROf(portfolio.FundsThreadSafe, portfolio, earlierTime, laterTime);
+                    return TotalSecurityIRROf(portfolio.FundsThreadSafe, portfolio, earlierTime, laterTime, numIterations);
                 }
                 case Totals.SecurityCompany:
                 {
-                    return TotalSecurityIRROf(portfolio.CompanyAccounts(Account.Security, name.Company), portfolio, earlierTime, laterTime);
+                    return TotalSecurityIRROf(portfolio.CompanyAccounts(Account.Security, name.Company), portfolio, earlierTime, laterTime, numIterations);
                 }
                 case Totals.Sector:
                 case Totals.SecuritySector:
                 {
-                    return TotalSecurityIRROf(portfolio.SectorAccounts(Account.Security, name), portfolio, earlierTime, laterTime);
+                    return TotalSecurityIRROf(portfolio.SectorAccounts(Account.Security, name), portfolio, earlierTime, laterTime, numIterations);
                 }
                 case Totals.BankAccount:
                 {
@@ -98,7 +98,7 @@ namespace FinancialStructures.Database.Extensions.Rates
             }
         }
 
-        private static double TotalSecurityIRROf(IReadOnlyList<IValueList> securities, IPortfolio portfolio, DateTime earlierTime, DateTime laterTime)
+        private static double TotalSecurityIRROf(IReadOnlyList<IValueList> securities, IPortfolio portfolio, DateTime earlierTime, DateTime laterTime, int numIterations)
         {
             if (securities.Count == 0)
             {
@@ -120,7 +120,7 @@ namespace FinancialStructures.Database.Extensions.Rates
                 }
             }
 
-            return FinanceFunctions.IRR(new DailyValuation(earlierTime, earlierValue), investments, new DailyValuation(laterTime, laterValue));
+            return FinanceFunctions.IRR(new DailyValuation(earlierTime, earlierValue), investments, new DailyValuation(laterTime, laterValue), numIterations);
         }
 
         /// <summary>

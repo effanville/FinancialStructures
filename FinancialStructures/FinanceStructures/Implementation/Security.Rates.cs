@@ -144,7 +144,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 List<DailyValuation> invs = InvestmentsBetween(earlierDate, laterDate, currency);
                 DailyValuation latestTime = Value(laterDate, currency);
                 DailyValuation firstTime = Value(earlierDate, currency);
-                return FinanceFunctions.IRR(firstTime, invs, latestTime);
+                return FinanceFunctions.IRR(firstTime, invs, latestTime, 10);
             }
             return double.NaN;
         }
