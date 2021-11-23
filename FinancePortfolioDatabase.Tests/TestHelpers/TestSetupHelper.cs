@@ -8,7 +8,6 @@ using Common.UI;
 using Common.UI.Services;
 using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
 using Moq;
 

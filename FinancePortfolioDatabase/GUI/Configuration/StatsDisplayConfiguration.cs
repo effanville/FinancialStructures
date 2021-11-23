@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
+using Common.Structure.DisplayClasses;
 using FinancePortfolioDatabase.GUI.ViewModels.Stats;
+using FinancialStructures.Database.Statistics;
 
 namespace FinancePortfolioDatabase.GUI.Configuration
 {
@@ -12,6 +15,8 @@ namespace FinancePortfolioDatabase.GUI.Configuration
     {
         [DataMember]
         internal bool DisplayValueFunds;
+        [DataMember(EmitDefaultValue = false)]
+        internal List<Selectable<Statistic>> StatisticNames;
 
         /// <inheritdoc/>
         [DataMember]
@@ -43,6 +48,7 @@ namespace FinancePortfolioDatabase.GUI.Configuration
             if (viewModel is StatsViewModel vm)
             {
                 DisplayValueFunds = vm.DisplayValueFunds;
+                StatisticNames = vm.StatisticNames;
             }
         }
 
@@ -52,6 +58,10 @@ namespace FinancePortfolioDatabase.GUI.Configuration
             if (viewModel is StatsViewModel vm)
             {
                 vm.DisplayValueFunds = DisplayValueFunds;
+                if (StatisticNames != null && StatisticNames.Any())
+                {
+                    vm.StatisticNames = StatisticNames;
+                }
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.IO.Abstractions;
 using System.Reflection;
 using Common.Structure.Reporting;
 using Common.UI;
@@ -114,7 +115,12 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         /// </summary>
         public void SaveConfig()
         {
-            fUserConfiguration.SaveConfiguration(fConfigLocation, fUiGlobals.CurrentFileSystem);
+            SaveConfig(fConfigLocation, fUiGlobals.CurrentFileSystem);
+        }
+
+        internal void SaveConfig(string filePath, IFileSystem fileSystem)
+        {
+            fUserConfiguration.SaveConfiguration(filePath, fileSystem);
         }
 
         private void AllData_portfolioChanged(object sender, PortfolioEventArgs e)

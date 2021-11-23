@@ -58,6 +58,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
             else
             {
+                fUserConfiguration.StoreConfiguration(this);
                 fUserConfiguration.HasLoaded = true;
             }
 

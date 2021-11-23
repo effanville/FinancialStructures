@@ -20,6 +20,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         private List<AccountStatistics> fStats;
 
         private bool fDisplayValueFunds = true;
+        private List<Selectable<Statistic>> fStatisticNames;
 
         /// <summary>
         /// Should statistics for funds with non zero value be displayed.
@@ -30,6 +31,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             set
             {
                 SetAndNotify(ref fDisplayValueFunds, value, nameof(DisplayValueFunds));
+                fUserConfiguration.StoreConfiguration(this);
                 UpdateData();
             }
         }
@@ -48,8 +50,8 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         /// </summary>
         public List<Selectable<Statistic>> StatisticNames
         {
-            get;
-            set;
+            get => fStatisticNames;
+            set => SetAndNotify(ref fStatisticNames, value, nameof(StatisticNames));
         }
 
         /// <summary>
@@ -59,13 +61,17 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             : base(globals, styles, userConfiguration, portfolio, "Statistics", account)
         {
             StatisticNames = statsToView != null ? statsToView.Select(stat => new Selectable<Statistic>(stat, true)).ToList() : AccountStatisticsHelpers.AllStatistics().Select(stat => new Selectable<Statistic>(stat, true)).ToList();
-            StatisticNames.ForEach(stat => stat.SelectedChanged += OnSelectedChanged);
             if (fUserConfiguration.HasLoaded)
             {
                 fUserConfiguration.RestoreFromConfiguration(this);
             }
+            else
+            {
+                fUserConfiguration.StoreConfiguration(this);
+                fUserConfiguration.HasLoaded = true;
+            }
 
-            fUserConfiguration.HasLoaded = true;
+            StatisticNames.ForEach(stat => stat.SelectedChanged += OnSelectedChanged);
             UpdateData(portfolio);
         }
 
@@ -74,6 +80,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         /// </summary>
         private void OnSelectedChanged(object sender, EventArgs e)
         {
+            fUserConfiguration.StoreConfiguration(this);
             UpdateData();
         }
 
@@ -87,7 +94,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 
             Statistic[] statsToView = StatisticNames.Where(stat => stat.Selected).Select(stat => stat.Instance).ToArray();
             Stats = DataStore.GetStats(DataType, DisplayValueFunds, statisticsToDisplay: statsToView);
-            fUserConfiguration.StoreConfiguration(this);
         }
     }
 }

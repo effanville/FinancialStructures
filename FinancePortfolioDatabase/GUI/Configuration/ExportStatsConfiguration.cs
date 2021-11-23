@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Serialization;
 using Common.Structure.DisplayClasses;
 using FinancePortfolioDatabase.GUI.ViewModels.Stats;
@@ -82,16 +83,31 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         {
             if (HasLoaded && viewModel is ExportStatsViewModel vm)
             {
-                vm.SecurityColumnNames = SecurityColumnNames;
+                if (SecurityColumnNames != null && SecurityColumnNames.Any())
+                {
+                    vm.SecurityColumnNames = SecurityColumnNames;
+                }
                 vm.SecuritySortingField = SecuritySortingField;
                 vm.SecurityDirection = SecurityDirection;
-                vm.SectorColumnNames = SectorColumnNames;
+
+                if (SectorColumnNames != null && SectorColumnNames.Any())
+                {
+                    vm.SectorColumnNames = SectorColumnNames;
+                }
                 vm.SectorSortingField = SectorSortingField;
                 vm.SectorDirection = SectorDirection;
-                vm.BankColumnNames = BankColumnNames;
+
+                if (BankColumnNames != null && BankColumnNames.Any())
+                {
+                    vm.BankColumnNames = BankColumnNames;
+                }
                 vm.BankSortingField = BankSortingField;
                 vm.BankDirection = BankDirection;
-                vm.DisplayConditions = DisplayConditions;
+
+                if (DisplayConditions != null && DisplayConditions.Any())
+                {
+                    vm.DisplayConditions = DisplayConditions;
+                }
             }
         }
     }
