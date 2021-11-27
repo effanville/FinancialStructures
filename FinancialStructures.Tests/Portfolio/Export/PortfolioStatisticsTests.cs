@@ -249,7 +249,11 @@ namespace FinancialStructures.Tests.Database.Export
                 includeSectors: false,
                 Statistic.Company,
                 SortDirection.Ascending,
-                AccountStatisticsHelpers.DefaultSectorStats().ToList());
+                AccountStatisticsHelpers.DefaultSectorStats().ToList(),
+                includeAssets: false,
+                Statistic.Company,
+                SortDirection.Descending,
+                AccountStatisticsHelpers.DefaultAssetStats().ToList());
             var portfolioStatistics = new PortfolioStatistics(portfolio, settings, new MockFileSystem());
             var exportSettings = PortfolioStatisticsExportSettings.DefaultSettings();
             var statsString = portfolioStatistics.ExportString(false, ExportType.Html, exportSettings);

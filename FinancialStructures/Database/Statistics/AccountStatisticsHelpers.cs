@@ -144,6 +144,7 @@ namespace FinancialStructures.Database.Statistics
                 Statistic.Company,
                 Statistic.Name,
                 Statistic.LatestValue,
+                Statistic.Sectors,
                 Statistic.Notes
             };
         }
@@ -169,6 +170,22 @@ namespace FinancialStructures.Database.Statistics
                 Statistic.FirstDate,
                 Statistic.LatestDate,
                 Statistic.Notes
+            };
+        }
+
+
+        /// <summary>
+        /// Returns those statistic types suitable for Assets.
+        /// </summary>
+        public static Statistic[] DefaultAssetStats()
+        {
+            return new Statistic[]
+            {
+                Statistic.Company,
+                Statistic.Name,
+                Statistic.LatestValue,
+                Statistic.Sectors,
+                Statistic.Notes,
             };
         }
 

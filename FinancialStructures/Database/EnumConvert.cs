@@ -33,6 +33,10 @@
                 {
                     return Totals.Currency;
                 }
+                case Account.Asset:
+                {
+                    return Totals.Asset;
+                }
             }
         }
 
@@ -73,6 +77,14 @@
                 {
                     return Account.Currency;
                 }
+
+                case Totals.Asset:
+                case Totals.AssetCompany:
+                case Totals.AssetSector:
+                case Totals.AssetCurrency:
+                {
+                    return Account.Asset;
+                }
             }
         }
 
@@ -112,6 +124,14 @@
                 case Totals.Currency:
                 {
                     return Totals.Currency;
+                }
+
+                case Totals.AssetCompany:
+                case Totals.Asset:
+                case Totals.AssetSector:
+                case Totals.AssetCurrency:
+                {
+                    return Totals.AssetCompany;
                 }
             }
         }

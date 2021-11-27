@@ -19,15 +19,16 @@ namespace FinancialStructures.Database.Implementation
             switch (elementType)
             {
                 case Account.Security:
+                case Account.Asset:
                 {
-                    if (!TryGetAccount(Account.Security, name, out IValueList desired) || !desired.Any())
+                    if (!TryGetAccount(elementType, name, out IValueList desired) || !desired.Any())
                     {
                         return 0.0m;
                     }
 
-                    ISecurity security = desired as ISecurity;
-                    ICurrency currency = Currency(Account.Security, security);
-                    return security.Value(date, currency)?.Value ?? 0.0m;
+                    IExchangableValueList exchangableValueList = desired as IExchangableValueList;
+                    ICurrency currency = Currency(elementType, exchangableValueList);
+                    return exchangableValueList.Value(date, currency)?.Value ?? 0.0m;
                 }
                 case Account.Currency:
                 case Account.Benchmark:
@@ -51,7 +52,6 @@ namespace FinancialStructures.Database.Implementation
                     IExchangableValueList bankAccount = account as IExchangableValueList;
                     ICurrency currency = Currency(elementType, bankAccount);
                     return bankAccount.ValueOnOrBefore(date, currency)?.Value ?? 0.0m;
-
                 }
                 default:
                     return 0.0m;

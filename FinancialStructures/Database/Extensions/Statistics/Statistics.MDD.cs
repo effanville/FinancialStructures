@@ -38,26 +38,29 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 {
                     return TotalMDDOf(portfolio.FundsThreadSafe, earlierTime, laterTime);
                 }
-                case Totals.SecurityCompany:
-                {
-                    return TotalMDDOf(portfolio.CompanyAccounts(Account.Security, name.Company), earlierTime, laterTime);
-                }
                 case Totals.Sector:
-                case Totals.SecuritySector:
                 {
-                    return TotalMDDOf(portfolio.SectorAccounts(Account.Security, name), earlierTime, laterTime);
+                    return TotalMDDOf(portfolio.SectorAccounts(Account.All, name), earlierTime, laterTime);
                 }
                 case Totals.BankAccount:
                 {
                     return TotalMDDOf(portfolio.BankAccountsThreadSafe, earlierTime, laterTime);
                 }
-                case Totals.BankAccountCompany:
+                case Totals.Asset:
                 {
-                    return TotalMDDOf(portfolio.CompanyAccounts(Account.BankAccount, name.Company), earlierTime, laterTime);
+                    return TotalMDDOf(portfolio.Assets, earlierTime, laterTime);
+                }
+                case Totals.BankAccountCompany:
+                case Totals.AssetCompany:
+                case Totals.SecurityCompany:
+                {
+                    return TotalMDDOf(portfolio.CompanyAccounts(accountType.ToAccount(), name.Company), earlierTime, laterTime);
                 }
                 case Totals.BankAccountSector:
+                case Totals.SecuritySector:
+                case Totals.AssetSector:
                 {
-                    return TotalMDDOf(portfolio.SectorAccounts(Account.BankAccount, name), earlierTime, laterTime);
+                    return TotalMDDOf(portfolio.SectorAccounts(accountType.ToAccount(), name), earlierTime, laterTime);
                 }
                 case Totals.Benchmark:
                 {
@@ -123,27 +126,13 @@ namespace FinancialStructures.Database.Extensions.Statistics
         /// </summary>
         public static double MDD(this IPortfolio portfolio, Account accountType, TwoName names, DateTime earlierTime, DateTime laterTime)
         {
-            switch (accountType)
+            if (!portfolio.TryGetAccount(accountType, names, out IValueList desired))
             {
-                case Account.Security:
-                case Account.BankAccount:
-                case Account.Benchmark:
-                case Account.Currency:
-                {
-                    if (!portfolio.TryGetAccount(accountType, names, out IValueList desired))
-                    {
-                        return double.NaN;
-                    }
-
-                    List<DailyValuation> values = desired.ListOfValues().Where(value => value.Day >= earlierTime && value.Day <= laterTime && !value.Value.Equals(0.0)).ToList();
-                    return (double)FinanceFunctions.MDD(values);
-                }
-                case Account.All:
-                default:
-                {
-                    return 0.0;
-                }
+                return double.NaN;
             }
+
+            List<DailyValuation> values = desired.ListOfValues().Where(value => value.Day >= earlierTime && value.Day <= laterTime && !value.Value.Equals(0.0)).ToList();
+            return (double)FinanceFunctions.MDD(values);
         }
     }
 }

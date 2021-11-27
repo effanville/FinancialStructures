@@ -82,6 +82,10 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 {
                     return Profit(portfolio.BenchMarksThreadSafe);
                 }
+                case Totals.Asset:
+                {
+                    return Profit(portfolio.Assets);
+                }
                 case Totals.Currency:
                 {
                     return Profit(portfolio.CurrenciesThreadSafe);
@@ -135,6 +139,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
             {
                 case Account.Security:
                 case Account.BankAccount:
+                case Account.Asset:
                 {
                     if (portfolio.TryGetAccount(account, names, out IValueList desired))
                     {

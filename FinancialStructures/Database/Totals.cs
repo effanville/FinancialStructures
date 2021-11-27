@@ -21,6 +21,11 @@
         BankAccountCompany,
 
         /// <summary>
+        /// A company comprising of a collection of assets.
+        /// </summary>
+        AssetCompany,
+
+        /// <summary>
         /// A company that comprises of securities or bank accounts, or both.
         /// </summary>
         Company,
@@ -46,6 +51,11 @@
         Currency,
 
         /// <summary>
+        /// The asset type.
+        /// </summary>
+        Asset,
+
+        /// <summary>
         /// Artificial construct consisting of Securities and BankAccounts listed in the relevant Sector.
         /// </summary>
         Sector,
@@ -61,6 +71,11 @@
         BankAccountSector,
 
         /// <summary>
+        /// A sector comprising of a collection of assets.
+        /// </summary>
+        AssetSector,
+
+        /// <summary>
         /// A sector where all accounts are associated to the currency.
         /// </summary>
         CurrencySector,
@@ -73,6 +88,11 @@
         /// <summary>
         /// All bank accounts associated to a currency.
         /// </summary>
-        BankAccountCurrency
+        BankAccountCurrency,
+
+        /// <summary>
+        /// All assets associated to a currency.
+        /// </summary>
+        AssetCurrency,
     }
 }

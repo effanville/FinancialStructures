@@ -46,6 +46,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
                 case Account.Security:
                 case Account.BankAccount:
                 case Account.Currency:
+                case Account.Asset:
                 {
                     if (!portfolio.TryGetAccount(account, name, out IValueList desired))
                     {

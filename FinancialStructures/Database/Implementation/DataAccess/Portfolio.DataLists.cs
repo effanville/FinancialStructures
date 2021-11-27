@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Implementation;
+using FinancialStructures.FinanceStructures.Implementation.Asset;
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Implementation
@@ -41,6 +42,10 @@ namespace FinancialStructures.Database.Implementation
             {
                 PortfoCopy.BenchMarks.Add((Sector)sector.Copy());
             }
+            foreach (AmortisableAsset asset in AssetsBackingList)
+            {
+                PortfoCopy.AssetsBackingList.Add((AmortisableAsset)asset.Copy());
+            }
 
             return PortfoCopy;
         }
@@ -55,6 +60,7 @@ namespace FinancialStructures.Database.Implementation
                 {
                     accountList.AddRange(CompanyAccounts(Account.Security, company));
                     accountList.AddRange(CompanyAccounts(Account.BankAccount, company));
+                    accountList.AddRange(CompanyAccounts(Account.Asset, company));
                     break;
                 }
                 case Account.Security:
@@ -80,6 +86,18 @@ namespace FinancialStructures.Database.Implementation
 
                     break;
                 }
+                case Account.Asset:
+                {
+                    foreach (IAmortisableAsset asset in Assets)
+                    {
+                        if (asset.Names.Company == company)
+                        {
+                            accountList.Add(asset.Copy());
+                        }
+                    }
+
+                    break;
+                }
                 case Account.Benchmark:
                 case Account.Currency:
                 default:
@@ -100,6 +118,7 @@ namespace FinancialStructures.Database.Implementation
                 {
                     accountList.AddRange(SectorAccounts(Account.Security, sectorName));
                     accountList.AddRange(SectorAccounts(Account.BankAccount, sectorName));
+                    accountList.AddRange(SectorAccounts(Account.Asset, sectorName));
                     break;
                 }
                 case Account.Security:
@@ -108,7 +127,7 @@ namespace FinancialStructures.Database.Implementation
                     {
                         if (security.IsSectorLinked(sectorName))
                         {
-                            accountList.Add(security);
+                            accountList.Add(security.Copy());
                         }
                     }
 
@@ -120,7 +139,19 @@ namespace FinancialStructures.Database.Implementation
                     {
                         if (cashAccount.IsSectorLinked(sectorName))
                         {
-                            accountList.Add(cashAccount);
+                            accountList.Add(cashAccount.Copy());
+                        }
+                    }
+
+                    break;
+                }
+                case Account.Asset:
+                {
+                    foreach (IAmortisableAsset asset in Assets)
+                    {
+                        if (asset.IsSectorLinked(sectorName))
+                        {
+                            accountList.Add(asset.Copy());
                         }
                     }
 
@@ -161,15 +192,28 @@ namespace FinancialStructures.Database.Implementation
                 {
                     return BankAccountsThreadSafe;
                 }
+                case Totals.Asset:
+                {
+                    return Assets;
+                }
+                case Totals.AssetCompany:
+                {
+                    return Assets.Where(asset => asset.Names.Company == name.Company).ToList();
+                }
+                case Totals.All:
+                {
+                    return FundsThreadSafe.Union(BankAccountsThreadSafe.Union(Assets)).ToList();
+                }
                 case Totals.Currency:
                 case Totals.Sector:
                 case Totals.SecuritySector:
                 case Totals.BankAccountSector:
+                case Totals.AssetSector:
                 case Totals.CurrencySector:
                 case Totals.SecurityCurrency:
                 case Totals.BankAccountCurrency:
+                case Totals.AssetCurrency:
                 case Totals.Company:
-                case Totals.All:
                 default:
                     throw new NotImplementedException($"Total value {account} not implemented for {nameof(IPortfolio)}.{nameof(Accounts)}");
             }

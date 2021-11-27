@@ -17,7 +17,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
             {
                 case Totals.All:
                 {
-                    return portfolio.RecentChange(Totals.Security) + portfolio.RecentChange(Totals.BankAccount);
+                    return portfolio.RecentChange(Totals.Security) + portfolio.RecentChange(Totals.BankAccount) + portfolio.RecentChange(Totals.Asset);
                 }
                 case Totals.Security:
                 {
@@ -25,6 +25,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 }
                 case Totals.SecurityCompany:
                 case Totals.BankAccountCompany:
+                case Totals.AssetCompany:
                 {
                     return RecentChangeOf(portfolio.CompanyAccounts(totals.ToAccount(), names?.Company), portfolio, totals);
                 }
@@ -32,47 +33,30 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 {
                     return RecentChangeOf(portfolio.BankAccountsThreadSafe, portfolio, totals);
                 }
-                case Totals.SecuritySector:
+                case Totals.Asset:
                 {
-                    decimal total = 0;
-                    foreach (ISecurity security in portfolio.FundsThreadSafe)
-                    {
-                        if (security.IsSectorLinked(names) && security.Any())
-                        {
-                            ICurrency currency = portfolio.Currency(totals.ToAccount(), security);
-                            total += security.RecentChange(currency);
-                        }
-                    }
-
-                    return total;
+                    return RecentChangeOf(portfolio.Assets, portfolio, totals);
                 }
+                case Totals.SecuritySector:
                 case Totals.BankAccountSector:
+                case Totals.AssetSector:
                 {
-                    decimal total = 0;
-                    foreach (IExchangableValueList bankAccount in portfolio.BankAccountsThreadSafe)
-                    {
-                        if (bankAccount.IsSectorLinked(names) && bankAccount.Any())
-                        {
-                            ICurrency currency = portfolio.Currency(totals.ToAccount(), bankAccount);
-                            total += bankAccount.RecentChange(currency);
-                        }
-                    }
-
-                    return total;
+                    return RecentChangeOf(portfolio.SectorAccounts(totals.ToAccount(), names), portfolio, totals);
                 }
                 case Totals.Sector:
                 {
-                    return portfolio.RecentChange(Totals.BankAccountSector, names) + portfolio.RecentChange(Totals.SecuritySector, names);
+                    return portfolio.RecentChange(Totals.BankAccountSector, names) + portfolio.RecentChange(Totals.SecuritySector, names) + portfolio.RecentChange(Totals.AssetSector, names);
                 }
                 case Totals.Company:
                 {
-                    return portfolio.RecentChange(Totals.SecurityCompany, names) + portfolio.RecentChange(Totals.BankAccountCompany, names);
+                    return portfolio.RecentChange(Totals.SecurityCompany, names) + portfolio.RecentChange(Totals.BankAccountCompany, names) + portfolio.RecentChange(Totals.AssetCompany, names);
                 }
                 case Totals.Benchmark:
                 case Totals.Currency:
                 case Totals.CurrencySector:
                 case Totals.SecurityCurrency:
                 case Totals.BankAccountCurrency:
+                case Totals.AssetCurrency:
                 default:
                 {
                     return 0.0m;
@@ -104,6 +88,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
             {
                 case Account.Security:
                 case Account.BankAccount:
+                case Account.Asset:
                 {
                     if (portfolio.TryGetAccount(elementType, names, out IValueList account) && account.Any())
                     {

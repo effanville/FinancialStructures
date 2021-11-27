@@ -49,6 +49,10 @@ namespace FinancialStructures.Database.Implementation
                 {
                     return SingleDataNameObtainer(BenchMarksThreadSafe);
                 }
+                case Account.Asset:
+                {
+                    return SingleDataNameObtainer(Assets);
+                }
                 case Account.All:
                 default:
                     break;
@@ -57,7 +61,8 @@ namespace FinancialStructures.Database.Implementation
             return namesAndCompanies;
         }
 
-        private List<NameData> SingleDataNameObtainer<T>(IReadOnlyList<T> objects) where T : IValueList
+        private static List<NameData> SingleDataNameObtainer<T>(IReadOnlyList<T> objects) 
+            where T : IValueList
         {
             List<NameData> namesAndCompanies = new List<NameData>();
             if (objects != null)

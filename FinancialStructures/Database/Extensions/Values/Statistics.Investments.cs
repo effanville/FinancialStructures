@@ -65,25 +65,20 @@ namespace FinancialStructures.Database.Extensions.Values
         /// <param name="names">The name of the account.</param>
         public static List<Labelled<TwoName, DailyValuation>> Investments(this IPortfolio portfolio, Account accountType, TwoName names)
         {
-            switch (accountType)
+            if (accountType != Account.Security)
             {
-                case Account.Security:
-                {
-                    if (portfolio.TryGetAccount(Account.Security, names, out IValueList desired) && desired.Any())
-                    {
-                        ISecurity security = desired as ISecurity;
-                        ICurrency currency = portfolio.Currency(Account.Security, security);
-                        return security.AllInvestmentsNamed(currency);
-
-                    }
-
-                    return null;
-                }
-                default:
-                {
-                    return null;
-                }
+                return null;
             }
+
+            if (portfolio.TryGetAccount(Account.Security, names, out IValueList desired) && desired.Any())
+            {
+                ISecurity security = desired as ISecurity;
+                ICurrency currency = portfolio.Currency(Account.Security, security);
+                return security.AllInvestmentsNamed(currency);
+
+            }
+
+            return null;
         }
     }
 }

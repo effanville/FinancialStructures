@@ -33,6 +33,7 @@ namespace FinancialStructures.Database.Extensions.Values
                 {
                     return LastInvestmentDateOf(portfolio.SectorAccounts(Account.Security, name), portfolio);
                 }
+                case Totals.Asset:
                 case Totals.BankAccount:
                 case Totals.Benchmark:
                 case Totals.Currency:

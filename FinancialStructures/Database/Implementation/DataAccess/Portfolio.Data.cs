@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+
 using Common.Structure.DataStructures;
 using Common.Structure.Reporting;
+
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
@@ -44,6 +46,10 @@ namespace FinancialStructures.Database.Implementation
                 case Account.Benchmark:
                 {
                     return SingleDataListDataObtainer(BenchMarksThreadSafe, elementType, name, reportLogger);
+                }
+                case Account.Asset:
+                {
+                    return SingleDataListDataObtainer(Assets, elementType, name, reportLogger);
                 }
                 case Account.All:
                 default:

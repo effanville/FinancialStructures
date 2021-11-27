@@ -24,6 +24,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 {
                     return EntryDistributionOf(portfolio.FundsThreadSafe);
                 }
+                case Totals.AssetCompany:
                 case Totals.SecurityCompany:
                 {
                     return EntryDistributionOf(portfolio.CompanyAccounts(Account.Security, company.Company));
@@ -35,6 +36,10 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 case Totals.Benchmark:
                 {
                     return EntryDistributionOf(portfolio.BenchMarksThreadSafe);
+                }
+                case Totals.Asset:
+                {
+                    return EntryDistributionOf(portfolio.Assets);
                 }
                 default:
                 {

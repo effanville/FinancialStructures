@@ -46,45 +46,24 @@ namespace FinancialStructures.Database.Extensions.Rates
                 }
                 case Totals.BankAccount:
                 {
-                    decimal earlierValue = 0;
-                    decimal laterValue = 0;
-
-                    foreach (IExchangableValueList bankAccount in portfolio.BankAccountsThreadSafe)
-                    {
-                        ICurrency currency = portfolio.Currency(bankAccount.Names.Currency);
-                        earlierValue += bankAccount.Value(earlierTime, currency).Value;
-                        laterValue += bankAccount.Value(laterTime, currency).Value;
-                    }
-
-                    return FinanceFunctions.CAR(new DailyValuation(earlierTime, earlierValue), new DailyValuation(laterTime, laterValue));
+                    return TotalExchangableValueListCAROf(portfolio.BankAccountsThreadSafe, portfolio, earlierTime, laterTime);
+                }
+                case Totals.Asset:
+                {
+                    return TotalExchangableValueListCAROf(portfolio.Assets, portfolio, earlierTime, laterTime);
                 }
                 case Totals.Benchmark:
                 {
-                    decimal earlierValue = 0;
-                    decimal laterValue = 0;
-
-                    foreach (IValueList benchmark in portfolio.BenchMarksThreadSafe)
-                    {
-                        earlierValue += benchmark.Value(earlierTime).Value;
-                        laterValue += benchmark.Value(laterTime).Value;
-                    }
-
-                    return FinanceFunctions.CAR(new DailyValuation(earlierTime, earlierValue), new DailyValuation(laterTime, laterValue));
+                    return TotalValueListCAROf(portfolio.BenchMarksThreadSafe, earlierTime, laterTime);
                 }
                 case Totals.Currency:
                 {
-                    decimal earlierValue = 0;
-                    decimal laterValue = 0;
-
-                    foreach (ICurrency currency in portfolio.CurrenciesThreadSafe)
-                    {
-                        earlierValue += currency.Value(earlierTime).Value;
-                        laterValue += currency.Value(laterTime).Value;
-                    }
-
-                    return FinanceFunctions.CAR(new DailyValuation(earlierTime, earlierValue), new DailyValuation(laterTime, laterValue));
+                    return TotalValueListCAROf(portfolio.CurrenciesThreadSafe, earlierTime, laterTime);
                 }
 
+                case Totals.AssetCompany:
+                case Totals.AssetSector:
+                case Totals.AssetCurrency:
                 case Totals.BankAccountCompany:
                 case Totals.Company:
                 case Totals.BankAccountSector:
@@ -96,6 +75,35 @@ namespace FinancialStructures.Database.Extensions.Rates
                     return 0.0;
                 }
             }
+        }
+
+        private static double TotalValueListCAROf(IReadOnlyList<IValueList> valueLists, DateTime earlierTime, DateTime laterTime)
+        {
+            decimal earlierValue = 0;
+            decimal laterValue = 0;
+
+            foreach (IValueList currency in valueLists)
+            {
+                earlierValue += currency.Value(earlierTime).Value;
+                laterValue += currency.Value(laterTime).Value;
+            }
+
+            return FinanceFunctions.CAR(new DailyValuation(earlierTime, earlierValue), new DailyValuation(laterTime, laterValue));
+        }
+
+        private static double TotalExchangableValueListCAROf(IReadOnlyList<IValueList> valueLists, IPortfolio portfolio, DateTime earlierTime, DateTime laterTime)
+        {
+            decimal earlierValue = 0;
+            decimal laterValue = 0;
+
+            foreach (IExchangableValueList bankAccount in valueLists)
+            {
+                ICurrency currency = portfolio.Currency(bankAccount.Names.Currency);
+                earlierValue += bankAccount.Value(earlierTime, currency).Value;
+                laterValue += bankAccount.Value(laterTime, currency).Value;
+            }
+
+            return FinanceFunctions.CAR(new DailyValuation(earlierTime, earlierValue), new DailyValuation(laterTime, laterValue));
         }
 
         private static double TotalSecurityIRROf(IReadOnlyList<IValueList> securities, IPortfolio portfolio, DateTime earlierTime, DateTime laterTime, int numIterations)
@@ -147,6 +155,7 @@ namespace FinancialStructures.Database.Extensions.Rates
                 case Account.BankAccount:
                 case Account.Benchmark:
                 case Account.Currency:
+                case Account.Asset:
                 {
                     if (portfolio.TryGetAccount(accountType, names, out IValueList desired))
                     {

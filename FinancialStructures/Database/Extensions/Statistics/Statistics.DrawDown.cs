@@ -24,39 +24,38 @@ namespace FinancialStructures.Database.Extensions.Statistics
         /// <summary>
         /// Calculates the total IRR for the portfolio and the account type given over the time frame specified.
         /// </summary>
-        public static double TotalDrawdown(this IPortfolio portfolio, Totals accountType, DateTime earlierTime, DateTime laterTime, TwoName name = null)
+        public static double TotalDrawdown(this IPortfolio portfolio, Totals total, DateTime earlierTime, DateTime laterTime, TwoName name = null)
         {
-            switch (accountType)
+            switch (total)
             {
                 case Totals.All:
                 case Totals.Security:
                 {
                     return TotalDrawdownOf(portfolio.FundsThreadSafe, earlierTime, laterTime);
                 }
-                case Totals.SecurityCompany:
-                {
-                    return TotalDrawdownOf(portfolio.CompanyAccounts(Account.Security, name.Company), earlierTime, laterTime);
-                }
                 case Totals.Sector:
-                case Totals.SecuritySector:
                 {
-                    return TotalDrawdownOf(portfolio.SectorAccounts(Account.Security, name), earlierTime, laterTime);
+                    return TotalDrawdownOf(portfolio.SectorAccounts(Account.All, name), earlierTime, laterTime);
+                }
+                case Totals.SecuritySector:
+                case Totals.BankAccountSector:
+                case Totals.AssetSector:
+                {
+                    return TotalDrawdownOf(portfolio.SectorAccounts(total.ToAccount(), name), earlierTime, laterTime);
                 }
                 case Totals.BankAccount:
                 {
                     return TotalDrawdownOf(portfolio.BankAccountsThreadSafe, earlierTime, laterTime);
                 }
+                case Totals.SecurityCompany:
                 case Totals.BankAccountCompany:
+                case Totals.AssetCompany:
                 {
-                    return TotalDrawdownOf(portfolio.CompanyAccounts(Account.BankAccount, name.Company), earlierTime, laterTime);
-                }
-                case Totals.BankAccountSector:
-                {
-                    return TotalDrawdownOf(portfolio.SectorAccounts(Account.BankAccount, name), earlierTime, laterTime);
+                    return TotalDrawdownOf(portfolio.CompanyAccounts(total.ToAccount(), name.Company), earlierTime, laterTime);
                 }
                 case Totals.Benchmark:
                 {
-                    return TotalDrawdownOf(portfolio.BankAccountsThreadSafe, earlierTime, laterTime);
+                    return TotalDrawdownOf(portfolio.BenchMarksThreadSafe, earlierTime, laterTime);
                 }
                 case Totals.Company:
                 {
@@ -66,6 +65,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 case Totals.CurrencySector:
                 case Totals.SecurityCurrency:
                 case Totals.BankAccountCurrency:
+                case Totals.AssetCurrency:
                 default:
                 {
                     return 0.0;
@@ -119,27 +119,13 @@ namespace FinancialStructures.Database.Extensions.Statistics
         /// </summary>
         public static double Drawdown(this IPortfolio portfolio, Account accountType, TwoName names, DateTime earlierTime, DateTime laterTime)
         {
-            switch (accountType)
+            if (!portfolio.TryGetAccount(accountType, names, out IValueList desired))
             {
-                case Account.Security:
-                case Account.BankAccount:
-                case Account.Benchmark:
-                case Account.Currency:
-                {
-                    if (!portfolio.TryGetAccount(accountType, names, out IValueList desired))
-                    {
-                        return double.NaN;
-                    }
-
-                    List<DailyValuation> values = desired.ListOfValues().Where(value => value.Day >= earlierTime && value.Day <= laterTime && !value.Value.Equals(0.0)).ToList();
-                    return (double)FinanceFunctions.Drawdown(values);
-                }
-                case Account.All:
-                default:
-                {
-                    return 0.0;
-                }
+                return double.NaN;
             }
+
+            List<DailyValuation> values = desired.ListOfValues().Where(value => value.Day >= earlierTime && value.Day <= laterTime && !value.Value.Equals(0.0)).ToList();
+            return (double)FinanceFunctions.Drawdown(values);
         }
     }
 }

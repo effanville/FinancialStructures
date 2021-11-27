@@ -62,6 +62,14 @@ namespace FinancialStructures.Database.Export.Statistics
         }
 
         /// <summary>
+        /// Options on displaying assets.
+        /// </summary>
+        public StatisticTableOptions AssetDisplayOptions
+        {
+            get;
+        }
+
+        /// <summary>
         /// Constructor setting all values.
         /// </summary>
         public PortfolioStatisticsSettings(
@@ -79,7 +87,11 @@ namespace FinancialStructures.Database.Export.Statistics
             bool includeSectors,
             Statistic sectorSortField,
             SortDirection sectorSortDirection,
-            List<Statistic> sectorDisplayFields)
+            List<Statistic> sectorDisplayFields,
+            bool includeAssets,
+            Statistic assetSortField,
+            SortDirection assetSortDirection,
+            List<Statistic> assetDisplayFields)
         {
             DateToCalculate = dateToCalculate;
             IncludeBenchmarks = includeBenchmarks;
@@ -87,6 +99,7 @@ namespace FinancialStructures.Database.Export.Statistics
             SecurityDisplayOptions = new StatisticTableOptions(includeSecurities, securitySortField, securitySortDirection, securityDisplayFields);
             BankAccountDisplayOptions = new StatisticTableOptions(includeBankAccounts, bankAccSortField, bankAccSortDirection, bankAccDisplayFields);
             SectorDisplayOptions = new StatisticTableOptions(includeSectors, sectorSortField, sectorSortDirection, sectorDisplayFields);
+            AssetDisplayOptions = new StatisticTableOptions(includeAssets, assetSortField, assetSortDirection, assetDisplayFields);
         }
 
         /// <summary>
@@ -109,7 +122,11 @@ namespace FinancialStructures.Database.Export.Statistics
                 true,
                 Statistic.Company,
                 SortDirection.Descending,
-                AccountStatisticsHelpers.DefaultSectorStats().ToList());
+                AccountStatisticsHelpers.DefaultSectorStats().ToList(),
+                true,
+                Statistic.Company,
+                SortDirection.Descending,
+                AccountStatisticsHelpers.DefaultAssetStats().ToList());
         }
     }
 }

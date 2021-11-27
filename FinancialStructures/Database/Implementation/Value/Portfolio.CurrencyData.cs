@@ -16,6 +16,7 @@ namespace FinancialStructures.Database.Implementation
             {
                 case Account.Security:
                 case Account.BankAccount:
+                case Account.Asset:
                 {
                     string currencyName = valueList.Names.Currency;
                     IReadOnlyList<ICurrency> currencies = CurrenciesThreadSafe;

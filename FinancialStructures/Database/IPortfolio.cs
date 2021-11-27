@@ -103,6 +103,14 @@ namespace FinancialStructures.Database
         }
 
         /// <summary>
+        /// Extra assets that are held as part of this portfolio.
+        /// </summary>
+        IReadOnlyList<IAmortisableAsset> Assets
+        {
+            get;
+        }
+
+        /// <summary>
         /// Number of type in the database.
         /// </summary>
         /// <param name="accountType">The type to search for.</param>
@@ -217,6 +225,36 @@ namespace FinancialStructures.Database
         /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
         bool TryDeleteTradeData(Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Adds the desired asset debt data if it can.
+        /// </summary>
+        bool TryAddOrEditAssetDebt(Account elementType, TwoName names, DailyValuation oldData, DailyValuation newData, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Adds the desired asset payment data if it can.
+        /// </summary>
+        bool TryAddOrEditAssetPayment(Account elementType, TwoName names, DailyValuation oldData, DailyValuation newData, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Attempts to remove asset debt from the account.
+        /// </summary>
+        /// <param name="elementType">The type of data to remove from.</param>
+        /// <param name="name">The name to remove from.</param>
+        /// <param name="date">The date on which to remove data.</param>
+        /// <param name="reportLogger">Report callback.</param>
+        /// <returns>Success or failure.</returns>
+        bool TryDeleteAssetDebt(Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Attempts to remove an asset payment from the account.
+        /// </summary>
+        /// <param name="elementType">The type of data to remove from.</param>
+        /// <param name="name">The name to remove from.</param>
+        /// <param name="date">The date on which to remove data.</param>
+        /// <param name="reportLogger">Report callback.</param>
+        /// <returns>Success or failure.</returns>
+        bool TryDeleteAssetPayment(Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Attempts to add data to the account.

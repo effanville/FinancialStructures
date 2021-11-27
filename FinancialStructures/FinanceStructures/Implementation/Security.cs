@@ -45,25 +45,22 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// An empty constructor.
         /// </summary>
         internal Security()
+            : base()
         {
-            Names = new NameData();
         }
 
         internal Security(NameData names)
+            : base(names)
         {
-            Names = names;
-            SetupEventListening();
         }
 
         /// <summary>
         /// Constructor creating a new security.
         /// </summary>
         internal Security(string company, string name, string currency = "GBP", string url = null, HashSet<string> sectors = null)
+            : base(new NameData(company, name, currency, url, sectors))
         {
-            Names = new NameData(company, name, currency, url, sectors);
-            SetupEventListening();
         }
-
 
         /// <summary>
         /// Constructor to make a new security from known data, where the data is assumed to be consistent.
@@ -71,7 +68,6 @@ namespace FinancialStructures.FinanceStructures.Implementation
         private Security(NameData names, TimeList unitPrices, TimeList shares, TimeList investments, List<SecurityTrade> trades)
             : base(names.Copy())
         {
-            Names = names.Copy();
             UnitPrice = unitPrices;
             Shares = shares;
             Investments = investments;
