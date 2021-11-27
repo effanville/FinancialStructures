@@ -37,7 +37,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public virtual DailyValuation ValuationOnOrBefore(DateTime date)
+        public virtual DailyValuation ValueOnOrBefore(DateTime date)
         {
             return Values.ValueOnOrBefore(date);
         }

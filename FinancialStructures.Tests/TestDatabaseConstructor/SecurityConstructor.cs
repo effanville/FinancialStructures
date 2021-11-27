@@ -14,6 +14,12 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
         public static readonly decimal[] DefaultShareValues = new decimal[] { 2.0m, 1.5m, 17.3m, 4, 5.7m, 5.5m };
         public static readonly decimal[] DefaultUnitPrices = new decimal[] { 100.0m, 100.0m, 125.2m, 90.6m, 77.7m, 101.1m };
         public static readonly decimal[] DefaultInvestments = new decimal[] { 100.0m, 0.0m, 0.0m, 0.0m, 0.0m, 0.0m };
+        public static readonly SecurityTrade[] DefaultTrades = new SecurityTrade[]
+            {
+                new SecurityTrade(TradeType.Buy, new TwoName(DefaultCompany, DefaultName), new DateTime(2010, 1, 1), 2.0m, 100.0m, 0.0m),
+                new SecurityTrade(TradeType.ShareReprice, new TwoName(DefaultCompany, DefaultName), new DateTime(2011, 1, 1), -0.5m, 100.0m, 0.0m),
+                new SecurityTrade(TradeType.DividendReinvestment, new TwoName(DefaultCompany, DefaultName), new DateTime(2012, 5, 1), 15.8m, 125.2m, 0.0m)
+            };
 
         public const string SecondaryName = "China Stock";
         public const string SecondaryCompany = "Prudential";
@@ -33,6 +39,27 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             Item = new Security(names);
         }
 
+        private SecurityConstructor WithData(DateTime date, decimal sharePrice)
+        {
+            Item.UnitPrice.SetData(date, sharePrice);
+
+            Item.EnsureDataConsistency();
+            return this;
+        }
+        private SecurityConstructor WithTrades(SecurityTrade[] trades)
+        {
+            foreach (var trade in trades)
+            {
+                if (trade != null)
+                {
+                    Item.SecurityTrades.Add(trade);
+                }
+            }
+            Item.EnsureDataConsistency();
+
+            return this;
+        }
+
         private SecurityConstructor WithData(DateTime date, decimal sharePrice, decimal numberUnits, decimal investment = 0)
         {
             Item.Shares.SetData(date, numberUnits);
@@ -47,9 +74,19 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             return this;
         }
 
+        public static SecurityConstructor Empty()
+        {
+            return new SecurityConstructor(DefaultCompany, DefaultName);
+        }
+
         public static SecurityConstructor Default()
         {
             return FromNameAndData(DefaultCompany, DefaultName, dates: DefaultDates, sharePrice: DefaultUnitPrices, numberUnits: DefaultShareValues, investment: DefaultInvestments);
+        }
+
+        public static SecurityConstructor DefaultFromTrades()
+        {
+            return FromNameAndTradeData(DefaultCompany, DefaultName, dates: DefaultDates, sharePrice: DefaultUnitPrices, trades: DefaultTrades);
         }
 
         public static SecurityConstructor Secondary()
@@ -60,6 +97,32 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
         public static SecurityConstructor FromName(string company, string name, string currency = null, string url = null, string sectors = null)
         {
             return new SecurityConstructor(company, name, currency, url, sectors);
+        }
+
+        public static SecurityConstructor FromNameAndTradeData(
+            string company,
+            string name,
+            string currency = null,
+            string url = null,
+            string sectors = null,
+            DateTime[] dates = null,
+            decimal[] sharePrice = null,
+            SecurityTrade[] trades = null)
+        {
+            SecurityConstructor securityConstructor = new SecurityConstructor(company, name, currency, url, sectors);
+            if (dates != null)
+            {
+                for (int i = 0; i < dates.Length; i++)
+                {
+                    if (dates[i] != default(DateTime))
+                    {
+                        _ = securityConstructor.WithData(dates[i], sharePrice[i]);
+                    }
+                }
+            }
+
+            _ = securityConstructor.WithTrades(trades);
+            return securityConstructor;
         }
 
         public static SecurityConstructor FromNameAndData(

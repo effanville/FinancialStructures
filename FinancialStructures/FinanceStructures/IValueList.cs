@@ -75,7 +75,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Returns the latest valuation on or before the date <paramref name="date"/>.
         /// </summary>
-        DailyValuation ValuationOnOrBefore(DateTime date);
+        DailyValuation ValueOnOrBefore(DateTime date);
 
         /// <summary>
         /// Calculates the compound annual rate of the Value list.

@@ -164,12 +164,13 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
             RemoveEventListening();
             CleanData();
+
             // When a trade is present, number of shares bought/sold should correspond to share number difference before
             // and after.
             // Investment on that day should correspond also.
-			
+
             // First remove all share values that dont have a trade value.
-			// Do this first to ensure that share totals when editing trades are correct.
+            // Do this first to ensure that share totals when editing trades are correct.
             for (int index = 0; index < Shares.Count(); index++)
             {
                 DailyValuation shareValue = Shares[index];
@@ -189,16 +190,16 @@ namespace FinancialStructures.FinanceStructures.Implementation
             {
                 if (trade != null)
                 {
-                    double sign = trade.TradeType.Sign();
+                    decimal sign = trade.TradeType.Sign();
 
                     // if trade should alter number of shares, then alter
                     // if it shouldnt then remove the shares.
                     if (trade.TradeType.IsShareNumberAlteringTradeType())
                     {
                         DailyValuation sharesPreviousValue = Shares.ValueBefore(trade.Day) ?? new DailyValuation(trade.Day, 0);
-                        bool hasShareValue = Shares.TryGetValue(trade.Day, out double shareValue);
-                        double expectedNumberShares = sharesPreviousValue.Value + sign * trade.NumberShares;
-                        if ((hasShareValue && !Equals(shareValue, expectedNumberShares, 1e-4)) || !hasShareValue)
+                        bool hasShareValue = Shares.TryGetValue(trade.Day, out decimal shareValue);
+                        decimal expectedNumberShares = sharesPreviousValue.Value + sign * trade.NumberShares;
+                        if ((hasShareValue && !Equals(shareValue, expectedNumberShares)) || !hasShareValue)
                         {
                             Shares.SetData(trade.Day, expectedNumberShares);
                         }

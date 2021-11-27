@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Common.Structure.DataStructures;
-using FinancialStructures.FinanceStructures.Implementation;
+
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.Tests.TestDatabaseConstructor;
+
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.FinanceStructuresTests
@@ -122,7 +125,7 @@ namespace FinancialStructures.Tests.FinanceStructuresTests
         }
 
         [TestCaseSource(nameof(EditDataValues))]
-        public void TryEditDataTests(CashAccount sut, (DateTime Date, decimal Value) dataToAdd, (DateTime Date, decimal Value)[] expectedValues)
+        public void TryEditDataTests(IExchangableValueList sut, (DateTime Date, decimal Value) dataToAdd, (DateTime Date, decimal Value)[] expectedValues)
         {
             _ = sut.TryEditData(dataToAdd.Date, dataToAdd.Date, dataToAdd.Value, reportLogger: null);
 

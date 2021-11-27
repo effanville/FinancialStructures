@@ -14,6 +14,11 @@ namespace FinancialStructures.FinanceStructures.Statistics
         /// </summary>
         public static decimal MeanSharePrice(this ISecurity security, TradeType tradeType)
         {
+            if (!security.Shares.Any())
+            {
+                return 0m;
+            }
+
             decimal sum = 0.0m;
             decimal numShares = 0.0m;
             foreach (var trade in security.Trades)
@@ -24,10 +29,12 @@ namespace FinancialStructures.FinanceStructures.Statistics
                     numShares += trade.NumberShares;
                 }
             }
+
             if (sum.Equals(0.0m))
             {
                 return 0.0m;
             }
+
             return sum / numShares;
         }
     }

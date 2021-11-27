@@ -50,7 +50,7 @@ namespace FinancialStructures.Database.Implementation
 
                     IExchangableValueList bankAccount = account as IExchangableValueList;
                     ICurrency currency = Currency(elementType, bankAccount);
-                    return bankAccount.ValuationOnOrBefore(date, currency)?.Value ?? 0.0m;
+                    return bankAccount.ValueOnOrBefore(date, currency)?.Value ?? 0.0m;
 
                 }
                 default:

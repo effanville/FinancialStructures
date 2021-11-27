@@ -21,6 +21,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
             SecurityTrade trade = SecurityTrades.Where(t => t.Day.Equals(day)).FirstOrDefault();
             return new SecurityDayData(day, unitPrice, shares, invest, trade);
         }
+
         /// <inheritdoc/>
         public DailyValuation LastInvestment(ICurrency currency)
         {

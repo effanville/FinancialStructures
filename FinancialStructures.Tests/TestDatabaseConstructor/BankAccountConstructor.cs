@@ -33,6 +33,11 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             return this;
         }
 
+        public static BankAccountConstructor Empty()
+        {
+            return new BankAccountConstructor(DefaultCompany, DefaultName);
+        }
+
         public static BankAccountConstructor Default()
         {
             return FromNameAndData(DefaultCompany, DefaultName, dates: DefaultDates, values: DefaultValues);

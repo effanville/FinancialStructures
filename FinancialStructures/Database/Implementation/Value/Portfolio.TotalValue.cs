@@ -48,7 +48,7 @@ namespace FinancialStructures.Database.Implementation
                         if (acc.Any() && acc.Names.Currency == names.Name)
                         {
                             ICurrency currency = Currency(Account.BankAccount, acc);
-                            total += acc.ValuationOnOrBefore(date, currency).Value;
+                            total += acc.ValueOnOrBefore(date, currency).Value;
                         }
                     }
                     return total;
@@ -61,7 +61,7 @@ namespace FinancialStructures.Database.Implementation
                         if (acc.Any())
                         {
                             ICurrency currency = Currency(Account.BankAccount, acc);
-                            sum += acc.ValuationOnOrBefore(date, currency).Value;
+                            sum += acc.ValueOnOrBefore(date, currency).Value;
                         }
                     }
 
@@ -74,7 +74,7 @@ namespace FinancialStructures.Database.Implementation
                     {
                         if (fund.IsSectorLinked(names))
                         {
-                            sum += fund.ValuationOnOrBefore(date).Value;
+                            sum += fund.ValueOnOrBefore(date).Value;
                         }
                     }
 
@@ -88,7 +88,7 @@ namespace FinancialStructures.Database.Implementation
                     {
                         if (fund.IsSectorLinked(names))
                         {
-                            sum += fund.ValuationOnOrBefore(date).Value;
+                            sum += fund.ValueOnOrBefore(date).Value;
                         }
                     }
 
@@ -130,7 +130,7 @@ namespace FinancialStructures.Database.Implementation
                         if (account != null && account.Any())
                         {
                             ICurrency currency = Currency(Account.BankAccount, account);
-                            value += account.ValuationOnOrBefore(date, currency).Value;
+                            value += account.ValueOnOrBefore(date, currency).Value;
                         }
                     }
 

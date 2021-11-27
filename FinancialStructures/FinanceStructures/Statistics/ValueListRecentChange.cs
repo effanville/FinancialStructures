@@ -12,6 +12,11 @@ namespace FinancialStructures.FinanceStructures.Statistics
         /// </summary>
         public static decimal RecentChange(this IValueList valueList)
         {
+            if (!valueList.Any())
+            {
+                return 0m;
+            }
+
             DailyValuation needed = valueList.LatestValue();
             if (needed.Value > 0)
             {
@@ -26,6 +31,11 @@ namespace FinancialStructures.FinanceStructures.Statistics
         /// </summary>
         public static decimal RecentChange(this IExchangableValueList valueList, ICurrency currency)
         {
+            if (!valueList.Any())
+            {
+                return 0m;
+            }
+
             DailyValuation needed = valueList.LatestValue(currency);
             if (needed.Value > 0)
             {

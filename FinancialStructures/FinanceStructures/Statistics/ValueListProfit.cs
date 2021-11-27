@@ -35,7 +35,7 @@ namespace FinancialStructures.FinanceStructures.Statistics
                 case Account.Security:
                 {
                     ISecurity security = valueList as ISecurity;
-                    return security.LatestValue(currency).Value - security.TotalInvestment(currency);
+                    return security.Profit(currency);
                 }
                 default:
                 case Account.BankAccount:

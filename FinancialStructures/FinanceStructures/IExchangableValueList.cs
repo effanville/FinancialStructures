@@ -43,6 +43,6 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         /// <param name="date">The date to query the value for.</param>
         /// <param name="currency">An optional currency to exchange the value with.</param>
-        DailyValuation ValuationOnOrBefore(DateTime date, ICurrency currency);
+        DailyValuation ValueOnOrBefore(DateTime date, ICurrency currency);
     }
 }

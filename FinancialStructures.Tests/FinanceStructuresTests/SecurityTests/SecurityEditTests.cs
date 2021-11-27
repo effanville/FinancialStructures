@@ -1,17 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 
-namespace FinancialStructures.Tests.FinanceStructuresTests
+namespace FinancialStructures.Tests.FinanceStructuresTests.SecurityTests
 {
     [TestFixture]
-    public sealed class SecurityTests
+    public sealed class SecurityEditTests
     {
-        public static IEnumerable<TestCaseData> TradeData()
+        private static IEnumerable<TestCaseData> TradeData()
         {
             yield return new TestCaseData(
                SecurityConstructor.Default().Item,
@@ -125,6 +126,112 @@ namespace FinancialStructures.Tests.FinanceStructuresTests
         public void SecurityTradeTests(Security sut, (DateTime Date, decimal UP, decimal Shares, decimal Inv, decimal TradeShares, decimal TradePrice, decimal TradeCost) dataToAdd, (DateTime Date, decimal UnitPrice, decimal ShareNo, decimal Investment)[] expectedValues)
         {
             _ = sut.AddOrEditData(dataToAdd.Date, dataToAdd.Date, dataToAdd.UP, dataToAdd.Shares, dataToAdd.Inv, trade: new SecurityTrade(TradeType.Buy, sut.Names.ToTwoName(), dataToAdd.Date, dataToAdd.TradeShares, dataToAdd.TradePrice, dataToAdd.TradeCost), reportLogger: null);
+
+            Assert.Multiple(() =>
+            {
+                foreach ((DateTime Date, decimal UnitPrice, decimal ShareNo, decimal Investment) in expectedValues)
+                {
+                    SecurityDayData dayData = sut.DayData(Date);
+                    Assert.AreEqual(Investment, dayData.NewInvestment, $"{Date} Investment value wrong");
+                    Assert.AreEqual(ShareNo, dayData.ShareNo, $"{Date} Num Shares value wrong");
+                    Assert.AreEqual(UnitPrice, dayData.UnitPrice, $"{Date} Unit Price wrong");
+                }
+            });
+        }
+
+        private static IEnumerable<TestCaseData> TradeEditData()
+        {
+            yield return new TestCaseData(
+               SecurityConstructor.DefaultFromTrades().Item,
+               (TradeType.Buy, new DateTime(2010, 1, 1), 2.0m, 100.0m, 2.0m),
+               new[] {
+                    (new DateTime(2010, 1, 1), 100.0m, 2.0m, 202.0m),
+                    (new DateTime(2011, 1, 1), 100.0m, 1.5m, 0.0m),
+                    (new DateTime(2012, 5, 1), 125.2m, 17.3m, 0.0m),
+               }).SetName("AlterTradeCost");
+            yield return new TestCaseData(
+               SecurityConstructor.DefaultFromTrades().Item,
+               (TradeType.DividendReinvestment, new DateTime(2011, 1, 1), 0.5m, 100.0m, 0.0m),
+               new[] {
+                    (new DateTime(2010, 1, 1), 100.0m, 2.0m, 202.0m),
+                    (new DateTime(2011, 1, 1), 100.0m, 2.5m, 50.0m),
+                    (new DateTime(2012, 5, 1), 125.2m, 18.3m, 0.0m),
+               }).SetName("AlterToDivReinv");
+            yield return new TestCaseData(
+               SecurityConstructor.DefaultFromTrades().Item,
+               (TradeType.ShareReprice, new DateTime(2012, 5, 1), 15.8m, 125.2m, 0.0m),
+               new[] {
+                    (new DateTime(2010, 1, 1), 100.0m, 2.0m, 202.0m),
+                    (new DateTime(2011, 1, 1), 100.0m, 2.5m, 50.0m),
+                    (new DateTime(2012, 5, 1), 125.2m, 18.3m, 1978.16m),
+               }).SetName("AlterToShareReprice");
+        }
+
+        [TestCaseSource(nameof(TradeEditData))]
+        public void EditSecurityTradeTests(
+            Security sut,
+            (TradeType TradeType, DateTime Date, decimal TradeShares, decimal TradePrice, decimal TradeCost) tradeEditData,
+            (DateTime Date, decimal UnitPrice, decimal ShareNo, decimal Investment)[] expectedValues)
+        {
+            var oldTrade = sut.SecurityTrades.First(trade => trade.Day.Equals(tradeEditData.Date));
+            _ = sut.TryAddOrEditTradeData(
+                new SecurityTrade(tradeEditData.Date),
+                new SecurityTrade(
+                    TradeType.Buy,
+                    sut.Names.ToTwoName(),
+                    tradeEditData.Date,
+                    tradeEditData.TradeShares,
+                    tradeEditData.TradePrice,
+                    tradeEditData.TradeCost),
+                reportLogger: null);
+
+            Assert.Multiple(() =>
+            {
+                foreach ((DateTime Date, decimal UnitPrice, decimal ShareNo, decimal Investment) in expectedValues)
+                {
+                    SecurityDayData dayData = sut.DayData(Date);
+                    Assert.AreEqual(Investment, dayData.NewInvestment, $"{Date} Investment value wrong");
+                    Assert.AreEqual(ShareNo, dayData.ShareNo, $"{Date} Num Shares value wrong");
+                    Assert.AreEqual(UnitPrice, dayData.UnitPrice, $"{Date} Unit Price wrong");
+                }
+            });
+        }
+
+        private static IEnumerable<TestCaseData> TradeDeleteData()
+        {
+            yield return new TestCaseData(
+               SecurityConstructor.DefaultFromTrades().Item,
+               new DateTime(2010, 1, 1),
+               new[] {
+                    (new DateTime(2010, 1, 1), 100.0m, 0.0m, 0.0m),
+                    (new DateTime(2011, 1, 1), 100.0m, -0.5m, 0.0m),
+                    (new DateTime(2012, 5, 1), 125.2m, 15.3m, 0.0m),
+               }).SetName("DeleteFirstTrade");
+            yield return new TestCaseData(
+               SecurityConstructor.DefaultFromTrades().Item,
+               new DateTime(2011, 1, 1),
+               new[] {
+                    (new DateTime(2010, 1, 1), 100.0m, 2.0m, 200.0m),
+                    (new DateTime(2011, 1, 1), 100.0m, 0.0m, 0.0m),
+                    (new DateTime(2012, 5, 1), 125.2m, 17.8m, 0.0m),
+               }).SetName("DeleteSecondTrade");
+            yield return new TestCaseData(
+               SecurityConstructor.DefaultFromTrades().Item,
+               new DateTime(2012, 5, 1),
+               new[] {
+                    (new DateTime(2010, 1, 1), 100.0m, 2.0m, 200.0m),
+                    (new DateTime(2011, 1, 1), 100.0m, 1.5m, 0.0m),
+                    (new DateTime(2012, 5, 1), 125.2m, 0.0m, 0.0m),
+               }).SetName("DeleteLastTrade");
+        }
+
+        [TestCaseSource(nameof(TradeDeleteData))]
+        public void DeleteSecurityTradeTests(
+            Security sut,
+            DateTime tradeDeleteData,
+            (DateTime Date, decimal UnitPrice, decimal ShareNo, decimal Investment)[] expectedValues)
+        {
+            _ = sut.TryDeleteTradeData(tradeDeleteData);
 
             Assert.Multiple(() =>
             {

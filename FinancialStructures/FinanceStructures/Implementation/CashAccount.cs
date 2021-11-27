@@ -104,7 +104,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public DailyValuation ValuationOnOrBefore(DateTime date, ICurrency currency = null)
+        public DailyValuation ValueOnOrBefore(DateTime date, ICurrency currency = null)
         {
             DailyValuation value = Values.ValueOnOrBefore(date);
             if (value == null)

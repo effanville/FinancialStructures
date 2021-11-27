@@ -66,7 +66,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
             get;
             set;
-        } = new TimeList();
+        }
 
         /// <summary>
         /// default constructor.
@@ -74,6 +74,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         public ValueList()
         {
             Names = new NameData();
+            Values = new TimeList();
             SetupEventListening();
         }
 
@@ -83,6 +84,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         public ValueList(NameData names)
         {
             Names = names;
+            Values = new TimeList();
             SetupEventListening();
         }
 

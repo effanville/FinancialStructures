@@ -67,15 +67,8 @@ namespace FinancialStructures.DataStructures
         {
             get
             {
-                if (TradeType == TradeType.Sell)
-                {
-                    return NumberShares * UnitPrice - TradeCosts;
-                }
-                if (TradeType == TradeType.ShareReprice)
-                {
-                    return 0.0m;
-                }
-                return NumberShares * UnitPrice + TradeCosts;
+                decimal sign = TradeType.Sign();
+                return NumberShares * UnitPrice + sign * TradeCosts;
             }
         }
 
@@ -139,6 +132,11 @@ namespace FinancialStructures.DataStructures
             NumberShares = numShares;
             UnitPrice = price;
             TradeCosts = costs;
+        }
+
+        internal SecurityTrade(DateTime day)
+        {
+            Day = day;
         }
 
         /// <summary>

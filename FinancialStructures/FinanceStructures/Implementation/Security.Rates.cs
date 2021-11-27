@@ -10,6 +10,11 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public decimal TotalInvestment(ICurrency currency = null)
         {
+            if (!Any())
+            {
+                return 0.0m;
+            }
+
             List<DailyValuation> investments = InvestmentsBetween(FirstValue().Day, LatestValue().Day, currency);
             decimal sum = 0;
             foreach (DailyValuation investment in investments)
@@ -23,6 +28,11 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public List<DailyValuation> InvestmentsBetween(DateTime earlierDate, DateTime laterDate, ICurrency currency = null)
         {
+            if (!Any())
+            {
+                return null;
+            }
+
             List<DailyValuation> values = Investments.GetValuesBetween(earlierDate, laterDate);
             foreach (DailyValuation value in values)
             {
@@ -81,6 +91,12 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public DailyValuation Value(DateTime date, ICurrency currency)
         {
+            // if we have never held the security, have no value.
+            if (!Shares.Any())
+            {
+                return null;
+            }
+
             DailyValuation perSharePrice = UnitPrice.Value(date);
             decimal value = perSharePrice?.Value * Shares.ValueOnOrBefore(date)?.Value * GetCurrencyValue(date, currency) ?? 0.0m;
             return new DailyValuation(date, value);
@@ -95,6 +111,12 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public DailyValuation ValueBefore(DateTime date, ICurrency currency)
         {
+            // if we have never held the security, have no value.
+            if (!Shares.Any())
+            {
+                return null;
+            }
+
             DailyValuation val = UnitPrice.ValueBefore(date);
             if (val == null)
             {
@@ -106,14 +128,20 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public override DailyValuation ValuationOnOrBefore(DateTime date)
+        public override DailyValuation ValueOnOrBefore(DateTime date)
         {
-            return ValuationOnOrBefore(date, null);
+            return ValueOnOrBefore(date, null);
         }
 
         /// <inheritdoc/>
-        public DailyValuation ValuationOnOrBefore(DateTime date, ICurrency currency)
+        public DailyValuation ValueOnOrBefore(DateTime date, ICurrency currency)
         {
+            // if we have never held the security, have no value.
+            if (!Shares.Any())
+            {
+                return null;
+            }
+
             DailyValuation val = UnitPrice.ValueOnOrBefore(date);
             if (val == null)
             {
@@ -139,19 +167,26 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public double IRR(DateTime earlierDate, DateTime laterDate, ICurrency currency = null)
         {
-            if (Any())
+            if (!Any())
             {
-                List<DailyValuation> invs = InvestmentsBetween(earlierDate, laterDate, currency);
-                DailyValuation latestTime = Value(laterDate, currency);
-                DailyValuation firstTime = Value(earlierDate, currency);
-                return FinanceFunctions.IRR(firstTime, invs, latestTime, 10);
+                return double.NaN;
             }
-            return double.NaN;
+
+            List<DailyValuation> invs = InvestmentsBetween(earlierDate, laterDate, currency);
+            DailyValuation latestTime = Value(laterDate, currency);
+            DailyValuation firstTime = Value(earlierDate, currency);
+            return FinanceFunctions.IRR(firstTime, invs, latestTime, 10);
+
         }
 
         /// <inheritdoc/>
         public double IRR(ICurrency currency = null)
         {
+            if (!Any())
+            {
+                return double.NaN;
+            }
+
             return IRR(FirstValue().Day, LatestValue().Day, currency);
         }
     }

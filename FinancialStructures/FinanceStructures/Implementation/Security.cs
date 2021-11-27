@@ -40,6 +40,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 }
             }
         }
+
         /// <summary>
         /// An empty constructor.
         /// </summary>
@@ -63,16 +64,17 @@ namespace FinancialStructures.FinanceStructures.Implementation
             SetupEventListening();
         }
 
+
         /// <summary>
         /// Constructor to make a new security from known data.
         /// </summary>
-        private Security(NameData names, TimeList shares, TimeList prices, TimeList investments)
+        private Security(NameData names, TimeList unitPrices, List<SecurityTrade> trades)
         {
             Names = names.Copy();
-            Shares = shares;
-            UnitPrice = prices;
-            Investments = investments;
+            UnitPrice = unitPrices;
+            SecurityTrades = trades;
             SetupEventListening();
+            EnsureDataConsistency();
         }
 
         /// <inheritdoc/>
@@ -101,18 +103,13 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public override IValueList Copy()
         {
-            return new Security(Names, Shares, UnitPrice, Investments);
+            return new Security(Names, UnitPrice, SecurityTrades);
         }
 
         /// <inheritdoc/>
         public override bool Any()
         {
-            if (UnitPrice.Any() && Shares.Any())
-            {
-                return true;
-            }
-
-            return false;
+            return UnitPrice.Any() && Shares.Any();
         }
 
         /// <inheritdoc/>
