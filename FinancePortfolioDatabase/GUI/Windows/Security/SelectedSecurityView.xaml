@@ -111,18 +111,23 @@
                         </DataGridComboBoxColumn>
                         <DataGridTextColumn Header="Date"
                                             MinWidth="50"
+                                    Width="Auto"
                                             Binding="{Binding Path=Day, Converter={StaticResource StringToUKDate}, UpdateSourceTrigger=LostFocus}" />
                         <DataGridTextColumn Header="Prices"
                                             MinWidth="50"
+                                    Width="Auto"
                                             Binding="{Binding Path=UnitPrice, UpdateSourceTrigger=LostFocus}" />
                         <DataGridTextColumn Header="Num Shares"
                                             MinWidth="50"
+                                    Width="Auto"
                                             Binding="{Binding Path=NumberShares, UpdateSourceTrigger=LostFocus}" />
                         <DataGridTextColumn Header="Trade costs"
                                             MinWidth="50"
+                                    Width="Auto"
                                             Binding="{Binding Path=TradeCosts, UpdateSourceTrigger=LostFocus}" />
                         <DataGridTextColumn Header="Total Cost"
                                             MinWidth="50"
+                                    Width="Auto"
                                             IsReadOnly="True"
                                             Binding="{Binding Path=TotalCost, UpdateSourceTrigger=LostFocus}" />
                     </DataGrid.Columns>
@@ -133,8 +138,10 @@
                           AutoGenerateColumns="False">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Statistic"
+                                    Width="Auto"
                                             Binding="{Binding Path=StatType}"/>
                         <DataGridTextColumn Header="Value"
+                                    Width="Auto"
                                             Binding="{Binding Path=ValueAsObject}" />
                     </DataGrid.Columns>
                 </DataGrid>

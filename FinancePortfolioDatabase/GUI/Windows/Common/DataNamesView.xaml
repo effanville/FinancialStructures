@@ -111,23 +111,28 @@
                 </DataGridTemplateColumn>
                 <DataGridTextColumn Header="Company"
                                     MinWidth="70"
+                                    Width="Auto"
                                     Visibility="{Binding Data.DisplayCompany, Converter={StaticResource BoolToVis}, Source={StaticResource proxy}}"
                                     Binding="{Binding Path=Instance.Company,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Name"
                                     MinWidth="70"
+                                    Width="Auto"
                                     Binding="{Binding Path=Instance.Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Url"
                                     MinWidth="50"
-                                    MaxWidth="250"
+                                    Width="Auto"
                                     Binding="{Binding Path=Instance.Url,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Currency"
                                     MinWidth="20"
+                                    Width="Auto"
                                     Binding="{Binding Path=Instance.Currency,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Sectors"
                                     MinWidth="70"
+                                    Width="Auto"
                                     Binding="{Binding Path=Instance.SectorsFlat,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 <DataGridTextColumn Header="Notes"
                                     MinWidth="70"
+                                    Width="Auto"
                                     Binding="{Binding Path=Instance.Notes,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
             </DataGrid.Columns>
         </DataGrid>

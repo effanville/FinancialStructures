@@ -51,9 +51,11 @@
         <DataGrid.Columns>
             <DataGridTextColumn Header="Date"
                                 MinWidth="80"
+                                    Width="Auto"
                                 Binding="{Binding Path=Day, Converter={StaticResource StringToUKDate}, UpdateSourceTrigger=LostFocus}" />
             <DataGridTextColumn
                                 MinWidth="60"
+                                    Width="Auto"
                                 Binding="{Binding Path=Value, UpdateSourceTrigger=LostFocus}">
                 <DataGridTextColumn.Header>
                     <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.ValueName }" />
