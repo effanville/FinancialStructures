@@ -156,41 +156,42 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         {
             CloseWindowAction = CloseWindow;
             ExportCommand = new RelayCommand(ExecuteExportCommand);
+
+            foreach (Statistic stat in AccountStatisticsHelpers.DefaultSecurityStats())
+            {
+                SecurityColumnNames.Add(new Selectable<Statistic>(stat, true));
+            }
+
+            SecuritySortingField = Statistic.Company;
+
+            foreach (Statistic stat in AccountStatisticsHelpers.DefaultSectorStats())
+            {
+                SectorColumnNames.Add(new Selectable<Statistic>(stat, true));
+            }
+
+            SectorSortingField = Statistic.Name;
+
+            foreach (Statistic stat in AccountStatisticsHelpers.DefaultBankAccountStats())
+            {
+                BankColumnNames.Add(new Selectable<Statistic>(stat, true));
+            }
+
+            BankSortingField = Statistic.Company;
+
+            DisplayConditions.Add(new Selectable<string>(ValueFunds, true));
+            DisplayConditions.Add(new Selectable<string>(Spacing, true));
+            DisplayConditions.Add(new Selectable<string>(Colouring, true));
+            DisplayConditions.Add(new Selectable<string>(ShowSecurities, true));
+            DisplayConditions.Add(new Selectable<string>(ShowBankAccounts, true));
+            DisplayConditions.Add(new Selectable<string>(ShowSectors, true));
+            DisplayConditions.Add(new Selectable<string>(ShowBenchmarks, false));
+
             if (fUserConfiguration.HasLoaded)
             {
                 fUserConfiguration.RestoreFromConfiguration(this);
             }
             else
             {
-                foreach (Statistic stat in AccountStatisticsHelpers.AllStatistics())
-                {
-                    SecurityColumnNames.Add(new Selectable<Statistic>(stat, true));
-                }
-
-                SecuritySortingField = Statistic.Company;
-
-                foreach (Statistic stat in AccountStatisticsHelpers.DefaultSectorStats())
-                {
-                    SectorColumnNames.Add(new Selectable<Statistic>(stat, true));
-                }
-
-                SectorSortingField = Statistic.Name;
-
-                foreach (Statistic stat in AccountStatisticsHelpers.DefaultBankAccountStats())
-                {
-                    BankColumnNames.Add(new Selectable<Statistic>(stat, true));
-                }
-
-                BankSortingField = Statistic.Company;
-
-                DisplayConditions.Add(new Selectable<string>(ValueFunds, true));
-                DisplayConditions.Add(new Selectable<string>(Spacing, true));
-                DisplayConditions.Add(new Selectable<string>(Colouring, true));
-                DisplayConditions.Add(new Selectable<string>(ShowSecurities, true));
-                DisplayConditions.Add(new Selectable<string>(ShowBankAccounts, true));
-                DisplayConditions.Add(new Selectable<string>(ShowSectors, true));
-                DisplayConditions.Add(new Selectable<string>(ShowBenchmarks, false));
-
                 fUserConfiguration.HasLoaded = true;
                 fUserConfiguration.StoreConfiguration(this);
             }
