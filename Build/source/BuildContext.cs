@@ -51,7 +51,7 @@ public class BuildContext : FrostingContext
         : base(context)
     {
         BuildConfiguration = context.Arguments.GetArgument("configuration") ?? "Release";
-        Framework = context.Arguments.GetArgument("framework") ?? "net5.0-windows";
+        Framework = context.Arguments.GetArgument("framework") ?? "net6.0-windows";
         PublishDir = context.Arguments.GetArgument("publishDir") ?? $"../Publish/FPD/{Framework}";
         Runtime = context.Arguments.GetArgument("runtime") ?? "win-x64";
 
