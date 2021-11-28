@@ -311,19 +311,11 @@ namespace FinancePortfolioDatabase.Tests
               <SectorSortingField>Name</SectorSortingField>
               <SecurityColumnNames xmlns:d8p1=""http://schemas.datacontract.org/2004/07/Common.Structure.DisplayClasses"">
                 <d8p1:SelectableOfStatisticKZb_SPP6u>
-                  <d8p1:Instance>AccountType</d8p1:Instance>
-                  <d8p1:Selected>true</d8p1:Selected>
-                </d8p1:SelectableOfStatisticKZb_SPP6u>
-                <d8p1:SelectableOfStatisticKZb_SPP6u>
                   <d8p1:Instance>Company</d8p1:Instance>
                   <d8p1:Selected>true</d8p1:Selected>
                 </d8p1:SelectableOfStatisticKZb_SPP6u>
                 <d8p1:SelectableOfStatisticKZb_SPP6u>
                   <d8p1:Instance>Name</d8p1:Instance>
-                  <d8p1:Selected>true</d8p1:Selected>
-                </d8p1:SelectableOfStatisticKZb_SPP6u>
-                <d8p1:SelectableOfStatisticKZb_SPP6u>
-                  <d8p1:Instance>Currency</d8p1:Instance>
                   <d8p1:Selected>true</d8p1:Selected>
                 </d8p1:SelectableOfStatisticKZb_SPP6u>
                 <d8p1:SelectableOfStatisticKZb_SPP6u>
@@ -336,10 +328,6 @@ namespace FinancePortfolioDatabase.Tests
                 </d8p1:SelectableOfStatisticKZb_SPP6u>
                 <d8p1:SelectableOfStatisticKZb_SPP6u>
                   <d8p1:Instance>NumberUnits</d8p1:Instance>
-                  <d8p1:Selected>true</d8p1:Selected>
-                </d8p1:SelectableOfStatisticKZb_SPP6u>
-                <d8p1:SelectableOfStatisticKZb_SPP6u>
-                  <d8p1:Instance>MeanSharePrice</d8p1:Instance>
                   <d8p1:Selected>true</d8p1:Selected>
                 </d8p1:SelectableOfStatisticKZb_SPP6u>
                 <d8p1:SelectableOfStatisticKZb_SPP6u>
@@ -383,31 +371,11 @@ namespace FinancePortfolioDatabase.Tests
                   <d8p1:Selected>true</d8p1:Selected>
                 </d8p1:SelectableOfStatisticKZb_SPP6u>
                 <d8p1:SelectableOfStatisticKZb_SPP6u>
-                  <d8p1:Instance>DrawDown</d8p1:Instance>
-                  <d8p1:Selected>true</d8p1:Selected>
-                </d8p1:SelectableOfStatisticKZb_SPP6u>
-                <d8p1:SelectableOfStatisticKZb_SPP6u>
-                  <d8p1:Instance>MDD</d8p1:Instance>
-                  <d8p1:Selected>true</d8p1:Selected>
-                </d8p1:SelectableOfStatisticKZb_SPP6u>
-                <d8p1:SelectableOfStatisticKZb_SPP6u>
                   <d8p1:Instance>Sectors</d8p1:Instance>
                   <d8p1:Selected>true</d8p1:Selected>
                 </d8p1:SelectableOfStatisticKZb_SPP6u>
                 <d8p1:SelectableOfStatisticKZb_SPP6u>
-                  <d8p1:Instance>NumberOfAccounts</d8p1:Instance>
-                  <d8p1:Selected>true</d8p1:Selected>
-                </d8p1:SelectableOfStatisticKZb_SPP6u>
-                <d8p1:SelectableOfStatisticKZb_SPP6u>
                   <d8p1:Instance>FirstDate</d8p1:Instance>
-                  <d8p1:Selected>true</d8p1:Selected>
-                </d8p1:SelectableOfStatisticKZb_SPP6u>
-                <d8p1:SelectableOfStatisticKZb_SPP6u>
-                  <d8p1:Instance>LastInvestmentDate</d8p1:Instance>
-                  <d8p1:Selected>true</d8p1:Selected>
-                </d8p1:SelectableOfStatisticKZb_SPP6u>
-                <d8p1:SelectableOfStatisticKZb_SPP6u>
-                  <d8p1:Instance>LastPurchaseDate</d8p1:Instance>
                   <d8p1:Selected>true</d8p1:Selected>
                 </d8p1:SelectableOfStatisticKZb_SPP6u>
                 <d8p1:SelectableOfStatisticKZb_SPP6u>
