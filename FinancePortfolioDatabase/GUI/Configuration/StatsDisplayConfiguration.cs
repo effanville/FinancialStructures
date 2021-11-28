@@ -57,11 +57,12 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         {
             if (viewModel is StatsViewModel vm)
             {
-                vm.DisplayValueFunds = DisplayValueFunds;
                 if (StatisticNames != null && StatisticNames.Any())
                 {
                     vm.StatisticNames = StatisticNames;
                 }
+
+                vm.DisplayValueFunds = DisplayValueFunds;
             }
         }
     }

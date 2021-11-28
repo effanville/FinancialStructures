@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Common.Structure.DisplayClasses;
 using Common.UI;
@@ -28,12 +29,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         public bool DisplayValueFunds
         {
             get => fDisplayValueFunds;
-            set
-            {
-                SetAndNotify(ref fDisplayValueFunds, value, nameof(DisplayValueFunds));
-                fUserConfiguration.StoreConfiguration(this);
-                UpdateData();
-            }
+            set => SetAndNotify(ref fDisplayValueFunds, value, nameof(DisplayValueFunds));
         }
 
         /// <summary>
@@ -60,7 +56,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         public StatsViewModel(UiGlobals globals, UiStyles styles, IConfiguration userConfiguration, IPortfolio portfolio, Account account = Account.All, Statistic[] statsToView = null)
             : base(globals, styles, userConfiguration, portfolio, "Statistics", account)
         {
-            StatisticNames = statsToView != null ? statsToView.Select(stat => new Selectable<Statistic>(stat, true)).ToList() : AccountStatisticsHelpers.AllStatistics().Select(stat => new Selectable<Statistic>(stat, true)).ToList();
+            StatisticNames = statsToView != null
+                ? statsToView.Select(stat => new Selectable<Statistic>(stat, true)).ToList()
+                : AccountStatisticsHelpers.AllStatistics().Select(stat => new Selectable<Statistic>(stat, true)).ToList();
             if (fUserConfiguration.HasLoaded)
             {
                 fUserConfiguration.RestoreFromConfiguration(this);
@@ -71,8 +69,10 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 fUserConfiguration.HasLoaded = true;
             }
 
-            StatisticNames.ForEach(stat => stat.SelectedChanged += OnSelectedChanged);
             UpdateData(portfolio);
+
+            StatisticNames.ForEach(stat => stat.SelectedChanged += OnSelectedChanged);
+            PropertyChanged += OnPropertyChanged;
         }
 
         /// <summary>
@@ -82,6 +82,17 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         {
             fUserConfiguration.StoreConfiguration(this);
             UpdateData();
+        }
+        /// <summary>
+        /// Update to regenerate the statistics displayed if required.
+        /// </summary>
+        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(StatisticNames) || e.PropertyName == nameof(DisplayValueFunds))
+            {
+                fUserConfiguration.StoreConfiguration(this);
+                UpdateData();
+            }
         }
 
         /// <inheritdoc/>
