@@ -30,6 +30,11 @@ namespace FinancialStructures.FinanceStructures
         }
 
         /// <summary>
+        /// Compares to another valueList based upon the value on the specified date.
+        /// </summary>
+        int ValueComparison(IValueList otherList, DateTime dateTime);
+
+        /// <summary>
         /// Returns a copy of this <see cref="IValueList"/>.
         /// </summary>
         IValueList Copy();

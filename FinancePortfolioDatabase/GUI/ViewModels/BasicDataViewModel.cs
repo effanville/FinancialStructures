@@ -6,7 +6,6 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using Common.Structure.DataStructures;
-using Common.Structure.Extensions;
 using Common.Structure.NamingStructures;
 using Common.UI;
 using Common.UI.Commands;
@@ -129,13 +128,14 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             CultureInfo culture = CurrencyCultureHelpers.CurrencyCultureInfo(portfolio.BaseCurrency);
             SecurityAmountText = $"Total Value: {portfolio.TotalValue(Totals.Security).ToString("C2", culture)}";
             List<ISecurity> securities = portfolio.FundsThreadSafe.ToList();
-            securities.Sort((fund, otherFund) => otherFund.Value(DateTime.Today).Value.CompareTo(fund.Value(DateTime.Today).Value));
+
+            securities.Sort((fund, otherFund) => fund.ValueComparison(otherFund, DateTime.Today));
             TopSecurities = securities.Take(5).Select(name => new Labelled<TwoName, DailyValuation>(new TwoName(name.Names.Company, name.Names.Name), name.Value(DateTime.Today))).ToList();
 
             BankAccountTotalText = $"Total Bank Accounts: {portfolio.NumberOf(Account.BankAccount)}";
             BankAccountAmountText = $"Total Value: {portfolio.TotalValue(Totals.BankAccount).ToString("C2", culture)}";
             List<IExchangableValueList> bankAccounts = portfolio.BankAccountsThreadSafe.ToList();
-            bankAccounts.Sort((bank, otherBank) => otherBank.Value(DateTime.Today).Value.CompareTo(bank.Value(DateTime.Today).Value));
+            bankAccounts.Sort((bank, otherBank) => bank.ValueComparison(otherBank, DateTime.Today));
             TopBankAccounts = bankAccounts.Take(5).Select(name => new Labelled<TwoName, DailyValuation>(new TwoName(name.Names.Company, name.Names.Name), name.Value(DateTime.Today) ?? new DailyValuation(DateTime.Today, 0.0m))).ToList();
             Notes = portfolio.Notes.ToList();
         }

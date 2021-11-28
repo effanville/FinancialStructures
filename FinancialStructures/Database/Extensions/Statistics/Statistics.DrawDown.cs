@@ -95,7 +95,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 decimal value = 0.0m;
                 foreach (IValueList sec in securities)
                 {
-                    value += sec.Value(date).Value;
+                    value += sec.Value(date)?.Value ?? 0.0m;
                 }
 
                 valuations.Add(new DailyValuation(date, value));

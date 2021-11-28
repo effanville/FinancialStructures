@@ -166,5 +166,13 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
             return Names.CompareTo(other.Names);
         }
+
+        /// <inheritdoc />
+        public int ValueComparison(IValueList otherList, DateTime dateTime)
+        {
+            decimal thislistValue = Value(dateTime)?.Value ?? 0.0m;
+            decimal otherListValue = otherList.Value(dateTime)?.Value ?? 0.0m;
+            return otherListValue.CompareTo(thislistValue);
+        }
     }
 }
