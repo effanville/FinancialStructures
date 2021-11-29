@@ -15,17 +15,20 @@ namespace FinancialStructures.Tests.Database.Export
         private const string test =
 @"<table>
 <thead><tr>
-<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>Notes</th>
+<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>Sectors</th><th>Notes</th>
 </tr></thead>
 <tbody>
 <tr>
-<td>Totals</td><td>Security</td><td>£26,084.10</td><td></td>
+<td>Totals</td><td>Security</td><td>£26,084.10</td><td></td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>BankAccount</td><td>£1,102.20</td><td></td>
+<td>Totals</td><td>BankAccount</td><td>£1,102.20</td><td></td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>All</td><td>£27,186.30</td><td></td>
+<td>Totals</td><td>Asset</td><td>£0.00</td><td></td><td></td>
+</tr>
+<tr>
+<td>Totals</td><td>All</td><td>£27,186.30</td><td></td><td></td>
 </tr>
 </tbody>
 </table>
@@ -49,17 +52,17 @@ namespace FinancialStructures.Tests.Database.Export
 <h2>Bank Accounts Data</h2>
 <table>
 <thead><tr>
-<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>Notes</th>
+<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>Sectors</th><th>Notes</th>
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Santander</th><td>Current</td><td>£101.10</td><td></td>
+<th scope=""row"">Santander</th><td>Current</td><td>£101.10</td><td></td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Halifax</th><td>Current</td><td>£1,001.10</td><td></td>
+<th scope=""row"">Halifax</th><td>Current</td><td>£1,001.10</td><td></td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Totals</th><td>BankAccount</td><td>£1,102.20</td><td></td>
+<th scope=""row"">Totals</th><td>BankAccount</td><td>£1,102.20</td><td></td><td></td>
 </tr>
 </tbody>
 </table>
@@ -83,6 +86,7 @@ namespace FinancialStructures.Tests.Database.Export
             var portfolioStatistics = new PortfolioStatistics(portfolio, settings, new MockFileSystem());
             var exportSettings = PortfolioStatisticsExportSettings.DefaultSettings();
             var statsString = portfolioStatistics.ExportString(includeHtmlHeaders: false, ExportType.Html, exportSettings);
+            var actual = statsString.ToString();
             Assert.AreEqual(test, statsString.ToString());
         }
 
@@ -90,17 +94,20 @@ namespace FinancialStructures.Tests.Database.Export
         {
             yield return new TestCaseData(Statistic.Company, SortDirection.Ascending, @"<table>
 <thead><tr>
-<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>Notes</th>
+<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>Sectors</th><th>Notes</th>
 </tr></thead>
 <tbody>
 <tr>
-<td>Totals</td><td>Security</td><td>£26,084.10</td><td></td>
+<td>Totals</td><td>Security</td><td>£26,084.10</td><td></td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>BankAccount</td><td>£0.00</td><td></td>
+<td>Totals</td><td>BankAccount</td><td>£0.00</td><td></td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>All</td><td>£26,084.10</td><td></td>
+<td>Totals</td><td>Asset</td><td>£0.00</td><td></td><td></td>
+</tr>
+<tr>
+<td>Totals</td><td>All</td><td>£26,084.10</td><td></td><td></td>
 </tr>
 </tbody>
 </table>
@@ -125,17 +132,20 @@ namespace FinancialStructures.Tests.Database.Export
 ");
             yield return new TestCaseData(Statistic.Company, SortDirection.Descending, @"<table>
 <thead><tr>
-<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>Notes</th>
+<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>Sectors</th><th>Notes</th>
 </tr></thead>
 <tbody>
 <tr>
-<td>Totals</td><td>Security</td><td>£26,084.10</td><td></td>
+<td>Totals</td><td>Security</td><td>£26,084.10</td><td></td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>BankAccount</td><td>£0.00</td><td></td>
+<td>Totals</td><td>BankAccount</td><td>£0.00</td><td></td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>All</td><td>£26,084.10</td><td></td>
+<td>Totals</td><td>Asset</td><td>£0.00</td><td></td><td></td>
+</tr>
+<tr>
+<td>Totals</td><td>All</td><td>£26,084.10</td><td></td><td></td>
 </tr>
 </tbody>
 </table>
@@ -160,17 +170,20 @@ namespace FinancialStructures.Tests.Database.Export
 ");
             yield return new TestCaseData(Statistic.LatestValue, SortDirection.Ascending, @"<table>
 <thead><tr>
-<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>Notes</th>
+<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>Sectors</th><th>Notes</th>
 </tr></thead>
 <tbody>
 <tr>
-<td>Totals</td><td>Security</td><td>£26,084.10</td><td></td>
+<td>Totals</td><td>Security</td><td>£26,084.10</td><td></td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>BankAccount</td><td>£0.00</td><td></td>
+<td>Totals</td><td>BankAccount</td><td>£0.00</td><td></td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>All</td><td>£26,084.10</td><td></td>
+<td>Totals</td><td>Asset</td><td>£0.00</td><td></td><td></td>
+</tr>
+<tr>
+<td>Totals</td><td>All</td><td>£26,084.10</td><td></td><td></td>
 </tr>
 </tbody>
 </table>
@@ -195,17 +208,20 @@ namespace FinancialStructures.Tests.Database.Export
 ");
             yield return new TestCaseData(Statistic.LatestValue, SortDirection.Descending, @"<table>
 <thead><tr>
-<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>Notes</th>
+<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>Sectors</th><th>Notes</th>
 </tr></thead>
 <tbody>
 <tr>
-<td>Totals</td><td>Security</td><td>£26,084.10</td><td></td>
+<td>Totals</td><td>Security</td><td>£26,084.10</td><td></td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>BankAccount</td><td>£0.00</td><td></td>
+<td>Totals</td><td>BankAccount</td><td>£0.00</td><td></td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>All</td><td>£26,084.10</td><td></td>
+<td>Totals</td><td>Asset</td><td>£0.00</td><td></td><td></td>
+</tr>
+<tr>
+<td>Totals</td><td>All</td><td>£26,084.10</td><td></td><td></td>
 </tr>
 </tbody>
 </table>

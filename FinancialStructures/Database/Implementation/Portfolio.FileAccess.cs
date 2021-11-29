@@ -12,7 +12,7 @@ namespace FinancialStructures.Database.Implementation
         /// <inheritdoc/>
         public void LoadPortfolio(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null)
         {
-            if (fileSystem.File.Exists(filePath))
+            if (!string.IsNullOrWhiteSpace(filePath) && fileSystem.File.Exists(filePath))
             {
                 AllData database = XmlFileAccess.ReadFromXmlFile<AllData>(fileSystem, filePath, out string error);
                 if (database != null)
