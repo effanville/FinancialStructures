@@ -160,7 +160,7 @@ namespace FinancialStructures.Database.Download
                 }
                 case Website.Yahoo:
                 {
-                    value = ProcessFromYahoo(data);
+                    value = ProcessFromYahoo(data, url);
                     if (value == null)
                     {
                         _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from Yahoo url: {url}");
@@ -235,8 +235,18 @@ namespace FinancialStructures.Database.Download
             return null;
         }
 
-        private static decimal? ProcessFromYahoo(string data)
+        private static decimal? ProcessFromYahoo(string data, string url)
         {
+            string urlSearchString = "/quote/";
+            int startIndex = url.IndexOf(urlSearchString);
+            int endIndex = url.IndexOfAny(new[] { '/', '?' }, startIndex + urlSearchString.Length);
+            if (endIndex == -1)
+            {
+                endIndex = url.Length;
+            }
+            string code = url.Substring(startIndex + urlSearchString.Length, endIndex - startIndex - urlSearchString.Length);
+            code = code.Replace("%5E", "^").ToUpper();
+
             bool continuer(char c)
             {
                 if (char.IsDigit(c) || c == '.' || c == ',')
@@ -246,9 +256,17 @@ namespace FinancialStructures.Database.Download
 
                 return false;
             };
-            int number = 28;
-            string searchString = $"data-reactid=\"{number}\"><span class=\"Trsdu(0.3s) Fw(b) Fz(36px) Mb(-4px) D(ib)\" data-reactid=\"{number + 1}\">";
-            int poundsValue = data.IndexOf(searchString);
+
+            int number = 2;
+            int poundsValue = -1;
+            string searchString;
+            do
+            {
+                searchString = $"data-symbol=\"{code}\" data-test=\"qsp-price\" data-field=\"regularMarketPrice\" data-trend=\"none\" data-pricehint=\"{number}\"";
+                poundsValue = data.IndexOf(searchString);
+                number++;
+            }
+            while (poundsValue == -1 && number < 100);
             if (poundsValue != -1)
             {
                 string containsNewValue = data.Substring(poundsValue + searchString.Length, 20);
