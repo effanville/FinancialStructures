@@ -66,15 +66,17 @@ namespace FinancialStructures.FinanceStructures.Implementation
 
 
         /// <summary>
-        /// Constructor to make a new security from known data.
+        /// Constructor to make a new security from known data, where the data is assumed to be consistent.
         /// </summary>
-        private Security(NameData names, TimeList unitPrices, List<SecurityTrade> trades)
+        private Security(NameData names, TimeList unitPrices, TimeList shares, TimeList investments, List<SecurityTrade> trades)
+            : base(names.Copy())
         {
             Names = names.Copy();
             UnitPrice = unitPrices;
+            Shares = shares;
+            Investments = investments;
             SecurityTrades = trades;
             SetupEventListening();
-            EnsureDataConsistency();
         }
 
         /// <inheritdoc/>
@@ -103,7 +105,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public override IValueList Copy()
         {
-            return new Security(Names, UnitPrice, SecurityTrades);
+            return new Security(Names, UnitPrice, Shares, Investments, SecurityTrades);
         }
 
         /// <inheritdoc/>
