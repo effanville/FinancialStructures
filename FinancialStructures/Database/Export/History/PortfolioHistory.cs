@@ -87,21 +87,23 @@ namespace FinancialStructures.Database.Export.History
             List<DateTime> times = new List<DateTime>();
             if (!settings.SnapshotIncrement.Equals(0))
             {
-                DateTime calculationDate = portfolio.FirstValueDate(Totals.All);
-                while (calculationDate < DateTime.Today)
+                DateTime calculationDate = settings.EarliestDate != default ? settings.EarliestDate : portfolio.FirstValueDate(Totals.All);
+                DateTime lastDate = settings.LastDate != default ? settings.LastDate : portfolio.LatestDate(Totals.All);
+                while (calculationDate < lastDate)
                 {
                     times.Add(calculationDate);
                     calculationDate = calculationDate.AddDays(settings.SnapshotIncrement);
                 }
-                if (calculationDate == DateTime.Today)
+                if (calculationDate == lastDate)
                 {
                     times.Add(calculationDate);
                 }
-                if (calculationDate == DateTime.MaxValue && !times.Contains(DateTime.Today))
+                if (calculationDate == DateTime.MaxValue && !times.Contains(lastDate))
                 {
-                    times.Add(DateTime.Today);
+                    times.Add(lastDate);
                 }
             }
+
             return times;
         }
 

@@ -9,6 +9,7 @@ using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Export.History;
+using FinancialStructures.Database.Extensions.Values;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
 {
@@ -39,7 +40,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
         }
 
-
         private Dictionary<string, decimal> fDistributionValues2;
         public Dictionary<string, decimal> BankAccountValues
         {
@@ -69,11 +69,29 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 base.UpdateData(portfolio);
             }
 
-            PortfolioHistory history = new PortfolioHistory(DataStore, new PortfolioHistorySettings(20, generateSecurityRates: false, generateSectorRates: true));
-            HistoryStats = history.Snapshots;
-            SecurityValues = HistoryStats[HistoryStats.Count - 1].SecurityValues.Where(x => x.Value > 0).ToDictionary(x => x.Key, x => x.Value);
-            BankAccountValues = HistoryStats[HistoryStats.Count - 1].BankAccValues.Where(x => x.Value > 0).ToDictionary(x => x.Key, x => x.Value);
-            SectorValues = HistoryStats[HistoryStats.Count - 1].SectorValues.Where(x => x.Value > 0).ToDictionary(x => x.Key, x => x.Value);
+            DateTime firstDate = portfolio.FirstValueDate(Totals.All);
+            if (firstDate < new DateTime(1980, 1, 1))
+            {
+                firstDate = new DateTime(1980, 1, 1);
+            }
+
+            DateTime lastDate = portfolio.LatestDate(Totals.All);
+            if (lastDate == default(DateTime))
+            {
+                lastDate = DateTime.Today;
+            }
+
+            int numDays = (lastDate - firstDate).Days;
+            int snapshotGap = numDays / 100;
+
+            PortfolioHistory history = new PortfolioHistory(DataStore, new PortfolioHistorySettings(firstDate, lastDate, snapshotIncrement: snapshotGap, generateSecurityRates: false, generateSectorRates: true));
+            HistoryStats = history.Snapshots.Where(stat => stat.Date > new DateTime(1000, 1, 1)).ToList();
+            if (HistoryStats.Any())
+            {
+                SecurityValues = HistoryStats[HistoryStats.Count - 1].SecurityValues.Where(x => x.Value > 0).ToDictionary(x => x.Key, x => x.Value);
+                BankAccountValues = HistoryStats[HistoryStats.Count - 1].BankAccValues.Where(x => x.Value > 0).ToDictionary(x => x.Key, x => x.Value);
+                SectorValues = HistoryStats[HistoryStats.Count - 1].SectorValues.Where(x => x.Value > 0).ToDictionary(x => x.Key, x => x.Value);
+            }
 
             UpdateChart();
         }

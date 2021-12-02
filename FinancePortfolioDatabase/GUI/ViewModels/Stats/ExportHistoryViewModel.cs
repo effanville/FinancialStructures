@@ -104,7 +104,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                     result.FilePath += ".csv";
                 }
 
-                PortfolioHistory history = new PortfolioHistory(DataStore, new PortfolioHistorySettings(HistoryGapDays, GenerateSecurityValues, GenerateBankAccountValues, GenerateSectorValues, generateSecurityRates: false, generateSectorRates: false));
+                PortfolioHistory history = new PortfolioHistory(DataStore, new PortfolioHistorySettings(default, default, HistoryGapDays, GenerateSecurityValues, GenerateBankAccountValues, GenerateSectorValues, generateSecurityRates: false, generateSectorRates: false));
                 history.ExportToFile(result.FilePath, fUiGlobals.CurrentFileSystem);
                 fCloseWindowAction(new PortfolioHistoryViewModel(DataStore, Styles));
             }

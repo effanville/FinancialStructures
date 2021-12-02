@@ -1,4 +1,6 @@
-﻿namespace FinancialStructures.Database.Export.History
+﻿using System;
+
+namespace FinancialStructures.Database.Export.History
 {
     /// <summary>
     /// Contains settings for a <see cref="PortfolioHistory"/>.
@@ -51,6 +53,24 @@
         }
 
         /// <summary>
+        /// The earliest date to calculate data on.
+        /// </summary>
+        public DateTime EarliestDate
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
+        /// The Last date to calculate data on.
+        /// </summary>
+        public DateTime LastDate
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// The gap between days to record values for.
         /// </summary>
         public int SnapshotIncrement
@@ -63,13 +83,16 @@
         /// Default constructor.
         /// </summary>
         public PortfolioHistorySettings(
+            DateTime earliestDate = default,
+            DateTime lastDate = default,
             int snapshotIncrement = 20,
             bool generateSecurityValues = true,
             bool generateBankAccountValues = true,
             bool generateSectorValues = true,
-            bool generateSecurityRates = false,
-            bool generateSectorRates = false)
+            bool generateSecurityRates = false, bool generateSectorRates = false)
         {
+            EarliestDate = earliestDate;
+            LastDate = lastDate;
             SnapshotIncrement = snapshotIncrement;
             GenerateSecurityRates = generateSecurityRates;
             GenerateSectorRates = generateSectorRates;

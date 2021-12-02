@@ -35,7 +35,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
         public override void UpdateData(IPortfolio DataStore)
         {
             base.UpdateData(DataStore);
-            PortfolioHistory history = new PortfolioHistory(DataStore, new PortfolioHistorySettings(HistoryGapDays, generateSecurityRates: false, generateSectorRates: false));
+            PortfolioHistory history = new PortfolioHistory(DataStore, new PortfolioHistorySettings(snapshotIncrement: HistoryGapDays, generateSecurityRates: false, generateSectorRates: false));
             HistoryStats = history.Snapshots;
         }
 
