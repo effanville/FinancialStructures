@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 
@@ -14,25 +15,43 @@ namespace FinancialStructures.Database.Extensions.Values
         /// Returns the latest date held in the portfolio.
         /// </summary>
         /// <param name="portfolio">The database to query</param>
-        /// <param name="elementType">The type of element to search for. All searches for Bank accounts and securities.</param>
+        /// <param name="total">The type of element to search for. All searches for Bank accounts and securities.</param>
         /// <param name="name">An ancillary name to use in the case of Sectors</param>
         /// <returns></returns>
-        public static DateTime LatestDate(this IPortfolio portfolio, Totals elementType, TwoName name = null)
+        public static DateTime LatestDate(this IPortfolio portfolio, Totals total, TwoName name = null)
         {
-            switch (elementType)
+            switch (total)
             {
                 case Totals.Security:
                 {
                     return LatestDateOf(portfolio.FundsThreadSafe);
                 }
                 case Totals.SecurityCompany:
+                case Totals.BankAccountCompany:
                 {
-                    return LatestDateOf(portfolio.CompanyAccounts(Account.Security, name.Company));
+                    return LatestDateOf(portfolio.CompanyAccounts(total.ToAccount(), name.Company));
                 }
                 case Totals.Sector:
-                case Totals.SecuritySector:
                 {
-                    return LatestDateOf(portfolio.SectorAccounts(Account.Security, name));
+                    DateTime earlySecurity = portfolio.LatestDate(Totals.SecuritySector, name);
+                    DateTime earlyBank = portfolio.LatestDate(Totals.BankAccountSector, name);
+
+                    if (earlySecurity == default)
+                    {
+                        return earlyBank;
+                    }
+
+                    if (earlyBank == default)
+                    {
+                        return earlySecurity;
+                    }
+
+                    return earlySecurity > earlyBank ? earlySecurity : earlyBank;
+                }
+                case Totals.SecuritySector:
+                case Totals.BankAccountSector:
+                {
+                    return LatestDateOf(portfolio.SectorAccounts(total.ToAccount(), name));
                 }
                 case Totals.BankAccount:
                 {
@@ -46,6 +65,30 @@ namespace FinancialStructures.Database.Extensions.Values
                 {
                     return LatestDateOf(portfolio.CurrenciesThreadSafe);
                 }
+
+                case Totals.Company:
+                {
+                    DateTime earlySecurity = portfolio.LatestDate(Totals.SecurityCompany, name);
+                    DateTime earlyBank = portfolio.LatestDate(Totals.BankAccountCompany, name);
+
+                    if (earlySecurity == default)
+                    {
+                        return earlyBank;
+                    }
+
+                    if (earlyBank == default)
+                    {
+                        return earlySecurity;
+                    }
+
+                    return earlySecurity > earlyBank ? earlySecurity : earlyBank;
+                }
+                case Totals.CurrencySector:
+                case Totals.SecurityCurrency:
+                case Totals.BankAccountCurrency:
+                {
+                    return default;
+                }
                 case Totals.All:
                 default:
                 {
@@ -58,6 +101,11 @@ namespace FinancialStructures.Database.Extensions.Values
 
         private static DateTime LatestDateOf(IReadOnlyList<IValueList> accounts)
         {
+            if (!accounts.Any())
+            {
+                return default;
+            }
+
             DateTime output = DateTime.MinValue;
             foreach (IValueList sec in accounts)
             {
@@ -88,7 +136,7 @@ namespace FinancialStructures.Database.Extensions.Values
                 return desired.LatestValue()?.Day ?? DateTime.MinValue;
             }
 
-            return DateTime.MinValue;
+            return default;
         }
     }
 }
