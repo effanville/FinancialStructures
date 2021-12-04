@@ -1,4 +1,5 @@
-﻿using FinancialStructures.Database.Download;
+﻿using System.Threading.Tasks;
+using FinancialStructures.Database.Download;
 using FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
@@ -25,7 +26,12 @@ namespace FinancialStructures.Tests.Database
         [TestCase("https://uk.finance.yahoo.com/quote/JXN?p=JXN&.tsrc=fin-srch")]
         [TestCase("https://uk.finance.yahoo.com/quote/hgen.L")]
         [TestCase("https://markets.ft.com/data/funds/tearsheet/summary?s=gb00b4khn986:gbx")]
-        public void CanDownload(string url)
+        [TestCase("https://uk.finance.yahoo.com/quote/^FVX")]
+        [TestCase("https://uk.finance.yahoo.com/quote/USDGBP=X")]
+        [TestCase("https://uk.finance.yahoo.com/quote/HKDGBP=X")]
+        [TestCase("https://www.morningstar.co.uk/uk/etf/snapshot/snapshot.aspx?id=0P0000WAHE")]
+        [TestCase("https://www.morningstar.co.uk/uk/funds/snapshot/snapshot.aspx?id=F0GBR04S22")]
+        public async Task CanDownload(string url)
         {
             decimal value = 0;
             void getValue(decimal v)
@@ -33,7 +39,7 @@ namespace FinancialStructures.Tests.Database
                 value = v;
             }
 
-            PortfolioDataUpdater.DownloadLatestValue(new NameData("company", "name", url: url), getValue, null).Wait();
+            await PortfolioDataUpdater.DownloadLatestValue(new NameData("company", "name", url: url), getValue, null);
 
             Assert.AreNotEqual(0m, value);
         }

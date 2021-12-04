@@ -14,6 +14,9 @@ namespace FinancialStructures.Database.Download
     /// </summary>
     public static class PortfolioDataUpdater
     {
+        private static readonly string Pence = "GBX";
+        private static readonly string Pounds = "GBP";
+
         /// <summary>
         /// Updates specific object.
         /// </summary>
@@ -21,7 +24,6 @@ namespace FinancialStructures.Database.Download
         /// <param name="portfolio">The database storing the object</param>
         /// <param name="names">The name of the object.</param>
         /// <param name="reportLogger">An optional update logger.</param>
-        /// <returns></returns>
         public static async Task Download(Account accountType, IPortfolio portfolio, TwoName names, IReportLogger reportLogger = null)
         {
             List<Task> downloadTasks = new List<Task>();
@@ -37,39 +39,6 @@ namespace FinancialStructures.Database.Download
 
             await Task.WhenAll(downloadTasks);
             _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Downloading, "Downloader Completed");
-        }
-
-        private static readonly string Pence = "GBX";
-        private static readonly string Pounds = "GBP";
-
-        private static Website AddressType(string address)
-        {
-            if (address.Contains("morningstar"))
-            {
-                return Website.Morningstar;
-            }
-            if (address.Contains("yahoo"))
-            {
-                return Website.Yahoo;
-            }
-            if (address.Contains("google"))
-            {
-                return Website.Google;
-            }
-            if (address.Contains("trustnet"))
-            {
-                return Website.TrustNet;
-            }
-            if (address.Contains("bloomberg"))
-            {
-                return Website.Bloomberg;
-            }
-            if (address.Contains("markets.ft"))
-            {
-                return Website.FT;
-            }
-
-            return Website.NotImplemented;
         }
 
         private static List<Task> DownloadPortfolioLatest(IPortfolio portfo, IReportLogger reportLogger)
@@ -128,7 +97,7 @@ namespace FinancialStructures.Database.Download
         /// </summary>
         internal static async Task DownloadLatestValue(NameData names, Action<decimal> updateValue, IReportLogger reportLogger = null)
         {
-            string data = await WebDownloader.DownloadFromURLasync(names.Url, reportLogger).ConfigureAwait(false);
+            string data = await WebDownloader.DownloadFromURLasync(PrepareUrlString(names.Url), reportLogger).ConfigureAwait(false);
             if (string.IsNullOrEmpty(data))
             {
                 _ = reportLogger?.LogUsefulError(ReportLocation.Downloading, $"{names.Company}-{names.Name}: could not download data from {names.Url}");
@@ -142,97 +111,39 @@ namespace FinancialStructures.Database.Download
             updateValue(value.Value);
         }
 
+        private static string PrepareUrlString(string url)
+        {
+            return url.Replace("^", "%5E");
+        }
+
         private static bool ProcessDownloadString(string url, string data, IReportLogger reportLogger, out decimal? value)
         {
             value = null;
-            switch (AddressType(url))
+            if (url.Contains("morningstar"))
             {
-                case Website.FT:
-                {
-                    value = ProcessFromFT(data);
-                    if (value == null)
-                    {
-                        _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from FT url: {url}");
-                        return false;
-                    }
-
-                    return true;
-                }
-                case Website.Yahoo:
-                {
-                    value = ProcessFromYahoo(data, url);
-                    if (value == null)
-                    {
-                        _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from Yahoo url: {url}");
-                        return false;
-                    }
-
-                    return true;
-                }
-                default:
-                case Website.Morningstar:
-                {
-                    value = ProcessFromMorningstar(data);
-                    if (value == null)
-                    {
-                        _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from Morningstar url: {url}");
-                        return false;
-                    }
-
-                    return true;
-                }
-                case Website.Google:
-                case Website.TrustNet:
-                case Website.Bloomberg:
-                    _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Url not of a currently implemented downloadable type: {url}");
-                    return false;
+                value = Process(data, $"<td class=\"line text\">{Pounds}", Pence, 20);
             }
-        }
-
-        private static decimal? ProcessFromMorningstar(string data)
-        {
-            bool continuer(char c)
+            else if (url.Contains("yahoo"))
             {
-                if (char.IsDigit(c) || c == '.')
-                {
-                    return true;
-                }
+                value = ProcessFromYahoo(data, url);
+            }
+            else if (url.Contains("markets.ft"))
+            {
+                value = Process(data, $"Price ({Pounds})", $"Price ({Pence})", 200);
 
+            }
+            else
+            {
+                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Url not of a currently implemented type: {url}");
                 return false;
-            };
-
-            int penceValue = data.IndexOf(Pence);
-            if (penceValue != -1)
-            {
-                string containsNewValue = data.Substring(Pence.Length + penceValue, 20);
-
-                char[] digits = containsNewValue.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
-
-                string str = new string(digits);
-                if (string.IsNullOrEmpty(str))
-                {
-                    return null;
-                }
-
-                return decimal.Parse(str) / 100.0m;
-            }
-            string searchName = "<td class=\"line text\">" + Pounds;
-            int poundsValue = data.IndexOf(searchName);
-            if (poundsValue != -1)
-            {
-                string containsNewValue = data.Substring(searchName.Length + poundsValue, 20);
-                char[] digits = containsNewValue.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
-
-                string str = new string(digits);
-                if (string.IsNullOrEmpty(str))
-                {
-                    return null;
-                }
-
-                return decimal.Parse(str);
             }
 
-            return null;
+            if (value == null)
+            {
+                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from url: {url}");
+                return false;
+            }
+            return true;
         }
 
         private static decimal? ProcessFromYahoo(string data, string url)
@@ -247,93 +158,83 @@ namespace FinancialStructures.Database.Download
             string code = url.Substring(startIndex + urlSearchString.Length, endIndex - startIndex - urlSearchString.Length);
             code = code.Replace("%5E", "^").ToUpper();
 
-            bool continuer(char c)
+            // seems to be a bug in the website where it uses the wrong code.
+            if (code.Equals("USDGBP=X"))
             {
-                if (char.IsDigit(c) || c == '.' || c == ',')
-                {
-                    return true;
-                }
-
-                return false;
-            };
+                code = "GBP=X";
+            }
 
             int number = 2;
-            int poundsValue = -1;
+            int poundsIndex;
             string searchString;
             do
             {
                 searchString = $"data-symbol=\"{code}\" data-test=\"qsp-price\" data-field=\"regularMarketPrice\" data-trend=\"none\" data-pricehint=\"{number}\"";
-                poundsValue = data.IndexOf(searchString);
+                poundsIndex = data.IndexOf(searchString);
                 number++;
             }
-            while (poundsValue == -1 && number < 100);
-            if (poundsValue != -1)
+            while (poundsIndex == -1 && number < 100);
+
+            decimal? value = ParseDataIntoNumber(data, poundsIndex, searchString.Length, 20);
+            if (value.HasValue)
             {
-                string containsNewValue = data.Substring(poundsValue + searchString.Length, 20);
-
-                char[] digits = containsNewValue.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
-
-                string str = new string(digits);
-                if (string.IsNullOrEmpty(str))
-                {
-                    return null;
-                }
-                decimal i = decimal.Parse(str);
                 if (data.Contains("GBp"))
                 {
-                    i /= 100.0m;
+                    return value.Value / 100.0m;
                 }
-                return i;
+
+                return value.Value;
             }
 
             return null;
         }
 
-        private static decimal? ProcessFromFT(string data)
+        private static decimal? Process(string data, string poundsSearchString, string penceSearchString, int searchLength)
         {
-            bool continuer(char c)
+            int penceValueIndex = data.IndexOf(penceSearchString);
+            decimal? penceResult = ParseDataIntoNumber(data, penceValueIndex, penceSearchString.Length, searchLength);
+            if (penceResult.HasValue)
             {
-                if (char.IsDigit(c) || c == '.' || c == ',')
-                {
-                    return true;
-                }
-
-                return false;
-            };
-            string searchString = "Price (GBP)";
-            int poundsValue = data.IndexOf(searchString);
-            if (poundsValue != -1)
-            {
-                string containsNewValue = data.Substring(poundsValue + searchString.Length, 200);
-
-                char[] digits = containsNewValue.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
-
-                string str = new string(digits);
-                if (string.IsNullOrEmpty(str))
-                {
-                    return null;
-                }
-
-                return decimal.Parse(str);
+                return penceResult.Value / 100m;
             }
 
-            int penceValue = data.IndexOf("Price (GBX)");
-            if (penceValue != -1)
+            int poundsValueIndex = data.IndexOf(poundsSearchString);
+            decimal? poundsResult = ParseDataIntoNumber(data, poundsValueIndex, poundsSearchString.Length, searchLength);
+            if (poundsResult.HasValue)
             {
-                string containsNewValue = data.Substring(penceValue + searchString.Length, 200);
-
-                char[] digits = containsNewValue.SkipWhile(c => !char.IsDigit(c)).TakeWhile(continuer).ToArray();
-
-                string str = new string(digits);
-                if (string.IsNullOrEmpty(str))
-                {
-                    return null;
-                }
-                decimal i = decimal.Parse(str);
-                return i / 100.0m;
+                return poundsResult.Value;
             }
 
             return null;
+        }
+
+        private static decimal? ParseDataIntoNumber(string data, int startIndex, int offset, int searchLength)
+        {
+            if (startIndex == -1)
+            {
+                return null;
+            }
+
+            string shortenedDataString = data.Substring(startIndex + offset, searchLength);
+            char[] digits = shortenedDataString.SkipWhile(c => !char.IsDigit(c)).TakeWhile(IsNumericValue).ToArray();
+
+            string str = new string(digits);
+            if (string.IsNullOrEmpty(str))
+            {
+                return null;
+            }
+
+            return decimal.Parse(str);
+        }
+
+        private static bool IsNumericValue(char c)
+        {
+            if (char.IsDigit(c) || c == '.' || c == ',')
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
