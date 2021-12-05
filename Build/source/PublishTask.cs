@@ -27,6 +27,8 @@ namespace Build
                 Runtime = context.Runtime,
                 OutputDirectory = outputDir,
                 SelfContained = true,
+                PublishSingleFile = true,
+                PublishReadyToRun = true,
                 NoBuild = true
             };
             FilePath file = ((DirectoryPath)(context.RepoDir + context.Directory("/FinancePortfolioDatabase/"))).CombineWithFilePath("FinancePortfolioDatabase.csproj");
