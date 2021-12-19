@@ -212,7 +212,7 @@ namespace FinancialStructures.Database.Export.Statistics
                     }
                 }
 
-                securityDataToWrite.Sort(fDisplayOptions.SecurityDisplayOptions.SortingField, fDisplayOptions.SectorDisplayOptions.SortingDirection);
+                securityDataToWrite.Sort(fDisplayOptions.SecurityDisplayOptions.SortingField, fDisplayOptions.SecurityDisplayOptions.SortingDirection);
                 securityDataToWrite.AddRange(PortfolioSecurityStats);
 
                 SpacingAdd(settings.Spacing, fDisplayOptions.SecurityDisplayOptions.SortingField, ref securityDataToWrite);
