@@ -80,6 +80,16 @@ namespace FinancialStructures.Database.Export.History
         }
 
         /// <summary>
+        /// The max number of iterations to use for calculating
+        /// IRR.
+        /// </summary>
+        public int MaxIRRIterations
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Default constructor.
         /// </summary>
         public PortfolioHistorySettings(
@@ -89,7 +99,9 @@ namespace FinancialStructures.Database.Export.History
             bool generateSecurityValues = true,
             bool generateBankAccountValues = true,
             bool generateSectorValues = true,
-            bool generateSecurityRates = false, bool generateSectorRates = false)
+            bool generateSecurityRates = false,
+            bool generateSectorRates = false,
+            int maxIRRIterations = 10)
         {
             EarliestDate = earliestDate;
             LastDate = lastDate;
@@ -99,6 +111,7 @@ namespace FinancialStructures.Database.Export.History
             GenerateSecurityValues = generateSecurityValues;
             GenerateBankAccountValues = generateBankAccountValues;
             GenerateSectorValues = generateSectorValues;
+            MaxIRRIterations = maxIRRIterations;
         }
     }
 }

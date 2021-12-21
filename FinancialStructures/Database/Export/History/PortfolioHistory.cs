@@ -112,7 +112,15 @@ namespace FinancialStructures.Database.Export.History
             List<PortfolioDaySnapshot> outputs = new List<PortfolioDaySnapshot>();
             foreach (DateTime time in PrepareTimes(portfolio, settings))
             {
-                PortfolioDaySnapshot calcuationDateStatistics = new PortfolioDaySnapshot(time, portfolio, includeSecurityValues: true, includeBankValues: true, includeSectorValues: true, settings.GenerateSecurityRates, settings.GenerateSectorRates);
+                PortfolioDaySnapshot calcuationDateStatistics = new PortfolioDaySnapshot(
+                    time,
+                    portfolio,
+                    includeSecurityValues: true,
+                    includeBankValues: true,
+                    includeSectorValues: true,
+                    settings.GenerateSecurityRates,
+                    settings.GenerateSectorRates,
+                    settings.MaxIRRIterations);
                 outputs.Add(calcuationDateStatistics);
             }
 
@@ -128,7 +136,15 @@ namespace FinancialStructures.Database.Export.History
             {
                 Task task = Task.Run(() =>
                 {
-                    PortfolioDaySnapshot snapshot = new PortfolioDaySnapshot(time, portfolio, includeSecurityValues: true, includeBankValues: true, includeSectorValues: true, settings.GenerateSecurityRates, settings.GenerateSectorRates);
+                    PortfolioDaySnapshot snapshot = new PortfolioDaySnapshot(
+                        time,
+                        portfolio,
+                        includeSecurityValues: true,
+                        includeBankValues: true,
+                        includeSectorValues: true,
+                        settings.GenerateSecurityRates,
+                        settings.GenerateSectorRates,
+                        settings.MaxIRRIterations);
                     bag.Add(snapshot);
                 });
                 tasks.Add(task);

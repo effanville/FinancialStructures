@@ -186,19 +186,20 @@ namespace FinancialStructures.Database.Export.History
         /// <param name="includeSectorValues">Should sector values be calculated.</param>
         /// <param name="generateSecurityRates">Should security rates be calculated.</param>
         /// <param name="generateSectorRates">Should sector rates be calculated.</param>
-        public PortfolioDaySnapshot(DateTime date, IPortfolio portfolio, bool includeSecurityValues, bool includeBankValues, bool includeSectorValues, bool generateSecurityRates, bool generateSectorRates)
+        /// <param name="maxRateIterations">The number of iterations to use for calculating rate values.</param>
+        public PortfolioDaySnapshot(DateTime date, IPortfolio portfolio, bool includeSecurityValues, bool includeBankValues, bool includeSectorValues, bool generateSecurityRates, bool generateSectorRates, int maxRateIterations = 10)
         {
             Date = date;
             TotalValue = portfolio.TotalValue(Totals.All, date);
             BankAccValue = portfolio.TotalValue(Totals.BankAccount, date);
             SecurityValue = portfolio.TotalValue(Totals.Security, date);
 
-            AddSecurityValues(date, portfolio, includeSecurityValues, generateSecurityRates);
+            AddSecurityValues(date, portfolio, includeSecurityValues, generateSecurityRates, maxRateIterations);
             AddBankAccountValues(date, portfolio, includeBankValues);
-            AddSectorTotalValues(date, portfolio, includeSectorValues, generateSectorRates);
+            AddSectorTotalValues(date, portfolio, includeSectorValues, generateSectorRates, maxRateIterations);
         }
 
-        private void AddSecurityValues(DateTime date, IPortfolio portfolio, bool includeValues, bool generateRates)
+        private void AddSecurityValues(DateTime date, IPortfolio portfolio, bool includeValues, bool generateRates, int numIterations)
         {
             if (!includeValues && !generateRates)
             {
@@ -209,7 +210,7 @@ namespace FinancialStructures.Database.Export.History
             companyNames.Sort();
 
             DateTime firstDate = portfolio.FirstValueDate(Totals.Security);
-            TotalSecurityIRR = firstDate > date ? 0 : portfolio.TotalIRR(Totals.Security, firstDate, date);
+            TotalSecurityIRR = firstDate > date ? 0 : portfolio.TotalIRR(Totals.Security, firstDate, date, numIterations: numIterations);
 
             foreach (string companyName in companyNames)
             {
@@ -223,7 +224,7 @@ namespace FinancialStructures.Database.Export.History
                     Security1YrCar.Add(companyName, portfolio.TotalIRR(Totals.SecurityCompany, date.AddDays(-365), date, new TwoName(companyName)));
 
                     DateTime firstCompanyDate = portfolio.FirstValueDate(Totals.SecurityCompany, new TwoName(companyName));
-                    double totalIRR = date < firstCompanyDate ? 0.0 : portfolio.TotalIRR(Totals.SecurityCompany, firstCompanyDate, date, new TwoName(companyName));
+                    double totalIRR = date < firstCompanyDate ? 0.0 : portfolio.TotalIRR(Totals.SecurityCompany, firstCompanyDate, date, new TwoName(companyName), numIterations);
                     SecurityTotalCar.Add(companyName, totalIRR);
                 }
             }
@@ -244,7 +245,7 @@ namespace FinancialStructures.Database.Export.History
             }
         }
 
-        private void AddSectorTotalValues(DateTime date, IPortfolio portfolio, bool includeValues, bool generateRates)
+        private void AddSectorTotalValues(DateTime date, IPortfolio portfolio, bool includeValues, bool generateRates, int numIterations)
         {
             if (!includeValues && !generateRates)
             {
@@ -262,7 +263,7 @@ namespace FinancialStructures.Database.Export.History
                 if (generateRates)
                 {
                     DateTime firstDate = portfolio.FirstValueDate(Totals.Sector, new TwoName(null, sectorName));
-                    double sectorCAR = date < firstDate ? 0.0 : portfolio.TotalIRR(Totals.Sector, firstDate, date, new TwoName(null, sectorName));
+                    double sectorCAR = date < firstDate ? 0.0 : portfolio.TotalIRR(Totals.Sector, firstDate, date, new TwoName(null, sectorName), numIterations);
                     CurrentSectorTotalCar.Add(sectorName, sectorCAR);
                 }
             }
