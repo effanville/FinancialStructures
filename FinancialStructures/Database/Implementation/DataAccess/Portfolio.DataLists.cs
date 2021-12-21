@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
@@ -41,11 +43,6 @@ namespace FinancialStructures.Database.Implementation
             }
 
             return PortfoCopy;
-        }
-        /// <inheritdoc/>
-        public IReadOnlyList<IValueList> CompanyAccounts(string company)
-        {
-            return CompanyAccounts(Account.All, company);
         }
 
         /// <inheritdoc/>
@@ -137,6 +134,45 @@ namespace FinancialStructures.Database.Implementation
 
             accountList.Sort();
             return accountList;
+        }
+
+        /// <inheritdoc/>
+        public IReadOnlyList<IValueList> Accounts(Totals account, TwoName name)
+        {
+            switch (account)
+            {
+                case Totals.SecurityCompany:
+                {
+                    return FundsThreadSafe.Where(fund => fund.Names.Company == name.Company).ToList();
+                }
+                case Totals.BankAccountCompany:
+                {
+                    return BankAccountsThreadSafe.Where(fund => fund.Names.Company == name.Company).ToList();
+                }
+                case Totals.Security:
+                {
+                    return FundsThreadSafe;
+                }
+                case Totals.Benchmark:
+                {
+                    return BenchMarksThreadSafe;
+                }
+                case Totals.BankAccount:
+                {
+                    return BankAccountsThreadSafe;
+                }
+                case Totals.Currency:
+                case Totals.Sector:
+                case Totals.SecuritySector:
+                case Totals.BankAccountSector:
+                case Totals.CurrencySector:
+                case Totals.SecurityCurrency:
+                case Totals.BankAccountCurrency:
+                case Totals.Company:
+                case Totals.All:
+                default:
+                    throw new NotImplementedException($"Total value {account} not implemented for {nameof(IPortfolio)}.{nameof(Accounts)}");
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using FinancialStructures.FinanceStructures;
+﻿using System.Collections.Generic;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Statistics.Implementation
@@ -63,7 +64,15 @@ namespace FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public void Calculate(IPortfolio portfolio, Totals total, TwoName name)
         {
-            Value = 0.0;
+            var accounts = portfolio.Accounts(total, name);
+            HashSet<string> sectors = new HashSet<string>();
+
+            foreach (var account in accounts)
+            {
+                sectors.UnionWith(account.Names.Sectors);
+            }
+
+            StringValue = NameData.FlattenSectors(sectors);
         }
 
         /// <inheritdoc/>

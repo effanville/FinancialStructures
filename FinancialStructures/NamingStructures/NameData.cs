@@ -42,7 +42,7 @@ namespace FinancialStructures.NamingStructures
         [XmlIgnore]
         public string SectorsFlat
         {
-            get => Sectors != null ? string.Join(",", Sectors) : null;
+            get => FlattenSectors(Sectors);
             set
             {
                 HashSet<string> sectorList = new HashSet<string>();
@@ -60,6 +60,14 @@ namespace FinancialStructures.NamingStructures
 
                 Sectors = sectorList;
             }
+        }
+
+        /// <summary>
+        /// Converts a list of sectors into a string.
+        /// </summary>
+        public static string FlattenSectors(HashSet<string> sectorsSet)
+        {
+            return sectorsSet != null ? string.Join(",", sectorsSet) : null;
         }
 
         /// <summary>
