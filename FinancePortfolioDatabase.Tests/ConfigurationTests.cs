@@ -15,6 +15,12 @@ namespace FinancePortfolioDatabase.Tests
     {
         private readonly string DefaultSerializedConfiguration =
 @"<UserConfiguration xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/FinancePortfolioDatabase.GUI.Configuration"">
+  <ProgramVersion xmlns:d2p1=""http://schemas.datacontract.org/2004/07/System"">
+    <d2p1:_Build>0</d2p1:_Build>
+    <d2p1:_Major>21</d2p1:_Major>
+    <d2p1:_Minor>7</d2p1:_Minor>
+    <d2p1:_Revision>1222</d2p1:_Revision>
+  </ProgramVersion>
   <ChildConfigurations xmlns:d2p1=""http://schemas.microsoft.com/2003/10/Serialization/Arrays"">
     <d2p1:KeyValueOfstringanyType>
       <d2p1:Key>StatsViewModel</d2p1:Key>
@@ -55,6 +61,14 @@ namespace FinancePortfolioDatabase.Tests
               <HistoryGapDays>0</HistoryGapDays>
             </d2p1:Value>
           </d2p1:KeyValueOfstringanyType>
+          <d2p1:KeyValueOfstringanyType>
+            <d2p1:Key>ExportReportViewModel</d2p1:Key>
+            <d2p1:Value i:type=""ExportReportConfiguration"">
+              <ChildConfigurations />
+              <DisplayValueFunds>false</DisplayValueFunds>
+              <HasLoaded>false</HasLoaded>
+            </d2p1:Value>
+          </d2p1:KeyValueOfstringanyType>
         </ChildConfigurations>
         <HasLoaded>false</HasLoaded>
       </d2p1:Value>
@@ -64,6 +78,12 @@ namespace FinancePortfolioDatabase.Tests
 
         private readonly string ExampleSerializedConfiguration =
 @"<UserConfiguration xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/FinancePortfolioDatabase.GUI.Configuration"">
+  <ProgramVersion xmlns:d2p1=""http://schemas.datacontract.org/2004/07/System"">
+    <d2p1:_Build>0</d2p1:_Build>
+    <d2p1:_Major>21</d2p1:_Major>
+    <d2p1:_Minor>7</d2p1:_Minor>
+    <d2p1:_Revision>1222</d2p1:_Revision>
+  </ProgramVersion>
   <ChildConfigurations xmlns:d2p1=""http://schemas.microsoft.com/2003/10/Serialization/Arrays"">
     <d2p1:KeyValueOfstringanyType>
       <d2p1:Key>StatsViewModel</d2p1:Key>
@@ -410,6 +430,14 @@ namespace FinancePortfolioDatabase.Tests
               <HistoryGapDays>20</HistoryGapDays>
             </d2p1:Value>
           </d2p1:KeyValueOfstringanyType>
+          <d2p1:KeyValueOfstringanyType>
+            <d2p1:Key>ExportReportViewModel</d2p1:Key>
+            <d2p1:Value i:type=""ExportReportConfiguration"">
+              <ChildConfigurations />
+              <DisplayValueFunds>true</DisplayValueFunds>
+              <HasLoaded>true</HasLoaded>
+            </d2p1:Value>
+          </d2p1:KeyValueOfstringanyType>
         </ChildConfigurations>
         <HasLoaded>true</HasLoaded>
       </d2p1:Value>
@@ -471,7 +499,7 @@ namespace FinancePortfolioDatabase.Tests
             Assert.Multiple(() =>
             {
                 StatsCreatorConfiguration statsCreatorVM = config.ChildConfigurations[UserConfiguration.StatsCreator] as StatsCreatorConfiguration;
-                Assert.AreEqual(2, statsCreatorVM.ChildConfigurations.Count);
+                Assert.AreEqual(3, statsCreatorVM.ChildConfigurations.Count);
 
                 ExportStatsConfiguration exportStats = statsCreatorVM.ChildConfigurations[UserConfiguration.StatsOptions] as ExportStatsConfiguration;
                 Assert.AreEqual(false, exportStats.HasLoaded);
@@ -535,7 +563,7 @@ namespace FinancePortfolioDatabase.Tests
             Assert.Multiple(() =>
             {
                 StatsCreatorConfiguration statsCreatorVM = newConfig.ChildConfigurations[UserConfiguration.StatsCreator] as StatsCreatorConfiguration;
-                Assert.AreEqual(2, statsCreatorVM.ChildConfigurations.Count);
+                Assert.AreEqual(3, statsCreatorVM.ChildConfigurations.Count);
 
                 ExportStatsConfiguration exportStats = statsCreatorVM.ChildConfigurations[UserConfiguration.StatsOptions] as ExportStatsConfiguration;
                 Assert.AreEqual(false, exportStats.HasLoaded);
