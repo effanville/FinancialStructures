@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Xml;
@@ -16,6 +17,7 @@ namespace FinancePortfolioDatabase.GUI.Configuration
     [DataContract]
     public sealed class UserConfiguration : IConfiguration
     {
+        private readonly IReadOnlyList<Migration<UserConfiguration>> fMigrations;
         private readonly Type[] fExpectedConfigurationTypes = new Type[]
         {
             typeof(StatsDisplayConfiguration),
@@ -44,8 +46,18 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         /// </summary>
         public const string HistoryOptions = nameof(ExportHistoryViewModel);
 
+        /// <summary>
+        /// The version of the program this version is associated to.
+        /// </summary>
+        [DataMember(Order = 1)]
+        public Version ProgramVersion
+        {
+            get;
+            set;
+        }
+
         /// <inheritdoc/>
-        [DataMember]
+        [DataMember(Order = 2)]
         public Dictionary<string, IConfiguration> ChildConfigurations
         {
             get;
@@ -102,11 +114,17 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         {
             try
             {
+                Assembly assembly = Assembly.GetExecutingAssembly();
                 DataContractSerializer serializer = new DataContractSerializer(typeof(UserConfiguration), fExpectedConfigurationTypes);
                 using (Stream stream = fileSystem.FileStream.Create(filePath, FileMode.Open))
                 using (XmlTextReader reader = new XmlTextReader(stream))
                 {
                     UserConfiguration configuration = (UserConfiguration)serializer.ReadObject(reader);
+                    foreach (var migration in fMigrations)
+                    {
+                        migration.EnactMigration(configuration, configuration.ProgramVersion, assembly.GetName().Version);
+                    }
+
                     ChildConfigurations = configuration.ChildConfigurations;
                 }
             }
@@ -121,6 +139,12 @@ namespace FinancePortfolioDatabase.GUI.Configuration
         {
             try
             {
+                if (ProgramVersion == default)
+                {
+                    Assembly assembly = Assembly.GetExecutingAssembly();
+                    ProgramVersion = assembly.GetName().Version;
+                }
+
                 string dir = fileSystem.Path.GetDirectoryName(filePath);
                 _ = fileSystem.Directory.CreateDirectory(dir);
                 DataContractSerializer serializer = new DataContractSerializer(typeof(UserConfiguration), fExpectedConfigurationTypes);
