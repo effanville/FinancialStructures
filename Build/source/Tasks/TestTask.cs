@@ -3,7 +3,7 @@ using Cake.Common.Tools.DotNetCore.Test;
 using Cake.Core.IO;
 using Cake.Frosting;
 
-namespace Build
+namespace Build.Tasks
 {
     [TaskName("Test")]
     [IsDependentOn(typeof(BuildTask))]
@@ -16,7 +16,8 @@ namespace Build
                 Configuration = context.BuildConfiguration,
                 NoBuild = true
             };
-            FilePath file = context.RepoDir.CombineWithFilePath("FinancePortfolioDatabase.sln");
+
+            FilePath file = context.SolutionFilePath();
             context.DotNetCoreTest(file.FullPath, settings);
         }
     }

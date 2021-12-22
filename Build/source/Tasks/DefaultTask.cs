@@ -1,9 +1,10 @@
 ﻿using Cake.Frosting;
 
-namespace Build
+namespace Build.Tasks
 {
     [TaskName("Default")]
-    [IsDependentOn(typeof(CopyPublishTask))]
+    [IsDependentOn(typeof(PublishTask))]
+    [IsDependentOn(typeof(NugetPublishTask))]
     public sealed class DefaultTask : FrostingTask<BuildContext>
     {
     }
