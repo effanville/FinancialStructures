@@ -32,7 +32,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         /// </summary>
         internal readonly IReportLogger ReportLogger;
         private readonly UiGlobals fUiGlobals;
-        private UserConfiguration fUserConfiguration;
+        internal UserConfiguration fUserConfiguration;
         private string fConfigLocation;
 
         private UiStyles fStyles;

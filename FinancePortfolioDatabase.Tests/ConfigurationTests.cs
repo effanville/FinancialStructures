@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using Common.UI;
@@ -16,10 +17,10 @@ namespace FinancePortfolioDatabase.Tests
         private readonly string DefaultSerializedConfiguration =
 @"<UserConfiguration xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/FinancePortfolioDatabase.GUI.Configuration"">
   <ProgramVersion xmlns:d2p1=""http://schemas.datacontract.org/2004/07/System"">
-    <d2p1:_Build>0</d2p1:_Build>
-    <d2p1:_Major>21</d2p1:_Major>
-    <d2p1:_Minor>7</d2p1:_Minor>
-    <d2p1:_Revision>1222</d2p1:_Revision>
+    <d2p1:_Build>3</d2p1:_Build>
+    <d2p1:_Major>1</d2p1:_Major>
+    <d2p1:_Minor>2</d2p1:_Minor>
+    <d2p1:_Revision>4</d2p1:_Revision>
   </ProgramVersion>
   <ChildConfigurations xmlns:d2p1=""http://schemas.microsoft.com/2003/10/Serialization/Arrays"">
     <d2p1:KeyValueOfstringanyType>
@@ -79,10 +80,10 @@ namespace FinancePortfolioDatabase.Tests
         private readonly string ExampleSerializedConfiguration =
 @"<UserConfiguration xmlns:i=""http://www.w3.org/2001/XMLSchema-instance"" xmlns=""http://schemas.datacontract.org/2004/07/FinancePortfolioDatabase.GUI.Configuration"">
   <ProgramVersion xmlns:d2p1=""http://schemas.datacontract.org/2004/07/System"">
-    <d2p1:_Build>0</d2p1:_Build>
-    <d2p1:_Major>21</d2p1:_Major>
-    <d2p1:_Minor>7</d2p1:_Minor>
-    <d2p1:_Revision>1222</d2p1:_Revision>
+    <d2p1:_Build>3</d2p1:_Build>
+    <d2p1:_Major>1</d2p1:_Major>
+    <d2p1:_Minor>2</d2p1:_Minor>
+    <d2p1:_Revision>4</d2p1:_Revision>
   </ProgramVersion>
   <ChildConfigurations xmlns:d2p1=""http://schemas.microsoft.com/2003/10/Serialization/Arrays"">
     <d2p1:KeyValueOfstringanyType>
@@ -515,6 +516,8 @@ namespace FinancePortfolioDatabase.Tests
         {
             MockFileSystem tempFileSystem = new MockFileSystem();
             UserConfiguration config = new UserConfiguration();
+
+            config.ProgramVersion = new Version(1, 2, 3, 4);
             string testPath = "c:/temp/saved/user.config";
             config.SaveConfiguration(testPath, tempFileSystem);
 
@@ -531,6 +534,7 @@ namespace FinancePortfolioDatabase.Tests
             UiGlobals globals = TestSetupHelper.CreateGlobalsMock(tempFileSystem, TestSetupHelper.CreateFileMock(testPath).Object, TestSetupHelper.CreateDialogMock().Object);
 
             var vm = new MainWindowViewModel(globals);
+            vm.fUserConfiguration.ProgramVersion = new Version(1, 2, 3, 4);
             string testConfigPath = "c:/temp/saved/user.config";
             vm.SaveConfig(testConfigPath, tempFileSystem);
 
@@ -543,6 +547,7 @@ namespace FinancePortfolioDatabase.Tests
         {
             MockFileSystem tempFileSystem = new MockFileSystem();
             UserConfiguration config = new UserConfiguration();
+            config.ProgramVersion = new Version(1, 2, 3, 4);
             string testPath = "c:/temp/saved/user.config";
             config.SaveConfiguration(testPath, tempFileSystem);
 
