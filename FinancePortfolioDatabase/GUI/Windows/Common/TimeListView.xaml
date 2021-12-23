@@ -23,7 +23,10 @@
               HorizontalGridLinesBrush="DeepSkyBlue"
               VerticalGridLinesBrush="DeepSkyBlue"
               Background="AliceBlue"
-              ScrollViewer.VerticalScrollBarVisibility="Visible">
+              ScrollViewer.VerticalScrollBarVisibility="Visible"
+              KeyDown="DataGrid_KeyDown"
+              PreviewKeyDown="DataGrid_KeyDown"
+              AddingNewItem="DataGrid_AddingNewItem">
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="BeginningEdit">
                 <i:InvokeCommandAction Command="{Binding PreEditCommand}" />
@@ -31,31 +34,18 @@
             <i:EventTrigger EventName="RowEditEnding">
                 <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=AddEditDataCommand}" />
             </i:EventTrigger>
-            <i:EventTrigger EventName="AddingNewItem">
-                <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=AddDefaultDataCommand}"
-                                       PassEventArgsToCommand="True" />
-            </i:EventTrigger>
             <i:EventTrigger EventName="SelectionChanged">
                 <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=SelectionChangedCommand}"
                                        CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=CurrentItem}" />
-            </i:EventTrigger>
-            <i:EventTrigger EventName="PreviewKeyDown">
-                <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=DeleteValuationCommand}"
-                                       PassEventArgsToCommand="True" />
-            </i:EventTrigger>
-            <i:EventTrigger EventName="KeyDown">
-                <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=DeleteValuationCommand}"
-                                       PassEventArgsToCommand="True" />
             </i:EventTrigger>
         </i:Interaction.Triggers>
         <DataGrid.Columns>
             <DataGridTextColumn Header="Date"
                                 MinWidth="80"
-                                    Width="Auto"
+                                Width="Auto"
                                 Binding="{Binding Path=Day, Converter={StaticResource StringToUKDate}, UpdateSourceTrigger=LostFocus}" />
-            <DataGridTextColumn
-                                MinWidth="60"
-                                    Width="Auto"
+            <DataGridTextColumn MinWidth="60"
+                                Width="Auto"
                                 Binding="{Binding Path=Value, UpdateSourceTrigger=LostFocus}">
                 <DataGridTextColumn.Header>
                     <TextBlock Text="{Binding RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}, Path=DataContext.ValueName }" />
