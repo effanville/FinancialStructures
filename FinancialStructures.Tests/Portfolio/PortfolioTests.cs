@@ -1,4 +1,6 @@
-﻿using FinancialStructures.Database.Implementation;
+﻿using System.IO.Abstractions;
+using FinancialStructures.Database;
+using FinancialStructures.Database.Extensions;
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.Database
@@ -6,18 +8,16 @@ namespace FinancialStructures.Tests.Database
     [TestFixture]
     public class PortfolioTests
     {
-        [TestCase("fish.txt", ".txt", "", "fish")]
-        [TestCase("c:/dev/fish.txt", ".txt", "c:\\dev", "fish")]
-        [TestCase("c:/dev/super.txt", ".txt", "c:\\dev", "super")]
-        [TestCase("c:/dev/.txt", ".txt", "c:\\dev", "")]
-        public void FilePathAttributes(string filePath, string extension, string directory, string databaseName)
+        [TestCase("fish.txt", "fish")]
+        [TestCase("c:/dev/fish.txt", "fish")]
+        [TestCase("c:/dev/super.txt", "super")]
+        [TestCase("c:/dev/.txt", "")]
+        public void FilePathAttributes(string filePath, string databaseName)
         {
-            var portfolio = new Portfolio();
-            portfolio.SetFilePath(filePath);
+            IPortfolio portfolio = PortfolioFactory.GenerateEmpty();
+            portfolio.FilePath = filePath;
             Assert.AreEqual(filePath, portfolio.FilePath);
-            Assert.AreEqual(extension, portfolio.Extension);
-            Assert.AreEqual(directory, portfolio.Directory);
-            Assert.AreEqual(databaseName, portfolio.DatabaseName);
+            Assert.AreEqual(databaseName, portfolio.DatabaseName(new FileSystem()));
         }
     }
 }

@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <IsPackable>false</IsPackable>
+  </PropertyGroup>
+
+  <Import Project="..\Build\CommonProperties.Build.props" />
+
+  <ItemGroup>
+    <PackageReference Include="Common.UI" Version="1.0.9" />
+    <PackageReference Include="Moq" Version="4.16.1" />
+    <PackageReference Include="nunit" Version="3.13.2" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+    <PackageReference Include="System.IO.Abstractions.TestingHelpers" Version="13.2.47" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\FinancePortfolioDatabase\FinancePortfolioDatabase.csproj" />
+    <ProjectReference Include="..\FinancialStructures\FinancialStructures.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="ExampleDatabases\BasicTestDatabase.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="ExampleDatabases\user.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+	
+</Project>

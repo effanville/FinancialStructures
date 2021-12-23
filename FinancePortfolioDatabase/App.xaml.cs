@@ -4,10 +4,11 @@ using System.Windows;
 using System.Windows.Markup;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
-using FinanceWindows;
+using FinancePortfolioDatabase.GUI.Windows;
 
 namespace FinancePortfolioDatabase
 {
+
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
@@ -29,6 +30,7 @@ namespace FinancePortfolioDatabase
         /// </summary>
         public void Application_Startup(object sender, StartupEventArgs e)
         {
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             if (CultureInfo.CurrentUICulture.IetfLanguageTag == "en-US")
             {
                 CultureInfo UKEnglishCulture = new CultureInfo("en-GB");
@@ -36,7 +38,6 @@ namespace FinancePortfolioDatabase
                     typeof(FrameworkElement),
                     new FrameworkPropertyMetadata(
                     XmlLanguage.GetLanguage(UKEnglishCulture.IetfLanguageTag)));
-                AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             }
             else
             {
@@ -44,7 +45,6 @@ namespace FinancePortfolioDatabase
                     typeof(FrameworkElement),
                     new FrameworkPropertyMetadata(
                     XmlLanguage.GetLanguage(CultureInfo.CurrentUICulture.IetfLanguageTag)));
-                AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
             }
         }
 
@@ -54,9 +54,9 @@ namespace FinancePortfolioDatabase
         public void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             //Handling the exception within the UnhandledExcpeiton handler.
-            _ = MessageBox.Show(e.Exception.Message + Environment.NewLine + e.Exception.StackTrace, "Exception Caught", MessageBoxButton.OK, MessageBoxImage.Error);
-            var main = Current.MainWindow as MainWindow;
-            main.PrintErrorLog(e.Exception);
+            _ = MessageBox.Show(e?.Exception?.Message + Environment.NewLine + e?.Exception?.StackTrace, "Exception Caught", MessageBoxButton.OK, MessageBoxImage.Error);
+            MainWindow main = Current.MainWindow as MainWindow;
+            main.PrintErrorLog(e?.Exception);
             e.Handled = true;
         }
 
@@ -64,7 +64,7 @@ namespace FinancePortfolioDatabase
         {
             Exception ex = e.ExceptionObject as Exception;
             _ = MessageBox.Show(ex.Message, "Uncaught Thread Exception", MessageBoxButton.OK, MessageBoxImage.Error);
-            var main = Current.MainWindow as MainWindow;
+            MainWindow main = Current.MainWindow as MainWindow;
             main.PrintErrorLog(ex);
         }
     }

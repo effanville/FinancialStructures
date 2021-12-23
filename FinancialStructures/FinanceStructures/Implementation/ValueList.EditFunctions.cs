@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Common.Structure.DataStructures;
+using Common.Structure.Reporting;
 using FinancialStructures.NamingStructures;
-using StructureCommon.DataStructures;
-using StructureCommon.Reporting;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {
@@ -13,8 +13,6 @@ namespace FinancialStructures.FinanceStructures.Implementation
     /// </summary>
     public partial class ValueList
     {
-
-
         /// <inheritdoc/>
         public virtual bool EditNameData(NameData newNames)
         {
@@ -24,14 +22,21 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public virtual bool TryAddOrEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null)
+        public virtual bool TryEditData(DateTime oldDate, DateTime date, decimal value, IReportLogger reportLogger = null)
         {
             if (Values.ValueExists(oldDate, out _))
             {
                 return Values.TryEditData(oldDate, date, value, reportLogger);
             }
 
-            return Values.TryAddValue(date, value, reportLogger);
+            Values.SetData(date, value, reportLogger);
+            return true;
+        }
+
+        /// <inheritdoc/>
+        public virtual void SetData(DateTime date, decimal value, IReportLogger logger = null)
+        {
+            Values.SetData(date, value, logger);
         }
 
         /// <summary>
@@ -50,7 +55,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                     break;
                 }
 
-                DailyValuation line = new DailyValuation(DateTime.Parse(dayValuation[0]), double.Parse(dayValuation[1]));
+                DailyValuation line = new DailyValuation(DateTime.Parse(dayValuation[0]), decimal.Parse(dayValuation[1]));
                 dailyValuations.Add(line);
             }
 
@@ -64,7 +69,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <param name="reportLogger">A logger to record outcomes.</param>
         public virtual void WriteDataToCsv(TextWriter writer, IReportLogger reportLogger = null)
         {
-            foreach (DailyValuation value in GetDataForDisplay())
+            foreach (DailyValuation value in ListOfValues())
             {
                 writer.WriteLine(value.ToString());
             }
@@ -77,11 +82,11 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public bool TryRemoveSector(string sectorName)
+        public bool TryRemoveSector(TwoName sectorName)
         {
             if (IsSectorLinked(sectorName))
             {
-                _ = Names.Sectors.Remove(sectorName);
+                _ = Names.Sectors.Remove(sectorName.Name);
                 OnDataEdit(this, new EventArgs());
                 return true;
             }
@@ -90,13 +95,13 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public bool IsSectorLinked(string sectorName)
+        public bool IsSectorLinked(TwoName sectorName)
         {
             if (Names.Sectors != null && Names.Sectors.Any())
             {
                 foreach (string name in Names.Sectors)
                 {
-                    if (name == sectorName)
+                    if (name == sectorName.Name)
                     {
                         return true;
                     }

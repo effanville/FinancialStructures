@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using FinancialStructures.Database;
 using FinancialStructures.Database.Implementation;
 using FinancialStructures.FinanceStructures.Implementation;
 
@@ -10,15 +9,27 @@ namespace FinancialStructures.SavingClasses
     /// </summary>
     public class AllData
     {
+        /// <summary>
+        /// The portfolio data.
+        /// </summary>
         public Portfolio MyFunds { get; set; } = new Portfolio();
 
+        /// <summary>
+        /// The Sector data.
+        /// </summary>
         public List<Sector> myBenchMarks { get; set; } = new List<Sector>();
 
+        /// <summary>
+        /// Empty constructor.
+        /// </summary>
         public AllData()
         {
         }
 
-        public AllData(IPortfolio portfo, List<Sector> fSectors)
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        public AllData(Portfolio portfo, List<Sector> fSectors)
         {
             MyFunds.CopyData(portfo);
             myBenchMarks = fSectors;

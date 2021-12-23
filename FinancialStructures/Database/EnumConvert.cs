@@ -8,7 +8,7 @@
         /// <summary>
         /// Converts a Account enum to a Totals enum.
         /// </summary>
-        public static Totals ConvertAccountToTotal(Account element)
+        public static Totals ToTotals(this Account element)
         {
             switch (element)
             {
@@ -39,7 +39,7 @@
         /// <summary>
         /// Converts a Account enum to a Totals enum.
         /// </summary>
-        public static Account ConvertTotalToAccount(Totals element)
+        public static Account ToAccount(this Totals element)
         {
             switch (element)
             {
@@ -76,11 +76,10 @@
             }
         }
 
-
         /// <summary>
         /// Converts a Account enum to a Totals enum.
         /// </summary>
-        public static Totals ConvertTotalToCompanyTotal(Totals element)
+        public static Totals ToCompanyTotal(this Totals element)
         {
             switch (element)
             {

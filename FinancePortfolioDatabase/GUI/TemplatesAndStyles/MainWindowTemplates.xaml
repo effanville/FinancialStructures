@@ -1,0 +1,50 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:view="clr-namespace:FinancePortfolioDatabase.GUI.Windows"
+                    xmlns:vm="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels"
+                    xmlns:vms="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Security"
+                    xmlns:vmStats="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Stats"
+                    xmlns:cvm="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels.Common"
+                    xmlns:viewCommon="clr-namespace:FinancePortfolioDatabase.GUI.Windows"
+                    xmlns:viewSecurity="clr-namespace:FinancePortfolioDatabase.GUI.Windows.Security"
+                    xmlns:statsView="clr-namespace:FinancePortfolioDatabase.GUI.Windows.Stats">
+    <DataTemplate DataType="{x:Type vm:BasicDataViewModel}">
+        <view:BasicDataView />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vms:SecurityEditWindowViewModel}">
+        <viewSecurity:SecurityEditWindow />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type cvm:ValueListWindowViewModel}">
+        <viewCommon:SingleValueEditWindow />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vmStats:StatsCreatorWindowViewModel}">
+        <statsView:StatsCreatorWindow />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vmStats:StatsViewModel}">
+        <statsView:StatsUserControl />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vmStats:ExportHistoryViewModel}">
+        <statsView:ExportHistoryControl />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vmStats:ExportReportViewModel}">
+        <statsView:ExportReportControl />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vmStats:ExportStatsViewModel}">
+        <statsView:ExportStatsControl />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:HtmlStatsViewerViewModel}">
+        <view:HtmlStatsViewer />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vmStats:StatisticsChartsViewModel}">
+        <statsView:StatisticsCharts />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vmStats:SecurityInvestmentViewModel}">
+        <statsView:SecurityInvestments />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vmStats:PortfolioHistoryViewModel}">
+        <statsView:PortfolioHistory />
+    </DataTemplate>
+    <DataTemplate DataType="{x:Type vm:ReportingWindowViewModel}">
+        <view:ReportingWindow />
+    </DataTemplate>
+</ResourceDictionary>

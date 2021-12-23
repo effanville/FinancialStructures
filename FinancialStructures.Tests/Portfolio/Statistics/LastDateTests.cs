@@ -1,6 +1,6 @@
 ﻿using System;
 using FinancialStructures.Database;
-using FinancialStructures.Database.Statistics;
+using FinancialStructures.Database.Extensions.Values;
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.Database.Statistics
@@ -18,7 +18,7 @@ namespace FinancialStructures.Tests.Database.Statistics
         [TestCase(TestDatabaseName.TwoBank, Totals.Security, "0001/01/01")]
         public void LastDateTest(TestDatabaseName databaseName, Totals totals, DateTime expected)
         {
-            var portfolio = TestDatabase.Databases[databaseName];
+            IPortfolio portfolio = TestDatabase.Databases[databaseName];
             Assert.AreEqual(expected, portfolio.LatestDate(totals));
         }
     }

@@ -13,8 +13,10 @@ namespace FinancialStructures.Tests.NamingStructuresTests
         [TestCase("dog man,cat", 2, "dog man,cat")]
         public void CanSetSectorsFromFlatList(string inputSectors, int expectedNumber, string expected)
         {
-            var data = new NameData("company", "name");
-            data.SectorsFlat = inputSectors;
+            NameData data = new NameData("company", "name")
+            {
+                SectorsFlat = inputSectors
+            };
 
             Assert.AreEqual(expectedNumber, data.Sectors.Count);
             Assert.AreEqual(expected, data.SectorsFlat);
@@ -23,12 +25,14 @@ namespace FinancialStructures.Tests.NamingStructuresTests
         [Test]
         public void HasExpectedSectors()
         {
-            var data = new NameData("company", "name");
-            data.SectorsFlat = "dog man, cat ,human";
+            NameData data = new NameData("company", "name")
+            {
+                SectorsFlat = "dog man, cat ,human"
+            };
 
             Assert.AreEqual(3, data.Sectors.Count);
             string[] expected = new string[] { "dog man", "cat", "human" };
-            var listing = data.Sectors.ToArray();
+            string[] listing = data.Sectors.ToArray();
             for (int sectorIndex = 0; sectorIndex < expected.Length; sectorIndex++)
             {
                 Assert.AreEqual(expected[sectorIndex], listing[sectorIndex]);
@@ -62,10 +66,14 @@ namespace FinancialStructures.Tests.NamingStructuresTests
         [TestCase(null, null, null, null, null, null, null, null, null, null, true)]
         public void EqualityTests(string company, string name, string url, string SectorsFlat, string currency, string otherCompany, string otherName, string otherUrl, string otherSectorsFlat, string otherCurrency, bool areEqual)
         {
-            var firstName = new NameData(company, name, currency, url);
-            firstName.SectorsFlat = SectorsFlat;
-            var secondName = new NameData(otherCompany, otherName, otherCurrency, otherUrl);
-            secondName.SectorsFlat = otherSectorsFlat;
+            NameData firstName = new NameData(company, name, currency, url)
+            {
+                SectorsFlat = SectorsFlat
+            };
+            NameData secondName = new NameData(otherCompany, otherName, otherCurrency, otherUrl)
+            {
+                SectorsFlat = otherSectorsFlat
+            };
 
             Assert.AreEqual(areEqual, firstName.Equals(secondName));
         }

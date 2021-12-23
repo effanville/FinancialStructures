@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Abstractions;
+using Common.Structure.DataStructures;
+using Common.Structure.Reporting;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
-using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
-using StructureCommon.DataStructures;
-using StructureCommon.Reporting;
 
 namespace FinancialStructures.Database
 {
@@ -15,35 +15,12 @@ namespace FinancialStructures.Database
     public interface IPortfolio
     {
         /// <summary>
-        /// Access of the databse path.
+        /// Access of the database path.
         /// </summary>
         string FilePath
         {
             get;
-        }
-
-        /// <summary>
-        /// The file extension of the path.
-        /// </summary>
-        string Extension
-        {
-            get;
-        }
-
-        /// <summary>
-        /// The directory where the database is stored.
-        /// </summary>
-        string Directory
-        {
-            get;
-        }
-
-        /// <summary>
-        /// The non-extension part of the filename, considered to be the databse name.
-        /// </summary>
-        string DatabaseName
-        {
-            get;
+            set;
         }
 
         /// <summary>
@@ -64,17 +41,47 @@ namespace FinancialStructures.Database
         }
 
         /// <summary>
-        /// Securities stored in this database.
+        /// A collection of notes for the portfolio.
         /// </summary>
-        List<Security> Funds
+        IReadOnlyList<Note> Notes
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Add a note to the list of notes <see cref="Notes"/>.
+        /// </summary>
+        void AddNote(DateTime timeStamp, string note);
+
+        /// <summary>
+        /// Delete a note from the list of notes <see cref="Notes"/>.
+        /// </summary>
+        bool RemoveNote(Note note);
+
+        /// <summary>
+        /// Delete a note from the list of notes <see cref="Notes"/>
+        /// at the index specified.
+        /// </summary>
+        void RemoveNote(int noteIndex);
+
+        /// <summary>
+        /// Securities stored in this database.
+        /// This is a shallow copy of the actual list, accessed in a
+        /// threadsafe manner.
+        /// </summary>
+        IReadOnlyList<ISecurity> FundsThreadSafe
         {
             get;
         }
 
         /// <summary>
         /// Bank accounts stored in this database.
+        /// <para>
+        /// This is a shallow copy of the actual list, accessed in a
+        /// threadsafe manner.
+        /// </para>
         /// </summary>
-        List<CashAccount> BankAccounts
+        IReadOnlyList<IExchangableValueList> BankAccountsThreadSafe
         {
             get;
         }
@@ -82,7 +89,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// The currencies other objects are held in.
         /// </summary>
-        List<Currency> Currencies
+        IReadOnlyList<ICurrency> CurrenciesThreadSafe
         {
             get;
         }
@@ -90,15 +97,10 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Sector benchmarks for comparison of held data.
         /// </summary>
-        List<Sector> BenchMarks
+        IReadOnlyList<IValueList> BenchMarksThreadSafe
         {
             get;
         }
-
-        /// <summary>
-        /// Copies references of other portfolio to this portfolio.
-        /// </summary>
-        void CopyData(IPortfolio portfolio);
 
         /// <summary>
         /// Number of type in the database.
@@ -129,11 +131,6 @@ namespace FinancialStructures.Database
         /// Raise event if something has changed.
         /// </summary>
         void OnPortfolioChanged(object obj, PortfolioEventArgs e);
-
-        /// <summary>
-        /// Set the path where the database will be stored.
-        /// </summary>
-        void SetFilePath(string path);
 
         /// <summary>
         /// Edits the name of the data currently held.
@@ -183,15 +180,17 @@ namespace FinancialStructures.Database
         /// Load database from xml file.
         /// </summary>
         /// <param name="filePath">The path to load from.</param>
+        /// <param name="fileSystem">The file system abstraction to use to resolve the file.</param>
         /// <param name="reportLogger">Callback to report information.</param>
-        void LoadPortfolio(string filePath, IReportLogger reportLogger = null);
+        void LoadPortfolio(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Save database to xml file.
         /// </summary>
         /// <param name="filePath">The path to save to.</param>
+        /// <param name="fileSystem">The file system abstraction to use to resolve the file.</param>
         /// <param name="reportLogger">Callback to report information.</param>
-        void SavePortfolio(string filePath, IReportLogger reportLogger = null);
+        void SavePortfolio(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Clears all data in the portfolio.
@@ -201,7 +200,23 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Adds the desired data to the security if it can.
         /// </summary>
-        bool TryAddOrEditDataToSecurity(TwoName names, DateTime oldDate, DateTime date, double shares, double unitPrice, double Investment, IReportLogger reportLogger = null);
+        [Obsolete("Should use the add or edit trade data method instead.")]
+        bool TryAddOrEditDataToSecurity(TwoName names, DateTime oldDate, DateTime date, decimal shares, decimal unitPrice, decimal investment, SecurityTrade trade, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Adds the desired trade data if it can.
+        /// </summary>
+        bool TryAddOrEditTradeData(Account elementType, TwoName names, SecurityTrade oldTrade, SecurityTrade trade, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Attempts to remove trade data from the account.
+        /// </summary>
+        /// <param name="elementType">The type of data to remove from.</param>
+        /// <param name="name">The name to remove from.</param>
+        /// <param name="date">The date on which to remove data.</param>
+        /// <param name="reportLogger">Report callback.</param>
+        /// <returns>Success or failure.</returns>
+        bool TryDeleteTradeData(Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Attempts to add data to the account.
@@ -226,40 +241,42 @@ namespace FinancialStructures.Database
         bool TryDeleteData(Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null);
 
         /// <summary>
-        /// Returns a list of all companes of the desired type in the databse.
+        /// Returns a list of all companes of the desired type in the database.
         /// </summary>
-        /// <param name="elementType">Type of object to search for.</param>
+        /// <param name="account">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        List<string> Companies(Account elementType);
-
-
-        /// <summary>
-        /// Returns a list of all names of the desired type in the databse.
-        /// </summary>
-        /// <param name="elementType">Type of object to search for.</param>
-        /// <returns>List of names of the desired type.</returns>
-        List<string> Names(Account elementType);
+        IReadOnlyList<string> Companies(Account account);
 
         /// <summary>
-        /// Returns a list of all namedata in the databse.
+        /// Returns a list of all sector names of the desired type in the database.
         /// </summary>
-        /// <param name="elementType">Type of object to search for.</param>
+        /// <param name="account">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        List<NameCompDate> NameData(Account elementType);
+        IReadOnlyList<string> Sectors(Account account);
+
+        /// <summary>
+        /// Returns a list of all names of the desired type in the database.
+        /// </summary>
+        /// <param name="account">Type of object to search for.</param>
+        /// <returns>List of names of the desired type.</returns>
+        IReadOnlyList<string> Names(Account account);
+
+        /// <summary>
+        /// Returns a list of all namedata in the database.
+        /// </summary>
+        /// <param name="account">Type of object to search for.</param>
+        /// <returns>List of names of the desired type.</returns>
+        IReadOnlyList<NameData> NameData(Account account);
 
         /// <summary>
         /// Queries for data for the security of name and company.
         /// </summary>
-        List<SecurityDayData> SecurityData(TwoName name, IReportLogger reportLogger = null);
+        IReadOnlyList<SecurityDayData> SecurityData(TwoName name, IReportLogger reportLogger = null);
 
         /// <summary>
-        /// Returns the
+        /// Returns the valuations of the account.
         /// </summary>
-        /// <param name="elementType"></param>
-        /// <param name="name"></param>
-        /// <param name="reportLogger"></param>
-        /// <returns></returns>
-        List<DailyValuation> NumberData(Account elementType, TwoName name, IReportLogger reportLogger = null);
+        IReadOnlyList<DailyValuation> NumberData(Account account, TwoName name, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Outputs the account if it exists.
@@ -270,23 +287,19 @@ namespace FinancialStructures.Database
         bool TryGetAccount(Account accountType, TwoName name, out IValueList desired);
 
         /// <summary>
-        /// Returns a copy of all securities with the company as specified.
+        /// Returns a copy of all accounts of type account with the company as specified.
         /// </summary>
-        List<ISecurity> CompanySecurities(string company);
+        IReadOnlyList<IValueList> CompanyAccounts(Account account, string company);
 
         /// <summary>
-        /// Returns a copy of all Bank Accounts listed with the specified company.
+        /// Returns a copy of all accounts related to the given benchmark.
         /// </summary>
-        /// <param name="company">The company to return all bank accounts for.</param>
-        /// <returns></returns>
-        List<ICashAccount> CompanyBankAccounts(string company);
+        IReadOnlyList<IValueList> SectorAccounts(Account account, TwoName sectorName);
 
         /// <summary>
-        /// Returns all Securities related to the given benchmark.
+        /// Returns a copy of all accounts related to the total.
         /// </summary>
-        /// <param name="sectorName"></param>
-        /// <returns></returns>
-        List<ISecurity> SectorSecurities(string sectorName);
+        IReadOnlyList<IValueList> Accounts(Totals totals, TwoName name = null);
 
         /// <summary>
         /// Returns a copy of the currently held portfolio.
@@ -304,7 +317,7 @@ namespace FinancialStructures.Database
         /// <param name="elementType">The type of element to find.</param>
         /// <param name="name">The name of the element to find.</param>
         /// <returns>The latest value if it exists.</returns>
-        double LatestValue(Account elementType, TwoName name);
+        decimal LatestValue(Account elementType, TwoName name);
 
         /// <summary>
         /// Get the value of the selected element on the date provided. For a sector the name is only the surname
@@ -313,7 +326,7 @@ namespace FinancialStructures.Database
         /// <param name="name">The name of the element to find.</param>
         /// <param name="date">The date on which to find the value.</param>
         /// <returns>The  value if it exists.</returns>
-        double Value(Account elementType, TwoName name, DateTime date);
+        decimal Value(Account elementType, TwoName name, DateTime date);
 
         /// <summary>
         /// Total value of all accounts of type specified today.
@@ -321,7 +334,7 @@ namespace FinancialStructures.Database
         /// <param name="elementType">The type to find the total of.</param>
         /// <param name="names">Any name associated with this total, e.g. the Sector name</param>
         /// <returns>The total value held on today.</returns>
-        double TotalValue(Totals elementType, TwoName names = null);
+        decimal TotalValue(Totals elementType, TwoName names = null);
 
         /// <summary>
         /// Total value of all accounts of type specified on date given.
@@ -330,19 +343,16 @@ namespace FinancialStructures.Database
         /// <param name="date">The date to find the total on.</param>
         /// <param name="names">Any name associated with this total, e.g. the Sector name</param>
         /// <returns>The total value held.</returns>
-        double TotalValue(Totals elementType, DateTime date, TwoName names = null);
-
-        /// <summary>
-        /// Total value of all accounts of all types on date given.
-        /// </summary>
-        /// <param name="date">The date to find the total on.</param>
-        /// <param name="names">Any name associated with this total, e.g. the Sector name</param>
-        /// <returns>The total value held.</returns>
-        double TotalValue(DateTime date, TwoName names = null);
+        decimal TotalValue(Totals elementType, DateTime date, TwoName names = null);
 
         /// <summary>
         /// returns the currency associated to the account.
         /// </summary>
-        ICurrency Currency(Account elementType, object account);
+        ICurrency Currency(Account account, IValueList valueList);
+
+        /// <summary>
+        /// returns the currency associated to the name.
+        /// </summary>
+        ICurrency Currency(string currencyName);
     }
 }

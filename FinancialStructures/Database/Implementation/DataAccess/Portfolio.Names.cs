@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
@@ -9,39 +8,48 @@ namespace FinancialStructures.Database.Implementation
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public List<string> Companies(Account elementType)
+        public IReadOnlyList<string> Companies(Account elementType)
         {
             return NameData(elementType).Select(NameData => NameData.Company).Distinct().ToList();
         }
 
         /// <inheritdoc/>
-        public List<string> Names(Account elementType)
+        public IReadOnlyList<string> Names(Account elementType)
         {
             return NameData(elementType).Select(NameData => NameData.Name).ToList();
         }
 
         /// <inheritdoc/>
-        public List<NameCompDate> NameData(Account elementType)
+        public IReadOnlyList<string> Sectors(Account elementType)
         {
-            List<NameCompDate> namesAndCompanies = new List<NameCompDate>();
+            List<string> sectors = NameData(elementType).SelectMany(name => name.Sectors).Distinct().ToList();
+            sectors.Sort();
+            return sectors;
+        }
+
+        /// <inheritdoc/>
+        public IReadOnlyList<NameData> NameData(Account elementType)
+        {
+            List<NameData> namesAndCompanies = new List<NameData>();
             switch (elementType)
             {
-                case (Account.Security):
+                case Account.Security:
                 {
-                    return SingleDataNameObtainer(Funds);
+                    return SingleDataNameObtainer(FundsThreadSafe);
                 }
-                case (Account.Currency):
+                case Account.Currency:
                 {
-                    return SingleDataNameObtainer(Currencies);
+                    return SingleDataNameObtainer(CurrenciesThreadSafe);
                 }
-                case (Account.BankAccount):
+                case Account.BankAccount:
                 {
-                    return SingleDataNameObtainer(BankAccounts);
+                    return SingleDataNameObtainer(BankAccountsThreadSafe);
                 }
-                case (Account.Benchmark):
+                case Account.Benchmark:
                 {
-                    return SingleDataNameObtainer(BenchMarks);
+                    return SingleDataNameObtainer(BenchMarksThreadSafe);
                 }
+                case Account.All:
                 default:
                     break;
             }
@@ -49,20 +57,14 @@ namespace FinancialStructures.Database.Implementation
             return namesAndCompanies;
         }
 
-        private List<NameCompDate> SingleDataNameObtainer<T>(List<T> objects) where T : IValueList
+        private List<NameData> SingleDataNameObtainer<T>(IReadOnlyList<T> objects) where T : IValueList
         {
-            List<NameCompDate> namesAndCompanies = new List<NameCompDate>();
+            List<NameData> namesAndCompanies = new List<NameData>();
             if (objects != null)
             {
                 foreach (T dataList in objects)
                 {
-                    DateTime date = DateTime.MinValue;
-                    if (dataList.Any())
-                    {
-                        date = dataList.LatestValue().Day;
-                    }
-
-                    namesAndCompanies.Add(new NameCompDate(dataList.Names.Company, dataList.Names.Name, dataList.Names.Currency, dataList.Names.Url, dataList.Names.Sectors, date));
+                    namesAndCompanies.Add(new NameData(dataList.Names.Company, dataList.Names.Name, dataList.Names.Currency, dataList.Names.Url, dataList.Names.Sectors, dataList.Names.Notes));
                 }
             }
 

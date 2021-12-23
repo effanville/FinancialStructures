@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Common.Structure.Reporting;
 using FinancialStructures.Database;
+using FinancialStructures.Database.Implementation;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
-using StructureCommon.Reporting;
 
 namespace FinancialStructures.Tests.Database.AccountEdit
 {
@@ -17,10 +18,10 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanRemoveSecurity()
         {
-            var constructor = new DatabaseConstructor();
-            _ = constructor.WithSecurityFromName(BaseCompanyName, BaseName);
+            DatabaseConstructor constructor = new DatabaseConstructor();
+            _ = constructor.WithSecurity(BaseCompanyName, BaseName);
 
-            var database = constructor.database;
+            Portfolio database = constructor.Database;
 
             _ = database.TryRemove(Account.Security, new NameData(BaseCompanyName, BaseName));
 
@@ -30,10 +31,10 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanRemoveSector()
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName(BaseCompanyName, BaseName);
 
-            var database = constructor.database;
+            Portfolio database = constructor.Database;
 
             _ = database.TryRemove(Account.Benchmark, new NameData(BaseCompanyName, BaseName));
 
@@ -43,10 +44,10 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanRemoveBankAccount()
         {
-            var constructor = new DatabaseConstructor();
-            _ = constructor.WithBankAccountFromName(BaseCompanyName, BaseName);
+            DatabaseConstructor constructor = new DatabaseConstructor();
+            _ = constructor.WithBankAccount(BaseCompanyName, BaseName);
 
-            var database = constructor.database;
+            Portfolio database = constructor.Database;
 
             _ = database.TryRemove(Account.BankAccount, new NameData(BaseCompanyName, BaseName));
 
@@ -56,10 +57,10 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanRemoveCurrency()
         {
-            var constructor = new DatabaseConstructor();
-            _ = constructor.WithCurrencyFromName(BaseCompanyName, BaseName);
+            DatabaseConstructor constructor = new DatabaseConstructor();
+            _ = constructor.WithCurrency(BaseCompanyName, BaseName);
 
-            var database = constructor.database;
+            Portfolio database = constructor.Database;
 
             _ = database.TryRemove(Account.Currency, new NameData(BaseCompanyName, BaseName));
 
@@ -69,17 +70,17 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void ReportsSecurityCorrect()
         {
-            var constructor = new DatabaseConstructor();
-            _ = constructor.WithSecurityFromName(BaseCompanyName, BaseName);
-            var reports = new List<ErrorReport>();
-            var database = constructor.database;
+            DatabaseConstructor constructor = new DatabaseConstructor();
+            _ = constructor.WithSecurity(BaseCompanyName, BaseName);
+            List<ErrorReport> reports = new List<ErrorReport>();
+            Portfolio database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryRemove(Account.Security, new NameData(BaseCompanyName, BaseName), logging);
 
             Assert.AreEqual(1, reports.Count);
 
-            var report = reports.First();
-            Assert.AreEqual(ReportType.Report, report.ErrorType);
+            ErrorReport report = reports.First();
+            Assert.AreEqual(ReportType.Information, report.ErrorType);
             Assert.AreEqual(ReportLocation.DeletingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Detailed, report.ErrorSeverity);
             Assert.AreEqual($"Security {BaseCompanyName}-{BaseName} removed from the database.", report.Message);
@@ -88,15 +89,15 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void RemovingSecurityFailReports()
         {
-            var constructor = new DatabaseConstructor();
-            var reports = new List<ErrorReport>();
-            var database = constructor.database;
+            DatabaseConstructor constructor = new DatabaseConstructor();
+            List<ErrorReport> reports = new List<ErrorReport>();
+            Portfolio database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryRemove(Account.Security, new NameData(BaseCompanyName, BaseName), logging);
 
             Assert.AreEqual(1, reports.Count);
 
-            var report = reports.First();
+            ErrorReport report = reports.First();
             Assert.AreEqual(ReportType.Error, report.ErrorType);
             Assert.AreEqual(ReportLocation.AddingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Useful, report.ErrorSeverity);
@@ -106,17 +107,17 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void ReportSectorCorrect()
         {
-            var constructor = new DatabaseConstructor();
+            DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName(BaseCompanyName, BaseName);
-            var reports = new List<ErrorReport>();
-            var database = constructor.database;
+            List<ErrorReport> reports = new List<ErrorReport>();
+            Portfolio database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryRemove(Account.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
 
             Assert.AreEqual(1, reports.Count);
 
-            var report = reports.First();
-            Assert.AreEqual(ReportType.Report, report.ErrorType);
+            ErrorReport report = reports.First();
+            Assert.AreEqual(ReportType.Information, report.ErrorType);
             Assert.AreEqual(ReportLocation.DeletingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Detailed, report.ErrorSeverity);
             Assert.AreEqual($"Deleted benchmark {BaseName}", report.Message);
@@ -125,15 +126,15 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void RemovingSectorFailReports()
         {
-            var constructor = new DatabaseConstructor();
-            var reports = new List<ErrorReport>();
-            var database = constructor.database;
+            DatabaseConstructor constructor = new DatabaseConstructor();
+            List<ErrorReport> reports = new List<ErrorReport>();
+            Portfolio database = constructor.Database;
             IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
             _ = database.TryRemove(Account.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
 
             Assert.AreEqual(1, reports.Count);
 
-            var report = reports.First();
+            ErrorReport report = reports.First();
             Assert.AreEqual(ReportType.Error, report.ErrorType);
             Assert.AreEqual(ReportLocation.AddingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Useful, report.ErrorSeverity);

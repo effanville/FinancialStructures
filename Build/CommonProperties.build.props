@@ -2,24 +2,27 @@
 <Project>
   <PropertyGroup>
     <AppxAutoIncrementPackageRevision>false</AppxAutoIncrementPackageRevision>
+    <BuildPackage>true</BuildPackage>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Effanville</Authors>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <Deterministic>false</Deterministic>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+    <Platforms>AnyCPU;x64</Platforms>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
-  
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <OutputPath>..\bin\Debug\</OutputPath>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <OutputPath>..\bin\Release</OutputPath>
   </PropertyGroup>
-  
+
   <ItemGroup>
-      <PackageReference Include="StructureCommon" Version="1.0.5" />
+      <PackageReference Include="Common.Structure" Version="1.0.19" />
   </ItemGroup>
 </Project>

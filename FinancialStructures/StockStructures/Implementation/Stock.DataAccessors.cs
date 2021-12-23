@@ -17,10 +17,26 @@ namespace FinancialStructures.StockStructures.Implementation
             return Valuations[Valuations.Count - 1].Time;
         }
 
+        /// <summary>
+        /// This retrieves the data on the date <paramref name="date"/> as well
+        /// as setting <see cref="LastValueIndex"/> to the index of this
+        /// value.
+        /// </summary>
+        public StockDay GetData(DateTime date)
+        {
+            var data = GetDataAndSetAccessor(date);
+            if (data == null)
+            {
+                return null;
+            }
+
+            return new StockDay(data.Time, data.Open, data.High, data.Low, data.Close, data.Volume);
+        }
+
         /// <inheritdoc/>
         public double Value(DateTime date, StockDataStream data = StockDataStream.Close)
         {
-            return GetDataAndSetAccessor(date).Value(data);
+            return GetDataAndSetAccessor(date)?.Value(data) ?? double.NaN;
         }
 
         /// <inheritdoc/>
@@ -57,10 +73,17 @@ namespace FinancialStructures.StockStructures.Implementation
             do
             {
                 dayIndex++;
-            } while (date > Valuations[dayIndex].Time && dayIndex < numberValues);
+            }
+            while (dayIndex < numberValues && date >= Valuations[dayIndex].Time);
 
             LastValueIndex = dayIndex - 1;
-            return Valuations[dayIndex - 1];
+            var value = Valuations[dayIndex - 1];
+            if (value.Time.Equals(date))
+            {
+                return Valuations[dayIndex - 1];
+            }
+
+            return null;
         }
     }
 }

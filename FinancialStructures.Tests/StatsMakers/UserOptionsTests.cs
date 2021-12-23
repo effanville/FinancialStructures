@@ -1,8 +1,8 @@
-﻿using FinancialStructures.DataExporters.ExportOptions;
-using FinancialStructures.Statistics;
+﻿using FinancialStructures.Database.Statistics;
+using FinancialStructures.Database.Export.Statistics;
 using NUnit.Framework;
 
-namespace FinancialStructures.Tests.StatsMakers
+namespace FinancialStructures.Tests.DataExporters.Statistics
 {
     [TestFixture]
     public sealed class UserOptionsTests
@@ -10,17 +10,24 @@ namespace FinancialStructures.Tests.StatsMakers
         [Test]
         public void EnsureDefaults()
         {
-            var options = new UserDisplayOptions();
+            PortfolioStatisticsSettings options = PortfolioStatisticsSettings.DefaultSettings();
 
             Assert.AreEqual(SortDirection.Descending, options.SecurityDisplayOptions.SortingDirection);
             Assert.AreEqual(SortDirection.Descending, options.BankAccountDisplayOptions.SortingDirection);
             Assert.AreEqual(SortDirection.Descending, options.SectorDisplayOptions.SortingDirection);
             Assert.IsFalse(options.DisplayValueFunds);
-            Assert.IsFalse(options.Spacing);
-            Assert.IsFalse(options.Colours);
             Assert.IsTrue(options.SecurityDisplayOptions.ShouldDisplay);
             Assert.IsTrue(options.SectorDisplayOptions.ShouldDisplay);
             Assert.IsTrue(options.BankAccountDisplayOptions.ShouldDisplay);
+        }
+
+        [Test]
+        public void EnsureExportDefaults()
+        {
+            PortfolioStatisticsExportSettings options = PortfolioStatisticsExportSettings.DefaultSettings();
+
+            Assert.IsFalse(options.Spacing);
+            Assert.IsFalse(options.Colours);
         }
     }
 }

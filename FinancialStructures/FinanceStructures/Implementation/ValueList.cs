@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Xml.Serialization;
+using Common.Structure.DataStructures;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
-using StructureCommon.DataStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {
@@ -20,64 +21,44 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// This should only be used for serialisation.
         /// </summary>
+        [XmlIgnore]
         public string Name
         {
-            get
-            {
-                return Names.Name;
-            }
+            get => Names.Name;
 
-            set
-            {
-                Names.Name = value;
-            }
+            set => Names.Name = value;
         }
 
         /// <summary>
         /// This should only be used for serialisation.
         /// </summary>
+        [XmlIgnore]
         public string Company
         {
-            get
-            {
-                return Names.Company;
-            }
+            get => Names.Company;
 
-            set
-            {
-                Names.Company = value;
-            }
+            set => Names.Company = value;
         }
 
         /// <summary>
         /// A url to retrieve data for this list.
         /// </summary>
+        [XmlIgnore]
         public string Url
         {
-            get
-            {
-                return Names.Url;
-            }
+            get => Names.Url;
 
-            set
-            {
-                Names.Url = value;
-            }
+            set => Names.Url = value;
         }
 
         /// <summary>
         /// The currency the data in this list is associated with.
         /// </summary>
+        [XmlIgnore]
         public string Currency
         {
-            get
-            {
-                return Names.Currency;
-            }
-            set
-            {
-                Names.Currency = value;
-            }
+            get => Names.Currency;
+            set => Names.Currency = value;
         }
 
         /// <inheritdoc />
@@ -85,7 +66,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
             get;
             set;
-        } = new TimeList();
+        }
 
         /// <summary>
         /// default constructor.
@@ -93,6 +74,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         public ValueList()
         {
             Names = new NameData();
+            Values = new TimeList();
             SetupEventListening();
         }
 
@@ -102,6 +84,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         public ValueList(NameData names)
         {
             Names = names;
+            Values = new TimeList();
             SetupEventListening();
         }
 
@@ -118,14 +101,14 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Event that controls when data is edited.
         /// </summary>
-        public virtual event EventHandler<PortfolioEventArgs> DataEdit;
+        public event EventHandler<PortfolioEventArgs> DataEdit;
 
         /// <summary>
         /// Raises the <see cref="DataEdit"/> event.
         /// </summary>
-        internal virtual void OnDataEdit(object edited, EventArgs e)
+        protected virtual void OnDataEdit(object edited, EventArgs e)
         {
-            var args = e is PortfolioEventArgs pe ? pe : new PortfolioEventArgs();
+            PortfolioEventArgs args = e is PortfolioEventArgs pe ? pe : new PortfolioEventArgs();
             DataEdit?.Invoke(edited, args);
         }
 
@@ -162,9 +145,9 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public virtual bool IsEqualTo(IValueList otherAccount)
+        public virtual bool Equals(IValueList other)
         {
-            return Names.IsEqualTo(otherAccount.Names);
+            return Names.IsEqualTo(other.Names);
         }
 
         /// <inheritdoc />
@@ -172,10 +155,24 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
             if (obj is IValueList otherList)
             {
-                return Names.CompareTo(otherList.Names);
+                return CompareTo(otherList);
             }
 
             return 0;
+        }
+
+        /// <inheritdoc />
+        public virtual int CompareTo(IValueList other)
+        {
+            return Names.CompareTo(other.Names);
+        }
+
+        /// <inheritdoc />
+        public int ValueComparison(IValueList otherList, DateTime dateTime)
+        {
+            decimal thislistValue = Value(dateTime)?.Value ?? 0.0m;
+            decimal otherListValue = otherList.Value(dateTime)?.Value ?? 0.0m;
+            return otherListValue.CompareTo(thislistValue);
         }
     }
 }

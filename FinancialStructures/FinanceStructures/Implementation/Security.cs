@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Common.Structure.DataStructures;
 using FinancialStructures.Database;
+using FinancialStructures.DataStructures;
 using FinancialStructures.NamingStructures;
-using StructureCommon.DataStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {
@@ -11,64 +13,38 @@ namespace FinancialStructures.FinanceStructures.Implementation
     /// </summary>
     public partial class Security : ValueList, ISecurity
     {
-        private TimeList fInvestments = new TimeList();
-        private TimeList fShares = new TimeList();
-        private TimeList fUnitPrice = new TimeList();
+        private readonly object TradesLock = new object();
+
+        /// <inheritdoc/>
+        public TimeList Shares { get; set; } = new TimeList();
+
+        /// <inheritdoc/>
+        public TimeList UnitPrice { get; set; } = new TimeList();
+
+        /// <inheritdoc/>
+        public TimeList Investments { get; set; } = new TimeList();
 
         /// <summary>
-        /// For backwards compatibility with old systems where this was the true store of sectors.
+        /// The list of Trades made in this <see cref="ISecurity"/>.
         /// </summary>
-        public HashSet<string> Sectors
-        {
-            get
-            {
-                return Names.Sectors;
-            }
-        }
+        public List<SecurityTrade> SecurityTrades { get; set; } = new List<SecurityTrade>();
 
         /// <inheritdoc/>
-        public TimeList Shares
+        public IReadOnlyList<SecurityTrade> Trades
         {
             get
             {
-                return fShares;
-            }
-            set
-            {
-                fShares = value;
-            }
-        }
-
-        /// <inheritdoc/>
-        public TimeList UnitPrice
-        {
-            get
-            {
-                return fUnitPrice;
-            }
-            set
-            {
-                fUnitPrice = value;
-            }
-        }
-
-        /// <inheritdoc/>
-        public TimeList Investments
-        {
-            get
-            {
-                return fInvestments;
-            }
-            set
-            {
-                fInvestments = value;
+                lock (TradesLock)
+                {
+                    return SecurityTrades.Select(trade => trade.Copy()).ToList();
+                }
             }
         }
 
         /// <summary>
         /// An empty constructor.
         /// </summary>
-        private Security()
+        internal Security()
         {
             Names = new NameData();
         }
@@ -88,29 +64,25 @@ namespace FinancialStructures.FinanceStructures.Implementation
             SetupEventListening();
         }
 
+
         /// <summary>
-        /// Constructor to make a new security from known data.
+        /// Constructor to make a new security from known data, where the data is assumed to be consistent.
         /// </summary>
-        private Security(NameData names, TimeList shares, TimeList prices, TimeList investments)
+        private Security(NameData names, TimeList unitPrices, TimeList shares, TimeList investments, List<SecurityTrade> trades)
+            : base(names.Copy())
         {
             Names = names.Copy();
-            fShares = shares;
-            fUnitPrice = prices;
-            fInvestments = investments;
+            UnitPrice = unitPrices;
+            Shares = shares;
+            Investments = investments;
+            SecurityTrades = trades;
             SetupEventListening();
         }
 
-        /// <summary>
-        /// Event that controls when data is edited.
-        /// </summary>
-        public override event EventHandler<PortfolioEventArgs> DataEdit;
-
-        /// <summary>
-        /// Raises the <see cref="DataEdit"/> event.
-        /// </summary>
-        internal override void OnDataEdit(object edited, EventArgs e)
+        /// <inheritdoc/>
+        protected override void OnDataEdit(object edited, EventArgs e)
         {
-            DataEdit?.Invoke(edited, new PortfolioEventArgs(Account.Security));
+            base.OnDataEdit(edited, new PortfolioEventArgs(Account.Security));
         }
 
         /// <summary>
@@ -123,50 +95,63 @@ namespace FinancialStructures.FinanceStructures.Implementation
             Investments.DataEdit += OnDataEdit;
         }
 
-        /// <inheritdoc/>
-        public override string ToString()
+        private void RemoveEventListening()
         {
-            return Names.ToString();
+            UnitPrice.DataEdit -= OnDataEdit;
+            Shares.DataEdit -= OnDataEdit;
+            Investments.DataEdit -= OnDataEdit;
         }
 
         /// <inheritdoc/>
-        public new ISecurity Copy()
+        public override IValueList Copy()
         {
-            return new Security(Names, fShares, fUnitPrice, fInvestments);
+            return new Security(Names, UnitPrice, Shares, Investments, SecurityTrades);
         }
 
         /// <inheritdoc/>
         public override bool Any()
         {
-            if (fUnitPrice.Any() && fShares.Any())
-            {
-                return true;
-            }
-
-            return false;
+            return UnitPrice.Any() && Shares.Any();
         }
 
         /// <inheritdoc/>
         public override int Count()
         {
-            return fUnitPrice.Count();
+            return UnitPrice.Count();
         }
 
         /// <inheritdoc/>
-        public override bool IsEqualTo(IValueList otherList)
+        public override bool Equals(IValueList otherList)
         {
             if (otherList is ISecurity otherSecurity)
             {
-                return IsEqualTo(otherSecurity);
+                return Equals(otherSecurity);
             }
 
             return false;
         }
 
         /// <inheritdoc/>
-        public bool IsEqualTo(ISecurity otherSecurity)
+        public bool Equals(ISecurity otherSecurity)
         {
-            return base.IsEqualTo(otherSecurity);
+            return base.Equals(otherSecurity);
+        }
+
+        /// <inheritdoc />
+        public override int CompareTo(IValueList other)
+        {
+            if (other is ISecurity otherSecurity)
+            {
+                return base.CompareTo(otherSecurity);
+            }
+
+            return 0;
+        }
+
+        /// <inheritdoc/>
+        public int CompareTo(ISecurity other)
+        {
+            return base.CompareTo(other);
         }
     }
 }

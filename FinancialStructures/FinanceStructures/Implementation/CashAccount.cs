@@ -1,37 +1,32 @@
 ﻿using System;
+using Common.Structure.DataStructures;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
-using StructureCommon.DataStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {
     /// <summary>
     /// An account simulating a bank account.
     /// </summary>
-    public class CashAccount : ValueList, ICashAccount
+    public class CashAccount : ValueList, IExchangableValueList
     {
-        internal override void OnDataEdit(object edited, EventArgs e)
+        /// <inheritdoc/>
+        protected override void OnDataEdit(object edited, EventArgs e)
         {
             base.OnDataEdit(edited, new PortfolioEventArgs(Account.BankAccount));
         }
 
         /// <inheritdoc/>
-        public new ICashAccount Copy()
+        public override IValueList Copy()
         {
-            return new CashAccount(Names, Values);
+            return new CashAccount(Names.Copy(), Values);
         }
 
         /// <inheritdoc/>
         public TimeList Amounts
         {
-            get
-            {
-                return Values;
-            }
-            set
-            {
-                Values = value;
-            }
+            get => Values;
+            set => Values = value;
         }
 
         /// <summary>
@@ -53,7 +48,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Parameterless constructor for serialisation.
         /// </summary>
-        private CashAccount()
+        internal CashAccount()
             : base()
         {
         }
@@ -62,7 +57,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         public DailyValuation Value(DateTime date, ICurrency currency = null)
         {
             DailyValuation perSharePrice = Values.ValueZeroBefore(date);
-            double value = perSharePrice.Value * GetCurrencyValue(date, currency);
+            decimal value = perSharePrice?.Value * GetCurrencyValue(date, currency) ?? 0.0m;
             return new DailyValuation(date, value);
         }
 
@@ -72,22 +67,22 @@ namespace FinancialStructures.FinanceStructures.Implementation
             DailyValuation latestDate = Values.LatestValuation();
             if (latestDate == null)
             {
-                return new DailyValuation(DateTime.Today, 0.0);
+                return new DailyValuation(DateTime.Today, 0.0m);
             }
 
-            double latestValue = latestDate.Value * GetCurrencyValue(latestDate.Day, currency);
+            decimal latestValue = latestDate.Value * GetCurrencyValue(latestDate.Day, currency);
 
             return new DailyValuation(latestDate.Day, latestValue);
         }
 
         /// <inheritdoc/>
-        public DailyValuation RecentPreviousValue(DateTime date, ICurrency currency)
+        public DailyValuation ValueBefore(DateTime date, ICurrency currency)
         {
-            DailyValuation val = Values.RecentPreviousValue(date);
+            DailyValuation val = Values.ValueBefore(date);
 
             if (val == null)
             {
-                return new DailyValuation(date, 0.0);
+                return new DailyValuation(date, 0.0m);
             }
 
             val.Value *= GetCurrencyValue(val.Day, currency);
@@ -100,25 +95,37 @@ namespace FinancialStructures.FinanceStructures.Implementation
             DailyValuation firstDate = Values.FirstValuation();
             if (firstDate == null)
             {
-                return new DailyValuation(DateTime.Today, 0.0);
+                return new DailyValuation(DateTime.Today, 0.0m);
             }
 
-            double latestValue = firstDate.Value * GetCurrencyValue(firstDate.Day, currency);
+            decimal latestValue = firstDate.Value * GetCurrencyValue(firstDate.Day, currency);
 
             return new DailyValuation(firstDate.Day, latestValue);
         }
 
         /// <inheritdoc/>
-        public DailyValuation NearestEarlierValuation(DateTime date, ICurrency currency = null)
+        public DailyValuation ValueOnOrBefore(DateTime date, ICurrency currency = null)
         {
-            DailyValuation value = Values.NearestEarlierValue(date);
-            value.SetValue(value.Value * GetCurrencyValue(value.Day, currency));
+            DailyValuation value = Values.ValueOnOrBefore(date);
+            if (value == null)
+            {
+                return new DailyValuation(date, 0.0m);
+            }
+            var currencyValue = GetCurrencyValue(value.Day, currency);
+            value.Value *= currencyValue;
             return value;
         }
 
-        private double GetCurrencyValue(DateTime date, ICurrency currency)
+        private static decimal GetCurrencyValue(DateTime date, ICurrency currency)
         {
-            return currency == null ? 1.0 : currency.Value(date)?.Value ?? 1.0;
+            return currency == null ? 1.0m : currency.Value(date)?.Value ?? 1.0m;
+        }
+
+        private static decimal TruncateDecimal(decimal value, int precision)
+        {
+            decimal step = (decimal)Math.Pow(10, precision);
+            decimal tmp = Math.Truncate(step * value);
+            return tmp / step;
         }
     }
 }

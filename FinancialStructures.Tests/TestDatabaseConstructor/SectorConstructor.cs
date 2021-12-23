@@ -1,7 +1,6 @@
 ﻿using System;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
-using StructureCommon.DataStructures;
 
 namespace FinancialStructures.Tests.TestDatabaseConstructor
 {
@@ -11,13 +10,13 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 
         public SectorConstructor(string company, string name, string currency = null, string url = null)
         {
-            var names = new NameData(company, name, currency, url);
+            NameData names = new NameData(company, name, currency, url);
             item = new Sector(names);
         }
 
-        public SectorConstructor WithData(DateTime date, double valueToAdd)
+        public SectorConstructor WithData(DateTime date, decimal valueToAdd)
         {
-            item.Values.Values.Add(new DailyValuation(date, valueToAdd));
+            item.Values.SetData(date, valueToAdd);
             return this;
         }
     }

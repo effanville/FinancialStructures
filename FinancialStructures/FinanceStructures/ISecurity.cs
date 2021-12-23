@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
+using Common.Structure.DataStructures;
+using Common.Structure.FileAccess;
+using Common.Structure.NamingStructures;
+using Common.Structure.Reporting;
 using FinancialStructures.DataStructures;
-using StructureCommon.DataStructures;
-using StructureCommon.FileAccess;
-using StructureCommon.Reporting;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.FinanceStructures
 {
     /// <summary>
     /// A named entity with Share, unit price and investment lists to detail price history.
     /// </summary>
-    public interface ISecurity : ICSVAccess, IExchangableValueList, IValueList
+    public interface ISecurity : ICSVAccess, IExchangableValueList, IValueList, IEquatable<ISecurity>, IComparable<ISecurity>
     {
         /// <summary>
         /// The Share data for this Security
@@ -37,20 +39,23 @@ namespace FinancialStructures.FinanceStructures
         }
 
         /// <summary>
-        /// Compares another <see cref="ISecurity"/> and determines if they both have the same name and company.
+        /// The list of Trades made in this <see cref="ISecurity"/>.
         /// </summary>
-        bool IsEqualTo(ISecurity otherSecurity);
+        IReadOnlyList<SecurityTrade> Trades
+        {
+            get;
+        }
 
         /// <summary>
-        /// Returns a copy of this <see cref="ISecurity"/>.
+        /// Produces the data for the security on the day specified.
         /// </summary>
-        new ISecurity Copy();
+        SecurityDayData DayData(DateTime day);
 
         /// <summary>
         /// Produces a list of data for visual display purposes. Display in the base currency
         /// of the fund ( so this does not modify values due to currency)
         /// </summary>
-        new List<SecurityDayData> GetDataForDisplay();
+        IReadOnlyList<SecurityDayData> GetDataForDisplay();
 
         /// <summary>
         /// Produces a list of all investments (values in <see cref="Investments"/>) in the <see cref="ISecurity"/> between the dates requested, with a currency conversion if required.
@@ -65,13 +70,19 @@ namespace FinancialStructures.FinanceStructures
         /// all values in <see cref="Investments"/>.
         /// </summary>
         /// <param name="currency">An optional currency to exchange the value with.</param>
-        double TotalInvestment(ICurrency currency = null);
+        decimal TotalInvestment(ICurrency currency = null);
+
+        /// <summary>
+        /// Returns the last investment in the <see cref="ISecurity"/>.
+        /// </summary>
+        /// <returns></returns>
+        DailyValuation LastInvestment(ICurrency currency = null);
 
         /// <summary>
         /// Returns a list of all investments with the name of the security.
         /// </summary>
         /// <param name="currency">An optional currency to exchange the value with.</param>
-        List<DayValue_Named> AllInvestmentsNamed(ICurrency currency = null);
+        List<Labelled<TwoName, DailyValuation>> AllInvestmentsNamed(ICurrency currency = null);
 
         /// <summary>
         /// Calculates the compound annual rate of the Value list.
@@ -105,12 +116,31 @@ namespace FinancialStructures.FinanceStructures
         /// <param name="unitPrice">The unit price data to add.</param>
         /// <param name="shares">The number of shares data to add.</param>
         /// <param name="investment">The value of the investment.</param>
+        /// <param name="trade">The details of any trade on this date.</param>
         /// <param name="reportLogger">An optional logger to log progress.</param>
         /// <returns>Was adding or editing successful.</returns>
-        bool TryAddOrEditData(DateTime oldDate, DateTime date, double unitPrice, double shares, double investment, IReportLogger reportLogger = null);
+        bool AddOrEditData(DateTime oldDate, DateTime date, decimal unitPrice, decimal shares, decimal investment = 0.0m, SecurityTrade trade = null, IReportLogger reportLogger = null);
 
         /// <summary>
-        ///
+        /// Tries to add data for the date specified if it doesnt exist, or edits data if it exists.
+        /// If cannot add any value that one wants to, then doesn't add all the values chosen.
+        /// </summary>
+        /// <param name="oldTrade">The existing trade held.</param>
+        /// <param name="newTrade">The new trade to overwrite the old with.</param>
+        /// <param name="reportLogger">An optional logger to log progress.</param>
+        /// <returns>Was adding or editing successful.</returns>
+        bool TryAddOrEditTradeData(SecurityTrade oldTrade, SecurityTrade newTrade, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Attempts to delete trade data on the date given.
+        /// </summary>
+        /// <param name="date">The date to delete data on</param>
+        /// <param name="reportLogger">An optional logger to log progress.</param>
+        /// <returns>True if has deleted, false if failed to delete.</returns>
+        bool TryDeleteTradeData(DateTime date, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Removes unnecessary investment and Share number values to reduce size.
         /// </summary>
         void CleanData();
     }

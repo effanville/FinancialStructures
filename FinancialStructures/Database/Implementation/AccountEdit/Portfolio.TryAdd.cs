@@ -1,6 +1,6 @@
-﻿using FinancialStructures.FinanceStructures.Implementation;
+﻿using Common.Structure.Reporting;
+using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
-using StructureCommon.Reporting;
 
 namespace FinancialStructures.Database.Implementation
 {
@@ -9,7 +9,7 @@ namespace FinancialStructures.Database.Implementation
         /// <inheritdoc/>
         public bool TryAdd(Account elementType, NameData name, IReportLogger reportLogger = null)
         {
-            if (string.IsNullOrEmpty(name.Name) && string.IsNullOrEmpty(name.Company))
+            if (string.IsNullOrWhiteSpace(name.Name) && string.IsNullOrWhiteSpace(name.Company))
             {
                 _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Adding {elementType}: Company '{name.Company}' and name '{name.Name}' cannot both be empty.");
                 return false;
@@ -28,7 +28,11 @@ namespace FinancialStructures.Database.Implementation
                 {
                     Security toAdd = new Security(name);
                     toAdd.DataEdit += OnPortfolioChanged;
-                    Funds.Add(toAdd);
+                    lock (FundsLock)
+                    {
+                        Funds.Add(toAdd);
+                    }
+
                     OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
                     break;
                 }
@@ -38,9 +42,14 @@ namespace FinancialStructures.Database.Implementation
                     {
                         name.Company = "GBP";
                     }
+
                     Currency toAdd = new Currency(name);
                     toAdd.DataEdit += OnPortfolioChanged;
-                    Currencies.Add(toAdd);
+                    lock (CurrenciesLock)
+                    {
+                        Currencies.Add(toAdd);
+                    }
+
                     OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
                     break;
                 }
@@ -48,7 +57,11 @@ namespace FinancialStructures.Database.Implementation
                 {
                     CashAccount toAdd = new CashAccount(name);
                     toAdd.DataEdit += OnPortfolioChanged;
-                    BankAccounts.Add(toAdd);
+                    lock (BankAccountsLock)
+                    {
+                        BankAccounts.Add(toAdd);
+                    }
+
                     OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
                     break;
                 }
@@ -56,16 +69,20 @@ namespace FinancialStructures.Database.Implementation
                 {
                     Sector toAdd = new Sector(name);
                     toAdd.DataEdit += OnPortfolioChanged;
-                    BenchMarks.Add(toAdd);
+                    lock (BenchmarksLock)
+                    {
+                        BenchMarks.Add(toAdd);
+                    }
+
                     OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
                     break;
                 }
                 default:
-                    _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.EditingData, $"Editing an Unknown type.");
+                    _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, $"Adding an Unknown type to portfolio.");
                     return false;
             }
 
-            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.AddingData, $"{elementType} `{name.Company}'-`{name.Name}' added to database.");
+            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.AddingData, $"{elementType} `{name.Company}'-`{name.Name}' added to database.");
             return true;
         }
     }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 using FinancialStructures.FinanceStructures;
@@ -13,13 +12,16 @@ namespace FinancialStructures.Database.Implementation
     /// </summary>
     public partial class Portfolio : IPortfolio
     {
-        private string fDatabaseFilePath;
+        private readonly object FundsLock = new object();
+        private readonly object BankAccountsLock = new object();
+        private readonly object CurrenciesLock = new object();
+        private readonly object BenchmarksLock = new object();
 
         /// <summary>
         /// Flag to state when the user has altered values in the portfolio
         /// after the last save.
         /// </summary>
-        [XmlIgnoreAttribute]
+        [XmlIgnore]
         public bool IsAlteredSinceSave
         {
             get;
@@ -27,42 +29,15 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
+        [XmlElement(ElementName = "FilePath")]
         public string FilePath
         {
-            get
-            {
-                return fDatabaseFilePath;
-            }
+            get;
+            set;
         }
 
         /// <inheritdoc/>
-        public string Extension
-        {
-            get
-            {
-                return string.IsNullOrEmpty(fDatabaseFilePath) ? string.Empty : Path.GetExtension(fDatabaseFilePath);
-            }
-        }
-
-        /// <inheritdoc/>
-        public string Directory
-        {
-            get
-            {
-                return string.IsNullOrEmpty(fDatabaseFilePath) ? string.Empty : Path.GetDirectoryName(fDatabaseFilePath);
-            }
-        }
-
-        /// <inheritdoc/>
-        public string DatabaseName
-        {
-            get
-            {
-                return Path.GetFileNameWithoutExtension(fDatabaseFilePath);
-            }
-        }
-
-        /// <inheritdoc/>
+        [XmlElement(ElementName = "BaseCurrency")]
         public string BaseCurrency
         {
             get;
@@ -70,13 +45,29 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
+        [XmlArray(ElementName = "Funds")]
         public List<Security> Funds
         {
             get;
             private set;
         } = new List<Security>();
 
+
         /// <inheritdoc/>
+        [XmlIgnore]
+        public IReadOnlyList<ISecurity> FundsThreadSafe
+        {
+            get
+            {
+                lock (FundsLock)
+                {
+                    return Funds.ToList();
+                }
+            }
+        }
+
+        /// <inheritdoc/>
+        [XmlArray(ElementName = "BankAccounts")]
         public List<CashAccount> BankAccounts
         {
             get;
@@ -84,6 +75,20 @@ namespace FinancialStructures.Database.Implementation
         } = new List<CashAccount>();
 
         /// <inheritdoc/>
+        [XmlIgnore]
+        public IReadOnlyList<IExchangableValueList> BankAccountsThreadSafe
+        {
+            get
+            {
+                lock (BankAccountsLock)
+                {
+                    return BankAccounts.ToList();
+                }
+            }
+        }
+
+        /// <inheritdoc/>
+        [XmlArray(ElementName = "Currencies")]
         public List<Currency> Currencies
         {
             get;
@@ -91,35 +96,68 @@ namespace FinancialStructures.Database.Implementation
         } = new List<Currency>();
 
         /// <inheritdoc/>
+        [XmlIgnore]
+        public IReadOnlyList<ICurrency> CurrenciesThreadSafe
+        {
+            get
+            {
+                lock (CurrenciesLock)
+                {
+                    return Currencies.ToList();
+                }
+            }
+        }
+
+        /// <inheritdoc/>
+        [XmlArray(ElementName = "BenchMarks")]
         public List<Sector> BenchMarks
         {
             get;
             set;
         } = new List<Sector>();
 
+        /// <inheritdoc/>
+        [XmlIgnore]
+        public IReadOnlyList<IValueList> BenchMarksThreadSafe
+        {
+            get
+            {
+                lock (BenchmarksLock)
+                {
+                    return BenchMarks.ToList();
+                }
+            }
+        }
+
         /// <summary>
         /// Default parameterless constructor.
         /// </summary>
-        public Portfolio()
+        internal Portfolio()
         {
         }
 
         /// <inheritdoc/>
-        public void CopyData(IPortfolio portfolio)
+        public void CopyData(Portfolio portfolio)
         {
             BaseCurrency = portfolio.BaseCurrency;
-            fDatabaseFilePath = portfolio.FilePath;
+            FilePath = portfolio.FilePath;
             Funds = portfolio.Funds;
             BankAccounts = portfolio.BankAccounts;
             Currencies = portfolio.Currencies;
             BenchMarks = portfolio.BenchMarks;
+            NotesInternal = portfolio.NotesInternal;
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// For legacy loading this is required to set the benchmarks.
+        /// </summary>
         public void SetBenchMarks(List<Sector> sectors)
         {
-            BenchMarks.Clear();
-            BenchMarks.AddRange(sectors);
+            lock (BenchmarksLock)
+            {
+                BenchMarks.Clear();
+                BenchMarks.AddRange(sectors);
+            }
         }
 
         /// <summary>
@@ -139,7 +177,7 @@ namespace FinancialStructures.Database.Implementation
                 handler?.Invoke(obj, e);
             }
 
-            if (obj is bool noChange)
+            if (obj is bool _)
             {
                 IsAlteredSinceSave = false;
             }
@@ -152,35 +190,29 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
-        public void SetFilePath(string path)
-        {
-            if (fDatabaseFilePath != path)
-            {
-                fDatabaseFilePath = path;
-                OnPortfolioChanged(fDatabaseFilePath, new PortfolioEventArgs());
-            }
-        }
-
-        /// <inheritdoc/>
         public int NumberOf(Account elementType)
         {
             switch (elementType)
             {
+                case (Account.All):
+                {
+                    return FundsThreadSafe.Count + CurrenciesThreadSafe.Count + BankAccountsThreadSafe.Count + BenchMarksThreadSafe.Count;
+                }
                 case (Account.Security):
                 {
-                    return Funds.Count;
+                    return FundsThreadSafe.Count;
                 }
                 case (Account.Currency):
                 {
-                    return Currencies.Count;
+                    return CurrenciesThreadSafe.Count;
                 }
                 case (Account.BankAccount):
                 {
-                    return BankAccounts.Count;
+                    return BankAccountsThreadSafe.Count;
                 }
                 case (Account.Benchmark):
                 {
-                    break;
+                    return BenchMarksThreadSafe.Count;
                 }
                 default:
                     break;
@@ -196,19 +228,19 @@ namespace FinancialStructures.Database.Implementation
             {
                 case Account.Security:
                 {
-                    return Funds.Where(fund => selector(fund)).Count();
+                    return FundsThreadSafe.Where(fund => selector(fund)).Count();
                 }
                 case Account.BankAccount:
                 {
-                    return BankAccounts.Where(fund => selector(fund)).Count();
+                    return BankAccountsThreadSafe.Where(fund => selector(fund)).Count();
                 }
                 case Account.Benchmark:
                 {
-                    return BenchMarks.Where(fund => selector(fund)).Count();
+                    return BenchMarksThreadSafe.Where(fund => selector(fund)).Count();
                 }
                 case Account.Currency:
                 {
-                    return Currencies.Where(fund => selector(fund)).Count();
+                    return CurrenciesThreadSafe.Where(fund => selector(fund)).Count();
                 }
                 default:
                     return 0;
@@ -218,7 +250,7 @@ namespace FinancialStructures.Database.Implementation
         /// <inheritdoc/>
         public void CleanData()
         {
-            foreach (var security in Funds)
+            foreach (ISecurity security in FundsThreadSafe)
             {
                 security.CleanData();
             }

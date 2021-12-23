@@ -1,8 +1,9 @@
-﻿using System.IO;
+﻿using System.IO.Abstractions;
 using System.Linq;
+using Common.Structure.FileAccess;
+using Common.Structure.Reporting;
+using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.SavingClasses;
-using StructureCommon.FileAccess;
-using StructureCommon.Reporting;
 
 namespace FinancialStructures.Database.Implementation
 {
@@ -11,59 +12,76 @@ namespace FinancialStructures.Database.Implementation
         /// <inheritdoc />
         public void Clear()
         {
-            SetFilePath("");
+            FilePath = "";
             BaseCurrency = "";
             IsAlteredSinceSave = false;
-            Funds.Clear();
-            BenchMarks.Clear();
-            Currencies.Clear();
-            BankAccounts.Clear();
+            lock (FundsLock)
+            {
+                Funds.Clear();
+            }
+            lock (BenchmarksLock)
+            {
+                BenchMarks.Clear();
+            }
+            lock (CurrenciesLock)
+            {
+                Currencies.Clear();
+            }
+            lock (BankAccountsLock)
+            {
+                BankAccounts.Clear();
+            }
         }
 
         /// <inheritdoc/>
-        public void LoadPortfolio(string filePath, IReportLogger reportLogger = null)
+        public void LoadPortfolio(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null)
         {
-            if (File.Exists(filePath))
+            if (fileSystem.File.Exists(filePath))
             {
-                AllData database = XmlFileAccess.ReadFromXmlFile<AllData>(filePath, out string error);
+                AllData database = XmlFileAccess.ReadFromXmlFile<AllData>(fileSystem, filePath, out string error);
                 if (database != null)
                 {
-                    database.MyFunds.SetFilePath(filePath);
                     CopyData(database.MyFunds);
+
                     if (!database.MyFunds.BenchMarks.Any())
                     {
                         SetBenchMarks(database.myBenchMarks);
                     }
 
                     WireDataChangedEvents();
-                    OnPortfolioChanged(this, new PortfolioEventArgs());
                     Saving();
-                    _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Loading, $"Loaded new database from {filePath}");
+                    _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Loading, $"Loaded new database from {filePath}");
                 }
                 else
                 {
                     _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, $" Failed to load new database from {filePath}. {error}.");
                 }
 
+                foreach (Security sec in FundsThreadSafe)
+                {
+                    sec.EnsureOnLoadDataConsistency();
+                }
+
+                OnPortfolioChanged(this, new PortfolioEventArgs(changedPortfolio: true));
                 return;
             }
 
-            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Loading, "Loaded Empty New Database.");
+            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Loading, "Loaded Empty New Database.");
 
             CopyData(new Portfolio());
             WireDataChangedEvents();
-            OnPortfolioChanged(this, new PortfolioEventArgs());
+            OnPortfolioChanged(this, new PortfolioEventArgs(changedPortfolio: true));
             Saving();
         }
 
         /// <inheritdoc/>
-        public void SavePortfolio(string filePath, IReportLogger reportLogger = null)
+        public void SavePortfolio(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null)
         {
             AllData toSave = new AllData(this, null);
 
             if (filePath != null)
             {
-                XmlFileAccess.WriteToXmlFile(filePath, toSave, out string error);
+                CommonTemp.WriteToXmlFile(fileSystem, filePath, toSave, out string error);
                 if (error != null)
                 {
                     _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Saving, $"Failed to save database: {error}");
@@ -71,7 +89,7 @@ namespace FinancialStructures.Database.Implementation
                 }
 
                 Saving();
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Report, ReportLocation.Saving, $"Saved Database at {filePath}");
+                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Saving, $"Saved Database at {filePath}");
             }
         }
     }

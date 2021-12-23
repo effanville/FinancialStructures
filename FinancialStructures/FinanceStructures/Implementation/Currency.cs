@@ -1,7 +1,7 @@
 ﻿using System;
+using Common.Structure.DataStructures;
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
-using StructureCommon.DataStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {
@@ -10,28 +10,17 @@ namespace FinancialStructures.FinanceStructures.Implementation
     /// </summary>
     public class Currency : ValueList, ICurrency
     {
-        internal override void OnDataEdit(object edited, EventArgs e)
+        /// <inheritdoc/>
+        protected override void OnDataEdit(object edited, EventArgs e)
         {
             base.OnDataEdit(edited, new PortfolioEventArgs(Account.Currency));
         }
 
         /// <inheritdoc/>
-        public string BaseCurrency
-        {
-            get
-            {
-                return Names.Company;
-            }
-        }
+        public string BaseCurrency => Names.Company;
 
         /// <inheritdoc/>
-        public string QuoteCurrency
-        {
-            get
-            {
-                return Names.Name;
-            }
-        }
+        public string QuoteCurrency => Names.Name;
 
         internal Currency(NameData names)
             : base(names)
@@ -52,7 +41,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public new ICurrency Copy()
+        public override IValueList Copy()
         {
             return new Currency(Names, Values);
         }

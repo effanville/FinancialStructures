@@ -1,23 +1,37 @@
-﻿using FinancialStructures.Database.Implementation;
-using StructureCommon.Reporting;
+﻿using System.IO.Abstractions;
+using Common.Structure.Reporting;
+using FinancialStructures.Database.Implementation;
 
 namespace FinancialStructures.Database
 {
+    /// <summary>
+    /// Class for generating portfolios.
+    /// </summary>
     public static class PortfolioFactory
     {
+        /// <summary>
+        /// Create an empty portfolio.
+        /// </summary>
         public static IPortfolio GenerateEmpty()
         {
             return new Portfolio();
         }
 
-        public static void FillDetailsFromFile(this IPortfolio portfolio, string filePath)
+        /// <summary>
+        /// Overwrites existing information and adds the information in the file to an existing portfolio.
+        /// </summary>
+        public static void FillDetailsFromFile(this IPortfolio portfolio, IFileSystem fileSystem, string filePath, IReportLogger logger)
         {
+            portfolio.LoadPortfolio(filePath, fileSystem, logger);
         }
 
-        public static IPortfolio CreateFromFile(string filepath, IReportLogger logger)
+        /// <summary>
+        /// Creates a portfolio from the file specified.
+        /// </summary>
+        public static IPortfolio CreateFromFile(IFileSystem fileSystem, string filepath, IReportLogger logger)
         {
-            var portfolio = new Portfolio();
-            portfolio.LoadPortfolio(filepath, logger);
+            Portfolio portfolio = new Portfolio();
+            portfolio.LoadPortfolio(filepath, fileSystem, logger);
             return portfolio;
         }
     }

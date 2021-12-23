@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Implementation;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Implementation
 {
@@ -16,9 +19,12 @@ namespace FinancialStructures.Database.Implementation
         /// </remarks>
         public IPortfolio Copy()
         {
-            Portfolio PortfoCopy = new Portfolio();
-            PortfoCopy.BaseCurrency = BaseCurrency;
-            PortfoCopy.fDatabaseFilePath = fDatabaseFilePath;
+            Portfolio PortfoCopy = new Portfolio
+            {
+                BaseCurrency = BaseCurrency,
+                FilePath = FilePath
+            };
+
             foreach (Security security in Funds)
             {
                 PortfoCopy.Funds.Add((Security)security.Copy());
@@ -40,49 +46,133 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
-        public List<ISecurity> CompanySecurities(string company)
+        public IReadOnlyList<IValueList> CompanyAccounts(Account account, string company)
         {
-            List<ISecurity> securities = new List<ISecurity>();
-            foreach (ISecurity sec in Funds)
+            List<IValueList> accountList = new List<IValueList>();
+            switch (account)
             {
-                if (sec.Names.Company == company)
+                case Account.All:
                 {
-                    securities.Add(sec.Copy());
+                    accountList.AddRange(CompanyAccounts(Account.Security, company));
+                    accountList.AddRange(CompanyAccounts(Account.BankAccount, company));
+                    break;
                 }
+                case Account.Security:
+                {
+                    foreach (ISecurity sec in FundsThreadSafe)
+                    {
+                        if (sec.Names.Company == company)
+                        {
+                            accountList.Add(sec.Copy());
+                        }
+                    }
+                    break;
+                }
+                case Account.BankAccount:
+                {
+                    foreach (IExchangableValueList acc in BankAccounts)
+                    {
+                        if (acc.Names.Company == company)
+                        {
+                            accountList.Add(acc.Copy());
+                        }
+                    }
+
+                    break;
+                }
+                case Account.Benchmark:
+                case Account.Currency:
+                default:
+                    break;
             }
-            securities.Sort();
-            return securities;
+
+            accountList.Sort();
+            return accountList;
         }
 
         /// <inheritdoc/>
-        public List<ICashAccount> CompanyBankAccounts(string company)
+        public IReadOnlyList<IValueList> SectorAccounts(Account account, TwoName sectorName)
         {
-            List<ICashAccount> accounts = new List<ICashAccount>();
-            foreach (ICashAccount acc in BankAccounts)
+            List<IValueList> accountList = new List<IValueList>();
+            switch (account)
             {
-                if (acc.Names.Company == company)
+                case Account.All:
                 {
-                    accounts.Add(acc);
+                    accountList.AddRange(SectorAccounts(Account.Security, sectorName));
+                    accountList.AddRange(SectorAccounts(Account.BankAccount, sectorName));
+                    break;
                 }
+                case Account.Security:
+                {
+                    foreach (ISecurity security in FundsThreadSafe)
+                    {
+                        if (security.IsSectorLinked(sectorName))
+                        {
+                            accountList.Add(security);
+                        }
+                    }
+
+                    break;
+                }
+                case Account.BankAccount:
+                {
+                    foreach (IExchangableValueList cashAccount in BankAccountsThreadSafe)
+                    {
+                        if (cashAccount.IsSectorLinked(sectorName))
+                        {
+                            accountList.Add(cashAccount);
+                        }
+                    }
+
+                    break;
+                }
+                case Account.Benchmark:
+                case Account.Currency:
+                default:
+                    break;
             }
 
-            accounts.Sort();
-            return accounts;
+            accountList.Sort();
+            return accountList;
         }
 
         /// <inheritdoc/>
-        public List<ISecurity> SectorSecurities(string sectorName)
+        public IReadOnlyList<IValueList> Accounts(Totals account, TwoName name)
         {
-            List<ISecurity> securities = new List<ISecurity>();
-            foreach (ISecurity security in Funds)
+            switch (account)
             {
-                if (security.IsSectorLinked(sectorName))
+                case Totals.SecurityCompany:
                 {
-                    securities.Add(security);
+                    return FundsThreadSafe.Where(fund => fund.Names.Company == name.Company).ToList();
                 }
+                case Totals.BankAccountCompany:
+                {
+                    return BankAccountsThreadSafe.Where(fund => fund.Names.Company == name.Company).ToList();
+                }
+                case Totals.Security:
+                {
+                    return FundsThreadSafe;
+                }
+                case Totals.Benchmark:
+                {
+                    return BenchMarksThreadSafe;
+                }
+                case Totals.BankAccount:
+                {
+                    return BankAccountsThreadSafe;
+                }
+                case Totals.Currency:
+                case Totals.Sector:
+                case Totals.SecuritySector:
+                case Totals.BankAccountSector:
+                case Totals.CurrencySector:
+                case Totals.SecurityCurrency:
+                case Totals.BankAccountCurrency:
+                case Totals.Company:
+                case Totals.All:
+                default:
+                    throw new NotImplementedException($"Total value {account} not implemented for {nameof(IPortfolio)}.{nameof(Accounts)}");
             }
-            securities.Sort();
-            return securities;
         }
     }
 }

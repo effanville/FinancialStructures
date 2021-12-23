@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using Common.Structure.DataStructures;
+using Common.Structure.FileAccess;
+using Common.Structure.Reporting;
 using FinancialStructures.NamingStructures;
-using StructureCommon.DataStructures;
-using StructureCommon.FileAccess;
-using StructureCommon.Reporting;
 
 namespace FinancialStructures.FinanceStructures
 {
     /// <summary>
     /// A named list containing values.
     /// </summary>
-    public interface IValueList : ICSVAccess, IComparable
+    public interface IValueList : ICSVAccess, IComparable, IComparable<IValueList>, IEquatable<IValueList>
     {
         /// <summary>
         /// The Name data for this list, including company, name and urls.
@@ -30,14 +30,9 @@ namespace FinancialStructures.FinanceStructures
         }
 
         /// <summary>
-        /// Provides a short string representing the <see cref="IValueList"/>
+        /// Compares to another valueList based upon the value on the specified date.
         /// </summary>
-        string ToString();
-
-        /// <summary>
-        /// Compares another <see cref="IValueList"/> and determines if they both have the same name and company.
-        /// </summary>
-        bool IsEqualTo(IValueList otherAccount);
+        int ValueComparison(IValueList otherList, DateTime dateTime);
 
         /// <summary>
         /// Returns a copy of this <see cref="IValueList"/>.
@@ -56,11 +51,15 @@ namespace FinancialStructures.FinanceStructures
 
         /// <summary>
         /// The latest value and date stored in the value list.
+        /// <para/>
+        /// If no entries are held, returns null.
         /// </summary>
         DailyValuation LatestValue();
 
         /// <summary>
         /// The earliest value and date storend in this value list.
+        /// <para/>
+        /// If no entries are held, returns null.
         /// </summary>
         DailyValuation FirstValue();
 
@@ -76,16 +75,17 @@ namespace FinancialStructures.FinanceStructures
         /// Returns the most recent value to <paramref name="date"/> that is prior to that date.
         /// This value is strictly prior to <paramref name="date"/>.
         /// </summary>
-        DailyValuation RecentPreviousValue(DateTime date);
+        DailyValuation ValueBefore(DateTime date);
 
         /// <summary>
         /// Returns the latest valuation on or before the date <paramref name="date"/>.
         /// </summary>
-        /// <param name="date">The date to query the value for.</param>
-        DailyValuation NearestEarlierValuation(DateTime date);
+        DailyValuation ValueOnOrBefore(DateTime date);
 
         /// <summary>
         /// Calculates the compound annual rate of the Value list.
+        /// This is the compound rate from the value on <paramref name="earlierTime"/>
+        /// to reach the value at <paramref name="laterTime"/>.
         /// </summary>
         /// <param name="earlierTime">The start time.</param>
         /// <param name="laterTime">The end time.</param>
@@ -94,7 +94,7 @@ namespace FinancialStructures.FinanceStructures
         /// <summary>
         /// Retrieves data in a list ordered by date.
         /// </summary>
-        List<DailyValuation> GetDataForDisplay();
+        List<DailyValuation> ListOfValues();
 
         /// <summary>
         /// Edits the names of the Value list.
@@ -112,7 +112,16 @@ namespace FinancialStructures.FinanceStructures
         /// <param name="value">The value data to add.</param>
         /// <param name="reportLogger">An optional logger to log progress.</param>
         /// <returns>Was adding or editing successful.</returns>
-        bool TryAddOrEditData(DateTime oldDate, DateTime date, double value, IReportLogger reportLogger = null);
+        bool TryEditData(DateTime oldDate, DateTime date, decimal value, IReportLogger reportLogger = null);
+
+        /// <summary>
+        /// Sets data on the date specified to the value given. This overwrites the existing
+        /// value if it exists.
+        /// </summary>
+        /// <param name="date">The date to add data to.</param>
+        /// <param name="value">The value data to add.</param>
+        /// <param name="reportLogger">An optional logger to log progress.</param>
+        void SetData(DateTime date, decimal value, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Attempts to delete data on the date specified.
@@ -127,13 +136,13 @@ namespace FinancialStructures.FinanceStructures
         /// </summary>
         /// <param name="sectorName">The sector to remove.</param>
         /// <returns>Whether removal was successful or not.</returns>
-        bool TryRemoveSector(string sectorName);
+        bool TryRemoveSector(TwoName sectorName);
 
         /// <summary>
         /// Is the sector listed in this <see cref="IValueList"/>
         /// </summary>
         /// <param name="sectorName">The sector to check.</param>
-        bool IsSectorLinked(string sectorName);
+        bool IsSectorLinked(TwoName sectorName);
 
         /// <summary>
         /// The total number of sectors associated to this <see cref="IValueList"/>

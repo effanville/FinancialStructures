@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Windows;
-using StructureCommon.Reporting;
+using Common.Structure.Reporting;
 
 namespace FinanceWindows
 {
@@ -20,7 +20,7 @@ namespace FinanceWindows
             string helpPath = Path.GetFullPath("Help\\help.html");
             if (!File.Exists(helpPath))
             {
-                _ = reportLogger.LogUsefulWithStrings("Error", "Help", "Could not find help documentation.");
+                _ = reportLogger.LogUseful(ReportType.Error, ReportLocation.Help, "Could not find help documentation.");
                 return;
             }
 

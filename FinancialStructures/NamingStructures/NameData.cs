@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 
 namespace FinancialStructures.NamingStructures
 {
@@ -8,23 +9,13 @@ namespace FinancialStructures.NamingStructures
     /// </summary>
     public class NameData : TwoName, IEquatable<NameData>
     {
-        private string fUrl;
-        private string fCurrency;
-        private HashSet<string> fSectors = new HashSet<string>();
-
         /// <summary>
         /// Website associated to account.
         /// </summary>
         public string Url
         {
-            get
-            {
-                return fUrl;
-            }
-            set
-            {
-                fUrl = value;
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -32,14 +23,8 @@ namespace FinancialStructures.NamingStructures
         /// </summary>
         public string Currency
         {
-            get
-            {
-                return fCurrency;
-            }
-            set
-            {
-                fCurrency = value;
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -47,25 +32,17 @@ namespace FinancialStructures.NamingStructures
         /// </summary>
         public HashSet<string> Sectors
         {
-            get
-            {
-                return fSectors;
-            }
-            set
-            {
-                fSectors = value;
-            }
+            get;
+            set;
         }
 
         /// <summary>
         /// Input of sector values from a string, with comma as separator.
         /// </summary>
+        [XmlIgnore]
         public string SectorsFlat
         {
-            get
-            {
-                return fSectors != null ? string.Join(",", fSectors) : null;
-            }
+            get => FlattenSectors(Sectors);
             set
             {
                 HashSet<string> sectorList = new HashSet<string>();
@@ -86,22 +63,41 @@ namespace FinancialStructures.NamingStructures
         }
 
         /// <summary>
+        /// Converts a list of sectors into a string.
+        /// </summary>
+        public static string FlattenSectors(HashSet<string> sectorsSet)
+        {
+            return sectorsSet != null ? string.Join(",", sectorsSet) : null;
+        }
+
+        /// <summary>
+        /// Any extra notes to add to the NameData.
+        /// </summary>
+        public string Notes
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Empty constructor.
         /// </summary>
         public NameData()
             : base()
         {
+            Sectors = new HashSet<string>();
         }
 
         /// <summary>
         /// Set all name type values.
         /// </summary>
-        public NameData(string company, string name, string currency = null, string url = null, HashSet<string> sectors = null)
+        public NameData(string company, string name, string currency = null, string url = null, HashSet<string> sectors = null, string notes = null)
             : base(company, name)
         {
             Currency = currency;
             Url = url;
-            Sectors = sectors;
+            Sectors = sectors ?? new HashSet<string>();
+            Notes = notes;
         }
 
         /// <summary>
@@ -109,7 +105,7 @@ namespace FinancialStructures.NamingStructures
         /// </summary>
         public NameData Copy()
         {
-            return new NameData(Company, Name, Currency, Url, Sectors);
+            return new NameData(Company, Name, Currency, Url, Sectors, Notes);
         }
 
         /// <inheritdoc/>
@@ -126,102 +122,22 @@ namespace FinancialStructures.NamingStructures
         /// <inheritdoc/>
         public bool Equals(NameData otherName)
         {
-            if (string.IsNullOrEmpty(Currency) && string.IsNullOrEmpty(Url) && string.IsNullOrEmpty(SectorsFlat))
-            {
-                if (string.IsNullOrEmpty(otherName.Currency) && string.IsNullOrEmpty(otherName.Url) && string.IsNullOrEmpty(otherName.SectorsFlat))
-                {
-
-                    return base.Equals(otherName);
-                }
-
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(Url) && string.IsNullOrEmpty(SectorsFlat))
-            {
-                if (string.IsNullOrEmpty(otherName.Url) && string.IsNullOrEmpty(otherName.SectorsFlat))
-                {
-                    if (Currency.Equals(otherName.Currency))
-                    {
-                        return base.Equals(otherName);
-                    }
-                }
-                return false;
-            }
-            if (string.IsNullOrEmpty(Currency) && string.IsNullOrEmpty(SectorsFlat))
-            {
-                if (string.IsNullOrEmpty(otherName.Currency) && string.IsNullOrEmpty(otherName.SectorsFlat))
-                {
-                    if (Url.Equals(otherName.Url))
-                    {
-                        return base.Equals(otherName);
-                    }
-                }
-                return false;
-            }
-            if (string.IsNullOrEmpty(Currency) && string.IsNullOrEmpty(Url))
-            {
-                if (string.IsNullOrEmpty(otherName.Currency) && string.IsNullOrEmpty(otherName.Url))
-                {
-                    if (SectorsFlat.Equals(otherName.SectorsFlat))
-                    {
-                        return base.Equals(otherName);
-                    }
-                }
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(Currency))
-            {
-                if (string.IsNullOrEmpty(otherName.Currency))
-                {
-                    if (Url.Equals(otherName.Url) && SectorsFlat.Equals(otherName.SectorsFlat))
-                    {
-                        return base.Equals(otherName);
-                    }
-                }
-
-                return false;
-            }
-            if (string.IsNullOrEmpty(Url))
-            {
-                if (string.IsNullOrEmpty(otherName.Url))
-                {
-                    if (Currency.Equals(otherName.Currency) && SectorsFlat.Equals(otherName.SectorsFlat))
-                    {
-                        return base.Equals(otherName);
-                    }
-                }
-
-                return false;
-            }
-            if (string.IsNullOrEmpty(SectorsFlat))
-            {
-                if (string.IsNullOrEmpty(otherName.SectorsFlat))
-                {
-                    if (Currency.Equals(otherName.Currency) && Url.Equals(otherName.Url))
-                    {
-                        return base.Equals(otherName);
-                    }
-                }
-
-                return false;
-            }
-            if (Currency.Equals(otherName.Currency) && Url.Equals(otherName.Url) && SectorsFlat.Equals(otherName.SectorsFlat))
-            {
-                return base.Equals(otherName);
-            }
-
-            return false;
+            bool currenciesEqual = Currency?.Equals(otherName.Currency) ?? otherName.Currency == null;
+            bool urlEqual = Url?.Equals(otherName.Url) ?? otherName.Url == null;
+            bool sectorsEqual = SectorsFlat?.Equals(otherName.SectorsFlat) ?? otherName.SectorsFlat == null;
+            bool notesEqual = Notes?.Equals(otherName.Notes) ?? otherName.Notes == null;
+            return currenciesEqual && urlEqual && sectorsEqual && notesEqual && base.Equals(otherName);
         }
 
         /// <inheritdoc/>
         public override int GetHashCode()
         {
-            int currencyVal = Currency != null ? Currency.GetHashCode() : 0;
-            int urlVal = Url != null ? Url.GetHashCode() : 0;
-            int sectorVal = Sectors != null ? Sectors.GetHashCode() : 0;
-            return currencyVal + urlVal + sectorVal + base.GetHashCode();
+            int hashCode = 17;
+            hashCode = 23 * hashCode + Currency?.GetHashCode() ?? 17;
+            hashCode = 23 * hashCode + Url?.GetHashCode() ?? 17;
+            hashCode = 23 * hashCode + SectorsFlat?.GetHashCode() ?? 17;
+            hashCode = 23 * hashCode + Notes?.GetHashCode() ?? 17;
+            return 23 * hashCode + base.GetHashCode();
         }
     }
 }

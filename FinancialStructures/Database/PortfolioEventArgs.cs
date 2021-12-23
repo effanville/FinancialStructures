@@ -10,45 +10,30 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Is the change pertaining to Securities.
         /// </summary>
-        public bool IsSecurity
-        {
-            get
-            {
-                return ChangedAccount == Account.Security || ChangedAccount == Account.All;
-            }
-        }
+        public bool IsSecurity => ChangedAccount == Account.Security || ChangedAccount == Account.All;
 
         /// <summary>
         /// Is the change pertaining to Benchmarks.
         /// </summary>
-        public bool IsBenchmark
-        {
-            get
-            {
-                return ChangedAccount == Account.Benchmark || ChangedAccount == Account.All;
-            }
-        }
+        public bool IsBenchmark => ChangedAccount == Account.Benchmark || ChangedAccount == Account.All;
 
         /// <summary>
         /// Is the change pertaining to BankAccounts.
         /// </summary>
-        public bool IsBankAccount
-        {
-            get
-            {
-                return ChangedAccount == Account.BankAccount || ChangedAccount == Account.All;
-            }
-        }
+        public bool IsBankAccount => ChangedAccount == Account.BankAccount || ChangedAccount == Account.All;
 
         /// <summary>
         /// Is the change pertaining to Currencies.
         /// </summary>
-        public bool IsCurrency
+        public bool IsCurrency => ChangedAccount == Account.Currency || ChangedAccount == Account.All;
+
+        /// <summary>
+        /// Has this change altered the portfolio.
+        /// </summary>
+        public bool ChangedPortfolio
         {
-            get
-            {
-                return ChangedAccount == Account.Currency || ChangedAccount == Account.All;
-            }
+            get;
+            set;
         }
 
         /// <summary>
@@ -60,21 +45,12 @@ namespace FinancialStructures.Database
         }
 
         /// <summary>
-        /// Details how the account type has changed.
+        /// Constructor taking an account type.
         /// </summary>
-        public EventAction HowChanged
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Constructor taking an account type, and how the data was edited.
-        /// </summary>
-        public PortfolioEventArgs(Account type, EventAction eventAction)
+        public PortfolioEventArgs(bool changedPortfolio)
             : base()
         {
-            HowChanged = eventAction;
-            ChangedAccount = type;
+            ChangedPortfolio = changedPortfolio;
         }
 
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿using System.Windows.Media;
 
-namespace Colouring
+namespace FinancePortfolioDatabase.GUI.TemplatesAndStyles
 {
     /// <summary>
     /// Stores the colours and brushes used in the program.
@@ -8,57 +8,48 @@ namespace Colouring
     public static class Colours
     {
         /// <summary>
-        /// The colour used for the background
-        /// </summary>
-        public static Color BackgroundMainColour
-        {
-            get;
-            set;
-        } = Colors.AliceBlue;
-
-        /// <summary>
-        /// A bruch with the same colour as <see cref="BackgroundMainColour"/>.
+        /// A brush to be used for background.
         /// </summary>
         public static Brush BackgroundBrush
         {
             get;
             set;
-        } = new SolidColorBrush(BackgroundMainColour);
+        } = new SolidColorBrush(Colors.AliceBlue);
 
         /// <summary>
-        /// A secondary background colour.
-        /// </summary>
-        public static Color BackgroundSecondColour
-        {
-            get;
-            set;
-        } = Colors.LightBlue;
-
-        /// <summary>
-        /// A brush with colour of <see cref="BackgroundSecondColour"/>
+        /// A brush for secondary background colours.
         /// </summary>
         public static Brush BackgroundSecondaryBrush
         {
             get;
             set;
-        } = new SolidColorBrush(BackgroundSecondColour);
+        } = new SolidColorBrush(Colors.LightBlue);
 
         /// <summary>
-        /// The colour used on buttons.
-        /// </summary>
-        public static Color ButtonColour
-        {
-            get;
-            set;
-        } = Colors.Lavender;
-
-        /// <summary>
-        /// A brush with the same colour as <see cref="ButtonColour"/>.
+        /// A brush with the colour for buttons.
         /// </summary>
         public static Brush DefaultButtonBrush
         {
             get;
             set;
-        } = new SolidColorBrush(ButtonColour);
+        } = new SolidColorBrush(Colors.Lavender);
+
+        /// <summary>
+        /// A brush for any highlights.
+        /// </summary>
+        public static Brush HighlightBrush
+        {
+            get;
+            set;
+        } = new SolidColorBrush(Colors.DarkGray);
+
+        /// <summary>
+        /// A brush for any highlights.
+        /// </summary>
+        public static Brush ForegroundBrush
+        {
+            get;
+            set;
+        } = new SolidColorBrush(Colors.Black);
     }
 }

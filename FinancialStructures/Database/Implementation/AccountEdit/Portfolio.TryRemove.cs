@@ -1,6 +1,6 @@
-﻿using FinancialStructures.FinanceStructures.Implementation;
+﻿using Common.Structure.Reporting;
+using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
-using StructureCommon.Reporting;
 
 namespace FinancialStructures.Database.Implementation
 {
@@ -19,62 +19,70 @@ namespace FinancialStructures.Database.Implementation
             {
                 case (Account.Security):
                 {
-                    foreach (Security sec in Funds)
+                    lock (FundsLock)
                     {
-                        if (name.IsEqualTo(sec.Names))
+                        foreach (Security sec in Funds)
                         {
-                            _ = Funds.Remove(sec);
-                            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Security {name} removed from the database.");
-                            OnPortfolioChanged(Funds, new PortfolioEventArgs(elementType));
-                            return true;
+                            if (name.IsEqualTo(sec.Names))
+                            {
+                                _ = Funds.Remove(sec);
+                                _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData, $"Security {name} removed from the database.");
+                                OnPortfolioChanged(Funds, new PortfolioEventArgs(elementType));
+                                return true;
+                            }
                         }
                     }
-
                     break;
                 }
                 case (Account.Currency):
                 {
-                    foreach (Currency currency in Currencies)
+                    lock (CurrenciesLock)
                     {
-                        if (name.IsEqualTo(currency.Names))
+                        foreach (Currency currency in Currencies)
                         {
-                            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted currency {currency.Names.Name}");
-                            _ = Currencies.Remove(currency);
-                            OnPortfolioChanged(Currencies, new PortfolioEventArgs(elementType));
-                            return true;
+                            if (name.IsEqualTo(currency.Names))
+                            {
+                                _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData, $"Deleted currency {currency.Names.Name}");
+                                _ = Currencies.Remove(currency);
+                                OnPortfolioChanged(Currencies, new PortfolioEventArgs(elementType));
+                                return true;
+                            }
                         }
                     }
-
                     break;
                 }
                 case (Account.BankAccount):
                 {
-                    foreach (CashAccount acc in BankAccounts)
+                    lock (BankAccountsLock)
                     {
-                        if (name.IsEqualTo(acc.Names))
+                        foreach (CashAccount acc in BankAccounts)
                         {
-                            _ = BankAccounts.Remove(acc);
-                            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleting Bank Account: Deleted {name}.");
-                            OnPortfolioChanged(BankAccounts, new PortfolioEventArgs(elementType));
-                            return true;
+                            if (name.IsEqualTo(acc.Names))
+                            {
+                                _ = BankAccounts.Remove(acc);
+                                _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData, $"Deleting Bank Account: Deleted {name}.");
+                                OnPortfolioChanged(BankAccounts, new PortfolioEventArgs(elementType));
+                                return true;
+                            }
                         }
                     }
-
                     break;
                 }
                 case (Account.Benchmark):
                 {
-                    foreach (Sector sector in BenchMarks)
+                    lock (BenchmarksLock)
                     {
-                        if (name.IsEqualTo(sector.Names))
+                        foreach (Sector sector in BenchMarks)
                         {
-                            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Report, ReportLocation.DeletingData, $"Deleted benchmark {sector.Names.Name}");
-                            _ = BenchMarks.Remove(sector);
-                            OnPortfolioChanged(BenchMarks, new PortfolioEventArgs(elementType));
-                            return true;
+                            if (name.IsEqualTo(sector.Names))
+                            {
+                                _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData, $"Deleted benchmark {sector.Names.Name}");
+                                _ = BenchMarks.Remove(sector);
+                                OnPortfolioChanged(BenchMarks, new PortfolioEventArgs(elementType));
+                                return true;
+                            }
                         }
                     }
-
                     break;
                 }
                 default:

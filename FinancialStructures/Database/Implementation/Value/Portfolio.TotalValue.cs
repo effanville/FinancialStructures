@@ -8,26 +8,20 @@ namespace FinancialStructures.Database.Implementation
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public double TotalValue(DateTime date, TwoName names)
-        {
-            return TotalValue(Totals.All, date, names);
-        }
-
-        /// <inheritdoc/>
-        public double TotalValue(Totals elementType, TwoName names = null)
+        public decimal TotalValue(Totals elementType, TwoName names = null)
         {
             return TotalValue(elementType, DateTime.Today, names);
         }
 
         /// <inheritdoc/>
-        public double TotalValue(Totals elementType, DateTime date, TwoName names = null)
+        public decimal TotalValue(Totals elementType, DateTime date, TwoName names = null)
         {
             switch (elementType)
             {
-                case (Totals.Security):
+                case Totals.Security:
                 {
-                    double total = 0;
-                    foreach (ISecurity sec in Funds)
+                    decimal total = 0;
+                    foreach (ISecurity sec in FundsThreadSafe)
                     {
                         if (sec.Any())
                         {
@@ -38,10 +32,10 @@ namespace FinancialStructures.Database.Implementation
 
                     return total;
                 }
-                case (Totals.Currency):
+                case Totals.Currency:
                 {
-                    double total = 0;
-                    foreach (ISecurity sec in Funds)
+                    decimal total = 0;
+                    foreach (ISecurity sec in FundsThreadSafe)
                     {
                         if (sec.Any() && sec.Names.Currency == names.Name)
                         {
@@ -49,60 +43,75 @@ namespace FinancialStructures.Database.Implementation
                             total += sec.Value(date, currency).Value;
                         }
                     }
-                    foreach (ICashAccount acc in BankAccounts)
+                    foreach (IExchangableValueList acc in BankAccountsThreadSafe)
                     {
                         if (acc.Any() && acc.Names.Currency == names.Name)
                         {
                             ICurrency currency = Currency(Account.BankAccount, acc);
-                            total += acc.NearestEarlierValuation(date, currency).Value;
+                            total += acc.ValueOnOrBefore(date, currency).Value;
                         }
                     }
                     return total;
                 }
-                case (Totals.BankAccount):
+                case Totals.BankAccount:
                 {
-                    double sum = 0;
-                    foreach (ICashAccount acc in BankAccounts)
+                    decimal sum = 0;
+                    foreach (IExchangableValueList acc in BankAccountsThreadSafe)
                     {
                         if (acc.Any())
                         {
                             ICurrency currency = Currency(Account.BankAccount, acc);
-                            sum += acc.NearestEarlierValuation(date, currency).Value;
+                            sum += acc.ValueOnOrBefore(date, currency).Value;
                         }
                     }
 
                     return sum;
                 }
-                case (Totals.Sector):
+                case Totals.SecuritySector:
                 {
-                    double sum = 0;
-                    if (Funds != null)
+                    decimal sum = 0;
+                    foreach (ISecurity fund in FundsThreadSafe)
                     {
-                        foreach (ISecurity fund in Funds)
+                        if (fund.IsSectorLinked(names))
                         {
-                            if (fund.IsSectorLinked(names?.Company))
-                            {
-                                sum += fund.NearestEarlierValuation(date).Value;
-                            }
+                            sum += fund.ValueOnOrBefore(date).Value;
                         }
                     }
 
                     return sum;
                 }
-                case (Totals.All):
+                case Totals.BankAccountSector:
+                {
+                    decimal sum = 0;
+
+                    foreach (IExchangableValueList fund in BankAccountsThreadSafe)
+                    {
+                        if (fund.IsSectorLinked(names))
+                        {
+                            sum += fund.ValueOnOrBefore(date).Value;
+                        }
+                    }
+
+                    return sum;
+                }
+                case Totals.Sector:
+                {
+                    return TotalValue(Totals.SecuritySector, date, names) + TotalValue(Totals.BankAccountSector, date, names);
+                }
+                case Totals.All:
                 {
                     return TotalValue(Totals.Security, date) + TotalValue(Totals.BankAccount, date);
                 }
                 case Totals.SecurityCompany:
                 {
-                    List<ISecurity> securities = CompanySecurities(names.Company);
-                    double value = 0;
-                    foreach (ISecurity security in securities)
+                    IReadOnlyList<IValueList> companyAccounts = CompanyAccounts(elementType.ToAccount(), names.Company);
+                    decimal value = 0;
+                    foreach (IExchangableValueList valueList in companyAccounts)
                     {
-                        if (security.Any())
+                        if (valueList.Any())
                         {
-                            ICurrency currency = Currency(Account.Security, security);
-                            value += security.Value(date, currency).Value;
+                            ICurrency currency = Currency(elementType.ToAccount(), valueList);
+                            value += valueList.Value(date, currency).Value;
                         }
                     }
 
@@ -110,18 +119,18 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.BankAccountCompany:
                 {
-                    List<ICashAccount> bankAccounts = CompanyBankAccounts(names.Company);
+                    IReadOnlyList<IValueList> bankAccounts = CompanyAccounts(Account.BankAccount, names.Company);
                     if (bankAccounts.Count == 0)
                     {
-                        return double.NaN;
+                        return 0.0m;
                     }
-                    double value = 0;
-                    foreach (ICashAccount account in bankAccounts)
+                    decimal value = 0;
+                    foreach (IExchangableValueList account in bankAccounts)
                     {
                         if (account != null && account.Any())
                         {
                             ICurrency currency = Currency(Account.BankAccount, account);
-                            value += account.NearestEarlierValuation(date, currency).Value;
+                            value += account.ValueOnOrBefore(date, currency).Value;
                         }
                     }
 
@@ -129,14 +138,18 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.Company:
                 {
-                    return TotalValue(Totals.BankAccount, date, names) + TotalValue(Totals.Security, date, names);
+                    return TotalValue(Totals.BankAccountCompany, date, names) + TotalValue(Totals.SecurityCompany, date, names);
                 }
-                case (Totals.Benchmark):
+
+                case Totals.CurrencySector:
+                case Totals.SecurityCurrency:
+                case Totals.BankAccountCurrency:
+                case Totals.Benchmark:
                 default:
                     break;
             }
 
-            return 0.0;
+            return 0.0m;
         }
     }
 }

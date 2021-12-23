@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AllData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <MyFunds>
+    <FilePath>c:/temp/saved.xml</FilePath>
+    <Funds>
+      <Security>
+        <Names>
+          <Company>company</Company>
+          <Name>name</Name>
+          <Sectors />
+        </Names>
+        <Values>
+          <Values />
+        </Values>
+        <Shares>
+          <Values />
+        </Shares>
+        <UnitPrice>
+          <Values />
+        </UnitPrice>
+        <Investments>
+          <Values />
+        </Investments>
+        <SecurityTrades />
+      </Security>
+    </Funds>
+    <BankAccounts>
+      <CashAccount>
+        <Names>
+          <Company>bank</Company>
+          <Name>account</Name>
+          <Sectors />
+        </Names>
+        <Values>
+          <Values />
+        </Values>
+        <Amounts>
+          <Values />
+        </Amounts>
+      </CashAccount>
+    </BankAccounts>
+    <Currencies>
+      <Currency>
+        <Names>
+          <Company>gbp</Company>
+          <Name>hkd</Name>
+          <Sectors />
+        </Names>
+        <Values>
+          <Values />
+        </Values>
+      </Currency>
+    </Currencies>
+    <BenchMarks>
+      <Sector>
+        <Names>
+          <Company>first</Company>
+          <Name>last</Name>
+          <Sectors />
+        </Names>
+        <Values>
+          <Values />
+        </Values>
+      </Sector>
+    </BenchMarks>
+    <Notes />
+  </MyFunds>
+</AllData>
