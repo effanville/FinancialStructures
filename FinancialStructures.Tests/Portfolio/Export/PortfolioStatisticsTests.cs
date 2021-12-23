@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 using Common.Structure.FileAccess;
@@ -12,31 +13,7 @@ namespace FinancialStructures.Tests.Database.Export
     public sealed class PortfolioStatisticsTests
     {
         private const string test =
-@"<!DOCTYPE html>
-<html lang=""en"">
-<head>
-<meta charset=""utf-8"" http-equiv=""x-ua-compatible"" content=""IE=11""/>
-<title>Statement for funds as of 19/12/2021</title>
-<style>
-html, h1, h2, h3, h4, h5, h6 { font-family: ""Arial"", cursive, sans-serif; }
-h1 { font-family: ""Arial"", cursive, sans-serif; margin-top: 1.5em; }
-h2 { font-family: ""Arial"", cursive, sans-serif; margin-top: 1.5em; }
-body{ font-family: ""Arial"", cursive, sans-serif; font-size: 10px; }
-table { border-collapse: collapse; }
-table, th, td { border: 1px solid black; }
-caption { margin-bottom: 1.2em; font-family: ""Arial"", cursive, sans-serif; font-size:medium; }
-tr { text-align: center; }
-div { max-width: 1000px; max-height: 600px; margin: left; margin-bottom: 1.5em; }
-th{ height: 1.5em; }
-p { line-height: 1.5em; margin-bottom: 1.5em;}
-</style>
-<script src=""https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js""></script>
-<script src=""https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js""></script>
-<script src=""https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js""></script>
-</head>
-<body>
-<h1>saved - Statement on 19/12/2021</h1>
-<table>
+@"<table>
 <thead><tr>
 <th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>Notes</th>
 </tr></thead>
@@ -95,8 +72,6 @@ p { line-height: 1.5em; margin-bottom: 1.5em;}
 </tbody>
 </table>
 <h2>Portfolio Notes</h2>
-</body>
-</html>
 ";
 
         [Test]
@@ -104,9 +79,10 @@ p { line-height: 1.5em; margin-bottom: 1.5em;}
         {
             var portfolio = TestDatabase.Databases[TestDatabaseName.TwoSecTwoBank];
             var settings = PortfolioStatisticsSettings.DefaultSettings();
+            settings.DateToCalculate = new DateTime(2021, 12, 19);
             var portfolioStatistics = new PortfolioStatistics(portfolio, settings, new MockFileSystem());
             var exportSettings = PortfolioStatisticsExportSettings.DefaultSettings();
-            var statsString = portfolioStatistics.ExportString(true, ExportType.Html, exportSettings);
+            var statsString = portfolioStatistics.ExportString(includeHtmlHeaders: false, ExportType.Html, exportSettings);
             Assert.AreEqual(test, statsString.ToString());
         }
 
@@ -259,6 +235,7 @@ p { line-height: 1.5em; margin-bottom: 1.5em;}
         {
             var portfolio = TestDatabase.Databases[TestDatabaseName.TwoSec];
             var settings = new PortfolioStatisticsSettings(
+                new DateTime(2021, 12, 19),
                 includeBenchmarks: true,
                 displayValueFunds: true,
                 includeSecurities: true,

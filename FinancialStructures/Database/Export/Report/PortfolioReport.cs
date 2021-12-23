@@ -153,7 +153,7 @@ namespace FinancialStructures.Database.Export.Report
                 {
                     TextWriting.WriteTitle(sb, exportType, company, HtmlTag.h3);
 
-                    var stats = fPortfolio.GetStats(Totals.SecurityCompany, new TwoName(company), AccountStatisticsHelpers.DefaultSecurityCompanyStats());
+                    var stats = fPortfolio.GetStats(DateTime.Today, Totals.SecurityCompany, new TwoName(company), AccountStatisticsHelpers.DefaultSecurityCompanyStats());
                     TableWriting.WriteTable(
                         sb,
                         exportType,

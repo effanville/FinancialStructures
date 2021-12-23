@@ -1,4 +1,5 @@
-﻿using FinancialStructures.Database.Statistics.Implementation;
+﻿using System;
+using FinancialStructures.Database.Statistics.Implementation;
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Statistics
@@ -91,7 +92,23 @@ namespace FinancialStructures.Database.Statistics
         public static IStatistic Generate(Statistic statTypeToGenerate, IPortfolio portfolio, Account account, TwoName name)
         {
             IStatistic stats = Generate(statTypeToGenerate);
-            stats.Calculate(portfolio, account, name);
+            stats.Calculate(portfolio, DateTime.Today, account, name);
+            return stats;
+        }
+
+        /// <summary>
+        /// Generates a statistic class from the specific type enum.
+        /// </summary>
+        /// <param name="statTypeToGenerate">The <see cref="Statistic"/> to generate.</param>
+        /// <param name="portfolio">The portfolio to generate values from.</param>
+        /// <param name="dateToCalculate">The date to calculate the stats on.</param>
+        /// <param name="account">The Account type to generate statistics for.</param>
+        /// <param name="name">A name to generate statistics with.</param>
+        /// <returns>A statistic with the relevant type and no value set.</returns>
+        public static IStatistic Generate(Statistic statTypeToGenerate, IPortfolio portfolio, DateTime dateToCalculate, Account account, TwoName name)
+        {
+            IStatistic stats = Generate(statTypeToGenerate);
+            stats.Calculate(portfolio, dateToCalculate, account, name);
             return stats;
         }
 
@@ -106,7 +123,23 @@ namespace FinancialStructures.Database.Statistics
         public static IStatistic Generate(Statistic statTypeToGenerate, IPortfolio portfolio, Totals totals, TwoName name)
         {
             IStatistic stats = Generate(statTypeToGenerate);
-            stats.Calculate(portfolio, totals, name);
+            stats.Calculate(portfolio, DateTime.Today, totals, name);
+            return stats;
+        }
+
+        /// <summary>
+        /// Generates a statistic class from the specific type enum.
+        /// </summary>
+        /// <param name="statTypeToGenerate">The <see cref="Statistic"/> to generate.</param>
+        /// <param name="portfolio">The portfolio to generate values from.</param>
+        /// <param name="dateToCalculate">The date to calculate the stats on.</param>
+        /// <param name="totals">The totals type to generate statistics for.</param>
+        /// <param name="name">A name to generate statistics with.</param>
+        /// <returns>A statistic with the relevant type and no value set.</returns>
+        public static IStatistic Generate(Statistic statTypeToGenerate, IPortfolio portfolio, DateTime dateToCalculate, Totals totals, TwoName name)
+        {
+            IStatistic stats = Generate(statTypeToGenerate);
+            stats.Calculate(portfolio, dateToCalculate, totals, name);
             return stats;
         }
     }

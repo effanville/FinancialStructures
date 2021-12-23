@@ -27,15 +27,15 @@ namespace FinancialStructures.Database.Statistics.Implementation
 
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
+        public override void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
-            Value = portfolio.Fraction(account.ToTotals(), account, name, DateTime.Today);
+            Value = portfolio.Fraction(account.ToTotals(), account, name, date);
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, Totals total, TwoName name)
+        public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
-            Value = portfolio.TotalFraction(total, name, DateTime.Today);
+            Value = portfolio.TotalFraction(total, name, date);
         }
     }
 }

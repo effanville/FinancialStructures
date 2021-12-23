@@ -49,13 +49,13 @@ namespace FinancialStructures.Database.Statistics
         /// <summary>
         /// Default constructor for statistics for a <see cref="Account"/> object.
         /// </summary>
-        public AccountStatistics(IPortfolio portfolio, Account account, TwoName name, Statistic[] statsToGenerate)
+        public AccountStatistics(IPortfolio portfolio, DateTime dateToCalculate, Account account, TwoName name, Statistic[] statsToGenerate)
         {
             NameData = name;
 
             foreach (Statistic stat in statsToGenerate)
             {
-                IStatistic stats = StatisticFactory.Generate(stat, portfolio, account, name);
+                IStatistic stats = StatisticFactory.Generate(stat, portfolio, dateToCalculate, account, name);
                 Statistics.Add(stats);
             }
         }
@@ -63,17 +63,13 @@ namespace FinancialStructures.Database.Statistics
         /// <summary>
         /// Default constructor for statistics for a <see cref="Totals"/>
         /// </summary>
-        /// <param name="portfolio"></param>
-        /// <param name="total"></param>
-        /// <param name="name"></param>
-        /// <param name="statsToGenerate"></param>
-        public AccountStatistics(IPortfolio portfolio, Totals total, TwoName name, Statistic[] statsToGenerate)
+        public AccountStatistics(IPortfolio portfolio, DateTime dateToCalculate, Totals total, TwoName name, Statistic[] statsToGenerate)
         {
             NameData = name;
 
             foreach (Statistic stat in statsToGenerate)
             {
-                IStatistic stats = StatisticFactory.Generate(stat, portfolio, total, name);
+                IStatistic stats = StatisticFactory.Generate(stat, portfolio, dateToCalculate, total, name);
                 Statistics.Add(stats);
             }
         }

@@ -49,14 +49,14 @@ namespace FinancialStructures.Database.Statistics
         }
 
         /// <summary>
-        /// Calculates the value for this statistic from the account in question.
+        /// Calculates the value for this statistic from the account in question on the date specified.
         /// </summary>
-        void Calculate(IPortfolio portfolio, Account account, TwoName name);
+        void Calculate(IPortfolio portfolio, DateTime dateToCalculate, Account account, TwoName name);
 
         /// <summary>
-        /// Calculates the total statistic from the total type in question.
+        /// Calculates the total statistic from the total type in question on the date specified.
         /// </summary>
-        void Calculate(IPortfolio portfolio, Totals total, TwoName name);
+        void Calculate(IPortfolio portfolio, DateTime dateToCalculate, Totals total, TwoName name);
 
         /// <summary>
         /// The string representation of the value in the statistic.

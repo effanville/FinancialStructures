@@ -20,14 +20,14 @@ namespace FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
+        public override void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
             Totals companyTotals = account.ToTotals().ToCompanyTotal();
-            Value = portfolio.Fraction(companyTotals, account, name, DateTime.Today);
+            Value = portfolio.Fraction(companyTotals, account, name, date);
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, Totals total, TwoName name)
+        public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
             if (total == Totals.Company || total == Totals.SecurityCompany || total == Totals.All)
             {

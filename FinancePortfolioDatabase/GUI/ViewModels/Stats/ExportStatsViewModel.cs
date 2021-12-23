@@ -243,6 +243,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
                 }
 
                 PortfolioStatisticsSettings settings = new PortfolioStatisticsSettings(
+                    DateTime.Today,
                     SelectableHelpers.GetData(DisplayConditions, ShowBenchmarks),
                     SelectableHelpers.GetData(DisplayConditions, ValueFunds),
                     SelectableHelpers.GetData(DisplayConditions, ShowSecurities),

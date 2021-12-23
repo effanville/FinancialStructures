@@ -1,4 +1,5 @@
-﻿using Common.Structure.Extensions;
+﻿using System;
+using Common.Structure.Extensions;
 
 using FinancialStructures.Database.Extensions.Statistics;
 using FinancialStructures.Database.Extensions.Values;
@@ -15,7 +16,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
+        public override void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
             if (!portfolio.TryGetAccount(account, name, out IValueList bankAcc))
             {
@@ -26,7 +27,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, Totals total, TwoName name)
+        public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
             Value = (portfolio.LatestDate(total, name) - portfolio.FirstValueDate(total, name)).Days / ((double)365 * portfolio.EntryDistribution(total, name).Count);
         }

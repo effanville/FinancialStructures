@@ -1,4 +1,5 @@
-﻿using FinancialStructures.DataStructures;
+﻿using System;
+using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Statistics;
 using FinancialStructures.NamingStructures;
@@ -13,7 +14,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
+        public override void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
             if (!portfolio.TryGetAccount(account, name, out IValueList desired))
             {
@@ -27,7 +28,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, Totals total, TwoName name)
+        public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
             if (total == Totals.Company || total == Totals.All)
             {

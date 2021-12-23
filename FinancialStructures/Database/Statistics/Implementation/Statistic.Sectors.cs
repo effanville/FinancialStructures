@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 
@@ -38,7 +39,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
         public object ValueAsObject => IsNumeric ? Value : StringValue;
 
         /// <inheritdoc/>
-        public void Calculate(IPortfolio portfolio, Account account, TwoName name)
+        public void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
             switch (account)
             {
@@ -62,7 +63,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public void Calculate(IPortfolio portfolio, Totals total, TwoName name)
+        public void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
             var accounts = portfolio.Accounts(total, name);
             HashSet<string> sectors = new HashSet<string>();

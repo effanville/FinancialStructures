@@ -1,4 +1,5 @@
-﻿using FinancialStructures.NamingStructures;
+﻿using System;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Statistics.Implementation
 {
@@ -36,13 +37,13 @@ namespace FinancialStructures.Database.Statistics.Implementation
         public object ValueAsObject => IsNumeric ? Value : StringValue;
 
         /// <inheritdoc/>
-        public void Calculate(IPortfolio portfolio, Account account, TwoName name)
+        public void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
             StringValue = name.Company;
         }
 
         /// <inheritdoc/>
-        public void Calculate(IPortfolio portfolio, Totals total, TwoName name)
+        public void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
             StringValue = name.Company;
         }

@@ -1,4 +1,5 @@
-﻿using Common.Structure.Extensions;
+﻿using System;
+using Common.Structure.Extensions;
 using FinancialStructures.Database.Extensions.Values;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
@@ -39,7 +40,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
         public object ValueAsObject => IsNumeric ? Value : StringValue;
 
         /// <inheritdoc/>
-        public void Calculate(IPortfolio portfolio, Account account, TwoName name)
+        public void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
             if (!portfolio.TryGetAccount(account, name, out IValueList desired))
             {
@@ -50,7 +51,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public void Calculate(IPortfolio portfolio, Totals total, TwoName name)
+        public void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
             StringValue = portfolio.FirstValueDate(total, name).ToUkDateString();
         }

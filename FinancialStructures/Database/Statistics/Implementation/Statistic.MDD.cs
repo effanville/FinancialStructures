@@ -1,4 +1,5 @@
-﻿using FinancialStructures.Database.Extensions.Statistics;
+﻿using System;
+using FinancialStructures.Database.Extensions.Statistics;
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Statistics.Implementation
@@ -11,13 +12,13 @@ namespace FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
+        public override void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
             Value = portfolio.MDD(account, name);
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, Totals total, TwoName name)
+        public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
             Value = portfolio.TotalMDD(total, name);
         }

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Common.Structure.DataStructures;
@@ -17,7 +18,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
+        public override void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
             decimal sum = 0.0m;
             List<Labelled<TwoName, DailyValuation>> investments = portfolio.Investments(account, name);
@@ -34,7 +35,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, Totals total, TwoName name)
+        public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
             decimal sum = 0.0m;
             List<Labelled<TwoName, DailyValuation>> investments = portfolio.TotalInvestments(total, name);

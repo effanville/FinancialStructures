@@ -104,7 +104,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Stats
             }
 
             Statistic[] statsToView = StatisticNames.Where(stat => stat.Selected).Select(stat => stat.Instance).ToArray();
-            Stats = DataStore.GetStats(DataType, DisplayValueFunds, statisticsToDisplay: statsToView);
+            Stats = DataStore.GetStats(DateTime.Today, DataType, DisplayValueFunds, statisticsToDisplay: statsToView);
         }
     }
 }

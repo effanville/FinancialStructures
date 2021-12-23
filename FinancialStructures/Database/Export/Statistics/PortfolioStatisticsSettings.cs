@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FinancialStructures.Database.Statistics;
 
@@ -9,6 +10,15 @@ namespace FinancialStructures.Database.Export.Statistics
     /// </summary>
     public sealed class PortfolioStatisticsSettings
     {
+        /// <summary>
+        /// The date to calculate statistics upon.
+        /// </summary>
+        public DateTime DateToCalculate
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         /// Should benchmarks be included in the sector table.
         /// </summary>
@@ -55,6 +65,7 @@ namespace FinancialStructures.Database.Export.Statistics
         /// Constructor setting all values.
         /// </summary>
         public PortfolioStatisticsSettings(
+            DateTime dateToCalculate,
             bool includeBenchmarks,
             bool displayValueFunds,
             bool includeSecurities,
@@ -70,6 +81,7 @@ namespace FinancialStructures.Database.Export.Statistics
             SortDirection sectorSortDirection,
             List<Statistic> sectorDisplayFields)
         {
+            DateToCalculate = dateToCalculate;
             IncludeBenchmarks = includeBenchmarks;
             DisplayValueFunds = displayValueFunds;
             SecurityDisplayOptions = new StatisticTableOptions(includeSecurities, securitySortField, securitySortDirection, securityDisplayFields);
@@ -83,6 +95,7 @@ namespace FinancialStructures.Database.Export.Statistics
         public static PortfolioStatisticsSettings DefaultSettings()
         {
             return new PortfolioStatisticsSettings(
+                DateTime.Today,
                 includeBenchmarks: true,
                 displayValueFunds: false,
                 includeSecurities: true,

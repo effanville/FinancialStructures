@@ -13,7 +13,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
+        public override void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
             if (!portfolio.TryGetAccount(account, name, out IValueList desired))
             {
@@ -21,13 +21,13 @@ namespace FinancialStructures.Database.Statistics.Implementation
             }
             if (desired is ISecurity security)
             {
-                Value = (double)(security.UnitPrice.ValueOnOrBefore(DateTime.Today)?.Value ?? 0.0m);
+                Value = (double)(security.UnitPrice.ValueOnOrBefore(date)?.Value ?? 0.0m);
                 fCurrency = security.Names.Currency;
             }
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, Totals total, TwoName name)
+        public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
             if (total == Totals.Company)
             {

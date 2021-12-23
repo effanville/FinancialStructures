@@ -12,15 +12,15 @@ namespace FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, Account account, TwoName name)
+        public override void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
-            Value = 100 * portfolio.IRR(account, name, DateTime.Today.AddMonths(-3), DateTime.Today);
+            Value = 100 * portfolio.IRR(account, name, date.AddMonths(-3), date);
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, Totals total, TwoName name)
+        public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
-            Value = 100 * portfolio.TotalIRR(total, DateTime.Today.AddMonths(-3), DateTime.Today, name);
+            Value = 100 * portfolio.TotalIRR(total, date.AddMonths(-3), date, name);
         }
     }
 }

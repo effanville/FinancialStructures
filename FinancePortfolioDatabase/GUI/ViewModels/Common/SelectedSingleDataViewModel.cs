@@ -103,7 +103,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             UpdateData(portfolio);
 
             DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);
-            Stats = portfolio.GetStats(TypeOfAccount, SelectedName, AccountStatisticsHelpers.AllStatistics()).Single();
+            Stats = portfolio.GetStats(DateTime.Today, TypeOfAccount, SelectedName, AccountStatisticsHelpers.AllStatistics()).Single();
             AddCsvData = new RelayCommand(ExecuteAddCsvData);
             ExportCsvData = new RelayCommand(ExecuteExportCsvData);
 

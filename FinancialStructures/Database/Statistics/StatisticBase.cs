@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using Common.Structure.Extensions;
 using FinancialStructures.NamingStructures;
 
@@ -45,12 +46,12 @@ namespace FinancialStructures.Database.Statistics
             StatType = stat;
         }
 
-        public virtual void Calculate(IPortfolio portfolio, Account account, TwoName name)
+        public virtual void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
         }
 
         /// <inheritdoc/>
-        public virtual void Calculate(IPortfolio portfolio, Totals total, TwoName name)
+        public virtual void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
         }
 
