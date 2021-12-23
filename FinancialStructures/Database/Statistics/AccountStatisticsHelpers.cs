@@ -111,6 +111,30 @@ namespace FinancialStructures.Database.Statistics
         }
 
         /// <summary>
+        /// Returns those statistic types suitable for securities.
+        /// </summary>
+        public static Statistic[] DefaultSecurityCompanyStats()
+        {
+            return new Statistic[]
+            {
+                Statistic.Company,
+                Statistic.LatestValue,
+                Statistic.RecentChange,
+                Statistic.FundFraction,
+                Statistic.Investment,
+                Statistic.Profit,
+                Statistic.IRR3M,
+                Statistic.IRR6M,
+                Statistic.IRR1Y,
+                Statistic.IRR5Y,
+                Statistic.IRRTotal,
+                Statistic.Sectors,
+                Statistic.FirstDate,
+                Statistic.LatestDate
+            };
+        }
+
+        /// <summary>
         /// Returns those statistic types suitable for Bank Accounts.
         /// </summary>
         public static Statistic[] DefaultBankAccountStats()

@@ -34,7 +34,8 @@ namespace FinancePortfolioDatabase.GUI.Configuration
             ChildConfigurations = new Dictionary<string, IConfiguration>
             {
                 { UserConfiguration.StatsOptions, new ExportStatsConfiguration() },
-                { UserConfiguration.HistoryOptions, new ExportHistoryConfiguration() }
+                { UserConfiguration.HistoryOptions, new ExportHistoryConfiguration() },
+                { UserConfiguration.ReportOptions, new ExportReportConfiguration() }
             };
         }
 

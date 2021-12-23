@@ -32,7 +32,7 @@ namespace FinancialStructures.Database.Export.Investments
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public PortfolioInvestments(IPortfolio portfolio, PortfoliInvestmentsSettings settings)
+        public PortfolioInvestments(IPortfolio portfolio, PortfolioInvestmentSettings settings)
         {
             Investments = portfolio.TotalInvestments(settings.TotalsType, settings.Name);
         }
