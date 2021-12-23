@@ -45,13 +45,16 @@ namespace Build
         public DirectoryPath PublishLocation
         {
             get;
-            set;
         }
 
         public DirectoryPath NugetPublishLocation
         {
             get;
-            set;
+        }
+
+        public bool IsProductionBuild
+        {
+            get;
         }
 
         public BuildContext(ICakeContext context)
@@ -63,6 +66,7 @@ namespace Build
             string nugetPublishDir = context.Arguments.GetArgument("publishDir") ?? $"{Configurations.DefaultPublishDir}/{Configurations.SolutionName}";
             Runtime = context.Arguments.GetArgument("runtime") ?? Configurations.DefaultRuntime;
             RemoteDir = context.Arguments.GetArgument("remote") ?? string.Empty;
+            IsProductionBuild = context.Arguments.HasArgument("isProd");
 
             RepoDir = context.MakeAbsolute(context.Directory("../../"));
             PublishLocation = RepoDir + context.Directory($"{publishDir}");

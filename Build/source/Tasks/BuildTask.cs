@@ -30,8 +30,9 @@ namespace Build.Tasks
             var settings = new DotNetCoreBuildSettings()
             {
                 Configuration = context.BuildConfiguration,
-                NoRestore = false
+                NoRestore = false,
             };
+
             context.DotNetCoreBuild(solutionFile.FullPath, settings);
         }
     }

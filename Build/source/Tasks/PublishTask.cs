@@ -1,13 +1,10 @@
 ﻿using System;
-using Cake.Common.Diagnostics;
 using Cake.Common.IO;
 using Cake.Common.Tools.DotNetCore;
+using Cake.Common.Tools.DotNetCore.MSBuild;
 using Cake.Common.Tools.DotNetCore.Publish;
-using Cake.Common.Xml;
 using Cake.Core.IO;
 using Cake.Frosting;
-using Cake.Git;
-using Cake.VersionReader;
 
 namespace Build.Tasks
 {
@@ -19,12 +16,8 @@ namespace Build.Tasks
         {
             foreach (var project in context.ExecutableProjectFilePaths())
             {
-                DirectoryPath binDir = context.RepoDir + context.Directory($"bin/{context.BuildConfiguration}/{context.Framework}");
-                FilePath thing = binDir.CombineWithFilePath("FinancePortfolioDatabase.exe");
-                string assemblyVersion = context.GetFullVersionNumber(thing);
-
-                var currentVersion = new Version(assemblyVersion);
-                DirectoryPath outputDir = context.PublishLocation + context.Directory($"{assemblyVersion}");
+                Version currentVersion = context.GetAssemblyVersion(project.ProjectName, true);
+                DirectoryPath outputDir = context.PublishLocation + context.Directory($"{currentVersion}");
 
                 var settings = new DotNetCorePublishSettings()
                 {
@@ -36,19 +29,18 @@ namespace Build.Tasks
                     PublishSingleFile = true,
                     PublishReadyToRun = true,
                     NoBuild = false,
-                    NoRestore = true,
+                    NoRestore = true
                 };
+
+                if (context.IsProductionBuild)
+                {
+                    settings.MSBuildSettings = new DotNetCoreMSBuildSettings();
+                    _ = settings.MSBuildSettings.SetVersion(currentVersion.ToString());
+                }
 
                 context.DotNetCorePublish(project.FilePath.FullPath, settings);
 
-                try
-                {
-                    context.GitTag(context.RepoDir, $"{project.ProjectName}/{currentVersion.Major}.{currentVersion.Minor}/{currentVersion.Major}.{currentVersion.Minor}.{currentVersion.Build}.{currentVersion.Revision}");
-                }
-                catch (Exception ex)
-                {
-                    context.Error($"Git tag failed with error: {ex.Message}");
-                }
+                context.TryGitTag(project.ProjectName, currentVersion);
             }
         }
     }
