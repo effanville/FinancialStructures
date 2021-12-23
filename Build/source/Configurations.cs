@@ -18,7 +18,7 @@
         public static readonly string SolutionFileName = $"{SolutionName}.sln";
 
         public const string DefaultBuildConfiguration = "Release";
-        public const string DefaultFramework = "net5.0-windows";
+        public const string DefaultFramework = "net6.0-windows";
         public const string DefaultRuntime = "win-x64";
         public const string DefaultPublishDir = "../Publish";
     }

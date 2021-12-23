@@ -7,6 +7,7 @@ using Cake.Common.Xml;
 using Cake.Core.IO;
 using Cake.Frosting;
 using Cake.Git;
+using Cake.VersionReader;
 
 namespace Build.Tasks
 {
@@ -18,18 +19,13 @@ namespace Build.Tasks
         {
             foreach (var project in context.ExecutableProjectFilePaths())
             {
-                string readedVersion = context.XmlPeek(project.FilePath.FullPath, "//Version");
-                if (readedVersion == null)
-                {
-                    readedVersion = context.XmlPeek(project.FilePath.FullPath, "//VersionPrefix");
-                }
+                DirectoryPath binDir = context.RepoDir + context.Directory($"bin/{context.BuildConfiguration}/{context.Framework}");
+                FilePath thing = binDir.CombineWithFilePath("FinancePortfolioDatabase.exe");
+                string assemblyVersion = context.GetFullVersionNumber(thing);
 
-                var currentVersion = new Version(readedVersion);
-                DirectoryPath outputDir = context.PublishLocation + context.Directory($"{currentVersion.Major}.{currentVersion.Minor}.{currentVersion.Build}.{currentVersion.Revision}");
-                if (context.DirectoryExists(outputDir))
-                {
-                    context.CleanDirectory(outputDir);
-                }
+                var currentVersion = new Version(assemblyVersion);
+                DirectoryPath outputDir = context.PublishLocation + context.Directory($"{assemblyVersion}");
+
                 var settings = new DotNetCorePublishSettings()
                 {
                     Framework = context.Framework,
@@ -39,7 +35,8 @@ namespace Build.Tasks
                     SelfContained = true,
                     PublishSingleFile = true,
                     PublishReadyToRun = true,
-                    NoBuild = true
+                    NoBuild = false,
+                    NoRestore = true,
                 };
 
                 context.DotNetCorePublish(project.FilePath.FullPath, settings);
