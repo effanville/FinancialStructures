@@ -47,7 +47,7 @@
         </Grid.Resources>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"
-                           MinHeight="40"/>
+                           MinHeight="40" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Border Grid.Row="0"
@@ -134,7 +134,7 @@
                 Visibility="{Binding HasValues, Converter={StaticResource BoolToVis}}">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="30" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0"
@@ -142,20 +142,23 @@
                            FontWeight="DemiBold"
                            Text="Portfolio Notes:" />
                 <DataGrid Grid.Row="1"
-                      FontSize="{Binding Styles.SmallFontSize}"
-                      Margin="5"
-                      MinWidth="600"
-                      HorizontalAlignment="Left"
-                      SelectionUnit="FullRow"
-                      SelectionMode="Extended"
-                      CanUserAddRows="True"
-                      IsReadOnly="False"
-                      CanUserDeleteRows="False"
-                      AutoGenerateColumns="False"
+                          FontSize="{Binding Styles.SmallFontSize}"
+                          Margin="5"
+                          MinWidth="600"
+                          HorizontalAlignment="Left"
+                          SelectionUnit="FullRow"
+                          SelectionMode="Extended"
+                          CanUserAddRows="True"
+                          IsReadOnly="False"
+                          CanUserDeleteRows="False"
+                          KeyDown="DataGrid_KeyDown"
+                          PreviewKeyDown="DataGrid_KeyDown"
+                          AddingNewItem="DataGrid_AddingNewItem"
+                          AutoGenerateColumns="False"
                           ItemsSource="{Binding Path=Notes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                           DataContext="{Binding}"
                           ScrollViewer.VerticalScrollBarVisibility="Visible"
-                      ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                          ScrollViewer.HorizontalScrollBarVisibility="Auto">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="RowEditEnding">
                             <i:InvokeCommandAction Command="{Binding CreateCommand}" />
@@ -164,34 +167,26 @@
                             <i:InvokeCommandAction Command="{Binding Path=SelectionChangedCommand}"
                                                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Mode=Default, Path=CurrentItem}" />
                         </i:EventTrigger>
-                        <i:EventTrigger EventName="PreviewKeyDown">
-                            <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=DeleteValuationCommand}"
-                                                   PassEventArgsToCommand="True" />
-                        </i:EventTrigger>
-                        <i:EventTrigger EventName="KeyDown">
-                            <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=DeleteValuationCommand}"
-                                                   PassEventArgsToCommand="True" />
-                        </i:EventTrigger>
                         <i:EventTrigger EventName="AddingNewItem">
                             <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=AddDefaultDataCommand}"
                                                    PassEventArgsToCommand="True" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                     <DataGrid.Columns>
-                    <DataGridTextColumn Header="TimeStamp"
-                                        MinWidth="100"
+                        <DataGridTextColumn Header="TimeStamp"
+                                            MinWidth="100"
                                             Binding="{Binding Path=TimeStamp, Converter={StaticResource StringToUKDate}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    <DataGridTextColumn Header="Note"
-                                        MinWidth="600"
+                        <DataGridTextColumn Header="Note"
+                                            MinWidth="600"
                                             Binding="{Binding Path=Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                </DataGrid.Columns>
+                    </DataGrid.Columns>
                 </DataGrid>
             </Grid>
         </Border>
         <Border Grid.Row="1"
                 BorderBrush="{Binding Styles.BackgroundSecondaryBrush}"
                 BorderThickness="2"
-              Visibility="{Binding NoValues, Converter={StaticResource BoolToVis}}">
+                Visibility="{Binding NoValues, Converter={StaticResource BoolToVis}}">
             <TextBlock Text="To get started, &#10; 1. Save your database in a convenient location by clicking at the top on the Save Database button.&#10; 2. Navigate to each page on the left hand side&#10; 3. Start adding Bank Accounts or Securities to the database.&#10; 4. Remember to save so you don't lose your data."
                        TextWrapping="WrapWithOverflow"
                        Margin="20" />

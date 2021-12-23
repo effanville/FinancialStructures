@@ -1,4 +1,8 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Windows.Controls;
+using System.Windows.Input;
+using FinancePortfolioDatabase.GUI.ViewModels;
+using FinancialStructures.DataStructures;
 
 namespace FinancePortfolioDatabase.GUI.Windows
 {
@@ -13,6 +17,28 @@ namespace FinancePortfolioDatabase.GUI.Windows
         public BasicDataView()
         {
             InitializeComponent();
+        }
+
+        private void DataGrid_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete || e.Key == Key.Back)
+            {
+                if (e.OriginalSource is DataGridCell)
+                {
+                    if (DataContext is BasicDataViewModel vm)
+                    {
+                        vm.DeleteSelectedNote();
+                    }
+                }
+            }
+        }
+
+        private void DataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        {
+            e.NewItem = new Note()
+            {
+                TimeStamp = DateTime.Today
+            };
         }
     }
 }
