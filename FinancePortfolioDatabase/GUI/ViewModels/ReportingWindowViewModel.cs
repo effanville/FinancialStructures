@@ -98,7 +98,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             Reports = new ErrorReports();
             ReportsToView = new ErrorReports();
             ClearReportsCommand = new RelayCommand(ExecuteClearReports);
-            DeleteCommand = new RelayCommand<KeyEventArgs>(ExecuteDeleteReport);
             ExportReportsCommand = new RelayCommand(ExecuteExportReportsCommand);
             SyncReports();
         }
@@ -160,21 +159,12 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         /// <summary>
         /// Command to delete a selected report.
         /// </summary>
-        public ICommand DeleteCommand
+        internal void DeleteReport()
         {
-            get;
-            set;
-        }
-
-        private void ExecuteDeleteReport(KeyEventArgs e)
-        {
-            if (e.Key == Key.Delete || e.Key == Key.Back)
+            if (IndexToDelete >= 0)
             {
-                if (IndexToDelete >= 0)
-                {
-                    Reports.RemoveReport(IndexToDelete);
-                    SyncReports();
-                }
+                Reports.RemoveReport(IndexToDelete);
+                SyncReports();
             }
         }
 

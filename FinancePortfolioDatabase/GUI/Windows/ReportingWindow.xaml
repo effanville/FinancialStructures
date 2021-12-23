@@ -3,7 +3,6 @@
           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-          xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
           xmlns:viewmodels="clr-namespace:FinancePortfolioDatabase.GUI.ViewModels"
           d:DataContext="{d:DesignInstance Type=viewmodels:ReportingWindowViewModel}"
           mc:Ignorable="d"
@@ -54,16 +53,9 @@
                   GridLinesVisibility="None"
                   ItemsSource="{Binding ReportsToView, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   SelectedIndex="{Binding IndexToDelete}"
+                  PreviewKeyDown="DataGrid_PreviewKeyDown"
                   Grid.Column="1"
                   Margin="5 -15 5 5"
-                  ScrollViewer.VerticalScrollBarVisibility="Auto">
-
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="PreviewKeyDown">
-                    <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=DeleteCommand}"
-                                           PassEventArgsToCommand="True" />
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </DataGrid>
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"/>
     </Grid>
 </Expander>
