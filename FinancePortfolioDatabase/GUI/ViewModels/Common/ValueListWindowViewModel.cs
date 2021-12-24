@@ -6,12 +6,13 @@ using Common.UI;
 using Common.UI.ViewModelBases;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancialStructures.Database;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 
 namespace FinancePortfolioDatabase.GUI.ViewModels.Common
 {
     /// <summary>
-    /// A view model for displaying a collect of <see cref="FinancialStructures.FinanceStructures.IValueList"/>
+    /// A view model for displaying a collect of <see cref="IValueList"/>
     /// </summary>
     public class ValueListWindowViewModel : DataDisplayViewModelBase
     {

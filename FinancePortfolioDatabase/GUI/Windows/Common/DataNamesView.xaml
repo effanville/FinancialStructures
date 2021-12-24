@@ -61,7 +61,8 @@
                   ItemsSource="{Binding Path=DataNames, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   DataContext="{Binding}"
                   ScrollViewer.VerticalScrollBarVisibility="Visible"
-                  ScrollViewer.HorizontalScrollBarVisibility="Auto">
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                  AddingNewItem="DataGrid_AddingNewItem">
             <DataGrid.Resources>
                 <commonui:BindingProxy x:Key="proxy"
                                     Data="{Binding}" />
@@ -83,10 +84,6 @@
                 </i:EventTrigger>
                 <i:EventTrigger EventName="RowEditEnding">
                     <i:InvokeCommandAction Command="{Binding CreateCommand}" />
-                </i:EventTrigger>
-                <i:EventTrigger EventName="AddingNewItem">
-                    <i:InvokeCommandAction Command="{Binding Path=AddDefaultDataCommand}"
-                                           PassEventArgsToCommand="True" />
                 </i:EventTrigger>
                 <i:EventTrigger EventName="SelectionChanged">
                     <i:InvokeCommandAction Command="{Binding Path=SelectionChangedCommand}"

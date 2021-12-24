@@ -1,4 +1,7 @@
 ﻿using System.Windows.Controls;
+using Common.Structure.DisplayClasses;
+using FinancePortfolioDatabase.GUI.ViewModels.Common;
+using FinancialStructures.NamingStructures;
 
 namespace FinancePortfolioDatabase.GUI.Windows
 {
@@ -13,6 +16,14 @@ namespace FinancePortfolioDatabase.GUI.Windows
         public DataNamesView()
         {
             InitializeComponent();
+        }
+
+        private void DataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        {
+            if (DataContext != null && DataContext is DataNamesViewModel vm && vm.DataNames != null)
+            {
+                e.NewItem = new SelectableEquatable<NameData>(new NameData(), false);
+            }
         }
     }
 }

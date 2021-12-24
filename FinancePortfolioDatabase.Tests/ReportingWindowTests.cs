@@ -1,11 +1,9 @@
-using System;
 using System.Linq;
-using System.Threading;
-using System.Windows.Input;
-using System.Windows.Interop;
 using Common.Structure.Reporting;
+using Common.UI.Services;
 using FinancePortfolioDatabase.GUI.ViewModels;
 using FinancePortfolioDatabase.Tests.TestHelpers;
+using Moq;
 using NUnit.Framework;
 
 namespace FinancePortfolioDatabase.Tests
@@ -69,7 +67,6 @@ namespace FinancePortfolioDatabase.Tests
         /// Ensure the correct selected report is removed when clear single report is pressed.
         /// </summary>
         [Test]
-        [RequiresThread(ApartmentState.STA)]
         public void CanClearSingleReport()
         {
             ReportingWindowViewModel viewModel = CreateViewModel("nothing");
@@ -81,8 +78,7 @@ namespace FinancePortfolioDatabase.Tests
             Assert.AreEqual(2, viewModel.ReportsToView.Count(), "Viewable reports should have one report added.");
 
             viewModel.IndexToDelete = 1;
-            KeyEventArgs eventArgs = new KeyEventArgs(Keyboard.PrimaryDevice, new HwndSource(0, 0, 0, 0, 0, "", IntPtr.Zero), 0, Key.Delete);
-            viewModel.DeleteCommand.Execute(eventArgs);
+            viewModel.DeleteReport();
             Assert.AreEqual(1, viewModel.Reports.GetReports().Count, "Reports should have been cleared.");
             Assert.AreEqual(1, viewModel.ReportsToView.Count(), "Viewable reports should have been cleared.");
             Assert.AreEqual(ReportType.Error, viewModel.ReportsToView.Single().ErrorType);
@@ -90,9 +86,9 @@ namespace FinancePortfolioDatabase.Tests
             Assert.AreEqual("Is this added?", viewModel.ReportsToView.Single().Message);
         }
 
-        private ReportingWindowViewModel CreateViewModel(string filepath, ReportSeverity reportingSeverity = ReportSeverity.Detailed)
+        private static ReportingWindowViewModel CreateViewModel(string filepath, ReportSeverity reportingSeverity = ReportSeverity.Detailed)
         {
-            Moq.Mock<Common.UI.Services.IFileInteractionService> mockFileService = TestSetupHelper.CreateFileMock(filepath);
+            Mock<IFileInteractionService> mockFileService = TestSetupHelper.CreateFileMock(filepath);
             ReportingWindowViewModel viewModel = new ReportingWindowViewModel(mockFileService.Object, null)
             {
                 ReportingSeverity = reportingSeverity

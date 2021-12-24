@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Common.Structure.DataStructures;
 using Common.Structure.FileAccess;
@@ -114,11 +113,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             DeleteValuationCommand = new RelayCommand(ExecuteDeleteValuation);
             AddCsvData = new RelayCommand(ExecuteAddCsvData);
             ExportCsvData = new RelayCommand(ExecuteExportCsvData);
-            DeleteTradeKeyDownCommand = new RelayCommand<KeyEventArgs>(ExecuteDeleteTradeKeyDownValuation);
             DownloadCommand = new RelayCommand(ExecuteDownloadCommand);
             AddEditDataCommand = new RelayCommand(ExecuteAddEditData);
             SelectionChangedCommand = new RelayCommand<object>(ExecuteSelectionChanged);
-            AddDefaultDataCommand = new RelayCommand<AddingNewItemEventArgs>(e => DataGrid_AddingNewItem(null, e));
             UpdateDataCallback = updateData;
 
             if (portfolio.TryGetAccount(Account.Security, SelectedName, out IValueList desired))
@@ -310,18 +307,9 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             fOldSelectedTrade = SelectedTrade?.Copy();
         }
 
-        /// <summary>
-        /// Command to create default values in the selected trade list.
-        /// </summary>
-        public ICommand AddDefaultDataCommand
+        internal SecurityTrade DefaultTradeValue()
         {
-            get;
-            set;
-        }
-
-        private void DataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
-        {
-            e.NewItem = new SecurityTrade()
+            return new SecurityTrade()
             {
                 TradeType = TradeType.Buy,
                 Names = SelectedName.ToTwoName(),
@@ -368,30 +356,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Security
             }
         }
 
-        /// <summary>
-        /// Command to delete a trade when key is pressed.
-        /// </summary>
-        public ICommand DeleteTradeKeyDownCommand
+        internal void DeleteTrade()
         {
-            get;
-            set;
-        }
-
-        private void ExecuteDeleteTradeKeyDownValuation(KeyEventArgs e)
-        {
-            if (e.Key == Key.Delete || e.Key == Key.Back)
+            if (SelectedName != null && SelectedTrade != null)
             {
-                if (e.OriginalSource is DataGridCell)
-                {
-                    if (SelectedName != null && SelectedTrade != null)
-                    {
-                        UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteTradeData(Account.Security, SelectedName, SelectedTrade.Day, fReportLogger));
-                    }
-                    else
-                    {
-                        _ = fReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.DeletingData, "No Account was selected when trying to delete data.");
-                    }
-                }
+                UpdateDataCallback(programPortfolio => programPortfolio.TryDeleteTradeData(Account.Security, SelectedName, SelectedTrade.Day, fReportLogger));
+            }
+            else
+            {
+                _ = fReportLogger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.DeletingData, "No Account was selected when trying to delete data.");
             }
         }
     }

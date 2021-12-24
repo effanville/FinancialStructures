@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Controls;
 using System.Windows.Input;
 using Common.Structure.DataStructures;
 using Common.UI.Commands;
@@ -53,8 +52,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             PreEditCommand = new RelayCommand(ExecutePreEdit);
             AddEditDataCommand = new RelayCommand(ExecuteAddEditData);
             SelectionChangedCommand = new RelayCommand<object>(ExecuteSelectionChanged);
-            AddDefaultDataCommand = new RelayCommand<AddingNewItemEventArgs>(e => DataGrid_AddingNewItem(null, e));
-            DeleteValuationCommand = new RelayCommand<KeyEventArgs>(ExecuteDeleteValuation);
             UpdateData(timeList);
         }
 
@@ -67,23 +64,15 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             Valuations = timeList?.Values() ?? new List<DailyValuation>();
         }
 
-        /// <summary>
-        /// Command called to add default values.
-        /// </summary>
-        public ICommand AddDefaultDataCommand
-        {
-            get;
-            set;
-        }
-
-        private void DataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
+        internal DailyValuation DefaultNewItem()
         {
             DailyValuation latest = null;
             if (Valuations != null && Valuations.Any())
             {
                 latest = Valuations.Last();
             }
-            e.NewItem = new DailyValuation()
+
+            return new DailyValuation()
             {
                 Day = DateTime.Today,
                 Value = latest?.Value ?? 0.0m
@@ -141,23 +130,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
         /// <summary>
         /// Command to delete values from the <see cref="TimeList"/>
         /// </summary>
-        public ICommand DeleteValuationCommand
+        internal void DeleteValuation()
         {
-            get;
-            set;
-        }
-
-        private void ExecuteDeleteValuation(KeyEventArgs e)
-        {
-            if (e.Key == Key.Delete || e.Key == Key.Back)
+            if (SelectedValuation != null)
             {
-                if (e.OriginalSource is DataGridCell dgCell)
-                {
-                    if (SelectedValuation != null)
-                    {
-                        DeleteValueAction(SelectedValuation);
-                    }
-                }
+                DeleteValueAction(SelectedValuation);
             }
         }
     }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using Common.Structure.DataStructures;
@@ -113,8 +112,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         {
             SelectionChangedCommand = new RelayCommand<object>(ExecuteSelectionChanged);
             CreateCommand = new RelayCommand(ExecuteCreateEdit);
-            DeleteValuationCommand = new RelayCommand<KeyEventArgs>(ExecuteDeleteValuation);
-            AddDefaultDataCommand = new RelayCommand<AddingNewItemEventArgs>(DataGrid_AddingNewItem);
             DataUpdateCallback = updateData;
             UpdateData(portfolio);
         }
@@ -138,23 +135,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             bankAccounts.Sort((bank, otherBank) => bank.ValueComparison(otherBank, DateTime.Today));
             TopBankAccounts = bankAccounts.Take(5).Select(name => new Labelled<TwoName, DailyValuation>(new TwoName(name.Names.Company, name.Names.Name), name.Value(DateTime.Today) ?? new DailyValuation(DateTime.Today, 0.0m))).ToList();
             Notes = portfolio.Notes.ToList();
-        }
-
-        /// <summary>
-        /// Command called to add default values.
-        /// </summary>
-        public ICommand AddDefaultDataCommand
-        {
-            get;
-            set;
-        }
-
-        private void DataGrid_AddingNewItem(AddingNewItemEventArgs e)
-        {
-            e.NewItem = new Note()
-            {
-                TimeStamp = DateTime.Today
-            };
         }
 
         /// <summary>
@@ -195,27 +175,11 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
         }
 
-
-        /// <summary>
-        /// Command to delete values from the <see cref="TimeList"/>
-        /// </summary>
-        public ICommand DeleteValuationCommand
+        internal void DeleteSelectedNote()
         {
-            get;
-            set;
-        }
-
-        private void ExecuteDeleteValuation(KeyEventArgs e)
-        {
-            if (e.Key == Key.Delete || e.Key == Key.Back)
+            if (fSelectedNote != null)
             {
-                if (e.OriginalSource is DataGridCell dgCell)
-                {
-                    if (fSelectedNote != null)
-                    {
-                        DataUpdateCallback(portfolio => portfolio.RemoveNote(fSelectedNote));
-                    }
-                }
+                DataUpdateCallback(portfolio => portfolio.RemoveNote(fSelectedNote));
             }
         }
     }

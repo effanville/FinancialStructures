@@ -67,7 +67,10 @@
                 <DataGrid ItemsSource="{Binding Path=Trades, Mode=TwoWay}"
                           AutoGenerateColumns="False"
                           Grid.Row="0"
-                          Grid.Column="1">
+                          Grid.Column="1"
+                          KeyDown="DataGrid_KeyDown"
+                          PreviewKeyDown="DataGrid_KeyDown"
+                          AddingNewItem="DataGrid_AddingNewItem">
                     <i:Interaction.Triggers>
                         <i:EventTrigger EventName="BeginningEdit">
                             <i:InvokeCommandAction Command="{Binding PreEditCommand}" />
@@ -75,21 +78,9 @@
                         <i:EventTrigger EventName="RowEditEnding">
                             <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=AddEditDataCommand}" />
                         </i:EventTrigger>
-                        <i:EventTrigger EventName="AddingNewItem">
-                            <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=AddDefaultDataCommand}"
-                                                   PassEventArgsToCommand="True" />
-                        </i:EventTrigger>
                         <i:EventTrigger EventName="SelectionChanged">
                             <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=SelectionChangedCommand}"
                                                    CommandParameter="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}, Path=CurrentItem}" />
-                        </i:EventTrigger>
-                        <i:EventTrigger EventName="PreviewKeyDown">
-                            <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path=DeleteTradeKeyDownCommand}"
-                                                   PassEventArgsToCommand="True" />
-                        </i:EventTrigger>
-                        <i:EventTrigger EventName="KeyDown">
-                            <i:InvokeCommandAction Command="{Binding Mode=TwoWay, Path= DeleteTradeKeyDownCommand}"
-                                                   PassEventArgsToCommand="True" />
                         </i:EventTrigger>
                     </i:Interaction.Triggers>
                     <DataGrid.Columns>

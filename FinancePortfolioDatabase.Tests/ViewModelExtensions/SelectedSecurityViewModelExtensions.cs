@@ -1,9 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Interop;
+﻿using System.Linq;
 using Common.Structure.DataStructures;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
 using FinancePortfolioDatabase.GUI.ViewModels.Security;
@@ -20,8 +15,7 @@ namespace FinancePortfolioDatabase.Tests.ViewModelExtensions
         public static SecurityTrade AddNewTrade(this SelectedSecurityViewModel viewModel)
         {
             viewModel.SelectTrade(null);
-            viewModel.AddDefaultDataCommand?.Execute(new AddingNewItemEventArgs());
-            viewModel.Trades.Add(new SecurityTrade());
+            viewModel.Trades.Add(viewModel.DefaultTradeValue());
             SecurityTrade newItem = viewModel.Trades.Last();
             viewModel.SelectTrade(newItem);
             viewModel.BeginEdit();
@@ -45,22 +39,15 @@ namespace FinancePortfolioDatabase.Tests.ViewModelExtensions
             viewModel.UpdateData(portfolio);
         }
 
-        [STAThread]
         public static void DeleteSelectedTrade(this SelectedSecurityViewModel viewModel, IPortfolio portfolio)
         {
-            KeyEventArgs eventArgs = new KeyEventArgs(Keyboard.PrimaryDevice, new HwndSource(0, 0, 0, 0, 0, "", IntPtr.Zero), 0, Key.Delete)
-            {
-                RoutedEvent = EventManager.RegisterRoutedEvent("Click", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(DataGridCell)),
-                Source = new DataGridCell()
-            };
-            viewModel.DeleteTradeKeyDownCommand?.Execute(eventArgs);
+            viewModel.DeleteTrade();
             viewModel.UpdateData(portfolio);
         }
 
         public static DailyValuation AddNewUnitPrice(this SelectedSecurityViewModel viewModel)
         {
             viewModel.SelectUnitPrice(null);
-            viewModel.TLVM.AddDefaultDataCommand?.Execute(new AddingNewItemEventArgs());
             viewModel.TLVM.Valuations.Add(new DailyValuation());
             DailyValuation newItem = viewModel.TLVM.Valuations.Last();
             viewModel.SelectUnitPrice(newItem);
@@ -85,15 +72,9 @@ namespace FinancePortfolioDatabase.Tests.ViewModelExtensions
             viewModel.UpdateData(portfolio);
         }
 
-        [STAThread]
         public static void DeleteSelected(this SelectedSecurityViewModel viewModel, IPortfolio portfolio)
         {
-            KeyEventArgs eventArgs = new KeyEventArgs(Keyboard.PrimaryDevice, new HwndSource(0, 0, 0, 0, 0, "", IntPtr.Zero), 0, Key.Delete)
-            {
-                RoutedEvent = EventManager.RegisterRoutedEvent("AnotherClick", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(DataGridCell)),
-                Source = new DataGridCell()
-            };
-            viewModel.TLVM.DeleteValuationCommand?.Execute(eventArgs);
+            viewModel.TLVM.DeleteValuation();
             viewModel.UpdateData(portfolio);
         }
     }
