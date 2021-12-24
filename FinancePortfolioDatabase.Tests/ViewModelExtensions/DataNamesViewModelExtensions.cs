@@ -28,7 +28,6 @@ namespace FinancePortfolioDatabase.Tests.ViewModelExtensions
         public static NameData AddNewItem(this DataNamesViewModel viewModel)
         {
             viewModel.SelectItem(null);
-            viewModel.AddDefaultDataCommand?.Execute(new AddingNewItemEventArgs());
             viewModel.DataNames.Add(new SelectableEquatable<NameData>(new NameData(), false));
             SelectableEquatable<NameData> newItem = viewModel.DataNames.Last();
             viewModel.SelectItem(newItem.Instance);

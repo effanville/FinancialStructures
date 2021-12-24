@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using Common.Structure.DataStructures;
@@ -130,7 +129,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             DeleteCommand = new RelayCommand(ExecuteDelete);
             DownloadCommand = new RelayCommand(ExecuteDownloadCommand);
             OpenTabCommand = new RelayCommand(() => LoadSelectedTab(SelectedName?.Instance));
-            AddDefaultDataCommand = new RelayCommand<AddingNewItemEventArgs>(e => DataGrid_AddingNewItem(null, e));
         }
 
         /// <summary>
@@ -192,23 +190,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels.Common
             {
                 NameData names = SelectedName.Instance;
                 UpdateDataCallback(async programPortfolio => await PortfolioDataUpdater.Download(TypeOfAccount, programPortfolio, names, ReportLogger).ConfigureAwait(false));
-            }
-        }
-
-        /// <summary>
-        /// Command to add default values to any new names added.
-        /// </summary>
-        public ICommand AddDefaultDataCommand
-        {
-            get;
-            set;
-        }
-
-        private void DataGrid_AddingNewItem(object sender, AddingNewItemEventArgs e)
-        {
-            if (DataNames != null)
-            {
-                e.NewItem = new SelectableEquatable<NameData>(new NameData(), false);
             }
         }
 
