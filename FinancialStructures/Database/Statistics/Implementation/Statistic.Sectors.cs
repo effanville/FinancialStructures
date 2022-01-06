@@ -70,10 +70,14 @@ namespace FinancialStructures.Database.Statistics.Implementation
 
             foreach (var account in accounts)
             {
-                sectors.UnionWith(account.Names.Sectors);
+                var value = account.Value(date);
+                if (value != null && value.Value > 0.0m)
+                {
+                    sectors.UnionWith(account.Names.Sectors);
+                }
             }
 
-            StringValue = NameData.FlattenSectors(sectors);
+            StringValue = NameData.FlattenSectors(sectors).Replace(",", ", ");
         }
 
         /// <inheritdoc/>
