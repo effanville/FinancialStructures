@@ -52,12 +52,12 @@ namespace FinancialStructures.Database.Statistics
             {
                 if (a.Name.Equals("Totals"))
                 {
-                    return a.Company.CompareTo(b.Company);
+                    return -1;
                 }
 
                 if (b.Name.Equals("Totals"))
                 {
-                    return a.Company.CompareTo(b.Company);
+                    return 1;
                 }
             }
             return b.CompareTo(a);
