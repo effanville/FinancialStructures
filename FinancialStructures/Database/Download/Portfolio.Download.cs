@@ -34,7 +34,7 @@ namespace FinancialStructures.Database.Download
             else
             {
                 _ = portfolio.TryGetAccount(accountType, names, out IValueList acc);
-                downloadTasks.Add(DownloadLatestValue(acc.Names, value => acc.SetData(DateTime.Today, value, reportLogger), reportLogger));
+                downloadTasks.Add(DownloadLatestValue(acc.Names, value => UpdateAndCheck(acc, value, reportLogger), reportLogger));
             }
 
             await Task.WhenAll(downloadTasks);
@@ -48,7 +48,7 @@ namespace FinancialStructures.Database.Download
             {
                 if (!string.IsNullOrEmpty(sec.Names.Url))
                 {
-                    downloadTasks.Add(DownloadLatestValue(sec.Names, value => sec.SetData(DateTime.Today, value, reportLogger), reportLogger));
+                    downloadTasks.Add(DownloadLatestValue(sec.Names, value => UpdateAndCheck(sec, value, reportLogger), reportLogger));
                 }
                 else
                 {
@@ -59,7 +59,7 @@ namespace FinancialStructures.Database.Download
             {
                 if (!string.IsNullOrEmpty(acc.Names.Url))
                 {
-                    downloadTasks.Add(DownloadLatestValue(acc.Names, value => acc.SetData(DateTime.Today, value, reportLogger), reportLogger));
+                    downloadTasks.Add(DownloadLatestValue(acc.Names, value => UpdateAndCheck(acc, value, reportLogger), reportLogger));
                 }
                 else
                 {
@@ -70,7 +70,7 @@ namespace FinancialStructures.Database.Download
             {
                 if (!string.IsNullOrEmpty(currency.Names.Url))
                 {
-                    downloadTasks.Add(DownloadLatestValue(currency.Names, value => currency.SetData(DateTime.Today, value, reportLogger), reportLogger));
+                    downloadTasks.Add(DownloadLatestValue(currency.Names, value => UpdateAndCheck(currency, value, reportLogger), reportLogger));
                 }
                 else
                 {
@@ -81,7 +81,7 @@ namespace FinancialStructures.Database.Download
             {
                 if (!string.IsNullOrEmpty(sector.Names.Url))
                 {
-                    downloadTasks.Add(DownloadLatestValue(sector.Names, value => sector.SetData(DateTime.Today, value, reportLogger), reportLogger));
+                    downloadTasks.Add(DownloadLatestValue(sector.Names, value => UpdateAndCheck(sector, value, reportLogger), reportLogger));
                 }
                 else
                 {
@@ -90,6 +90,23 @@ namespace FinancialStructures.Database.Download
             }
 
             return downloadTasks;
+        }
+
+        private static void UpdateAndCheck(IValueList valueList, decimal valueToUpdate, IReportLogger logger)
+        {
+            decimal latestValue = valueList.LatestValue().Value;
+            valueList.SetData(DateTime.Today, valueToUpdate, logger);
+
+            decimal newLatestValue = valueList.LatestValue().Value;
+            decimal scaleFactor = latestValue / newLatestValue;
+            if (scaleFactor > 50 || scaleFactor < 0.02m)
+            {
+                _ = logger.Log(
+                    ReportSeverity.Critical,
+                    ReportType.Warning,
+                    ReportLocation.Downloading,
+                    $"Account {valueList.Names} has large change in value from {latestValue} to {newLatestValue}.");
+            }
         }
 
         /// <summary>
