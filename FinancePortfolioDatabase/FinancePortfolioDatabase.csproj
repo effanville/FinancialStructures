@@ -16,7 +16,7 @@
   <PropertyGroup>
     <AssemblyTitle>FinancePortfolioDatabase</AssemblyTitle>
     <Product>FinancePortfolioDatabase</Product>
-    <VersionPrefix>21.7.0.$([System.DateTime]::UtcNow.ToString(`MMdd`))</VersionPrefix>
+    <VersionPrefix>22.0.0.$([System.DateTime]::UtcNow.ToString(`MMdd`))</VersionPrefix>
     <VersionSuffix>$([System.DateTime]::UtcNow.ToString(`yyyyMMdd-HHmm`))</VersionSuffix>
   </PropertyGroup>
 
