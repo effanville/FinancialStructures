@@ -81,7 +81,7 @@ namespace FinancialStructures.Database.Implementation
 
             if (filePath != null)
             {
-                CommonTemp.WriteToXmlFile(fileSystem, filePath, toSave, out string error);
+                XmlFileAccess.WriteToXmlFile(fileSystem, filePath, toSave, out string error);
                 if (error != null)
                 {
                     _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Saving, $"Failed to save database: {error}");

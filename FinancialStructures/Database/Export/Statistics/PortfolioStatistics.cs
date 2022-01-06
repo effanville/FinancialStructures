@@ -196,7 +196,12 @@ namespace FinancialStructures.Database.Export.Statistics
                 _ = sb.AppendLine($"<h1>{fDatabaseName} - Statement on {DateTime.Today.ToShortDateString()}</h1>");
             }
 
-            TableWriting.WriteTableFromEnumerable(sb, exportType, fDisplayOptions.BankAccountDisplayOptions.DisplayFieldNames(), PortfolioTotals.Select(data => data.Statistics), headerFirstColumn: false);
+            TableWriting.WriteTableFromEnumerable(
+                sb,
+                exportType,
+                fDisplayOptions.BankAccountDisplayOptions.DisplayFieldNames(),
+                PortfolioTotals.Select(data => data.Statistics),
+                headerFirstColumn: false);
 
             if (fDisplayOptions.SecurityDisplayOptions.ShouldDisplay)
             {
@@ -215,9 +220,14 @@ namespace FinancialStructures.Database.Export.Statistics
                 securityDataToWrite.Sort(fDisplayOptions.SecurityDisplayOptions.SortingField, fDisplayOptions.SecurityDisplayOptions.SortingDirection);
                 securityDataToWrite.AddRange(PortfolioSecurityStats);
 
-                SpacingAdd(settings.Spacing, fDisplayOptions.SecurityDisplayOptions.SortingField, ref securityDataToWrite);
+                AddSpacing(settings.Spacing, fDisplayOptions.SecurityDisplayOptions.SortingField, ref securityDataToWrite, addAfterName: false);
 
-                TableWriting.WriteTableFromEnumerable(sb, exportType, fDisplayOptions.SecurityDisplayOptions.DisplayFieldNames(), securityDataToWrite.Select(data => data.Statistics), headerFirstColumn: true);
+                TableWriting.WriteTableFromEnumerable(
+                    sb,
+                    exportType,
+                    fDisplayOptions.SecurityDisplayOptions.DisplayFieldNames(),
+                    securityDataToWrite.Select(data => data.Statistics),
+                    headerFirstColumn: true);
             }
 
             if (fDisplayOptions.BankAccountDisplayOptions.ShouldDisplay)
@@ -237,9 +247,14 @@ namespace FinancialStructures.Database.Export.Statistics
                 bankAccountDataToWrite.Sort(fDisplayOptions.BankAccountDisplayOptions.SortingField, fDisplayOptions.BankAccountDisplayOptions.SortingDirection);
                 bankAccountDataToWrite.AddRange(BankAccountTotalStats);
 
-                SpacingAdd(settings.Spacing, fDisplayOptions.BankAccountDisplayOptions.SortingField, ref bankAccountDataToWrite);
+                AddSpacing(settings.Spacing, fDisplayOptions.BankAccountDisplayOptions.SortingField, ref bankAccountDataToWrite, addAfterName: false);
 
-                TableWriting.WriteTableFromEnumerable(sb, exportType, fDisplayOptions.BankAccountDisplayOptions.DisplayFieldNames(), bankAccountDataToWrite.Select(data => data.Statistics), headerFirstColumn: true);
+                TableWriting.WriteTableFromEnumerable(
+                    sb,
+                    exportType,
+                    fDisplayOptions.BankAccountDisplayOptions.DisplayFieldNames(),
+                    bankAccountDataToWrite.Select(data => data.Statistics),
+                    headerFirstColumn: true);
             }
 
             if (fDisplayOptions.SectorDisplayOptions.ShouldDisplay)
@@ -249,9 +264,14 @@ namespace FinancialStructures.Database.Export.Statistics
 
                 sectorDataToWrite.Sort(fDisplayOptions.SectorDisplayOptions.SortingField, fDisplayOptions.SectorDisplayOptions.SortingDirection);
 
-                SectorSpacingAdd(settings.Spacing, fDisplayOptions.SectorDisplayOptions.SortingField, ref sectorDataToWrite);
+                AddSpacing(settings.Spacing, fDisplayOptions.SectorDisplayOptions.SortingField, ref sectorDataToWrite, addAfterName: true);
 
-                TableWriting.WriteTableFromEnumerable(sb, exportType, fDisplayOptions.SectorDisplayOptions.DisplayFieldNames(), sectorDataToWrite.Select(data => data.Statistics), headerFirstColumn: true);
+                TableWriting.WriteTableFromEnumerable(
+                    sb,
+                    exportType,
+                    fDisplayOptions.SectorDisplayOptions.DisplayFieldNames(),
+                    sectorDataToWrite.Select(data => data.Statistics),
+                    headerFirstColumn: true);
             }
 
             TextWriting.WriteTitle(sb, exportType, "Portfolio Notes", HtmlTag.h2);
@@ -268,7 +288,7 @@ namespace FinancialStructures.Database.Export.Statistics
         /// <summary>
         /// Adds spacing into the table list if user desires.
         /// </summary>
-        private static void SpacingAdd(bool addSpacing, Statistic sortingField, ref List<AccountStatistics> dataList)
+        private static void AddSpacing(bool addSpacing, Statistic sortingField, ref List<AccountStatistics> dataList, bool addAfterName)
         {
             if (addSpacing)
             {
@@ -277,30 +297,12 @@ namespace FinancialStructures.Database.Export.Statistics
                     int index = 0;
                     while (index < dataList.Count - 1)
                     {
-                        if (dataList[index].NameData.Company != dataList[index + 1].NameData.Company)
+                        if (!addAfterName && dataList[index].NameData.Company != dataList[index + 1].NameData.Company)
                         {
                             dataList.Insert(index + 1, new AccountStatistics());
                             index++;
                         }
-                        index++;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Adds spacing into the table list if user desires.
-        /// </summary>
-        private static void SectorSpacingAdd(bool addSpacing, Statistic sortingField, ref List<AccountStatistics> dataList)
-        {
-            if (addSpacing)
-            {
-                if (sortingField == Statistic.Company || sortingField == Statistic.Name)
-                {
-                    int index = 0;
-                    while (index < dataList.Count - 1)
-                    {
-                        if (dataList[index].NameData.Name != dataList[index + 1].NameData.Name)
+                        else if (dataList[index].NameData.Name != dataList[index + 1].NameData.Name)
                         {
                             dataList.Insert(index + 1, new AccountStatistics());
                             index++;
