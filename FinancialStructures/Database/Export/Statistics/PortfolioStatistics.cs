@@ -302,7 +302,7 @@ namespace FinancialStructures.Database.Export.Statistics
                             dataList.Insert(index + 1, new AccountStatistics());
                             index++;
                         }
-                        else if (dataList[index].NameData.Name != dataList[index + 1].NameData.Name)
+                        else if (addAfterName && dataList[index].NameData.Name != dataList[index + 1].NameData.Name)
                         {
                             dataList.Insert(index + 1, new AccountStatistics());
                             index++;
