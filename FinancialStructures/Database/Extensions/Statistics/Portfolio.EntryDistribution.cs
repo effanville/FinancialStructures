@@ -96,7 +96,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
             Dictionary<DateTime, int> totals = new Dictionary<DateTime, int>();
             foreach (IValueList cashAccount in accounts)
             {
-                foreach (DailyValuation value in cashAccount.Values.Values())
+                foreach (DailyValuation value in cashAccount.ListOfValues())
                 {
                     if (totals.TryGetValue(value.Day, out _))
                     {
