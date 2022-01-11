@@ -56,23 +56,6 @@
                         </i:Interaction.Triggers>
                     </ComboBox>
                 </ToolBar>
-                <ToolBar ToolTip="Help Options"
-                         Background="{Binding Styles.BackgroundBrush}">
-                    <Button HorizontalAlignment="Right"
-                            Background="{Binding Styles.BackgroundBrush}"
-                            Style="{StaticResource ResourceKey=defaultButtonNoMargin}"
-                            Command="{Binding OpenHelpCommand}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="../TemplatesAndStyles/helpIcon.png" />
-                            <TextBlock HorizontalAlignment="Center"
-                                       VerticalAlignment="Center"
-                                       Foreground="LightGreen"
-                                       FontSize="{Binding Styles.MediumFontSize}"
-                                       FontWeight="UltraBold"
-                                       Text="Don't Panic!" />
-                        </StackPanel>
-                    </Button>
-                </ToolBar>
             </ToolBarTray>
         </StackPanel>
     </Grid>

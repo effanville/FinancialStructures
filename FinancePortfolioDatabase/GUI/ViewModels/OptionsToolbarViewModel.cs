@@ -9,7 +9,6 @@ using Common.UI.Commands;
 using Common.UI.Services;
 using FinancePortfolioDatabase.GUI.TemplatesAndStyles;
 using FinancePortfolioDatabase.GUI.ViewModels.Common;
-using FinanceWindows;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Download;
 using FinancialStructures.Database.Extensions;
@@ -59,7 +58,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             DataUpdateCallback = updateData;
             UpdateData(portfolio);
 
-            OpenHelpCommand = new RelayCommand(OpenHelpDocsCommand);
             NewDatabaseCommand = new RelayCommand(ExecuteNewDatabase);
             SaveDatabaseCommand = new RelayCommand(ExecuteSaveDatabase);
             LoadDatabaseCommand = new RelayCommand(ExecuteLoadDatabase);
@@ -82,21 +80,6 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
 
             BaseCurrency = portfolio.BaseCurrency;
-        }
-
-        /// <summary>
-        /// Command to open the help documentation.
-        /// </summary>
-        public ICommand OpenHelpCommand
-        {
-            get;
-        }
-
-        private void OpenHelpDocsCommand()
-        {
-            _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Unknown, $"Opening help window.");
-            HelpWindow helpwindow = new HelpWindow(ReportLogger);
-            helpwindow.Show();
         }
 
         /// <summary>
