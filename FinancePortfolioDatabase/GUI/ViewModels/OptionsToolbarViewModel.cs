@@ -120,8 +120,7 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
             }
             if (result == MessageBoxResult.Yes)
             {
-                DataUpdateCallback(programPortfolio => programPortfolio.FilePath = "");
-                DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio("", fUiGlobals.CurrentFileSystem, ReportLogger));
+                DataUpdateCallback(programPortfolio => PortfolioFactory.GenerateEmpty());
                 fUiGlobals.CurrentWorkingDirectory = "";
             }
         }
@@ -152,15 +151,14 @@ namespace FinancePortfolioDatabase.GUI.ViewModels
         {
             get;
         }
+
         private void ExecuteLoadDatabase()
         {
             _ = ReportLogger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Loading, $"Loading database called.");
             FileInteractionResult result = fUiGlobals.FileInteractionService.OpenFile("xml", filter: "XML Files|*.xml|All Files|*.*");
             if (result.Success)
             {
-                DataUpdateCallback(programPortfolio => programPortfolio.Clear());
-                DataUpdateCallback(programPortfolio => programPortfolio.FilePath = result.FilePath);
-                DataUpdateCallback(programPortfolio => programPortfolio.LoadPortfolio(result.FilePath, fUiGlobals.CurrentFileSystem, ReportLogger));
+                DataUpdateCallback(programPortfolio => programPortfolio.FillDetailsFromFile(fUiGlobals.CurrentFileSystem, result.FilePath, ReportLogger));
                 fUiGlobals.CurrentWorkingDirectory = fUiGlobals.CurrentFileSystem.Path.GetDirectoryName(result.FilePath);
             }
         }

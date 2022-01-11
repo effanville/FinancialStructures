@@ -22,6 +22,7 @@ namespace FinancialStructures.Database
         /// </summary>
         public static void FillDetailsFromFile(this IPortfolio portfolio, IFileSystem fileSystem, string filePath, IReportLogger logger)
         {
+            portfolio.Clear();
             portfolio.LoadPortfolio(filePath, fileSystem, logger);
         }
 
