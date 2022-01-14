@@ -98,6 +98,11 @@ namespace FinancialStructures.Database.Download
             valueList.SetData(DateTime.Today, valueToUpdate, logger);
 
             decimal newLatestValue = valueList.LatestValue().Value;
+            if (newLatestValue == 0 || latestValue == 0)
+            {
+                return;
+            }
+
             decimal scaleFactor = latestValue / newLatestValue;
             if (scaleFactor > 50 || scaleFactor < 0.02m)
             {
@@ -120,6 +125,7 @@ namespace FinancialStructures.Database.Download
                 _ = reportLogger?.LogUsefulError(ReportLocation.Downloading, $"{names.Company}-{names.Name}: could not download data from {names.Url}");
                 return;
             }
+
             if (!ProcessDownloadString(names.Url, data, reportLogger, out decimal? value))
             {
                 return;
