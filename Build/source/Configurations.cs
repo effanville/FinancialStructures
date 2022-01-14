@@ -6,7 +6,7 @@
         public static readonly (string FolderName, string ProjectName)[] ExecutablePublishProjects =
             new (string FolderName, string ProjectName)[]
             {
-                ("FinancePortfolioDatabase", "FinancePortfolioDatabase"),
+                ("FPD.UI", "FPD.UI"),
                 ("FPDConsole", "FPDConsole"),
             };
         public static readonly (string FolderName, string ProjectName)[] NugetPackageProjects =

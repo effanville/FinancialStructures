@@ -16,7 +16,7 @@
   <Import Project="..\Build\CommonProperties.Build.props" />
 
   <PropertyGroup>
-    <DocumentationFile>..\bin\Release\FinancialStructures.xml</DocumentationFile>
+    <DocumentationFile>..\bin\$(Configuration)\$(Framework)\$(Runtime)\FinancialStructures.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,7 +29,7 @@
     <_Parameter1>FinancialStructures.Tests</_Parameter1>
     </AssemblyAttribute>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-      <_Parameter1>FinancePortfolioDatabase.Tests</_Parameter1>
+      <_Parameter1>FPD.ViewModels.Tests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
 
