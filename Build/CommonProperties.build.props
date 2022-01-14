@@ -2,8 +2,8 @@
 <Project>
   <PropertyGroup>
     <AppxAutoIncrementPackageRevision>false</AppxAutoIncrementPackageRevision>
-    <BuildPackage>true</BuildPackage>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <BuildPackage>false</BuildPackage>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>Effanville</Authors>
   </PropertyGroup>
 
