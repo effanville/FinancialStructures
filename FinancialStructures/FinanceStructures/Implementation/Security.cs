@@ -79,6 +79,21 @@ namespace FinancialStructures.FinanceStructures.Implementation
             SetupEventListening();
         }
 
+        /// <summary>
+        /// Disposes of objects, and unsubscribes from events.
+        /// </summary>
+        protected override void Dispose(bool disposing)
+        {
+            base.Dispose(disposing);
+
+            if (disposing)
+            {
+                UnitPrice.DataEdit -= OnDataEdit;
+                Shares.DataEdit -= OnDataEdit;
+                Investments.DataEdit -= OnDataEdit;
+            }
+        }
+
         /// <inheritdoc/>
         protected override void OnDataEdit(object edited, EventArgs e)
         {

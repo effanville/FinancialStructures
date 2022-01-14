@@ -9,30 +9,6 @@ namespace FinancialStructures.Database.Implementation
 {
     public partial class Portfolio
     {
-        /// <inheritdoc />
-        public void Clear()
-        {
-            FilePath = "";
-            BaseCurrency = "";
-            IsAlteredSinceSave = false;
-            lock (FundsLock)
-            {
-                Funds.Clear();
-            }
-            lock (BenchmarksLock)
-            {
-                BenchMarks.Clear();
-            }
-            lock (CurrenciesLock)
-            {
-                Currencies.Clear();
-            }
-            lock (BankAccountsLock)
-            {
-                BankAccounts.Clear();
-            }
-        }
-
         /// <inheritdoc/>
         public void LoadPortfolio(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null)
         {
@@ -41,7 +17,7 @@ namespace FinancialStructures.Database.Implementation
                 AllData database = XmlFileAccess.ReadFromXmlFile<AllData>(fileSystem, filePath, out string error);
                 if (database != null)
                 {
-                    CopyData(database.MyFunds);
+                    SetFrom(database.MyFunds);
 
                     if (!database.MyFunds.BenchMarks.Any())
                     {
@@ -68,10 +44,7 @@ namespace FinancialStructures.Database.Implementation
 
             _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Loading, "Loaded Empty New Database.");
 
-            CopyData(new Portfolio());
-            WireDataChangedEvents();
-            OnPortfolioChanged(this, new PortfolioEventArgs(changedPortfolio: true));
-            Saving();
+            Clear();
         }
 
         /// <inheritdoc/>

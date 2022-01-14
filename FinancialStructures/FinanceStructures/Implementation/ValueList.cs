@@ -9,7 +9,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
     /// <summary>
     /// A named list containing values.
     /// </summary>
-    public partial class ValueList : IValueList
+    public partial class ValueList : IValueList, IDisposable
     {
         /// <inheritdoc/>
         public NameData Names
@@ -96,6 +96,24 @@ namespace FinancialStructures.FinanceStructures.Implementation
             Names = names;
             Values = values;
             SetupEventListening();
+        }
+
+        /// <inheritdoc/>
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Disposes of objects, and unsubscribes from events.
+        /// </summary>
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                Values.DataEdit -= OnDataEdit;
+            }
         }
 
         /// <summary>

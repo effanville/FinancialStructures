@@ -26,7 +26,7 @@ namespace FinancialStructures.Database.Implementation
         {
             get;
             private set;
-        }
+        } = false;
 
         /// <inheritdoc/>
         [XmlElement(ElementName = "FilePath")]
@@ -137,7 +137,7 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
-        public void CopyData(Portfolio portfolio)
+        public void SetFrom(Portfolio portfolio)
         {
             BaseCurrency = portfolio.BaseCurrency;
             FilePath = portfolio.FilePath;
@@ -146,6 +146,14 @@ namespace FinancialStructures.Database.Implementation
             Currencies = portfolio.Currencies;
             BenchMarks = portfolio.BenchMarks;
             NotesInternal = portfolio.NotesInternal;
+        }
+
+        /// <inheritdoc />
+        public void Clear()
+        {
+            SetFrom(new Portfolio());
+            WireDataChangedEvents();
+            OnPortfolioChanged(this, new PortfolioEventArgs(changedPortfolio: true));
         }
 
         /// <summary>

@@ -27,6 +27,14 @@ namespace FinancialStructures.Database
         }
 
         /// <summary>
+        /// Overwrites existing information with empty defaults.
+        /// </summary>
+        public static void Clear(this IPortfolio portfolio, IReportLogger logger)
+        {
+            portfolio.Clear();
+        }
+
+        /// <summary>
         /// Creates a portfolio from the file specified.
         /// </summary>
         public static IPortfolio CreateFromFile(IFileSystem fileSystem, string filepath, IReportLogger logger)
