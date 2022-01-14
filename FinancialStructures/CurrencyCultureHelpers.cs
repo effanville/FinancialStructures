@@ -44,7 +44,7 @@ namespace FinancialStructures
             {
                 cultureInfo = CultureInfo.CreateSpecificCulture(cultureSpecifier);
             }
-            catch (CultureNotFoundException ex)
+            catch (CultureNotFoundException)
             {
                 return null;
             }
