@@ -28,26 +28,19 @@ namespace FinancialStructures.Database.Extensions.Values
                 }
                 case Totals.SecurityCompany:
                 case Totals.BankAccountCompany:
+                case Totals.AssetCompany:
                 {
                     return LatestDateOf(portfolio.CompanyAccounts(total.ToAccount(), name.Company));
                 }
                 case Totals.Sector:
                 {
-                    DateTime earlySecurity = portfolio.LatestDate(Totals.SecuritySector, name);
-                    DateTime earlyBank = portfolio.LatestDate(Totals.BankAccountSector, name);
-
-                    if (earlySecurity == default)
-                    {
-                        return earlyBank;
-                    }
-
-                    if (earlyBank == default)
-                    {
-                        return earlySecurity;
-                    }
-
-                    return earlySecurity > earlyBank ? earlySecurity : earlyBank;
+                    return LatestDateOf(portfolio.SectorAccounts(Account.All, name));
                 }
+                case Totals.Asset:
+                {
+                    return LatestDateOf(portfolio.Assets);
+                }
+                case Totals.AssetSector:
                 case Totals.SecuritySector:
                 case Totals.BankAccountSector:
                 {

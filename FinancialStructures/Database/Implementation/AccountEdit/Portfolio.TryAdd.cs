@@ -1,5 +1,6 @@
 ﻿using Common.Structure.Reporting;
 using FinancialStructures.FinanceStructures.Implementation;
+using FinancialStructures.FinanceStructures.Implementation.Asset;
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Implementation
@@ -24,7 +25,7 @@ namespace FinancialStructures.Database.Implementation
 
             switch (elementType)
             {
-                case (Account.Security):
+                case Account.Security:
                 {
                     Security toAdd = new Security(name);
                     toAdd.DataEdit += OnPortfolioChanged;
@@ -36,7 +37,7 @@ namespace FinancialStructures.Database.Implementation
                     OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
                     break;
                 }
-                case (Account.Currency):
+                case Account.Currency:
                 {
                     if (string.IsNullOrEmpty(name.Company))
                     {
@@ -53,7 +54,7 @@ namespace FinancialStructures.Database.Implementation
                     OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
                     break;
                 }
-                case (Account.BankAccount):
+                case Account.BankAccount:
                 {
                     CashAccount toAdd = new CashAccount(name);
                     toAdd.DataEdit += OnPortfolioChanged;
@@ -65,13 +66,25 @@ namespace FinancialStructures.Database.Implementation
                     OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
                     break;
                 }
-                case (Account.Benchmark):
+                case Account.Benchmark:
                 {
                     Sector toAdd = new Sector(name);
                     toAdd.DataEdit += OnPortfolioChanged;
                     lock (BenchmarksLock)
                     {
                         BenchMarks.Add(toAdd);
+                    }
+
+                    OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
+                    break;
+                }
+                case Account.Asset:
+                {
+                    AmortisableAsset toAdd = new AmortisableAsset(name);
+                    toAdd.DataEdit += OnPortfolioChanged;
+                    lock (AssetsLock)
+                    {
+                        AssetsBackingList.Add(toAdd);
                     }
 
                     OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));

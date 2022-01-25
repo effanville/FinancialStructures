@@ -1,5 +1,6 @@
 ﻿using FinancialStructures.Database;
 using FinancialStructures.FinanceStructures.Implementation;
+using FinancialStructures.FinanceStructures.Implementation.Asset;
 
 namespace FinancialStructures.FinanceStructures
 {
@@ -12,7 +13,6 @@ namespace FinancialStructures.FinanceStructures
         /// Creates an instance of an IValueList.
         /// </summary>
         /// <param name="account">The type of ValueList to create.</param>
-        /// <returns></returns>
         public static IValueList Create(Account account)
         {
             switch (account)
@@ -25,6 +25,8 @@ namespace FinancialStructures.FinanceStructures
                     return new CashAccount();
                 case Account.Currency:
                     return new Currency();
+                case Account.Asset:
+                    return new AmortisableAsset();
                 case Account.All:
                 default:
                     return null;

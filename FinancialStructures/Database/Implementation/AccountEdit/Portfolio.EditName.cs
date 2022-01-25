@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+
 using Common.Structure.Reporting;
+
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 
@@ -12,21 +14,25 @@ namespace FinancialStructures.Database.Implementation
         {
             switch (elementType)
             {
-                case (Account.Security):
+                case Account.Security:
                 {
                     return TryEditNameSingleList(FundsThreadSafe, elementType, oldName, newName, reportLogger);
                 }
-                case (Account.Currency):
+                case Account.Currency:
                 {
                     return TryEditNameSingleList(CurrenciesThreadSafe, elementType, oldName, newName, reportLogger);
                 }
-                case (Account.BankAccount):
+                case Account.BankAccount:
                 {
                     return TryEditNameSingleList(BankAccountsThreadSafe, elementType, oldName, newName, reportLogger);
                 }
-                case (Account.Benchmark):
+                case Account.Benchmark:
                 {
                     return TryEditNameSingleList(BenchMarksThreadSafe, elementType, oldName, newName, reportLogger);
+                }
+                case Account.Asset:
+                {
+                    return TryEditNameSingleList(Assets, elementType, oldName, newName, reportLogger);
                 }
                 default:
                 {
@@ -36,7 +42,7 @@ namespace FinancialStructures.Database.Implementation
             }
         }
 
-        private bool TryEditNameSingleList<T>(IReadOnlyList<T> values, Account elementType, NameData oldName, NameData newName, IReportLogger reportLogger = null) where T : IValueList
+        private static bool TryEditNameSingleList<T>(IReadOnlyList<T> values, Account elementType, NameData oldName, NameData newName, IReportLogger reportLogger = null) where T : IValueList
         {
             for (int AccountIndex = 0; AccountIndex < values.Count; AccountIndex++)
             {

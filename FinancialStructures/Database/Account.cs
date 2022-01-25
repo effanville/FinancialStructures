@@ -29,6 +29,11 @@
         /// <summary>
         /// The currency type.
         /// </summary>
-        Currency
+        Currency,
+
+        /// <summary>
+        /// An asset type.
+        /// </summary>
+        Asset
     }
 }

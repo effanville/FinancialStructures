@@ -17,7 +17,7 @@ namespace FinancialStructures.Database.Implementation
 
             switch (elementType)
             {
-                case (Account.Security):
+                case Account.Security:
                 {
                     lock (FundsLock)
                     {
@@ -34,7 +34,7 @@ namespace FinancialStructures.Database.Implementation
                     }
                     break;
                 }
-                case (Account.Currency):
+                case Account.Currency:
                 {
                     lock (CurrenciesLock)
                     {
@@ -51,7 +51,7 @@ namespace FinancialStructures.Database.Implementation
                     }
                     break;
                 }
-                case (Account.BankAccount):
+                case Account.BankAccount:
                 {
                     lock (BankAccountsLock)
                     {
@@ -68,7 +68,7 @@ namespace FinancialStructures.Database.Implementation
                     }
                     break;
                 }
-                case (Account.Benchmark):
+                case Account.Benchmark:
                 {
                     lock (BenchmarksLock)
                     {
@@ -83,6 +83,24 @@ namespace FinancialStructures.Database.Implementation
                             }
                         }
                     }
+                    break;
+                }
+                case Account.Asset:
+                {
+                    lock (AssetsLock)
+                    {
+                        foreach (var asset in AssetsBackingList)
+                        {
+                            if (name.IsEqualTo(asset.Names))
+                            {
+                                _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData, $"Deleted asset {asset.Names.Name}");
+                                _ = AssetsBackingList.Remove(asset);
+                                OnPortfolioChanged(AssetsBackingList, new PortfolioEventArgs(elementType));
+                                return true;
+                            }
+                        }
+                    }
+
                     break;
                 }
                 default:

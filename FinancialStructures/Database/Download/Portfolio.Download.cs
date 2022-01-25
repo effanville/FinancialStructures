@@ -88,6 +88,17 @@ namespace FinancialStructures.Database.Download
                     _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Downloading, $"No Url set for {sector.Names}");
                 }
             }
+            foreach (IValueList asset in portfo.Assets)
+            {
+                if (!string.IsNullOrEmpty(asset.Names.Url))
+                {
+                    downloadTasks.Add(DownloadLatestValue(asset.Names, value => asset.SetData(DateTime.Today, value, reportLogger), reportLogger));
+                }
+                else
+                {
+                    _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Downloading, $"No Url set for {asset.Names}");
+                }
+            }
 
             return downloadTasks;
         }

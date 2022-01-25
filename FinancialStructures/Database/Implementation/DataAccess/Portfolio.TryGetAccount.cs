@@ -12,7 +12,7 @@ namespace FinancialStructures.Database.Implementation
             desired = null;
             switch (accountType)
             {
-                case (Account.Security):
+                case Account.Security:
                 {
                     foreach (ISecurity sec in FundsThreadSafe)
                     {
@@ -24,7 +24,7 @@ namespace FinancialStructures.Database.Implementation
                     }
                     break;
                 }
-                case (Account.BankAccount):
+                case Account.BankAccount:
                 {
                     foreach (IExchangableValueList sec in BankAccountsThreadSafe)
                     {
@@ -36,7 +36,7 @@ namespace FinancialStructures.Database.Implementation
                     }
                     break;
                 }
-                case (Account.Currency):
+                case Account.Currency:
                 {
                     foreach (ICurrency currency in CurrenciesThreadSafe)
                     {
@@ -48,7 +48,7 @@ namespace FinancialStructures.Database.Implementation
                     }
                     break;
                 }
-                case (Account.Benchmark):
+                case Account.Benchmark:
                 {
                     foreach (IValueList sector in BenchMarksThreadSafe)
                     {
@@ -58,6 +58,24 @@ namespace FinancialStructures.Database.Implementation
                             success = true;
                         }
                     }
+                    break;
+                }
+                case Account.Asset:
+                {
+                    foreach (IValueList asset in Assets)
+                    {
+                        if (names.IsEqualTo(asset.Names))
+                        {
+                            desired = asset;
+                            success = true;
+                        }
+                    }
+                    break;
+                }
+                case Account.All:
+                {
+                    desired = null;
+                    success = false;
                     break;
                 }
             }

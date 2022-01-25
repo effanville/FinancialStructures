@@ -25,30 +25,23 @@ namespace FinancialStructures.Database.Extensions.Values
                 {
                     return FirstValueOf(portfolio.FundsThreadSafe);
                 }
+                case Totals.AssetCompany:
                 case Totals.SecurityCompany:
                 case Totals.BankAccountCompany:
                 {
                     return FirstValueOf(portfolio.CompanyAccounts(total.ToAccount(), name.Company));
                 }
+                case Totals.Asset:
+                {
+                    return FirstValueOf(portfolio.Assets);
+                }
                 case Totals.Sector:
                 {
-                    DateTime earlySecurity = portfolio.FirstValueDate(Totals.SecuritySector, name);
-                    DateTime earlyBank = portfolio.FirstValueDate(Totals.BankAccountSector, name);
-
-                    if (earlySecurity == default(DateTime))
-                    {
-                        return earlyBank;
-                    }
-
-                    if (earlyBank == default(DateTime))
-                    {
-                        return earlySecurity;
-                    }
-
-                    return earlySecurity < earlyBank ? earlySecurity : earlyBank;
+                    return FirstValueOf(portfolio.SectorAccounts(Account.All, name));
                 }
                 case Totals.SecuritySector:
                 case Totals.BankAccountSector:
+                case Totals.AssetSector:
                 {
                     return FirstValueOf(portfolio.SectorAccounts(total.ToAccount(), name));
                 }

@@ -44,11 +44,16 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 {
                     return GenerateFromList(portfolio.CurrenciesThreadSafe, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats());
                 }
+                case Account.Asset:
+                {
+                    return GenerateFromList(portfolio.Assets, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultAssetStats());
+                }
                 case Account.All:
                 {
                     List<AccountStatistics> stats = new List<AccountStatistics>();
                     stats.AddRange(portfolio.GetStats(dateToCalculate, Account.Security, displayValueFunds, displayTotals, statisticsToDisplay));
                     stats.AddRange(portfolio.GetStats(dateToCalculate, Account.BankAccount, displayValueFunds, displayTotals, statisticsToDisplay));
+                    stats.AddRange(portfolio.GetStats(dateToCalculate, Account.Asset, displayValueFunds, displayTotals, statisticsToDisplay));
                     stats.Sort();
                     return stats;
                 }
@@ -118,7 +123,12 @@ namespace FinancialStructures.Database.Extensions.Statistics
 
                         break;
                     }
+                    case Account.Asset:
+                    {
+                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, account, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultAssetStats()));
 
+                        break;
+                    }
                     case Account.All:
                         break;
                 }
@@ -161,6 +171,15 @@ namespace FinancialStructures.Database.Extensions.Statistics
                     return GenerateFromList(portfolio.Companies(total.ToAccount()), portfolio, dateToCalculate, total, displayValueFunds, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats());
                 }
                 case Totals.BankAccountSector:
+                {
+                    return GenerateFromList(portfolio.Companies(total.ToAccount()), portfolio, dateToCalculate, total, displayValueFunds, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats());
+                }
+                case Totals.Asset:
+                case Totals.AssetCompany:
+                {
+                    return GenerateFromList(portfolio.Companies(total.ToAccount()), portfolio, dateToCalculate, total, displayValueFunds, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultAssetStats());
+                }
+                case Totals.AssetSector:
                 {
                     return GenerateFromList(portfolio.Companies(total.ToAccount()), portfolio, dateToCalculate, total, displayValueFunds, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats());
                 }
