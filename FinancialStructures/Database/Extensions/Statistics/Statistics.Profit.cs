@@ -56,7 +56,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                         {
                             Account accountType = totals.ToAccount();
                             ICurrency currency = portfolio.Currency(accountType, account);
-                            total += account.Profit(currency, accountType);
+                            total += account.Profit(currency);
                         }
                     }
 
@@ -72,7 +72,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                         {
                             Account accountType = totals.ToAccount();
                             ICurrency currency = portfolio.Currency(accountType, account);
-                            total += account.Profit(currency, accountType);
+                            total += account.Profit(currency);
                         }
                     }
 
@@ -146,7 +146,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                         if (desired is IExchangableValueList cashAcc)
                         {
                             ICurrency currency = portfolio.Currency(account, desired);
-                            return cashAcc.Profit(currency, account);
+                            return cashAcc.Profit(currency);
                         }
                     }
 

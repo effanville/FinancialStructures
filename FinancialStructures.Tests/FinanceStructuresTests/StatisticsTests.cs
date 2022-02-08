@@ -104,7 +104,7 @@ namespace FinancialStructures.Tests.FinanceStructuresTests
         [TestCaseSource(nameof(SecurityProfitAsIExchData))]
         public void SecurityProfitAsIExchTests(IExchangableValueList valueList, decimal expectedValue)
         {
-            decimal actualValue = valueList.Profit(null, Account.Security);
+            decimal actualValue = valueList.Profit(null);
 
             Assert.Multiple(() =>
             {

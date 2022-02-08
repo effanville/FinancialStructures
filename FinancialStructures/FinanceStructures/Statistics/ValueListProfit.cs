@@ -23,26 +23,20 @@ namespace FinancialStructures.FinanceStructures.Statistics
         /// <summary>
         /// Calculates the difference between the last and investment of a <see cref="IExchangableValueList"/>.
         /// </summary>
-        public static decimal Profit(this IExchangableValueList valueList, ICurrency currency, Account elementType)
+        public static decimal Profit(this IExchangableValueList valueList, ICurrency currency)
         {
+            if (valueList is ISecurity security)
+            {
+                return security.Profit(currency);
+            }
+
             if (!valueList.Any())
             {
                 return 0.0m;
             }
 
-            switch (elementType)
-            {
-                case Account.Security:
-                {
-                    ISecurity security = valueList as ISecurity;
-                    return security.Profit(currency);
-                }
-                default:
-                case Account.BankAccount:
-                {
-                    return valueList.LatestValue(currency).Value - valueList.FirstValue(currency).Value;
-                }
-            }
+            return valueList.LatestValue(currency).Value - valueList.FirstValue(currency).Value;
+
         }
 
 
