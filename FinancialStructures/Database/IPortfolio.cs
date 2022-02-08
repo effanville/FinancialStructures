@@ -262,11 +262,6 @@ namespace FinancialStructures.Database
         IReadOnlyList<IValueList> CompanyAccounts(Account account, string company);
 
         /// <summary>
-        /// Returns a copy of all accounts related to the given benchmark.
-        /// </summary>
-        IReadOnlyList<IValueList> SectorAccounts(Account account, TwoName sectorName);
-
-        /// <summary>
         /// Returns a copy of all accounts related to the total.
         /// </summary>
         IReadOnlyList<IValueList> Accounts(Totals totals, TwoName name = null);

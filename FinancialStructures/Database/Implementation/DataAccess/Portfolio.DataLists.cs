@@ -94,65 +94,6 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
-        public IReadOnlyList<IValueList> SectorAccounts(Account account, TwoName sectorName)
-        {
-            List<IValueList> accountList = new List<IValueList>();
-            switch (account)
-            {
-                case Account.All:
-                {
-                    accountList.AddRange(SectorAccounts(Account.Security, sectorName));
-                    accountList.AddRange(SectorAccounts(Account.BankAccount, sectorName));
-                    accountList.AddRange(SectorAccounts(Account.Asset, sectorName));
-                    break;
-                }
-                case Account.Security:
-                {
-                    foreach (ISecurity security in FundsThreadSafe)
-                    {
-                        if (security.IsSectorLinked(sectorName))
-                        {
-                            accountList.Add(security.Copy());
-                        }
-                    }
-
-                    break;
-                }
-                case Account.BankAccount:
-                {
-                    foreach (IExchangableValueList cashAccount in BankAccountsThreadSafe)
-                    {
-                        if (cashAccount.IsSectorLinked(sectorName))
-                        {
-                            accountList.Add(cashAccount.Copy());
-                        }
-                    }
-
-                    break;
-                }
-                case Account.Asset:
-                {
-                    foreach (IAmortisableAsset asset in Assets)
-                    {
-                        if (asset.IsSectorLinked(sectorName))
-                        {
-                            accountList.Add(asset.Copy());
-                        }
-                    }
-
-                    break;
-                }
-                case Account.Benchmark:
-                case Account.Currency:
-                default:
-                    break;
-            }
-
-            accountList.Sort();
-            return accountList;
-        }
-
-        /// <inheritdoc/>
         public IReadOnlyList<IValueList> Accounts(Account account)
         {
             switch (account)
