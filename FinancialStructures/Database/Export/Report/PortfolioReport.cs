@@ -161,7 +161,7 @@ namespace FinancialStructures.Database.Export.Report
                         stats[0].Statistics,
                         headerFirstColumn: true);
 
-                    var companyAccounts = fPortfolio.CompanyAccounts(Account.Security, company);
+                    var companyAccounts = fPortfolio.Accounts(Totals.SecurityCompany, new TwoName(company));
                     if (companyAccounts != null && companyAccounts.Count > 1)
                     {
                         ChartWriting.WritePieChart(

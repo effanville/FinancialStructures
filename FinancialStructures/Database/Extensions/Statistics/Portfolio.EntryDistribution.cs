@@ -12,7 +12,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
         /// Returns a dictionary with the distribution over time of values for the
         /// account type.
         /// </summary>
-        public static Dictionary<DateTime, int> EntryDistribution(this IPortfolio portfolio, Totals elementType = Totals.Security, TwoName company = null)
+        public static Dictionary<DateTime, int> EntryDistribution(this IPortfolio portfolio, Totals totals = Totals.Security, TwoName company = null)
         {
             return portfolio.CalculateAggregateStatistic(
                 totals,

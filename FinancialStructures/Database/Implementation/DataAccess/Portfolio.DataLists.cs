@@ -51,49 +51,6 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
-        public IReadOnlyList<IValueList> CompanyAccounts(Account account, string company)
-        {
-            List<IValueList> accountList = new List<IValueList>();
-            switch (account)
-            {
-                case Account.All:
-                {
-                    accountList.AddRange(CompanyAccounts(Account.Security, company));
-                    accountList.AddRange(CompanyAccounts(Account.BankAccount, company));
-                    accountList.AddRange(CompanyAccounts(Account.Asset, company));
-                    break;
-                }
-                case Account.Security:
-                {
-                    return FundsThreadSafe.Where(sec => sec.Names.Company == company).ToList();
-                }
-                case Account.BankAccount:
-                {
-                    return BankAccountsThreadSafe.Where(sec => sec.Names.Company == company).ToList();
-                }
-                case Account.Asset:
-                {
-                    foreach (IAmortisableAsset asset in Assets)
-                    {
-                        if (asset.Names.Company == company)
-                        {
-                            accountList.Add(asset.Copy());
-                        }
-                    }
-
-                    break;
-                }
-                case Account.Benchmark:
-                case Account.Currency:
-                default:
-                    break;
-            }
-
-            accountList.Sort();
-            return accountList;
-        }
-
-        /// <inheritdoc/>
         public IReadOnlyList<IValueList> Accounts(Account account)
         {
             switch (account)
