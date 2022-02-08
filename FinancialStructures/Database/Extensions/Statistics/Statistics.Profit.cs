@@ -24,7 +24,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                     {
                         if (security.Any())
                         {
-                            ICurrency currency = portfolio.Currency(totals.ToAccount(), security);
+                            ICurrency currency = portfolio.Currency(security);
                             total += security.Profit(currency);
                         }
                     }
@@ -39,7 +39,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                     {
                         if (security.Any())
                         {
-                            ICurrency currency = portfolio.Currency(totals.ToAccount(), security);
+                            ICurrency currency = portfolio.Currency(security);
                             total += security.Profit(currency);
                             ;
                         }
@@ -55,7 +55,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                         if (account.Any())
                         {
                             Account accountType = totals.ToAccount();
-                            ICurrency currency = portfolio.Currency(accountType, account);
+                            ICurrency currency = portfolio.Currency(account);
                             total += account.Profit(currency);
                         }
                     }
@@ -71,7 +71,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                         if (account.Any())
                         {
                             Account accountType = totals.ToAccount();
-                            ICurrency currency = portfolio.Currency(accountType, account);
+                            ICurrency currency = portfolio.Currency(account);
                             total += account.Profit(currency);
                         }
                     }
@@ -96,7 +96,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                     decimal total = 0;
                     foreach (ISecurity security in portfolio.SectorAccounts(Account.Security, names))
                     {
-                        ICurrency currency = portfolio.Currency(totals.ToAccount(), security);
+                        ICurrency currency = portfolio.Currency(security);
                         total += security.Profit(currency);
                     }
 
@@ -145,7 +145,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                     {
                         if (desired is IExchangableValueList cashAcc)
                         {
-                            ICurrency currency = portfolio.Currency(account, desired);
+                            ICurrency currency = portfolio.Currency(desired);
                             return cashAcc.Profit(currency);
                         }
                     }

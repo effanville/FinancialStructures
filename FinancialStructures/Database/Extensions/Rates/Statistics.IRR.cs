@@ -145,7 +145,7 @@ namespace FinancialStructures.Database.Extensions.Rates
                         ISecurity desired = account as ISecurity;
                         if (desired.Any())
                         {
-                            ICurrency currency = portfolio.Currency(Account.Security, desired);
+                            ICurrency currency = portfolio.Currency(desired);
                             return desired.IRR(currency);
                         }
                     }
@@ -188,7 +188,7 @@ namespace FinancialStructures.Database.Extensions.Rates
                         ISecurity desired = account as ISecurity;
                         if (desired.Any())
                         {
-                            ICurrency currency = portfolio.Currency(Account.Security, desired);
+                            ICurrency currency = portfolio.Currency(desired);
                             return desired.IRR(earlierTime, laterTime, currency);
                         }
                     }

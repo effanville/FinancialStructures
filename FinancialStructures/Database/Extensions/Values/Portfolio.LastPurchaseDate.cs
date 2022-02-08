@@ -63,7 +63,7 @@ namespace FinancialStructures.Database.Extensions.Values
             {
                 if (valueList.Any())
                 {
-                    ICurrency currency = portfolio.Currency(Account.Security, valueList);
+                    ICurrency currency = portfolio.Currency(valueList);
                     DateTime latest = valueList.Trades.LastOrDefault(trade => trade.TradeType.Equals(TradeType.Buy))?.Day ?? default(DateTime);
                     if (latest > output)
                     {
@@ -88,7 +88,7 @@ namespace FinancialStructures.Database.Extensions.Values
             {
                 if (desired is ISecurity sec)
                 {
-                    ICurrency currency = portfolio.Currency(Account.Security, sec);
+                    ICurrency currency = portfolio.Currency(sec);
                     DateTime latest = sec.Trades.LastOrDefault(trade => trade.TradeType.Equals(TradeType.Buy))?.Day ?? default(DateTime);
                     return latest;
                 }

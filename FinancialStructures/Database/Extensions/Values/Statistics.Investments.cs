@@ -49,7 +49,7 @@ namespace FinancialStructures.Database.Extensions.Values
             List<Labelled<TwoName, DailyValuation>> output = new List<Labelled<TwoName, DailyValuation>>();
             foreach (ISecurity security in securities)
             {
-                ICurrency currency = portfolio.Currency(totals.ToAccount(), security);
+                ICurrency currency = portfolio.Currency(security);
                 output.AddRange(security.AllInvestmentsNamed(currency));
             }
 
@@ -73,7 +73,7 @@ namespace FinancialStructures.Database.Extensions.Values
             if (portfolio.TryGetAccount(Account.Security, names, out IValueList desired) && desired.Any())
             {
                 ISecurity security = desired as ISecurity;
-                ICurrency currency = portfolio.Currency(Account.Security, security);
+                ICurrency currency = portfolio.Currency(security);
                 return security.AllInvestmentsNamed(currency);
 
             }

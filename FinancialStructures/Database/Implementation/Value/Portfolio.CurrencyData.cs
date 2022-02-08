@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using FinancialStructures.FinanceStructures;
-using FinancialStructures.FinanceStructures.Implementation;
 
 namespace FinancialStructures.Database.Implementation
 {
@@ -10,41 +8,20 @@ namespace FinancialStructures.Database.Implementation
         /// <summary>
         /// returns the currency associated to the account.
         /// </summary>
-        public ICurrency Currency(Account account, IValueList valueList)
+        public ICurrency Currency(IValueList valueList)
         {
-            switch (account)
+            if (valueList is IExchangableValueList)
             {
-                case Account.Security:
-                case Account.BankAccount:
-                case Account.Asset:
-                {
-                    string currencyName = valueList.Names.Currency;
-                    IReadOnlyList<ICurrency> currencies = CurrenciesThreadSafe;
-                    foreach (ICurrency curr in currencies)
-                    {
-                        if (curr.BaseCurrency == currencyName && curr.QuoteCurrency == BaseCurrency)
-                        {
-                            return curr;
-                        }
-                        else if (curr.BaseCurrency == BaseCurrency && curr.QuoteCurrency == currencyName)
-                        {
-                            return curr.Inverted();
-                        }
-                    }
-
-                    return null;
-                }
-                case Account.Currency:
-                {
-                    return (ICurrency)valueList;
-                }
-                case Account.Benchmark:
-                case Account.All:
-                default:
-                {
-                    return new Currency();
-                }
+                string currencyName = valueList.Names.Currency;
+                return Currency(currencyName);
             }
+
+            if (valueList is ICurrency currency)
+            {
+                return currency;
+            }
+
+            return null;
         }
 
         /// <summary>

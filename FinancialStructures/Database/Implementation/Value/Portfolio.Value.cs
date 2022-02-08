@@ -27,7 +27,7 @@ namespace FinancialStructures.Database.Implementation
                     }
 
                     IExchangableValueList exchangableValueList = desired as IExchangableValueList;
-                    ICurrency currency = Currency(elementType, exchangableValueList);
+                    ICurrency currency = Currency(exchangableValueList);
                     return exchangableValueList.Value(date, currency)?.Value ?? 0.0m;
                 }
                 case Account.Currency:
@@ -50,7 +50,7 @@ namespace FinancialStructures.Database.Implementation
                     }
 
                     IExchangableValueList bankAccount = account as IExchangableValueList;
-                    ICurrency currency = Currency(elementType, bankAccount);
+                    ICurrency currency = Currency(bankAccount);
                     return bankAccount.ValueOnOrBefore(date, currency)?.Value ?? 0.0m;
                 }
                 default:

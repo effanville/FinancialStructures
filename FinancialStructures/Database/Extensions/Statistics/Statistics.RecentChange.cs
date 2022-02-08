@@ -71,7 +71,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
             {
                 if (valueList.Any())
                 {
-                    ICurrency currency = portfolio.Currency(totals.ToAccount(), valueList);
+                    ICurrency currency = portfolio.Currency(valueList);
                     total += valueList.RecentChange(currency);
                 }
             }
@@ -93,7 +93,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                     if (portfolio.TryGetAccount(elementType, names, out IValueList account) && account.Any())
                     {
                         IExchangableValueList exchangeValueList = account as IExchangableValueList;
-                        ICurrency currency = portfolio.Currency(elementType, exchangeValueList);
+                        ICurrency currency = portfolio.Currency(exchangeValueList);
                         return exchangeValueList.RecentChange(currency);
                     }
 

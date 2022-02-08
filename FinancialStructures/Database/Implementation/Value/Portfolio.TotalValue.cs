@@ -25,7 +25,7 @@ namespace FinancialStructures.Database.Implementation
                     {
                         if (sec.Any())
                         {
-                            ICurrency currency = Currency(Account.Security, sec);
+                            ICurrency currency = Currency(sec);
                             total += sec.Value(date, currency).Value;
                         }
                     }
@@ -39,7 +39,7 @@ namespace FinancialStructures.Database.Implementation
                     {
                         if (sec.Any() && sec.Names.Currency == names.Name)
                         {
-                            ICurrency currency = Currency(Account.Security, sec);
+                            ICurrency currency = Currency(sec);
                             total += sec.Value(date, currency).Value;
                         }
                     }
@@ -47,7 +47,7 @@ namespace FinancialStructures.Database.Implementation
                     {
                         if (acc.Any() && acc.Names.Currency == names.Name)
                         {
-                            ICurrency currency = Currency(Account.BankAccount, acc);
+                            ICurrency currency = Currency(acc);
                             total += acc.ValueOnOrBefore(date, currency).Value;
                         }
                     }
@@ -60,7 +60,7 @@ namespace FinancialStructures.Database.Implementation
                     {
                         if (acc.Any())
                         {
-                            ICurrency currency = Currency(Account.BankAccount, acc);
+                            ICurrency currency = Currency(acc);
                             sum += acc.ValueOnOrBefore(date, currency).Value;
                         }
                     }
@@ -110,7 +110,7 @@ namespace FinancialStructures.Database.Implementation
                     {
                         if (valueList.Any())
                         {
-                            ICurrency currency = Currency(elementType.ToAccount(), valueList);
+                            ICurrency currency = Currency(valueList);
                             value += valueList.Value(date, currency).Value;
                         }
                     }
@@ -129,7 +129,7 @@ namespace FinancialStructures.Database.Implementation
                     {
                         if (account != null && account.Any())
                         {
-                            ICurrency currency = Currency(Account.BankAccount, account);
+                            ICurrency currency = Currency(account);
                             value += account.ValueOnOrBefore(date, currency).Value;
                         }
                     }
@@ -147,7 +147,7 @@ namespace FinancialStructures.Database.Implementation
                     {
                         if (asset.Any())
                         {
-                            ICurrency currency = Currency(Account.Asset, asset);
+                            ICurrency currency = Currency(asset);
                             total += asset.Value(date, currency).Value;
                         }
                     }
@@ -167,7 +167,7 @@ namespace FinancialStructures.Database.Implementation
                     {
                         if (account != null && account.Any())
                         {
-                            ICurrency currency = Currency(Account.Asset, account);
+                            ICurrency currency = Currency(account);
                             value += account.Value(date, currency).Value;
                         }
                     }

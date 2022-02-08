@@ -386,7 +386,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// returns the currency associated to the account.
         /// </summary>
-        ICurrency Currency(Account account, IValueList valueList);
+        ICurrency Currency(IValueList valueList);
 
         /// <summary>
         /// returns the currency associated to the name.
