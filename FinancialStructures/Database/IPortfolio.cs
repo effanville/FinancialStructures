@@ -254,7 +254,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Returns a copy of all accounts related to the account type.
         /// </summary>
-        IReadOnlyList<IValueList> Accounts(Account account, TwoName name = null);
+        IReadOnlyList<IValueList> Accounts(Account account);
 
         /// <summary>
         /// Returns a copy of all accounts of type account with the company as specified.

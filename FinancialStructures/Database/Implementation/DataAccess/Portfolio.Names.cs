@@ -61,7 +61,7 @@ namespace FinancialStructures.Database.Implementation
             return namesAndCompanies;
         }
 
-        private static List<NameData> SingleDataNameObtainer<T>(IReadOnlyList<T> objects) 
+        private static List<NameData> SingleDataNameObtainer<T>(IReadOnlyList<T> objects)
             where T : IValueList
         {
             List<NameData> namesAndCompanies = new List<NameData>();

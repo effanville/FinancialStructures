@@ -65,26 +65,11 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Account.Security:
                 {
-                    foreach (ISecurity sec in FundsThreadSafe)
-                    {
-                        if (sec.Names.Company == company)
-                        {
-                            accountList.Add(sec.Copy());
-                        }
-                    }
-                    break;
+                    return FundsThreadSafe.Where(sec => sec.Names.Company == company).ToList();
                 }
                 case Account.BankAccount:
                 {
-                    foreach (IExchangableValueList acc in BankAccounts)
-                    {
-                        if (acc.Names.Company == company)
-                        {
-                            accountList.Add(acc.Copy());
-                        }
-                    }
-
-                    break;
+                    return BankAccountsThreadSafe.Where(sec => sec.Names.Company == company).ToList();
                 }
                 case Account.Asset:
                 {
@@ -168,16 +153,16 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
-        public IReadOnlyList<IValueList> Accounts(Account account, TwoName sectorName)
+        public IReadOnlyList<IValueList> Accounts(Account account)
         {
             switch (account)
             {
                 case Account.All:
                 {
                     List<IValueList> accountList = new List<IValueList>();
-                    accountList.AddRange(SectorAccounts(Account.Security, sectorName));
-                    accountList.AddRange(SectorAccounts(Account.BankAccount, sectorName));
-                    accountList.AddRange(SectorAccounts(Account.Asset, sectorName));
+                    accountList.AddRange(FundsThreadSafe);
+                    accountList.AddRange(BankAccountsThreadSafe);
+                    accountList.AddRange(Assets);
                     return accountList;
                 }
                 case Account.Security:
@@ -240,18 +225,42 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.All:
                 {
-                    return FundsThreadSafe.Union(BankAccountsThreadSafe.Union(Assets)).ToList();
+                    return FundsThreadSafe
+                        .Union(BankAccountsThreadSafe
+                        .Union(Assets))
+                        .ToList();
+                }
+                case Totals.SecuritySector:
+                {
+                    return FundsThreadSafe.Where(fund => fund.IsSectorLinked(name)).ToList();
+                }
+                case Totals.BankAccountSector:
+                {
+                    return BankAccountsThreadSafe.Where(fund => fund.IsSectorLinked(name)).ToList();
+                }
+                case Totals.AssetSector:
+                {
+                    return Assets.Where(fund => fund.IsSectorLinked(name)).ToList();
+                }
+                case Totals.Sector:
+                {
+                    return Accounts(Totals.SecuritySector, name)
+                        .Union(Accounts(Totals.AssetSector, name))
+                        .Union(Accounts(Totals.BankAccountSector, name))
+                        .ToList();
+                }
+                case Totals.Company:
+                {
+                    return Accounts(Totals.SecurityCompany, name)
+                        .Union(Accounts(Totals.AssetCompany, name))
+                        .Union(Accounts(Totals.BankAccountCompany, name))
+                        .ToList();
                 }
                 case Totals.Currency:
-                case Totals.Sector:
-                case Totals.SecuritySector:
-                case Totals.BankAccountSector:
-                case Totals.AssetSector:
                 case Totals.CurrencySector:
                 case Totals.SecurityCurrency:
                 case Totals.BankAccountCurrency:
                 case Totals.AssetCurrency:
-                case Totals.Company:
                 default:
                     throw new NotImplementedException($"Total value {account} not implemented for {nameof(IPortfolio)}.{nameof(Accounts)}");
             }

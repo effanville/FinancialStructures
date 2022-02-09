@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using FinancialStructures.FinanceStructures;
+﻿using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Statistics;
 using FinancialStructures.NamingStructures;
 
@@ -15,157 +14,43 @@ namespace FinancialStructures.Database.Extensions.Statistics
         /// </summary>
         public static decimal TotalProfit(this IPortfolio portfolio, Totals totals, TwoName names = null)
         {
-            switch (totals)
+            return portfolio.CalculateAggregateStatistic(
+                totals,
+                names,
+                0.0m,
+                exchangableValueList => Calcuate(exchangableValueList),
+                (value, currentTotal) => value + currentTotal);
+            decimal Calcuate(IValueList valueList)
             {
-                case Totals.Security:
+                if (valueList is not IExchangableValueList exchangableValueList)
                 {
-                    decimal total = 0;
-                    foreach (ISecurity security in portfolio.FundsThreadSafe)
-                    {
-                        if (security.Any())
-                        {
-                            ICurrency currency = portfolio.Currency(security);
-                            total += security.Profit(currency);
-                        }
-                    }
+                    return valueList.Profit();
+                }
 
-                    return total;
-                }
-                case Totals.SecurityCompany:
-                {
-                    decimal total = 0;
-                    IReadOnlyList<IValueList> securities = portfolio.CompanyAccounts(Account.Security, names.Company);
-                    foreach (ISecurity security in securities)
-                    {
-                        if (security.Any())
-                        {
-                            ICurrency currency = portfolio.Currency(security);
-                            total += security.Profit(currency);
-                            ;
-                        }
-                    }
-
-                    return total;
-                }
-                case Totals.BankAccount:
-                {
-                    decimal total = 0;
-                    foreach (IExchangableValueList account in portfolio.BankAccountsThreadSafe)
-                    {
-                        if (account.Any())
-                        {
-                            Account accountType = totals.ToAccount();
-                            ICurrency currency = portfolio.Currency(account);
-                            total += account.Profit(currency);
-                        }
-                    }
-
-                    return total;
-                }
-                case Totals.BankAccountCompany:
-                {
-                    decimal total = 0;
-                    IReadOnlyList<IValueList> bankAccounts = portfolio.CompanyAccounts(Account.BankAccount, names.Company);
-                    foreach (IExchangableValueList account in bankAccounts)
-                    {
-                        if (account.Any())
-                        {
-                            Account accountType = totals.ToAccount();
-                            ICurrency currency = portfolio.Currency(account);
-                            total += account.Profit(currency);
-                        }
-                    }
-
-                    return total;
-                }
-                case Totals.Benchmark:
-                {
-                    return Profit(portfolio.BenchMarksThreadSafe);
-                }
-                case Totals.Asset:
-                {
-                    return Profit(portfolio.Assets);
-                }
-                case Totals.Currency:
-                {
-                    return Profit(portfolio.CurrenciesThreadSafe);
-                }
-                case Totals.Sector:
-                case Totals.SecuritySector:
-                {
-                    decimal total = 0;
-                    foreach (ISecurity security in portfolio.SectorAccounts(Account.Security, names))
-                    {
-                        ICurrency currency = portfolio.Currency(security);
-                        total += security.Profit(currency);
-                    }
-
-                    return total;
-                }
-                case Totals.All:
-                {
-                    return portfolio.TotalProfit(Totals.Security, names) + portfolio.TotalProfit(Totals.BankAccount, names);
-                }
-                case Totals.Company:
-                {
-                    return portfolio.TotalProfit(Totals.SecurityCompany, names) + portfolio.TotalProfit(Totals.BankAccountCompany, names);
-                }
-                case Totals.BankAccountSector:
-                case Totals.CurrencySector:
-                case Totals.SecurityCurrency:
-                case Totals.BankAccountCurrency:
-                default:
-                    return 0.0m;
+                ICurrency currency = portfolio.Currency(exchangableValueList);
+                return exchangableValueList.Profit(currency);
             }
-        }
-
-        private static decimal Profit(IReadOnlyList<IValueList> accounts)
-        {
-            decimal total = 0;
-            foreach (IValueList accountList in accounts)
-            {
-                total += accountList.Profit();
-            }
-
-            return total;
         }
 
         /// <summary>
         /// Returns the profit of the company over its lifetime in the portfolio.
         /// </summary>
-        public static decimal Profit(this IPortfolio portfolio, Account account, TwoName names)
+        public static decimal Profit(this IPortfolio portfolio, Account account, TwoName name)
         {
-            switch (account)
+            return portfolio.CalculateStatistic(
+                account,
+                name,
+                valueList => valueList.Any() ? valueList.Profit() : 0.0m,
+                valueList => Calculate(valueList));
+
+            decimal Calculate(IExchangableValueList valueList)
             {
-                case Account.Security:
-                case Account.BankAccount:
-                case Account.Asset:
+                if (!valueList.Any())
                 {
-                    if (portfolio.TryGetAccount(account, names, out IValueList desired))
-                    {
-                        if (desired is IExchangableValueList cashAcc)
-                        {
-                            ICurrency currency = portfolio.Currency(desired);
-                            return cashAcc.Profit(currency);
-                        }
-                    }
-
                     return 0.0m;
                 }
-                case Account.Currency:
-                case Account.Benchmark:
-                {
-                    if (portfolio.TryGetAccount(account, names, out IValueList desired))
-                    {
-                        return desired.Profit();
-                    }
-
-                    return 0.0m;
-                }
-
-                case Account.All:
-                default:
-                    return 0.0m;
+                ICurrency currency = portfolio.Currency(valueList);
+                return valueList.Profit(currency);
             }
         }
     }
