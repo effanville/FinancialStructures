@@ -90,7 +90,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             Assert.AreEqual(ReportType.Information, report.ErrorType);
             Assert.AreEqual(ReportLocation.AddingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Detailed, report.ErrorSeverity);
-            Assert.AreEqual($"Security `{BaseCompanyName}'-`{BaseName}' added to database.", report.Message);
+            Assert.AreEqual($"Security-{BaseCompanyName}-{BaseName} added to database.", report.Message);
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             Assert.AreEqual(ReportType.Error, report.ErrorType);
             Assert.AreEqual(ReportLocation.AddingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Critical, report.ErrorSeverity);
-            Assert.AreEqual($"Security `{BaseCompanyName}'-`{BaseName}' already exists.", report.Message);
+            Assert.AreEqual($"Security-{BaseCompanyName}-{BaseName} already exists.", report.Message);
         }
 
         [Test]
@@ -129,7 +129,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             Assert.AreEqual(ReportType.Information, report.ErrorType);
             Assert.AreEqual(ReportLocation.AddingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Detailed, report.ErrorSeverity);
-            Assert.AreEqual($"Benchmark `{BaseCompanyName}'-`{BaseName}' added to database.", report.Message);
+            Assert.AreEqual($"Benchmark-{BaseCompanyName}-{BaseName} added to database.", report.Message);
         }
 
         [Test]
@@ -148,7 +148,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             Assert.AreEqual(ReportType.Error, report.ErrorType);
             Assert.AreEqual(ReportLocation.AddingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Critical, report.ErrorSeverity);
-            Assert.AreEqual($"Benchmark `{BaseCompanyName}'-`{BaseName}' already exists.", report.Message);
+            Assert.AreEqual($"Benchmark-{BaseCompanyName}-{BaseName} already exists.", report.Message);
         }
     }
 }

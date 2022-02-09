@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
 using FinancialStructures.Database;
+using FinancialStructures.Database.Extensions;
 using FinancialStructures.Database.Implementation;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;

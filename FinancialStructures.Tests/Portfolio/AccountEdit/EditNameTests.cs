@@ -44,7 +44,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         {
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(newComp, newName, newCurrency, newUrl, newSectors));
 
-            NameData accountNames = database.FundsThreadSafe.First().Names;
+            NameData accountNames = database.FundsThreadSafe[0].Names;
             Assert.AreEqual(newName, accountNames.Name);
             Assert.AreEqual(newComp, accountNames.Company);
             Assert.AreEqual(newUrl, accountNames.Url);
@@ -205,8 +205,8 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             ErrorReport report = reports.First();
             Assert.AreEqual(ReportType.Error, report.ErrorType);
             Assert.AreEqual(ReportLocation.EditingData, report.ErrorLocation);
-            Assert.AreEqual(ReportSeverity.Useful, report.ErrorSeverity);
-            Assert.AreEqual($"Renaming Security: Could not find Security with name {BaseCompanyName}-{BaseName}.", report.Message);
+            Assert.AreEqual(ReportSeverity.Critical, report.ErrorSeverity);
+            Assert.AreEqual($"Could not find Security - {BaseCompanyName}-{BaseName}.", report.Message);
         }
 
         [Test]
@@ -246,8 +246,8 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             ErrorReport report = reports.First();
             Assert.AreEqual(ReportType.Error, report.ErrorType);
             Assert.AreEqual(ReportLocation.EditingData, report.ErrorLocation);
-            Assert.AreEqual(ReportSeverity.Useful, report.ErrorSeverity);
-            Assert.AreEqual($"Renaming Benchmark: Could not find Benchmark with name {BaseCompanyName}-{BaseName}.", report.Message);
+            Assert.AreEqual(ReportSeverity.Critical, report.ErrorSeverity);
+            Assert.AreEqual($"Could not find Benchmark - {BaseCompanyName}-{BaseName}.", report.Message);
         }
     }
 }

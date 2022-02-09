@@ -21,7 +21,7 @@ namespace FinancialStructures.Database.Implementation
         /// <inheritdoc/>
         public bool Exists(Account elementType, TwoName name)
         {
-            foreach (TwoName sec in NameData(elementType))
+            foreach (TwoName sec in NameDataForAccount(elementType))
             {
                 if (sec.IsEqualTo(name))
                 {

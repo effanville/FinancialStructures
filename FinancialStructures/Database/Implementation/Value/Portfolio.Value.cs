@@ -1,5 +1,5 @@
 ﻿using System;
-
+using FinancialStructures.Database.Extensions;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 
@@ -14,47 +14,43 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
-        public decimal Value(Account elementType, TwoName name, DateTime date)
+        public decimal Value(Account account, TwoName name, DateTime date)
         {
-            switch (elementType)
+            return this.CalculateStatistic(
+                account,
+                name,
+                valueList => CalculateValue(valueList),
+                DefaultValue());
+            decimal DefaultValue()
             {
-                case Account.Security:
-                case Account.Asset:
+                if (account == Account.Currency || account == Account.Benchmark)
                 {
-                    if (!TryGetAccount(elementType, name, out IValueList desired) || !desired.Any())
-                    {
-                        return 0.0m;
-                    }
-
-                    IExchangableValueList exchangableValueList = desired as IExchangableValueList;
-                    ICurrency currency = Currency(exchangableValueList);
-                    return exchangableValueList.Value(date, currency)?.Value ?? 0.0m;
+                    return 1.0m;
                 }
-                case Account.Currency:
-                case Account.Benchmark:
+
+                return 0.0m;
+            }
+
+            decimal CalculateValue(IValueList valueList)
+            {
+                if (!valueList.Any())
                 {
-                    if (!TryGetAccount(elementType, name, out IValueList desired))
-                    {
-                        // If doesnt exist, the default here is 1.0, as these values would
-                        // be used in a multiplicative instance.
-                        return 1.0m;
-                    }
-
-                    return desired.Value(date)?.Value ?? 0.0m;
+                    return 0;
                 }
-                case Account.BankAccount:
+
+                if (valueList is not IExchangableValueList eValueList)
                 {
-                    if (!TryGetAccount(elementType, name, out IValueList account))
-                    {
-                        return 0.0m;
-                    }
-
-                    IExchangableValueList bankAccount = account as IExchangableValueList;
-                    ICurrency currency = Currency(bankAccount);
-                    return bankAccount.ValueOnOrBefore(date, currency)?.Value ?? 0.0m;
+                    return valueList.Value(date)?.Value ?? 0.0m;
                 }
-                default:
-                    return 0.0m;
+
+                ICurrency currency = Currency(eValueList);
+
+                if (account is Account.BankAccount)
+                {
+                    return eValueList.ValueOnOrBefore(date, currency)?.Value ?? 0.0m;
+                }
+
+                return eValueList.Value(date, currency)?.Value ?? 0.0m;
             }
         }
     }

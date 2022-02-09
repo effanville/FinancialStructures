@@ -60,7 +60,7 @@ namespace FinancialStructures.Tests.Database.DataAccess
             DatabaseConstructor constructor = CreateThreeAccounts(elementType, company1, name1, company2, name2, company3, name3);
             Portfolio database = constructor.Database;
 
-            IReadOnlyList<NameData> names = database.NameData(elementType);
+            IReadOnlyList<NameData> names = database.NameDataForAccount(elementType);
             Assert.AreEqual(3, names.Count);
 
             Assert.AreEqual(company1, names[0].Company);
