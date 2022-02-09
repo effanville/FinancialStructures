@@ -231,7 +231,7 @@ namespace FinancialStructures.Database
         /// </summary>
         /// <param name="account">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        IReadOnlyList<NameData> NameData(Account account);
+        IReadOnlyList<NameData> NameDataForAccount(Account account);
 
         /// <summary>
         /// Queries for data for the security of name and company.

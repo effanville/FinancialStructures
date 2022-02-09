@@ -83,7 +83,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             Assert.AreEqual(ReportType.Information, report.ErrorType);
             Assert.AreEqual(ReportLocation.DeletingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Detailed, report.ErrorSeverity);
-            Assert.AreEqual($"Security {BaseCompanyName}-{BaseName} removed from the database.", report.Message);
+            Assert.AreEqual($"Security-{BaseCompanyName}-{BaseName} removed from the database.", report.Message);
         }
 
         [Test]
@@ -99,7 +99,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
 
             ErrorReport report = reports.First();
             Assert.AreEqual(ReportType.Error, report.ErrorType);
-            Assert.AreEqual(ReportLocation.AddingData, report.ErrorLocation);
+            Assert.AreEqual(ReportLocation.DeletingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Useful, report.ErrorSeverity);
             Assert.AreEqual($"Security - {BaseCompanyName}-{BaseName} could not be found in the database.", report.Message);
         }
@@ -120,7 +120,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
             Assert.AreEqual(ReportType.Information, report.ErrorType);
             Assert.AreEqual(ReportLocation.DeletingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Detailed, report.ErrorSeverity);
-            Assert.AreEqual($"Deleted benchmark {BaseName}", report.Message);
+            Assert.AreEqual($"Benchmark-{BaseCompanyName}-{BaseName} removed from the database.", report.Message);
         }
 
         [Test]
@@ -136,7 +136,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
 
             ErrorReport report = reports.First();
             Assert.AreEqual(ReportType.Error, report.ErrorType);
-            Assert.AreEqual(ReportLocation.AddingData, report.ErrorLocation);
+            Assert.AreEqual(ReportLocation.DeletingData, report.ErrorLocation);
             Assert.AreEqual(ReportSeverity.Useful, report.ErrorSeverity);
             Assert.AreEqual($"Benchmark - {BaseCompanyName}-{BaseName} could not be found in the database.", report.Message);
         }

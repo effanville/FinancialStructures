@@ -1,4 +1,7 @@
-﻿using Common.Structure.Reporting;
+﻿using System.Collections.Generic;
+
+using Common.Structure.Reporting;
+
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
 
@@ -19,97 +22,49 @@ namespace FinancialStructures.Database.Implementation
             {
                 case Account.Security:
                 {
-                    lock (FundsLock)
-                    {
-                        foreach (Security sec in Funds)
-                        {
-                            if (name.IsEqualTo(sec.Names))
-                            {
-                                _ = Funds.Remove(sec);
-                                _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData, $"Security {name} removed from the database.");
-                                OnPortfolioChanged(Funds, new PortfolioEventArgs(elementType));
-                                return true;
-                            }
-                        }
-                    }
-                    break;
+                    return RemoveAccount(Funds, elementType, name, FundsLock, reportLogger);
                 }
                 case Account.Currency:
                 {
-                    lock (CurrenciesLock)
-                    {
-                        foreach (Currency currency in Currencies)
-                        {
-                            if (name.IsEqualTo(currency.Names))
-                            {
-                                _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData, $"Deleted currency {currency.Names.Name}");
-                                _ = Currencies.Remove(currency);
-                                OnPortfolioChanged(Currencies, new PortfolioEventArgs(elementType));
-                                return true;
-                            }
-                        }
-                    }
-                    break;
+                    return RemoveAccount(Currencies, elementType, name, CurrenciesLock, reportLogger);
                 }
                 case Account.BankAccount:
                 {
-                    lock (BankAccountsLock)
-                    {
-                        foreach (CashAccount acc in BankAccounts)
-                        {
-                            if (name.IsEqualTo(acc.Names))
-                            {
-                                _ = BankAccounts.Remove(acc);
-                                _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData, $"Deleting Bank Account: Deleted {name}.");
-                                OnPortfolioChanged(BankAccounts, new PortfolioEventArgs(elementType));
-                                return true;
-                            }
-                        }
-                    }
-                    break;
+                    return RemoveAccount(BankAccounts, elementType, name, BankAccountsLock, reportLogger);
                 }
                 case Account.Benchmark:
                 {
-                    lock (BenchmarksLock)
-                    {
-                        foreach (Sector sector in BenchMarks)
-                        {
-                            if (name.IsEqualTo(sector.Names))
-                            {
-                                _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData, $"Deleted benchmark {sector.Names.Name}");
-                                _ = BenchMarks.Remove(sector);
-                                OnPortfolioChanged(BenchMarks, new PortfolioEventArgs(elementType));
-                                return true;
-                            }
-                        }
-                    }
-                    break;
+                    return RemoveAccount(BenchMarks, elementType, name, BenchmarksLock, reportLogger);
                 }
                 case Account.Asset:
                 {
-                    lock (AssetsLock)
-                    {
-                        foreach (var asset in AssetsBackingList)
-                        {
-                            if (name.IsEqualTo(asset.Names))
-                            {
-                                _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData, $"Deleted asset {asset.Names.Name}");
-                                _ = AssetsBackingList.Remove(asset);
-                                OnPortfolioChanged(AssetsBackingList, new PortfolioEventArgs(elementType));
-                                return true;
-                            }
-                        }
-                    }
-
-                    break;
+                    return RemoveAccount(AssetsBackingList, elementType, name, AssetsLock, reportLogger);
                 }
                 default:
                     _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.DeletingData, $"Editing an Unknown type.");
                     return false;
             }
 
-            _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, $"{elementType} - {name} could not be found in the database.");
-            return false;
+            bool RemoveAccount<T>(List<T> currentItems, Account account, TwoName name, object lockObject, IReportLogger reportLogger = null)
+                where T : ValueList
+            {
+                lock (lockObject)
+                {
+                    foreach (T sec in currentItems)
+                    {
+                        if (name.IsEqualTo(sec.Names))
+                        {
+                            _ = currentItems.Remove(sec);
+                            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData, $"{account}-{name} removed from the database.");
+                            OnPortfolioChanged(currentItems, new PortfolioEventArgs(account));
+                            return true;
+                        }
+                    }
+                }
+
+                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.DeletingData, $"{account} - {name} could not be found in the database.");
+                return false;
+            }
         }
     }
 }
