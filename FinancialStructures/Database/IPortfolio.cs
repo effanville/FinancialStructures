@@ -206,79 +206,6 @@ namespace FinancialStructures.Database
         void Clear();
 
         /// <summary>
-        /// Adds the desired data to the security if it can.
-        /// </summary>
-        [Obsolete("Should use the add or edit trade data method instead.")]
-        bool TryAddOrEditDataToSecurity(TwoName names, DateTime oldDate, DateTime date, decimal shares, decimal unitPrice, decimal investment, SecurityTrade trade, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Adds the desired trade data if it can.
-        /// </summary>
-        bool TryAddOrEditTradeData(Account elementType, TwoName names, SecurityTrade oldTrade, SecurityTrade trade, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Attempts to remove trade data from the account.
-        /// </summary>
-        /// <param name="elementType">The type of data to remove from.</param>
-        /// <param name="name">The name to remove from.</param>
-        /// <param name="date">The date on which to remove data.</param>
-        /// <param name="reportLogger">Report callback.</param>
-        /// <returns>Success or failure.</returns>
-        bool TryDeleteTradeData(Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Adds the desired asset debt data if it can.
-        /// </summary>
-        bool TryAddOrEditAssetDebt(Account elementType, TwoName names, DailyValuation oldData, DailyValuation newData, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Adds the desired asset payment data if it can.
-        /// </summary>
-        bool TryAddOrEditAssetPayment(Account elementType, TwoName names, DailyValuation oldData, DailyValuation newData, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Attempts to remove asset debt from the account.
-        /// </summary>
-        /// <param name="elementType">The type of data to remove from.</param>
-        /// <param name="name">The name to remove from.</param>
-        /// <param name="date">The date on which to remove data.</param>
-        /// <param name="reportLogger">Report callback.</param>
-        /// <returns>Success or failure.</returns>
-        bool TryDeleteAssetDebt(Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Attempts to remove an asset payment from the account.
-        /// </summary>
-        /// <param name="elementType">The type of data to remove from.</param>
-        /// <param name="name">The name to remove from.</param>
-        /// <param name="date">The date on which to remove data.</param>
-        /// <param name="reportLogger">Report callback.</param>
-        /// <returns>Success or failure.</returns>
-        bool TryDeleteAssetPayment(Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Attempts to add data to the account.
-        /// </summary>
-        /// <param name="elementType">The type of data to add to.</param>
-        /// <param name="name">The name to add to.</param>
-        /// <param name="oldData"> The old data to edit.</param>
-        /// <param name="data">The data to add.</param>
-        /// <param name="reportLogger">Report callback.</param>
-        /// <returns>Success or failure.</returns>
-        /// <remarks> This cannot currently be used to add to securities due to different type of data.</remarks>
-        bool TryAddOrEditData(Account elementType, TwoName name, DailyValuation oldData, DailyValuation data, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Attempts to remove data from the account.
-        /// </summary>
-        /// <param name="elementType">The type of data to remove from.</param>
-        /// <param name="name">The name to remove from.</param>
-        /// <param name="date">The date on which to remove data.</param>
-        /// <param name="reportLogger">Report callback.</param>
-        /// <returns>Success or failure.</returns>
-        bool TryDeleteData(Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null);
-
-        /// <summary>
         /// Returns a list of all companes of the desired type in the database.
         /// </summary>
         /// <param name="account">Type of object to search for.</param>
@@ -323,6 +250,11 @@ namespace FinancialStructures.Database
         /// <param name="name">The name of the element to find.</param>
         /// <param name="desired">The account if it exists.</param>
         bool TryGetAccount(Account accountType, TwoName name, out IValueList desired);
+
+        /// <summary>
+        /// Returns a copy of all accounts related to the account type.
+        /// </summary>
+        IReadOnlyList<IValueList> Accounts(Account account, TwoName name = null);
 
         /// <summary>
         /// Returns a copy of all accounts of type account with the company as specified.

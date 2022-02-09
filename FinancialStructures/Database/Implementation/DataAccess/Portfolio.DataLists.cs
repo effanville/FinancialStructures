@@ -168,6 +168,44 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
+        public IReadOnlyList<IValueList> Accounts(Account account, TwoName sectorName)
+        {
+            switch (account)
+            {
+                case Account.All:
+                {
+                    List<IValueList> accountList = new List<IValueList>();
+                    accountList.AddRange(SectorAccounts(Account.Security, sectorName));
+                    accountList.AddRange(SectorAccounts(Account.BankAccount, sectorName));
+                    accountList.AddRange(SectorAccounts(Account.Asset, sectorName));
+                    return accountList;
+                }
+                case Account.Security:
+                {
+                    return FundsThreadSafe;
+                }
+                case Account.BankAccount:
+                {
+                    return BankAccountsThreadSafe;
+                }
+                case Account.Asset:
+                {
+                    return Assets;
+                }
+                case Account.Benchmark:
+                {
+                    return BenchMarksThreadSafe;
+                }
+                case Account.Currency:
+                {
+                    return CurrenciesThreadSafe;
+                }
+                default:
+                    return null;
+            }
+        }
+
+        /// <inheritdoc/>
         public IReadOnlyList<IValueList> Accounts(Totals account, TwoName name)
         {
             switch (account)

@@ -8,7 +8,6 @@ namespace FinancialStructures.Database.Implementation
         /// <inheritdoc/>
         public bool TryGetAccount(Account accountType, TwoName names, out IValueList desired)
         {
-            bool success = false;
             desired = null;
             switch (accountType)
             {
@@ -19,10 +18,11 @@ namespace FinancialStructures.Database.Implementation
                         if (names.IsEqualTo(sec.Names))
                         {
                             desired = sec;
-                            success = true;
+                            return true;
                         }
                     }
-                    break;
+
+                    return false;
                 }
                 case Account.BankAccount:
                 {
@@ -31,10 +31,11 @@ namespace FinancialStructures.Database.Implementation
                         if (names.IsEqualTo(sec.Names))
                         {
                             desired = sec;
-                            success = true;
+                            return true;
                         }
                     }
-                    break;
+
+                    return false;
                 }
                 case Account.Currency:
                 {
@@ -43,10 +44,11 @@ namespace FinancialStructures.Database.Implementation
                         if (names.IsEqualTo(currency.Names))
                         {
                             desired = currency;
-                            success = true;
+                            return true;
                         }
                     }
-                    break;
+
+                    return false;
                 }
                 case Account.Benchmark:
                 {
@@ -55,10 +57,11 @@ namespace FinancialStructures.Database.Implementation
                         if (sector.Names.Name == names.Name)
                         {
                             desired = sector;
-                            success = true;
+                            return true;
                         }
                     }
-                    break;
+
+                    return false;
                 }
                 case Account.Asset:
                 {
@@ -67,20 +70,19 @@ namespace FinancialStructures.Database.Implementation
                         if (names.IsEqualTo(asset.Names))
                         {
                             desired = asset;
-                            success = true;
+                            return true;
                         }
                     }
-                    break;
+
+                    return false;
                 }
+                default:
                 case Account.All:
                 {
                     desired = null;
-                    success = false;
-                    break;
+                    return false;
                 }
             }
-
-            return success;
         }
     }
 }
