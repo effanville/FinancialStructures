@@ -1,0 +1,4 @@
+[submodule "BuildProcess"]
+	path = BuildProcess
+	branch = master
+	url = https://github.com/effanville/BuildProcess.git
