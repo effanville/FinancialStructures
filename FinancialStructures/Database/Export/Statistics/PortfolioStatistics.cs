@@ -21,42 +21,41 @@ namespace FinancialStructures.Database.Export.Statistics
     public class PortfolioStatistics
     {
         private readonly string fDatabaseName;
-        private readonly PortfolioStatisticsSettings fGenerationSettings;
 
         /// <summary>
         /// Totals of different types held in portfolio.
         /// </summary>
-        public List<AccountStatistics> PortfolioTotals
+        internal List<AccountStatistics> PortfolioTotals
         {
             get;
-            set;
-        } = new List<AccountStatistics>();
+            private set;
+        }
 
         /// <summary>
         /// A list of all securities and their statistics.
         /// </summary>
-        public List<AccountStatistics> IndividualSecurityStats
+        internal List<AccountStatistics> SecurityStats
         {
             get;
-            set;
+            private set;
         }
 
         /// <summary>
         /// List of statistics of each company performance
         /// </summary>
-        public List<AccountStatistics> CompanyTotalsStats
+        internal List<AccountStatistics> SecurityCompanyStats
         {
             get;
-            set;
+            private set;
         }
 
         /// <summary>
         /// List of statistics of each company performance
         /// </summary>
-        public List<AccountStatistics> PortfolioSecurityStats
+        public List<AccountStatistics> SecurityTotalStats
         {
             get;
-            set;
+            private set;
         }
 
         /// <summary>
@@ -65,67 +64,67 @@ namespace FinancialStructures.Database.Export.Statistics
         public List<AccountStatistics> SectorStats
         {
             get;
-            set;
-        } = new List<AccountStatistics>();
+            private set;
+        }
 
         /// <summary>
         /// Value held in each bank account.
         /// </summary>
-        public List<AccountStatistics> BankAccountStats
+        internal List<AccountStatistics> BankAccountStats
         {
             get;
-            set;
+            private set;
         }
 
         /// <summary>
         /// Statistics for each company holding bank accounts.
         /// </summary>
-        public List<AccountStatistics> BankAccountCompanyStats
+        internal List<AccountStatistics> BankAccountCompanyStats
         {
             get;
-            set;
+            private set;
         }
 
         /// <summary>
         /// Total statistics for each BankAccount.
         /// </summary>
-        public List<AccountStatistics> BankAccountTotalStats
+        internal List<AccountStatistics> BankAccountTotalStats
         {
             get;
-            set;
+            private set;
         }
 
         /// <summary>
         /// Value held in each asset.
         /// </summary>
-        public List<AccountStatistics> AssetStats
+        internal List<AccountStatistics> AssetStats
         {
             get;
-            set;
+            private set;
         }
 
         /// <summary>
         /// Statistics for each company holding asset.
         /// </summary>
-        public List<AccountStatistics> AssetCompanyStats
+        internal List<AccountStatistics> AssetCompanyStats
         {
             get;
-            set;
+            private set;
         }
 
         /// <summary>
         /// Total statistics for each asset.
         /// </summary>
-        public List<AccountStatistics> AssetTotalStats
+        internal List<AccountStatistics> AssetTotalStats
         {
             get;
-            set;
+            private set;
         }
 
         /// <summary>
         /// Any notes for the portfolio.
         /// </summary>
-        public List<Note> PortfolioNotes
+        private List<Note> PortfolioNotes
         {
             get;
             set;
@@ -144,49 +143,77 @@ namespace FinancialStructures.Database.Export.Statistics
         public PortfolioStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings, IFileSystem fileSystem)
         {
             fDatabaseName = portfolio.DatabaseName(fileSystem);
-            fGenerationSettings = settings;
-            GenerateStatistics(portfolio);
+            GenerateStatistics(portfolio, settings);
         }
 
-        private void GenerateStatistics(IPortfolio portfolio)
+        private void GenerateStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings)
         {
-            PortfolioTotals.AddRange(portfolio.GetStats(fGenerationSettings.DateToCalculate, Totals.Security, new TwoName(), AccountStatisticsHelpers.DefaultBankAccountStats()));
-            PortfolioTotals.AddRange(portfolio.GetStats(fGenerationSettings.DateToCalculate, Totals.BankAccount, new TwoName(), AccountStatisticsHelpers.DefaultBankAccountStats()));
-            PortfolioTotals.AddRange(portfolio.GetStats(fGenerationSettings.DateToCalculate, Totals.Asset, new TwoName(), AccountStatisticsHelpers.DefaultBankAccountStats()));
-            PortfolioTotals.AddRange(portfolio.GetStats(fGenerationSettings.DateToCalculate, Totals.All, new TwoName(), AccountStatisticsHelpers.DefaultBankAccountStats()));
+            Statistic[] bankAccountStatistics = settings.BankAccountGenerateOptions.GenerateFields.ToArray();
 
-            Statistic[] securityData = fGenerationSettings.SecurityDisplayOptions.DisplayFields.ToArray();
+            PortfolioTotals = new List<AccountStatistics>();
+            PortfolioTotals.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.Security, new TwoName(), bankAccountStatistics));
+            PortfolioTotals.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.BankAccount, new TwoName(), bankAccountStatistics));
+            PortfolioTotals.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.Asset, new TwoName(), bankAccountStatistics));
+            PortfolioTotals.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.All, new TwoName(), bankAccountStatistics));
 
-            IndividualSecurityStats = portfolio.GetStats(fGenerationSettings.DateToCalculate, Account.Security, displayValueFunds: fGenerationSettings.DisplayValueFunds, displayTotals: false, statisticsToDisplay: securityData);
-
-            CompanyTotalsStats = portfolio.GetStats(fGenerationSettings.DateToCalculate, Totals.SecurityCompany, fGenerationSettings.DisplayValueFunds, securityData);
-            PortfolioSecurityStats = portfolio.GetStats(fGenerationSettings.DateToCalculate, Totals.Security, new TwoName(), securityData);
-
-            BankAccountStats = portfolio.GetStats(fGenerationSettings.DateToCalculate, Account.BankAccount, fGenerationSettings.DisplayValueFunds, false);
-
-            Statistic[] bankAccountData = fGenerationSettings.BankAccountDisplayOptions.DisplayFields.ToArray();
-            BankAccountCompanyStats = portfolio.GetStats(fGenerationSettings.DateToCalculate, Totals.BankAccountCompany, fGenerationSettings.DisplayValueFunds, bankAccountData);
-            BankAccountTotalStats = portfolio.GetStats(fGenerationSettings.DateToCalculate, Totals.BankAccount, new TwoName("Totals", ""), bankAccountData);
-
-            AssetStats = portfolio.GetStats(fGenerationSettings.DateToCalculate, Account.Asset, fGenerationSettings.DisplayValueFunds, false);
-
-            Statistic[] assetStatistics = fGenerationSettings.AssetDisplayOptions.DisplayFields.ToArray();
-            AssetCompanyStats = portfolio.GetStats(fGenerationSettings.DateToCalculate, Totals.AssetCompany, fGenerationSettings.DisplayValueFunds, assetStatistics);
-            AssetTotalStats = portfolio.GetStats(fGenerationSettings.DateToCalculate, Totals.Asset, new TwoName("Totals", ""), assetStatistics);
-
-            Statistic[] sectorData = fGenerationSettings.SectorDisplayOptions.DisplayFields.ToArray();
-            IReadOnlyList<string> sectorNames = portfolio.Sectors(Account.Security);
-            foreach (string sectorName in sectorNames)
-            {
-                SectorStats.AddRange(portfolio.GetStats(fGenerationSettings.DateToCalculate, Totals.Sector, new TwoName("Totals", sectorName), sectorData));
-
-                if (fGenerationSettings.IncludeBenchmarks)
-                {
-                    SectorStats.AddRange(portfolio.GetStats(fGenerationSettings.DateToCalculate, Account.Benchmark, new TwoName("Benchmark", sectorName), statisticsToDisplay: sectorData));
-                }
-            }
+            GenerateSecurityStatistics(portfolio, settings);
+            GenerateBankAccountStatistics(portfolio, settings);
+            GenerateAssetStatistics(portfolio, settings);
+            GenerateSectorStatistics(portfolio, settings);
 
             PortfolioNotes = portfolio.Notes.ToList();
+        }
+
+        private void GenerateSecurityStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings)
+        {
+            if (settings.SecurityGenerateOptions.ShouldGenerate)
+            {
+                Statistic[] securityData = settings.SecurityGenerateOptions.GenerateFields.ToArray();
+                SecurityStats = portfolio.GetStats(settings.DateToCalculate, Account.Security, displayValueFunds: settings.DisplayValueFunds, displayTotals: false, securityData);
+                SecurityCompanyStats = portfolio.GetStats(settings.DateToCalculate, Totals.SecurityCompany, settings.DisplayValueFunds, securityData);
+                SecurityTotalStats = portfolio.GetStats(settings.DateToCalculate, Totals.Security, new TwoName(), securityData);
+            }
+        }
+
+        private void GenerateBankAccountStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings)
+        {
+            if (settings.BankAccountGenerateOptions.ShouldGenerate)
+            {
+                Statistic[] bankAccountStatistics = settings.BankAccountGenerateOptions.GenerateFields.ToArray();
+                BankAccountStats = portfolio.GetStats(settings.DateToCalculate, Account.BankAccount, settings.DisplayValueFunds, displayTotals: false, bankAccountStatistics);
+                BankAccountCompanyStats = portfolio.GetStats(settings.DateToCalculate, Totals.BankAccountCompany, settings.DisplayValueFunds, bankAccountStatistics);
+                BankAccountTotalStats = portfolio.GetStats(settings.DateToCalculate, Totals.BankAccount, new TwoName("Totals", ""), bankAccountStatistics);
+            }
+        }
+
+        private void GenerateAssetStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings)
+        {
+            if (settings.AssetGenerateOptions.ShouldGenerate)
+            {
+                Statistic[] assetStatistics = settings.AssetGenerateOptions.GenerateFields.ToArray();
+                AssetStats = portfolio.GetStats(settings.DateToCalculate, Account.Asset, settings.DisplayValueFunds, false, assetStatistics);
+
+                AssetCompanyStats = portfolio.GetStats(settings.DateToCalculate, Totals.AssetCompany, settings.DisplayValueFunds, assetStatistics);
+                AssetTotalStats = portfolio.GetStats(settings.DateToCalculate, Totals.Asset, new TwoName("Totals", ""), assetStatistics);
+            }
+        }
+
+        private void GenerateSectorStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings)
+        {
+            if (settings.SectorGenerateOptions.ShouldGenerate)
+            {
+                Statistic[] sectorData = settings.SectorGenerateOptions.GenerateFields.ToArray();
+                IReadOnlyList<string> sectorNames = portfolio.Sectors(Account.Security);
+                foreach (string sectorName in sectorNames)
+                {
+                    SectorStats.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.Sector, new TwoName("Totals", sectorName), sectorData));
+
+                    if (settings.GenerateBenchmarks)
+                    {
+                        SectorStats.AddRange(portfolio.GetStats(settings.DateToCalculate, Account.Benchmark, new TwoName("Benchmark", sectorName), sectorData));
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -230,110 +257,21 @@ namespace FinancialStructures.Database.Export.Statistics
                 _ = sb.AppendLine($"<h1>{fDatabaseName} - Statement on {DateTime.Today.ToShortDateString()}</h1>");
             }
 
+            var totalFieldNames = PortfolioTotals.Select(data => data.Statistics).First().Select(stat => stat.StatType.ToString()).ToList();
             TableWriting.WriteTableFromEnumerable(
                 sb,
                 exportType,
-                fGenerationSettings.BankAccountDisplayOptions.DisplayFieldNames(),
+                totalFieldNames,
                 PortfolioTotals.Select(data => data.Statistics),
                 headerFirstColumn: false);
 
-            if (fGenerationSettings.SecurityDisplayOptions.ShouldDisplay)
-            {
-                TextWriting.WriteTitle(sb, exportType, "Funds Data", HtmlTag.h2);
-                List<AccountStatistics> securityDataToWrite = IndividualSecurityStats;
+            WriteSection(sb, exportType, "Fund Data", settings.Spacing, settings.SecurityDisplayOptions, SecurityStats, SecurityCompanyStats, SecurityTotalStats);
 
-                foreach (AccountStatistics companyStatistic in CompanyTotalsStats)
-                {
-                    int number = securityDataToWrite.Count(datum => datum.NameData.Company.Equals(companyStatistic.NameData.Company, StringComparison.Ordinal));
-                    if (number > 1)
-                    {
-                        securityDataToWrite.Add(companyStatistic);
-                    }
-                }
+            WriteSection(sb, exportType, "Bank Account Data", settings.Spacing, settings.BankAccountDisplayOptions, BankAccountStats, BankAccountCompanyStats, BankAccountTotalStats);
 
-                securityDataToWrite.Sort(fGenerationSettings.SecurityDisplayOptions.SortingField, fGenerationSettings.SecurityDisplayOptions.SortingDirection);
-                securityDataToWrite.AddRange(PortfolioSecurityStats);
+            WriteSection(sb, exportType, "Asset Data", settings.Spacing, settings.AssetDisplayOptions, AssetStats, AssetCompanyStats, AssetTotalStats);
 
-                AddSpacing(settings.Spacing, fGenerationSettings.SecurityDisplayOptions.SortingField, ref securityDataToWrite, addAfterName: false);
-
-                TableWriting.WriteTableFromEnumerable(
-                    sb,
-                    exportType,
-                    fGenerationSettings.SecurityDisplayOptions.DisplayFieldNames(),
-                    securityDataToWrite.Select(data => data.Statistics),
-                    headerFirstColumn: true);
-            }
-
-            if (fGenerationSettings.BankAccountDisplayOptions.ShouldDisplay)
-            {
-                TextWriting.WriteTitle(sb, exportType, "Bank Accounts Data", HtmlTag.h2);
-                List<AccountStatistics> bankAccountDataToWrite = BankAccountStats;
-
-                foreach (AccountStatistics companyStatistic in BankAccountCompanyStats)
-                {
-                    int number = bankAccountDataToWrite.Count(datum => datum.NameData.Company.Equals(companyStatistic.NameData.Company, StringComparison.Ordinal));
-                    if (number > 1)
-                    {
-                        bankAccountDataToWrite.Add(companyStatistic);
-                    }
-                }
-
-                bankAccountDataToWrite.Sort(fGenerationSettings.BankAccountDisplayOptions.SortingField, fGenerationSettings.BankAccountDisplayOptions.SortingDirection);
-                bankAccountDataToWrite.AddRange(BankAccountTotalStats);
-
-                AddSpacing(settings.Spacing, fGenerationSettings.BankAccountDisplayOptions.SortingField, ref bankAccountDataToWrite, addAfterName: false);
-
-                TableWriting.WriteTableFromEnumerable(
-                    sb,
-                    exportType,
-                    fGenerationSettings.BankAccountDisplayOptions.DisplayFieldNames(),
-                    bankAccountDataToWrite.Select(data => data.Statistics),
-                    headerFirstColumn: true);
-            }
-
-            if (fGenerationSettings.AssetDisplayOptions.ShouldDisplay)
-            {
-                TextWriting.WriteTitle(sb, exportType, "Asset Data", HtmlTag.h2);
-                List<AccountStatistics> assetDataToWrite = AssetStats;
-
-                foreach (AccountStatistics companyStatistic in AssetCompanyStats)
-                {
-                    int number = assetDataToWrite.Count(datum => datum.NameData.Company.Equals(companyStatistic.NameData.Company, StringComparison.Ordinal));
-                    if (number > 1)
-                    {
-                        assetDataToWrite.Add(companyStatistic);
-                    }
-                }
-
-                assetDataToWrite.Sort(fGenerationSettings.AssetDisplayOptions.SortingField, fGenerationSettings.AssetDisplayOptions.SortingDirection);
-                assetDataToWrite.AddRange(AssetTotalStats);
-
-                AddSpacing(settings.Spacing, fGenerationSettings.AssetDisplayOptions.SortingField, ref assetDataToWrite, addAfterName: false);
-
-                TableWriting.WriteTableFromEnumerable(
-                    sb,
-                    exportType,
-                    fGenerationSettings.AssetDisplayOptions.DisplayFieldNames(),
-                    assetDataToWrite.Select(data => data.Statistics),
-                    headerFirstColumn: true);
-            }
-
-            if (fGenerationSettings.SectorDisplayOptions.ShouldDisplay)
-            {
-                TextWriting.WriteTitle(sb, exportType, "Analysis By Sector", HtmlTag.h2);
-                List<AccountStatistics> sectorDataToWrite = SectorStats;
-
-                sectorDataToWrite.Sort(fGenerationSettings.SectorDisplayOptions.SortingField, fGenerationSettings.SectorDisplayOptions.SortingDirection);
-
-                AddSpacing(settings.Spacing, fGenerationSettings.SectorDisplayOptions.SortingField, ref sectorDataToWrite, addAfterName: true);
-
-                TableWriting.WriteTableFromEnumerable(
-                    sb,
-                    exportType,
-                    fGenerationSettings.SectorDisplayOptions.DisplayFieldNames(),
-                    sectorDataToWrite.Select(data => data.Statistics),
-                    headerFirstColumn: true);
-            }
+            WriteSection(sb, exportType, "Analysis By Sector", settings.Spacing, settings.SectorDisplayOptions, SectorStats, null, null);
 
             TextWriting.WriteTitle(sb, exportType, "Portfolio Notes", HtmlTag.h2);
             TableWriting.WriteTable(sb, exportType, PortfolioNotes, headerFirstColumn: false);
@@ -344,6 +282,52 @@ namespace FinancialStructures.Database.Export.Statistics
             }
 
             return sb;
+        }
+
+        private static void WriteSection(
+                StringBuilder sb,
+                ExportType exportType,
+                string title,
+                bool useSpacing,
+                TableOptions<Statistic> displaySettings,
+                IReadOnlyList<AccountStatistics> itemStats,
+                IReadOnlyList<AccountStatistics> companyStats,
+                IReadOnlyList<AccountStatistics> totalStats)
+        {
+            if (displaySettings.ShouldDisplay)
+            {
+                TextWriting.WriteTitle(sb, exportType, title, HtmlTag.h2);
+                List<AccountStatistics> collatedData = itemStats?.ToList() ?? new List<AccountStatistics>();
+
+                if (companyStats != null)
+                {
+                    foreach (AccountStatistics companyStatistic in companyStats)
+                    {
+                        int number = collatedData.Count(datum => datum.NameData.Company.Equals(companyStatistic.NameData.Company, StringComparison.Ordinal));
+                        if (number > 1)
+                        {
+                            collatedData.Add(companyStatistic);
+                        }
+                    }
+                }
+
+                collatedData.Sort(displaySettings.SortingField, displaySettings.SortingDirection);
+                if (totalStats != null && totalStats.Count > 0)
+                {
+                    collatedData.AddRange(totalStats);
+                }
+
+                collatedData = AccountStatisticsHelpers.Restrict(collatedData, displaySettings.DisplayFields);
+
+                AddSpacing(useSpacing, displaySettings.SortingField, ref collatedData, addAfterName: false);
+
+                TableWriting.WriteTableFromEnumerable(
+                    sb,
+                    exportType,
+                    displaySettings.DisplayFields.Select(field => field.ToString()),
+                    collatedData.Select(data => data.Statistics),
+                    headerFirstColumn: true);
+            }
         }
 
         /// <summary>

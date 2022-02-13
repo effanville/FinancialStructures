@@ -7,10 +7,10 @@ using FinancialStructures.Tests.TestDatabaseConstructor;
 
 using NUnit.Framework;
 
-namespace FinancialStructures.Tests.DataExporters.Statistics
+namespace FinancialStructures.Tests.Database.Export
 {
     [TestFixture]
-    public sealed class PortfolioStatisticsTests
+    public sealed class PortfolioStatisticsGenerateTests
     {
         [Test]
         public void CanGenerateWithSingleDataValues()
@@ -23,10 +23,10 @@ namespace FinancialStructures.Tests.DataExporters.Statistics
             _ = generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0m });
             PortfolioStatistics stats = new PortfolioStatistics(generator.Database, PortfolioStatisticsSettings.DefaultSettings(), new FileSystem());
 
-            Assert.AreEqual(1, stats.IndividualSecurityStats.Count);
-            Assert.AreEqual(secCompany, stats.IndividualSecurityStats.First().NameData.Company);
-            Assert.AreEqual(1, stats.CompanyTotalsStats.Count);
-            Assert.AreEqual(secCompany, stats.CompanyTotalsStats.First().NameData.Company);
+            Assert.AreEqual(1, stats.SecurityStats.Count);
+            Assert.AreEqual(secCompany, stats.SecurityStats.First().NameData.Company);
+            Assert.AreEqual(1, stats.SecurityCompanyStats.Count);
+            Assert.AreEqual(secCompany, stats.SecurityCompanyStats.First().NameData.Company);
             Assert.AreEqual(1, stats.BankAccountStats.Count);
             Assert.AreEqual(bankCompany, stats.BankAccountStats.First().NameData.Company);
             Assert.AreEqual(1, stats.BankAccountCompanyStats.Count);

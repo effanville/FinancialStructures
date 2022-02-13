@@ -72,6 +72,33 @@ namespace FinancialStructures.Database.Statistics
         }
 
         /// <summary>
+        /// Only includes desired statistics. 
+        /// </summary>
+        public static List<AccountStatistics> Restrict(List<AccountStatistics> stats, IReadOnlyList<Statistic> restrictedStatistics)
+        {
+            if (stats == null || !stats.Any())
+            {
+                return stats;
+            }
+
+            var currentStats = stats[0].StatisticNames;
+            var firstNotSecond = currentStats.Except(restrictedStatistics).ToList();
+            var secondNotFirst = restrictedStatistics.Except(currentStats).ToList();
+            if (!firstNotSecond.Any() || !secondNotFirst.Any())
+            {
+                return stats;
+            }
+
+            var newList = new List<AccountStatistics>();
+            foreach (var stat in stats)
+            {
+                newList.Add(stat.Restricted(restrictedStatistics));
+            }
+
+            return newList;
+        }
+
+        /// <summary>
         /// Returns all statistic types currently possible.
         /// </summary>
         public static Statistic[] AllStatistics()
@@ -88,9 +115,11 @@ namespace FinancialStructures.Database.Statistics
             {
                 Statistic.Company,
                 Statistic.Name,
+                Statistic.Currency,
                 Statistic.LatestValue,
                 Statistic.UnitPrice,
                 Statistic.NumberUnits,
+                Statistic.MeanSharePrice,
                 Statistic.RecentChange,
                 Statistic.FundFraction,
                 Statistic.FundCompanyFraction,
@@ -101,8 +130,12 @@ namespace FinancialStructures.Database.Statistics
                 Statistic.IRR1Y,
                 Statistic.IRR5Y,
                 Statistic.IRRTotal,
+                Statistic.DrawDown,
+                Statistic.MDD,
                 Statistic.Sectors,
                 Statistic.FirstDate,
+                Statistic.LastInvestmentDate,
+                Statistic.LastPurchaseDate,
                 Statistic.LatestDate,
                 Statistic.NumberEntries,
                 Statistic.EntryYearDensity,
@@ -143,6 +176,7 @@ namespace FinancialStructures.Database.Statistics
             {
                 Statistic.Company,
                 Statistic.Name,
+                Statistic.Currency,
                 Statistic.LatestValue,
                 Statistic.Sectors,
                 Statistic.Notes

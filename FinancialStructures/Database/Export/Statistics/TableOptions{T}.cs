@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using FinancialStructures.Database.Statistics;
 
 namespace FinancialStructures.Database.Export.Statistics
 {
     /// <summary>
-    /// Contains display options for a table of statistics.
+    /// Contains data for display of a table, where values are specified
+    /// from an <see cref="Enum"/>.
     /// </summary>
-    public class StatisticTableOptions
+    /// <typeparam name="T">An enumerable listing all possible values.</typeparam>
+    public class TableOptions<T> where T : Enum
     {
         /// <summary>
         /// Should this table be displayed.
@@ -21,7 +22,7 @@ namespace FinancialStructures.Database.Export.Statistics
         /// <summary>
         /// What field to sor the table by.
         /// </summary>
-        public Statistic SortingField
+        public T SortingField
         {
             get;
         }
@@ -37,15 +38,15 @@ namespace FinancialStructures.Database.Export.Statistics
         /// <summary>
         /// What fields to display in the table.
         /// </summary>
-        public List<Statistic> DisplayFields
+        public IReadOnlyList<T> DisplayFields
         {
             get;
-        } = new List<Statistic>();
+        }
 
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public StatisticTableOptions()
+        public TableOptions()
         {
             ShouldDisplay = true;
             SortingDirection = SortDirection.Descending;
@@ -58,24 +59,12 @@ namespace FinancialStructures.Database.Export.Statistics
         /// <param name="sort">What field to sort the table by.</param>
         /// <param name="sortDirection">What direction to sort.</param>
         /// <param name="display">What fields to display.</param>
-        public StatisticTableOptions(bool shouldDisplay, Statistic sort, SortDirection sortDirection, List<Statistic> display)
+        public TableOptions(bool shouldDisplay, T sort, SortDirection sortDirection, IReadOnlyList<T> display)
         {
-            if (!display.Contains(sort))
-            {
-                throw new InvalidOperationException($"The table should be sorted by {sort} but this was not selected to display.");
-            }
             ShouldDisplay = shouldDisplay;
             SortingField = sort;
             SortingDirection = sortDirection;
             DisplayFields = display;
-        }
-
-        /// <summary>
-        /// Retrieve display names as strings.
-        /// </summary>
-        public IEnumerable<string> DisplayFieldNames()
-        {
-            return DisplayFields.Select(Database => Database.ToString());
         }
     }
 }
