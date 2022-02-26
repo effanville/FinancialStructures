@@ -202,6 +202,7 @@ namespace FinancialStructures.Database.Export.Statistics
         {
             if (settings.SectorGenerateOptions.ShouldGenerate)
             {
+                SectorStats = new List<AccountStatistics>();
                 Statistic[] sectorData = settings.SectorGenerateOptions.GenerateFields.ToArray();
                 IReadOnlyList<string> sectorNames = portfolio.Sectors(Account.Security);
                 foreach (string sectorName in sectorNames)
