@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using Common.Structure.Extensions;
 using FinancialStructures.NamingStructures;
 
@@ -74,13 +73,7 @@ namespace FinancialStructures.Database.Statistics
                 return Value.TruncateToString();
             }
 
-            CultureInfo culture = CurrencyCultureHelpers.CurrencyCultureInfo(fCurrency);
-            if (culture == null)
-            {
-                return $"{fCurrency}{Value.TruncateToString()}";
-            }
-
-            return Value.ToString("C", culture);
+            return Value.WithCurrencySymbol(fCurrency);
         }
     }
 }

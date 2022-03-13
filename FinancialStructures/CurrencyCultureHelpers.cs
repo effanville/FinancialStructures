@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 
 namespace FinancialStructures
 {
@@ -8,30 +9,27 @@ namespace FinancialStructures
     public static class CurrencyCultureHelpers
     {
         /// <summary>
-        /// Returns the standard culture specified from the currency name.
+        /// Provides standard conversion of a value into a value based upon a currency name.
         /// </summary>
-        public static string FormatName(string currencyName)
+        /// <typeparam name="T">Any type that implements <see cref="IFormattable"/></typeparam>
+        /// <param name="valueToConvert">The value to output in the currency.</param>
+        /// <param name="currencyName">The name of the currency.</param>
+        /// <returns>A string with the currency symbol, or the name prefixed if not found.</returns>
+        public static string WithCurrencySymbol<T>(this T valueToConvert, string currencyName) where T : IFormattable
         {
-            switch (currencyName)
+            CultureInfo culture = CurrencyCultureInfo(currencyName);
+            if (culture == null || string.IsNullOrEmpty(culture.Name))
             {
-                case "GBP":
-                case "£":
-                    return "en-GB";
-                case "HKD":
-                    return "zh-HK";
-                case "USD":
-                    return "en-US";
-                case "SAR":
-                    return "en-ZA";
-                default:
-                    return currencyName;
+                return $"{currencyName}{valueToConvert}";
             }
+
+            return valueToConvert.ToString("C", culture);
         }
 
         /// <summary>
         /// Returns the standard culture specified from the currency name.
         /// </summary>
-        public static CultureInfo CurrencyCultureInfo(string currencyName)
+        private static CultureInfo CurrencyCultureInfo(string currencyName)
         {
             if (string.IsNullOrEmpty(currencyName))
             {
@@ -50,6 +48,31 @@ namespace FinancialStructures
             }
 
             return cultureInfo;
+        }
+
+        /// <summary>
+        /// Returns the standard culture specified from the currency name.
+        /// </summary>
+        private static string FormatName(string currencyName)
+        {
+            switch (currencyName)
+            {
+                case "GBP":
+                case "£":
+                    return "en-GB";
+                case "HKD":
+                    return "zh-HK";
+                case "EUR":
+                case "€":
+                    return "en-FR";
+                case "USD":
+                case "$":
+                    return "en-US";
+                case "SAR":
+                    return "en-ZA";
+                default:
+                    return currencyName;
+            }
         }
     }
 }
