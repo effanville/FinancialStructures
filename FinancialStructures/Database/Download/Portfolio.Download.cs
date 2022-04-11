@@ -212,7 +212,7 @@ namespace FinancialStructures.Database.Download
             decimal? value = ParseDataIntoNumber(data, poundsIndex, searchString.Length, 20);
             if (value.HasValue)
             {
-                if (data.Contains("GBp"))
+                if (data.Contains("Currency in GBp"))
                 {
                     return value.Value / 100.0m;
                 }
