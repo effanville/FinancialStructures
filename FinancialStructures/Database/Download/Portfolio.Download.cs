@@ -190,7 +190,7 @@ namespace FinancialStructures.Database.Download
                 endIndex = url.Length;
             }
             string code = url.Substring(startIndex + urlSearchString.Length, endIndex - startIndex - urlSearchString.Length);
-            code = code.Replace("%5E", "^").ToUpper();
+            code = code.Replace("%5E", "^").Replace("%3D", "=").ToUpper();
 
             // seems to be a bug in the website where it uses the wrong code.
             if (code.Equals("USDGBP=X"))

@@ -31,6 +31,11 @@ namespace FinancialStructures.Tests.Database
         [TestCase("https://uk.finance.yahoo.com/quote/HKDGBP=X")]
         [TestCase("https://www.morningstar.co.uk/uk/etf/snapshot/snapshot.aspx?id=0P0000WAHE")]
         [TestCase("https://www.morningstar.co.uk/uk/funds/snapshot/snapshot.aspx?id=F0GBR04S22")]
+        [TestCase("https://uk.finance.yahoo.com/quote/GRP.L")]
+        [TestCase("https://uk.finance.yahoo.com/quote/JXN?p=JXN&.tsrc=fin-srch")]
+        [TestCase("https://uk.finance.yahoo.com/quote/ship.l")]
+        [TestCase("https://uk.finance.yahoo.com/quote/GBPEUR%3DX")]
+        [TestCase("https://uk.finance.yahoo.com/quote/GBPUSD%3DX?p=GBPUSD%3DX")]
         public async Task CanDownload(string url)
         {
             decimal value = 0;
