@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Common.Structure.Reporting;
-using Common.Structure.WebAccess;
+using FinancialStructures.Download;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 
@@ -14,9 +13,6 @@ namespace FinancialStructures.Database.Download
     /// </summary>
     public static class PortfolioDataUpdater
     {
-        private static readonly string Pence = "GBX";
-        private static readonly string Pounds = "GBP";
-
         /// <summary>
         /// Updates specific object.
         /// </summary>
@@ -130,145 +126,12 @@ namespace FinancialStructures.Database.Download
         /// </summary>
         internal static async Task DownloadLatestValue(NameData names, Action<decimal> updateValue, IReportLogger reportLogger = null)
         {
-            string data = await WebDownloader.DownloadFromURLasync(PrepareUrlString(names.Url), reportLogger).ConfigureAwait(false);
-            if (string.IsNullOrEmpty(data))
+            var downloader = PriceDownloaderFactory.Retrieve(names.Url);
+            if (downloader != null && await downloader.TryGetLatestPriceFromUrl(names.Url, updateValue, reportLogger))
             {
                 _ = reportLogger?.LogUsefulError(ReportLocation.Downloading, $"{names.Company}-{names.Name}: could not download data from {names.Url}");
                 return;
             }
-
-            if (!ProcessDownloadString(names.Url, data, reportLogger, out decimal? value))
-            {
-                return;
-            }
-
-            updateValue(value.Value);
-        }
-
-        private static string PrepareUrlString(string url)
-        {
-            return url.Replace("^", "%5E");
-        }
-
-        private static bool ProcessDownloadString(string url, string data, IReportLogger reportLogger, out decimal? value)
-        {
-            value = null;
-            if (url.Contains("morningstar"))
-            {
-                value = Process(data, $"<td class=\"line text\">{Pounds}", Pence, 20);
-            }
-            else if (url.Contains("yahoo"))
-            {
-                value = ProcessFromYahoo(data, url);
-            }
-            else if (url.Contains("markets.ft"))
-            {
-                value = Process(data, $"Price ({Pounds})", $"Price ({Pence})", 200);
-
-            }
-            else
-            {
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Url not of a currently implemented type: {url}");
-                return false;
-            }
-
-            if (value == null)
-            {
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Downloading, $"Could not download data from url: {url}");
-                return false;
-            }
-            return true;
-        }
-
-        private static decimal? ProcessFromYahoo(string data, string url)
-        {
-            string urlSearchString = "/quote/";
-            int startIndex = url.IndexOf(urlSearchString);
-            int endIndex = url.IndexOfAny(new[] { '/', '?' }, startIndex + urlSearchString.Length);
-            if (endIndex == -1)
-            {
-                endIndex = url.Length;
-            }
-            string code = url.Substring(startIndex + urlSearchString.Length, endIndex - startIndex - urlSearchString.Length);
-            code = code.Replace("%5E", "^").Replace("%3D", "=").ToUpper();
-
-            // seems to be a bug in the website where it uses the wrong code.
-            if (code.Equals("USDGBP=X"))
-            {
-                code = "GBP=X";
-            }
-
-            int number = 2;
-            int poundsIndex;
-            string searchString;
-            do
-            {
-                searchString = $"data-symbol=\"{code}\" data-test=\"qsp-price\" data-field=\"regularMarketPrice\" data-trend=\"none\" data-pricehint=\"{number}\"";
-                poundsIndex = data.IndexOf(searchString);
-                number++;
-            }
-            while (poundsIndex == -1 && number < 100);
-
-            decimal? value = ParseDataIntoNumber(data, poundsIndex, searchString.Length, 20);
-            if (value.HasValue)
-            {
-                if (data.Contains("Currency in GBp"))
-                {
-                    return value.Value / 100.0m;
-                }
-
-                return value.Value;
-            }
-
-            return null;
-        }
-
-        private static decimal? Process(string data, string poundsSearchString, string penceSearchString, int searchLength)
-        {
-            int penceValueIndex = data.IndexOf(penceSearchString);
-            decimal? penceResult = ParseDataIntoNumber(data, penceValueIndex, penceSearchString.Length, searchLength);
-            if (penceResult.HasValue)
-            {
-                return penceResult.Value / 100m;
-            }
-
-            int poundsValueIndex = data.IndexOf(poundsSearchString);
-            decimal? poundsResult = ParseDataIntoNumber(data, poundsValueIndex, poundsSearchString.Length, searchLength);
-            if (poundsResult.HasValue)
-            {
-                return poundsResult.Value;
-            }
-
-            return null;
-        }
-
-        private static decimal? ParseDataIntoNumber(string data, int startIndex, int offset, int searchLength)
-        {
-            if (startIndex == -1)
-            {
-                return null;
-            }
-
-            string shortenedDataString = data.Substring(startIndex + offset, searchLength);
-            char[] digits = shortenedDataString.SkipWhile(c => !char.IsDigit(c)).TakeWhile(IsNumericValue).ToArray();
-
-            string str = new string(digits);
-            if (string.IsNullOrEmpty(str))
-            {
-                return null;
-            }
-
-            return decimal.Parse(str);
-        }
-
-        private static bool IsNumericValue(char c)
-        {
-            if (char.IsDigit(c) || c == '.' || c == ',')
-            {
-                return true;
-            }
-
-            return false;
         }
     }
 }

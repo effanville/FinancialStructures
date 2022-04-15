@@ -43,6 +43,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// </summary>
         public Stock()
         {
+            Valuations = new List<StockDay>();
         }
 
         /// <summary>
