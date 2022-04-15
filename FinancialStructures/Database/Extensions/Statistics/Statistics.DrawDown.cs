@@ -68,7 +68,13 @@ namespace FinancialStructures.Database.Extensions.Statistics
         private static double TotalDrawdownOf(IReadOnlyList<IValueList> accounts, DateTime earlierTime, DateTime laterTime)
         {
             var valuations = CalculateValuesOf(accounts, earlierTime, laterTime);
-            return (double)FinanceFunctions.Drawdown(valuations);
+            decimal dd = FinanceFunctions.Drawdown(valuations);
+            if (dd == decimal.MaxValue)
+            {
+                return 0.0;
+            }
+
+            return (double)dd;
         }
 
         /// <summary>

@@ -37,7 +37,13 @@ namespace FinancialStructures.Database.Extensions.Statistics
         private static double TotalMDDOf(IReadOnlyList<IValueList> securities, DateTime earlierTime, DateTime laterTime)
         {
             var valuations = CalculateValuesOf(securities, earlierTime, laterTime);
-            return (double)FinanceFunctions.MDD(valuations);
+            decimal dd = FinanceFunctions.MDD(valuations);
+            if (dd == decimal.MaxValue)
+            {
+                return 0.0;
+            }
+
+            return (double)dd;
         }
 
         /// <summary>
