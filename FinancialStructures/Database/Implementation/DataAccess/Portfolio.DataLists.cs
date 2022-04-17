@@ -155,10 +155,25 @@ namespace FinancialStructures.Database.Implementation
                         .ToList();
                 }
                 case Totals.Currency:
-                case Totals.CurrencySector:
+                {
+                    return Accounts(Totals.SecurityCurrency, name)
+                        .Union(Accounts(Totals.AssetCurrency, name))
+                        .Union(Accounts(Totals.BankAccountCurrency, name))
+                        .ToList();
+                }
                 case Totals.SecurityCurrency:
+                {
+                    return FundsThreadSafe.Where(fund => fund.Names.Currency==name.Company).ToList();
+                }
                 case Totals.BankAccountCurrency:
+                {
+                    return BankAccountsThreadSafe.Where(fund => fund.Names.Currency == name.Company).ToList();
+                }
                 case Totals.AssetCurrency:
+                {
+                    return Assets.Where(fund => fund.Names.Currency == name.Company).ToList();
+                }
+                case Totals.CurrencySector:
                 default:
                     throw new NotImplementedException($"Total value {account} not implemented for {nameof(IPortfolio)}.{nameof(Accounts)}");
             }
