@@ -101,7 +101,13 @@ namespace FinancialStructures.Database.Extensions.Statistics
             double Calculate(IValueList valueList)
             {
                 List<DailyValuation> values = valueList.ListOfValues().Where(value => value.Day >= earlierTime && value.Day <= laterTime && !value.Value.Equals(0.0)).ToList();
-                return (double)FinanceFunctions.Drawdown(values);
+                decimal dd = FinanceFunctions.Drawdown(values);
+                if (dd == decimal.MaxValue)
+                {
+                    return 0.0;
+                }
+
+                return (double)dd;
             }
         }
     }
