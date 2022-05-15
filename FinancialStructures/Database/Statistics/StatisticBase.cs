@@ -57,6 +57,11 @@ namespace FinancialStructures.Database.Statistics
         /// <inheritdoc/>
         public int CompareTo(IStatistic other)
         {
+            if(!IsNumeric)
+            {
+                return StringValue.CompareTo(other.StringValue);
+            }
+            
             return Value.CompareTo(other.Value);
         }
 

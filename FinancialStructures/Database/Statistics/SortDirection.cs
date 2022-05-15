@@ -15,4 +15,22 @@
         /// </summary>
         Descending
     }
+
+    /// <summary>
+    /// helpers for the SortDirection enum
+    /// </summary>
+    public static class SortDirectionHelpers
+    {
+        public static SortDirection Invert(SortDirection sortDirection)
+        {
+            if(sortDirection == SortDirection.Ascending)
+            {
+                return SortDirection.Descending;
+            }
+            else
+            {
+                return SortDirection.Ascending;
+            }
+        }
+    }
 }

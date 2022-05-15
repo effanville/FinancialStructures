@@ -116,5 +116,19 @@ namespace FinancialStructures.Database.Statistics
         {
             return NameData.CompareTo(other.NameData);
         }
+
+        /// <summary>
+        /// Compares to another instance, where the comparison is on the specified
+        /// statistic and in the specified direction
+        /// </summary>
+        public int CompareTo(AccountStatistics other, Statistic compareStatistic, SortDirection sortDirection)
+        {
+                var firstField = Statistics.First(stat => stat.StatType == compareStatistic);
+                var secondField = other.Statistics.First(stat => stat.StatType == compareStatistic);
+
+                return sortDirection == SortDirection.Descending 
+                    ? secondField.CompareTo(firstField) 
+                    : firstField.CompareTo(secondField);
+        }
     }
 }
