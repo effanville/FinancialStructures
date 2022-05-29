@@ -101,11 +101,11 @@ namespace FinancialStructures.Database.Download
 
         private static void UpdateAndCheck(IValueList valueList, decimal valueToUpdate, IReportLogger logger)
         {
-            decimal latestValue = valueList.LatestValue().Value;
+            decimal latestValue = valueList.LatestValue()?.Value ?? 0.0m;
             valueList.SetData(DateTime.Today, valueToUpdate, logger);
 
-            decimal newLatestValue = valueList.LatestValue().Value;
-            if (newLatestValue == 0 || latestValue == 0)
+            decimal newLatestValue = valueList.LatestValue()?.Value ?? 0.0m;
+            if (newLatestValue == 0.0m || latestValue == 0.0m)
             {
                 return;
             }
@@ -129,8 +129,10 @@ namespace FinancialStructures.Database.Download
             var downloader = PriceDownloaderFactory.Retrieve(names.Url);
             if (downloader != null && await downloader.TryGetLatestPriceFromUrl(names.Url, updateValue, reportLogger))
             {
+            }
+            else
+            {
                 _ = reportLogger?.LogUsefulError(ReportLocation.Downloading, $"{names.Company}-{names.Name}: could not download data from {names.Url}");
-                return;
             }
         }
     }
