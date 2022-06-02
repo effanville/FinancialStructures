@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
 using Common.Structure.ReportWriting;
 
@@ -183,7 +182,7 @@ namespace FinancialStructures.Database.Export.History
                 }
 
                 StringBuilder sb = new StringBuilder();
-                TableWriting.WriteTableFromEnumerable(sb, ExportType.Csv, Snapshots[0].ExportHeaders(), valuesToWrite, false);
+                TableWriting.WriteTableFromEnumerable(sb, DocumentType.Csv, Snapshots[0].ExportHeaders(), valuesToWrite, false);
 
                 using (Stream stream = fileSystem.FileStream.Create(filePath, FileMode.Create))
                 using (StreamWriter fileWriter = new StreamWriter(stream))

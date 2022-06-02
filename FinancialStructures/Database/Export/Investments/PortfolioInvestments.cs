@@ -5,7 +5,6 @@ using System.IO.Abstractions;
 using System.Text;
 
 using Common.Structure.DataStructures;
-using Common.Structure.FileAccess;
 using Common.Structure.NamingStructures;
 using Common.Structure.Reporting;
 using Common.Structure.ReportWriting;
@@ -59,7 +58,7 @@ namespace FinancialStructures.Database.Export.Investments
                 }
 
                 StringBuilder sb = new StringBuilder();
-                TableWriting.WriteTableFromEnumerable(sb, ExportType.Csv, new List<string> { "Date", "Company", "Name", "Investment Amount" }, valuesToWrite, false);
+                TableWriting.WriteTableFromEnumerable(sb, DocumentType.Csv, new List<string> { "Date", "Company", "Name", "Investment Amount" }, valuesToWrite, false);
 
                 using (Stream stream = fileSystem.FileStream.Create(filePath, FileMode.Create))
                 using (StreamWriter fileWriter = new StreamWriter(stream))

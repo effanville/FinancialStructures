@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
-using Common.Structure.FileAccess;
+using Common.Structure.ReportWriting;
 using FinancialStructures.Database.Export.Statistics;
 using FinancialStructures.Database.Statistics;
 using NUnit.Framework;
@@ -85,7 +85,7 @@ namespace FinancialStructures.Tests.Database.Export
             settings.DateToCalculate = new DateTime(2021, 12, 19);
             var portfolioStatistics = new PortfolioStatistics(portfolio, settings, new MockFileSystem());
             var exportSettings = PortfolioStatisticsExportSettings.DefaultSettings();
-            var statsString = portfolioStatistics.ExportString(includeHtmlHeaders: false, ExportType.Html, exportSettings);
+            var statsString = portfolioStatistics.ExportString(includeHtmlHeaders: false, DocumentType.Html, exportSettings);
             var actual = statsString.ToString();
             Assert.AreEqual(test, actual);
         }
@@ -203,7 +203,7 @@ namespace FinancialStructures.Tests.Database.Export
                 Statistic.Company,
                 SortDirection.Descending,
                 AccountStatisticsHelpers.DefaultAssetStats().ToList());
-            var statsString = portfolioStatistics.ExportString(includeHtmlHeaders: false, ExportType.Html, exportSettings);
+            var statsString = portfolioStatistics.ExportString(includeHtmlHeaders: false, DocumentType.Html, exportSettings);
             var actual = statsString.ToString();
             Assert.AreEqual(FilteredOutput, actual);
         }
@@ -400,7 +400,7 @@ namespace FinancialStructures.Tests.Database.Export
                 Statistic.NumberOfAccounts,
                 SortDirection.Ascending,
                 assetDisplayFields: AccountStatisticsHelpers.DefaultAssetStats().ToList());
-            var statsString = portfolioStatistics.ExportString(false, ExportType.Html, exportSettings);
+            var statsString = portfolioStatistics.ExportString(false, DocumentType.Html, exportSettings);
 
             string actualOutput = statsString.ToString();
             Assert.AreEqual(expectedOutput, actualOutput);

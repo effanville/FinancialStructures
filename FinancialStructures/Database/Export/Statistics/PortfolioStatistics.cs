@@ -4,7 +4,6 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Text;
-using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
 using Common.Structure.ReportWriting;
 using FinancialStructures.Database.Extensions;
@@ -225,7 +224,7 @@ namespace FinancialStructures.Database.Export.Statistics
         /// <param name="exportType">The type of export.</param>
         /// <param name="settings">Various options for the export.</param>
         /// <param name="LogReporter">Returns information on success or failure.</param>
-        public void ExportToFile(IFileSystem fileSystem, string filePath, ExportType exportType, PortfolioStatisticsExportSettings settings, IReportLogger LogReporter)
+        public void ExportToFile(IFileSystem fileSystem, string filePath, DocumentType exportType, PortfolioStatisticsExportSettings settings, IReportLogger LogReporter)
         {
             try
             {
@@ -249,12 +248,12 @@ namespace FinancialStructures.Database.Export.Statistics
         /// <summary>
         /// Creates the string with all stats.
         /// </summary>
-        public StringBuilder ExportString(bool includeHtmlHeaders, ExportType exportType, PortfolioStatisticsExportSettings settings)
+        public StringBuilder ExportString(bool includeHtmlHeaders, DocumentType exportType, PortfolioStatisticsExportSettings settings)
         {
             StringBuilder sb = new StringBuilder();
-            if (includeHtmlHeaders && exportType == ExportType.Html)
+            if (includeHtmlHeaders && exportType == DocumentType.Html)
             {
-                TextWriting.CreateHTMLHeader(sb, $"Statement for funds as of {DateTime.Today.ToShortDateString()}", settings.Colours);
+                TextWriting.WriteHeader(sb, exportType, $"Statement for funds as of {DateTime.Today.ToShortDateString()}", settings.Colours);
                 _ = sb.AppendLine($"<h1>{fDatabaseName} - Statement on {DateTime.Today.ToShortDateString()}</h1>");
             }
 
@@ -274,12 +273,12 @@ namespace FinancialStructures.Database.Export.Statistics
 
             WriteSection(sb, exportType, "Analysis By Sector", settings.Spacing, settings.SectorDisplayOptions, SectorStats, null, null);
 
-            TextWriting.WriteTitle(sb, exportType, "Portfolio Notes", HtmlTag.h2);
+            TextWriting.WriteTitle(sb, exportType, "Portfolio Notes", DocumentElement.h2);
             TableWriting.WriteTable(sb, exportType, PortfolioNotes, headerFirstColumn: false);
 
-            if (includeHtmlHeaders && exportType == ExportType.Html)
+            if (includeHtmlHeaders && exportType == DocumentType.Html)
             {
-                TextWriting.CreateHTMLFooter(sb);
+                TextWriting.WriteFooter(sb, exportType);
             }
 
             return sb;
@@ -287,7 +286,7 @@ namespace FinancialStructures.Database.Export.Statistics
 
         private static void WriteSection(
                 StringBuilder sb,
-                ExportType exportType,
+                DocumentType exportType,
                 string title,
                 bool useSpacing,
                 TableOptions<Statistic> displaySettings,
@@ -297,7 +296,7 @@ namespace FinancialStructures.Database.Export.Statistics
         {
             if (displaySettings.ShouldDisplay)
             {
-                TextWriting.WriteTitle(sb, exportType, title, HtmlTag.h2);
+                TextWriting.WriteTitle(sb, exportType, title, DocumentElement.h2);
                 List<AccountStatistics> collatedData = itemStats?.ToList() ?? new List<AccountStatistics>();
 
                 if (companyStats != null)

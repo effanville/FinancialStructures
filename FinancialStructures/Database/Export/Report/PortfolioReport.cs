@@ -87,11 +87,12 @@ namespace FinancialStructures.Database.Export.Report
             StringBuilder sb = new StringBuilder();
 
             string title = $"Portfolio Report for {fPortfolio.DatabaseName()} - Statement on {DateTime.Today.ToShortDateString()}";
-            TextWriting.CreateHTMLHeader(sb, title, true);
+            TextWriting.WriteHeader(sb, exportType, title, true);
             TextWriting.WriteTitle(sb, exportType, title);
-            TextWriting.WriteTitle(sb, exportType, "Total Values", HtmlTag.h2);
+            TextWriting.WriteTitle(sb, exportType, "Total Values", DocumentElement.h2);
             ChartWriting.WriteLineChart(
                 sb,
+                exportType,
                 "line1",
                 "Total values over time",
                 new[] { "BankAccount", "Security", "Total" },
@@ -106,6 +107,7 @@ namespace FinancialStructures.Database.Export.Report
 
             ChartWriting.WriteLineChart(
                 sb,
+                exportType,
                 "line2",
                 "Recent Total values",
                 new[] { "BankAccount", "Security", "Total" },
@@ -120,6 +122,7 @@ namespace FinancialStructures.Database.Export.Report
 
             ChartWriting.WriteLineChart(
                 sb,
+                exportType,
                 "line3",
                 "Fund return over time",
                 new[] { "IRR" },
@@ -127,9 +130,10 @@ namespace FinancialStructures.Database.Export.Report
                 new[] { CarValues.Select(value => value.Value).ToList() },
                 xAxisIsTime: true);
 
-            TextWriting.WriteTitle(sb, exportType, "Current Distribution", HtmlTag.h2);
+            TextWriting.WriteTitle(sb, exportType, "Current Distribution", DocumentElement.h2);
 
             ChartWriting.WriteBarChart(sb,
+                exportType,
                 "bar1",
                 "Security By Sector",
                 "Value",
@@ -138,6 +142,7 @@ namespace FinancialStructures.Database.Export.Report
 
             ChartWriting.WritePieChart(
                 sb,
+                exportType,
                 "pie1",
                 "Security by company",
                 "Value",
@@ -146,12 +151,12 @@ namespace FinancialStructures.Database.Export.Report
 
             var companies = fPortfolio.Companies(Account.Security);
 
-            TextWriting.WriteTitle(sb, exportType, "Company Statistics", HtmlTag.h2);
+            TextWriting.WriteTitle(sb, exportType, "Company Statistics", DocumentElement.h2);
             foreach (string company in companies)
             {
                 if (fSettings.DisplayValueFunds && fPortfolio.TotalValue(Totals.Company, new TwoName(company)) > 0m || !fSettings.DisplayValueFunds)
                 {
-                    TextWriting.WriteTitle(sb, exportType, company, HtmlTag.h3);
+                    TextWriting.WriteTitle(sb, exportType, company, DocumentElement.h3);
 
                     var stats = fPortfolio.GetStats(DateTime.Today, Totals.SecurityCompany, new TwoName(company), AccountStatisticsHelpers.DefaultSecurityCompanyStats());
                     TableWriting.WriteTable(
@@ -166,6 +171,7 @@ namespace FinancialStructures.Database.Export.Report
                     {
                         ChartWriting.WritePieChart(
                             sb,
+                            exportType,
                             $"pie{company}",
                             $"{company} securities",
                             "Value",
@@ -176,6 +182,7 @@ namespace FinancialStructures.Database.Export.Report
 
                     ChartWriting.WriteLineChart(
                         sb,
+                        exportType,
                         $"lineValue{company}",
                         $"{company} value over time",
                         new[] { "Value" },
@@ -185,6 +192,7 @@ namespace FinancialStructures.Database.Export.Report
 
                     ChartWriting.WriteLineChart(
                         sb,
+                        exportType,
                         $"lineReturn{company}",
                         $"{company} Return over time",
                         new[] { "Value" },
@@ -194,7 +202,7 @@ namespace FinancialStructures.Database.Export.Report
                 }
             }
 
-            TextWriting.CreateHTMLFooter(sb);
+            TextWriting.WriteFooter(sb, exportType);
 
             return sb;
         }
