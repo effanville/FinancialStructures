@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
+using System.Threading.Tasks;
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
 using FinancialStructures.Download.Implementation;
@@ -35,31 +36,31 @@ namespace FinancialStructures.StockStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public double GetValue(string ticker, DateTime date, StockDataStream datatype = StockDataStream.Close)
+        public decimal GetValue(string ticker, DateTime date, StockDataStream datatype = StockDataStream.Close)
         {
             foreach (Stock stock in Stocks)
             {
                 if (stock.Ticker.Equals(ticker))
                 {
-                    return stock.Value(date, datatype);
+                    return Convert.ToDecimal(stock.Value(date, datatype));
                 }
             }
 
-            return 0.0;
+            return 0.0m;
         }
 
         /// <inheritdoc/>
-        public double GetValue(TwoName name, DateTime date, StockDataStream datatype = StockDataStream.Close)
+        public decimal GetValue(TwoName name, DateTime date, StockDataStream datatype = StockDataStream.Close)
         {
             foreach (Stock stock in Stocks)
             {
                 if (stock.Name.IsEqualTo(name))
                 {
-                    return stock.Value(date, datatype);
+                    return Convert.ToDecimal(stock.Value(date, datatype));
                 }
             }
 
-            return 0.0;
+            return 0.0m;
         }
 
         /// <inheritdoc/>
@@ -173,13 +174,13 @@ namespace FinancialStructures.StockStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public async void Download(DateTime startDate, DateTime endDate, IReportLogger reportLogger = null)
+        public async Task Download(DateTime startDate, DateTime endDate, IReportLogger reportLogger = null)
         {
             foreach (Stock stock in Stocks)
             {
                 var downloader = new YahooDownloader();
                 IStock tempDataHolder = null;
-                var code = YahooDownloader.GetFinancialCode(stock.Name.Url);
+                string code = YahooDownloader.GetFinancialCode(stock.Name.Url);
                 if (await downloader.TryGetFullPriceHistory(code, startDate, endDate, TimeSpan.FromDays(1), value => tempDataHolder = value, reportLogger))
                 {
                     stock.Valuations = tempDataHolder.Valuations;
@@ -188,13 +189,13 @@ namespace FinancialStructures.StockStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public async void Download(IReportLogger reportLogger = null)
+        public async Task Download(IReportLogger reportLogger = null)
         {
             foreach (Stock stock in Stocks)
             {
                 var downloader = new YahooDownloader();
                 StockDay stockDay = null;
-                var code = YahooDownloader.GetFinancialCode(stock.Name.Url);
+                string code = YahooDownloader.GetFinancialCode(stock.Name.Url);
                 if (await downloader.TryGetLatestPriceData(code, value => stockDay = value, reportLogger))
                 {
                     stock.AddValue(stockDay.Time, stockDay.Open, stockDay.High, stockDay.Low, stockDay.Close, stockDay.Volume);

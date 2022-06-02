@@ -1,7 +1,9 @@
 ﻿using System;
 using System.IO.Abstractions;
 using System.Linq;
+
 using Common.Structure.Reporting;
+
 using FinancialStructures.StockStructures.Implementation;
 
 namespace FinancialStructures.StockStructures
@@ -63,7 +65,7 @@ namespace FinancialStructures.StockStructures
                 {
                     if (openOnly)
                     {
-                        inheritedStock.AddValue(stockData.Time, stockData.Open, 0.0, 0.0, 0.0, 0.0);
+                        inheritedStock.AddValue(stockData.Time, stockData.Open, 0.0m, 0.0m, 0.0m, 0.0m);
                     }
                     else
                     {

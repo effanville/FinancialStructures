@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Common.Structure.Reporting;
 using FinancialStructures.NamingStructures;
@@ -72,13 +71,13 @@ namespace FinancialStructures.Download.Implementation
                 return false;
             }
 
-            double? close = (double?)GetValue(stockWebsite, financialCode);
-            double? open = FindAndGetSingleValue(stockWebsite, "data-test=\"OPEN-value\"", true);
-            Tuple<double, double> range = FindAndGetDoubleValues(stockWebsite, "data-test=\"DAYS_RANGE-value\"");
-            double? volume = FindAndGetSingleValue(stockWebsite, $"data-test=\"TD_VOLUME-value\"><fin-streamer data-symbol=\"{financialCode}\" data-field=\"regularMarketVolume\" data-trend=\"none\" data-pricehint=\"2\" data-dfield=\"longFmt\"", true);
+            decimal? close = GetValue(stockWebsite, financialCode);
+            decimal? open = FindAndGetSingleValue(stockWebsite, "data-test=\"OPEN-value\"", true);
+            Tuple<decimal, decimal> range = FindAndGetDoubleValues(stockWebsite, "data-test=\"DAYS_RANGE-value\"");
+            decimal? volume = FindAndGetSingleValue(stockWebsite, $"data-test=\"TD_VOLUME-value\"><fin-streamer data-symbol=\"{financialCode}\" data-field=\"regularMarketVolume\" data-trend=\"none\" data-pricehint=\"2\" data-dfield=\"longFmt\"", true);
 
             DateTime date = DateTime.Now.TimeOfDay > new DateTime(2010, 1, 1, 16, 30, 0).TimeOfDay ? DateTime.Today : DateTime.Today.AddDays(-1);
-            retrieveValueAction(new StockDay(date, open.Value, range.Item2, range.Item1, close.Value, volume.HasValue ? volume.Value : 0.0));
+            retrieveValueAction(new StockDay(date, open.Value, range.Item2, range.Item1, close.Value, volume.HasValue ? volume.Value : 0.0m));
             return true;
         }
 
@@ -122,11 +121,11 @@ namespace FinancialStructures.Download.Implementation
                     int yahooInt = int.Parse(FindAndGetSingleValue(dayValues, "date", false).ToString());
                     DateTime date = YahooIntToDate(yahooInt);
                     var localDate = date.ToLocalTime();
-                    double? open = FindAndGetSingleValue(dayValues, "open", false);
-                    double? high = FindAndGetSingleValue(dayValues, "high", false);
-                    double? low = FindAndGetSingleValue(dayValues, "low", false);
-                    double? close = FindAndGetSingleValue(dayValues, "close", false);
-                    double? volume = FindAndGetSingleValue(dayValues, "volume", false);
+                    decimal? open = FindAndGetSingleValue(dayValues, "open", false);
+                    decimal? high = FindAndGetSingleValue(dayValues, "high", false);
+                    decimal? low = FindAndGetSingleValue(dayValues, "low", false);
+                    decimal? close = FindAndGetSingleValue(dayValues, "close", false);
+                    decimal? volume = FindAndGetSingleValue(dayValues, "volume", false);
                     stock.AddValue(localDate, open.Value, high.Value, low.Value, close.Value, volume.Value);
                     dataLeft = dataLeft.Substring(dayEndIndex);
                     numberEntriesAdded++;
@@ -185,28 +184,33 @@ namespace FinancialStructures.Download.Implementation
             return code;
         }
 
-        private double? FindAndGetSingleValue(string searchString, string findString, bool includeComma, int containedWithin = 50)
+        private decimal? FindAndGetSingleValue(string searchString, string findString, bool includeComma, int containedWithin = 50)
         {
             int index = searchString.IndexOf(findString);
             int lengthToSearch = Math.Min(containedWithin, searchString.Length - index - findString.Length);
-            return (double?)DownloadHelper.ParseDataIntoNumber(searchString, index, findString.Length, lengthToSearch, includeComma);
+            return DownloadHelper.ParseDataIntoNumber(searchString, index, findString.Length, lengthToSearch, includeComma);
         }
 
-        private Tuple<double, double> FindAndGetDoubleValues(string searchString, string findString, int containedWithin = 50)
+        private Tuple<decimal, decimal> FindAndGetDoubleValues(string searchString, string findString, int containedWithin = 50)
         {
             int index = searchString.IndexOf(findString);
             int lengthToSearch = Math.Min(containedWithin, searchString.Length - index - findString.Length);
-            double? firstValue = (double?)DownloadHelper.ParseDataIntoNumber(searchString, index, findString.Length, lengthToSearch, true);
+            decimal? firstValue = DownloadHelper.ParseDataIntoNumber(searchString, index, findString.Length, lengthToSearch, true);
 
             if (!firstValue.HasValue)
             {
-                return new Tuple<double, double>(double.NaN, double.NaN);
+                return new Tuple<decimal, decimal>(decimal.MinValue, decimal.MinValue);
             }
 
             string value = searchString.Substring(index + findString.Length, lengthToSearch);
             int separator = value.IndexOf("-");
-            double value2 = (double)DownloadHelper.ParseDataIntoNumber(value, separator, 0, lengthToSearch, true);
-            return new Tuple<double, double>(firstValue.Value, value2);
+            decimal? value2 = DownloadHelper.ParseDataIntoNumber(value, separator, 0, lengthToSearch, true);
+            if (!value2.HasValue)
+            {
+                return new Tuple<decimal, decimal>(decimal.MinValue, decimal.MinValue);
+            }
+
+            return new Tuple<decimal, decimal>(firstValue.Value, value2.Value);
         }
 
         private static decimal? GetValue(string webData, string financialCode)

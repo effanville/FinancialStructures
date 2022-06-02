@@ -40,7 +40,7 @@ namespace FinancialStructures.StockStructures
         /// <summary>
         /// Adds a value to the Stock. Note this does not sort the values, so <see cref="Sort"/> should be called after this.
         /// </summary>
-        void AddValue(DateTime time, double open, double high, double low, double close, double volume);
+        void AddValue(DateTime time, decimal open, decimal high, decimal low, decimal close, decimal volume);
 
         /// <summary>
         /// Sorts the values in the stock.
@@ -50,12 +50,12 @@ namespace FinancialStructures.StockStructures
         /// <summary>
         /// Calculates the value of the stock at the time specified.
         /// </summary>
-        double Value(DateTime date, StockDataStream data = StockDataStream.Close);
+        decimal Value(DateTime date, StockDataStream data = StockDataStream.Close);
 
         /// <summary>
         /// Returns a collection of values before and after the date specified.
         /// </summary>
-        List<double> Values(DateTime date, int numberValuesBefore, int numberValuesAfter = 0, StockDataStream data = StockDataStream.Close);
+        List<decimal> Values(DateTime date, int numberValuesBefore, int numberValuesAfter = 0, StockDataStream data = StockDataStream.Close);
 
         /// <summary>
         /// The earliest time held in the stock.
@@ -71,26 +71,26 @@ namespace FinancialStructures.StockStructures
         /// Calculates moving average of <paramref name="numberBefore"/> previous values and <paramref name="numberAfter"/> subsequent values from the day <paramref name="day"/> for the stock
         /// for the type of data <paramref name="data"/>.
         /// </summary>
-        double MovingAverage(DateTime day, int numberBefore, int numberAfter, StockDataStream data);
+        decimal MovingAverage(DateTime day, int numberBefore, int numberAfter, StockDataStream data);
 
         /// <summary>
         /// Calculates the maximum over the period requested.
         /// </summary>
-        double Max(DateTime day, int numberBefore, int numberAfter, StockDataStream data);
+        decimal Max(DateTime day, int numberBefore, int numberAfter, StockDataStream data);
 
         /// <summary>
         /// Calculates the minimum over the period requested.
         /// </summary>
-        double Min(DateTime day, int numberBefore, int numberAfter, StockDataStream data);
+        decimal Min(DateTime day, int numberBefore, int numberAfter, StockDataStream data);
 
         /// <summary>
         /// Calculate the stockastic statistic.
         /// </summary>
-        double Stochastic(DateTime day, int length, int innerLength = 3);
+        decimal Stochastic(DateTime day, int length, int innerLength = 3);
 
         /// <summary>
         /// Need to have a moving average of this.
         /// </summary>
-        double ADX(DateTime day, int length = 14);
+        decimal ADX(DateTime day, int length = 14);
     }
 }

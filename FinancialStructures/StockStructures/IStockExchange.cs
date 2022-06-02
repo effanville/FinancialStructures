@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
+using System.Threading.Tasks;
 using Common.Structure.Reporting;
+
 using FinancialStructures.NamingStructures;
 using FinancialStructures.StockStructures.Implementation;
 
@@ -32,12 +34,12 @@ namespace FinancialStructures.StockStructures
         /// <summary>
         /// Returns the value of the stock indexed by ticker on the date desired.
         /// </summary>
-        double GetValue(string ticker, DateTime date, StockDataStream datatype = StockDataStream.Close);
+        decimal GetValue(string ticker, DateTime date, StockDataStream datatype = StockDataStream.Close);
 
         /// <summary>
         /// Returns the value of the stock with the desired name on the date desired.
         /// </summary>
-        double GetValue(TwoName name, DateTime date, StockDataStream datatype = StockDataStream.Close);
+        decimal GetValue(TwoName name, DateTime date, StockDataStream datatype = StockDataStream.Close);
 
         /// <summary>
         /// Returns the earliest date held in the stock data.
@@ -96,11 +98,11 @@ namespace FinancialStructures.StockStructures
         /// <summary>
         /// Downloads data for the stock exchange between the dates provided.
         /// </summary>
-        void Download(DateTime startDate, DateTime endDate, IReportLogger reportLogger = null);
+        Task Download(DateTime startDate, DateTime endDate, IReportLogger reportLogger = null);
 
         /// <summary>
         /// Downloads data for the stock exchange on the latest date possible.
         /// </summary>
-        void Download(IReportLogger reportLogger = null);
+        Task Download(IReportLogger reportLogger = null);
     }
 }

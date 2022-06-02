@@ -28,7 +28,7 @@ namespace FinancialStructures.StockStructures.Statistics.Implementation
         /// <inheritdoc/>
         public double Calculate(DateTime date, IStock stock)
         {
-            return stock.ADX(date, BurnInTime);
+            return Convert.ToDouble(stock.ADX(date, BurnInTime));
         }
     }
 }

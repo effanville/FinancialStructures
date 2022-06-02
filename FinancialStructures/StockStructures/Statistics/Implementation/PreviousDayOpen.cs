@@ -17,7 +17,7 @@ namespace FinancialStructures.StockStructures.Statistics.Implementation
         /// <inheritdoc/>
         public double Calculate(DateTime date, IStock stock)
         {
-            return stock.Values(date, 1, 0, DataType).First();
+            return Convert.ToDouble(stock.Values(date, 1, 0, DataType).First());
         }
     }
 }

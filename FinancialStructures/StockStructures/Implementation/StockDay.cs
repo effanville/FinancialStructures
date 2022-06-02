@@ -32,7 +32,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// The opening price in the interval.
         /// </summary>
         [XmlAttribute(AttributeName = "O")]
-        public double Open
+        public decimal Open
         {
             get;
             set;
@@ -42,7 +42,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// The high value in this interval
         /// </summary>
         [XmlAttribute(AttributeName = "H")]
-        public double High
+        public decimal High
         {
             get;
             set;
@@ -52,7 +52,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// The low value in this interval.
         /// </summary>
         [XmlAttribute(AttributeName = "L")]
-        public double Low
+        public decimal Low
         {
             get;
             set;
@@ -62,7 +62,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// The closing value in this interval.
         /// </summary>
         [XmlAttribute(AttributeName = "C")]
-        public double Close
+        public decimal Close
         {
             get;
             set;
@@ -72,7 +72,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// The trading volume experienced in the interval.
         /// </summary>
         [XmlAttribute(AttributeName = "V")]
-        public double Volume
+        public decimal Volume
         {
             get;
             set;
@@ -88,7 +88,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <summary>
         /// Constructor setting all values.
         /// </summary>
-        public StockDay(DateTime time, double open, double high, double low, double close, double volume)
+        public StockDay(DateTime time, decimal open, decimal high, decimal low, decimal close, decimal volume)
         {
             Time = time;
             Open = open;
@@ -97,28 +97,29 @@ namespace FinancialStructures.StockStructures.Implementation
             Close = close;
             Volume = volume;
         }
+
         /// <summary>
         /// Get the relevant value based on the datastream.
         /// </summary>
-        public double Value(StockDataStream data)
+        public decimal Value(StockDataStream data)
         {
             switch (data)
             {
-                case (StockDataStream.Open):
+                case StockDataStream.Open:
                     return Open;
-                case (StockDataStream.High):
+                case StockDataStream.High:
                     return High;
-                case (StockDataStream.Low):
+                case StockDataStream.Low:
                     return Low;
-                case (StockDataStream.CloseOpen):
+                case StockDataStream.CloseOpen:
                     return Close / Open;
-                case (StockDataStream.HighOpen):
+                case StockDataStream.HighOpen:
                     return High / Open;
-                case (StockDataStream.LowOpen):
+                case StockDataStream.LowOpen:
                     return Low / Open;
                 case StockDataStream.Volume:
                     return Volume;
-                case (StockDataStream.Close):
+                case StockDataStream.Close:
                 default:
                     return Close;
             }

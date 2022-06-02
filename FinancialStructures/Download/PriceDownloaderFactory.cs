@@ -18,7 +18,7 @@ namespace FinancialStructures.Download
         /// <returns></returns>
         public static IPriceDownloader Retrieve(string url)
         {
-            if(string.IsNullOrEmpty(url))
+            if (string.IsNullOrEmpty(url))
             {
                 return null;
             }
@@ -46,11 +46,11 @@ namespace FinancialStructures.Download
         /// </summary>
         public static string RetrieveCodeFromUrl(string url)
         {
-            if(string.IsNullOrEmpty(url))
+            if (string.IsNullOrEmpty(url))
             {
                 return null;
             }
-            
+
             if (url.Contains("morningstar"))
             {
                 return MorningstarDownloader.GetFinancialCode(url);
