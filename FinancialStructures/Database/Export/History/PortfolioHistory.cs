@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 using Common.Structure.Reporting;
@@ -181,13 +180,13 @@ namespace FinancialStructures.Database.Export.History
                     valuesToWrite.Add(statistic.ExportValues());
                 }
 
-                StringBuilder sb = new StringBuilder();
-                TableWriting.WriteTableFromEnumerable(sb, DocumentType.Csv, Snapshots[0].ExportHeaders(), valuesToWrite, false);
+                ReportBuilder reportBuilder = new ReportBuilder(DocumentType.Csv, new ReportSettings(true, false, false));
+                _ = reportBuilder.WriteTableFromEnumerable(Snapshots[0].ExportHeaders(), valuesToWrite, false);
 
                 using (Stream stream = fileSystem.FileStream.Create(filePath, FileMode.Create))
                 using (StreamWriter fileWriter = new StreamWriter(stream))
                 {
-                    fileWriter.Write(sb);
+                    fileWriter.Write(reportBuilder.ToString());
                 }
 
                 _ = reportLogger?.LogUseful(ReportType.Information, ReportLocation.StatisticsPage, $"Successfully exported history to {filePath}.");

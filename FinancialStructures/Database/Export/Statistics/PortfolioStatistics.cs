@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
-using System.Text;
 using Common.Structure.Reporting;
 using Common.Structure.ReportWriting;
 using FinancialStructures.Database.Extensions;
@@ -228,7 +227,7 @@ namespace FinancialStructures.Database.Export.Statistics
         {
             try
             {
-                StringBuilder sb = ExportString(true, exportType, settings);
+                ReportBuilder sb = ExportString(true, exportType, settings);
 
                 using (Stream stream = fileSystem.FileStream.Create(filePath, FileMode.Create))
                 using (StreamWriter fileWriter = new StreamWriter(stream))
@@ -248,45 +247,39 @@ namespace FinancialStructures.Database.Export.Statistics
         /// <summary>
         /// Creates the string with all stats.
         /// </summary>
-        public StringBuilder ExportString(bool includeHtmlHeaders, DocumentType exportType, PortfolioStatisticsExportSettings settings)
+        public ReportBuilder ExportString(bool includeHtmlHeaders, DocumentType exportType, PortfolioStatisticsExportSettings settings)
         {
-            StringBuilder sb = new StringBuilder();
+            ReportBuilder reportBuilder = new ReportBuilder(exportType, new ReportSettings(settings.Colours, false, false));
             if (includeHtmlHeaders && exportType == DocumentType.Html)
             {
-                TextWriting.WriteHeader(sb, exportType, $"Statement for funds as of {DateTime.Today.ToShortDateString()}", settings.Colours);
-                _ = sb.AppendLine($"<h1>{fDatabaseName} - Statement on {DateTime.Today.ToShortDateString()}</h1>");
+                _ = reportBuilder.WriteHeader($"Statement for funds as of {DateTime.Today.ToShortDateString()}")
+                    .WriteTitle($"{fDatabaseName} - Statement on {DateTime.Today.ToShortDateString()}", DocumentElement.h1);
             }
 
             var totalFieldNames = PortfolioTotals.Select(data => data.Statistics).First().Select(stat => stat.StatType.ToString()).ToList();
-            TableWriting.WriteTableFromEnumerable(
-                sb,
-                exportType,
+            _ = reportBuilder.WriteTableFromEnumerable(
                 totalFieldNames,
                 PortfolioTotals.Select(data => data.Statistics),
                 headerFirstColumn: false);
 
-            WriteSection(sb, exportType, "Fund Data", settings.Spacing, settings.SecurityDisplayOptions, SecurityStats, SecurityCompanyStats, SecurityTotalStats);
+            WriteSection(reportBuilder, "Fund Data", settings.Spacing, settings.SecurityDisplayOptions, SecurityStats, SecurityCompanyStats, SecurityTotalStats);
 
-            WriteSection(sb, exportType, "Bank Account Data", settings.Spacing, settings.BankAccountDisplayOptions, BankAccountStats, BankAccountCompanyStats, BankAccountTotalStats);
+            WriteSection(reportBuilder, "Bank Account Data", settings.Spacing, settings.BankAccountDisplayOptions, BankAccountStats, BankAccountCompanyStats, BankAccountTotalStats);
 
-            WriteSection(sb, exportType, "Asset Data", settings.Spacing, settings.AssetDisplayOptions, AssetStats, AssetCompanyStats, AssetTotalStats);
+            WriteSection(reportBuilder, "Asset Data", settings.Spacing, settings.AssetDisplayOptions, AssetStats, AssetCompanyStats, AssetTotalStats);
 
-            WriteSection(sb, exportType, "Analysis By Sector", settings.Spacing, settings.SectorDisplayOptions, SectorStats, null, null);
+            WriteSection(reportBuilder, "Analysis By Sector", settings.Spacing, settings.SectorDisplayOptions, SectorStats, null, null);
 
-            TextWriting.WriteTitle(sb, exportType, "Portfolio Notes", DocumentElement.h2);
-            TableWriting.WriteTable(sb, exportType, PortfolioNotes, headerFirstColumn: false);
+            _ = reportBuilder.WriteTitle("Portfolio Notes", DocumentElement.h2)
+                .WriteTable(PortfolioNotes, headerFirstColumn: false);
 
-            if (includeHtmlHeaders && exportType == DocumentType.Html)
-            {
-                TextWriting.WriteFooter(sb, exportType);
-            }
+            _ = reportBuilder.WriteFooter();
 
-            return sb;
+            return reportBuilder;
         }
 
         private static void WriteSection(
-                StringBuilder sb,
-                DocumentType exportType,
+                ReportBuilder sb,
                 string title,
                 bool useSpacing,
                 TableOptions<Statistic> displaySettings,
@@ -296,7 +289,7 @@ namespace FinancialStructures.Database.Export.Statistics
         {
             if (displaySettings.ShouldDisplay)
             {
-                TextWriting.WriteTitle(sb, exportType, title, DocumentElement.h2);
+                _ = sb.WriteTitle(title, DocumentElement.h2);
                 List<AccountStatistics> collatedData = itemStats?.ToList() ?? new List<AccountStatistics>();
 
                 if (companyStats != null)
@@ -321,9 +314,7 @@ namespace FinancialStructures.Database.Export.Statistics
 
                 AddSpacing(useSpacing, displaySettings.SortingField, ref collatedData, addAfterName: false);
 
-                TableWriting.WriteTableFromEnumerable(
-                    sb,
-                    exportType,
+                _ = sb.WriteTableFromEnumerable(
                     displaySettings.DisplayFields.Select(field => field.ToString()),
                     collatedData.Select(data => data.Statistics),
                     headerFirstColumn: true);

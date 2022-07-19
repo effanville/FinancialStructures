@@ -2,7 +2,6 @@
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
-using System.Text;
 
 using Common.Structure.ReportWriting;
 using Common.Structure.Reporting;
@@ -58,14 +57,14 @@ namespace FinancialStructures.Database.Export.Report
         /// <param name="logger">Returns information on success or failure.</param>
         public void ExportToFile(IFileSystem fileSystem, string filePath, PortfolioReportExportSettings settings, IReportLogger logger)
         {
-            StringBuilder sb = ExportString(settings);
+            ReportBuilder reportBuilder = ExportString(settings);
 
             try
             {
                 using (Stream stream = fileSystem.FileStream.Create(filePath, FileMode.Create))
                 using (StreamWriter fileWriter = new StreamWriter(stream))
                 {
-                    fileWriter.Write(sb.ToString());
+                    fileWriter.Write(reportBuilder.ToString());
                 }
             }
             catch (IOException exception)
@@ -80,19 +79,17 @@ namespace FinancialStructures.Database.Export.Report
         /// <summary>
         /// Generates the export string for the report.
         /// </summary>
-        public StringBuilder ExportString(PortfolioReportExportSettings settings)
+        public ReportBuilder ExportString(PortfolioReportExportSettings settings)
         {
             var exportType = settings.ReportExportType;
 
-            StringBuilder sb = new StringBuilder();
+            ReportBuilder reportBuilder = new ReportBuilder(settings.ReportExportType, new ReportSettings(true, false, true));
 
             string title = $"Portfolio Report for {fPortfolio.DatabaseName()} - Statement on {DateTime.Today.ToShortDateString()}";
-            TextWriting.WriteHeader(sb, exportType, title, true);
-            TextWriting.WriteTitle(sb, exportType, title);
-            TextWriting.WriteTitle(sb, exportType, "Total Values", DocumentElement.h2);
-            ChartWriting.WriteLineChart(
-                sb,
-                exportType,
+            _ = reportBuilder.WriteHeader(title)
+                .WriteTitle(title, DocumentElement.h1)
+                .WriteTitle("Total Values", DocumentElement.h2)
+                .WriteLineChart(
                 "line1",
                 "Total values over time",
                 new[] { "BankAccount", "Security", "Total" },
@@ -105,9 +102,7 @@ namespace FinancialStructures.Database.Export.Report
                 },
                 xAxisIsTime: true);
 
-            ChartWriting.WriteLineChart(
-                sb,
-                exportType,
+            _ = reportBuilder.WriteLineChart(
                 "line2",
                 "Recent Total values",
                 new[] { "BankAccount", "Security", "Total" },
@@ -120,9 +115,7 @@ namespace FinancialStructures.Database.Export.Report
                 },
                 xAxisIsTime: true);
 
-            ChartWriting.WriteLineChart(
-                sb,
-                exportType,
+            _ = reportBuilder.WriteLineChart(
                 "line3",
                 "Fund return over time",
                 new[] { "IRR" },
@@ -130,19 +123,15 @@ namespace FinancialStructures.Database.Export.Report
                 new[] { CarValues.Select(value => value.Value).ToList() },
                 xAxisIsTime: true);
 
-            TextWriting.WriteTitle(sb, exportType, "Current Distribution", DocumentElement.h2);
-
-            ChartWriting.WriteBarChart(sb,
-                exportType,
+            _ = reportBuilder.WriteTitle("Current Distribution", DocumentElement.h2)
+                .WriteBarChart(
                 "bar1",
                 "Security By Sector",
                 "Value",
                 SectorValues.Select(x => x.Key).ToList(),
                 SectorValues.Select(x => x.Value.TruncateToString()).ToList());
 
-            ChartWriting.WritePieChart(
-                sb,
-                exportType,
+            _ = reportBuilder.WritePieChart(
                 "pie1",
                 "Security by company",
                 "Value",
@@ -151,17 +140,15 @@ namespace FinancialStructures.Database.Export.Report
 
             var companies = fPortfolio.Companies(Account.Security);
 
-            TextWriting.WriteTitle(sb, exportType, "Company Statistics", DocumentElement.h2);
+            _ = reportBuilder.WriteTitle("Company Statistics", DocumentElement.h2);
             foreach (string company in companies)
             {
                 if (fSettings.DisplayValueFunds && fPortfolio.TotalValue(Totals.Company, new TwoName(company)) > 0m || !fSettings.DisplayValueFunds)
                 {
-                    TextWriting.WriteTitle(sb, exportType, company, DocumentElement.h3);
+                    _ = reportBuilder.WriteTitle(company, DocumentElement.h3);
 
                     var stats = fPortfolio.GetStats(DateTime.Today, Totals.SecurityCompany, new TwoName(company), AccountStatisticsHelpers.DefaultSecurityCompanyStats());
-                    TableWriting.WriteTable(
-                        sb,
-                        exportType,
+                    _ = reportBuilder.WriteTable(
                         new[] { "StatType", "ValueAsObject" },
                         stats[0].Statistics,
                         headerFirstColumn: true);
@@ -169,9 +156,7 @@ namespace FinancialStructures.Database.Export.Report
                     var companyAccounts = fPortfolio.Accounts(Totals.SecurityCompany, new TwoName(company));
                     if (companyAccounts != null && companyAccounts.Count > 1)
                     {
-                        ChartWriting.WritePieChart(
-                            sb,
-                            exportType,
+                        _ = reportBuilder.WritePieChart(
                             $"pie{company}",
                             $"{company} securities",
                             "Value",
@@ -180,9 +165,7 @@ namespace FinancialStructures.Database.Export.Report
                     }
                     var priceHistory = fHistory.Snapshots.Select(snap => ($"{snap.Date.Year}-{snap.Date.Month}-{snap.Date.Day}", snap.SecurityValues[company], 100 * snap.SecurityTotalCar[company])).Where(val => val.Item2 > 0);
 
-                    ChartWriting.WriteLineChart(
-                        sb,
-                        exportType,
+                    _ = reportBuilder.WriteLineChart(
                         $"lineValue{company}",
                         $"{company} value over time",
                         new[] { "Value" },
@@ -190,9 +173,7 @@ namespace FinancialStructures.Database.Export.Report
                         new[] { priceHistory.Select(value => value.Item2.ToString()).ToList() },
                         xAxisIsTime: true);
 
-                    ChartWriting.WriteLineChart(
-                        sb,
-                        exportType,
+                    _ = reportBuilder.WriteLineChart(
                         $"lineReturn{company}",
                         $"{company} Return over time",
                         new[] { "Value" },
@@ -202,9 +183,9 @@ namespace FinancialStructures.Database.Export.Report
                 }
             }
 
-            TextWriting.WriteFooter(sb, exportType);
+            _ = reportBuilder.WriteFooter();
 
-            return sb;
+            return reportBuilder;
         }
     }
 }

@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-    <PackageReference Include="System.IO.Abstractions" Version="17.0.18" />
+    <PackageReference Include="System.IO.Abstractions" Version="17.0.24" />
   </ItemGroup>
 
   <ItemGroup>
@@ -32,5 +32,4 @@
       <_Parameter1>FPD.ViewModels.Tests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
-
 </Project>

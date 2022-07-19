@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
-using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -216,14 +215,12 @@ namespace FinancialStructures.ExpensesStructures.Implementation
             error = null;
             try
             {
-                StringBuilder sb = new StringBuilder();
-                TextWriting.WriteHeader(sb, exportType, title, useColours: true);
-                TextWriting.WriteTitle(sb, exportType, title);
-
-                TableWriting.WriteTable(sb, exportType, Expenses, false);
-                TextWriting.WriteParagraph(sb, exportType, new string[] { $"Total Expenses {Total()}" });
-
-                TextWriting.WriteFooter(sb, exportType);
+                ReportBuilder sb = new ReportBuilder(exportType, new ReportSettings(useColours: true, useDefaultStyle: false, useScripts: false));
+                _ = sb.WriteHeader(title)
+                    .WriteTitle(title, DocumentElement.h1)
+                    .WriteTable(Expenses, false)
+                    .WriteParagraph(new string[] { $"Total Expenses {Total()}" })
+                    .WriteFooter();
 
                 using (Stream stream = fileSystem.FileStream.Create(filepath, FileMode.Create))
                 using (StreamWriter sw = new StreamWriter(stream))
