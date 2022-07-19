@@ -27,6 +27,22 @@ namespace FinancialStructures
         }
 
         /// <summary>
+        /// Enables retrieval of the currency symbol for the currency provided.
+        /// </summary>
+        /// <param name="currencyName">The name of the currency.</param>
+        /// <returns>A string with the currency symbol</returns>
+        public static string CurrencySymbol(string currencyName)
+        {
+            if (string.IsNullOrWhiteSpace(currencyName))
+            {
+                return "";
+            }
+
+            var culture = CurrencyCultureInfo(currencyName);
+            return culture.NumberFormat.CurrencySymbol;
+        }
+
+        /// <summary>
         /// Returns the standard culture specified from the currency name.
         /// </summary>
         private static CultureInfo CurrencyCultureInfo(string currencyName)
