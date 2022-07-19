@@ -123,7 +123,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 return new DailyValuation(date, 0.0m);
             }
 
-            decimal latestValue = Shares.ValueOnOrBefore(date)?.Value * val.Value * GetCurrencyValue(val.Day, currency) ?? 0.0m;
+            decimal latestValue = Shares.ValueBefore(date)?.Value * val.Value * GetCurrencyValue(val.Day, currency) ?? 0.0m;
             return new DailyValuation(date, latestValue);
         }
 
