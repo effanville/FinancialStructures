@@ -28,6 +28,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPD.Logic", "FPD.Logic\FPD.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPD.Logic.Tests", "FPD.Logic.Tests\FPD.Logic.Tests.csproj", "{90EDA2DB-996B-497B-8562-C311F37B8A5C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Structure", "Common\Common.Structure\Common.Structure.csproj", "{A2CB7343-EE36-451E-A71B-5CC4E38C2589}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{5F985C0F-B939-463C-BCCF-060883E478B5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.UI", "Common\Common.UI\Common.UI.csproj", "{037B9B7D-83E3-4395-9C8C-A1D528C39FA2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Console", "Common\Common.Console\Common.Console.csproj", "{B86DCF20-F414-4900-817B-3A4B812E9FB5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug(Tests)|x64 = Debug(Tests)|x64
@@ -70,12 +78,33 @@ Global
 		{90EDA2DB-996B-497B-8562-C311F37B8A5C}.Debug|x64.Build.0 = Debug|x64
 		{90EDA2DB-996B-497B-8562-C311F37B8A5C}.Release|x64.ActiveCfg = Release|x64
 		{90EDA2DB-996B-497B-8562-C311F37B8A5C}.Release|x64.Build.0 = Release|x64
+		{A2CB7343-EE36-451E-A71B-5CC4E38C2589}.Debug(Tests)|x64.ActiveCfg = Debug|x64
+		{A2CB7343-EE36-451E-A71B-5CC4E38C2589}.Debug(Tests)|x64.Build.0 = Debug|x64
+		{A2CB7343-EE36-451E-A71B-5CC4E38C2589}.Debug|x64.ActiveCfg = Debug|x64
+		{A2CB7343-EE36-451E-A71B-5CC4E38C2589}.Debug|x64.Build.0 = Debug|x64
+		{A2CB7343-EE36-451E-A71B-5CC4E38C2589}.Release|x64.ActiveCfg = Release|x64
+		{A2CB7343-EE36-451E-A71B-5CC4E38C2589}.Release|x64.Build.0 = Release|x64
+		{037B9B7D-83E3-4395-9C8C-A1D528C39FA2}.Debug(Tests)|x64.ActiveCfg = Debug|x64
+		{037B9B7D-83E3-4395-9C8C-A1D528C39FA2}.Debug(Tests)|x64.Build.0 = Debug|x64
+		{037B9B7D-83E3-4395-9C8C-A1D528C39FA2}.Debug|x64.ActiveCfg = Debug|x64
+		{037B9B7D-83E3-4395-9C8C-A1D528C39FA2}.Debug|x64.Build.0 = Debug|x64
+		{037B9B7D-83E3-4395-9C8C-A1D528C39FA2}.Release|x64.ActiveCfg = Release|x64
+		{037B9B7D-83E3-4395-9C8C-A1D528C39FA2}.Release|x64.Build.0 = Release|x64
+		{B86DCF20-F414-4900-817B-3A4B812E9FB5}.Debug(Tests)|x64.ActiveCfg = Debug|x64
+		{B86DCF20-F414-4900-817B-3A4B812E9FB5}.Debug(Tests)|x64.Build.0 = Debug|x64
+		{B86DCF20-F414-4900-817B-3A4B812E9FB5}.Debug|x64.ActiveCfg = Debug|x64
+		{B86DCF20-F414-4900-817B-3A4B812E9FB5}.Debug|x64.Build.0 = Debug|x64
+		{B86DCF20-F414-4900-817B-3A4B812E9FB5}.Release|x64.ActiveCfg = Release|x64
+		{B86DCF20-F414-4900-817B-3A4B812E9FB5}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{8989B308-837A-402C-BE70-82764592AC9C} = {89F98A9D-5FE5-4238-A7FA-AA2C4ABC5077}
+		{A2CB7343-EE36-451E-A71B-5CC4E38C2589} = {5F985C0F-B939-463C-BCCF-060883E478B5}
+		{037B9B7D-83E3-4395-9C8C-A1D528C39FA2} = {5F985C0F-B939-463C-BCCF-060883E478B5}
+		{B86DCF20-F414-4900-817B-3A4B812E9FB5} = {5F985C0F-B939-463C-BCCF-060883E478B5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {93C86412-6CF8-4AE6-823D-068DDC6A6B87}

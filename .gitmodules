@@ -2,3 +2,6 @@
 	path = BuildProcess
 	branch = master
 	url = https://github.com/effanville/BuildProcess.git
+[submodule "Common"]
+	path = Common
+	url = https://github.com/effanville/Common
