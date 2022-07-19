@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Common.Structure.DataStructures;
-using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Implementation;
@@ -179,12 +178,12 @@ namespace FinancialStructures.Tests.FinanceStructuresTests
 
             yield return new TestCaseData(
                 SecurityConstructor.Default().Item,
-                128.7m)
+                113.16m)
                 .SetName($"{nameof(SecurityRecentChangeTests)}-DefaultSec");
 
             yield return new TestCaseData(
                 SecurityConstructor.Secondary().Item,
-                -19624.8m)
+                -14666.84m)
                 .SetName($"{nameof(SecurityRecentChangeTests)}-SecondarySec");
         }
 

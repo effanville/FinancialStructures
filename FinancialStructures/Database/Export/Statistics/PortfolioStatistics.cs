@@ -273,7 +273,10 @@ namespace FinancialStructures.Database.Export.Statistics
             _ = reportBuilder.WriteTitle("Portfolio Notes", DocumentElement.h2)
                 .WriteTable(PortfolioNotes, headerFirstColumn: false);
 
-            _ = reportBuilder.WriteFooter();
+            if (includeHtmlHeaders)
+            {
+                _ = reportBuilder.WriteFooter();
+            }
 
             return reportBuilder;
         }
