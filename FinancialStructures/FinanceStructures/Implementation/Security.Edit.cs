@@ -190,15 +190,13 @@ namespace FinancialStructures.FinanceStructures.Implementation
             {
                 if (trade != null)
                 {
-                    decimal sign = trade.TradeType.Sign();
-
                     // if trade should alter number of shares, then alter
                     // if it shouldnt then remove the shares.
                     if (trade.TradeType.IsShareNumberAlteringTradeType())
                     {
                         DailyValuation sharesPreviousValue = Shares.ValueBefore(trade.Day) ?? new DailyValuation(trade.Day, 0);
                         bool hasShareValue = Shares.TryGetValue(trade.Day, out decimal shareValue);
-                        decimal expectedNumberShares = sharesPreviousValue.Value + sign * trade.NumberShares;
+                        decimal expectedNumberShares = trade.GetPostTradeShares(sharesPreviousValue.Value);
                         if ((hasShareValue && !Equals(shareValue, expectedNumberShares)) || !hasShareValue)
                         {
                             Shares.SetData(trade.Day, expectedNumberShares);
@@ -213,6 +211,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                     // shouldnt have value then remove.
                     if (trade.TradeType.IsInvestmentTradeType())
                     {
+                        decimal sign = trade.TradeType.Sign();
                         Investments.SetData(trade.Day, sign * trade.TotalCost, reportLogger);
                     }
                     else
@@ -248,14 +247,13 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
             RemoveEventListening();
             CleanData();
+            SecurityTrades.Sort();
             for (int index = 0; index < SecurityTrades.Count; index++)
             {
                 // When a trade is present, number of shares bought/sold should correspond to share number difference before
                 // and after.
                 // Investment on that day should correspond also.
                 SecurityTrade trade = SecurityTrades[index];
-                decimal sign = trade.TradeType.Sign();
-
                 if (trade.TradeType.IsShareNumberAlteringTradeType())
                 {
                     if (trade.TradeType == TradeType.Sell)
@@ -266,7 +264,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                     DailyValuation sharesPreviousValue = Shares.ValueBefore(trade.Day) ?? new DailyValuation(DateTime.Today, 0);
                     bool hasShareValue = Shares.TryGetValue(trade.Day, out decimal shareValue);
 
-                    decimal expectedNumberShares = sharesPreviousValue.Value + sign * trade.NumberShares;
+                    decimal expectedNumberShares = trade.GetPostTradeShares(sharesPreviousValue.Value);
                     if ((hasShareValue && !Equals(shareValue, expectedNumberShares)) || !hasShareValue)
                     {
                         Shares.SetData(trade.Day, expectedNumberShares);
@@ -275,6 +273,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
 
                 if (trade.TradeType.IsInvestmentTradeType())
                 {
+                    decimal sign = trade.TradeType.Sign();
                     Investments.SetData(trade.Day, sign * trade.TotalCost, reportLogger);
                 }
             }
@@ -308,20 +307,15 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 }
             }
 
-            decimal previousNumShares = 0.0m;
             for (int index = 0; index < Shares.Count(); index++)
             {
                 DailyValuation shareValue = Shares[index];
-                Shares.SetData(shareValue.Day, shareValue.Value);
-                decimal shareDiff = shareValue.Value - previousNumShares;
-                if (!shareDiff.Equals(0.0m))
+                decimal numberShares = shareValue.Value;
+                Shares.SetData(shareValue.Day, numberShares);
+                if (!SecurityTrades.Any(trade => trade.Day == shareValue.Day))
                 {
-                    if (!SecurityTrades.Any(trade => trade.Day == shareValue.Day))
-                    {
-                        SecurityTrades.Add(new SecurityTrade(TradeType.ShareReprice, Names, shareValue.Day, shareDiff, UnitPrice.ValueOnOrBefore(shareValue.Day).Value, 0.0m));
-                    }
+                    SecurityTrades.Add(new SecurityTrade(TradeType.ShareReset, Names, shareValue.Day, numberShares, UnitPrice.ValueOnOrBefore(shareValue.Day).Value, 0.0m));
                 }
-                previousNumShares = shareValue.Value;
             }
 
             SetupEventListening();

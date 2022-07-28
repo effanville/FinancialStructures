@@ -65,7 +65,8 @@
             if (tradeType.Equals(TradeType.Buy)
                || tradeType.Equals(TradeType.Sell)
                || tradeType.Equals(TradeType.DividendReinvestment)
-               || tradeType.Equals(TradeType.ShareReprice))
+               || tradeType.Equals(TradeType.ShareReprice)
+               || tradeType.Equals(TradeType.ShareReset))
             {
                 return true;
             }

@@ -1,4 +1,7 @@
-﻿namespace FinancialStructures.DataStructures
+﻿using System;
+using System.ComponentModel;
+
+namespace FinancialStructures.DataStructures
 {
     /// <summary>
     /// The type of the trade.
@@ -31,9 +34,16 @@
         DividendReinvestment,
 
         /// <summary>
-        /// The price of one share was changed.
+        /// The price of one share was changed (deprecated).
         /// </summary>
+        [Description("The price of one share was reset to a new value, where the number of shares is the difference of number of shares.")]
         ShareReprice,
+
+        /// <summary>
+        /// The price of one share was reset to a new value.
+        /// </summary>
+        [Description("The price of one share was reset to a new value, where the number of shares is the new number of shares.")]
+        ShareReset,
 
         /// <summary>
         /// The trade was a payout in cash.

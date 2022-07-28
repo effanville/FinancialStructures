@@ -345,11 +345,11 @@ namespace FinancialStructures.Tests.Saving
         </Investments>
         <SecurityTrades>
           <SecurityTrade TradeType=""Buy"" Company=""BlackRock"" Name=""UK Stock"" Day=""2010-01-01T00:00:00"" NumberShares=""2.0"" UnitPrice=""100.0"" TradeCosts=""0.0"" />
-          <SecurityTrade TradeType=""ShareReprice"" Company=""BlackRock"" Name=""UK Stock"" Day=""2011-01-01T00:00:00"" NumberShares=""-0.5"" UnitPrice=""100.0"" TradeCosts=""0.0"" />
-          <SecurityTrade TradeType=""ShareReprice"" Company=""BlackRock"" Name=""UK Stock"" Day=""2012-05-01T00:00:00"" NumberShares=""15.8"" UnitPrice=""125.2"" TradeCosts=""0.0"" />
-          <SecurityTrade TradeType=""ShareReprice"" Company=""BlackRock"" Name=""UK Stock"" Day=""2015-04-03T00:00:00"" NumberShares=""-13.3"" UnitPrice=""90.6"" TradeCosts=""0.0"" />
-          <SecurityTrade TradeType=""ShareReprice"" Company=""BlackRock"" Name=""UK Stock"" Day=""2018-05-06T00:00:00"" NumberShares=""1.7"" UnitPrice=""77.7"" TradeCosts=""0.0"" />
-          <SecurityTrade TradeType=""ShareReprice"" Company=""BlackRock"" Name=""UK Stock"" Day=""2020-01-01T00:00:00"" NumberShares=""-0.2"" UnitPrice=""101.1"" TradeCosts=""0.0"" />
+          <SecurityTrade TradeType=""ShareReset"" Company=""BlackRock"" Name=""UK Stock"" Day=""2011-01-01T00:00:00"" NumberShares=""1.5"" UnitPrice=""100.0"" TradeCosts=""0.0"" />
+          <SecurityTrade TradeType=""ShareReset"" Company=""BlackRock"" Name=""UK Stock"" Day=""2012-05-01T00:00:00"" NumberShares=""17.3"" UnitPrice=""125.2"" TradeCosts=""0.0"" />
+          <SecurityTrade TradeType=""ShareReset"" Company=""BlackRock"" Name=""UK Stock"" Day=""2015-04-03T00:00:00"" NumberShares=""4"" UnitPrice=""90.6"" TradeCosts=""0.0"" />
+          <SecurityTrade TradeType=""ShareReset"" Company=""BlackRock"" Name=""UK Stock"" Day=""2018-05-06T00:00:00"" NumberShares=""5.7"" UnitPrice=""77.7"" TradeCosts=""0.0"" />
+          <SecurityTrade TradeType=""ShareReset"" Company=""BlackRock"" Name=""UK Stock"" Day=""2020-01-01T00:00:00"" NumberShares=""5.5"" UnitPrice=""101.1"" TradeCosts=""0.0"" />
         </SecurityTrades>
       </Security>
     </Funds>
@@ -403,11 +403,11 @@ namespace FinancialStructures.Tests.Saving
         </Investments>
         <SecurityTrades>
           <SecurityTrade TradeType=""Buy"" Company=""BlackRock"" Name=""UK Stock"" Day=""2010-01-01T00:00:00"" NumberShares=""2.0"" UnitPrice=""100.0"" TradeCosts=""0.0"" />
-          <SecurityTrade TradeType=""ShareReprice"" Company=""BlackRock"" Name=""UK Stock"" Day=""2011-01-01T00:00:00"" NumberShares=""-0.5"" UnitPrice=""100.0"" TradeCosts=""0.0"" />
-          <SecurityTrade TradeType=""ShareReprice"" Company=""BlackRock"" Name=""UK Stock"" Day=""2012-05-01T00:00:00"" NumberShares=""15.8"" UnitPrice=""125.2"" TradeCosts=""0.0"" />
-          <SecurityTrade TradeType=""ShareReprice"" Company=""BlackRock"" Name=""UK Stock"" Day=""2015-04-03T00:00:00"" NumberShares=""-13.3"" UnitPrice=""90.6"" TradeCosts=""0.0"" />
-          <SecurityTrade TradeType=""ShareReprice"" Company=""BlackRock"" Name=""UK Stock"" Day=""2018-05-06T00:00:00"" NumberShares=""1.7"" UnitPrice=""77.7"" TradeCosts=""0.0"" />
-          <SecurityTrade TradeType=""ShareReprice"" Company=""BlackRock"" Name=""UK Stock"" Day=""2020-01-01T00:00:00"" NumberShares=""-0.2"" UnitPrice=""101.1"" TradeCosts=""0.0"" />
+          <SecurityTrade TradeType=""ShareReset"" Company=""BlackRock"" Name=""UK Stock"" Day=""2011-01-01T00:00:00"" NumberShares=""1.5"" UnitPrice=""100.0"" TradeCosts=""0.0"" />
+          <SecurityTrade TradeType=""ShareReset"" Company=""BlackRock"" Name=""UK Stock"" Day=""2012-05-01T00:00:00"" NumberShares=""17.3"" UnitPrice=""125.2"" TradeCosts=""0.0"" />
+          <SecurityTrade TradeType=""ShareReset"" Company=""BlackRock"" Name=""UK Stock"" Day=""2015-04-03T00:00:00"" NumberShares=""4"" UnitPrice=""90.6"" TradeCosts=""0.0"" />
+          <SecurityTrade TradeType=""ShareReset"" Company=""BlackRock"" Name=""UK Stock"" Day=""2018-05-06T00:00:00"" NumberShares=""5.7"" UnitPrice=""77.7"" TradeCosts=""0.0"" />
+          <SecurityTrade TradeType=""ShareReset"" Company=""BlackRock"" Name=""UK Stock"" Day=""2020-01-01T00:00:00"" NumberShares=""5.5"" UnitPrice=""101.1"" TradeCosts=""0.0"" />
         </SecurityTrades>
       </Security>
     </Funds>
