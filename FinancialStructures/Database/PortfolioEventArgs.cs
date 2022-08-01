@@ -76,7 +76,7 @@ namespace FinancialStructures.Database
         /// </summary>
         public bool ShouldUpdate(Account dataType)
         {
-            return ChangedAccount == Account.All || dataType.Equals(ChangedAccount);
+            return ChangedAccount == Account.All || dataType.Equals(ChangedAccount) || dataType == Account.All;
         }
     }
 }

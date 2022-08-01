@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
@@ -51,7 +50,7 @@ namespace FinancialStructures.Database.Export.History
         /// <param name="settings">The settings for the history.</param>
         public PortfolioHistory(IPortfolio portfolio, PortfolioHistorySettings settings)
         {
-            if (ShouldMultiThread(portfolio, settings, forceMultiThreading: false))
+            if (ShouldMultiThread(portfolio, settings, forceMultiThreading: true))
             {
                 GenerateHistoryStatsMulti(portfolio, settings);
             }
@@ -128,29 +127,25 @@ namespace FinancialStructures.Database.Export.History
 
         private void GenerateHistoryStatsMulti(IPortfolio portfolio, PortfolioHistorySettings settings)
         {
-            ConcurrentBag<PortfolioDaySnapshot> bag = new ConcurrentBag<PortfolioDaySnapshot>();
-            List<Task> tasks = new List<Task>();
-            foreach (DateTime time in PrepareTimes(portfolio, settings))
+            var times = PrepareTimes(portfolio, settings);
+            PortfolioDaySnapshot[] snapshots = new PortfolioDaySnapshot[times.Count];
+            _ = Parallel.For(fromInclusive: 0, times.Count, timeIndex => GenerateSnapshot(timeIndex));
+
+            void GenerateSnapshot(int index)
             {
-                Task task = Task.Run(() =>
-                {
-                    PortfolioDaySnapshot snapshot = new PortfolioDaySnapshot(
-                        time,
-                        portfolio,
-                        includeSecurityValues: true,
-                        includeBankValues: true,
-                        includeSectorValues: true,
-                        settings.GenerateSecurityRates,
-                        settings.GenerateSectorRates,
-                        settings.MaxIRRIterations);
-                    bag.Add(snapshot);
-                });
-                tasks.Add(task);
+                PortfolioDaySnapshot snapshot = new PortfolioDaySnapshot(
+                    times[index],
+                    portfolio,
+                    includeSecurityValues: true,
+                    includeBankValues: true,
+                    includeSectorValues: true,
+                    settings.GenerateSecurityRates,
+                    settings.GenerateSectorRates,
+                    settings.MaxIRRIterations);
+                snapshots[index] = snapshot;
             }
 
-            Task.WhenAll(tasks).Wait();
-            Snapshots = bag.ToList();
-            Snapshots.Sort();
+            Snapshots = snapshots.ToList();
         }
 
         /// <summary>

@@ -40,59 +40,25 @@ namespace FinancialStructures.Database.Download
         private static List<Task> DownloadPortfolioLatest(IPortfolio portfo, IReportLogger reportLogger)
         {
             List<Task> downloadTasks = new List<Task>();
-            foreach (ISecurity sec in portfo.FundsThreadSafe)
+            Add(portfo.FundsThreadSafe);
+            Add(portfo.BankAccountsThreadSafe);
+            Add(portfo.CurrenciesThreadSafe);
+            Add(portfo.BenchMarksThreadSafe);
+            Add(portfo.Assets);
+
+
+            void Add(IReadOnlyList<IValueList> accounts)
             {
-                if (!string.IsNullOrEmpty(sec.Names.Url))
+                foreach (IValueList acc in accounts)
                 {
-                    downloadTasks.Add(DownloadLatestValue(sec.Names, value => UpdateAndCheck(sec, value, reportLogger), reportLogger));
-                }
-                else
-                {
-                    _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Downloading, $"No Url set for {sec.Names}");
-                }
-            }
-            foreach (IExchangableValueList acc in portfo.BankAccountsThreadSafe)
-            {
-                if (!string.IsNullOrEmpty(acc.Names.Url))
-                {
-                    downloadTasks.Add(DownloadLatestValue(acc.Names, value => UpdateAndCheck(acc, value, reportLogger), reportLogger));
-                }
-                else
-                {
-                    _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Downloading, $"No Url set for {acc.Names}");
-                }
-            }
-            foreach (ICurrency currency in portfo.CurrenciesThreadSafe)
-            {
-                if (!string.IsNullOrEmpty(currency.Names.Url))
-                {
-                    downloadTasks.Add(DownloadLatestValue(currency.Names, value => UpdateAndCheck(currency, value, reportLogger), reportLogger));
-                }
-                else
-                {
-                    _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Downloading, $"No Url set for {currency.Names}");
-                }
-            }
-            foreach (IValueList sector in portfo.BenchMarksThreadSafe)
-            {
-                if (!string.IsNullOrEmpty(sector.Names.Url))
-                {
-                    downloadTasks.Add(DownloadLatestValue(sector.Names, value => UpdateAndCheck(sector, value, reportLogger), reportLogger));
-                }
-                else
-                {
-                    _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Downloading, $"No Url set for {sector.Names}");
-                }
-            }
-            foreach (IValueList asset in portfo.Assets)
-            {
-                if (!string.IsNullOrEmpty(asset.Names.Url))
-                {
-                    downloadTasks.Add(DownloadLatestValue(asset.Names, value => asset.SetData(DateTime.Today, value, reportLogger), reportLogger));
-                }
-                else
-                {
-                    _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Downloading, $"No Url set for {asset.Names}");
+                    if (!string.IsNullOrEmpty(acc.Names.Url))
+                    {
+                        downloadTasks.Add(DownloadLatestValue(acc.Names, value => UpdateAndCheck(acc, value, reportLogger), reportLogger));
+                    }
+                    else
+                    {
+                        _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Downloading, $"No Url set for {acc.Names}");
+                    }
                 }
             }
 
@@ -127,10 +93,7 @@ namespace FinancialStructures.Database.Download
         internal static async Task DownloadLatestValue(NameData names, Action<decimal> updateValue, IReportLogger reportLogger = null)
         {
             var downloader = PriceDownloaderFactory.Retrieve(names.Url);
-            if (downloader != null && await downloader.TryGetLatestPriceFromUrl(names.Url, updateValue, reportLogger))
-            {
-            }
-            else
+            if (downloader == null || await downloader.TryGetLatestPriceFromUrl(names.Url, updateValue, reportLogger))
             {
                 _ = reportLogger?.LogUsefulError(ReportLocation.Downloading, $"{names.Company}-{names.Name}: could not download data from {names.Url}");
             }
