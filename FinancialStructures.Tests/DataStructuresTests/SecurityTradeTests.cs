@@ -17,6 +17,7 @@ namespace FinancialStructures.Tests.DataStructuresTests
             yield return new TestCaseData(TradeType.Dividend, 1.5m, 1m, 5m, -3.5m).SetName("DividendTrade");
             yield return new TestCaseData(TradeType.DividendReinvestment, 1.5m, 1m, 5m, 0.0m).SetName("DividendReinvTrade");
             yield return new TestCaseData(TradeType.ShareReprice, 1.5m, 1m, 5m, 0.0m).SetName("ShareRepriceTrade");
+            yield return new TestCaseData(TradeType.ShareReset, 1.5m, 1m, 5m, 0.0m).SetName("ShareResetTrade");
             yield return new TestCaseData(TradeType.CashPayout, 1.5m, 1m, 5m, -3.5m).SetName("CashPayoutTrade");
         }
 

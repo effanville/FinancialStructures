@@ -143,5 +143,11 @@ namespace FinancialStructures.FinanceStructures
         /// Removes unnecessary investment and Share number values to reduce size.
         /// </summary>
         void CleanData();
+
+        /// <summary>
+        /// Replaces all trades of type <see cref="TradeType.ShareReprice"/> with the <see cref="TradeType.ShareReset"/> 
+        /// type.
+        /// </summary>
+        void MigrateRepriceToReset();
     }
 }

@@ -157,6 +157,26 @@ namespace FinancialStructures.FinanceStructures.Implementation
             Investments.CleanValues(0.0);
         }
 
+        /// <inheritdoc/>
+        public void MigrateRepriceToReset()
+        {
+            var trades = SecurityTrades;
+            for (int index = 0; index < trades.Count; index++)
+            {
+                var trade = trades[index];
+                if (trade.TradeType == TradeType.ShareReprice)
+                {
+                    DailyValuation sharesPreviousValue = Shares.ValueBefore(trade.Day) ?? new DailyValuation(trade.Day, 0);
+                    trade.TradeType = TradeType.ShareReset;
+                    trade.NumberShares = sharesPreviousValue.Value + trade.NumberShares;
+                }
+
+                EnsureDataConsistency();
+            }
+
+            OnDataEdit(SecurityTrades, new EventArgs());
+        }
+
         /// <summary>
         /// Upon a new/edit/Delete trade, one needs to recompute the values of the investments for that trade.
         /// </summary>
@@ -261,7 +281,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                         trade.NumberShares = Math.Abs(trade.NumberShares);
                     }
 
-                    DailyValuation sharesPreviousValue = Shares.ValueBefore(trade.Day) ?? new DailyValuation(DateTime.Today, 0);
+                    DailyValuation sharesPreviousValue = Shares.ValueBefore(trade.Day) ?? new DailyValuation(trade.Day, 0);
                     bool hasShareValue = Shares.TryGetValue(trade.Day, out decimal shareValue);
 
                     decimal expectedNumberShares = trade.GetPostTradeShares(sharesPreviousValue.Value);
