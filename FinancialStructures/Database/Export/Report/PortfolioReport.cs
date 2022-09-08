@@ -13,6 +13,7 @@ using FinancialStructures.Database.Extensions.Statistics;
 using FinancialStructures.NamingStructures;
 using System.Collections.Generic;
 using FinancialStructures.Database.Statistics;
+using FinancialStructures.Database.Extensions.Values;
 
 namespace FinancialStructures.Database.Export.Report
 {

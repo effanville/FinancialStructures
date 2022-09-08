@@ -272,40 +272,6 @@ namespace FinancialStructures.Database
         IPortfolio Copy();
 
         /// <summary>
-        /// Get the latest value of the selected element.
-        /// </summary>
-        /// <param name="elementType">The type of element to find.</param>
-        /// <param name="name">The name of the element to find.</param>
-        /// <returns>The latest value if it exists.</returns>
-        decimal LatestValue(Account elementType, TwoName name);
-
-        /// <summary>
-        /// Get the value of the selected element on the date provided. For a sector the name is only the surname
-        /// </summary>
-        /// <param name="elementType">The type of element to find.</param>
-        /// <param name="name">The name of the element to find.</param>
-        /// <param name="date">The date on which to find the value.</param>
-        /// <returns>The  value if it exists.</returns>
-        decimal Value(Account elementType, TwoName name, DateTime date);
-
-        /// <summary>
-        /// Total value of all accounts of type specified today.
-        /// </summary>
-        /// <param name="elementType">The type to find the total of.</param>
-        /// <param name="names">Any name associated with this total, e.g. the Sector name</param>
-        /// <returns>The total value held on today.</returns>
-        decimal TotalValue(Totals elementType, TwoName names = null);
-
-        /// <summary>
-        /// Total value of all accounts of type specified on date given.
-        /// </summary>
-        /// <param name="elementType">The type to find the total of.</param>
-        /// <param name="date">The date to find the total on.</param>
-        /// <param name="names">Any name associated with this total, e.g. the Sector name</param>
-        /// <returns>The total value held.</returns>
-        decimal TotalValue(Totals elementType, DateTime date, TwoName names = null);
-
-        /// <summary>
         /// returns the currency associated to the account.
         /// </summary>
         ICurrency Currency(IValueList valueList);
