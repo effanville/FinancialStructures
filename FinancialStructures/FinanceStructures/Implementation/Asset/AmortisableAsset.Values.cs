@@ -18,7 +18,7 @@ namespace FinancialStructures.FinanceStructures.Implementation.Asset
         /// <inheritdoc/>
         public DailyValuation Value(DateTime date, ICurrency currency = null)
         {
-            if (!Values.Any())
+            if (!Any())
             {
                 return null;
             }
@@ -61,7 +61,7 @@ namespace FinancialStructures.FinanceStructures.Implementation.Asset
         /// <inheritdoc/>
         public DailyValuation ValueBefore(DateTime date, ICurrency currency)
         {
-            if (!Values.Any())
+            if (!Any())
             {
                 return null;
             }

@@ -48,7 +48,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         public virtual List<DailyValuation> ListOfValues()
         {
             List<DailyValuation> output = new List<DailyValuation>();
-            if (Values.Any())
+            if (Any())
             {
                 foreach (DailyValuation dateValue in Values.Values())
                 {
