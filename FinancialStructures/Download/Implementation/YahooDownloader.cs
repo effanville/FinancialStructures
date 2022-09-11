@@ -106,34 +106,44 @@ namespace FinancialStructures.Download.Implementation
                 getHistory(stock);
                 return true;
             }
-            while (dataLeft.Length > 0)
+
+            try
             {
-                int dayFirstIndex = dataLeft.IndexOf('{');
-                int dayEndIndex = dataLeft.IndexOf('}', dayFirstIndex);
-                string dayValues = dataLeft.Substring(dayFirstIndex, dayEndIndex - dayFirstIndex);
-                if (dayValues.Contains("DIVIDEND"))
+
+                while (dataLeft.Length > 0)
                 {
-                    dataLeft = dataLeft.Substring(dayEndIndex);
-                    continue;
+                    int dayFirstIndex = dataLeft.IndexOf('{');
+                    int dayEndIndex = dataLeft.IndexOf('}', dayFirstIndex);
+                    string dayValues = dataLeft.Substring(dayFirstIndex, dayEndIndex - dayFirstIndex);
+                    if (dayValues.Contains("DIVIDEND"))
+                    {
+                        dataLeft = dataLeft.Substring(dayEndIndex);
+                        continue;
+                    }
+                    else if (dayValues.Contains("date"))
+                    {
+                        int yahooInt = int.Parse(FindAndGetSingleValue(dayValues, "date", false).ToString());
+                        DateTime date = YahooIntToDate(yahooInt);
+                        var localDate = date.ToLocalTime();
+                        decimal? open = FindAndGetSingleValue(dayValues, "open", false);
+                        decimal? high = FindAndGetSingleValue(dayValues, "high", false);
+                        decimal? low = FindAndGetSingleValue(dayValues, "low", false);
+                        decimal? close = FindAndGetSingleValue(dayValues, "close", false);
+                        decimal? volume = FindAndGetSingleValue(dayValues, "volume", false);
+                        stock.AddValue(localDate, ParseNullable(open), ParseNullable(high), ParseNullable(low), ParseNullable(close), ParseNullable(volume));
+                        dataLeft = dataLeft.Substring(dayEndIndex);
+                        numberEntriesAdded++;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
-                else if (dayValues.Contains("date"))
-                {
-                    int yahooInt = int.Parse(FindAndGetSingleValue(dayValues, "date", false).ToString());
-                    DateTime date = YahooIntToDate(yahooInt);
-                    var localDate = date.ToLocalTime();
-                    decimal? open = FindAndGetSingleValue(dayValues, "open", false);
-                    decimal? high = FindAndGetSingleValue(dayValues, "high", false);
-                    decimal? low = FindAndGetSingleValue(dayValues, "low", false);
-                    decimal? close = FindAndGetSingleValue(dayValues, "close", false);
-                    decimal? volume = FindAndGetSingleValue(dayValues, "volume", false);
-                    stock.AddValue(localDate, open.Value, high.Value, low.Value, close.Value, volume.Value);
-                    dataLeft = dataLeft.Substring(dayEndIndex);
-                    numberEntriesAdded++;
-                }
-                else
-                {
-                    break;
-                }
+            }
+            catch (Exception ex)
+            {
+                _ = reportLogger?.LogUsefulError(ReportLocation.Downloading, $"Error when downloading: {ex.Message}");
+                return false;
             }
 
             _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Downloading, $"Added {numberEntriesAdded} to stock {stock.Name}");
@@ -141,6 +151,16 @@ namespace FinancialStructures.Download.Implementation
             stock.Sort();
             getHistory(stock);
             return true;
+        }
+
+        private static decimal ParseNullable(decimal? value)
+        {
+            if (value.HasValue)
+            {
+                return value.Value;
+            }
+
+            return decimal.MinValue;
         }
 
         private static string BuildQueryUrl(string url, string identifier)
