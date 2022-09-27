@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>22.0.0.$([System.DateTime]::UtcNow.ToString(`MMdd`))</VersionPrefix>
-    <VersionSuffix>$([System.DateTime]::UtcNow.ToString(`yyyyMMdd-HHmm`))</VersionSuffix>
+	  <VersionPrefix>22.9.0.$([System.DateTime]::UtcNow.ToString(`MMdd`))</VersionPrefix>
+	  <VersionSuffix>$([System.DateTime]::UtcNow.ToString(`yyyyMMdd-HHmm`))</VersionSuffix>
   </PropertyGroup>
 
   <Import Project="..\Build\CommonProperties.Build.props" />
