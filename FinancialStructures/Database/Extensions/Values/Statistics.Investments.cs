@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+
 using Common.Structure.DataStructures;
 using Common.Structure.NamingStructures;
+
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 
@@ -19,70 +22,44 @@ namespace FinancialStructures.Database.Extensions.Values
         /// <param name="name"></param>
         public static List<Labelled<TwoName, DailyValuation>> TotalInvestments(this IPortfolio portfolio, Totals totals, TwoName name = null)
         {
-            switch (totals)
-            {
-                case Totals.Security:
-                {
-                    return TotalInvestmentsOf(portfolio.FundsThreadSafe, portfolio, totals);
-                }
-                case Totals.SecurityCompany:
-                {
-                    return TotalInvestmentsOf(portfolio.CompanyAccounts(Account.Security, name.Company), portfolio, totals);
-                }
-                case Totals.SecuritySector:
-                {
-                    return TotalInvestmentsOf(portfolio.SectorAccounts(Account.Security, name), portfolio, totals);
-                }
-                case Totals.All:
-                {
-                    return portfolio.TotalInvestments(Totals.Security);
-                }
-                default:
-                {
-                    return null;
-                }
-            }
-        }
+            var values = portfolio.CalculateAggregateStatistic<ISecurity, List<Labelled<TwoName, DailyValuation>>>(
+              totals,
+              name,
+              (tot, n) => tot == Totals.Security
+                  || tot == Totals.SecurityCompany
+                  || tot == Totals.Sector
+                  || tot == Totals.SecuritySector
+                  || tot == Totals.All,
+              new List<Labelled<TwoName, DailyValuation>>(),
+              valueList => Calculate(valueList),
+              (date, otherDate) => date.Union(otherDate).ToList());
 
-        private static List<Labelled<TwoName, DailyValuation>> TotalInvestmentsOf(IReadOnlyList<IValueList> securities, IPortfolio portfolio, Totals totals)
-        {
-            List<Labelled<TwoName, DailyValuation>> output = new List<Labelled<TwoName, DailyValuation>>();
-            foreach (ISecurity security in securities)
+            values?.Sort();
+            return values;
+            List<Labelled<TwoName, DailyValuation>> Calculate(ISecurity security)
             {
-                ICurrency currency = portfolio.Currency(totals.ToAccount(), security);
-                output.AddRange(security.AllInvestmentsNamed(currency));
+                ICurrency currency = portfolio.Currency(security);
+                return security.AllInvestmentsNamed(currency);
             }
-
-            output.Sort();
-            return output;
         }
 
         /// <summary>
         /// Returns the investments in the object specified
         /// </summary>
         /// <param name="portfolio">The database to query.</param>
-        /// <param name="accountType">The type of account to look for.</param>
-        /// <param name="names">The name of the account.</param>
-        public static List<Labelled<TwoName, DailyValuation>> Investments(this IPortfolio portfolio, Account accountType, TwoName names)
+        /// <param name="account">The type of account to look for.</param>
+        /// <param name="name">The name of the account.</param>
+        public static List<Labelled<TwoName, DailyValuation>> Investments(this IPortfolio portfolio, Account account, TwoName name)
         {
-            switch (accountType)
+            return portfolio.CalculateStatistic<ISecurity, List<Labelled<TwoName, DailyValuation>>>(
+               account,
+               name,
+               (acc, n) => acc == Account.Security,
+               security => Calculate(security));
+            List<Labelled<TwoName, DailyValuation>> Calculate(ISecurity sec)
             {
-                case Account.Security:
-                {
-                    if (portfolio.TryGetAccount(Account.Security, names, out IValueList desired) && desired.Any())
-                    {
-                        ISecurity security = desired as ISecurity;
-                        ICurrency currency = portfolio.Currency(Account.Security, security);
-                        return security.AllInvestmentsNamed(currency);
-
-                    }
-
-                    return null;
-                }
-                default:
-                {
-                    return null;
-                }
+                ICurrency currency = portfolio.Currency(sec);
+                return sec.AllInvestmentsNamed(currency);
             }
         }
     }

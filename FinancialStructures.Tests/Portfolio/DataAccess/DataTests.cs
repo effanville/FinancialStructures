@@ -72,27 +72,5 @@ namespace FinancialStructures.Tests.Database.DataAccess
 
             Assert.AreEqual(0, data.Count);
         }
-
-        [Test]
-        public void ReturnsErrorMessageForNoBankAccountData()
-        {
-            DatabaseConstructor generator = new DatabaseConstructor();
-
-            List<ErrorReport> reports = new List<ErrorReport>();
-            IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
-            string bankCompany = "Bank";
-            _ = generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0m });
-            Portfolio database = generator.Database;
-
-            IReadOnlyList<DailyValuation> data = database.NumberData(Account.BankAccount, new NameData(bankCompany, "name"), logging);
-
-            Assert.AreEqual(0, data.Count);
-            Assert.AreEqual(1, reports.Count);
-            ErrorReport report = reports.Single();
-            Assert.AreEqual(ReportSeverity.Useful, report.ErrorSeverity);
-            Assert.AreEqual(ReportType.Error, report.ErrorType);
-            Assert.AreEqual(ReportLocation.DatabaseAccess, report.ErrorLocation);
-            Assert.AreEqual($"Could not find BankAccount - {bankCompany}-name", report.Message);
-        }
     }
 }

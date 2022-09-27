@@ -40,7 +40,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Constructor used when data is known.
         /// </summary>
-        private CashAccount(NameData names, TimeList amounts)
+        protected CashAccount(NameData names, TimeList amounts)
             : base(names, amounts)
         {
         }
@@ -119,13 +119,6 @@ namespace FinancialStructures.FinanceStructures.Implementation
         private static decimal GetCurrencyValue(DateTime date, ICurrency currency)
         {
             return currency == null ? 1.0m : currency.Value(date)?.Value ?? 1.0m;
-        }
-
-        private static decimal TruncateDecimal(decimal value, int precision)
-        {
-            decimal step = (decimal)Math.Pow(10, precision);
-            decimal tmp = Math.Truncate(step * value);
-            return tmp / step;
         }
     }
 }

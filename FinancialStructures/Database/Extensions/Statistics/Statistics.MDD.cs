@@ -31,81 +31,19 @@ namespace FinancialStructures.Database.Extensions.Statistics
         /// </summary>
         public static double TotalMDD(this IPortfolio portfolio, Totals accountType, DateTime earlierTime, DateTime laterTime, TwoName name = null)
         {
-            switch (accountType)
-            {
-                case Totals.All:
-                case Totals.Security:
-                {
-                    return TotalMDDOf(portfolio.FundsThreadSafe, earlierTime, laterTime);
-                }
-                case Totals.SecurityCompany:
-                {
-                    return TotalMDDOf(portfolio.CompanyAccounts(Account.Security, name.Company), earlierTime, laterTime);
-                }
-                case Totals.Sector:
-                case Totals.SecuritySector:
-                {
-                    return TotalMDDOf(portfolio.SectorAccounts(Account.Security, name), earlierTime, laterTime);
-                }
-                case Totals.BankAccount:
-                {
-                    return TotalMDDOf(portfolio.BankAccountsThreadSafe, earlierTime, laterTime);
-                }
-                case Totals.BankAccountCompany:
-                {
-                    return TotalMDDOf(portfolio.CompanyAccounts(Account.BankAccount, name.Company), earlierTime, laterTime);
-                }
-                case Totals.BankAccountSector:
-                {
-                    return TotalMDDOf(portfolio.SectorAccounts(Account.BankAccount, name), earlierTime, laterTime);
-                }
-                case Totals.Benchmark:
-                {
-                    return TotalMDDOf(portfolio.BankAccountsThreadSafe, earlierTime, laterTime);
-                }
-                case Totals.Company:
-                {
-                    return TotalMDDOf(portfolio.CompanyAccounts(Account.All, name.Company), earlierTime, laterTime);
-                }
-                case Totals.Currency:
-                case Totals.CurrencySector:
-                case Totals.SecurityCurrency:
-                case Totals.BankAccountCurrency:
-                default:
-                {
-                    return 0.0;
-                }
-            }
+            return TotalMDDOf(portfolio.Accounts(accountType, name), earlierTime, laterTime);
         }
 
         private static double TotalMDDOf(IReadOnlyList<IValueList> securities, DateTime earlierTime, DateTime laterTime)
         {
-            List<DateTime> values = new List<DateTime>();
-            foreach (IValueList security in securities)
+            var valuations = CalculateValuesOf(securities, earlierTime, laterTime);
+            decimal dd = FinanceFunctions.MDD(valuations);
+            if (dd == decimal.MaxValue)
             {
-                List<DailyValuation> vals = security.ListOfValues().Where(value => value.Day >= earlierTime && value.Day <= laterTime && !value.Value.Equals(0.0)).ToList();
-                foreach (DailyValuation val in vals)
-                {
-                    if (!values.Any(value => value.Equals(val.Day)))
-                    {
-                        values.Add(val.Day);
-                    }
-                }
+                return 0.0;
             }
 
-            values.Sort();
-            List<DailyValuation> valuations = new List<DailyValuation>();
-            foreach (DateTime date in values)
-            {
-                decimal value = 0.0m;
-                foreach (IValueList sec in securities)
-                {
-                    value += sec.Value(date)?.Value ?? 0.0m;
-                }
-                valuations.Add(new DailyValuation(date, value));
-            }
-
-            return (double)FinanceFunctions.MDD(valuations);
+            return (double)dd;
         }
 
         /// <summary>
@@ -121,28 +59,24 @@ namespace FinancialStructures.Database.Extensions.Statistics
         /// <summary>
         /// Calculates the MDD for the account with specified account and name between the times specified.
         /// </summary>
-        public static double MDD(this IPortfolio portfolio, Account accountType, TwoName names, DateTime earlierTime, DateTime laterTime)
+        public static double MDD(this IPortfolio portfolio, Account account, TwoName names, DateTime earlierTime, DateTime laterTime)
         {
-            switch (accountType)
-            {
-                case Account.Security:
-                case Account.BankAccount:
-                case Account.Benchmark:
-                case Account.Currency:
-                {
-                    if (!portfolio.TryGetAccount(accountType, names, out IValueList desired))
-                    {
-                        return double.NaN;
-                    }
+            return portfolio.CalculateStatistic(
+                account,
+                names,
+                valueList => Calculate(valueList),
+                double.NaN);
 
-                    List<DailyValuation> values = desired.ListOfValues().Where(value => value.Day >= earlierTime && value.Day <= laterTime && !value.Value.Equals(0.0)).ToList();
-                    return (double)FinanceFunctions.MDD(values);
-                }
-                case Account.All:
-                default:
+            double Calculate(IValueList valueList)
+            {
+                List<DailyValuation> values = valueList.ListOfValues().Where(value => value.Day >= earlierTime && value.Day <= laterTime && !value.Value.Equals(0.0)).ToList();
+                decimal dd = FinanceFunctions.MDD(values);
+                if(dd == decimal.MaxValue)
                 {
                     return 0.0;
                 }
+
+                return (double)dd;
             }
         }
     }

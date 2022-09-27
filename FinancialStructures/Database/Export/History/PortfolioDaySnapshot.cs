@@ -90,6 +90,14 @@ namespace FinancialStructures.Database.Export.History
         } = new Dictionary<string, decimal>();
 
         /// <summary>
+        /// The total held in securities.
+        /// </summary>
+        public decimal AssetValue
+        {
+            get;
+        }
+
+        /// <summary>
         /// The total values held in each sector.
         /// </summary>
         public Dictionary<string, decimal> SectorValues
@@ -148,7 +156,8 @@ namespace FinancialStructures.Database.Export.History
                 Date.ToUkDateString(),
                 TotalValue.TruncateToString(),
                 BankAccValue.TruncateToString(),
-                SecurityValue.TruncateToString()
+                SecurityValue.TruncateToString(),
+                AssetValue.TruncateToString()
             };
 
             foreach (KeyValuePair<string, decimal> value in SecurityValues)
@@ -193,6 +202,7 @@ namespace FinancialStructures.Database.Export.History
             TotalValue = portfolio.TotalValue(Totals.All, date);
             BankAccValue = portfolio.TotalValue(Totals.BankAccount, date);
             SecurityValue = portfolio.TotalValue(Totals.Security, date);
+            AssetValue = portfolio.TotalValue(Totals.Asset, date);
 
             AddSecurityValues(date, portfolio, includeSecurityValues, generateSecurityRates, maxRateIterations);
             AddBankAccountValues(date, portfolio, includeBankValues);

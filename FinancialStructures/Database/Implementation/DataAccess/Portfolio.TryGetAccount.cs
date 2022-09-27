@@ -8,61 +8,81 @@ namespace FinancialStructures.Database.Implementation
         /// <inheritdoc/>
         public bool TryGetAccount(Account accountType, TwoName names, out IValueList desired)
         {
-            bool success = false;
             desired = null;
             switch (accountType)
             {
-                case (Account.Security):
+                case Account.Security:
                 {
                     foreach (ISecurity sec in FundsThreadSafe)
                     {
                         if (names.IsEqualTo(sec.Names))
                         {
                             desired = sec;
-                            success = true;
+                            return true;
                         }
                     }
-                    break;
+
+                    return false;
                 }
-                case (Account.BankAccount):
+                case Account.BankAccount:
                 {
                     foreach (IExchangableValueList sec in BankAccountsThreadSafe)
                     {
                         if (names.IsEqualTo(sec.Names))
                         {
                             desired = sec;
-                            success = true;
+                            return true;
                         }
                     }
-                    break;
+
+                    return false;
                 }
-                case (Account.Currency):
+                case Account.Currency:
                 {
                     foreach (ICurrency currency in CurrenciesThreadSafe)
                     {
                         if (names.IsEqualTo(currency.Names))
                         {
                             desired = currency;
-                            success = true;
+                            return true;
                         }
                     }
-                    break;
+
+                    return false;
                 }
-                case (Account.Benchmark):
+                case Account.Benchmark:
                 {
                     foreach (IValueList sector in BenchMarksThreadSafe)
                     {
                         if (sector.Names.Name == names.Name)
                         {
                             desired = sector;
-                            success = true;
+                            return true;
                         }
                     }
-                    break;
+
+                    return false;
+                }
+                case Account.Asset:
+                {
+                    foreach (IValueList asset in Assets)
+                    {
+                        if (names.IsEqualTo(asset.Names))
+                        {
+                            desired = asset;
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
+                default:
+                case Account.All:
+                {
+                    desired = null;
+                    return false;
                 }
             }
-
-            return success;
         }
     }
 }

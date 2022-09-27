@@ -43,6 +43,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// </summary>
         public Stock()
         {
+            Valuations = new List<StockDay>();
         }
 
         /// <summary>
@@ -56,18 +57,18 @@ namespace FinancialStructures.StockStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public void AddValue(DateTime time, double open, double high, double low, double close, double volume)
+        public void AddValue(DateTime time, decimal open, decimal high, decimal low, decimal close, decimal volume)
         {
             Valuations.Add(new StockDay(time, open, high, low, close, volume));
         }
 
         /// <inheritdoc/>
-        public void AddOrEditValue(DateTime time, double? newOpen = null, double? newHigh = null, double? newLow = null, double? newClose = null, double? newVolume = null)
+        public void AddOrEditValue(DateTime time, decimal? newOpen = null, decimal? newHigh = null, decimal? newLow = null, decimal? newClose = null, decimal? newVolume = null)
         {
             var value = Valuations.FirstOrDefault(val => val.Time.Equals(time));
             if (value == null)
             {
-                AddValue(time, newOpen ?? 0.0, newHigh ?? 0.0, newLow ?? 0.0, newClose ?? 0.0, newVolume ?? 0.0);
+                AddValue(time, newOpen ?? 0.0m, newHigh ?? 0.0m, newLow ?? 0.0m, newClose ?? 0.0m, newVolume ?? 0.0m);
                 return;
             }
 

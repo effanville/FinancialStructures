@@ -68,7 +68,8 @@ namespace FinancialStructures.DataStructures
             get
             {
                 decimal sign = TradeType.Sign();
-                return NumberShares * UnitPrice + sign * TradeCosts;
+                bool isInvestmentAltering = TradeType.IsInvestmentTradeType();
+                return isInvestmentAltering ? NumberShares * UnitPrice + sign * TradeCosts : 0.0m;
             }
         }
 

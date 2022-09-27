@@ -16,18 +16,18 @@ namespace FinancialStructures.Tests.FinanceStructuresTests.SecurityTests
         private static IEnumerable<TestCaseData> LastInvestmentData()
         {
             yield return new TestCaseData(
-                SecurityConstructor.Empty().Item,
+                SecurityConstructor.Empty(),
                 null)
                 .SetName("LastInvestment-NoEntry");
 
             yield return new TestCaseData(
-                SecurityConstructor.Default().Item,
+                SecurityConstructor.Default(),
                 new DailyValuation(new DateTime(2010, 1, 1), 200m))
                 .SetName("LastInvestment-DefaultSec");
 
 
             yield return new TestCaseData(
-                SecurityConstructor.Secondary().Item,
+                SecurityConstructor.Secondary(),
                 new DailyValuation(new DateTime(2012, 5, 5), 21022.96m))
                 .SetName("LastInvestment-SecondarySec");
         }

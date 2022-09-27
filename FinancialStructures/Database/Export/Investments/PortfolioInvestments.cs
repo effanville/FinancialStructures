@@ -5,7 +5,6 @@ using System.IO.Abstractions;
 using System.Text;
 
 using Common.Structure.DataStructures;
-using Common.Structure.FileAccess;
 using Common.Structure.NamingStructures;
 using Common.Structure.Reporting;
 using Common.Structure.ReportWriting;
@@ -58,13 +57,13 @@ namespace FinancialStructures.Database.Export.Investments
                     valuesToWrite.Add(new List<string> { stats.Instance.Day.ToShortDateString(), stats.Label.Company, stats.Label.Name, stats.Instance.Value.ToString() });
                 }
 
-                StringBuilder sb = new StringBuilder();
-                TableWriting.WriteTableFromEnumerable(sb, ExportType.Csv, new List<string> { "Date", "Company", "Name", "Investment Amount" }, valuesToWrite, false);
+                ReportBuilder reportBuilder = new ReportBuilder(DocumentType.Csv, new ReportSettings(true, false, false));
+                _ = reportBuilder.WriteTableFromEnumerable(new List<string> { "Date", "Company", "Name", "Investment Amount" }, valuesToWrite, false);
 
                 using (Stream stream = fileSystem.FileStream.Create(filePath, FileMode.Create))
                 using (StreamWriter fileWriter = new StreamWriter(stream))
                 {
-                    fileWriter.WriteLine(sb.ToString());
+                    fileWriter.WriteLine(reportBuilder.ToString());
                 }
 
                 _ = reportLogger?.LogUseful(ReportType.Information, ReportLocation.StatisticsPage, $"Successfully exported history to {filePath}.");

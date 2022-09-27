@@ -20,15 +20,6 @@ namespace FinancialStructures.Database.Export.Statistics
         }
 
         /// <summary>
-        /// Should benchmarks be included in the sector table.
-        /// </summary>
-        public bool IncludeBenchmarks
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         /// Only display accounts that have non zero current value.
         /// </summary>
         public bool DisplayValueFunds
@@ -38,9 +29,18 @@ namespace FinancialStructures.Database.Export.Statistics
         }
 
         /// <summary>
+        /// Should benchmarks be included in the sector table.
+        /// </summary>
+        public bool GenerateBenchmarks
+        {
+            get;
+            set;
+        }
+
+        /// <summary>
         /// Options on displaying Securities.
         /// </summary>
-        public StatisticTableOptions SecurityDisplayOptions
+        public GenerateOptions<Statistic> SecurityGenerateOptions
         {
             get;
         }
@@ -48,7 +48,7 @@ namespace FinancialStructures.Database.Export.Statistics
         /// <summary>
         /// Options on displaying bank accounts.
         /// </summary>
-        public StatisticTableOptions BankAccountDisplayOptions
+        public GenerateOptions<Statistic> BankAccountGenerateOptions
         {
             get;
         }
@@ -56,7 +56,15 @@ namespace FinancialStructures.Database.Export.Statistics
         /// <summary>
         /// Options on displaying sectors.
         /// </summary>
-        public StatisticTableOptions SectorDisplayOptions
+        public GenerateOptions<Statistic> SectorGenerateOptions
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Options on displaying assets.
+        /// </summary>
+        public GenerateOptions<Statistic> AssetGenerateOptions
         {
             get;
         }
@@ -66,27 +74,24 @@ namespace FinancialStructures.Database.Export.Statistics
         /// </summary>
         public PortfolioStatisticsSettings(
             DateTime dateToCalculate,
-            bool includeBenchmarks,
             bool displayValueFunds,
+            bool generateBenchmarks,
             bool includeSecurities,
-            Statistic securitySortField,
-            SortDirection securitySortDirection,
-            List<Statistic> securityDisplayFields,
+            IReadOnlyList<Statistic> securityDisplayFields,
             bool includeBankAccounts,
-            Statistic bankAccSortField,
-            SortDirection bankAccSortDirection,
-            List<Statistic> bankAccDisplayFields,
+            IReadOnlyList<Statistic> bankAccDisplayFields,
             bool includeSectors,
-            Statistic sectorSortField,
-            SortDirection sectorSortDirection,
-            List<Statistic> sectorDisplayFields)
+            IReadOnlyList<Statistic> sectorDisplayFields,
+            bool includeAssets,
+            IReadOnlyList<Statistic> assetDisplayFields)
         {
             DateToCalculate = dateToCalculate;
-            IncludeBenchmarks = includeBenchmarks;
             DisplayValueFunds = displayValueFunds;
-            SecurityDisplayOptions = new StatisticTableOptions(includeSecurities, securitySortField, securitySortDirection, securityDisplayFields);
-            BankAccountDisplayOptions = new StatisticTableOptions(includeBankAccounts, bankAccSortField, bankAccSortDirection, bankAccDisplayFields);
-            SectorDisplayOptions = new StatisticTableOptions(includeSectors, sectorSortField, sectorSortDirection, sectorDisplayFields);
+            GenerateBenchmarks = generateBenchmarks;
+            SecurityGenerateOptions = new GenerateOptions<Statistic>(includeSecurities, securityDisplayFields);
+            BankAccountGenerateOptions = new GenerateOptions<Statistic>(includeBankAccounts, bankAccDisplayFields);
+            SectorGenerateOptions = new GenerateOptions<Statistic>(includeSectors, sectorDisplayFields);
+            AssetGenerateOptions = new GenerateOptions<Statistic>(includeAssets, assetDisplayFields);
         }
 
         /// <summary>
@@ -96,20 +101,16 @@ namespace FinancialStructures.Database.Export.Statistics
         {
             return new PortfolioStatisticsSettings(
                 DateTime.Today,
-                includeBenchmarks: true,
                 displayValueFunds: false,
+                generateBenchmarks: true,
                 includeSecurities: true,
-                Statistic.Company,
-                SortDirection.Descending,
-                AccountStatisticsHelpers.AllStatistics().ToList(),
-                true,
-                Statistic.Company,
-                SortDirection.Descending,
-                AccountStatisticsHelpers.DefaultBankAccountStats().ToList(),
-                true,
-                Statistic.Company,
-                SortDirection.Descending,
-                AccountStatisticsHelpers.DefaultSectorStats().ToList());
+                securityDisplayFields: AccountStatisticsHelpers.DefaultSecurityStats().ToList(),
+                includeBankAccounts: true,
+                bankAccDisplayFields: AccountStatisticsHelpers.DefaultBankAccountStats().ToList(),
+                includeSectors: true,
+                sectorDisplayFields: AccountStatisticsHelpers.DefaultSectorStats().ToList(),
+                includeAssets: false,
+                assetDisplayFields: AccountStatisticsHelpers.DefaultAssetStats().ToList());
         }
     }
 }

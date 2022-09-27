@@ -103,6 +103,14 @@ namespace FinancialStructures.Database
         }
 
         /// <summary>
+        /// Extra assets that are held as part of this portfolio.
+        /// </summary>
+        IReadOnlyList<IAmortisableAsset> Assets
+        {
+            get;
+        }
+
+        /// <summary>
         /// Number of type in the database.
         /// </summary>
         /// <param name="accountType">The type to search for.</param>
@@ -198,49 +206,6 @@ namespace FinancialStructures.Database
         void Clear();
 
         /// <summary>
-        /// Adds the desired data to the security if it can.
-        /// </summary>
-        [Obsolete("Should use the add or edit trade data method instead.")]
-        bool TryAddOrEditDataToSecurity(TwoName names, DateTime oldDate, DateTime date, decimal shares, decimal unitPrice, decimal investment, SecurityTrade trade, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Adds the desired trade data if it can.
-        /// </summary>
-        bool TryAddOrEditTradeData(Account elementType, TwoName names, SecurityTrade oldTrade, SecurityTrade trade, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Attempts to remove trade data from the account.
-        /// </summary>
-        /// <param name="elementType">The type of data to remove from.</param>
-        /// <param name="name">The name to remove from.</param>
-        /// <param name="date">The date on which to remove data.</param>
-        /// <param name="reportLogger">Report callback.</param>
-        /// <returns>Success or failure.</returns>
-        bool TryDeleteTradeData(Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Attempts to add data to the account.
-        /// </summary>
-        /// <param name="elementType">The type of data to add to.</param>
-        /// <param name="name">The name to add to.</param>
-        /// <param name="oldData"> The old data to edit.</param>
-        /// <param name="data">The data to add.</param>
-        /// <param name="reportLogger">Report callback.</param>
-        /// <returns>Success or failure.</returns>
-        /// <remarks> This cannot currently be used to add to securities due to different type of data.</remarks>
-        bool TryAddOrEditData(Account elementType, TwoName name, DailyValuation oldData, DailyValuation data, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Attempts to remove data from the account.
-        /// </summary>
-        /// <param name="elementType">The type of data to remove from.</param>
-        /// <param name="name">The name to remove from.</param>
-        /// <param name="date">The date on which to remove data.</param>
-        /// <param name="reportLogger">Report callback.</param>
-        /// <returns>Success or failure.</returns>
-        bool TryDeleteData(Account elementType, TwoName name, DateTime date, IReportLogger reportLogger = null);
-
-        /// <summary>
         /// Returns a list of all companes of the desired type in the database.
         /// </summary>
         /// <param name="account">Type of object to search for.</param>
@@ -266,7 +231,7 @@ namespace FinancialStructures.Database
         /// </summary>
         /// <param name="account">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
-        IReadOnlyList<NameData> NameData(Account account);
+        IReadOnlyList<NameData> NameDataForAccount(Account account);
 
         /// <summary>
         /// Queries for data for the security of name and company.
@@ -287,14 +252,9 @@ namespace FinancialStructures.Database
         bool TryGetAccount(Account accountType, TwoName name, out IValueList desired);
 
         /// <summary>
-        /// Returns a copy of all accounts of type account with the company as specified.
+        /// Returns a copy of all accounts related to the account type.
         /// </summary>
-        IReadOnlyList<IValueList> CompanyAccounts(Account account, string company);
-
-        /// <summary>
-        /// Returns a copy of all accounts related to the given benchmark.
-        /// </summary>
-        IReadOnlyList<IValueList> SectorAccounts(Account account, TwoName sectorName);
+        IReadOnlyList<IValueList> Accounts(Account account);
 
         /// <summary>
         /// Returns a copy of all accounts related to the total.
@@ -312,43 +272,9 @@ namespace FinancialStructures.Database
         IPortfolio Copy();
 
         /// <summary>
-        /// Get the latest value of the selected element.
-        /// </summary>
-        /// <param name="elementType">The type of element to find.</param>
-        /// <param name="name">The name of the element to find.</param>
-        /// <returns>The latest value if it exists.</returns>
-        decimal LatestValue(Account elementType, TwoName name);
-
-        /// <summary>
-        /// Get the value of the selected element on the date provided. For a sector the name is only the surname
-        /// </summary>
-        /// <param name="elementType">The type of element to find.</param>
-        /// <param name="name">The name of the element to find.</param>
-        /// <param name="date">The date on which to find the value.</param>
-        /// <returns>The  value if it exists.</returns>
-        decimal Value(Account elementType, TwoName name, DateTime date);
-
-        /// <summary>
-        /// Total value of all accounts of type specified today.
-        /// </summary>
-        /// <param name="elementType">The type to find the total of.</param>
-        /// <param name="names">Any name associated with this total, e.g. the Sector name</param>
-        /// <returns>The total value held on today.</returns>
-        decimal TotalValue(Totals elementType, TwoName names = null);
-
-        /// <summary>
-        /// Total value of all accounts of type specified on date given.
-        /// </summary>
-        /// <param name="elementType">The type to find the total of.</param>
-        /// <param name="date">The date to find the total on.</param>
-        /// <param name="names">Any name associated with this total, e.g. the Sector name</param>
-        /// <returns>The total value held.</returns>
-        decimal TotalValue(Totals elementType, DateTime date, TwoName names = null);
-
-        /// <summary>
         /// returns the currency associated to the account.
         /// </summary>
-        ICurrency Currency(Account account, IValueList valueList);
+        ICurrency Currency(IValueList valueList);
 
         /// <summary>
         /// returns the currency associated to the name.

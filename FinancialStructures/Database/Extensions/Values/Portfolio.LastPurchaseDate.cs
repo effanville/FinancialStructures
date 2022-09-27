@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
@@ -16,63 +16,26 @@ namespace FinancialStructures.Database.Extensions.Values
         /// Returns the earliest date held in the portfolio.
         /// </summary>
         /// <param name="portfolio">The database to query</param>
-        /// <param name="elementType">The type of element to search for. All searches for Bank accounts and securities.</param>
+        /// <param name="total">The type of element to search for. All searches for Bank accounts and securities.</param>
         /// <param name="name">An ancillary name to use in the case of Sectors</param>
-        public static DateTime LastPurchaseDate(this IPortfolio portfolio, Totals elementType, TwoName name = null)
+        public static DateTime LastPurchaseDate(this IPortfolio portfolio, Totals total, TwoName name = null)
         {
-            switch (elementType)
+            return portfolio.CalculateAggregateStatistic<ISecurity, DateTime>(
+              total,
+              name,
+              (tot, n) => tot == Totals.Security
+                  || tot == Totals.SecurityCompany
+                  || tot == Totals.Sector
+                  || tot == Totals.SecuritySector
+                  || tot == Totals.All,
+              DateTime.MinValue,
+              valueList => Calculate(valueList),
+              (date, otherDate) => otherDate > date ? otherDate : date);
+            DateTime Calculate(ISecurity valueList)
             {
-                case Totals.Security:
-                {
-                    return LastPurchaseDateOf(portfolio.FundsThreadSafe, portfolio);
-                }
-                case Totals.SecurityCompany:
-                {
-                    return LastPurchaseDateOf(portfolio.CompanyAccounts(Account.Security, name.Company), portfolio);
-                }
-                case Totals.Sector:
-                case Totals.SecuritySector:
-                {
-                    return LastPurchaseDateOf(portfolio.SectorAccounts(Account.Security, name), portfolio);
-                }
-                case Totals.BankAccountCompany:
-                case Totals.Company:
-                case Totals.BankAccountSector:
-                case Totals.CurrencySector:
-                case Totals.SecurityCurrency:
-                case Totals.BankAccountCurrency:
-                case Totals.BankAccount:
-                case Totals.Benchmark:
-                case Totals.Currency:
-                {
-                    return default(DateTime);
-                }
-                case Totals.All:
-                default:
-                {
-                    DateTime earlySecurity = portfolio.LastInvestmentDate(Totals.Security);
-                    return earlySecurity;
-                }
+                ICurrency currency = portfolio.Currency(valueList);
+                return valueList.Trades.LastOrDefault(trade => trade.TradeType.Equals(TradeType.Buy))?.Day ?? default(DateTime);
             }
-        }
-
-        private static DateTime LastPurchaseDateOf(IReadOnlyList<IValueList> accounts, IPortfolio portfolio)
-        {
-            DateTime output = DateTime.MinValue;
-            foreach (ISecurity valueList in accounts)
-            {
-                if (valueList.Any())
-                {
-                    ICurrency currency = portfolio.Currency(Account.Security, valueList);
-                    DateTime latest = valueList.Trades.LastOrDefault(trade => trade.TradeType.Equals(TradeType.Buy))?.Day ?? default(DateTime);
-                    if (latest > output)
-                    {
-                        output = latest;
-                    }
-                }
-            }
-
-            return output;
         }
 
         /// <summary>
@@ -88,7 +51,7 @@ namespace FinancialStructures.Database.Extensions.Values
             {
                 if (desired is ISecurity sec)
                 {
-                    ICurrency currency = portfolio.Currency(Account.Security, sec);
+                    ICurrency currency = portfolio.Currency(sec);
                     DateTime latest = sec.Trades.LastOrDefault(trade => trade.TradeType.Equals(TradeType.Buy))?.Day ?? default(DateTime);
                     return latest;
                 }

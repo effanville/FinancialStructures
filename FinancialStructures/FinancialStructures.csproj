@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net48</TargetFrameworks>
+    <TargetFrameworks>net6.0</TargetFrameworks>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PublishTrimmed>true</PublishTrimmed>
     <TrimMode>CopyUsed</TrimMode>
@@ -9,19 +9,19 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>21.7.0.$([System.DateTime]::UtcNow.ToString(`MMdd`))</VersionPrefix>
-    <VersionSuffix>$([System.DateTime]::UtcNow.ToString(`yyyyMMdd-HHmm`))</VersionSuffix>
+    <VersionPrefix>22.9</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
   </PropertyGroup>
 
   <Import Project="..\Build\CommonProperties.Build.props" />
 
   <PropertyGroup>
-    <DocumentationFile>..\bin\Release\FinancialStructures.xml</DocumentationFile>
+    <DocumentationFile>..\bin\$(Configuration)\$(Framework)\$(Runtime)\FinancialStructures.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-    <PackageReference Include="System.IO.Abstractions" Version="13.2.47" />
+    <PackageReference Include="System.IO.Abstractions" Version="17.0.24" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,8 +29,7 @@
     <_Parameter1>FinancialStructures.Tests</_Parameter1>
     </AssemblyAttribute>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-      <_Parameter1>FinancePortfolioDatabase.Tests</_Parameter1>
+      <_Parameter1>FPD.ViewModels.Tests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
-
 </Project>

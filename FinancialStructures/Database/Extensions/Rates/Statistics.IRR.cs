@@ -28,63 +28,31 @@ namespace FinancialStructures.Database.Extensions.Rates
         /// </summary>
         public static double TotalIRR(this IPortfolio portfolio, Totals accountType, DateTime earlierTime, DateTime laterTime, TwoName name = null, int numIterations = 10)
         {
+            var accounts = portfolio.Accounts(accountType, name);
             switch (accountType)
             {
                 case Totals.All:
                 case Totals.Security:
-                {
-                    return TotalSecurityIRROf(portfolio.FundsThreadSafe, portfolio, earlierTime, laterTime, numIterations);
-                }
                 case Totals.SecurityCompany:
-                {
-                    return TotalSecurityIRROf(portfolio.CompanyAccounts(Account.Security, name.Company), portfolio, earlierTime, laterTime, numIterations);
-                }
                 case Totals.Sector:
                 case Totals.SecuritySector:
                 {
-                    return TotalSecurityIRROf(portfolio.SectorAccounts(Account.Security, name), portfolio, earlierTime, laterTime, numIterations);
+                    return TotalSecurityIRROf(accounts, portfolio, earlierTime, laterTime, numIterations);
                 }
                 case Totals.BankAccount:
+                case Totals.Asset:
                 {
-                    decimal earlierValue = 0;
-                    decimal laterValue = 0;
-
-                    foreach (IExchangableValueList bankAccount in portfolio.BankAccountsThreadSafe)
-                    {
-                        ICurrency currency = portfolio.Currency(bankAccount.Names.Currency);
-                        earlierValue += bankAccount.Value(earlierTime, currency).Value;
-                        laterValue += bankAccount.Value(laterTime, currency).Value;
-                    }
-
-                    return FinanceFunctions.CAR(new DailyValuation(earlierTime, earlierValue), new DailyValuation(laterTime, laterValue));
+                    return TotalExchangableValueListCAROf(accounts, portfolio, earlierTime, laterTime);
                 }
                 case Totals.Benchmark:
-                {
-                    decimal earlierValue = 0;
-                    decimal laterValue = 0;
-
-                    foreach (IValueList benchmark in portfolio.BenchMarksThreadSafe)
-                    {
-                        earlierValue += benchmark.Value(earlierTime).Value;
-                        laterValue += benchmark.Value(laterTime).Value;
-                    }
-
-                    return FinanceFunctions.CAR(new DailyValuation(earlierTime, earlierValue), new DailyValuation(laterTime, laterValue));
-                }
                 case Totals.Currency:
                 {
-                    decimal earlierValue = 0;
-                    decimal laterValue = 0;
-
-                    foreach (ICurrency currency in portfolio.CurrenciesThreadSafe)
-                    {
-                        earlierValue += currency.Value(earlierTime).Value;
-                        laterValue += currency.Value(laterTime).Value;
-                    }
-
-                    return FinanceFunctions.CAR(new DailyValuation(earlierTime, earlierValue), new DailyValuation(laterTime, laterValue));
+                    return TotalValueListCAROf(accounts, earlierTime, laterTime);
                 }
 
+                case Totals.AssetCompany:
+                case Totals.AssetSector:
+                case Totals.AssetCurrency:
                 case Totals.BankAccountCompany:
                 case Totals.Company:
                 case Totals.BankAccountSector:
@@ -98,9 +66,38 @@ namespace FinancialStructures.Database.Extensions.Rates
             }
         }
 
-        private static double TotalSecurityIRROf(IReadOnlyList<IValueList> securities, IPortfolio portfolio, DateTime earlierTime, DateTime laterTime, int numIterations)
+        private static double TotalValueListCAROf(IReadOnlyList<IValueList> valueLists, DateTime earlierTime, DateTime laterTime)
         {
-            if (securities.Count == 0)
+            decimal earlierValue = 0;
+            decimal laterValue = 0;
+
+            foreach (IValueList currency in valueLists)
+            {
+                earlierValue += currency.Value(earlierTime).Value;
+                laterValue += currency.Value(laterTime).Value;
+            }
+
+            return FinanceFunctions.CAR(new DailyValuation(earlierTime, earlierValue), new DailyValuation(laterTime, laterValue));
+        }
+
+        private static double TotalExchangableValueListCAROf(IReadOnlyList<IValueList> valueLists, IPortfolio portfolio, DateTime earlierTime, DateTime laterTime)
+        {
+            decimal earlierValue = 0;
+            decimal laterValue = 0;
+
+            foreach (IExchangableValueList bankAccount in valueLists)
+            {
+                ICurrency currency = portfolio.Currency(bankAccount.Names.Currency);
+                earlierValue += bankAccount.Value(earlierTime, currency).Value;
+                laterValue += bankAccount.Value(laterTime, currency).Value;
+            }
+
+            return FinanceFunctions.CAR(new DailyValuation(earlierTime, earlierValue), new DailyValuation(laterTime, laterValue));
+        }
+
+        private static double TotalSecurityIRROf(IReadOnlyList<IValueList> valueLists, IPortfolio portfolio, DateTime earlierTime, DateTime laterTime, int numIterations)
+        {
+            if (valueLists.Count == 0)
             {
                 return double.NaN;
             }
@@ -109,9 +106,9 @@ namespace FinancialStructures.Database.Extensions.Rates
             decimal laterValue = 0;
             List<DailyValuation> investments = new List<DailyValuation>();
 
-            foreach (ISecurity security in securities)
+            foreach (IValueList valueList in valueLists)
             {
-                if (security.Any())
+                if (valueList is ISecurity security && security.Any())
                 {
                     ICurrency currency = portfolio.Currency(security.Names.Currency);
                     earlierValue += security.Value(earlierTime, currency).Value;
@@ -128,40 +125,21 @@ namespace FinancialStructures.Database.Extensions.Rates
         /// </summary>
         public static double IRR(this IPortfolio portfolio, Account accountType, TwoName names)
         {
-            switch (accountType)
+            return portfolio.CalculateStatistic(accountType,
+               names,
+               valueList => valueList.Any() ? valueList.CAR(valueList.FirstValue().Day, valueList.LatestValue().Day) : double.NaN,
+               valueList => valueList.Any() ? valueList.CAR(valueList.FirstValue().Day, valueList.LatestValue().Day) : double.NaN,
+               security => IRRForSecurity(security));
+
+            double IRRForSecurity(ISecurity security)
             {
-                case Account.Security:
+                if (!security.Any())
                 {
-                    if (portfolio.TryGetAccount(accountType, names, out IValueList account))
-                    {
-                        ISecurity desired = account as ISecurity;
-                        if (desired.Any())
-                        {
-                            ICurrency currency = portfolio.Currency(Account.Security, desired);
-                            return desired.IRR(currency);
-                        }
-                    }
-
                     return double.NaN;
                 }
-                case Account.BankAccount:
-                case Account.Benchmark:
-                case Account.Currency:
-                {
-                    if (portfolio.TryGetAccount(accountType, names, out IValueList desired))
-                    {
-                        if (desired.Any())
-                        {
-                            return desired.CAR(desired.FirstValue().Day, desired.LatestValue().Day);
-                        }
-                    }
 
-                    return double.NaN;
-                }
-                default:
-                {
-                    return 0.0;
-                }
+                ICurrency currency = portfolio.Currency(security);
+                return security.IRR(currency);
             }
         }
 
@@ -170,40 +148,21 @@ namespace FinancialStructures.Database.Extensions.Rates
         /// </summary>
         public static double IRR(this IPortfolio portfolio, Account accountType, TwoName names, DateTime earlierTime, DateTime laterTime)
         {
-            switch (accountType)
+            return portfolio.CalculateStatistic(accountType,
+                names,
+                valueList => valueList.Any() ? valueList.CAR(earlierTime, laterTime) : double.NaN,
+                valueList => valueList.Any() ? valueList.CAR(earlierTime, laterTime) : double.NaN,
+                security => IRRForSecurity(security));
+
+            double IRRForSecurity(ISecurity security)
             {
-                case Account.Security:
+                if (!security.Any())
                 {
-                    if (portfolio.TryGetAccount(accountType, names, out IValueList account))
-                    {
-                        ISecurity desired = account as ISecurity;
-                        if (desired.Any())
-                        {
-                            ICurrency currency = portfolio.Currency(Account.Security, desired);
-                            return desired.IRR(earlierTime, laterTime, currency);
-                        }
-                    }
-
                     return double.NaN;
                 }
-                case Account.BankAccount:
-                case Account.Benchmark:
-                case Account.Currency:
-                {
-                    if (portfolio.TryGetAccount(accountType, names, out IValueList desired))
-                    {
-                        if (desired.Any())
-                        {
-                            return desired.CAR(earlierTime, laterTime);
-                        }
-                    }
 
-                    return double.NaN;
-                }
-                default:
-                {
-                    return 0.0;
-                }
+                ICurrency currency = portfolio.Currency(security);
+                return security.IRR(earlierTime, laterTime, currency);
             }
         }
     }

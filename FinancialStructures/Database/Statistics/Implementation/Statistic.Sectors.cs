@@ -46,6 +46,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
                 case Account.Security:
                 case Account.BankAccount:
                 case Account.Currency:
+                case Account.Asset:
                 {
                     if (!portfolio.TryGetAccount(account, name, out IValueList desired))
                     {
@@ -70,10 +71,14 @@ namespace FinancialStructures.Database.Statistics.Implementation
 
             foreach (var account in accounts)
             {
-                sectors.UnionWith(account.Names.Sectors);
+                var value = account.Value(date);
+                if (value != null && value.Value > 0.0m)
+                {
+                    sectors.UnionWith(account.Names.Sectors);
+                }
             }
 
-            StringValue = NameData.FlattenSectors(sectors);
+            StringValue = NameData.FlattenSectors(sectors).Replace(",", ", ");
         }
 
         /// <inheritdoc/>

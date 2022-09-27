@@ -1,4 +1,4 @@
-﻿using Common.Structure.FileAccess;
+﻿using Common.Structure.ReportWriting;
 
 namespace FinancialStructures.Database.Export.Report
 {
@@ -10,7 +10,7 @@ namespace FinancialStructures.Database.Export.Report
         /// <summary>
         /// The type of file to export to.
         /// </summary>
-        public ExportType ReportExportType
+        public DocumentType ReportExportType
         {
             get;
         }
@@ -18,7 +18,7 @@ namespace FinancialStructures.Database.Export.Report
         /// <summary>
         /// Generate an instance.
         /// </summary>
-        public PortfolioReportExportSettings(ExportType reportExportType)
+        public PortfolioReportExportSettings(DocumentType reportExportType)
         {
             ReportExportType = reportExportType;
         }
@@ -28,7 +28,7 @@ namespace FinancialStructures.Database.Export.Report
         /// </summary>
         public static PortfolioReportExportSettings DefaultSettings()
         {
-            return new PortfolioReportExportSettings(ExportType.Html);
+            return new PortfolioReportExportSettings(DocumentType.Html);
         }
     }
 }

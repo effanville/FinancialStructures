@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using FinancialStructures.FinanceStructures;
+
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Extensions.Values
@@ -19,122 +17,27 @@ namespace FinancialStructures.Database.Extensions.Values
         /// <param name="name">An ancillary name to use in the case of Sectors</param>
         public static DateTime FirstValueDate(this IPortfolio portfolio, Totals total, TwoName name = null)
         {
-            switch (total)
-            {
-                case Totals.Security:
-                {
-                    return FirstValueOf(portfolio.FundsThreadSafe);
-                }
-                case Totals.SecurityCompany:
-                case Totals.BankAccountCompany:
-                {
-                    return FirstValueOf(portfolio.CompanyAccounts(total.ToAccount(), name.Company));
-                }
-                case Totals.Sector:
-                {
-                    DateTime earlySecurity = portfolio.FirstValueDate(Totals.SecuritySector, name);
-                    DateTime earlyBank = portfolio.FirstValueDate(Totals.BankAccountSector, name);
-
-                    if (earlySecurity == default(DateTime))
-                    {
-                        return earlyBank;
-                    }
-
-                    if (earlyBank == default(DateTime))
-                    {
-                        return earlySecurity;
-                    }
-
-                    return earlySecurity < earlyBank ? earlySecurity : earlyBank;
-                }
-                case Totals.SecuritySector:
-                case Totals.BankAccountSector:
-                {
-                    return FirstValueOf(portfolio.SectorAccounts(total.ToAccount(), name));
-                }
-                case Totals.BankAccount:
-                {
-                    return FirstValueOf(portfolio.BankAccountsThreadSafe);
-                }
-                case Totals.Benchmark:
-                {
-                    return FirstValueOf(portfolio.BenchMarksThreadSafe);
-                }
-                case Totals.Currency:
-                {
-                    return FirstValueOf(portfolio.CurrenciesThreadSafe);
-                }
-                case Totals.Company:
-                {
-                    DateTime earlySecurity = portfolio.FirstValueDate(Totals.SecurityCompany, name);
-                    DateTime earlyBank = portfolio.FirstValueDate(Totals.BankAccountCompany, name);
-
-                    if (earlySecurity == default(DateTime))
-                    {
-                        return earlyBank;
-                    }
-
-                    if (earlyBank == default(DateTime))
-                    {
-                        return earlySecurity;
-                    }
-
-                    return earlySecurity < earlyBank ? earlySecurity : earlyBank;
-                }
-                case Totals.CurrencySector:
-                case Totals.SecurityCurrency:
-                case Totals.BankAccountCurrency:
-                {
-                    return default;
-                }
-                case Totals.All:
-                default:
-                {
-                    DateTime earlySecurity = portfolio.FirstValueDate(Totals.Security);
-                    DateTime earlyBank = portfolio.FirstValueDate(Totals.BankAccount);
-                    return earlySecurity < earlyBank ? earlySecurity : earlyBank;
-                }
-            }
-        }
-
-        private static DateTime FirstValueOf(IReadOnlyList<IValueList> accounts)
-        {
-            if (!accounts.Any())
-            {
-                return default;
-            }
-
-            DateTime output = DateTime.MaxValue;
-            foreach (IValueList valueList in accounts)
-            {
-                if (valueList.Any())
-                {
-                    DateTime earliest = valueList.FirstValue().Day;
-                    if (earliest < output)
-                    {
-                        output = earliest;
-                    }
-                }
-            }
-
-            return output;
+            return portfolio.CalculateAggregateStatistic(
+                total,
+                name,
+                DateTime.MaxValue,
+                valueList => valueList.FirstValue().Day,
+                (newStat, previousStat) => newStat < previousStat ? newStat : previousStat);
         }
 
         /// <summary>
         /// Returns the latest date held in the portfolio.
         /// </summary>
         /// <param name="portfolio">The database to query</param>
-        /// <param name="elementType">The type of element to search for. All searches for Bank accounts and securities.</param>
+        /// <param name="account">The type of element to search for. All searches for Bank accounts and securities.</param>
         /// <param name="name">An ancillary name to use in the case of Sectors</param>
         /// <returns></returns>
-        public static DateTime FirstDate(this IPortfolio portfolio, Account elementType, TwoName name)
+        public static DateTime FirstDate(this IPortfolio portfolio, Account account, TwoName name)
         {
-            if (portfolio.TryGetAccount(elementType, name, out IValueList desired))
-            {
-                return desired.FirstValue()?.Day ?? DateTime.MaxValue;
-            }
-
-            return default;
+            return portfolio.CalculateStatistic(
+                account,
+                name,
+                valueList => valueList.FirstValue()?.Day ?? DateTime.MaxValue);
         }
     }
 }

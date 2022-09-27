@@ -9,39 +9,15 @@ namespace FinancialStructures.Database.Implementation
 {
     public partial class Portfolio
     {
-        /// <inheritdoc />
-        public void Clear()
-        {
-            FilePath = "";
-            BaseCurrency = "";
-            IsAlteredSinceSave = false;
-            lock (FundsLock)
-            {
-                Funds.Clear();
-            }
-            lock (BenchmarksLock)
-            {
-                BenchMarks.Clear();
-            }
-            lock (CurrenciesLock)
-            {
-                Currencies.Clear();
-            }
-            lock (BankAccountsLock)
-            {
-                BankAccounts.Clear();
-            }
-        }
-
         /// <inheritdoc/>
         public void LoadPortfolio(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null)
         {
-            if (fileSystem.File.Exists(filePath))
+            if (!string.IsNullOrWhiteSpace(filePath) && fileSystem.File.Exists(filePath))
             {
                 AllData database = XmlFileAccess.ReadFromXmlFile<AllData>(fileSystem, filePath, out string error);
                 if (database != null)
                 {
-                    CopyData(database.MyFunds);
+                    SetFrom(database.MyFunds);
 
                     if (!database.MyFunds.BenchMarks.Any())
                     {
@@ -68,10 +44,7 @@ namespace FinancialStructures.Database.Implementation
 
             _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Loading, "Loaded Empty New Database.");
 
-            CopyData(new Portfolio());
-            WireDataChangedEvents();
-            OnPortfolioChanged(this, new PortfolioEventArgs(changedPortfolio: true));
-            Saving();
+            Clear();
         }
 
         /// <inheritdoc/>
@@ -81,7 +54,7 @@ namespace FinancialStructures.Database.Implementation
 
             if (filePath != null)
             {
-                CommonTemp.WriteToXmlFile(fileSystem, filePath, toSave, out string error);
+                XmlFileAccess.WriteToXmlFile(fileSystem, filePath, toSave, out string error);
                 if (error != null)
                 {
                     _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Saving, $"Failed to save database: {error}");

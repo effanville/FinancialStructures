@@ -27,7 +27,7 @@ namespace FinancialStructures.StockStructures.Statistics.Implementation
         /// <inheritdoc/>
         public double Calculate(DateTime date, IStock stock)
         {
-            return stock.Stochastic(date, BurnInTime);
+            return Convert.ToDouble(stock.Stochastic(date, BurnInTime));
         }
     }
 }

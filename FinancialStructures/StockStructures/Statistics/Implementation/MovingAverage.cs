@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Common.Structure.MathLibrary.Vectors;
 
 namespace FinancialStructures.StockStructures.Statistics.Implementation
@@ -33,8 +34,8 @@ namespace FinancialStructures.StockStructures.Statistics.Implementation
         /// <inheritdoc/>
         public double Calculate(DateTime date, IStock stock)
         {
-            System.Collections.Generic.List<double> values = stock.Values(date, BurnInTime, 0, DataType);
-            return VectorStats.Mean(values, BurnInTime);
+            List<decimal> values = stock.Values(date, BurnInTime, 0, DataType);
+            return Convert.ToDouble(VectorStats.Mean(values, BurnInTime));
         }
     }
 }

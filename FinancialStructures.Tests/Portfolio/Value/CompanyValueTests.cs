@@ -1,6 +1,7 @@
 ﻿using System;
 
 using FinancialStructures.Database;
+using FinancialStructures.Database.Extensions.Values;
 using FinancialStructures.Database.Implementation;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Tests.TestDatabaseConstructor;

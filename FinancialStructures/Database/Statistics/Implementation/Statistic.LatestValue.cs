@@ -1,4 +1,5 @@
 ﻿using System;
+using FinancialStructures.Database.Extensions.Values;
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Statistics.Implementation

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using FinancialStructures.FinanceStructures;
+﻿using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Statistics;
 using FinancialStructures.NamingStructures;
 
@@ -13,118 +11,46 @@ namespace FinancialStructures.Database.Extensions.Statistics
         /// </summary>
         public static decimal RecentChange(this IPortfolio portfolio, Totals totals = Totals.Security, TwoName names = null)
         {
-            switch (totals)
+            return portfolio.CalculateAggregateStatistic<IExchangableValueList, decimal>(
+                totals,
+                names,
+                (tot, n) => tot != Totals.Benchmark
+                    || tot != Totals.Currency
+                    || tot != Totals.CurrencySector
+                    || tot != Totals.SecurityCurrency
+                    || tot != Totals.BankAccountCurrency
+                    || tot != Totals.AssetCurrency,
+                0.0m,
+                valueList => Calculate(valueList),
+                (value, runningTotal) => runningTotal + value);
+            decimal Calculate(IExchangableValueList valueList)
             {
-                case Totals.All:
-                {
-                    return portfolio.RecentChange(Totals.Security) + portfolio.RecentChange(Totals.BankAccount);
-                }
-                case Totals.Security:
-                {
-                    return RecentChangeOf(portfolio.FundsThreadSafe, portfolio, totals);
-                }
-                case Totals.SecurityCompany:
-                case Totals.BankAccountCompany:
-                {
-                    return RecentChangeOf(portfolio.CompanyAccounts(totals.ToAccount(), names?.Company), portfolio, totals);
-                }
-                case Totals.BankAccount:
-                {
-                    return RecentChangeOf(portfolio.BankAccountsThreadSafe, portfolio, totals);
-                }
-                case Totals.SecuritySector:
-                {
-                    decimal total = 0;
-                    foreach (ISecurity security in portfolio.FundsThreadSafe)
-                    {
-                        if (security.IsSectorLinked(names) && security.Any())
-                        {
-                            ICurrency currency = portfolio.Currency(totals.ToAccount(), security);
-                            total += security.RecentChange(currency);
-                        }
-                    }
-
-                    return total;
-                }
-                case Totals.BankAccountSector:
-                {
-                    decimal total = 0;
-                    foreach (IExchangableValueList bankAccount in portfolio.BankAccountsThreadSafe)
-                    {
-                        if (bankAccount.IsSectorLinked(names) && bankAccount.Any())
-                        {
-                            ICurrency currency = portfolio.Currency(totals.ToAccount(), bankAccount);
-                            total += bankAccount.RecentChange(currency);
-                        }
-                    }
-
-                    return total;
-                }
-                case Totals.Sector:
-                {
-                    return portfolio.RecentChange(Totals.BankAccountSector, names) + portfolio.RecentChange(Totals.SecuritySector, names);
-                }
-                case Totals.Company:
-                {
-                    return portfolio.RecentChange(Totals.SecurityCompany, names) + portfolio.RecentChange(Totals.BankAccountCompany, names);
-                }
-                case Totals.Benchmark:
-                case Totals.Currency:
-                case Totals.CurrencySector:
-                case Totals.SecurityCurrency:
-                case Totals.BankAccountCurrency:
-                default:
-                {
-                    return 0.0m;
-                }
+                ICurrency currency = portfolio.Currency(valueList);
+                return valueList.RecentChange(currency);
             }
-        }
-
-        private static decimal RecentChangeOf(IReadOnlyList<IValueList> accounts, IPortfolio portfolio, Totals totals)
-        {
-            decimal total = 0;
-            foreach (IExchangableValueList valueList in accounts)
-            {
-                if (valueList.Any())
-                {
-                    ICurrency currency = portfolio.Currency(totals.ToAccount(), valueList);
-                    total += valueList.RecentChange(currency);
-                }
-            }
-
-            return total;
         }
 
         /// <summary>
         /// returns the change between the most recent two valuations of the security.
         /// </summary>
-        public static decimal RecentChange(this IPortfolio portfolio, Account elementType, TwoName names)
+        public static decimal RecentChange(this IPortfolio portfolio, Account account, TwoName name)
         {
-            switch (elementType)
+            return portfolio.CalculateStatistic(
+                 account,
+                 name,
+                 valueList => valueList.Any() ? valueList.RecentChange() : 0.0m,
+                 valueList => Calculate(valueList));
+
+            decimal Calculate(IExchangableValueList valueList)
             {
-                case Account.Security:
-                case Account.BankAccount:
+                if (!valueList.Any())
                 {
-                    if (portfolio.TryGetAccount(elementType, names, out IValueList account) && account.Any())
-                    {
-                        IExchangableValueList exchangeValueList = account as IExchangableValueList;
-                        ICurrency currency = portfolio.Currency(elementType, exchangeValueList);
-                        return exchangeValueList.RecentChange(currency);
-                    }
+                    return 0.0m;
+                }
 
-                    break;
-                }
-                default:
-                {
-                    if (portfolio.TryGetAccount(elementType, names, out IValueList valueList) && valueList.Any())
-                    {
-                        return valueList.RecentChange();
-                    }
-                    break;
-                }
+                ICurrency currency = portfolio.Currency(valueList);
+                return valueList.RecentChange(currency);
             }
-
-            return 0.0m;
         }
     }
 }

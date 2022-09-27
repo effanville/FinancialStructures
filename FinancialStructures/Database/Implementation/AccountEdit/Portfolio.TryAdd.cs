@@ -1,5 +1,7 @@
-﻿using Common.Structure.Reporting;
+﻿using System.Collections.Generic;
+using Common.Structure.Reporting;
 using FinancialStructures.FinanceStructures.Implementation;
+using FinancialStructures.FinanceStructures.Implementation.Asset;
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Implementation
@@ -7,74 +9,51 @@ namespace FinancialStructures.Database.Implementation
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public bool TryAdd(Account elementType, NameData name, IReportLogger reportLogger = null)
+        public bool TryAdd(Account accountType, NameData name, IReportLogger reportLogger = null)
         {
             if (string.IsNullOrWhiteSpace(name.Name) && string.IsNullOrWhiteSpace(name.Company))
             {
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Adding {elementType}: Company '{name.Company}' and name '{name.Name}' cannot both be empty.");
+                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Adding {accountType}: Company '{name.Company}' and name '{name.Name}' cannot both be empty.");
                 return false;
             }
 
-            if (Exists(elementType, name))
+            if (Exists(accountType, name))
             {
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"{elementType} `{name.Company}'-`{name.Name}' already exists.");
-                OnPortfolioChanged(null, new PortfolioEventArgs(elementType));
+                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"{accountType}-{name} already exists.");
+                OnPortfolioChanged(null, new PortfolioEventArgs(accountType));
                 return false;
             }
 
-            switch (elementType)
+            switch (accountType)
             {
-                case (Account.Security):
+                case Account.Security:
                 {
-                    Security toAdd = new Security(name);
-                    toAdd.DataEdit += OnPortfolioChanged;
-                    lock (FundsLock)
-                    {
-                        Funds.Add(toAdd);
-                    }
-
-                    OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
+                    AddAccount(accountType, new Security(name), Funds, FundsLock);
                     break;
                 }
-                case (Account.Currency):
+                case Account.Currency:
                 {
                     if (string.IsNullOrEmpty(name.Company))
                     {
                         name.Company = "GBP";
                     }
 
-                    Currency toAdd = new Currency(name);
-                    toAdd.DataEdit += OnPortfolioChanged;
-                    lock (CurrenciesLock)
-                    {
-                        Currencies.Add(toAdd);
-                    }
-
-                    OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
+                    AddAccount(accountType, new Currency(name), Currencies, CurrenciesLock);
                     break;
                 }
-                case (Account.BankAccount):
+                case Account.BankAccount:
                 {
-                    CashAccount toAdd = new CashAccount(name);
-                    toAdd.DataEdit += OnPortfolioChanged;
-                    lock (BankAccountsLock)
-                    {
-                        BankAccounts.Add(toAdd);
-                    }
-
-                    OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
+                    AddAccount(accountType, new CashAccount(name), BankAccounts, BankAccountsLock);
                     break;
                 }
-                case (Account.Benchmark):
+                case Account.Benchmark:
                 {
-                    Sector toAdd = new Sector(name);
-                    toAdd.DataEdit += OnPortfolioChanged;
-                    lock (BenchmarksLock)
-                    {
-                        BenchMarks.Add(toAdd);
-                    }
-
-                    OnPortfolioChanged(toAdd, new PortfolioEventArgs(elementType));
+                    AddAccount(accountType, new Sector(name), BenchMarks, BenchmarksLock);
+                    break;
+                }
+                case Account.Asset:
+                {
+                    AddAccount(accountType, new AmortisableAsset(name), AssetsBackingList, AssetsLock);
                     break;
                 }
                 default:
@@ -82,8 +61,20 @@ namespace FinancialStructures.Database.Implementation
                     return false;
             }
 
-            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.AddingData, $"{elementType} `{name.Company}'-`{name.Name}' added to database.");
+            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.AddingData, $"{accountType}-{name} added to database.");
             return true;
+
+            void AddAccount<T>(Account account, T newObject, List<T> currentItems, object lockObject)
+                where T : ValueList
+            {
+                newObject.DataEdit += OnPortfolioChanged;
+                lock (lockObject)
+                {
+                    currentItems.Add(newObject);
+                }
+
+                OnPortfolioChanged(newObject, new PortfolioEventArgs(account));
+            }
         }
     }
 }

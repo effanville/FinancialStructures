@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Common.Structure.DataStructures;
-using FinancialStructures.Database;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Implementation;
@@ -19,25 +18,25 @@ namespace FinancialStructures.Tests.FinanceStructuresTests
         private static IEnumerable<TestCaseData> MeanSharePriceData()
         {
             yield return new TestCaseData(
-                SecurityConstructor.Empty().Item,
+                SecurityConstructor.Empty(),
                 TradeType.Buy,
                 0.0m)
                 .SetName("MeanSharePrice-NoEntry");
 
             yield return new TestCaseData(
-                SecurityConstructor.Default().Item,
+                SecurityConstructor.Default(),
                 TradeType.Buy,
                 100m)
                 .SetName("MeanSharePrice-DefaultSec");
 
             yield return new TestCaseData(
-                SecurityConstructor.Secondary().Item,
+                SecurityConstructor.Secondary(),
                 TradeType.Buy,
                 1193.9357512953367875647668394m)
                 .SetName("MeanSharePrice-SecondarySecBuy");
 
             yield return new TestCaseData(
-                SecurityConstructor.Secondary().Item,
+                SecurityConstructor.Secondary(),
                 TradeType.Sell,
                 0m)
                 .SetName("MeanSharePrice-SecondarySecSell");
@@ -57,17 +56,17 @@ namespace FinancialStructures.Tests.FinanceStructuresTests
         private static IEnumerable<TestCaseData> SecurityProfitData()
         {
             yield return new TestCaseData(
-                SecurityConstructor.Empty().Item,
+                SecurityConstructor.Empty(),
                 0.0m)
                 .SetName($"{nameof(SecurityProfitTests)}-NoEntry");
 
             yield return new TestCaseData(
-                SecurityConstructor.Default().Item,
+                SecurityConstructor.Default(),
                 356.05m)
                 .SetName($"{nameof(SecurityProfitTests)}-DefaultSec");
 
             yield return new TestCaseData(
-                SecurityConstructor.Secondary().Item,
+                SecurityConstructor.Secondary(),
                 2485.09m)
                 .SetName($"{nameof(SecurityProfitTests)}-SecondarySec");
         }
@@ -86,17 +85,17 @@ namespace FinancialStructures.Tests.FinanceStructuresTests
         private static IEnumerable<TestCaseData> SecurityProfitAsIExchData()
         {
             yield return new TestCaseData(
-                SecurityConstructor.Empty().Item,
+                SecurityConstructor.Empty(),
                 0.0m)
                 .SetName($"{nameof(SecurityProfitAsIExchTests)}-NoEntry");
 
             yield return new TestCaseData(
-                SecurityConstructor.Default().Item,
+                SecurityConstructor.Default(),
                 356.05m)
                 .SetName($"{nameof(SecurityProfitAsIExchTests)}-DefaultSec");
 
             yield return new TestCaseData(
-                SecurityConstructor.Secondary().Item,
+                SecurityConstructor.Secondary(),
                 2485.09m)
                 .SetName($"{nameof(SecurityProfitAsIExchTests)}-SecondarySec");
         }
@@ -104,7 +103,7 @@ namespace FinancialStructures.Tests.FinanceStructuresTests
         [TestCaseSource(nameof(SecurityProfitAsIExchData))]
         public void SecurityProfitAsIExchTests(IExchangableValueList valueList, decimal expectedValue)
         {
-            decimal actualValue = valueList.Profit(null, Account.Security);
+            decimal actualValue = valueList.Profit(null);
 
             Assert.Multiple(() =>
             {
@@ -173,18 +172,18 @@ namespace FinancialStructures.Tests.FinanceStructuresTests
         private static IEnumerable<TestCaseData> SecurityRecentChangeData()
         {
             yield return new TestCaseData(
-                SecurityConstructor.Empty().Item,
+                SecurityConstructor.Empty(),
                 0.0m)
                 .SetName($"{nameof(SecurityRecentChangeTests)}-NoEntry");
 
             yield return new TestCaseData(
-                SecurityConstructor.Default().Item,
-                128.7m)
+                SecurityConstructor.Default(),
+                113.16m)
                 .SetName($"{nameof(SecurityRecentChangeTests)}-DefaultSec");
 
             yield return new TestCaseData(
-                SecurityConstructor.Secondary().Item,
-                -19624.8m)
+                SecurityConstructor.Secondary(),
+                -14666.84m)
                 .SetName($"{nameof(SecurityRecentChangeTests)}-SecondarySec");
         }
 

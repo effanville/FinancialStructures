@@ -4,6 +4,7 @@ using System.Linq;
 using System.Xml.Serialization;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Implementation;
+using FinancialStructures.FinanceStructures.Implementation.Asset;
 
 namespace FinancialStructures.Database.Implementation
 {
@@ -16,6 +17,7 @@ namespace FinancialStructures.Database.Implementation
         private readonly object BankAccountsLock = new object();
         private readonly object CurrenciesLock = new object();
         private readonly object BenchmarksLock = new object();
+        private readonly object AssetsLock = new object();
 
         /// <summary>
         /// Flag to state when the user has altered values in the portfolio
@@ -26,7 +28,7 @@ namespace FinancialStructures.Database.Implementation
         {
             get;
             private set;
-        }
+        } = false;
 
         /// <inheritdoc/>
         [XmlElement(ElementName = "FilePath")]
@@ -66,7 +68,9 @@ namespace FinancialStructures.Database.Implementation
             }
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Backing for the BankAccounts.
+        /// </summary>
         [XmlArray(ElementName = "BankAccounts")]
         public List<CashAccount> BankAccounts
         {
@@ -87,7 +91,9 @@ namespace FinancialStructures.Database.Implementation
             }
         }
 
-        /// <inheritdoc/>
+        /// <summary>
+        /// Backing for the currencies.
+        /// </summary>
         [XmlArray(ElementName = "Currencies")]
         public List<Currency> Currencies
         {
@@ -130,6 +136,29 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <summary>
+        /// The list of assets in the portfolio.
+        /// </summary>
+        [XmlArray(ElementName = "Assets")]
+        public List<AmortisableAsset> AssetsBackingList
+        {
+            get;
+            set;
+        } = new List<AmortisableAsset>();
+
+        /// <inheritdoc/>
+        [XmlIgnore]
+        public IReadOnlyList<IAmortisableAsset> Assets
+        {
+            get
+            {
+                lock (AssetsLock)
+                {
+                    return AssetsBackingList.ToList();
+                }
+            }
+        }
+
+        /// <summary>
         /// Default parameterless constructor.
         /// </summary>
         internal Portfolio()
@@ -137,7 +166,7 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
-        public void CopyData(Portfolio portfolio)
+        public void SetFrom(Portfolio portfolio)
         {
             BaseCurrency = portfolio.BaseCurrency;
             FilePath = portfolio.FilePath;
@@ -145,7 +174,16 @@ namespace FinancialStructures.Database.Implementation
             BankAccounts = portfolio.BankAccounts;
             Currencies = portfolio.Currencies;
             BenchMarks = portfolio.BenchMarks;
+            AssetsBackingList = portfolio.AssetsBackingList;
             NotesInternal = portfolio.NotesInternal;
+        }
+
+        /// <inheritdoc />
+        public void Clear()
+        {
+            SetFrom(new Portfolio());
+            WireDataChangedEvents();
+            OnPortfolioChanged(this, new PortfolioEventArgs(changedPortfolio: true));
         }
 
         /// <summary>
@@ -194,25 +232,29 @@ namespace FinancialStructures.Database.Implementation
         {
             switch (elementType)
             {
-                case (Account.All):
+                case Account.All:
                 {
                     return FundsThreadSafe.Count + CurrenciesThreadSafe.Count + BankAccountsThreadSafe.Count + BenchMarksThreadSafe.Count;
                 }
-                case (Account.Security):
+                case Account.Security:
                 {
                     return FundsThreadSafe.Count;
                 }
-                case (Account.Currency):
+                case Account.Currency:
                 {
                     return CurrenciesThreadSafe.Count;
                 }
-                case (Account.BankAccount):
+                case Account.BankAccount:
                 {
                     return BankAccountsThreadSafe.Count;
                 }
-                case (Account.Benchmark):
+                case Account.Benchmark:
                 {
                     return BenchMarksThreadSafe.Count;
+                }
+                case Account.Asset:
+                {
+                    return AssetsBackingList.Count;
                 }
                 default:
                     break;
@@ -241,6 +283,10 @@ namespace FinancialStructures.Database.Implementation
                 case Account.Currency:
                 {
                     return CurrenciesThreadSafe.Where(fund => selector(fund)).Count();
+                }
+                case Account.Asset:
+                {
+                    return AssetsBackingList.Where(fund => selector(fund)).Count();
                 }
                 default:
                     return 0;
@@ -281,6 +327,12 @@ namespace FinancialStructures.Database.Implementation
             {
                 currency.DataEdit += OnPortfolioChanged;
                 currency.SetupEventListening();
+            }
+
+            foreach (AmortisableAsset asset in AssetsBackingList)
+            {
+                asset.DataEdit += OnPortfolioChanged;
+                asset.SetupEventListening();
             }
         }
     }

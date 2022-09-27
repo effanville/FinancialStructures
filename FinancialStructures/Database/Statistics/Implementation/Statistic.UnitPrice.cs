@@ -22,7 +22,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
             if (desired is ISecurity security)
             {
                 Value = (double)(security.UnitPrice.ValueOnOrBefore(date)?.Value ?? 0.0m);
-                fCurrency = security.Names.Currency;
+                fCurrency = security.Names.Currency ?? portfolio.BaseCurrency;
             }
         }
 

@@ -163,19 +163,19 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 
         public DatabaseConstructor WithDefaultSecurity()
         {
-            Database.Funds.Add(SecurityConstructor.Default().Item);
+            Database.Funds.Add(SecurityConstructor.Default());
             return this;
         }
 
         public DatabaseConstructor WithSecondarySecurity()
         {
-            Database.Funds.Add(SecurityConstructor.Secondary().Item);
+            Database.Funds.Add(SecurityConstructor.Secondary());
             return this;
         }
 
         public DatabaseConstructor WithSecurity(string company, string name)
         {
-            Database.Funds.Add(SecurityConstructor.FromName(company, name).Item);
+            Database.Funds.Add(SecurityConstructor.WithName(company, name).GetItem());
             return this;
         }
 
@@ -190,7 +190,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             decimal[] numberUnits = null,
             decimal[] investment = null)
         {
-            Database.Funds.Add(SecurityConstructor.FromNameAndData(company, name, currency, url, sectors, dates, sharePrice, numberUnits, investment).Item);
+            Database.Funds.Add(SecurityConstructor.WithNameAndData(company, name, currency, url, sectors, dates, sharePrice, numberUnits, investment).GetItem());
             return this;
         }
 

@@ -2,6 +2,7 @@
 using System.Linq;
 using Common.Structure.DataStructures;
 using FinancialStructures.Database;
+using FinancialStructures.Database.Extensions;
 using FinancialStructures.Database.Implementation;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Tests.TestDatabaseConstructor;

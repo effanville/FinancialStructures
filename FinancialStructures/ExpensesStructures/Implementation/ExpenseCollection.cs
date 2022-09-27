@@ -4,12 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
-using System.Text;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-using Common.Structure.FileAccess;
 using Common.Structure.ReportWriting;
 
 using FinancialStructures.ExpensesStructures.Models;
@@ -213,17 +211,16 @@ namespace FinancialStructures.ExpensesStructures.Implementation
         /// <inheritdoc/>
         public void WriteExpenses(IFileSystem fileSystem, string filepath, string title, out string error)
         {
+            var exportType = DocumentType.Html;
             error = null;
             try
             {
-                StringBuilder sb = new StringBuilder();
-                TextWriting.CreateHTMLHeader(sb, title, useColours: true);
-                TextWriting.WriteTitle(sb, ExportType.Html, title);
-
-                TableWriting.WriteTable(sb, ExportType.Html, Expenses, false);
-                TextWriting.WriteParagraph(sb, ExportType.Html, new string[] { $"Total Expenses {Total()}" });
-
-                TextWriting.CreateHTMLFooter(sb);
+                ReportBuilder sb = new ReportBuilder(exportType, new ReportSettings(useColours: true, useDefaultStyle: false, useScripts: false));
+                _ = sb.WriteHeader(title)
+                    .WriteTitle(title, DocumentElement.h1)
+                    .WriteTable(Expenses, false)
+                    .WriteParagraph(new string[] { $"Total Expenses {Total()}" })
+                    .WriteFooter();
 
                 using (Stream stream = fileSystem.FileStream.Create(filepath, FileMode.Create))
                 using (StreamWriter sw = new StreamWriter(stream))

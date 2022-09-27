@@ -12,45 +12,37 @@ namespace FinancialStructures.Database.Extensions.Statistics
         /// Returns a dictionary with the distribution over time of values for the
         /// account type.
         /// </summary>
-        public static Dictionary<DateTime, int> EntryDistribution(this IPortfolio portfolio, Totals elementType = Totals.Security, TwoName company = null)
+        public static Dictionary<DateTime, int> EntryDistribution(this IPortfolio portfolio, Totals totals = Totals.Security, TwoName company = null)
         {
-            switch (elementType)
-            {
-                case Totals.All:
-                {
-                    return portfolio.EntryDistribution(Totals.Security);
-                }
-                case Totals.Security:
-                {
-                    return EntryDistributionOf(portfolio.FundsThreadSafe);
-                }
-                case Totals.SecurityCompany:
-                {
-                    return EntryDistributionOf(portfolio.CompanyAccounts(Account.Security, company.Company));
-                }
-                case Totals.BankAccount:
-                {
-                    return EntryDistributionOf(portfolio.BankAccountsThreadSafe);
-                }
-                case Totals.Benchmark:
-                {
-                    return EntryDistributionOf(portfolio.BenchMarksThreadSafe);
-                }
-                default:
-                {
-                    return new Dictionary<DateTime, int>();
-                }
-            }
-        }
+            return portfolio.CalculateAggregateStatistic(
+                totals,
+                company,
+                new Dictionary<DateTime, int>(),
+                valueList => CalculateValues(valueList),
+                (a, b) => MergeDictionaries(a, b));
 
-        private static Dictionary<DateTime, int> EntryDistributionOf(IReadOnlyList<ISecurity> accounts)
-        {
-            Dictionary<DateTime, int> totals = new Dictionary<DateTime, int>();
-            foreach (ISecurity desired in accounts)
+            Dictionary<DateTime, int> CalculateValues(IValueList valueList)
             {
-                if (desired.Any())
+                if (valueList is ISecurity security)
                 {
-                    foreach (DailyValuation value in desired.Shares.Values())
+                    return CalculateValuesForSecurity(security);
+                }
+
+                Dictionary<DateTime, int> totals = new Dictionary<DateTime, int>();
+                foreach (DailyValuation value in valueList.ListOfValues())
+                {
+                    totals.Add(value.Day, 1);
+                }
+
+                return totals;
+            }
+
+            Dictionary<DateTime, int> CalculateValuesForSecurity(ISecurity security)
+            {
+                Dictionary<DateTime, int> totals = new Dictionary<DateTime, int>();
+                if (security.Any())
+                {
+                    foreach (DailyValuation value in security.Shares.Values())
                     {
                         if (totals.TryGetValue(value.Day, out _))
                         {
@@ -62,7 +54,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                         }
                     }
 
-                    foreach (DailyValuation priceValue in desired.UnitPrice.Values())
+                    foreach (DailyValuation priceValue in security.UnitPrice.Values())
                     {
                         if (totals.TryGetValue(priceValue.Day, out _))
                         {
@@ -74,7 +66,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                         }
                     }
 
-                    foreach (DailyValuation investmentValue in desired.Investments.Values())
+                    foreach (DailyValuation investmentValue in security.Investments.Values())
                     {
                         if (totals.TryGetValue(investmentValue.Day, out _))
                         {
@@ -86,30 +78,31 @@ namespace FinancialStructures.Database.Extensions.Statistics
                         }
                     }
                 }
-            }
 
-            return totals;
+                return totals;
+            }
         }
 
-        private static Dictionary<DateTime, int> EntryDistributionOf(IReadOnlyList<IValueList> accounts)
+        private static Dictionary<DateTime, int> MergeDictionaries(Dictionary<DateTime, int> first, Dictionary<DateTime, int> second)
         {
-            Dictionary<DateTime, int> totals = new Dictionary<DateTime, int>();
-            foreach (IValueList cashAccount in accounts)
+            Dictionary<DateTime, int> merged = new Dictionary<DateTime, int>();
+            foreach (KeyValuePair<DateTime, int> pair in first)
             {
-                foreach (DailyValuation value in cashAccount.Values.Values())
+                if (second.TryGetValue(pair.Key, out int value))
                 {
-                    if (totals.TryGetValue(value.Day, out _))
-                    {
-                        totals[value.Day] += 1;
-                    }
-                    else
-                    {
-                        totals.Add(value.Day, 1);
-                    }
+                    merged[pair.Key] = value + pair.Value;
+                    _ = second.Remove(pair.Key);
                 }
+
+                merged[pair.Key] = pair.Value;
             }
 
-            return totals;
+            foreach (KeyValuePair<DateTime, int> pair in second)
+            {
+                merged[pair.Key] = pair.Value;
+            }
+
+            return merged;
         }
     }
 }
