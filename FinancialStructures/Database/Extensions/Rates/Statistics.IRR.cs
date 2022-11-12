@@ -36,6 +36,9 @@ namespace FinancialStructures.Database.Extensions.Rates
                 case Totals.SecurityCompany:
                 case Totals.Sector:
                 case Totals.SecuritySector:
+                case Totals.Pension:
+                case Totals.PensionCompany:
+                case Totals.PensionSector:
                 {
                     return TotalSecurityIRROf(accounts, portfolio, earlierTime, laterTime, numIterations);
                 }

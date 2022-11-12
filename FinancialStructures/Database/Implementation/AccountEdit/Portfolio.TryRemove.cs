@@ -40,6 +40,10 @@ namespace FinancialStructures.Database.Implementation
                 {
                     return RemoveAccount(AssetsBackingList, elementType, name, AssetsLock, reportLogger);
                 }
+                case Account.Pension:
+                {
+                    return RemoveAccount(PensionsBackingList, elementType, name, PensionsLock, reportLogger);
+                }
                 default:
                     _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.DeletingData, $"Editing an Unknown type.");
                     return false;

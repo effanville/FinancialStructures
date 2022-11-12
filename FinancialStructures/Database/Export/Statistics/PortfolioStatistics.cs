@@ -120,6 +120,33 @@ namespace FinancialStructures.Database.Export.Statistics
         }
 
         /// <summary>
+        /// Value held in each pension.
+        /// </summary>
+        internal List<AccountStatistics> PensionStats
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Statistics for each company holding pension.
+        /// </summary>
+        internal List<AccountStatistics> PensionCompanyStats
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Total statistics for each pension.
+        /// </summary>
+        internal List<AccountStatistics> PensionTotalStats
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
         /// Any notes for the portfolio.
         /// </summary>
         private List<Note> PortfolioNotes
@@ -151,6 +178,7 @@ namespace FinancialStructures.Database.Export.Statistics
             PortfolioTotals = new List<AccountStatistics>();
             PortfolioTotals.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.Security, new TwoName(), bankAccountStatistics));
             PortfolioTotals.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.BankAccount, new TwoName(), bankAccountStatistics));
+            PortfolioTotals.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.Pension, new TwoName(), bankAccountStatistics));
             PortfolioTotals.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.Asset, new TwoName(), bankAccountStatistics));
             PortfolioTotals.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.All, new TwoName(), bankAccountStatistics));
 
@@ -158,7 +186,7 @@ namespace FinancialStructures.Database.Export.Statistics
             GenerateBankAccountStatistics(portfolio, settings);
             GenerateAssetStatistics(portfolio, settings);
             GenerateSectorStatistics(portfolio, settings);
-
+            GeneratePensionStatistics(portfolio, settings);
             PortfolioNotes = portfolio.Notes.ToList();
         }
 
@@ -170,6 +198,17 @@ namespace FinancialStructures.Database.Export.Statistics
                 SecurityStats = portfolio.GetStats(settings.DateToCalculate, Account.Security, displayValueFunds: settings.DisplayValueFunds, displayTotals: false, securityData);
                 SecurityCompanyStats = portfolio.GetStats(settings.DateToCalculate, Totals.SecurityCompany, settings.DisplayValueFunds, securityData);
                 SecurityTotalStats = portfolio.GetStats(settings.DateToCalculate, Totals.Security, new TwoName(), securityData);
+            }
+        }
+
+        private void GeneratePensionStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings)
+        {
+            if (settings.SecurityGenerateOptions.ShouldGenerate)
+            {
+                Statistic[] securityData = settings.SecurityGenerateOptions.GenerateFields.ToArray();
+                PensionStats = portfolio.GetStats(settings.DateToCalculate, Account.Pension, displayValueFunds: settings.DisplayValueFunds, displayTotals: false, securityData);
+                PensionCompanyStats = portfolio.GetStats(settings.DateToCalculate, Totals.PensionCompany, settings.DisplayValueFunds, securityData);
+                PensionTotalStats = portfolio.GetStats(settings.DateToCalculate, Totals.Pension, new TwoName(), securityData);
             }
         }
 
@@ -266,6 +305,8 @@ namespace FinancialStructures.Database.Export.Statistics
 
             WriteSection(reportBuilder, "Bank Account Data", settings.Spacing, settings.BankAccountDisplayOptions, BankAccountStats, BankAccountCompanyStats, BankAccountTotalStats);
 
+            WriteSection(reportBuilder, "Pension Data", settings.Spacing, settings.SecurityDisplayOptions, PensionStats, PensionCompanyStats, PensionTotalStats);
+            
             WriteSection(reportBuilder, "Asset Data", settings.Spacing, settings.AssetDisplayOptions, AssetStats, AssetCompanyStats, AssetTotalStats);
 
             WriteSection(reportBuilder, "Analysis By Sector", settings.Spacing, settings.SectorDisplayOptions, SectorStats, null, null);

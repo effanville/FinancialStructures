@@ -26,6 +26,11 @@
         AssetCompany,
 
         /// <summary>
+        /// A company comprising of a collection of pensions.
+        /// </summary>
+        PensionCompany,
+
+        /// <summary>
         /// A company that comprises of securities or bank accounts, or both.
         /// </summary>
         Company,
@@ -56,6 +61,11 @@
         Asset,
 
         /// <summary>
+        /// The pension type.
+        /// </summary>
+        Pension,
+
+        /// <summary>
         /// Artificial construct consisting of Securities and BankAccounts listed in the relevant Sector.
         /// </summary>
         Sector,
@@ -76,6 +86,11 @@
         AssetSector,
 
         /// <summary>
+        /// A sector comprising of a collection of pensions.
+        /// </summary>
+        PensionSector,
+
+        /// <summary>
         /// A sector where all accounts are associated to the currency.
         /// </summary>
         CurrencySector,
@@ -94,5 +109,10 @@
         /// All assets associated to a currency.
         /// </summary>
         AssetCurrency,
+
+        /// <summary>
+        /// All pensions associated to a currency.
+        /// </summary>
+        PensionCurrency,
     }
 }

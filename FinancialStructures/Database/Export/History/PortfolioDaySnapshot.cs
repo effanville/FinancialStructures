@@ -98,6 +98,50 @@ namespace FinancialStructures.Database.Export.History
         }
 
         /// <summary>
+        /// The total held in pensions.
+        /// </summary>
+        public decimal PensionValue
+        {
+            get;
+        }
+
+        /// <summary>
+        /// The Total IRR of all pensions at this snapshot.
+        /// </summary>
+        public double TotalPensionIRR
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// The totals held in each of the pensions.
+        /// </summary>
+        public IDictionary<string, decimal> PensionValues
+        {
+            get;
+            set;
+        } = new Dictionary<string, decimal>();
+
+        /// <summary>
+        /// The IRR values for all pension companies over the last year.
+        /// </summary>
+        public IDictionary<string, double> Pension1YrCar
+        {
+            get;
+            set;
+        } = new Dictionary<string, double>();
+
+        /// <summary>
+        /// The IRR values for all pension companies over all time.
+        /// </summary>
+        public IDictionary<string, double> PensionTotalCar
+        {
+            get;
+            set;
+        } = new Dictionary<string, double>();
+
+        /// <summary>
         /// The total values held in each sector.
         /// </summary>
         public Dictionary<string, decimal> SectorValues
@@ -124,10 +168,17 @@ namespace FinancialStructures.Database.Export.History
                 "Date",
                 "TotalValue",
                 "BankTotal",
-                "SecurityTotal"
+                "SecurityTotal",
+                "AssetTotal",
+                "PensionTotal"
             };
 
             foreach (KeyValuePair<string, decimal> value in SecurityValues)
+            {
+                headers.Add(value.Key);
+            }
+
+            foreach (KeyValuePair<string, decimal> value in PensionValues)
             {
                 headers.Add(value.Key);
             }
@@ -157,10 +208,16 @@ namespace FinancialStructures.Database.Export.History
                 TotalValue.TruncateToString(),
                 BankAccValue.TruncateToString(),
                 SecurityValue.TruncateToString(),
-                AssetValue.TruncateToString()
+                AssetValue.TruncateToString(),
+                PensionValue.TruncateToString()
             };
 
             foreach (KeyValuePair<string, decimal> value in SecurityValues)
+            {
+                values.Add(value.Value.TruncateToString());
+            }
+
+            foreach (KeyValuePair<string, decimal> value in PensionValues)
             {
                 values.Add(value.Value.TruncateToString());
             }
@@ -203,8 +260,10 @@ namespace FinancialStructures.Database.Export.History
             BankAccValue = portfolio.TotalValue(Totals.BankAccount, date);
             SecurityValue = portfolio.TotalValue(Totals.Security, date);
             AssetValue = portfolio.TotalValue(Totals.Asset, date);
+            PensionValue = portfolio.TotalValue(Totals.Pension, date);
 
             AddSecurityValues(date, portfolio, includeSecurityValues, generateSecurityRates, maxRateIterations);
+            AddPensionValues(date, portfolio, includeSecurityValues, generateSecurityRates, maxRateIterations);
             AddBankAccountValues(date, portfolio, includeBankValues);
             AddSectorTotalValues(date, portfolio, includeSectorValues, generateSectorRates, maxRateIterations);
         }
@@ -236,6 +295,37 @@ namespace FinancialStructures.Database.Export.History
                     DateTime firstCompanyDate = portfolio.FirstValueDate(Totals.SecurityCompany, new TwoName(companyName));
                     double totalIRR = date < firstCompanyDate ? 0.0 : portfolio.TotalIRR(Totals.SecurityCompany, firstCompanyDate, date, new TwoName(companyName), numIterations);
                     SecurityTotalCar.Add(companyName, totalIRR);
+                }
+            }
+        }
+
+        private void AddPensionValues(DateTime date, IPortfolio portfolio, bool includeValues, bool generateRates, int numIterations)
+        {
+            if (!includeValues && !generateRates)
+            {
+                return;
+            }
+
+            List<string> companyNames = portfolio.Companies(Account.Pension).ToList();
+            companyNames.Sort();
+
+            DateTime firstDate = portfolio.FirstValueDate(Totals.Pension);
+            TotalPensionIRR = firstDate > date ? 0 : portfolio.TotalIRR(Totals.Pension, firstDate, date, numIterations: numIterations);
+
+            foreach (string companyName in companyNames)
+            {
+                if (includeValues)
+                {
+                    PensionValues.Add(companyName, portfolio.TotalValue(Totals.PensionCompany, date, new TwoName(companyName)));
+                }
+
+                if (generateRates)
+                {
+                    Pension1YrCar.Add(companyName, portfolio.TotalIRR(Totals.PensionCompany, date.AddDays(-365), date, new TwoName(companyName)));
+
+                    DateTime firstCompanyDate = portfolio.FirstValueDate(Totals.PensionCompany, new TwoName(companyName));
+                    double totalIRR = date < firstCompanyDate ? 0.0 : portfolio.TotalIRR(Totals.PensionCompany, firstCompanyDate, date, new TwoName(companyName), numIterations);
+                    PensionTotalCar.Add(companyName, totalIRR);
                 }
             }
         }

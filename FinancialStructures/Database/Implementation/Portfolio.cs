@@ -18,6 +18,7 @@ namespace FinancialStructures.Database.Implementation
         private readonly object CurrenciesLock = new object();
         private readonly object BenchmarksLock = new object();
         private readonly object AssetsLock = new object();
+        private readonly object PensionsLock = new object();
 
         /// <summary>
         /// Flag to state when the user has altered values in the portfolio
@@ -159,6 +160,26 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <summary>
+        /// A list storing the actual data for all Pensions
+        /// </summary>
+        [XmlArray(ElementName = "Pensions")]
+        public List<Security> PensionsBackingList
+        {
+            get;
+            private set;
+        } = new List<Security>();
+
+        /// <inheritdoc />
+        [XmlIgnore]
+        public IReadOnlyList<ISecurity> Pensions
+        {
+            get
+            {
+                return PensionsBackingList.ToList();
+            }
+        }
+
+        /// <summary>
         /// Default parameterless constructor.
         /// </summary>
         internal Portfolio()
@@ -175,6 +196,7 @@ namespace FinancialStructures.Database.Implementation
             Currencies = portfolio.Currencies;
             BenchMarks = portfolio.BenchMarks;
             AssetsBackingList = portfolio.AssetsBackingList;
+            PensionsBackingList = portfolio.PensionsBackingList;
             NotesInternal = portfolio.NotesInternal;
         }
 
@@ -256,6 +278,10 @@ namespace FinancialStructures.Database.Implementation
                 {
                     return AssetsBackingList.Count;
                 }
+                case Account.Pension:
+                {
+                    return PensionsBackingList.Count;
+                }
                 default:
                     break;
             }
@@ -287,6 +313,10 @@ namespace FinancialStructures.Database.Implementation
                 case Account.Asset:
                 {
                     return AssetsBackingList.Where(fund => selector(fund)).Count();
+                }
+                case Account.Pension:
+                {
+                    return PensionsBackingList.Where(fund => selector(fund)).Count();
                 }
                 default:
                     return 0;
@@ -333,6 +363,12 @@ namespace FinancialStructures.Database.Implementation
             {
                 asset.DataEdit += OnPortfolioChanged;
                 asset.SetupEventListening();
+            }
+
+            foreach(Security pension in PensionsBackingList)
+            {
+                pension.DataEdit += OnPortfolioChanged;
+                pension.SetupEventListening();
             }
         }
     }

@@ -49,11 +49,16 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 {
                     return GenerateFromList(portfolio.Assets, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultAssetStats());
                 }
+                case Account.Pension:
+                {
+                    return GenerateFromList(portfolio.Pensions, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats());
+                }
                 case Account.All:
                 {
                     List<AccountStatistics> stats = new List<AccountStatistics>();
                     stats.AddRange(portfolio.GetStats(dateToCalculate, Account.Security, displayValueFunds, displayTotals, statisticsToDisplay));
                     stats.AddRange(portfolio.GetStats(dateToCalculate, Account.BankAccount, displayValueFunds, displayTotals, statisticsToDisplay));
+                    stats.AddRange(portfolio.GetStats(dateToCalculate, Account.Pension, displayValueFunds, displayTotals, statisticsToDisplay));
                     stats.AddRange(portfolio.GetStats(dateToCalculate, Account.Asset, displayValueFunds, displayTotals, statisticsToDisplay));
                     stats.Sort();
                     return stats;
@@ -98,16 +103,15 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 switch (account)
                 {
                     case Account.Security:
+                    case Account.Pension:
                     default:
                     {
                         stats.Add(new AccountStatistics(portfolio, dateToCalculate, account, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats()));
-
                         break;
                     }
                     case Account.BankAccount:
                     {
                         stats.Add(new AccountStatistics(portfolio, dateToCalculate, account, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
-
                         break;
                     }
                     case Account.Benchmark:
@@ -127,7 +131,6 @@ namespace FinancialStructures.Database.Extensions.Statistics
                     case Account.Asset:
                     {
                         stats.Add(new AccountStatistics(portfolio, dateToCalculate, account, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultAssetStats()));
-
                         break;
                     }
                     case Account.All:
@@ -162,6 +165,9 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 case Totals.Security:
                 case Totals.SecurityCompany:
                 case Totals.SecuritySector:
+                case Totals.Pension:
+                case Totals.PensionCompany:
+                case Totals.PensionSector:
                 default:
                 {
                     return GenerateFromList(portfolio.Companies(total.ToAccount()), portfolio, dateToCalculate, total, displayValueFunds, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats());
@@ -191,6 +197,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 case Totals.CurrencySector:
                 case Totals.SecurityCurrency:
                 case Totals.BankAccountCurrency:
+                case Totals.PensionCurrency:
                 {
                     return null;
                 }
@@ -230,6 +237,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                     case Totals.All:
                     default:
                     case Totals.Security:
+                    case Totals.Pension:
                     {
                         stats.Add(new AccountStatistics(portfolio, dateToCalculate, total, new TwoName("Totals", total.ToString()), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats()));
                         break;
@@ -248,6 +256,8 @@ namespace FinancialStructures.Database.Extensions.Statistics
                     }
                     case Totals.SecuritySector:
                     case Totals.SecurityCompany:
+                    case Totals.PensionSector:
+                    case Totals.PensionCompany:
                     {
                         stats.Add(new AccountStatistics(portfolio, dateToCalculate, total, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats()));
                         break;
