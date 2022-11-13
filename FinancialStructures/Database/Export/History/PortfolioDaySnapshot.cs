@@ -243,17 +243,9 @@ namespace FinancialStructures.Database.Export.History
         }
 
         /// <summary>
-        /// Constructor which generates the snapshot.
+        /// Construct an instance.
         /// </summary>
-        /// <param name="date">The date to take a snapshot on.</param>
-        /// <param name="portfolio">The portfolio to take a snapshot of.</param>
-        /// <param name="includeSecurityValues">Should security values be calculated.</param>
-        /// <param name="includeBankValues">Should bank account values be calculated.</param>
-        /// <param name="includeSectorValues">Should sector values be calculated.</param>
-        /// <param name="generateSecurityRates">Should security rates be calculated.</param>
-        /// <param name="generateSectorRates">Should sector rates be calculated.</param>
-        /// <param name="maxRateIterations">The number of iterations to use for calculating rate values.</param>
-        public PortfolioDaySnapshot(DateTime date, IPortfolio portfolio, bool includeSecurityValues, bool includeBankValues, bool includeSectorValues, bool generateSecurityRates, bool generateSectorRates, int maxRateIterations = 10)
+        public PortfolioDaySnapshot(DateTime date, IPortfolio portfolio, PortfolioHistory.Settings settings)
         {
             Date = date;
             TotalValue = portfolio.TotalValue(Totals.All, date);
@@ -262,10 +254,18 @@ namespace FinancialStructures.Database.Export.History
             AssetValue = portfolio.TotalValue(Totals.Asset, date);
             PensionValue = portfolio.TotalValue(Totals.Pension, date);
 
-            AddSecurityValues(date, portfolio, includeSecurityValues, generateSecurityRates, maxRateIterations);
-            AddPensionValues(date, portfolio, includeSecurityValues, generateSecurityRates, maxRateIterations);
-            AddBankAccountValues(date, portfolio, includeBankValues);
-            AddSectorTotalValues(date, portfolio, includeSectorValues, generateSectorRates, maxRateIterations);
+            var securitySettings = settings[Account.Security];
+            AddSecurityValues(date, portfolio, securitySettings.GenerateValues, securitySettings.GenerateRates, settings.MaxIRRIterations);
+            
+            var pensionSettings = settings[Account.Pension];
+            AddPensionValues(date, portfolio, pensionSettings.GenerateValues, pensionSettings.GenerateRates, settings.MaxIRRIterations);
+            
+            var bankAccountSettings = settings[Account.BankAccount];
+            AddBankAccountValues(date, portfolio, bankAccountSettings.GenerateValues);
+
+            var sectorSettings = settings[Account.Benchmark];
+            AddSectorTotalValues(date, portfolio, sectorSettings.GenerateValues, sectorSettings.GenerateRates, settings.MaxIRRIterations);
+        
         }
 
         private void AddSecurityValues(DateTime date, IPortfolio portfolio, bool includeValues, bool generateRates, int numIterations)

@@ -39,7 +39,7 @@ namespace FinancialStructures.Database.Export.Report
         {
             fPortfolio = portfolio;
             fSettings = settings;
-            fHistory = new PortfolioHistory(portfolio, new PortfolioHistorySettings(generateSecurityRates: true, maxIRRIterations: 20));
+            fHistory = new PortfolioHistory(portfolio, new PortfolioHistory.Settings(generateSecurityRates: true, maxIRRIterations: 20));
 
             TotalValues = fHistory.Snapshots.Select(snap => ($"{snap.Date.Year}-{snap.Date.Month}-{snap.Date.Day}", snap.BankAccValue.TruncateToString(), snap.SecurityValue.TruncateToString(), snap.TotalValue.TruncateToString())).ToList();
             RecentTotalValues = fHistory.Snapshots.Where(rec => rec.Date > DateTime.Today.AddMonths(-6)).Select(snap => ($"{snap.Date.Year}-{snap.Date.Month}-{snap.Date.Day}", snap.BankAccValue.TruncateToString(), snap.SecurityValue.TruncateToString(), snap.TotalValue.TruncateToString())).ToList();

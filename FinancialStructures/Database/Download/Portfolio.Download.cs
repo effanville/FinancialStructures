@@ -40,12 +40,9 @@ namespace FinancialStructures.Database.Download
         private static List<Task> DownloadPortfolioLatest(IPortfolio portfo, IReportLogger reportLogger)
         {
             List<Task> downloadTasks = new List<Task>();
-            Add(portfo.FundsThreadSafe);
-            Add(portfo.BankAccountsThreadSafe);
+            Add(portfo.Accounts(Account.All));
             Add(portfo.CurrenciesThreadSafe);
             Add(portfo.BenchMarksThreadSafe);
-            Add(portfo.Assets);
-
 
             void Add(IReadOnlyList<IValueList> accounts)
             {
