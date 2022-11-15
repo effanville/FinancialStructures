@@ -38,13 +38,11 @@ namespace FinancialStructures.Database.Implementation
                     sec.EnsureOnLoadDataConsistency();
                 }
 
-                OnPortfolioChanged(this, new PortfolioEventArgs(changedPortfolio: true));
+                OnPortfolioChanged(this, new PortfolioEventArgs());
                 return;
             }
 
-            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Loading, "Loaded Empty New Database.");
-
-            Clear();
+            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, $" Failed to load new database from {filePath}. File did not exist.");
         }
 
         /// <inheritdoc/>
