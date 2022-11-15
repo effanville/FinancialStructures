@@ -46,6 +46,10 @@ namespace FinancialStructures.Database.Implementation
             {
                 PortfoCopy.AssetsBackingList.Add((AmortisableAsset)asset.Copy());
             }
+            foreach(Security pension in PensionsBackingList)
+            {
+                PortfoCopy.PensionsBackingList.Add((Security)pension.Copy());
+            }
 
             return PortfoCopy;
         }
@@ -61,6 +65,7 @@ namespace FinancialStructures.Database.Implementation
                     accountList.AddRange(FundsThreadSafe);
                     accountList.AddRange(BankAccountsThreadSafe);
                     accountList.AddRange(Assets);
+                    accountList.AddRange(Pensions);
                     return accountList;
                 }
                 case Account.Security:
@@ -83,6 +88,10 @@ namespace FinancialStructures.Database.Implementation
                 {
                     return CurrenciesThreadSafe;
                 }
+                case Account.Pension:
+                {
+                    return Pensions;
+                }
                 default:
                     return null;
             }
@@ -101,6 +110,14 @@ namespace FinancialStructures.Database.Implementation
                 {
                     return BankAccountsThreadSafe.Where(fund => fund.Names.Company == name.Company).ToList();
                 }
+                case Totals.AssetCompany:
+                {
+                    return Assets.Where(asset => asset.Names.Company == name.Company).ToList();
+                }                
+                case Totals.PensionCompany:
+                {
+                    return Pensions.Where(pension => pension.Names.Company == name.Company).ToList();
+                }
                 case Totals.Security:
                 {
                     return FundsThreadSafe;
@@ -117,9 +134,9 @@ namespace FinancialStructures.Database.Implementation
                 {
                     return Assets;
                 }
-                case Totals.AssetCompany:
+                case Totals.Pension:
                 {
-                    return Assets.Where(asset => asset.Names.Company == name.Company).ToList();
+                    return Pensions;
                 }
                 case Totals.All:
                 {
@@ -139,12 +156,17 @@ namespace FinancialStructures.Database.Implementation
                 case Totals.AssetSector:
                 {
                     return Assets.Where(fund => fund.IsSectorLinked(name)).ToList();
+                }                
+                case Totals.PensionSector:
+                {
+                    return Pensions.Where(fund => fund.IsSectorLinked(name)).ToList();
                 }
                 case Totals.Sector:
                 {
                     return Accounts(Totals.SecuritySector, name)
                         .Union(Accounts(Totals.AssetSector, name))
                         .Union(Accounts(Totals.BankAccountSector, name))
+                        .Union(Accounts(Totals.PensionSector, name))
                         .ToList();
                 }
                 case Totals.Company:
@@ -152,6 +174,7 @@ namespace FinancialStructures.Database.Implementation
                     return Accounts(Totals.SecurityCompany, name)
                         .Union(Accounts(Totals.AssetCompany, name))
                         .Union(Accounts(Totals.BankAccountCompany, name))
+                        .Union(Accounts(Totals.PensionCompany, name))
                         .ToList();
                 }
                 case Totals.Currency:
@@ -159,6 +182,7 @@ namespace FinancialStructures.Database.Implementation
                     return Accounts(Totals.SecurityCurrency, name)
                         .Union(Accounts(Totals.AssetCurrency, name))
                         .Union(Accounts(Totals.BankAccountCurrency, name))
+                        .Union(Accounts(Totals.PensionCurrency, name))
                         .ToList();
                 }
                 case Totals.SecurityCurrency:
@@ -172,6 +196,10 @@ namespace FinancialStructures.Database.Implementation
                 case Totals.AssetCurrency:
                 {
                     return Assets.Where(fund => fund.Names.Currency == name.Company).ToList();
+                }                
+                case Totals.PensionCurrency:
+                {
+                    return Pensions.Where(fund => fund.Names.Currency == name.Company).ToList();
                 }
                 case Totals.CurrencySector:
                 default:

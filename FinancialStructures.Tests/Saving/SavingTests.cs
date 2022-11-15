@@ -100,6 +100,7 @@ namespace FinancialStructures.Tests.Saving
       </Sector>
     </BenchMarks>
     <Assets />
+    <Pensions />
   </MyFunds>
 </AllData>");
             Portfolio portfolioWithData = new Portfolio() { FilePath = "c:/temp/saved.xml" };
@@ -130,6 +131,7 @@ namespace FinancialStructures.Tests.Saving
     <Currencies />
     <BenchMarks />
     <Assets />
+    <Pensions />
     <Notes />
   </MyFunds>
 </AllData>");
@@ -206,6 +208,7 @@ namespace FinancialStructures.Tests.Saving
       </Sector>
     </BenchMarks>
     <Assets />
+    <Pensions />
     <Notes />
   </MyFunds>
 </AllData>");
@@ -296,12 +299,55 @@ namespace FinancialStructures.Tests.Saving
       </Sector>
     </BenchMarks>
     <Assets />
+    <Pensions />
     <Notes />
   </MyFunds>
 </AllData>");
 
             Dictionary<TestDatabaseName, IPortfolio> testDatabases = TestDatabase.Databases;
-            yield return (TestDatabaseName.OneBank.ToString(), testDatabases[TestDatabaseName.OneBank], "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<AllData xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <MyFunds>\r\n    <FilePath>c:/temp/saved.xml</FilePath>\r\n    <BaseCurrency>GBP</BaseCurrency>\r\n    <Funds />\r\n    <BankAccounts>\r\n      <CashAccount>\r\n        <Names>\r\n          <Company>Santander</Company>\r\n          <Name>Current</Name>\r\n          <Sectors />\r\n        </Names>\r\n        <Values>\r\n          <Values>\r\n            <DV D=\"2010-01-01T00:00:00\" V=\"100.0\" />\r\n            <DV D=\"2011-01-01T00:00:00\" V=\"100.0\" />\r\n            <DV D=\"2012-05-01T00:00:00\" V=\"125.2\" />\r\n            <DV D=\"2015-04-03T00:00:00\" V=\"90.6\" />\r\n            <DV D=\"2018-05-06T00:00:00\" V=\"77.7\" />\r\n            <DV D=\"2020-01-01T00:00:00\" V=\"101.1\" />\r\n          </Values>\r\n        </Values>\r\n        <Amounts>\r\n          <Values>\r\n            <DV D=\"2010-01-01T00:00:00\" V=\"100.0\" />\r\n            <DV D=\"2011-01-01T00:00:00\" V=\"100.0\" />\r\n            <DV D=\"2012-05-01T00:00:00\" V=\"125.2\" />\r\n            <DV D=\"2015-04-03T00:00:00\" V=\"90.6\" />\r\n            <DV D=\"2018-05-06T00:00:00\" V=\"77.7\" />\r\n            <DV D=\"2020-01-01T00:00:00\" V=\"101.1\" />\r\n          </Values>\r\n        </Amounts>\r\n      </CashAccount>\r\n    </BankAccounts>\r\n    <Currencies />\r\n    <BenchMarks />\r\n    <Assets />\r\n    <Notes />\r\n  </MyFunds>\r\n</AllData>");
+            yield return (TestDatabaseName.OneBank.ToString(), testDatabases[TestDatabaseName.OneBank],
+@"<?xml version=""1.0"" encoding=""utf-8""?>
+<AllData xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <MyFunds>
+    <FilePath>c:/temp/saved.xml</FilePath>
+    <BaseCurrency>GBP</BaseCurrency>
+    <Funds />
+    <BankAccounts>
+      <CashAccount>
+        <Names>
+          <Company>Santander</Company>
+          <Name>Current</Name>
+          <Sectors />
+        </Names>
+        <Values>
+          <Values>
+            <DV D=""2010-01-01T00:00:00"" V=""100.0"" />
+            <DV D=""2011-01-01T00:00:00"" V=""100.0"" />
+            <DV D=""2012-05-01T00:00:00"" V=""125.2"" />
+            <DV D=""2015-04-03T00:00:00"" V=""90.6"" />
+            <DV D=""2018-05-06T00:00:00"" V=""77.7"" />
+            <DV D=""2020-01-01T00:00:00"" V=""101.1"" />
+          </Values>
+        </Values>
+        <Amounts>
+          <Values>
+            <DV D=""2010-01-01T00:00:00"" V=""100.0"" />
+            <DV D=""2011-01-01T00:00:00"" V=""100.0"" />
+            <DV D=""2012-05-01T00:00:00"" V=""125.2"" />
+            <DV D=""2015-04-03T00:00:00"" V=""90.6"" />
+            <DV D=""2018-05-06T00:00:00"" V=""77.7"" />
+            <DV D=""2020-01-01T00:00:00"" V=""101.1"" />
+          </Values>
+        </Amounts>
+      </CashAccount>
+    </BankAccounts>
+    <Currencies />
+    <BenchMarks />
+    <Assets />
+    <Pensions />
+    <Notes />
+  </MyFunds>
+</AllData>");
             yield return (TestDatabaseName.OneSec.ToString(), testDatabases[TestDatabaseName.OneSec],
 @"<?xml version=""1.0"" encoding=""utf-8""?>
 <AllData xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
@@ -357,6 +403,7 @@ namespace FinancialStructures.Tests.Saving
     <Currencies />
     <BenchMarks />
     <Assets />
+    <Pensions />
     <Notes />
   </MyFunds>
 </AllData>");
@@ -443,6 +490,7 @@ namespace FinancialStructures.Tests.Saving
     <Currencies />
     <BenchMarks />
     <Assets />
+    <Pensions />
     <Notes />
   </MyFunds>
 </AllData>");

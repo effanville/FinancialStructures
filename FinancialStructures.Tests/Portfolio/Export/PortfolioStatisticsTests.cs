@@ -25,6 +25,9 @@ namespace FinancialStructures.Tests.Database.Export
 <td>Totals</td><td>BankAccount</td><td></td><td>£1,102.20</td><td></td><td></td>
 </tr>
 <tr>
+<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td></td><td></td>
+</tr>
+<tr>
 <td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td></td><td></td>
 </tr>
 <tr>
@@ -66,6 +69,17 @@ namespace FinancialStructures.Tests.Database.Export
 </tr>
 </tbody>
 </table>
+<h2>Pension Data</h2>
+<table>
+<thead><tr>
+<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>UnitPrice</th><th>NumberUnits</th><th>MeanSharePrice</th><th>RecentChange</th><th>FundFraction</th><th>FundCompanyFraction</th><th>Investment</th><th>Profit</th><th>IRR3M</th><th>IRR6M</th><th>IRR1Y</th><th>IRR5Y</th><th>IRRTotal</th><th>DrawDown</th><th>MDD</th><th>Sectors</th><th>FirstDate</th><th>LastInvestmentDate</th><th>LastPurchaseDate</th><th>LatestDate</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
+</tr></thead>
+<tbody>
+<tr>
+<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
+</tr>
+</tbody>
+</table>
 <h2>Analysis By Sector</h2>
 <table>
 <thead><tr>
@@ -86,7 +100,7 @@ namespace FinancialStructures.Tests.Database.Export
             var portfolioStatistics = new PortfolioStatistics(portfolio, settings, new MockFileSystem());
             var exportSettings = PortfolioStatisticsExportSettings.DefaultSettings();
             var statsString = portfolioStatistics.ExportString(includeHtmlHeaders: false, DocumentType.Html, exportSettings);
-            var actual = statsString.ToString();
+            string actual = statsString.ToString();
             Assert.AreEqual(test, actual);
         }
 
@@ -101,6 +115,9 @@ namespace FinancialStructures.Tests.Database.Export
 </tr>
 <tr>
 <td>Totals</td><td>BankAccount</td><td></td><td>£1,102.20</td><td></td><td></td>
+</tr>
+<tr>
+<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td></td><td></td>
 </tr>
 <tr>
 <td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td></td><td></td>
@@ -141,6 +158,17 @@ namespace FinancialStructures.Tests.Database.Export
 </tr>
 <tr>
 <th scope=""row"">Totals</th><td>BankAccount</td><td></td><td>£1,102.20</td><td></td><td></td>
+</tr>
+</tbody>
+</table>
+<h2>Pension Data</h2>
+<table>
+<thead><tr>
+<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>Profit</th><th>IRR3M</th><th>IRR6M</th><th>IRR1Y</th><th>IRR5Y</th>
+</tr></thead>
+<tbody>
+<tr>
+<th scope=""row"">Pension</th><td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>0</td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -204,7 +232,7 @@ namespace FinancialStructures.Tests.Database.Export
                 SortDirection.Descending,
                 AccountStatisticsHelpers.DefaultAssetStats().ToList());
             var statsString = portfolioStatistics.ExportString(includeHtmlHeaders: false, DocumentType.Html, exportSettings);
-            var actual = statsString.ToString();
+            string actual = statsString.ToString();
             Assert.AreEqual(FilteredOutput, actual);
         }
 
@@ -222,6 +250,9 @@ namespace FinancialStructures.Tests.Database.Export
 <td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td></td><td></td>
 </tr>
 <tr>
+<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td></td><td></td>
+</tr>
+<tr>
 <td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td></td><td></td>
 </tr>
 <tr>
@@ -243,6 +274,17 @@ namespace FinancialStructures.Tests.Database.Export
 </tr>
 <tr>
 <th scope=""row"">Totals</th><td>Security</td><td></td><td>£26,084.10</td><td>0</td><td>0</td><td>0</td><td>-£14,553.68</td><td>1</td><td>0</td><td>£23,242.96</td><td>£2,841.14</td><td>0</td><td>0</td><td>0</td><td>0.76</td><td>1.51</td><td>35.94</td><td>35.94</td><td></td><td>1/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+</tr>
+</tbody>
+</table>
+<h2>Pension Data</h2>
+<table>
+<thead><tr>
+<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>UnitPrice</th><th>NumberUnits</th><th>MeanSharePrice</th><th>RecentChange</th><th>FundFraction</th><th>FundCompanyFraction</th><th>Investment</th><th>Profit</th><th>IRR3M</th><th>IRR6M</th><th>IRR1Y</th><th>IRR5Y</th><th>IRRTotal</th><th>DrawDown</th><th>MDD</th><th>Sectors</th><th>FirstDate</th><th>LastInvestmentDate</th><th>LastPurchaseDate</th><th>LatestDate</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
+</tr></thead>
+<tbody>
+<tr>
+<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -260,6 +302,9 @@ namespace FinancialStructures.Tests.Database.Export
 <td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td></td><td></td>
 </tr>
 <tr>
+<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td></td><td></td>
+</tr>
+<tr>
 <td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td></td><td></td>
 </tr>
 <tr>
@@ -281,6 +326,17 @@ namespace FinancialStructures.Tests.Database.Export
 </tr>
 <tr>
 <th scope=""row"">Totals</th><td>Security</td><td></td><td>£26,084.10</td><td>0</td><td>0</td><td>0</td><td>-£14,553.68</td><td>1</td><td>0</td><td>£23,242.96</td><td>£2,841.14</td><td>0</td><td>0</td><td>0</td><td>0.76</td><td>1.51</td><td>35.94</td><td>35.94</td><td></td><td>1/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+</tr>
+</tbody>
+</table>
+<h2>Pension Data</h2>
+<table>
+<thead><tr>
+<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>UnitPrice</th><th>NumberUnits</th><th>MeanSharePrice</th><th>RecentChange</th><th>FundFraction</th><th>FundCompanyFraction</th><th>Investment</th><th>Profit</th><th>IRR3M</th><th>IRR6M</th><th>IRR1Y</th><th>IRR5Y</th><th>IRRTotal</th><th>DrawDown</th><th>MDD</th><th>Sectors</th><th>FirstDate</th><th>LastInvestmentDate</th><th>LastPurchaseDate</th><th>LatestDate</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
+</tr></thead>
+<tbody>
+<tr>
+<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -298,6 +354,9 @@ namespace FinancialStructures.Tests.Database.Export
 <td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td></td><td></td>
 </tr>
 <tr>
+<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td></td><td></td>
+</tr>
+<tr>
 <td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td></td><td></td>
 </tr>
 <tr>
@@ -319,6 +378,17 @@ namespace FinancialStructures.Tests.Database.Export
 </tr>
 <tr>
 <th scope=""row"">Totals</th><td>Security</td><td></td><td>£26,084.10</td><td>0</td><td>0</td><td>0</td><td>-£14,553.68</td><td>1</td><td>0</td><td>£23,242.96</td><td>£2,841.14</td><td>0</td><td>0</td><td>0</td><td>0.76</td><td>1.51</td><td>35.94</td><td>35.94</td><td></td><td>1/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+</tr>
+</tbody>
+</table>
+<h2>Pension Data</h2>
+<table>
+<thead><tr>
+<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>UnitPrice</th><th>NumberUnits</th><th>MeanSharePrice</th><th>RecentChange</th><th>FundFraction</th><th>FundCompanyFraction</th><th>Investment</th><th>Profit</th><th>IRR3M</th><th>IRR6M</th><th>IRR1Y</th><th>IRR5Y</th><th>IRRTotal</th><th>DrawDown</th><th>MDD</th><th>Sectors</th><th>FirstDate</th><th>LastInvestmentDate</th><th>LastPurchaseDate</th><th>LatestDate</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
+</tr></thead>
+<tbody>
+<tr>
+<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -336,6 +406,9 @@ namespace FinancialStructures.Tests.Database.Export
 <td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td></td><td></td>
 </tr>
 <tr>
+<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td></td><td></td>
+</tr>
+<tr>
 <td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td></td><td></td>
 </tr>
 <tr>
@@ -357,6 +430,17 @@ namespace FinancialStructures.Tests.Database.Export
 </tr>
 <tr>
 <th scope=""row"">Totals</th><td>Security</td><td></td><td>£26,084.10</td><td>0</td><td>0</td><td>0</td><td>-£14,553.68</td><td>1</td><td>0</td><td>£23,242.96</td><td>£2,841.14</td><td>0</td><td>0</td><td>0</td><td>0.76</td><td>1.51</td><td>35.94</td><td>35.94</td><td></td><td>1/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+</tr>
+</tbody>
+</table>
+<h2>Pension Data</h2>
+<table>
+<thead><tr>
+<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>UnitPrice</th><th>NumberUnits</th><th>MeanSharePrice</th><th>RecentChange</th><th>FundFraction</th><th>FundCompanyFraction</th><th>Investment</th><th>Profit</th><th>IRR3M</th><th>IRR6M</th><th>IRR1Y</th><th>IRR5Y</th><th>IRRTotal</th><th>DrawDown</th><th>MDD</th><th>Sectors</th><th>FirstDate</th><th>LastInvestmentDate</th><th>LastPurchaseDate</th><th>LatestDate</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
+</tr></thead>
+<tbody>
+<tr>
+<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
 </tr>
 </tbody>
 </table>

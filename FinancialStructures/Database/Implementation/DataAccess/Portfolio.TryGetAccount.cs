@@ -76,6 +76,19 @@ namespace FinancialStructures.Database.Implementation
 
                     return false;
                 }
+                case Account.Pension:
+                {
+                    foreach (IValueList pension in Pensions)
+                    {
+                        if (names.IsEqualTo(pension.Names))
+                        {
+                            desired = pension;
+                            return true;
+                        }
+                    }
+
+                    return false;
+                }
                 default:
                 case Account.All:
                 {

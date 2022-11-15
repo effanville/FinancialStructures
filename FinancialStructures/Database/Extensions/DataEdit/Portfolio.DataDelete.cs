@@ -24,7 +24,7 @@ namespace FinancialStructures.Database.Extensions
             return portfolio.TryPerformEdit<ISecurity>(
                account,
                name,
-               (acc, n) => acc == Account.Security,
+               (acc, n) => acc == Account.Security || acc == Account.Pension,
                security => security.TryDeleteTradeData(date, reportLogger),
                ReportLocation.DeletingData,
                reportLogger);

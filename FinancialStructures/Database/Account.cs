@@ -34,6 +34,11 @@
         /// <summary>
         /// An asset type.
         /// </summary>
-        Asset
+        Asset,
+
+        /// <summary>
+        /// A pension type.
+        /// </summary>
+        Pension
     }
 }

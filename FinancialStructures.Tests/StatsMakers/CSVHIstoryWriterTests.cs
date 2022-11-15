@@ -11,7 +11,7 @@ namespace FinancialStructures.Tests.StatsMakers
         public void CanGenerate()
         {
             var portfolio = TestDatabase.Databases[TestDatabaseName.OneSecOneBank];
-            var history = new PortfolioHistory(portfolio, new PortfolioHistorySettings());
+            var history = new PortfolioHistory(portfolio, new PortfolioHistory.Settings());
             MockFileSystem tempFileSystem = new MockFileSystem();
             string savePath = "c:/temp/saved.csv";
 

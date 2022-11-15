@@ -15,7 +15,7 @@ namespace FinancialStructures.Database.Export.History
     /// <summary>
     /// Class to store the historic evolution of a <see cref="IPortfolio"/>
     /// </summary>
-    public sealed class PortfolioHistory
+    public sealed partial class PortfolioHistory
     {
         /// <summary>
         /// Records of the history.
@@ -32,7 +32,7 @@ namespace FinancialStructures.Database.Export.History
         /// <param name="portfolio">The portfolio to create history for.</param>
         public PortfolioHistory(IPortfolio portfolio)
         {
-            PortfolioHistorySettings settings = new PortfolioHistorySettings();
+            Settings settings = new Settings();
             if (ShouldMultiThread(portfolio, settings, forceMultiThreading: false))
             {
                 GenerateHistoryStatsMulti(portfolio, settings);
@@ -48,7 +48,7 @@ namespace FinancialStructures.Database.Export.History
         /// </summary>
         /// <param name="portfolio">The portfolio to create history for.</param>
         /// <param name="settings">The settings for the history.</param>
-        public PortfolioHistory(IPortfolio portfolio, PortfolioHistorySettings settings)
+        public PortfolioHistory(IPortfolio portfolio, Settings settings)
         {
             if (ShouldMultiThread(portfolio, settings, forceMultiThreading: true))
             {
@@ -60,18 +60,18 @@ namespace FinancialStructures.Database.Export.History
             }
         }
 
-        private static bool ShouldMultiThread(IPortfolio portfolio, PortfolioHistorySettings settings, bool forceMultiThreading = false)
+        private static bool ShouldMultiThread(IPortfolio portfolio, Settings settings, bool forceMultiThreading = false)
         {
             if (forceMultiThreading)
             {
                 return true;
             }
-            if (settings.GenerateSecurityRates)
+            if (settings[Account.Security].GenerateRates)
             {
                 return true;
             }
 
-            if (!(settings.GenerateSecurityRates || settings.GenerateSectorRates) && portfolio.FundsThreadSafe.Count >= 15)
+            if (!(settings[Account.Security].GenerateRates || settings[Account.Benchmark].GenerateRates) && portfolio.FundsThreadSafe.Count >= 15)
             {
                 return true;
             }
@@ -79,7 +79,7 @@ namespace FinancialStructures.Database.Export.History
             return false;
         }
 
-        private static List<DateTime> PrepareTimes(IPortfolio portfolio, PortfolioHistorySettings settings)
+        private static List<DateTime> PrepareTimes(IPortfolio portfolio, Settings settings)
         {
             List<DateTime> times = new List<DateTime>();
             if (!settings.SnapshotIncrement.Equals(0))
@@ -104,7 +104,7 @@ namespace FinancialStructures.Database.Export.History
             return times;
         }
 
-        private void GenerateHistoryStats(IPortfolio portfolio, PortfolioHistorySettings settings)
+        private void GenerateHistoryStats(IPortfolio portfolio, Settings settings)
         {
             List<PortfolioDaySnapshot> outputs = new List<PortfolioDaySnapshot>();
             foreach (DateTime time in PrepareTimes(portfolio, settings))
@@ -112,12 +112,7 @@ namespace FinancialStructures.Database.Export.History
                 PortfolioDaySnapshot calcuationDateStatistics = new PortfolioDaySnapshot(
                     time,
                     portfolio,
-                    includeSecurityValues: true,
-                    includeBankValues: true,
-                    includeSectorValues: true,
-                    settings.GenerateSecurityRates,
-                    settings.GenerateSectorRates,
-                    settings.MaxIRRIterations);
+                    settings);
                 outputs.Add(calcuationDateStatistics);
             }
 
@@ -125,7 +120,7 @@ namespace FinancialStructures.Database.Export.History
             Snapshots = outputs;
         }
 
-        private void GenerateHistoryStatsMulti(IPortfolio portfolio, PortfolioHistorySettings settings)
+        private void GenerateHistoryStatsMulti(IPortfolio portfolio, Settings settings)
         {
             var times = PrepareTimes(portfolio, settings);
             PortfolioDaySnapshot[] snapshots = new PortfolioDaySnapshot[times.Count];
@@ -136,12 +131,7 @@ namespace FinancialStructures.Database.Export.History
                 PortfolioDaySnapshot snapshot = new PortfolioDaySnapshot(
                     times[index],
                     portfolio,
-                    includeSecurityValues: true,
-                    includeBankValues: true,
-                    includeSectorValues: true,
-                    settings.GenerateSecurityRates,
-                    settings.GenerateSectorRates,
-                    settings.MaxIRRIterations);
+                    settings);
                 snapshots[index] = snapshot;
             }
 
