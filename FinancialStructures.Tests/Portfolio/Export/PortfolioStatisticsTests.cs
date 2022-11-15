@@ -76,7 +76,7 @@ namespace FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>NaN</td><td>NaN</td><td>NaN</td><td>NaN</td><td>NaN</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
+<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -168,7 +168,7 @@ namespace FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Pension</th><td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>NaN</td><td>NaN</td><td>NaN</td><td>NaN</td><td>NaN</td><td>0</td><td>0</td><td></td><td>0</td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
+<th scope=""row"">Pension</th><td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>0</td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -284,7 +284,7 @@ namespace FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>NaN</td><td>NaN</td><td>NaN</td><td>NaN</td><td>NaN</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
+<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -336,7 +336,7 @@ namespace FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>NaN</td><td>NaN</td><td>NaN</td><td>NaN</td><td>NaN</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
+<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -388,7 +388,7 @@ namespace FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>NaN</td><td>NaN</td><td>NaN</td><td>NaN</td><td>NaN</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
+<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -440,7 +440,7 @@ namespace FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>NaN</td><td>NaN</td><td>NaN</td><td>NaN</td><td>NaN</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
+<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
 </tr>
 </tbody>
 </table>
