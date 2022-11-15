@@ -60,7 +60,6 @@ namespace FinancialStructures.Database.Export.History
         public IDictionary<string, decimal> SecurityValues
         {
             get;
-            set;
         } = new Dictionary<string, decimal>();
 
         /// <summary>
@@ -69,7 +68,6 @@ namespace FinancialStructures.Database.Export.History
         public IDictionary<string, double> Security1YrCar
         {
             get;
-            set;
         } = new Dictionary<string, double>();
 
         /// <summary>
@@ -78,7 +76,6 @@ namespace FinancialStructures.Database.Export.History
         public IDictionary<string, double> SecurityTotalCar
         {
             get;
-            set;
         } = new Dictionary<string, double>();
 
         /// <summary>
@@ -88,6 +85,22 @@ namespace FinancialStructures.Database.Export.History
         {
             get;
         } = new Dictionary<string, decimal>();
+
+        /// <summary>
+        /// Total values for each company.
+        /// </summary>
+        public IDictionary<string, decimal> CompanyValues
+        {
+            get;
+        } = new Dictionary<string, decimal>();
+
+        /// <summary>
+        /// Total IRR for each company.
+        /// </summary>
+        public IDictionary<string, double> CompanyTotalIRR
+        {
+            get;
+        } = new Dictionary<string, double>();
 
         /// <summary>
         /// The total held in securities.
@@ -120,7 +133,6 @@ namespace FinancialStructures.Database.Export.History
         public IDictionary<string, decimal> PensionValues
         {
             get;
-            set;
         } = new Dictionary<string, decimal>();
 
         /// <summary>
@@ -129,7 +141,6 @@ namespace FinancialStructures.Database.Export.History
         public IDictionary<string, double> Pension1YrCar
         {
             get;
-            set;
         } = new Dictionary<string, double>();
 
         /// <summary>
@@ -138,7 +149,6 @@ namespace FinancialStructures.Database.Export.History
         public IDictionary<string, double> PensionTotalCar
         {
             get;
-            set;
         } = new Dictionary<string, double>();
 
         /// <summary>
@@ -200,11 +210,11 @@ namespace FinancialStructures.Database.Export.History
         /// Values to export for this.
         /// </summary>
         /// <returns></returns>
-        public List<string> ExportValues()
+        public List<string> ExportValues(string dateFormat = "dd/MM/yyyy", bool includeSecurityValues = true, bool includePensionValues = true, bool includeBankAccValues = true, bool includeSectorValues = true)
         {
             List<string> values = new List<string>
             {
-                Date.ToUkDateString(),
+                Date.ToString(dateFormat),
                 TotalValue.TruncateToString(),
                 BankAccValue.TruncateToString(),
                 SecurityValue.TruncateToString(),
@@ -212,24 +222,36 @@ namespace FinancialStructures.Database.Export.History
                 PensionValue.TruncateToString()
             };
 
-            foreach (KeyValuePair<string, decimal> value in SecurityValues)
+            if (includeSecurityValues)
             {
-                values.Add(value.Value.TruncateToString());
+                foreach (KeyValuePair<string, decimal> value in SecurityValues)
+                {
+                    values.Add(value.Value.TruncateToString());
+                }
             }
 
-            foreach (KeyValuePair<string, decimal> value in PensionValues)
+            if (includePensionValues)
             {
-                values.Add(value.Value.TruncateToString());
+                foreach (KeyValuePair<string, decimal> value in PensionValues)
+                {
+                    values.Add(value.Value.TruncateToString());
+                }
             }
 
-            foreach (KeyValuePair<string, decimal> value in BankAccValues)
+            if (includeBankAccValues)
             {
-                values.Add(value.Value.TruncateToString());
+                foreach (KeyValuePair<string, decimal> value in BankAccValues)
+                {
+                    values.Add(value.Value.TruncateToString());
+                }
             }
 
-            foreach (KeyValuePair<string, decimal> value in SectorValues)
+            if (includeSectorValues)
             {
-                values.Add(value.Value.TruncateToString());
+                foreach (KeyValuePair<string, decimal> value in SectorValues)
+                {
+                    values.Add(value.Value.TruncateToString());
+                }
             }
 
             return values;
@@ -254,18 +276,28 @@ namespace FinancialStructures.Database.Export.History
             AssetValue = portfolio.TotalValue(Totals.Asset, date);
             PensionValue = portfolio.TotalValue(Totals.Pension, date);
 
+            var companies = portfolio.Companies(Account.All);
+            foreach (string company in companies)
+            {
+                decimal value = portfolio.TotalValue(Totals.Company, date, new TwoName(company));
+                DateTime firstCompanyDate = portfolio.FirstValueDate(Totals.Company, new TwoName(company));
+                double totalIRR = date < firstCompanyDate ? 0.0 : portfolio.TotalIRR(Totals.Company, firstCompanyDate, date, new TwoName(company), settings.MaxIRRIterations);
+                CompanyTotalIRR.Add(company, totalIRR);
+                CompanyValues.Add(company, value);
+            }
+
             var securitySettings = settings[Account.Security];
             AddSecurityValues(date, portfolio, securitySettings.GenerateValues, securitySettings.GenerateRates, settings.MaxIRRIterations);
-            
+
             var pensionSettings = settings[Account.Pension];
             AddPensionValues(date, portfolio, pensionSettings.GenerateValues, pensionSettings.GenerateRates, settings.MaxIRRIterations);
-            
+
             var bankAccountSettings = settings[Account.BankAccount];
             AddBankAccountValues(date, portfolio, bankAccountSettings.GenerateValues);
 
             var sectorSettings = settings[Account.Benchmark];
             AddSectorTotalValues(date, portfolio, sectorSettings.GenerateValues, sectorSettings.GenerateRates, settings.MaxIRRIterations);
-        
+
         }
 
         private void AddSecurityValues(DateTime date, IPortfolio portfolio, bool includeValues, bool generateRates, int numIterations)
@@ -388,5 +420,12 @@ namespace FinancialStructures.Database.Export.History
             return 0;
         }
 
+        /// <summary>
+        /// Return strings with values and IRR for a company.
+        /// </summary>
+        public (string Date, decimal Value, double TotalIRR) GetCompanyStrings(string company)
+        {
+            return ($"{Date.Year}-{Date.Month}-{Date.Day}", CompanyValues[company], 100 * CompanyTotalIRR[company]);
+        }
     }
 }

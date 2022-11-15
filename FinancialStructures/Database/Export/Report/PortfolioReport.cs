@@ -20,14 +20,14 @@ namespace FinancialStructures.Database.Export.Report
     /// <summary>
     /// Contains a report of the entire portfolio.
     /// </summary>
-    public sealed class PortfolioReport
+    public sealed partial class PortfolioReport
     {
         private readonly PortfolioHistory fHistory;
         private readonly IPortfolio fPortfolio;
-        private readonly PortfolioReportSettings fSettings;
+        private readonly Settings fSettings;
 
-        private readonly IList<(string, string, string, string)> TotalValues;
-        private readonly IList<(string, string, string, string)> RecentTotalValues;
+        private readonly IList<List<string>> TotalValues;
+        private readonly IList<List<string>> RecentTotalValues;
         private readonly List<(string Date, string Value)> CarValues;
         private readonly IList<KeyValuePair<string, decimal>> SectorValues;
         private readonly IList<KeyValuePair<string, decimal>> SecurityCompanyValues;
@@ -35,14 +35,14 @@ namespace FinancialStructures.Database.Export.Report
         /// <summary>
         /// Construct an instance.
         /// </summary>
-        public PortfolioReport(IPortfolio portfolio, PortfolioReportSettings settings)
+        public PortfolioReport(IPortfolio portfolio, Settings settings)
         {
             fPortfolio = portfolio;
             fSettings = settings;
             fHistory = new PortfolioHistory(portfolio, new PortfolioHistory.Settings(generateSecurityRates: true, maxIRRIterations: 20));
 
-            TotalValues = fHistory.Snapshots.Select(snap => ($"{snap.Date.Year}-{snap.Date.Month}-{snap.Date.Day}", snap.BankAccValue.TruncateToString(), snap.SecurityValue.TruncateToString(), snap.TotalValue.TruncateToString())).ToList();
-            RecentTotalValues = fHistory.Snapshots.Where(rec => rec.Date > DateTime.Today.AddMonths(-6)).Select(snap => ($"{snap.Date.Year}-{snap.Date.Month}-{snap.Date.Day}", snap.BankAccValue.TruncateToString(), snap.SecurityValue.TruncateToString(), snap.TotalValue.TruncateToString())).ToList();
+            TotalValues = fHistory.Snapshots.Select(snap => snap.ExportValues("yyyy-MM-dd", includeSecurityValues: false, false, false, false)).ToList();
+            RecentTotalValues = fHistory.Snapshots.Where(rec => rec.Date > DateTime.Today.AddMonths(-6)).Select(snap => snap.ExportValues("yyyy-MM-dd", includeSecurityValues: false, false, false, false)).ToList();
 
             CarValues = fHistory.Snapshots.Where(s => s.TotalSecurityIRR > 0).Select(snap => ($"{snap.Date.Year}-{snap.Date.Month}-{snap.Date.Day}", snap.TotalSecurityIRR.TruncateToString(5))).ToList();
             SectorValues = fHistory.Snapshots[fHistory.Snapshots.Count - 1].SectorValues.Where(x => x.Value > 0).ToList();
@@ -56,7 +56,7 @@ namespace FinancialStructures.Database.Export.Report
         /// <param name="filePath">The path exporting to.</param>
         /// <param name="settings">Various options for the export.</param>
         /// <param name="logger">Returns information on success or failure.</param>
-        public void ExportToFile(IFileSystem fileSystem, string filePath, PortfolioReportExportSettings settings, IReportLogger logger)
+        public void ExportToFile(IFileSystem fileSystem, string filePath, ExportSettings settings, IReportLogger logger)
         {
             ReportBuilder reportBuilder = ExportString(settings);
 
@@ -80,7 +80,7 @@ namespace FinancialStructures.Database.Export.Report
         /// <summary>
         /// Generates the export string for the report.
         /// </summary>
-        public ReportBuilder ExportString(PortfolioReportExportSettings settings)
+        public ReportBuilder ExportString(ExportSettings settings)
         {
             var exportType = settings.ReportExportType;
 
@@ -93,26 +93,30 @@ namespace FinancialStructures.Database.Export.Report
                 .WriteLineChart(
                 "line1",
                 "Total values over time",
-                new[] { "BankAccount", "Security", "Total" },
-                TotalValues.Select(value => value.Item1).ToList(),
+                new[] { "BankAccount", "Security", "Pension", "Asset", "Total" },
+                TotalValues.Select(value => value[0]).ToList(),
                 new[]
                 {
-                    TotalValues.Select(value => value.Item2).ToList(),
-                    TotalValues.Select(value => value.Item3).ToList(),
-                    TotalValues.Select(value => value.Item4).ToList()
+                    TotalValues.Select(value => value[2]).ToList(),
+                    TotalValues.Select(value => value[3]).ToList(),
+                    TotalValues.Select(value => value[5]).ToList(),
+                    TotalValues.Select(value => value[4]).ToList(),
+                    TotalValues.Select(value => value[1]).ToList()
                 },
                 xAxisIsTime: true);
 
             _ = reportBuilder.WriteLineChart(
                 "line2",
                 "Recent Total values",
-                new[] { "BankAccount", "Security", "Total" },
-                RecentTotalValues.Select(value => value.Item1).ToList(),
+                new[] { "BankAccount", "Security", "Pension", "Asset", "Total" },
+                RecentTotalValues.Select(value => value[0]).ToList(),
                 new[]
                 {
-                    RecentTotalValues.Select(value => value.Item2).ToList(),
-                    RecentTotalValues.Select(value => value.Item3).ToList(),
-                    RecentTotalValues.Select(value => value.Item4).ToList()
+                    RecentTotalValues.Select(value => value[2]).ToList(),
+                    RecentTotalValues.Select(value => value[3]).ToList(),
+                    RecentTotalValues.Select(value => value[5]).ToList(),
+                    RecentTotalValues.Select(value => value[4]).ToList(),
+                    RecentTotalValues.Select(value => value[1]).ToList()
                 },
                 xAxisIsTime: true);
 
@@ -139,7 +143,7 @@ namespace FinancialStructures.Database.Export.Report
                 SecurityCompanyValues.Select(val => val.Key).ToList(),
                 SecurityCompanyValues.Select(val => val.Value.TruncateToString()).ToList());
 
-            var companies = fPortfolio.Companies(Account.Security);
+            var companies = fPortfolio.Companies(Account.All);
 
             _ = reportBuilder.WriteTitle("Company Statistics", DocumentElement.h2);
             foreach (string company in companies)
@@ -148,13 +152,13 @@ namespace FinancialStructures.Database.Export.Report
                 {
                     _ = reportBuilder.WriteTitle(company, DocumentElement.h3);
 
-                    var stats = fPortfolio.GetStats(DateTime.Today, Totals.SecurityCompany, new TwoName(company), AccountStatisticsHelpers.DefaultSecurityCompanyStats());
+                    var stats = fPortfolio.GetStats(DateTime.Today, Totals.Company, new TwoName(company), AccountStatisticsHelpers.DefaultSecurityCompanyStats());
                     _ = reportBuilder.WriteTable(
                         new[] { "StatType", "ValueAsObject" },
                         stats[0].Statistics,
                         headerFirstColumn: true);
 
-                    var companyAccounts = fPortfolio.Accounts(Totals.SecurityCompany, new TwoName(company));
+                    var companyAccounts = fPortfolio.Accounts(Totals.Company, new TwoName(company));
                     if (companyAccounts != null && companyAccounts.Count > 1)
                     {
                         _ = reportBuilder.WritePieChart(
@@ -164,22 +168,22 @@ namespace FinancialStructures.Database.Export.Report
                             companyAccounts.Select(val => val.Names.Name).ToList(),
                             companyAccounts.Select(acc => acc.LatestValue().Value.TruncateToString()).ToList());
                     }
-                    var priceHistory = fHistory.Snapshots.Select(snap => ($"{snap.Date.Year}-{snap.Date.Month}-{snap.Date.Day}", snap.SecurityValues[company], 100 * snap.SecurityTotalCar[company])).Where(val => val.Item2 > 0);
+                    var priceHistory = fHistory.Snapshots.Select(snap => snap.GetCompanyStrings(company)).Where(val => val.Value > 0);
 
                     _ = reportBuilder.WriteLineChart(
                         $"lineValue{company}",
                         $"{company} value over time",
                         new[] { "Value" },
-                        priceHistory.Select(value => value.Item1).ToList(),
-                        new[] { priceHistory.Select(value => value.Item2.ToString()).ToList() },
+                        priceHistory.Select(value => value.Date).ToList(),
+                        new[] { priceHistory.Select(value => value.Value.ToString()).ToList() },
                         xAxisIsTime: true);
 
                     _ = reportBuilder.WriteLineChart(
                         $"lineReturn{company}",
                         $"{company} Return over time",
-                        new[] { "Value" },
-                        priceHistory.Select(value => value.Item1).ToList(),
-                        new[] { priceHistory.Select(value => value.Item3.ToString()).ToList() },
+                        new[] { "IRR" },
+                        priceHistory.Select(value => value.Date).ToList(),
+                        new[] { priceHistory.Select(value => value.TotalIRR.ToString()).ToList() },
                         xAxisIsTime: true);
                 }
             }
