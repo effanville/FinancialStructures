@@ -232,53 +232,72 @@ namespace FinancialStructures.Database.Extensions.Statistics
             if (portfolio != null)
             {
                 List<AccountStatistics> stats = new List<AccountStatistics>();
-                switch (total)
-                {
-                    case Totals.All:
-                    default:
-                    case Totals.Security:
-                    case Totals.Pension:
-                    {
-                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, total, new TwoName("Totals", total.ToString()), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats()));
-                        break;
-                    }
-                    case Totals.BankAccount:
-                    case Totals.Currency:
-                    {
-                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, total, new TwoName("Totals", total.ToString()), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
-                        break;
-                    }
-                    case Totals.BankAccountCompany:
-                    case Totals.BankAccountSector:
-                    {
-                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, total, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
-                        break;
-                    }
-                    case Totals.SecuritySector:
-                    case Totals.SecurityCompany:
-                    case Totals.PensionSector:
-                    case Totals.PensionCompany:
-                    {
-                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, total, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats()));
-                        break;
-                    }
-                    case Totals.Sector:
-                    case Totals.Benchmark:
-                    {
-                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, total, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats()));
-                        break;
-                    }
-                    case Totals.Company:
-                    case Totals.CurrencySector:
-                    case Totals.SecurityCurrency:
-                    case Totals.BankAccountCurrency:
-                        break;
-                }
-
+                stats.Add(new AccountStatistics(portfolio, dateToCalculate, total, StatName(total, name), statisticsToDisplay ?? DefaultStatistics(total)));
                 return stats;
             }
 
             return null;
+        }
+
+        private static TwoName StatName(Totals total, TwoName name)
+        {
+            switch (total)
+            {
+                case Totals.All:
+                default:
+                case Totals.Security:
+                case Totals.Pension:
+                case Totals.BankAccount:
+                case Totals.Currency:
+                    return new TwoName("Totals", total.ToString());
+                case Totals.BankAccountCompany:
+                case Totals.BankAccountSector:
+                case Totals.Company:
+                case Totals.SecuritySector:
+                case Totals.SecurityCompany:
+                case Totals.PensionSector:
+                case Totals.PensionCompany:
+                case Totals.Sector:
+                case Totals.Benchmark:
+                case Totals.CurrencySector:
+                case Totals.SecurityCurrency:
+                case Totals.BankAccountCurrency:
+                    return name;
+            }
+        }
+
+        private static Statistic[] DefaultStatistics(Totals total)
+        {
+            switch (total)
+            {
+                case Totals.All:
+                default:
+                case Totals.Security:
+                case Totals.Pension:
+                case Totals.Company:
+                case Totals.SecuritySector:
+                case Totals.SecurityCompany:
+                case Totals.PensionSector:
+                case Totals.PensionCompany:
+                case Totals.SecurityCurrency:
+                case Totals.CurrencySector:
+                case Totals.PensionCurrency:
+                    return AccountStatisticsHelpers.DefaultSecurityStats();
+                case Totals.BankAccount:
+                case Totals.Currency:
+                case Totals.BankAccountCompany:
+                case Totals.BankAccountSector:
+                case Totals.BankAccountCurrency:
+                    return AccountStatisticsHelpers.DefaultBankAccountStats();
+                case Totals.Sector:
+                case Totals.Benchmark:
+                    return AccountStatisticsHelpers.DefaultSectorStats();
+                case Totals.Asset:
+                case Totals.AssetCompany:
+                case Totals.AssetSector:
+                case Totals.AssetCurrency:
+                    return AccountStatisticsHelpers.DefaultAssetStats();
+            }
         }
     }
 }
