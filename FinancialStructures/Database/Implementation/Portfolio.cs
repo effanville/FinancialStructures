@@ -49,6 +49,7 @@ namespace FinancialStructures.Database.Implementation
 
         /// <inheritdoc/>
         [XmlArray(ElementName = "Funds")]
+        [XmlArrayItem(ElementName = "Security")]
         public List<Security> Funds
         {
             get;
@@ -73,6 +74,7 @@ namespace FinancialStructures.Database.Implementation
         /// Backing for the BankAccounts.
         /// </summary>
         [XmlArray(ElementName = "BankAccounts")]
+        [XmlArrayItem(ElementName = "CashAccount")]
         public List<CashAccount> BankAccounts
         {
             get;
@@ -96,6 +98,7 @@ namespace FinancialStructures.Database.Implementation
         /// Backing for the currencies.
         /// </summary>
         [XmlArray(ElementName = "Currencies")]
+        [XmlArrayItem(ElementName = "Currency")]
         public List<Currency> Currencies
         {
             get;
@@ -117,6 +120,7 @@ namespace FinancialStructures.Database.Implementation
 
         /// <inheritdoc/>
         [XmlArray(ElementName = "BenchMarks")]
+        [XmlArrayItem(ElementName = "Sector")]
         public List<Sector> BenchMarks
         {
             get;
@@ -140,6 +144,7 @@ namespace FinancialStructures.Database.Implementation
         /// The list of assets in the portfolio.
         /// </summary>
         [XmlArray(ElementName = "Assets")]
+        [XmlArrayItem(ElementName = "AmortisableAsset")]
         public List<AmortisableAsset> AssetsBackingList
         {
             get;
@@ -163,6 +168,7 @@ namespace FinancialStructures.Database.Implementation
         /// A list storing the actual data for all Pensions
         /// </summary>
         [XmlArray(ElementName = "Pensions")]
+        [XmlArrayItem(ElementName = "Pension")]
         public List<Security> PensionsBackingList
         {
             get;
@@ -365,7 +371,7 @@ namespace FinancialStructures.Database.Implementation
                 asset.SetupEventListening();
             }
 
-            foreach(Security pension in PensionsBackingList)
+            foreach (Security pension in PensionsBackingList)
             {
                 pension.DataEdit += OnPortfolioChanged;
                 pension.SetupEventListening();
