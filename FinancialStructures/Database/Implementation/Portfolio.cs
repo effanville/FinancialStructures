@@ -181,7 +181,10 @@ namespace FinancialStructures.Database.Implementation
         {
             get
             {
-                return PensionsBackingList.ToList();
+                lock (PensionsLock)
+                {
+                    return PensionsBackingList.ToList();
+                }
             }
         }
 
