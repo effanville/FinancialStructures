@@ -54,7 +54,7 @@ namespace FinancialStructures.Database.Extensions.Values
             return portfolio.CalculateStatistic<ISecurity, List<Labelled<TwoName, DailyValuation>>>(
                account,
                name,
-               (acc, n) => acc == Account.Security,
+               (acc, n) => acc == Account.Security || acc == Account.Pension,
                security => Calculate(security));
             List<Labelled<TwoName, DailyValuation>> Calculate(ISecurity sec)
             {

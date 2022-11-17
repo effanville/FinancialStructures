@@ -25,6 +25,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
             switch (account)
             {
                 case Account.Security:
+                case Account.Pension:
                 {
                     decimal sum = 0.0m;
                     List<Labelled<TwoName, DailyValuation>> investments = portfolio.Investments(account, name);
