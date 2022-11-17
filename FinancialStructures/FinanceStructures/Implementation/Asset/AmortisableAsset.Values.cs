@@ -87,7 +87,7 @@ namespace FinancialStructures.FinanceStructures.Implementation.Asset
         /// <inheritdoc/>
         public DailyValuation FirstValue(ICurrency currency)
         {
-            DailyValuation firstDate = Payments.FirstValuation();
+            DailyValuation firstDate = Values.FirstValuation();
             DailyValuation firstDebt = Debt.FirstValuation();
             if (firstDate == null)
             {

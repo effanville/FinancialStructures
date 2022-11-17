@@ -134,13 +134,13 @@ namespace FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Security</th><td>Prudential</td><td>China Stock</td><td>HKD</td><td>£25,528.05</td><td>HK$1,001.10</td><td>25.5</td><td>£1,193.94</td><td>-£14,666.84</td><td>0.97</td><td>1</td><td>£23,042.96</td><td>£2,485.09</td><td>0</td><td>0</td><td>0</td><td>0.59</td><td>1.22</td><td>36.48</td><td>36.48</td><td></td><td>1</td><td>5/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>6</td><td>1.6657</td><td></td>
+<th scope=""row"">Security</th><td>Prudential</td><td>China Stock</td><td>HKD</td><td>£25,528.05</td><td>HK$1,001.10</td><td>25.5</td><td>£1,193.94</td><td>-£14,666.84</td><td>0.97</td><td>1</td><td>£23,042.96</td><td>£2,485.09</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0.59</td><td>1.22</td><td>36.48</td><td>36.48</td><td></td><td>1</td><td>5/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>6</td><td>1.6657</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Security</th><td>BlackRock</td><td>UK Stock</td><td></td><td>£556.05</td><td>£101.10</td><td>5.5</td><td>£100.00</td><td>£113.16</td><td>0.02</td><td>1</td><td>£200.00</td><td>£356.05</td><td>0</td><td>0</td><td>0</td><td>10.73</td><td>10.76</td><td>74.32</td><td>83.26</td><td></td><td>1</td><td>1/1/2010</td><td>1/1/2010</td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
+<th scope=""row"">Security</th><td>BlackRock</td><td>UK Stock</td><td></td><td>£556.05</td><td>£101.10</td><td>5.5</td><td>£100.00</td><td>£113.16</td><td>0.02</td><td>1</td><td>£200.00</td><td>£356.05</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>10.73</td><td>10.76</td><td>74.32</td><td>83.26</td><td></td><td>1</td><td>1/1/2010</td><td>1/1/2010</td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Security</th><td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>0</td><td>0</td><td>0</td><td>-£14,553.68</td><td>0.95</td><td>0</td><td>£23,242.96</td><td>£2,841.14</td><td>0</td><td>0</td><td>0</td><td>0.76</td><td>1.51</td><td>35.94</td><td>35.94</td><td></td><td>2</td><td>1/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+<th scope=""row"">Security</th><td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>0</td><td>0</td><td>0</td><td>-£14,553.68</td><td>0.95</td><td>0</td><td>£23,242.96</td><td>£2,841.14</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0.76</td><td>1.51</td><td>35.94</td><td>35.94</td><td></td><td>2</td><td>1/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -168,7 +168,7 @@ namespace FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Pension</th><td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>0</td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
+<th scope=""row"">Pension</th><td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>0</td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
 </tr>
 </tbody>
 </table>

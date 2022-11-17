@@ -58,7 +58,7 @@ namespace FinancialStructures.Database.Statistics.Implementation
             ICurrency currency = portfolio.Currency(asset);
             var latestValue = asset.Debt.LatestValuation();
             decimal currencyValue = currency == null ? 1.0m : currency.Value(date)?.Value ?? 1.0m;
-            return (double)(latestValue?.Value * currencyValue);
+            return (double)(latestValue?.Value * currencyValue ?? 0.0m);
         }
     }
 }
