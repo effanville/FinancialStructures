@@ -29,6 +29,10 @@ namespace FinancialStructures.FinanceStructures.Statistics
             {
                 return security.Profit(currency);
             }
+            if (valueList is IAmortisableAsset asset)
+            {
+                return asset.Profit(currency);
+            }
 
             if (!valueList.Any())
             {
@@ -51,7 +55,16 @@ namespace FinancialStructures.FinanceStructures.Statistics
             }
 
             return valueList.LatestValue(currency).Value - valueList.TotalInvestment(currency);
+        }
 
+        public static decimal Profit(this IAmortisableAsset asset, ICurrency currency)
+        {
+            if (!asset.Any())
+            {
+                return 0.0m;
+            }
+
+            return asset.LatestValue(currency).Value - asset.TotalCost(currency);
         }
     }
 }

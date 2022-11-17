@@ -36,6 +36,8 @@ namespace FinancialStructures.Database.Statistics
                     return new StatisticFundCompanyFraction();
                 case Statistic.Investment:
                     return new StatisticInvestment();
+                case Statistic.Debt:
+                    return new StatisticDebt();
                 case Statistic.Profit:
                     return new StatisticProfit();
                 case Statistic.IRR3M:

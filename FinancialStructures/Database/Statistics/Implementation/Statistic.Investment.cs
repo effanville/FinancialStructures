@@ -4,8 +4,9 @@ using System.Linq;
 
 using Common.Structure.DataStructures;
 using Common.Structure.NamingStructures;
-
+using FinancialStructures.Database.Extensions;
 using FinancialStructures.Database.Extensions.Values;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Statistics.Implementation
@@ -20,18 +21,45 @@ namespace FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
-            decimal sum = 0.0m;
-            List<Labelled<TwoName, DailyValuation>> investments = portfolio.Investments(account, name);
-            if (investments != null && investments.Any())
+            fCurrency = portfolio.BaseCurrency;
+            switch (account)
             {
-                foreach (Labelled<TwoName, DailyValuation> investment in investments)
+                case Account.Security:
                 {
-                    sum += investment.Instance.Value;
+                    decimal sum = 0.0m;
+                    List<Labelled<TwoName, DailyValuation>> investments = portfolio.Investments(account, name);
+                    if (investments != null && investments.Any())
+                    {
+                        foreach (Labelled<TwoName, DailyValuation> investment in investments)
+                        {
+                            sum += investment.Instance.Value;
+                        }
+                    }
+
+                    Value = (double)sum;
+                    return;
+                }
+                case Account.Asset:
+                {
+                    Value = portfolio.CalculateStatistic<IAmortisableAsset, double>(
+                        account,
+                        name,
+                        (acc, n) => acc == Account.Asset,
+                        asset => Calculate(asset));
+                    double Calculate(IAmortisableAsset asset)
+                    {
+                        ICurrency currency = portfolio.Currency(asset);
+                        return (double)asset.TotalCost(date, currency);
+                    }
+
+                    return;
+                }
+                default:
+                {
+                    Value = 0.0;
+                    return;
                 }
             }
-
-            fCurrency = portfolio.BaseCurrency;
-            Value = (double)sum;
         }
 
         /// <inheritdoc/>

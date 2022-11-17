@@ -71,6 +71,11 @@
         Profit,
 
         /// <summary>
+        /// The debt against this object.
+        /// </summary>
+        Debt,
+
+        /// <summary>
         /// The IRR over the past 3 months of this.
         /// </summary>
         IRR3M,
