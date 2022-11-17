@@ -56,6 +56,11 @@ namespace FinancialStructures.Database.Implementation
                     AddAccount(accountType, new AmortisableAsset(name), AssetsBackingList, AssetsLock);
                     break;
                 }
+                case Account.Pension:
+                {
+                    AddAccount(accountType, new Security(name), PensionsBackingList, PensionsLock);
+                    break;
+                }
                 default:
                     _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, $"Adding an Unknown type to portfolio.");
                     return false;

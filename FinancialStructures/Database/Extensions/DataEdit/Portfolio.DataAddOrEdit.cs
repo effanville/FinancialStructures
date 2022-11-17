@@ -50,7 +50,7 @@ namespace FinancialStructures.Database.Extensions
             return portfolio.TryPerformEdit<ISecurity>(
                 account,
                 name,
-                (acc, n) => acc == Account.Security,
+                (acc, n) => acc == Account.Security || acc == Account.Pension,
                 security => security.TryAddOrEditTradeData(oldTrade, newTrade, reportLogger),
                 ReportLocation.AddingData,
                 reportLogger);

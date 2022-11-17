@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>22.9</VersionPrefix>
-    <VersionSuffix></VersionSuffix>
+	  <VersionPrefix>22.9.0.$([System.DateTime]::UtcNow.ToString(`MMdd`))</VersionPrefix>
+	  <VersionSuffix>$([System.DateTime]::UtcNow.ToString(`yyyyMMdd-HHmm`))</VersionSuffix>
   </PropertyGroup>
 
   <Import Project="..\Build\CommonProperties.Build.props" />
@@ -21,7 +21,7 @@
 
   <ItemGroup>
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
-    <PackageReference Include="System.IO.Abstractions" Version="17.0.24" />
+    <PackageReference Include="System.IO.Abstractions" Version="17.2.3" />
   </ItemGroup>
 
   <ItemGroup>

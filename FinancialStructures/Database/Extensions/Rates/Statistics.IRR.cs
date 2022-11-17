@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Common.Structure.DataStructures;
 using Common.Structure.MathLibrary.Finance;
 using FinancialStructures.Database.Extensions.Values;
@@ -36,29 +37,28 @@ namespace FinancialStructures.Database.Extensions.Rates
                 case Totals.SecurityCompany:
                 case Totals.Sector:
                 case Totals.SecuritySector:
+                case Totals.Pension:
+                case Totals.PensionCompany:
+                case Totals.PensionSector:
+                case Totals.Company:
+                case Totals.SecurityCurrency:
                 {
-                    return TotalSecurityIRROf(accounts, portfolio, earlierTime, laterTime, numIterations);
+                    return TotalIRR(accounts, portfolio, earlierTime, laterTime, numIterations);
                 }
                 case Totals.BankAccount:
+                case Totals.BankAccountCompany:
+                case Totals.BankAccountSector:
+                case Totals.BankAccountCurrency:
                 case Totals.Asset:
-                {
-                    return TotalExchangableValueListCAROf(accounts, portfolio, earlierTime, laterTime);
-                }
-                case Totals.Benchmark:
-                case Totals.Currency:
-                {
-                    return TotalValueListCAROf(accounts, earlierTime, laterTime);
-                }
-
                 case Totals.AssetCompany:
                 case Totals.AssetSector:
                 case Totals.AssetCurrency:
-                case Totals.BankAccountCompany:
-                case Totals.Company:
-                case Totals.BankAccountSector:
+                case Totals.Benchmark:
+                case Totals.Currency:
                 case Totals.CurrencySector:
-                case Totals.SecurityCurrency:
-                case Totals.BankAccountCurrency:
+                {
+                    return TotalCAR(accounts, portfolio, earlierTime, laterTime);
+                }
                 default:
                 {
                     return 0.0;
@@ -66,40 +66,45 @@ namespace FinancialStructures.Database.Extensions.Rates
             }
         }
 
-        private static double TotalValueListCAROf(IReadOnlyList<IValueList> valueLists, DateTime earlierTime, DateTime laterTime)
+        private static double TotalCAR(IReadOnlyList<IValueList> valueLists, IPortfolio portfolio, DateTime earlierTime, DateTime laterTime)
         {
+            if (!valueLists.Any())
+            {
+                return 0.0;
+            }
+
             decimal earlierValue = 0;
             decimal laterValue = 0;
 
-            foreach (IValueList currency in valueLists)
+            foreach (IValueList valueList in valueLists)
             {
-                earlierValue += currency.Value(earlierTime).Value;
-                laterValue += currency.Value(laterTime).Value;
+                if (valueList is ISecurity security && security.Any())
+                {
+                    ICurrency currency = portfolio.Currency(security.Names.Currency);
+                    earlierValue += security.Value(earlierTime, currency).Value;
+                    laterValue += security.Value(laterTime, currency).Value;
+                }
+                else if (valueList is IExchangableValueList exchangableValueList && exchangableValueList.Any())
+                {
+                    ICurrency currency = portfolio.Currency(exchangableValueList.Names.Currency);
+                    earlierValue += exchangableValueList.Value(earlierTime, currency).Value;
+                    laterValue += exchangableValueList.Value(laterTime, currency).Value;
+                }
+                else
+                {
+                    earlierValue += valueList.Value(earlierTime).Value;
+                    laterValue += valueList.Value(laterTime).Value;
+                }
             }
 
             return FinanceFunctions.CAR(new DailyValuation(earlierTime, earlierValue), new DailyValuation(laterTime, laterValue));
         }
 
-        private static double TotalExchangableValueListCAROf(IReadOnlyList<IValueList> valueLists, IPortfolio portfolio, DateTime earlierTime, DateTime laterTime)
+        private static double TotalIRR(IReadOnlyList<IValueList> valueLists, IPortfolio portfolio, DateTime earlierTime, DateTime laterTime, int numIterations)
         {
-            decimal earlierValue = 0;
-            decimal laterValue = 0;
-
-            foreach (IExchangableValueList bankAccount in valueLists)
+            if (!valueLists.Any())
             {
-                ICurrency currency = portfolio.Currency(bankAccount.Names.Currency);
-                earlierValue += bankAccount.Value(earlierTime, currency).Value;
-                laterValue += bankAccount.Value(laterTime, currency).Value;
-            }
-
-            return FinanceFunctions.CAR(new DailyValuation(earlierTime, earlierValue), new DailyValuation(laterTime, laterValue));
-        }
-
-        private static double TotalSecurityIRROf(IReadOnlyList<IValueList> valueLists, IPortfolio portfolio, DateTime earlierTime, DateTime laterTime, int numIterations)
-        {
-            if (valueLists.Count == 0)
-            {
-                return double.NaN;
+                return 0.0;
             }
 
             decimal earlierValue = 0;
@@ -114,6 +119,17 @@ namespace FinancialStructures.Database.Extensions.Rates
                     earlierValue += security.Value(earlierTime, currency).Value;
                     laterValue += security.Value(laterTime, currency).Value;
                     investments.AddRange(security.InvestmentsBetween(earlierTime, laterTime, currency));
+                }
+                else if (valueList is IExchangableValueList exchangableValueList && exchangableValueList.Any())
+                {
+                    ICurrency currency = portfolio.Currency(exchangableValueList.Names.Currency);
+                    earlierValue += exchangableValueList.Value(earlierTime, currency).Value;
+                    laterValue += exchangableValueList.Value(laterTime, currency).Value;
+                }
+                else
+                {
+                    earlierValue += valueList.Value(earlierTime).Value;
+                    laterValue += valueList.Value(laterTime).Value;
                 }
             }
 

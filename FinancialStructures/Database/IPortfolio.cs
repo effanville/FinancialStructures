@@ -111,6 +111,14 @@ namespace FinancialStructures.Database
         }
 
         /// <summary>
+        /// Accounts that are held as pensions.
+        /// </summary>
+        IReadOnlyList<ISecurity> Pensions
+        {
+            get;
+        }
+
+        /// <summary>
         /// Number of type in the database.
         /// </summary>
         /// <param name="accountType">The type to search for.</param>

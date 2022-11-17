@@ -37,6 +37,10 @@
                 {
                     return Totals.Asset;
                 }
+                case Account.Pension:
+                {
+                    return Totals.Pension;
+                }
             }
         }
 
@@ -85,6 +89,13 @@
                 {
                     return Account.Asset;
                 }
+                case Totals.Pension:
+                case Totals.PensionCompany:
+                case Totals.PensionSector:
+                case Totals.PensionCurrency:
+                {
+                    return Account.Pension;
+                }
             }
         }
 
@@ -132,6 +143,14 @@
                 case Totals.AssetCurrency:
                 {
                     return Totals.AssetCompany;
+                }
+                                
+                case Totals.PensionCompany:
+                case Totals.Pension:
+                case Totals.PensionSector:
+                case Totals.PensionCurrency:
+                {
+                    return Totals.PensionCompany;
                 }
             }
         }

@@ -18,6 +18,7 @@ namespace FinancialStructures.Database.Implementation
         private readonly object CurrenciesLock = new object();
         private readonly object BenchmarksLock = new object();
         private readonly object AssetsLock = new object();
+        private readonly object PensionsLock = new object();
 
         /// <summary>
         /// Flag to state when the user has altered values in the portfolio
@@ -48,6 +49,7 @@ namespace FinancialStructures.Database.Implementation
 
         /// <inheritdoc/>
         [XmlArray(ElementName = "Funds")]
+        [XmlArrayItem(ElementName = "Security")]
         public List<Security> Funds
         {
             get;
@@ -72,6 +74,7 @@ namespace FinancialStructures.Database.Implementation
         /// Backing for the BankAccounts.
         /// </summary>
         [XmlArray(ElementName = "BankAccounts")]
+        [XmlArrayItem(ElementName = "CashAccount")]
         public List<CashAccount> BankAccounts
         {
             get;
@@ -95,6 +98,7 @@ namespace FinancialStructures.Database.Implementation
         /// Backing for the currencies.
         /// </summary>
         [XmlArray(ElementName = "Currencies")]
+        [XmlArrayItem(ElementName = "Currency")]
         public List<Currency> Currencies
         {
             get;
@@ -116,6 +120,7 @@ namespace FinancialStructures.Database.Implementation
 
         /// <inheritdoc/>
         [XmlArray(ElementName = "BenchMarks")]
+        [XmlArrayItem(ElementName = "Sector")]
         public List<Sector> BenchMarks
         {
             get;
@@ -139,6 +144,7 @@ namespace FinancialStructures.Database.Implementation
         /// The list of assets in the portfolio.
         /// </summary>
         [XmlArray(ElementName = "Assets")]
+        [XmlArrayItem(ElementName = "AmortisableAsset")]
         public List<AmortisableAsset> AssetsBackingList
         {
             get;
@@ -154,6 +160,30 @@ namespace FinancialStructures.Database.Implementation
                 lock (AssetsLock)
                 {
                     return AssetsBackingList.ToList();
+                }
+            }
+        }
+
+        /// <summary>
+        /// A list storing the actual data for all Pensions
+        /// </summary>
+        [XmlArray(ElementName = "Pensions")]
+        [XmlArrayItem(ElementName = "Pension")]
+        public List<Security> PensionsBackingList
+        {
+            get;
+            private set;
+        } = new List<Security>();
+
+        /// <inheritdoc />
+        [XmlIgnore]
+        public IReadOnlyList<ISecurity> Pensions
+        {
+            get
+            {
+                lock (PensionsLock)
+                {
+                    return PensionsBackingList.ToList();
                 }
             }
         }
@@ -175,6 +205,7 @@ namespace FinancialStructures.Database.Implementation
             Currencies = portfolio.Currencies;
             BenchMarks = portfolio.BenchMarks;
             AssetsBackingList = portfolio.AssetsBackingList;
+            PensionsBackingList = portfolio.PensionsBackingList;
             NotesInternal = portfolio.NotesInternal;
         }
 
@@ -256,6 +287,10 @@ namespace FinancialStructures.Database.Implementation
                 {
                     return AssetsBackingList.Count;
                 }
+                case Account.Pension:
+                {
+                    return PensionsBackingList.Count;
+                }
                 default:
                     break;
             }
@@ -287,6 +322,10 @@ namespace FinancialStructures.Database.Implementation
                 case Account.Asset:
                 {
                     return AssetsBackingList.Where(fund => selector(fund)).Count();
+                }
+                case Account.Pension:
+                {
+                    return PensionsBackingList.Where(fund => selector(fund)).Count();
                 }
                 default:
                     return 0;
@@ -333,6 +372,12 @@ namespace FinancialStructures.Database.Implementation
             {
                 asset.DataEdit += OnPortfolioChanged;
                 asset.SetupEventListening();
+            }
+
+            foreach (Security pension in PensionsBackingList)
+            {
+                pension.DataEdit += OnPortfolioChanged;
+                pension.SetupEventListening();
             }
         }
     }

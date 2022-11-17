@@ -146,20 +146,41 @@ namespace FinancialStructures.FinanceStructures.Implementation.Asset
         }
 
         /// <inheritdoc/>
-        public decimal TotalCost()
+        public decimal TotalCost(ICurrency currency = null)
         {
-            return Payments.Sum();
+            if (!Any())
+            {
+                return 0.0m;
+            }
+
+            return TotalCost(FirstValue().Day, LatestValue().Day, currency);
         }
 
         /// <inheritdoc/>
-        public decimal TotalCost(DateTime date)
+        public decimal TotalCost(DateTime date, ICurrency currency = null)
         {
-            return Payments.Sum(val => val.Day <= date);
+            if (!Any())
+            {
+                return 0.0m;
+            }
+
+            return TotalCost(FirstValue().Day, date, currency);
         }
 
         /// <inheritdoc/>
-        public decimal TotalCost(DateTime earlierDate, DateTime laterDate)
+        public decimal TotalCost(DateTime earlierDate, DateTime laterDate, ICurrency currency = null)
         {
+            if (!Any())
+            {
+                return 0.0m;
+            }
+
+            List<DailyValuation> payments = PaymentsBetween(earlierDate, laterDate, currency);
+            decimal sum = 0;
+            foreach (DailyValuation investment in payments)
+            {
+                sum += investment.Value;
+            }
             return Payments.Sum(val => val.Day >= earlierDate && val.Day <= laterDate);
         }
     }
