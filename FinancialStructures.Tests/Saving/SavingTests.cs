@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
+using Common.Structure.DataStructures;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Extensions;
 using FinancialStructures.Database.Implementation;
@@ -104,8 +105,10 @@ namespace FinancialStructures.Tests.Saving
   </MyFunds>
 </AllData>");
             Portfolio portfolioWithData = new Portfolio() { FilePath = "c:/temp/saved.xml" };
+            var name = new TwoName("company", "name");
             _ = portfolioWithData.TryAdd(Account.Security, new NameData("company", "name", "GBP", "http://temp.com", new HashSet<string>() { "UK", "China" }, "some information"));
-            _ = portfolioWithData.TryAddOrEditDataToSecurity(new TwoName("company", "name"), new DateTime(2015, 1, 1), new DateTime(2015, 1, 1), 5, 1.2m, 6, null);
+            _ = portfolioWithData.TryAddOrEditTradeData(Account.Security, name, new SecurityTrade(new DateTime(2015, 1, 1)), new SecurityTrade(TradeType.Buy, name, new DateTime(2015, 1, 1), 5, 1.2m, 0.0m));
+            _ = portfolioWithData.TryAddOrEditData(Account.Security, name, new DailyValuation(new DateTime(2015, 1, 1), 1.2m), new DailyValuation(new DateTime(2015, 1, 1), 1.2m));
             _ = portfolioWithData.TryAdd(Account.BankAccount, new NameData("bank", "account"));
             _ = portfolioWithData.TryAdd(Account.Currency, new NameData("gbp", "hkd"));
             _ = portfolioWithData.TryAdd(Account.Benchmark, new NameData("first", "last"));
@@ -214,7 +217,8 @@ namespace FinancialStructures.Tests.Saving
 </AllData>");
             Portfolio portfolioWithData = new Portfolio() { FilePath = "c:/temp/saved.xml" };
             _ = portfolioWithData.TryAdd(Account.Security, new NameData("company", "name", "GBP", "http://temp.com", new HashSet<string>() { "UK", "China" }, "some information"));
-            _ = portfolioWithData.TryAddOrEditDataToSecurity(new TwoName("company", "name"), new DateTime(2015, 1, 1), new DateTime(2015, 1, 1), 5, 1.2m, 6, new SecurityTrade(TradeType.Buy, new TwoName("company", "name"), new DateTime(2015, 1, 1), 5, 1.2m, 0));
+            _ = portfolioWithData.TryAddOrEditTradeData(Account.Security, new TwoName("company", "name"), new SecurityTrade(new DateTime(2015, 1, 1)), new SecurityTrade(TradeType.Buy, new TwoName("company", "name"), new DateTime(2015, 1, 1), 5, 1.2m, 0));
+            _ = portfolioWithData.TryAddOrEditData(Account.Security, new TwoName("company", "name"), new DailyValuation(new DateTime(2015, 1, 1), 1.2m), new DailyValuation(new DateTime(2015, 1, 1), 1.2m));
             _ = portfolioWithData.TryAdd(Account.BankAccount, new NameData("bank", "account"));
             _ = portfolioWithData.TryAdd(Account.Currency, new NameData("gbp", "hkd"));
             _ = portfolioWithData.TryAdd(Account.Benchmark, new NameData("first", "last"));
@@ -241,7 +245,7 @@ namespace FinancialStructures.Tests.Saving
         </Values>
         <Shares>
           <Values>
-            <DV D=""2015-01-01T00:00:00"" V=""5"" />
+            <DV D=""2015-01-01T00:00:00"" V=""5.0"" />
           </Values>
         </Shares>
         <UnitPrice>

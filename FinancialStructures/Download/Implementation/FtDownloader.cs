@@ -12,7 +12,8 @@ namespace FinancialStructures.Download.Implementation
     /// </summary>
     internal sealed class FtDownloader : IPriceDownloader
     {
-        private static readonly string fBaseUrl = "https://markets.ft.com/";
+        /// <inheritdoc/>
+        public string BaseUrl => "https://markets.ft.com/";
 
         internal FtDownloader()
         {

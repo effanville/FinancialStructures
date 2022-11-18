@@ -57,6 +57,9 @@ namespace FinancialStructures.FinanceStructures.Statistics
             return valueList.LatestValue(currency).Value - valueList.TotalInvestment(currency);
         }
 
+        /// <summary>
+        /// Calculates the difference between the last two values of a <see cref="IAmortisableAsset"/>.
+        /// </summary>
         public static decimal Profit(this IAmortisableAsset asset, ICurrency currency)
         {
             if (!asset.Any())
