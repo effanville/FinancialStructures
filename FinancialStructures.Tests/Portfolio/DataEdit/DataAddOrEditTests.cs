@@ -4,6 +4,7 @@ using Common.Structure.DataStructures;
 using FinancialStructures.Database;
 using FinancialStructures.Database.Extensions;
 using FinancialStructures.Database.Implementation;
+using FinancialStructures.DataStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
@@ -20,7 +21,8 @@ namespace FinancialStructures.Tests.Database.DataEdit
             _ = constructor.WithSecurity("Company", "Name");
 
             Portfolio portfolio = constructor.Database;
-            bool success = portfolio.TryAddOrEditDataToSecurity(new TwoName("Company", "Name"), new DateTime(2010, 1, 1), new DateTime(2010, 1, 1), 1, 1, 1, null);
+            _ = portfolio.TryAddOrEditData(Account.Security, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 1), new DailyValuation(new DateTime(2010, 1, 1), 1));
+            bool success = portfolio.TryAddOrEditTradeData(Account.Security, new TwoName("Company", "Name"), new SecurityTrade(new DateTime(2010, 1, 1)), new SecurityTrade(TradeType.Buy, new TwoName("Company", "Name"), new DateTime(2010, 1, 1), 1, 1, 0));
 
             Assert.IsTrue(success);
             Assert.AreEqual(1, portfolio.Funds.Single().Count());
@@ -48,7 +50,8 @@ namespace FinancialStructures.Tests.Database.DataEdit
 
             Portfolio portfolio = constructor.Database;
 
-            bool success = portfolio.TryAddOrEditDataToSecurity(new TwoName("Company", "Name"), new DateTime(2010, 1, 1), new DateTime(2010, 1, 1), 1, 1, 1, null);
+            _ = portfolio.TryAddOrEditData(Account.Security, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 1), new DailyValuation(new DateTime(2010, 1, 1), 1));
+            bool success = portfolio.TryAddOrEditTradeData(Account.Security, new TwoName("Company", "Name"), new SecurityTrade(new DateTime(2010, 1, 1)), new SecurityTrade(TradeType.Buy, new TwoName("Company", "Name"), new DateTime(2010, 1, 1), 1, 1, 0));
 
             Assert.IsTrue(success);
             Assert.AreEqual(1, portfolio.Funds.Single().Count());
@@ -78,7 +81,8 @@ namespace FinancialStructures.Tests.Database.DataEdit
 
             Portfolio portfolio = constructor.Database;
 
-            bool success = portfolio.TryAddOrEditDataToSecurity(new TwoName("Company", "Name"), new DateTime(2010, 1, 1), new DateTime(2010, 1, 1), 1, 1, 1, null);
+            _ = portfolio.TryAddOrEditData(Account.Security, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 1), new DailyValuation(new DateTime(2010, 1, 1), 1));
+            bool success = portfolio.TryAddOrEditTradeData(Account.Security, new TwoName("Company", "Name"), new SecurityTrade(new DateTime(2010, 1, 1)), new SecurityTrade(TradeType.Buy, new TwoName("Company", "Name"), new DateTime(2010, 1, 1), 1, 1, 0));
 
             Assert.IsTrue(success);
             Assert.AreEqual(1, portfolio.Funds.Single().Count());
@@ -105,8 +109,8 @@ namespace FinancialStructures.Tests.Database.DataEdit
             _ = constructor.WithSecurity("Company", "Name", dates: new DateTime[] { new DateTime(2010, 1, 1) }, sharePrice: new decimal[] { 2.0m }, numberUnits: new decimal[] { 100.0m }, investment: new decimal[] { 0.0m });
 
             Portfolio portfolio = constructor.Database;
-
-            bool success = portfolio.TryAddOrEditDataToSecurity(new TwoName("Company", "Name"), new DateTime(2010, 1, 1), new DateTime(2020, 1, 1), 1, 1, 1, null);
+            _ = portfolio.TryAddOrEditData(Account.Security, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 1), new DailyValuation(new DateTime(2010, 1, 1), 1));
+            bool success = portfolio.TryAddOrEditTradeData(Account.Security, new TwoName("Company", "Name"), new SecurityTrade(new DateTime(2010, 1, 1)), new SecurityTrade(TradeType.Buy, new TwoName("Company", "Name"), new DateTime(2010, 1, 1), 1, 1, 0));
 
             Assert.IsTrue(success);
             Assert.AreEqual(1, portfolio.Funds.Single().Count());

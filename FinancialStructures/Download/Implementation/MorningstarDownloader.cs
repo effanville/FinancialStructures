@@ -12,7 +12,9 @@ namespace FinancialStructures.Download.Implementation
     /// </summary>
     internal sealed class MorningstarDownloader : IPriceDownloader
     {
-        private static readonly string fBaseUrl = "https://www.morningstar.co.uk/";
+        /// <inheritdoc/>
+        public string BaseUrl => "https://www.morningstar.co.uk/";
+
         /// <inheritdoc/>
         public Task<bool> TryGetIdentifier(TwoName name, Action<string> getIdentifierAction, IReportLogger reportLogger = null)
         {
@@ -40,7 +42,7 @@ namespace FinancialStructures.Download.Implementation
         }
 
         /// <inheritdoc/>
-        public async Task<bool> TryGetLatestPrice(string financialCode, Action<decimal> retrieveValueAction, IReportLogger reportLogger = null)
+        public Task<bool> TryGetLatestPrice(string financialCode, Action<decimal> retrieveValueAction, IReportLogger reportLogger = null)
         {
             throw new NotImplementedException();
         }

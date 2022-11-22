@@ -12,7 +12,8 @@ namespace FinancialStructures.Download.Implementation
     /// </summary>
     internal sealed class YahooDownloader : IPriceDownloader
     {
-        private static readonly string fBaseUrl = "https://uk.finance.yahoo.com/";
+        /// <inheritdoc/>
+        public string BaseUrl => "https://uk.finance.yahoo.com/";
 
         internal YahooDownloader()
         {
@@ -34,7 +35,7 @@ namespace FinancialStructures.Download.Implementation
         /// <inheritdoc/>
         public async Task<bool> TryGetLatestPrice(string financialCode, Action<decimal> retrieveValueAction, IReportLogger reportLogger = null)
         {
-            string url = BuildQueryUrl(fBaseUrl, financialCode);
+            string url = BuildQueryUrl(BaseUrl, financialCode);
             return await TryGetPriceInternal(url, financialCode, retrieveValueAction, reportLogger);
         }
 
@@ -63,7 +64,7 @@ namespace FinancialStructures.Download.Implementation
             Action<StockDay> retrieveValueAction,
             IReportLogger reportLogger = null)
         {
-            string url = BuildQueryUrl(fBaseUrl, financialCode);
+            string url = BuildQueryUrl(BaseUrl, financialCode);
             string stockWebsite = await DownloadHelper.GetWebData(url, reportLogger);
             if (string.IsNullOrEmpty(stockWebsite))
             {
@@ -90,7 +91,7 @@ namespace FinancialStructures.Download.Implementation
             Action<IStock> getHistory,
             IReportLogger reportLogger = null)
         {
-            Uri downloadUrl = new Uri($"{BuildQueryUrl(fBaseUrl, financialCode)}/history?period1={DateToYahooInt(firstDate)}&period2={DateToYahooInt(lastDate)}&interval=1d&filter=history&frequency=1d");
+            Uri downloadUrl = new Uri($"{BuildQueryUrl(BaseUrl, financialCode)}/history?period1={DateToYahooInt(firstDate)}&period2={DateToYahooInt(lastDate)}&interval=1d&filter=history&frequency=1d");
             string stockWebsite = await DownloadHelper.GetWebData(downloadUrl.ToString(), reportLogger);
             Stock stock = new Stock();
             string findString = "\"HistoricalPriceStore\":{\"prices\":";

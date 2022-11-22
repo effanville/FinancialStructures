@@ -13,6 +13,14 @@ namespace FinancialStructures.Download
     public interface IPriceDownloader
     {
         /// <summary>
+        /// The base url for the downloader.
+        /// </summary>
+        string BaseUrl
+        {
+            get;
+        }
+
+        /// <summary>
         /// Try to convert the name of the stock into a indentifier to download price data.
         /// </summary>
         /// <returns></returns>

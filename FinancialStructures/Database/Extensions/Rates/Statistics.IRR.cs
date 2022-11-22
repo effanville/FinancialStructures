@@ -81,19 +81,19 @@ namespace FinancialStructures.Database.Extensions.Rates
                 if (valueList is ISecurity security && security.Any())
                 {
                     ICurrency currency = portfolio.Currency(security.Names.Currency);
-                    earlierValue += security.Value(earlierTime, currency).Value;
-                    laterValue += security.Value(laterTime, currency).Value;
+                    earlierValue += security.Value(earlierTime, currency, 0.0m);
+                    laterValue += security.Value(laterTime, currency, 0.0m);
                 }
                 else if (valueList is IExchangableValueList exchangableValueList && exchangableValueList.Any())
                 {
                     ICurrency currency = portfolio.Currency(exchangableValueList.Names.Currency);
-                    earlierValue += exchangableValueList.Value(earlierTime, currency).Value;
-                    laterValue += exchangableValueList.Value(laterTime, currency).Value;
+                    earlierValue += exchangableValueList.Value(earlierTime, currency, 0.0m);
+                    laterValue += exchangableValueList.Value(laterTime, currency, 0.0m);
                 }
                 else
                 {
-                    earlierValue += valueList.Value(earlierTime).Value;
-                    laterValue += valueList.Value(laterTime).Value;
+                    earlierValue += valueList.Value(earlierTime, 0.0m);
+                    laterValue += valueList.Value(laterTime, 0.0m);
                 }
             }
 
@@ -116,20 +116,20 @@ namespace FinancialStructures.Database.Extensions.Rates
                 if (valueList is ISecurity security && security.Any())
                 {
                     ICurrency currency = portfolio.Currency(security.Names.Currency);
-                    earlierValue += security.Value(earlierTime, currency).Value;
-                    laterValue += security.Value(laterTime, currency).Value;
+                    earlierValue += security.Value(earlierTime, currency, 0.0m);
+                    laterValue += security.Value(laterTime, currency, 0.0m);
                     investments.AddRange(security.InvestmentsBetween(earlierTime, laterTime, currency));
                 }
                 else if (valueList is IExchangableValueList exchangableValueList && exchangableValueList.Any())
                 {
                     ICurrency currency = portfolio.Currency(exchangableValueList.Names.Currency);
-                    earlierValue += exchangableValueList.Value(earlierTime, currency).Value;
-                    laterValue += exchangableValueList.Value(laterTime, currency).Value;
+                    earlierValue += exchangableValueList.Value(earlierTime, currency, 0.0m);
+                    laterValue += exchangableValueList.Value(laterTime, currency, 0.0m);
                 }
                 else
                 {
-                    earlierValue += valueList.Value(earlierTime).Value;
-                    laterValue += valueList.Value(laterTime).Value;
+                    earlierValue += valueList.Value(earlierTime, 0.0m);
+                    laterValue += valueList.Value(laterTime, 0.0m);
                 }
             }
 

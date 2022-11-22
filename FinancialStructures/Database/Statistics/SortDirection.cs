@@ -21,6 +21,9 @@
     /// </summary>
     public static class SortDirectionHelpers
     {
+        /// <summary>
+        /// Inverts the SortingDirection.
+        /// </summary>
         public static SortDirection Invert(SortDirection sortDirection)
         {
             if(sortDirection == SortDirection.Ascending)

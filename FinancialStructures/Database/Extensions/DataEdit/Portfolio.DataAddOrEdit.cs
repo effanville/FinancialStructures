@@ -1,6 +1,4 @@
-﻿using System;
-
-using Common.Structure.DataStructures;
+﻿using Common.Structure.DataStructures;
 using Common.Structure.Reporting;
 
 using FinancialStructures.DataStructures;
@@ -52,21 +50,6 @@ namespace FinancialStructures.Database.Extensions
                 name,
                 (acc, n) => acc == Account.Security || acc == Account.Pension,
                 security => security.TryAddOrEditTradeData(oldTrade, newTrade, reportLogger),
-                ReportLocation.AddingData,
-                reportLogger);
-        }
-
-        /// <summary>
-        /// Adds the desired data to the security if it can.
-        /// </summary>
-        [Obsolete("Should use the add or edit trade data method instead.")]
-        public static bool TryAddOrEditDataToSecurity(this IPortfolio portfolio, TwoName name, DateTime oldDate, DateTime date, decimal shares, decimal unitPrice, decimal investment, SecurityTrade trade, IReportLogger reportLogger = null)
-        {
-            return portfolio.TryPerformEdit<ISecurity>(
-                Account.Security,
-                name,
-                (acc, n) => acc == Account.Security,
-                security => security.AddOrEditData(oldDate, date, unitPrice, shares, investment, trade, reportLogger),
                 ReportLocation.AddingData,
                 reportLogger);
         }
