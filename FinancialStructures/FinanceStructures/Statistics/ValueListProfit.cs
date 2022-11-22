@@ -1,6 +1,4 @@
-﻿using FinancialStructures.Database;
-
-namespace FinancialStructures.FinanceStructures.Statistics
+﻿namespace FinancialStructures.FinanceStructures.Statistics
 {
     /// <summary>
     /// Contains extension methods for statistics of <see cref="IValueList"/>s.
