@@ -122,6 +122,10 @@ namespace FinancialStructures.NamingStructures
         /// <inheritdoc/>
         public bool Equals(NameData otherName)
         {
+            if(otherName == null)
+            {
+                return false;
+            }
             bool currenciesEqual = Currency?.Equals(otherName.Currency) ?? otherName.Currency == null;
             bool urlEqual = Url?.Equals(otherName.Url) ?? otherName.Url == null;
             bool sectorsEqual = SectorsFlat?.Equals(otherName.SectorsFlat) ?? otherName.SectorsFlat == null;
