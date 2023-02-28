@@ -118,6 +118,10 @@ namespace FinancialStructures.StockStructures.Implementation
                 {
                     stock.AddValue(valuation.Time, valuation.Open, valuation.High, valuation.Low, valuation.Close, valuation.Volume);
                 }
+                if (valuation.Time == date)
+                {
+                    stock.AddValue(valuation.Time, valuation.Open, decimal.MinValue, decimal.MinValue, decimal.MinValue, decimal.MinValue);
+                }
             }
             return stock;
         }
