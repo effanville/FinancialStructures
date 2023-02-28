@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialStructures.Tests",
 	ProjectSection(ProjectDependencies) = postProject
 		{B86EADB1-3561-470B-9421-2E6992A25346} = {B86EADB1-3561-470B-9421-2E6992A25346}
 	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPDconsole", "FPDconsole\FPDconsole.csproj", "{7FA607A1-AF11-48A7-B410-07E9875685D2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialStructures", "FinancialStructures\FinancialStructures.csproj", "{B86EADB1-3561-470B-9421-2E6992A25346}"
 EndProject
@@ -22,21 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{8989B308
 		Build\CommonProperties.build.props = Build\CommonProperties.build.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPD.UI", "FPD.UI\FPD.UI.csproj", "{EF488959-0392-44B2-A810-5BA18903AC33}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPD.Logic", "FPD.Logic\FPD.Logic.csproj", "{128CC750-D915-4EA1-A23F-46EA530B6807}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FPD.Logic.Tests", "FPD.Logic.Tests\FPD.Logic.Tests.csproj", "{90EDA2DB-996B-497B-8562-C311F37B8A5C}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Structure", "Common\Common.Structure\Common.Structure.csproj", "{A2CB7343-EE36-451E-A71B-5CC4E38C2589}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{5F985C0F-B939-463C-BCCF-060883E478B5}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.UI", "Common\Common.UI\Common.UI.csproj", "{037B9B7D-83E3-4395-9C8C-A1D528C39FA2}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Console", "Common\Common.Console\Common.Console.csproj", "{B86DCF20-F414-4900-817B-3A4B812E9FB5}"
-EndProject
-Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug(Tests)|x64 = Debug(Tests)|x64
 		Debug|x64 = Debug|x64
