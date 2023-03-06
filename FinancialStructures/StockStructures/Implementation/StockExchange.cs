@@ -198,7 +198,7 @@ namespace FinancialStructures.StockStructures.Implementation
                 string code = YahooDownloader.GetFinancialCode(stock.Name.Url);
                 if (await downloader.TryGetLatestPriceData(code, value => stockDay = value, reportLogger))
                 {
-                    stock.AddValue(stockDay.Time, stockDay.Open, stockDay.High, stockDay.Low, stockDay.Close, stockDay.Volume);
+                    stock.AddValue(stockDay.Start, stockDay.Open, stockDay.High, stockDay.Low, stockDay.Close, stockDay.Volume);
                     stock.Sort();
                 }
             }

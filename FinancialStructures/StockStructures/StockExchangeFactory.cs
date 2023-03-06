@@ -55,7 +55,7 @@ namespace FinancialStructures.StockStructures
         /// Updates the values in the stocks in <paramref name="inheritedStockExchange"/> from data in <paramref name="baseStockExchange"/>
         /// <para/> at the time <paramref name="time"/>.
         /// </summary>
-        public static void UpdateFromBase(IStockExchange baseStockExchange, IStockExchange inheritedStockExchange, DateTime time, bool openOnly)
+        public static void UpdateFromBase(IStockExchange baseStockExchange, IStockExchange inheritedStockExchange, DateTime time)
         {
             foreach (Stock stock in baseStockExchange.Stocks)
             {
@@ -63,14 +63,7 @@ namespace FinancialStructures.StockStructures
                 StockDay stockData = stock.GetData(time);
                 if (stockData != null)
                 {
-                    if (openOnly)
-                    {
-                        inheritedStock.AddValue(stockData.Time, stockData.Open, 0.0m, 0.0m, 0.0m, 0.0m);
-                    }
-                    else
-                    {
-                        inheritedStock.AddOrEditValue(stockData.Time, stockData.Open, stockData.High, stockData.Low, stockData.Close, stockData.Volume);
-                    }
+                    inheritedStock.AddOrEditValue(stockData.Start, stockData.Open, stockData.High, stockData.Low, stockData.Close, stockData.Volume);
                 }
             }
         }

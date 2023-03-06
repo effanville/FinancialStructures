@@ -12,7 +12,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// The start time of the interval this data is about.
         /// </summary>
         [XmlAttribute(AttributeName = "T")]
-        public DateTime Time
+        public DateTime Start
         {
             get;
             set;
@@ -26,7 +26,16 @@ namespace FinancialStructures.StockStructures.Implementation
         {
             get;
             set;
-        } = TimeSpan.FromDays(1);
+        } = TimeSpan.FromHours(8.5);
+
+        /// <summary>
+        /// The ending time of the interval this data is about.
+        /// </summary>
+        [XmlIgnore]
+        public DateTime End
+        {
+            get => Start + Duration;
+        }
 
         /// <summary>
         /// The opening price in the interval.
@@ -89,13 +98,20 @@ namespace FinancialStructures.StockStructures.Implementation
         /// Constructor setting all values.
         /// </summary>
         public StockDay(DateTime time, decimal open, decimal high, decimal low, decimal close, decimal volume)
+            : this()
         {
-            Time = time;
+            Start = time;
             Open = open;
             High = high;
             Low = low;
             Close = close;
             Volume = volume;
+        }
+
+        public StockDay(DateTime time, decimal open, decimal high, decimal low, decimal close, decimal volume, TimeSpan duration)
+            : this (time, open, high, low, close, volume)
+        {
+            Duration = duration;
         }
 
         /// <summary>
@@ -128,7 +144,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <inheritdoc/>
         public override string ToString()
         {
-            return $"{Time}-O{Open}-H{High}-L{Low}-C{Close}-V{Volume}";
+            return $"{Start}-O{Open}-H{High}-L{Low}-C{Close}-V{Volume}";
         }
 
         /// <inheritdoc/>
@@ -136,10 +152,15 @@ namespace FinancialStructures.StockStructures.Implementation
         {
             if (obj is StockDay otherPrice)
             {
-                return Time.CompareTo(otherPrice.Time);
+                return Start.CompareTo(otherPrice.Start);
             }
 
             return 0;
+        }
+
+        public StockDay CopyAsOpenOnly()
+        {
+            return new StockDay(Start, Open, 0, 0, 0, 0, Duration);
         }
     }
 }
