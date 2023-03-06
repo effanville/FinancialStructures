@@ -33,7 +33,7 @@ namespace FinancialStructures.Tests.StockStructuresTests
         [Test]
         public void Test()
         {
-            string filePath = "c:\\temp\\example.xml";
+            string filePath = "c:/temp/example.xml";
             var reports = new ErrorReports();
             void reportAction(ReportSeverity severity, ReportType reportType, ReportLocation location, string text)
             {
@@ -50,7 +50,31 @@ namespace FinancialStructures.Tests.StockStructuresTests
             IStockExchange exchange = new StockExchange();
             exchange.LoadStockExchange(filePath, fileSystem, logger);
             exchange.Download(startDate, endDate, logger).Wait();
-            exchange.SaveStockExchange("c:\\temp\\example2.xml", fileSystem, logger);
+            exchange.SaveStockExchange("c:/temp/example2.xml", fileSystem, logger);
+        }
+
+        [Test]
+        public void AddValueTest()
+        {
+            string filePath = "c:/temp/example.xml";
+            var reports = new ErrorReports();
+            void reportAction(ReportSeverity severity, ReportType reportType, ReportLocation location, string text)
+            {
+                reports.AddErrorReport(severity, reportType, location, text);
+            }
+
+            var logger = new LogReporter(reportAction);
+            var fileSystem = new MockFileSystem();
+
+            fileSystem.AddFile(filePath, db);
+
+            var startDate = new DateTime(2010, 1, 1);
+            var endDate = new DateTime(2020, 1, 1);
+            IStockExchange exchange = new StockExchange();
+            exchange.LoadStockExchange(filePath, fileSystem, logger);
+            var stock = exchange.Stocks.First();
+            stock.AddValue(new DateTime(2022, 1, 1), 12, 12, 12, 12, 1444);
+            exchange.SaveStockExchange("c:/temp/example2.xml", fileSystem, logger);
         }
     }
 }

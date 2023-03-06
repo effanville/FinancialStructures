@@ -65,7 +65,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <inheritdoc/>
         public void AddOrEditValue(DateTime time, decimal? newOpen = null, decimal? newHigh = null, decimal? newLow = null, decimal? newClose = null, decimal? newVolume = null)
         {
-            var value = Valuations.FirstOrDefault(val => val.Time.Equals(time));
+            var value = Valuations.FirstOrDefault(val => val.Start.Equals(time));
             if (value == null)
             {
                 AddValue(time, newOpen ?? 0.0m, newHigh ?? 0.0m, newLow ?? 0.0m, newClose ?? 0.0m, newVolume ?? 0.0m);
@@ -114,13 +114,9 @@ namespace FinancialStructures.StockStructures.Implementation
             var stock = new Stock(Ticker, Name.Company, Name.Name, Name.Url);
             foreach (var valuation in Valuations)
             {
-                if (valuation.Time < date)
+                if (valuation.Start < date)
                 {
-                    stock.AddValue(valuation.Time, valuation.Open, valuation.High, valuation.Low, valuation.Close, valuation.Volume);
-                }
-                if (valuation.Time == date)
-                {
-                    stock.AddValue(valuation.Time, valuation.Open, decimal.MinValue, decimal.MinValue, decimal.MinValue, decimal.MinValue);
+                    stock.AddValue(valuation.Start, valuation.Open, valuation.High, valuation.Low, valuation.Close, valuation.Volume);
                 }
             }
             return stock;
