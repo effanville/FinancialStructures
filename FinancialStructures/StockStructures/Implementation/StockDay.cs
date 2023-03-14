@@ -6,6 +6,7 @@ namespace FinancialStructures.StockStructures.Implementation
     /// <summary>
     /// Class containing all data pertaining to a stock.
     /// </summary>
+    [XmlType(TypeName = "StockDay")]
     public class StockDay : IComparable<StockDay>
     {
         /// <summary>

@@ -64,6 +64,20 @@ namespace FinancialStructures.StockStructures.Implementation
         }
 
         /// <inheritdoc/>
+        public StockDay GetCandle(TwoName name, DateTime date)
+        {
+            foreach (Stock stock in Stocks)
+            {
+                if (stock.Name.IsEqualTo(name))
+                {
+                    return stock.GetData(date);
+                }
+            }
+
+            return null;
+        }
+
+        /// <inheritdoc/>
         public DateTime EarliestDate()
         {
             DateTime earliest = Stocks[0].EarliestTime();
@@ -240,13 +254,13 @@ namespace FinancialStructures.StockStructures.Implementation
 
         private void AddStock(string[] parameters, IReportLogger logger = null)
         {
-            if (parameters.Length != 4)
+            if (parameters.Length != 5)
             {
                 _ = logger?.LogUsefulError(ReportLocation.AddingData, "Insufficient Data in line to add Stock");
                 return;
             }
 
-            Stock stock = new Stock(parameters[0], parameters[1], parameters[2], parameters[3]);
+            Stock stock = new Stock(parameters[0], parameters[1], parameters[2], parameters[3], parameters[4]);
             Stocks.Add(stock);
         }
     }
