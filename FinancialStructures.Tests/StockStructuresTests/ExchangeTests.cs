@@ -35,7 +35,7 @@ namespace FinancialStructures.Tests.StockStructuresTests
         {
             string filePath = "c:/temp/example.xml";
             var reports = new ErrorReports();
-            void reportAction(ReportSeverity severity, ReportType reportType, ReportLocation location, string text)
+            void reportAction(ReportSeverity severity, ReportType reportType, string location, string text)
             {
                 reports.AddErrorReport(severity, reportType, location, text);
             }
@@ -46,7 +46,7 @@ namespace FinancialStructures.Tests.StockStructuresTests
             fileSystem.AddFile(filePath, db);
 
             var startDate = new DateTime(2010, 1, 1);
-            var endDate = new DateTime(2020, 1, 1);
+            var endDate = new DateTime(2023, 1, 1);
             IStockExchange exchange = new StockExchange();
             exchange.LoadStockExchange(filePath, fileSystem, logger);
             exchange.Download(startDate, endDate, logger).Wait();

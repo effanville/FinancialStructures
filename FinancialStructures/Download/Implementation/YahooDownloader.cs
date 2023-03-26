@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Globalization;
+using System.Linq;
 using System.Threading.Tasks;
 using Common.Structure.Reporting;
 using FinancialStructures.NamingStructures;
@@ -12,6 +14,7 @@ namespace FinancialStructures.Download.Implementation
     /// </summary>
     internal sealed class YahooDownloader : IPriceDownloader
     {
+        private static char DefaultCommaSeparator = ',';
         /// <inheritdoc/>
         public string BaseUrl => "https://uk.finance.yahoo.com/";
 
@@ -44,7 +47,7 @@ namespace FinancialStructures.Download.Implementation
             string webData = await DownloadHelper.GetWebData(url, reportLogger);
             if (string.IsNullOrEmpty(webData))
             {
-                _ = reportLogger?.LogUsefulError(ReportLocation.Downloading, $"Could not download data from {url}");
+                reportLogger?.Error("Downloading", $"Could not download data from {url}");
                 return false;
             }
 
@@ -68,7 +71,7 @@ namespace FinancialStructures.Download.Implementation
             string stockWebsite = await DownloadHelper.GetWebData(url, reportLogger);
             if (string.IsNullOrEmpty(stockWebsite))
             {
-                _ = reportLogger?.LogUsefulError(ReportLocation.Downloading, $"Could not download data from {url}");
+                reportLogger?.Error("Downloading", $"Could not download data from {url}");
                 return false;
             }
 
@@ -91,77 +94,48 @@ namespace FinancialStructures.Download.Implementation
             Action<IStock> getHistory,
             IReportLogger reportLogger = null)
         {
-            Uri downloadUrl = new Uri($"{BuildQueryUrl(BaseUrl, financialCode)}/history?period1={DateToYahooInt(firstDate)}&period2={DateToYahooInt(lastDate)}&interval=1d&filter=history&frequency=1d");
+            Uri downloadUrl = new Uri($"https://query1.finance.yahoo.com/v7/finance/download/{financialCode}?period1={DateToYahooInt(firstDate)}&period2={DateToYahooInt(lastDate)}&interval=1d&&events=history&includeAdjustedClose=true&filter=history&frequency=1d");
             string stockWebsite = await DownloadHelper.GetWebData(downloadUrl.ToString(), reportLogger);
             Stock stock = new Stock();
-            string findString = "\"HistoricalPriceStore\":{\"prices\":";
-            int historyStartIndex = stockWebsite.IndexOf(findString);
 
-            string dataLeft = stockWebsite.Substring(historyStartIndex + findString.Length);
-            // data is of form {"date":1582907959,"open":150.4199981689453,"high":152.3000030517578,"low":146.60000610351562,"close":148.74000549316406,"volume":120763559,"adjclose":148.74000549316406}.
-            // Iterate through these until stop.
-            int numberEntriesAdded = 0;
-            var characters = dataLeft.Substring(0, 2);
-            if (characters.Equals("[]"))
+            // stockWebsite here is a csv file
+            string[] lines = stockWebsite.Split(Environment.NewLine);
+            string[] headers = lines[0].Split(DefaultCommaSeparator);
+
+            if (lines.Length <= 1)
             {
                 getHistory(stock);
                 return true;
             }
 
-            try
+            int numberEntries = 0;
+            for (int lineIndex = 1; lineIndex < lines.Length; lineIndex++)
             {
-
-                while (dataLeft.Length > 0)
+                string[] entries = lines[lineIndex].Split(DefaultCommaSeparator);
+                string dateString = entries[0];
+                try
                 {
-                    int dayFirstIndex = dataLeft.IndexOf('{');
-                    int dayEndIndex = dataLeft.IndexOf('}', dayFirstIndex);
-                    string dayValues = dataLeft.Substring(dayFirstIndex, dayEndIndex - dayFirstIndex);
-                    if (dayValues.Contains("DIVIDEND"))
-                    {
-                        dataLeft = dataLeft.Substring(dayEndIndex);
-                        continue;
-                    }
-                    else if (dayValues.Contains("date"))
-                    {
-                        int yahooInt = int.Parse(FindAndGetSingleValue(dayValues, "date", false).ToString());
-                        DateTime date = YahooIntToDate(yahooInt);
-                        var localDate = date.ToLocalTime();
-                        decimal? open = FindAndGetSingleValue(dayValues, "open", false);
-                        decimal? high = FindAndGetSingleValue(dayValues, "high", false);
-                        decimal? low = FindAndGetSingleValue(dayValues, "low", false);
-                        decimal? close = FindAndGetSingleValue(dayValues, "close", false);
-                        decimal? volume = FindAndGetSingleValue(dayValues, "volume", false);
-                        stock.AddValue(localDate, ParseNullable(open), ParseNullable(high), ParseNullable(low), ParseNullable(close), ParseNullable(volume));
-                        dataLeft = dataLeft.Substring(dayEndIndex);
-                        numberEntriesAdded++;
-                    }
-                    else
-                    {
-                        break;
-                    }
+                    DateTime date = DateTime.Parse(dateString, CultureInfo.InvariantCulture);
+                    var utcDate = DateTime.SpecifyKind(date, DateTimeKind.Utc);
+                    decimal open = decimal.Parse(entries[1]);
+                    decimal high = decimal.Parse(entries[2]);
+                    decimal low = decimal.Parse(entries[3]);
+                    decimal close = decimal.Parse(entries[4]);
+                    decimal volume = decimal.Parse(entries[6]);
+                    stock.AddValue(utcDate, open, high, low, close, volume);
+                    numberEntries++;
+                }
+                catch (Exception ex)
+                {
+                    reportLogger?.Error("Downloading", $"Could not convert stock {stock.Name} data- {lines[lineIndex]}. Error {ex.Message}");
                 }
             }
-            catch (Exception ex)
-            {
-                _ = reportLogger?.LogUsefulError(ReportLocation.Downloading, $"Error when downloading: {ex.Message}");
-                return false;
-            }
 
-            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Downloading, $"Added {numberEntriesAdded} to stock {stock.Name}");
+            reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, "Downloading", $"Added {lines.Length - 1} to stock {stock.Name}");
 
             stock.Sort();
             getHistory(stock);
             return true;
-        }
-
-        private static decimal ParseNullable(decimal? value)
-        {
-            if (value.HasValue)
-            {
-                return value.Value;
-            }
-
-            return decimal.MinValue;
         }
 
         private static string BuildQueryUrl(string url, string identifier)
