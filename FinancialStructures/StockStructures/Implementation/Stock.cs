@@ -52,7 +52,7 @@ namespace FinancialStructures.StockStructures.Implementation
         public Stock(string ticker, string company, string name, string currency, string url)
         {
             Ticker = ticker;
-            Name = new NameData(company.Trim(), name.Trim(), "", url.Trim());
+            Name = new NameData(company.Trim(), name.Trim(), currency, url.Trim());
             Valuations = new List<StockDay>();
         }
 
