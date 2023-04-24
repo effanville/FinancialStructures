@@ -1,19 +1,7 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-GlobalSection(SolutionConfigurationPlatforms) = preSolution
-Debug(Tests)|x64 = Debug(Tests)|x64
-Debug|x64 = Debug|x64
-Release|x64 = Release|x64
-GlobalSection(ProjectConfigurationPlatforms) = postSolution
-GlobalSection(SolutionProperties) = preSolution
-HideSolutionNode = FALSE
-GlobalSection(NestedProjects) = preSolution
-{8989B308-837A-402C-BE70-82764592AC9C} = {89F98A9D-5FE5-4238-A7FA-AA2C4ABC5077}
-GlobalSection(ExtensibilityGlobals) = postSolution
-SolutionGuid = {93C86412-6CF8-4AE6-823D-068DDC6A6B87}
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialStructures.Tests", "FinancialStructures.Tests\FinancialStructures.Tests.csproj", "{709294DA-0BBE-4ACD-9C5E-29773FD18735}"
 	ProjectSection(ProjectDependencies) = postProject
 		{B86EADB1-3561-470B-9421-2E6992A25346} = {B86EADB1-3561-470B-9421-2E6992A25346}
@@ -28,7 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{8989B308-837A-402C-BE70-82764592AC9C}"
 	ProjectSection(SolutionItems) = preProject
-		Build\CommonProperties.build.props = Build\CommonProperties.build.props
+		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Structure", "Common\Common.Structure\Common.Structure.csproj", "{A2CB7343-EE36-451E-A71B-5CC4E38C2589}"
@@ -44,5 +32,11 @@ Global
 		{B86EADB1-3561-470B-9421-2E6992A25346}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2CB7343-EE36-451E-A71B-5CC4E38C2589}.Debug|Any CPU.ActiveCfg = Debug|x64
 		{A2CB7343-EE36-451E-A71B-5CC4E38C2589}.Debug|Any CPU.Build.0 = Debug|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4CD79E05-68D6-4E90-87E0-3232C41F7565}
 	EndGlobalSection
 EndGlobal

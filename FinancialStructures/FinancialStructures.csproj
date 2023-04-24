@@ -1,23 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
     <PublishTrimmed>true</PublishTrimmed>
     <TrimMode>CopyUsed</TrimMode>
     <LangVersion>9.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>
-
 	<VersionPrefix>22.10.0</VersionPrefix>
-	<VersionSuffix></VersionSuffix>
+	  <VersionSuffix>$([System.DateTime]::UtcNow.ToString(`yyyyMMdd-HHmm`))</VersionSuffix>
   </PropertyGroup>
 
-  <Import Project="..\Build\CommonProperties.Build.props" />
-
-  <PropertyGroup>
-    <DocumentationFile>..\bin\$(Configuration)\$(Framework)\$(Runtime)\FinancialStructures.xml</DocumentationFile>
-  </PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Common\Common.Structure\Common.Structure.csproj" />
+	</ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
