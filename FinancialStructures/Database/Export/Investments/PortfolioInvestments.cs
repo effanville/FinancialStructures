@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
-using System.Text;
 
 using Common.Structure.DataStructures;
 using Common.Structure.NamingStructures;
@@ -66,11 +65,11 @@ namespace FinancialStructures.Database.Export.Investments
                     fileWriter.WriteLine(reportBuilder.ToString());
                 }
 
-                _ = reportLogger?.LogUseful(ReportType.Information, ReportLocation.StatisticsPage, $"Successfully exported history to {filePath}.");
+                reportLogger?.Log(ReportType.Information, ReportLocation.StatisticsPage.ToString(), $"Successfully exported history to {filePath}.");
             }
             catch (Exception exception)
             {
-                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.StatisticsPage, exception.Message);
+                reportLogger?.Log(ReportType.Error, ReportLocation.StatisticsPage.ToString(), exception.Message);
             }
         }
     }

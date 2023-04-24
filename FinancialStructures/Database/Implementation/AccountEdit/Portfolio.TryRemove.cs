@@ -14,7 +14,7 @@ namespace FinancialStructures.Database.Implementation
         {
             if (string.IsNullOrEmpty(name.Name) && string.IsNullOrEmpty(name.Company))
             {
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.DeletingData, $"Adding {elementType}: Company `{name.Company}' or name `{name.Name}' cannot both be empty.");
+                reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.DeletingData.ToString(), $"Adding {elementType}: Company `{name.Company}' or name `{name.Name}' cannot both be empty.");
                 return false;
             }
 
@@ -45,7 +45,7 @@ namespace FinancialStructures.Database.Implementation
                     return RemoveAccount(PensionsBackingList, elementType, name, PensionsLock, reportLogger);
                 }
                 default:
-                    _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.DeletingData, $"Editing an Unknown type.");
+                    reportLogger?.Log(ReportType.Error, ReportLocation.DeletingData.ToString(), $"Editing an Unknown type.");
                     return false;
             }
 
@@ -59,14 +59,14 @@ namespace FinancialStructures.Database.Implementation
                         if (name.IsEqualTo(sec.Names))
                         {
                             _ = currentItems.Remove(sec);
-                            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData, $"{account}-{name} removed from the database.");
+                            reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData.ToString(), $"{account}-{name} removed from the database.");
                             OnPortfolioChanged(currentItems, new PortfolioEventArgs(account));
                             return true;
                         }
                     }
                 }
 
-                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.DeletingData, $"{account} - {name} could not be found in the database.");
+                reportLogger?.Log(ReportType.Error, ReportLocation.DeletingData.ToString(), $"{account} - {name} could not be found in the database.");
                 return false;
             }
         }

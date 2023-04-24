@@ -92,7 +92,7 @@ namespace FinancialStructures.Database.Download
             var downloader = PriceDownloaderFactory.Retrieve(names.Url);
             if (downloader == null || await downloader.TryGetLatestPriceFromUrl(names.Url, updateValue, reportLogger))
             {
-                _ = reportLogger?.LogUsefulError(ReportLocation.Downloading, $"{names.Company}-{names.Name}: could not download data from {names.Url}");
+                reportLogger?.Error(ReportLocation.Downloading.ToString(), $"{names.Company}-{names.Name}: could not download data from {names.Url}");
             }
         }
     }

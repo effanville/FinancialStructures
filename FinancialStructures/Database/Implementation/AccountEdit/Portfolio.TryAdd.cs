@@ -13,13 +13,13 @@ namespace FinancialStructures.Database.Implementation
         {
             if (string.IsNullOrWhiteSpace(name.Name) && string.IsNullOrWhiteSpace(name.Company))
             {
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"Adding {accountType}: Company '{name.Company}' and name '{name.Name}' cannot both be empty.");
+                reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData.ToString(), $"Adding {accountType}: Company '{name.Company}' and name '{name.Name}' cannot both be empty.");
                 return false;
             }
 
             if (Exists(accountType, name))
             {
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData, $"{accountType}-{name} already exists.");
+                reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData.ToString(), $"{accountType}-{name} already exists.");
                 OnPortfolioChanged(null, new PortfolioEventArgs(accountType));
                 return false;
             }
@@ -62,11 +62,11 @@ namespace FinancialStructures.Database.Implementation
                     break;
                 }
                 default:
-                    _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.AddingData, $"Adding an Unknown type to portfolio.");
+                    reportLogger?.Log(ReportType.Error, ReportLocation.AddingData.ToString(), $"Adding an Unknown type to portfolio.");
                     return false;
             }
 
-            _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.AddingData, $"{accountType}-{name} added to database.");
+            reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.AddingData.ToString(), $"{accountType}-{name} added to database.");
             return true;
 
             void AddAccount<T>(Account account, T newObject, List<T> currentItems, object lockObject)

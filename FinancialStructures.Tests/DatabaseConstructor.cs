@@ -19,6 +19,11 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             };
         }
 
+        public Portfolio GetInstance()
+        {
+            return Database;
+        }
+
         public DatabaseConstructor LoadDatabaseFromFilepath(IFileSystem fileSystem, string filepath)
         {
             Database.LoadPortfolio(filepath, fileSystem, null);

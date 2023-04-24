@@ -27,7 +27,7 @@ namespace FinancialStructures.Download.Implementation
             string webData = await DownloadHelper.GetWebData(url, reportLogger);
             if (string.IsNullOrEmpty(webData))
             {
-                _ = reportLogger?.LogUsefulError(ReportLocation.Downloading, $"Could not download data from {url}");
+                reportLogger?.Error(ReportLocation.Downloading.ToString(), $"Could not download data from {url}");
                 return false;
             }
 

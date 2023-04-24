@@ -153,17 +153,17 @@ namespace FinancialStructures.StockStructures.Implementation
                 StockExchange database = XmlFileAccess.ReadFromXmlFile<StockExchange>(fileSystem, filePath, out string error);
                 if (database != null)
                 {
-                    _ = reportLogger?.LogUseful(ReportType.Information, ReportLocation.Loading, $"Loaded StockExchange from {filePath}.");
+                    reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(), $"Loaded StockExchange from {filePath}.");
                     Stocks = database.Stocks;
                 }
                 else
                 {
-                    _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.Loading, $"No StockExchange Loaded from {filePath}. Error {error}.");
+                    reportLogger?.Log(ReportType.Error, ReportLocation.Loading.ToString(), $"No StockExchange Loaded from {filePath}. Error {error}.");
                 }
                 return;
             }
 
-            _ = reportLogger?.LogUseful(ReportType.Information, ReportLocation.Loading, "Loaded Empty New StockExchange.");
+            reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(), "Loaded Empty New StockExchange.");
             Stocks = new List<Stock>();
         }
 
@@ -179,11 +179,11 @@ namespace FinancialStructures.StockStructures.Implementation
             XmlFileAccess.WriteToXmlFile<StockExchange>(fileSystem, filePath, this, out string error);
             if (error == null)
             {
-                _ = reportLogger?.LogUseful(ReportType.Information, ReportLocation.Saving, $"Saved StockExchange at {filePath}");
+                reportLogger?.Log(ReportType.Information, ReportLocation.Saving.ToString(), $"Saved StockExchange at {filePath}");
             }
             else
             {
-                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.Saving, error);
+                reportLogger?.Log(ReportType.Error, ReportLocation.Saving.ToString(), error);
             }
         }
 
@@ -234,12 +234,12 @@ namespace FinancialStructures.StockStructures.Implementation
             }
             catch (Exception ex)
             {
-                _ = logger?.LogUsefulError(ReportLocation.AddingData, $"Failed to read from file located at {stockFilePath}: {ex.Message}.");
+                logger?.Error(ReportLocation.AddingData.ToString(), $"Failed to read from file located at {stockFilePath}: {ex.Message}.");
             }
 
             if (fileContents.Length == 0)
             {
-                _ = logger?.LogUsefulError(ReportLocation.AddingData, "Nothing in file selected, but expected stock company, name, url data.");
+                logger?.Error(ReportLocation.AddingData.ToString(), "Nothing in file selected, but expected stock company, name, url data.");
                 return;
             }
 
@@ -249,14 +249,14 @@ namespace FinancialStructures.StockStructures.Implementation
                 AddStock(inputs, logger);
             }
 
-            _ = logger?.LogUseful(ReportType.Information, ReportLocation.AddingData, $"Configured StockExchange from file {stockFilePath}.");
+            logger?.Log(ReportType.Information, ReportLocation.AddingData.ToString(), $"Configured StockExchange from file {stockFilePath}.");
         }
 
         private void AddStock(string[] parameters, IReportLogger logger = null)
         {
             if (parameters.Length != 5)
             {
-                _ = logger?.LogUsefulError(ReportLocation.AddingData, "Insufficient Data in line to add Stock");
+                logger?.Error(ReportLocation.AddingData.ToString(), "Insufficient Data in line to add Stock");
                 return;
             }
 

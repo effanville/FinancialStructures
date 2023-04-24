@@ -9,19 +9,19 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <inheritdoc/>
         public decimal MovingAverage(DateTime day, int numberBefore, int numberAfter, StockDataStream data)
         {
-            return VectorStats.Mean(Values(day, numberBefore, numberAfter, data), numberBefore + numberAfter);
+            return DecimalVector.Mean(Values(day, numberBefore, numberAfter, data), numberBefore + numberAfter);
         }
 
         /// <inheritdoc/>
         public decimal Max(DateTime day, int numberBefore, int numberAfter, StockDataStream data)
         {
-            return VectorStats.Max(Values(day, numberBefore, numberAfter, data), numberBefore + numberAfter);
+            return DecimalVector.Max(Values(day, numberBefore, numberAfter, data), numberBefore + numberAfter);
         }
 
         /// <inheritdoc/>
         public decimal Min(DateTime day, int numberBefore, int numberAfter, StockDataStream data)
         {
-            return VectorStats.Min(Values(day, numberBefore, numberAfter, data), numberBefore + numberAfter);
+            return DecimalVector.Min(Values(day, numberBefore, numberAfter, data), numberBefore + numberAfter);
         }
 
         private List<decimal> K(DateTime day, int length, int number)
@@ -95,7 +95,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <summary>
         /// Need to have a moving average of this.
         /// </summary>
-        private decimal DX(DateTime day, int length = 14)
+        private decimal DX(DateTime day)
         {
             return (DIPlus(day) - DIMinus(day)) / (DIPlus(day) + DIMinus(day));
         }
@@ -103,7 +103,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <inheritdoc/>
         public decimal ADX(DateTime day, int length = 14)
         {
-            return 100 * DX(day, length);
+            return 100 * DX(day);
         }
     }
 }

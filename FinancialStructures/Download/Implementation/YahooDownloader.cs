@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
 using Common.Structure.Reporting;
 using FinancialStructures.NamingStructures;
@@ -14,7 +13,8 @@ namespace FinancialStructures.Download.Implementation
     /// </summary>
     internal sealed class YahooDownloader : IPriceDownloader
     {
-        private static char DefaultCommaSeparator = ',';
+        private static readonly char DefaultCommaSeparator = ',';
+
         /// <inheritdoc/>
         public string BaseUrl => "https://uk.finance.yahoo.com/";
 
@@ -81,7 +81,7 @@ namespace FinancialStructures.Download.Implementation
             decimal? volume = FindAndGetSingleValue(stockWebsite, $"data-test=\"TD_VOLUME-value\"><fin-streamer data-symbol=\"{financialCode}\" data-field=\"regularMarketVolume\" data-trend=\"none\" data-pricehint=\"2\" data-dfield=\"longFmt\"", true);
 
             DateTime date = DateTime.Now.TimeOfDay > new DateTime(2010, 1, 1, 16, 30, 0).TimeOfDay ? DateTime.Today : DateTime.Today.AddDays(-1);
-            retrieveValueAction(new StockDay(date, open.Value, range.Item2, range.Item1, close.Value, volume.HasValue ? volume.Value : 0.0m));
+            retrieveValueAction(new StockDay(date, open.Value, range.Item2, range.Item1, close.Value, volume ?? 0.0m));
             return true;
         }
 
@@ -179,14 +179,14 @@ namespace FinancialStructures.Download.Implementation
             return code;
         }
 
-        private decimal? FindAndGetSingleValue(string searchString, string findString, bool includeComma, int containedWithin = 50)
+        private static decimal? FindAndGetSingleValue(string searchString, string findString, bool includeComma, int containedWithin = 50)
         {
             int index = searchString.IndexOf(findString);
             int lengthToSearch = Math.Min(containedWithin, searchString.Length - index - findString.Length);
             return DownloadHelper.ParseDataIntoNumber(searchString, index, findString.Length, lengthToSearch, includeComma);
         }
 
-        private Tuple<decimal, decimal> FindAndGetDoubleValues(string searchString, string findString, int containedWithin = 50)
+        private static Tuple<decimal, decimal> FindAndGetDoubleValues(string searchString, string findString, int containedWithin = 50)
         {
             int index = searchString.IndexOf(findString);
             int lengthToSearch = Math.Min(containedWithin, searchString.Length - index - findString.Length);
