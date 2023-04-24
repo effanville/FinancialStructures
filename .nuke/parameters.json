@@ -1,0 +1,12 @@
+{
+  "$schema": "./build.schema.json",
+  "Solution": "FinancialStructures.sln",
+  "ExecutablePublishProjects": [
+  ],
+  "NugetPackageProjects": [
+    "FinancialStructures"
+  ],
+  "Configuration": "Release",
+  "Framework": "net6.0-windows",
+  "Runtime": "win-x64"
+}
