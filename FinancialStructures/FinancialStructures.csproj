@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <PublishTrimmed>true</PublishTrimmed>
@@ -11,8 +11,11 @@
 	  <VersionSuffix>$([System.DateTime]::UtcNow.ToString(`yyyyMMdd-HHmm`))</VersionSuffix>
   </PropertyGroup>
 
-	<ItemGroup>
+	<ItemGroup Condition="Exists('..\Common\Common.Structure\Common.Structure.csproj')" >
 		<ProjectReference Include="..\Common\Common.Structure\Common.Structure.csproj" />
+	</ItemGroup>
+	<ItemGroup Condition="!Exists('..\Common\Common.Structure\Common.Structure.csproj') And Exists('..\..\FinancePortfolioDatabase.sln')" >
+		<ProjectReference Include="..\..\Common\Common.Structure\Common.Structure.csproj" />
 	</ItemGroup>
 
   <ItemGroup>
