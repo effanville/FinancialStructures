@@ -183,11 +183,11 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         public void EditingSecurityFailReports()
         {
             Portfolio database = new DatabaseConstructor().GetInstance();
-            List<ErrorReport> reports = new List<ErrorReport>();
-            IReportLogger logging = new LogReporter((a, b, c, d) => reports.Add(new ErrorReport(a, b, c, d)));
+            IReportLogger logging = new LogReporter(null, saveInternally: true);
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
-            Assert.AreEqual(1, reports.Count);
+            var reports = logging.Reports;
+            Assert.AreEqual(1, reports.Count());
 
             ErrorReport report = reports.First();
             Assert.AreEqual(ReportType.Error, report.ErrorType);
