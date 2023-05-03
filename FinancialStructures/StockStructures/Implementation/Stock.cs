@@ -56,10 +56,15 @@ namespace FinancialStructures.StockStructures.Implementation
             Valuations = new List<StockDay>();
         }
 
+        public void AddValue(StockDay candle)
+        {
+            Valuations.Add(candle);
+        }
+
         /// <inheritdoc/>
         public void AddValue(DateTime time, decimal open, decimal high, decimal low, decimal close, decimal volume)
         {
-            Valuations.Add(new StockDay(time, open, high, low, close, volume));
+            AddValue(new StockDay(time, open, high, low, close, volume));
         }
 
         /// <inheritdoc/>
