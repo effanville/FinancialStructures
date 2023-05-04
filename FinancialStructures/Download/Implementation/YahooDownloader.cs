@@ -99,8 +99,8 @@ namespace FinancialStructures.Download.Implementation
             Stock stock = new Stock();
 
             // stockWebsite here is a csv file
-            string[] lines = stockWebsite.Split(Environment.NewLine);
-            string[] headers = lines[0].Split(DefaultCommaSeparator);
+            string newLineSeparator = stockWebsite.Contains("\r\n") ? "\r\n" : "\n";
+            string[] lines = stockWebsite.Split(newLineSeparator);
 
             if (lines.Length <= 1)
             {
@@ -146,11 +146,6 @@ namespace FinancialStructures.Download.Implementation
         private static int DateToYahooInt(DateTime date)
         {
             return int.Parse((date - new DateTime(1970, 1, 1)).TotalSeconds.ToString());
-        }
-
-        private static DateTime YahooIntToDate(int yahooInt)
-        {
-            return new DateTime(1970, 1, 1).AddSeconds(yahooInt);
         }
 
         /// <summary>
