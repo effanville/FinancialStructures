@@ -25,6 +25,7 @@ namespace FinancialStructures.Database.Implementation
                     }
 
                     WireDataChangedEvents();
+                    Name = fileSystem.Path.GetFileNameWithoutExtension(filePath);
                     Saving();
                     _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Loading, $"Loaded new database from {filePath}");
                 }

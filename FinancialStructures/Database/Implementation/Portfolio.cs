@@ -32,8 +32,8 @@ namespace FinancialStructures.Database.Implementation
         } = false;
 
         /// <inheritdoc/>
-        [XmlElement(ElementName = "FilePath")]
-        public string FilePath
+        [XmlAttribute(AttributeName = "Name")]
+        public string Name
         {
             get;
             set;
@@ -199,7 +199,7 @@ namespace FinancialStructures.Database.Implementation
         public void SetFrom(Portfolio portfolio)
         {
             BaseCurrency = portfolio.BaseCurrency;
-            FilePath = portfolio.FilePath;
+            Name = portfolio.Name;
             Funds = portfolio.Funds;
             BankAccounts = portfolio.BankAccounts;
             Currencies = portfolio.Currencies;

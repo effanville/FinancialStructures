@@ -8,7 +8,7 @@ namespace FinancialStructures.Tests
     public static class TestDatabase
     {
         private static Dictionary<TestDatabaseName, IPortfolio> fDatabases;
-        private static readonly string TestFilePath = "c:/temp/saved.xml";
+        private static readonly string TestName = "saved";
         public static Dictionary<TestDatabaseName, IPortfolio> Databases
         {
             get
@@ -17,8 +17,10 @@ namespace FinancialStructures.Tests
                 {
                     fDatabases = new Dictionary<TestDatabaseName, IPortfolio>();
 
-                    DatabaseConstructor constructor = new DatabaseConstructor(TestFilePath);
-                    _ = constructor.WithDefaultBankAccount();
+                    DatabaseConstructor constructor = new DatabaseConstructor()
+                        .SetName(TestName)
+                        .SetCurrencyAsGBP()
+                        .WithDefaultBankAccount();
                     fDatabases.Add(TestDatabaseName.OneBank, constructor.Database.Copy());
 
                     _ = constructor.WithDefaultSecurity();
@@ -38,7 +40,7 @@ namespace FinancialStructures.Tests
                     _ = constructor
                         .ClearDatabase()
                         .SetCurrencyAsGBP()
-                        .SetFilePath(TestFilePath);
+                        .SetName(TestName);
 
                     _ = constructor.WithDefaultBankAccount()
                         .WithSecondaryBankAccount();
@@ -51,7 +53,7 @@ namespace FinancialStructures.Tests
                     _ = constructor
                         .ClearDatabase()
                         .SetCurrencyAsGBP()
-                        .SetFilePath(TestFilePath)
+                        .SetName(TestName)
                         .WithDefaultSecurity();
                     fDatabases.Add(TestDatabaseName.OneSec, constructor.Database.Copy());
 

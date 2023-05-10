@@ -10,13 +10,9 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
     public class DatabaseConstructor
     {
         internal Portfolio Database;
-        public DatabaseConstructor(string filePath = null, string currency = null)
+        public DatabaseConstructor()
         {
-            Database = new Portfolio
-            {
-                FilePath = filePath ?? null,
-                BaseCurrency = currency ?? DefaultCurrencyName
-            };
+            Database = new Portfolio();
         }
 
         public Portfolio GetInstance()
@@ -93,9 +89,9 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             }
         }
 
-        public DatabaseConstructor SetFilePath(string filePath)
+        public DatabaseConstructor SetName(string name)
         {
-            Database.FilePath = filePath;
+            Database.Name = name;
             return this;
         }
 
@@ -104,6 +100,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             Database.BaseCurrency = "GBP";
             return this;
         }
+
         public DatabaseConstructor SetCurrency(string currency)
         {
             Database.BaseCurrency = currency;

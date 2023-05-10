@@ -167,7 +167,7 @@ namespace FinancialStructures.Database.Export.Statistics
         /// </summary>
         public PortfolioStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings, IFileSystem fileSystem)
         {
-            fDatabaseName = portfolio.DatabaseName(fileSystem);
+            fDatabaseName = portfolio.Name;
             GenerateStatistics(portfolio, settings);
         }
 
@@ -306,7 +306,7 @@ namespace FinancialStructures.Database.Export.Statistics
             WriteSection(reportBuilder, "Bank Account Data", settings.Spacing, settings.BankAccountDisplayOptions, BankAccountStats, BankAccountCompanyStats, BankAccountTotalStats);
 
             WriteSection(reportBuilder, "Pension Data", settings.Spacing, settings.SecurityDisplayOptions, PensionStats, PensionCompanyStats, PensionTotalStats);
-            
+
             WriteSection(reportBuilder, "Asset Data", settings.Spacing, settings.AssetDisplayOptions, AssetStats, AssetCompanyStats, AssetTotalStats);
 
             WriteSection(reportBuilder, "Analysis By Sector", settings.Spacing, settings.SectorDisplayOptions, SectorStats, null, null);

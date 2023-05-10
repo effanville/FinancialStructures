@@ -86,7 +86,7 @@ namespace FinancialStructures.Database.Export.Report
 
             ReportBuilder reportBuilder = new ReportBuilder(settings.ReportExportType, new ReportSettings(true, false, true));
 
-            string title = $"Portfolio Report for {fPortfolio.DatabaseName()} - Statement on {DateTime.Today.ToShortDateString()}";
+            string title = $"Portfolio Report for {fPortfolio.Name} - Statement on {DateTime.Today.ToShortDateString()}";
             _ = reportBuilder.WriteHeader(title)
                 .WriteTitle(title, DocumentElement.h1)
                 .WriteTitle("Total Values", DocumentElement.h2)

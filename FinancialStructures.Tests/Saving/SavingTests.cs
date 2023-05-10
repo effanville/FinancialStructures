@@ -8,6 +8,7 @@ using FinancialStructures.Database.Implementation;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
+using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.Saving
@@ -17,11 +18,10 @@ namespace FinancialStructures.Tests.Saving
     {
         private static IEnumerable<(string name, IPortfolio testPortfolio, string XmlString)> OldStyleTestLists()
         {
-            yield return ("empty", new Portfolio() { FilePath = "c:/temp/saved.xml" },
+            yield return ("empty", new DatabaseConstructor().SetName("saved").GetInstance(),
    @"<?xml version=""1.0"" encoding=""utf-8""?>
 <AllData xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <MyFunds>
-    <FilePath>c:/temp/saved.xml</FilePath>
+  <MyFunds Name=""saved.xml"">
     <Funds />
     <BankAccounts />
     <Currencies />
@@ -29,7 +29,7 @@ namespace FinancialStructures.Tests.Saving
     <Assets />
 </MyFunds>
 </AllData>");
-            Portfolio portfolio = new Portfolio() { FilePath = "c:/temp/saved.xml" };
+            Portfolio portfolio = new DatabaseConstructor().SetName("saved").GetInstance();
             _ = portfolio.TryAdd(Account.Security, new NameData("company", "name"));
             _ = portfolio.TryAdd(Account.BankAccount, new NameData("bank", "account"));
             _ = portfolio.TryAdd(Account.Currency, new NameData("gbp", "hkd"));
@@ -37,8 +37,7 @@ namespace FinancialStructures.Tests.Saving
             yield return ("AccountsNoData", portfolio,
 @"<?xml version=""1.0"" encoding=""utf-8""?>
 <AllData xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <MyFunds>
-    <FilePath>c:/temp/saved.xml</FilePath>
+  <MyFunds Name=""saved"">
     <Funds>
       <Security>
         <Names>
@@ -104,7 +103,7 @@ namespace FinancialStructures.Tests.Saving
     <Pensions />
   </MyFunds>
 </AllData>");
-            Portfolio portfolioWithData = new Portfolio() { FilePath = "c:/temp/saved.xml" };
+            Portfolio portfolioWithData = new DatabaseConstructor().SetName("saved").GetInstance();
             var name = new TwoName("company", "name");
             _ = portfolioWithData.TryAdd(Account.Security, new NameData("company", "name", "GBP", "http://temp.com", new HashSet<string>() { "UK", "China" }, "some information"));
             _ = portfolioWithData.TryAddOrEditTradeData(Account.Security, name, new SecurityTrade(new DateTime(2015, 1, 1)), new SecurityTrade(TradeType.Buy, name, new DateTime(2015, 1, 1), 5, 1.2m, 0.0m));
@@ -124,11 +123,10 @@ namespace FinancialStructures.Tests.Saving
         private static IEnumerable<(string name, IPortfolio testPortfolio, string XmlString)> NewStyleTestLists()
         {
             yield return ("empty",
-                new Portfolio() { FilePath = "c:/temp/saved.xml" },
-@"<?xml version=""1.0"" encoding=""utf-8""?>
+                new DatabaseConstructor().SetName("saved").GetInstance(),
+            @"<?xml version=""1.0"" encoding=""utf-8""?>
 <AllData xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <MyFunds>
-    <FilePath>c:/temp/saved.xml</FilePath>
+  <MyFunds Name=""saved"">
     <Funds />
     <BankAccounts />
     <Currencies />
@@ -138,7 +136,7 @@ namespace FinancialStructures.Tests.Saving
     <Notes />
   </MyFunds>
 </AllData>");
-            Portfolio portfolio = new Portfolio() { FilePath = "c:/temp/saved.xml" };
+            Portfolio portfolio = new DatabaseConstructor().SetName("saved").GetInstance();
             _ = portfolio.TryAdd(Account.Security, new NameData("company", "name"));
             _ = portfolio.TryAdd(Account.BankAccount, new NameData("bank", "account"));
             _ = portfolio.TryAdd(Account.Currency, new NameData("gbp", "hkd"));
@@ -147,8 +145,7 @@ namespace FinancialStructures.Tests.Saving
                 portfolio,
    @"<?xml version=""1.0"" encoding=""utf-8""?>
 <AllData xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <MyFunds>
-    <FilePath>c:/temp/saved.xml</FilePath>
+  <MyFunds Name=""saved"">
     <Funds>
       <Security>
         <Names>
@@ -215,7 +212,7 @@ namespace FinancialStructures.Tests.Saving
     <Notes />
   </MyFunds>
 </AllData>");
-            Portfolio portfolioWithData = new Portfolio() { FilePath = "c:/temp/saved.xml" };
+            Portfolio portfolioWithData = new DatabaseConstructor().SetName("saved").GetInstance();
             _ = portfolioWithData.TryAdd(Account.Security, new NameData("company", "name", "GBP", "http://temp.com", new HashSet<string>() { "UK", "China" }, "some information"));
             _ = portfolioWithData.TryAddOrEditTradeData(Account.Security, new TwoName("company", "name"), new SecurityTrade(new DateTime(2015, 1, 1)), new SecurityTrade(TradeType.Buy, new TwoName("company", "name"), new DateTime(2015, 1, 1), 5, 1.2m, 0));
             _ = portfolioWithData.TryAddOrEditData(Account.Security, new TwoName("company", "name"), new DailyValuation(new DateTime(2015, 1, 1), 1.2m), new DailyValuation(new DateTime(2015, 1, 1), 1.2m));
@@ -225,8 +222,7 @@ namespace FinancialStructures.Tests.Saving
             yield return ("AccountsWithData", portfolioWithData,
    @"<?xml version=""1.0"" encoding=""utf-8""?>
 <AllData xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <MyFunds>
-    <FilePath>c:/temp/saved.xml</FilePath>
+  <MyFunds Name=""saved"">
     <Funds>
       <Security>
         <Names>
@@ -312,8 +308,7 @@ namespace FinancialStructures.Tests.Saving
             yield return (TestDatabaseName.OneBank.ToString(), testDatabases[TestDatabaseName.OneBank],
 @"<?xml version=""1.0"" encoding=""utf-8""?>
 <AllData xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <MyFunds>
-    <FilePath>c:/temp/saved.xml</FilePath>
+  <MyFunds Name=""saved"">
     <BaseCurrency>GBP</BaseCurrency>
     <Funds />
     <BankAccounts>
@@ -355,8 +350,7 @@ namespace FinancialStructures.Tests.Saving
             yield return (TestDatabaseName.OneSec.ToString(), testDatabases[TestDatabaseName.OneSec],
 @"<?xml version=""1.0"" encoding=""utf-8""?>
 <AllData xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <MyFunds>
-    <FilePath>c:/temp/saved.xml</FilePath>
+  <MyFunds Name=""saved"">
     <BaseCurrency>GBP</BaseCurrency>
     <Funds>
       <Security>
@@ -414,8 +408,7 @@ namespace FinancialStructures.Tests.Saving
             yield return (TestDatabaseName.OneSecOneBank.ToString(), testDatabases[TestDatabaseName.OneSecOneBank],
 @"<?xml version=""1.0"" encoding=""utf-8""?>
 <AllData xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-  <MyFunds>
-    <FilePath>c:/temp/saved.xml</FilePath>
+  <MyFunds Name=""saved"">
     <BaseCurrency>GBP</BaseCurrency>
     <Funds>
       <Security>
@@ -575,7 +568,7 @@ namespace FinancialStructures.Tests.Saving
                 Assert.IsTrue(expected == null && actual == null);
             }
 
-            Assert.AreEqual(expected.FilePath, actual.FilePath);
+            Assert.AreEqual(expected.Name, actual.Name);
 
             if (expected.FundsThreadSafe.Count == actual.FundsThreadSafe.Count)
             {
