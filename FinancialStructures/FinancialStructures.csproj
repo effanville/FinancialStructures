@@ -1,24 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0</TargetFrameworks>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PublishTrimmed>true</PublishTrimmed>
     <TrimMode>CopyUsed</TrimMode>
     <LangVersion>9.0</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup>
-
-	<VersionPrefix>22.10.0</VersionPrefix>
-	<VersionSuffix></VersionSuffix>
+	<VersionPrefix>23.05.0</VersionPrefix>
+	  <VersionSuffix>$([System.DateTime]::UtcNow.ToString(`yyyyMMdd-HHmm`))</VersionSuffix>
   </PropertyGroup>
 
-  <Import Project="..\Build\CommonProperties.Build.props" />
-
-  <PropertyGroup>
-    <DocumentationFile>..\bin\$(Configuration)\$(Framework)\$(Runtime)\FinancialStructures.xml</DocumentationFile>
-  </PropertyGroup>
+	<ItemGroup Condition="Exists('..\Common\Common.Structure\Common.Structure.csproj')" >
+		<ProjectReference Include="..\Common\Common.Structure\Common.Structure.csproj" />
+	</ItemGroup>
+	<ItemGroup Condition="!Exists('..\Common\Common.Structure\Common.Structure.csproj') And Exists('..\..\FinancePortfolioDatabase.sln')" >
+		<ProjectReference Include="..\..\Common\Common.Structure\Common.Structure.csproj" />
+	</ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
@@ -29,8 +27,6 @@
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
     <_Parameter1>FinancialStructures.Tests</_Parameter1>
     </AssemblyAttribute>
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-      <_Parameter1>FPD.ViewModels.Tests</_Parameter1>
-    </AssemblyAttribute>
   </ItemGroup>
+
 </Project>

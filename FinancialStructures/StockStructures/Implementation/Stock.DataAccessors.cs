@@ -8,13 +8,21 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <inheritdoc/>
         public DateTime EarliestTime()
         {
-            return Valuations[0].Time;
+            if (Valuations.Count == 0)
+            {
+                return DateTime.MinValue;
+            }
+            return Valuations[0].Start;
         }
 
         /// <inheritdoc/>
         public DateTime LastTime()
         {
-            return Valuations[Valuations.Count - 1].Time;
+            if (Valuations.Count == 0)
+            {
+                return DateTime.MinValue;
+            }
+            return Valuations[Valuations.Count - 1].Start;
         }
 
         /// <summary>
@@ -30,7 +38,7 @@ namespace FinancialStructures.StockStructures.Implementation
                 return null;
             }
 
-            return new StockDay(data.Time, data.Open, data.High, data.Low, data.Close, data.Volume);
+            return new StockDay(data.Start, data.Open, data.High, data.Low, data.Close, data.Volume);
         }
 
         /// <inheritdoc/>
@@ -62,9 +70,10 @@ namespace FinancialStructures.StockStructures.Implementation
         }
 
         /// <summary>
-        /// This retrieves the data on the date <paramref name="date"/> as well
+        /// This retrieves the data at the time specified in <paramref name="date"/> as well
         /// as setting <see cref="LastValueIndex"/> to the index of this
-        /// value.
+        /// value. If the time is within the duration of the Day here, then only the open
+        /// is returned.
         /// </summary>
         private StockDay GetDataAndSetAccessor(DateTime date)
         {
@@ -74,13 +83,18 @@ namespace FinancialStructures.StockStructures.Implementation
             {
                 dayIndex++;
             }
-            while (dayIndex < numberValues && date >= Valuations[dayIndex].Time);
+            while (dayIndex < numberValues && date >= Valuations[dayIndex].Start);
 
             LastValueIndex = dayIndex - 1;
             var value = Valuations[dayIndex - 1];
-            if (value.Time.Equals(date))
+            var endTime = value.End;
+            if (date >= endTime)
             {
-                return Valuations[dayIndex - 1];
+                return value;
+            }
+            if (date >= value.Start)
+            {
+                return value.CopyAsOpenOnly();
             }
 
             return null;

@@ -6,13 +6,14 @@ namespace FinancialStructures.StockStructures.Implementation
     /// <summary>
     /// Class containing all data pertaining to a stock.
     /// </summary>
+    [XmlType(TypeName = "StockDay")]
     public class StockDay : IComparable<StockDay>
     {
         /// <summary>
         /// The start time of the interval this data is about.
         /// </summary>
         [XmlAttribute(AttributeName = "T")]
-        public DateTime Time
+        public DateTime Start
         {
             get;
             set;
@@ -26,7 +27,13 @@ namespace FinancialStructures.StockStructures.Implementation
         {
             get;
             set;
-        } = TimeSpan.FromDays(1);
+        } = TimeSpan.FromHours(8.5);
+
+        /// <summary>
+        /// The ending time of the interval this data is about.
+        /// </summary>
+        [XmlIgnore]
+        public DateTime End => Start + Duration;
 
         /// <summary>
         /// The opening price in the interval.
@@ -89,8 +96,9 @@ namespace FinancialStructures.StockStructures.Implementation
         /// Constructor setting all values.
         /// </summary>
         public StockDay(DateTime time, decimal open, decimal high, decimal low, decimal close, decimal volume)
+            : this()
         {
-            Time = time;
+            Start = time;
             Open = open;
             High = high;
             Low = low;
@@ -99,36 +107,36 @@ namespace FinancialStructures.StockStructures.Implementation
         }
 
         /// <summary>
+        /// Constructor setting all values.
+        /// </summary>
+        public StockDay(DateTime time, decimal open, decimal high, decimal low, decimal close, decimal volume, TimeSpan duration)
+            : this(time, open, high, low, close, volume)
+        {
+            Duration = duration;
+        }
+
+        /// <summary>
         /// Get the relevant value based on the datastream.
         /// </summary>
         public decimal Value(StockDataStream data)
         {
-            switch (data)
+            return data switch
             {
-                case StockDataStream.Open:
-                    return Open;
-                case StockDataStream.High:
-                    return High;
-                case StockDataStream.Low:
-                    return Low;
-                case StockDataStream.CloseOpen:
-                    return Close / Open;
-                case StockDataStream.HighOpen:
-                    return High / Open;
-                case StockDataStream.LowOpen:
-                    return Low / Open;
-                case StockDataStream.Volume:
-                    return Volume;
-                case StockDataStream.Close:
-                default:
-                    return Close;
-            }
+                StockDataStream.Open => Open,
+                StockDataStream.High => High,
+                StockDataStream.Low => Low,
+                StockDataStream.CloseOpen => Close / Open,
+                StockDataStream.HighOpen => High / Open,
+                StockDataStream.LowOpen => Low / Open,
+                StockDataStream.Volume => Volume,
+                _ => Close,
+            };
         }
 
         /// <inheritdoc/>
         public override string ToString()
         {
-            return $"{Time}-O{Open}-H{High}-L{Low}-C{Close}-V{Volume}";
+            return $"{Start}-O{Open}-H{High}-L{Low}-C{Close}-V{Volume}";
         }
 
         /// <inheritdoc/>
@@ -136,10 +144,19 @@ namespace FinancialStructures.StockStructures.Implementation
         {
             if (obj is StockDay otherPrice)
             {
-                return Time.CompareTo(otherPrice.Time);
+                return Start.CompareTo(otherPrice.Start);
             }
 
             return 0;
+        }
+
+        /// <summary>
+        /// Copy only the open value into a new StockDay.
+        /// </summary>
+        /// <returns></returns>
+        public StockDay CopyAsOpenOnly()
+        {
+            return new StockDay(Start, Open, 0, 0, 0, 0, Duration);
         }
     }
 }

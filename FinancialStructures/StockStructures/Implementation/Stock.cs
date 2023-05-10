@@ -49,23 +49,28 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <summary>
         /// Constructor setting basic name information
         /// </summary>
-        public Stock(string ticker, string company, string name, string url)
+        public Stock(string ticker, string company, string name, string currency, string url)
         {
             Ticker = ticker;
-            Name = new NameData(company.Trim(), name.Trim(), "", url.Trim());
+            Name = new NameData(company.Trim(), name.Trim(), currency, url.Trim());
             Valuations = new List<StockDay>();
+        }
+
+        public void AddValue(StockDay candle)
+        {
+            Valuations.Add(candle);
         }
 
         /// <inheritdoc/>
         public void AddValue(DateTime time, decimal open, decimal high, decimal low, decimal close, decimal volume)
         {
-            Valuations.Add(new StockDay(time, open, high, low, close, volume));
+            AddValue(new StockDay(time, open, high, low, close, volume));
         }
 
         /// <inheritdoc/>
         public void AddOrEditValue(DateTime time, decimal? newOpen = null, decimal? newHigh = null, decimal? newLow = null, decimal? newClose = null, decimal? newVolume = null)
         {
-            var value = Valuations.FirstOrDefault(val => val.Time.Equals(time));
+            var value = Valuations.FirstOrDefault(val => val.Start.Equals(time));
             if (value == null)
             {
                 AddValue(time, newOpen ?? 0.0m, newHigh ?? 0.0m, newLow ?? 0.0m, newClose ?? 0.0m, newVolume ?? 0.0m);
@@ -111,12 +116,12 @@ namespace FinancialStructures.StockStructures.Implementation
         /// </summary>
         public Stock Copy(DateTime date)
         {
-            var stock = new Stock(Ticker, Name.Company, Name.Name, Name.Url);
+            var stock = new Stock(Ticker, Name.Company, Name.Name, Name.Currency, Name.Url);
             foreach (var valuation in Valuations)
             {
-                if (valuation.Time < date)
+                if (valuation.Start < date)
                 {
-                    stock.AddValue(valuation.Time, valuation.Open, valuation.High, valuation.Low, valuation.Close, valuation.Volume);
+                    stock.AddValue(valuation.Start, valuation.Open, valuation.High, valuation.Low, valuation.Close, valuation.Volume);
                 }
             }
             return stock;

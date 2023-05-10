@@ -153,7 +153,7 @@ namespace FinancialStructures.Database.Export.History
         {
             if (!Snapshots.Any())
             {
-                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.StatisticsPage, "Not enough history points to export.");
+                reportLogger?.Log(ReportType.Error, ReportLocation.StatisticsPage.ToString(), "Not enough history points to export.");
                 return;
             }
 
@@ -174,11 +174,11 @@ namespace FinancialStructures.Database.Export.History
                     fileWriter.Write(reportBuilder.ToString());
                 }
 
-                _ = reportLogger?.LogUseful(ReportType.Information, ReportLocation.StatisticsPage, $"Successfully exported history to {filePath}.");
+                reportLogger?.Log(ReportType.Information, ReportLocation.StatisticsPage.ToString(), $"Successfully exported history to {filePath}.");
             }
             catch (Exception exception)
             {
-                _ = reportLogger?.LogUseful(ReportType.Error, ReportLocation.StatisticsPage, exception.Message);
+                reportLogger?.Log(ReportType.Error, ReportLocation.StatisticsPage.ToString(), exception.Message);
             }
         }
     }

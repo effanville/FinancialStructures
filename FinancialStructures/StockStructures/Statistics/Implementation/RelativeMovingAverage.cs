@@ -40,7 +40,7 @@ namespace FinancialStructures.StockStructures.Statistics.Implementation
         public double Calculate(DateTime date, IStock stock)
         {
             List<decimal> values = stock.Values(date, BurnInTime, 0, DataType);
-            return Convert.ToDouble(VectorStats.Mean(values, fFirstLength) - VectorStats.Mean(values, fSecondLength));
+            return Convert.ToDouble(DecimalVector.Mean(values, fFirstLength) - DecimalVector.Mean(values, fSecondLength));
         }
     }
 }

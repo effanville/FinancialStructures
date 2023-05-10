@@ -15,9 +15,9 @@ namespace FinancialStructures.Database
     public interface IPortfolio
     {
         /// <summary>
-        /// Access of the database path.
+        /// The name of the portfolio.
         /// </summary>
-        string FilePath
+        string Name
         {
             get;
             set;

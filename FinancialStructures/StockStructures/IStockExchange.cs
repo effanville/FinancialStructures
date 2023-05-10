@@ -42,6 +42,11 @@ namespace FinancialStructures.StockStructures
         decimal GetValue(TwoName name, DateTime date, StockDataStream datatype = StockDataStream.Close);
 
         /// <summary>
+        /// Returns the complete candle preceding the time specified.
+        /// </summary>
+        StockDay GetCandle(TwoName name, DateTime date);
+
+        /// <summary>
         /// Returns the earliest date held in the stock data.
         /// </summary>
         DateTime EarliestDate();
