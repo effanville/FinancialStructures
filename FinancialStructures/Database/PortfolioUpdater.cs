@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Threading.Tasks;
+using Common.Structure.DataStructures;
 
 namespace FinancialStructures.Database
 {
@@ -8,10 +8,12 @@ namespace FinancialStructures.Database
     /// </summary>
     public sealed class BackgroundPortfolioUpdater : IPortfolioUpdater
     {
+        private TaskQueue _taskQueue = new TaskQueue();
+
         /// <inheritdoc/>
         public void PerformPortfolioAction(Action<IPortfolio> action, IPortfolio portfolio)
         {
-            new Task(() => action(portfolio)).Start();
+            _taskQueue.Enqueue(action, portfolio);
         }
     }
 
