@@ -143,6 +143,7 @@ namespace FinancialStructures.Database.Implementation
                     return FundsThreadSafe
                         .Union(BankAccountsThreadSafe
                         .Union(Assets))
+                        .Union(Pensions)
                         .ToList();
                 }
                 case Totals.SecuritySector:
