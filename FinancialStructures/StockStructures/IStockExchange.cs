@@ -6,6 +6,7 @@ using Common.Structure.Reporting;
 
 using FinancialStructures.NamingStructures;
 using FinancialStructures.StockStructures.Implementation;
+using Nager.Date;
 
 namespace FinancialStructures.StockStructures
 {
@@ -20,7 +21,22 @@ namespace FinancialStructures.StockStructures
         string Name
         {
             get;
-            set;
+        }
+
+        /// <summary>
+        /// The time zone the exchange is in
+        /// </summary>
+        TimeZoneInfo TimeZone
+        {
+            get;
+        }
+
+        /// <summary>
+        /// The code for the country to determine trading days.
+        /// </summary>
+        CountryCode CountryDateCode
+        {
+            get;
         }
 
         /// <summary>
@@ -30,6 +46,10 @@ namespace FinancialStructures.StockStructures
         {
             get;
         }
+
+        DateTime ExchangeOpenInUtc(DateTime date);
+
+        DateTime ExchangeCloseInUtc(DateTime date);
 
         /// <summary>
         /// Returns the value of the stock indexed by ticker on the date desired.

@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
 using FinancialStructures.Download.Implementation;
 using FinancialStructures.NamingStructures;
+using Nager.Date;
 
 namespace FinancialStructures.StockStructures.Implementation
 {
@@ -19,6 +21,41 @@ namespace FinancialStructures.StockStructures.Implementation
         {
             get;
             set;
+        }
+
+        /// <inheritdoc/>
+        [XmlIgnore]
+        public TimeZoneInfo TimeZone
+        {
+            get;
+            set;
+        } = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+
+        /// <inheritdoc/>
+        public CountryCode CountryDateCode
+        {
+            get;
+            set;
+        } = CountryCode.GB;
+
+        /// <inheritdoc/>
+        private TimeOnly ExchangeOpen => new TimeOnly(8, 0, 0);
+
+        /// <inheritdoc/>
+        private TimeOnly ExchangeClose => new TimeOnly(16, 30, 0);
+
+        public DateTime ExchangeOpenInUtc(DateTime date)
+        {
+            var dateTime = date.Date.Add(ExchangeOpen.ToTimeSpan());
+            dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
+            return TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZone);
+        }
+
+        public DateTime ExchangeCloseInUtc(DateTime date)
+        {
+            var dateTime = date.Date.Add(ExchangeClose.ToTimeSpan());
+            dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
+            return TimeZoneInfo.ConvertTimeToUtc(dateTime, TimeZone);
         }
 
         /// <inheritdoc/>
