@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace FinancialStructures.Database
 {
@@ -45,12 +46,31 @@ namespace FinancialStructures.Database
         }
 
         /// <summary>
+        /// Was the change initiated from a user action?
+        /// </summary>
+        public bool UserInitiated
+        {
+            get;
+        }
+
+
+        /// <summary>
         /// Constructor taking an account type.
         /// </summary>
         public PortfolioEventArgs(bool changedPortfolio)
             : base()
         {
             ChangedPortfolio = changedPortfolio;
+        }
+
+        /// <summary>
+        /// Constructor taking an account type.
+        /// </summary>
+        public PortfolioEventArgs(Account type, bool userInitiated)
+            : base()
+        {
+            ChangedAccount = type;
+            UserInitiated = userInitiated;
         }
 
         /// <summary>
