@@ -310,7 +310,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
                         if (sharesCurrentValue != null)
                         {
                             decimal numShares = sharesCurrentValue.Value - sharesPreviousValue.Value;
-                            decimal unitPrice = UnitPrice.ValueOnOrBefore(investmentValue.Day).Value;
+                            decimal unitPrice = UnitPrice.ValueOnOrBefore(investmentValue.Day)?.Value ?? 0.0m;
                             decimal value = numShares * unitPrice;
                             Investments.SetData(investmentValue.Day, value, reportLogger);
                             TradeType trade = value > 0 ? TradeType.Buy : TradeType.Sell;
