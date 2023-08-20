@@ -7,6 +7,11 @@
     public enum Account
     {
         /// <summary>
+        /// The default, unknown type of account.
+        /// </summary>
+        Unknown,
+
+        /// <summary>
         /// Default, and used to cycle over all account types.
         /// </summary>
         All,

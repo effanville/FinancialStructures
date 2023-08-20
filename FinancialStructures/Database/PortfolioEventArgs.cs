@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text;
 
 namespace FinancialStructures.Database
 {
@@ -34,7 +33,6 @@ namespace FinancialStructures.Database
         public bool ChangedPortfolio
         {
             get;
-            set;
         }
 
         /// <summary>
@@ -53,6 +51,14 @@ namespace FinancialStructures.Database
             get;
         }
 
+        /// <summary>
+        /// Default Constructor that alerts to all changed.
+        /// </summary>
+        public PortfolioEventArgs()
+            : base()
+        {
+            ChangedAccount = Account.All;
+        }
 
         /// <summary>
         /// Constructor taking an account type.
@@ -66,16 +72,6 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Constructor taking an account type.
         /// </summary>
-        public PortfolioEventArgs(Account type, bool userInitiated)
-            : base()
-        {
-            ChangedAccount = type;
-            UserInitiated = userInitiated;
-        }
-
-        /// <summary>
-        /// Constructor taking an account type.
-        /// </summary>
         public PortfolioEventArgs(Account type)
             : base()
         {
@@ -83,12 +79,13 @@ namespace FinancialStructures.Database
         }
 
         /// <summary>
-        /// Default Constructor that alerts to all changed.
+        /// Constructor taking an account type.
         /// </summary>
-        public PortfolioEventArgs()
+        public PortfolioEventArgs(Account type, bool userInitiated)
             : base()
         {
-            ChangedAccount = Account.All;
+            ChangedAccount = type;
+            UserInitiated = userInitiated;
         }
 
         /// <summary>

@@ -7,7 +7,9 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 {
     public class CurrencyConstructor
     {
-        public Currency item;
+        public const string DefaultCompany = "HKD";
+        public const string DefaultName = "GBP";
+        private Currency _item;
 
         public CurrencyConstructor(string company, string name, string currency = null, string url = null, string sectors = null)
         {
@@ -15,14 +17,16 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             {
                 SectorsFlat = sectors
             };
-            item = new Currency(names);
+            _item = new Currency(names);
         }
 
         public CurrencyConstructor WithData(DateTime date, decimal price)
         {
-            item.Values.SetData(date, price);
+            _item.Values.SetData(date, price);
 
             return this;
         }
+
+        public Currency GetInstance() => _item;
     }
 }

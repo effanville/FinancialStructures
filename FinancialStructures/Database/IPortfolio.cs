@@ -288,5 +288,11 @@ namespace FinancialStructures.Database
         /// returns the currency associated to the name.
         /// </summary>
         ICurrency Currency(string currencyName);
+
+        /// <summary>
+        /// Adds values to the current portfolio from another specified portfolio.
+        /// Matches on entity name only. If other 
+        /// </summary>
+        void ImportValuesFrom(IPortfolio other, IReportLogger reportLogger = null);
     }
 }
