@@ -8,9 +8,6 @@
         /// <summary>
         /// Static extension method to convert a <see cref="NameData"/> into a <see cref="TwoName"/>
         /// </summary>
-        public static TwoName ToTwoName(this NameData names)
-        {
-            return new TwoName(names.Company, names.Name);
-        }
+        public static TwoName ToTwoName(this NameData names) => new TwoName(names.Company, names.Name);
     }
 }

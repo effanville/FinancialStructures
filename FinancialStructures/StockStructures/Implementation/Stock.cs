@@ -14,13 +14,6 @@ namespace FinancialStructures.StockStructures.Implementation
         internal int LastValueIndex = 0;
 
         /// <inheritdoc/>
-        public string Ticker
-        {
-            get;
-            set;
-        }
-
-        /// <inheritdoc/>
         public NameData Name
         {
             get;
@@ -51,8 +44,8 @@ namespace FinancialStructures.StockStructures.Implementation
         /// </summary>
         public Stock(string ticker, string company, string name, string currency, string url)
         {
-            Ticker = ticker;
             Name = new NameData(company.Trim(), name.Trim(), currency, url.Trim());
+            Name.Ticker = ticker;
             Valuations = new List<StockDay>();
         }
 
@@ -108,7 +101,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// <inheritdoc/>
         public override string ToString()
         {
-            return $"Stock: {Ticker}-{Name}-{Valuations.Count}";
+            return $"Stock: {Name.Ticker}-{Name}-{Valuations.Count}";
         }
 
         /// <summary>
@@ -116,7 +109,7 @@ namespace FinancialStructures.StockStructures.Implementation
         /// </summary>
         public Stock Copy(DateTime date)
         {
-            var stock = new Stock(Ticker, Name.Company, Name.Name, Name.Currency, Name.Url);
+            var stock = new Stock(Name.Ticker, Name.Company, Name.Name, Name.Currency, Name.Url);
             foreach (var valuation in Valuations)
             {
                 if (valuation.Start < date)

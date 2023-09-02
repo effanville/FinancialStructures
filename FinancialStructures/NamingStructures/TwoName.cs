@@ -10,20 +10,12 @@ namespace FinancialStructures.NamingStructures
         /// <summary>
         /// The primary name (the company name)
         /// </summary>
-        public string Company
-        {
-            get;
-            set;
-        }
+        public string Company { get; set; }
 
         /// <summary>
         /// The secondary name.
         /// </summary>
-        public string Name
-        {
-            get;
-            set;
-        }
+        public string Name { get; set; }
 
         /// <summary>
         /// Constructor with both names.

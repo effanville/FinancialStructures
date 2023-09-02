@@ -77,7 +77,7 @@ namespace FinancialStructures.StockStructures.Implementation
         {
             foreach (Stock stock in Stocks)
             {
-                if (stock.Ticker.Equals(ticker))
+                if (stock.Name.Ticker.Equals(ticker))
                 {
                     return Convert.ToDecimal(stock.Value(date, datatype));
                 }

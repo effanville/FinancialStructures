@@ -17,8 +17,8 @@ namespace FinancialStructures.Tests.StockStructuresTests
 <StockExchange xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
   <Stocks>
     <Stock>
-      <Ticker>JMAT</Ticker>
       <Name>
+        <Ticker>JMAT</Ticker>
         <Company>Johnson Matthew</Company>
         <Name />
         <Url>https://uk.finance.yahoo.com/quote/JMAT.L</Url>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using FinancialStructures.NamingStructures;
 using FinancialStructures.StockStructures.Implementation;
 
@@ -10,15 +11,6 @@ namespace FinancialStructures.StockStructures
     /// </summary>
     public interface IStock
     {
-        /// <summary>
-        /// The code which refers to this Stock.
-        /// </summary>
-        string Ticker
-        {
-            get;
-            set;
-        }
-
         /// <summary>
         /// The name of the stock in question.
         /// </summary>
