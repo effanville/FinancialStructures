@@ -19,7 +19,7 @@ namespace FinancialStructures.NamingStructures
         /// The ric to identify the instrument.
         /// </summary>
         [XmlElement(IsNullable = false)]
-        public string RIC { get; set; }
+        public string Ric { get; set; }
 
         /// <summary>
         /// LSE based code detailing the instrument
@@ -31,7 +31,7 @@ namespace FinancialStructures.NamingStructures
         /// The isin for this instrument.
         /// </summary>
         [XmlElement(IsNullable = false)]
-        public string ISIN { get; set; }
+        public string Isin { get; set; }
 
         /// <summary>
         /// The exchange this instrument is listed on.
@@ -140,8 +140,8 @@ namespace FinancialStructures.NamingStructures
             bool urlEqual = Url?.Equals(otherName.Url) ?? otherName.Url == null;
             bool sectorsEqual = SectorsFlat?.Equals(otherName.SectorsFlat) ?? otherName.SectorsFlat == null;
             bool sedolEqual = Sedol?.Equals(otherName.Sedol) ?? otherName.Sedol == null;
-            bool isinEqual = ISIN?.Equals(otherName.ISIN) ?? otherName.ISIN == null;
-            bool ricEqual = RIC?.Equals(otherName.RIC) ?? otherName.RIC == null;
+            bool isinEqual = Isin?.Equals(otherName.Isin) ?? otherName.Isin == null;
+            bool ricEqual = Ric?.Equals(otherName.Ric) ?? otherName.Ric == null;
             bool tickerEqual = Ticker?.Equals(otherName.Ticker) ?? otherName.Ticker == null;
             bool exchangeEqual = Exchange?.Equals(otherName.Exchange) ?? otherName.Exchange == null;
             bool notesEqual = Notes?.Equals(otherName.Notes) ?? otherName.Notes == null;
@@ -164,9 +164,9 @@ namespace FinancialStructures.NamingStructures
             hashCode = 23 * hashCode + Currency?.GetHashCode() ?? 17;
             hashCode = 23 * hashCode + Url?.GetHashCode() ?? 17;
             hashCode = 23 * hashCode + SectorsFlat?.GetHashCode() ?? 17;
-            hashCode = 23 * hashCode + RIC?.GetHashCode() ?? 17;
+            hashCode = 23 * hashCode + Ric?.GetHashCode() ?? 17;
             hashCode = 23 * hashCode + Sedol?.GetHashCode() ?? 17;
-            hashCode = 23 * hashCode + ISIN?.GetHashCode() ?? 17;
+            hashCode = 23 * hashCode + Isin?.GetHashCode() ?? 17;
             hashCode = 23 * hashCode + Ticker?.GetHashCode() ?? 17;
             hashCode = 23 * hashCode + Exchange?.GetHashCode() ?? 17;
             hashCode = 23 * hashCode + Notes?.GetHashCode() ?? 17;
