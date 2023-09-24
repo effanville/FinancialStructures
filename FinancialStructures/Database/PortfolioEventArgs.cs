@@ -91,9 +91,9 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Should the type of account be updated or not.
         /// </summary>
-        public bool ShouldUpdate(Account dataType)
+        public static bool ShouldUpdate(Account change, Account dataType)
         {
-            return ChangedAccount == Account.All || dataType.Equals(ChangedAccount) || dataType == Account.All;
+            return change == Account.All || dataType.Equals(change) || dataType == Account.All;
         }
     }
 }
