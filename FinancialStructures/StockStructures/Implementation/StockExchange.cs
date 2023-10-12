@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
-using FinancialStructures.Download.Implementation;
+using FinancialStructures.StockStructures.Download;
 using FinancialStructures.NamingStructures;
 using Nager.Date;
 
@@ -231,7 +231,7 @@ namespace FinancialStructures.StockStructures.Implementation
             {
                 var downloader = new YahooDownloader();
                 IStock tempDataHolder = null;
-                string code = YahooDownloader.GetFinancialCode(stock.Name.Url);
+                string code = downloader.GetFinancialCode(stock.Name.Url);
                 if (await downloader.TryGetFullPriceHistory(code, startDate, endDate, TimeSpan.FromDays(1), value => tempDataHolder = value, reportLogger))
                 {
                     stock.Valuations = tempDataHolder.Valuations;
@@ -246,7 +246,7 @@ namespace FinancialStructures.StockStructures.Implementation
             {
                 var downloader = new YahooDownloader();
                 StockDay stockDay = null;
-                string code = YahooDownloader.GetFinancialCode(stock.Name.Url);
+                string code = downloader.GetFinancialCode(stock.Name.Url);
                 if (await downloader.TryGetLatestPriceData(code, value => stockDay = value, reportLogger))
                 {
                     stock.AddValue(stockDay.Start, stockDay.Open, stockDay.High, stockDay.Low, stockDay.Close, stockDay.Volume);
