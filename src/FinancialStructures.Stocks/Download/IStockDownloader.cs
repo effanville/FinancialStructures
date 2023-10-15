@@ -3,10 +3,9 @@ using System.Threading.Tasks;
 
 using Common.Structure.Reporting;
 
-using FinancialStructures.StockStructures;
-using FinancialStructures.StockStructures.Implementation;
+using FinancialStructures.Stocks.Implementation;
 
-namespace FinancialStructures.StockStructures.Download
+namespace FinancialStructures.Stocks.Download
 {
     public interface IStockDownloader
     {

@@ -4,9 +4,9 @@ using System.Linq;
 
 using Common.Structure.Reporting;
 
-using FinancialStructures.StockStructures.Implementation;
+using FinancialStructures.Stocks.Implementation;
 
-namespace FinancialStructures.StockStructures
+namespace FinancialStructures.Stocks
 {
     /// <summary>
     /// Static factory methods for creating an <see cref="IStockExchange"/>.

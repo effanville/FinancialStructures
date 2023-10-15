@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace FinancialStructures.StockStructures.Implementation
+namespace FinancialStructures.Stocks.Implementation
 {
     /// <summary>
     /// Class containing all data pertaining to a stock.

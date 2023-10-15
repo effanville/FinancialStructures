@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.StockStructures.Implementation
+namespace FinancialStructures.Stocks.Implementation
 {
     /// <summary>
     /// Simulates a Stock.

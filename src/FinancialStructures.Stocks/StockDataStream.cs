@@ -1,6 +1,6 @@
-﻿using FinancialStructures.StockStructures.Implementation;
+﻿using FinancialStructures.Stocks.Implementation;
 
-namespace FinancialStructures.StockStructures
+namespace FinancialStructures.Stocks
 {
     /// <summary>
     /// Possible streams of data to retrieve from a <see cref="Stock"/>.

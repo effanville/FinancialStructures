@@ -5,11 +5,11 @@ using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
-using FinancialStructures.StockStructures.Download;
+using FinancialStructures.Stocks.Download;
 using FinancialStructures.NamingStructures;
 using Nager.Date;
 
-namespace FinancialStructures.StockStructures.Implementation
+namespace FinancialStructures.Stocks.Implementation
 {
     /// <summary>
     /// Simulates a stock exchange.

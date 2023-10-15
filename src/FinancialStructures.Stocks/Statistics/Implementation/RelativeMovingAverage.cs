@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Common.Structure.MathLibrary.Vectors;
 
-namespace FinancialStructures.StockStructures.Statistics.Implementation
+namespace FinancialStructures.Stocks.Statistics.Implementation
 {
     internal class RelativeMovingAverage : IStockStatistic
     {

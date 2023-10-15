@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PublishTrimmed>true</PublishTrimmed>
+    <TrimMode>CopyUsed</TrimMode>
+    <LangVersion>9.0</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup>
+	<VersionPrefix>23.07.0</VersionPrefix>
+	  <VersionSuffix>$([System.DateTime]::UtcNow.ToString(`yyyyMMdd-HHmm`))</VersionSuffix>
+  </PropertyGroup>
+
+	<ItemGroup Condition="Exists('..\..\Common\Common.Structure\Common.Structure.csproj')" >
+		<ProjectReference Include="..\..\Common\Common.Structure\Common.Structure.csproj" />
+	</ItemGroup>
+	<ItemGroup Condition="!Exists('..\..\Common\Common.Structure\Common.Structure.csproj') And Exists('..\..\..\FinancePortfolioDatabase.sln')" >
+		<ProjectReference Include="..\..\..\Common\Common.Structure\Common.Structure.csproj" />
+	</ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+    <_Parameter1>$(AssemblyName).Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\FinancialStructures\FinancialStructures.csproj" />
+  </ItemGroup>
+
+</Project>

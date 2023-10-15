@@ -1,6 +1,6 @@
-﻿using FinancialStructures.StockStructures.Statistics.Implementation;
+﻿using FinancialStructures.Stocks.Statistics.Implementation;
 
-namespace FinancialStructures.StockStructures.Statistics
+namespace FinancialStructures.Stocks.Statistics
 {
     /// <summary>
     /// Generator for various statistic calculators for a stock.

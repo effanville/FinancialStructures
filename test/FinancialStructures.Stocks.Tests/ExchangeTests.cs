@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FinancialStructures.StockStructures.Implementation;
-using FinancialStructures.StockStructures;
+using FinancialStructures.Stocks.Implementation;
 using NUnit.Framework;
 using System.IO.Abstractions.TestingHelpers;
 using Common.Structure.Reporting;
 
-namespace FinancialStructures.Tests.StockStructuresTests
+namespace FinancialStructures.Stocks.Tests
 {
     internal sealed class ExchangeTests
     {

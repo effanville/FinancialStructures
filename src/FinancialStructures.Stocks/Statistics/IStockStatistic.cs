@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FinancialStructures.StockStructures.Statistics
+namespace FinancialStructures.Stocks.Statistics
 {
     /// <summary>
     /// A container for generic statistic calculations for each stock.

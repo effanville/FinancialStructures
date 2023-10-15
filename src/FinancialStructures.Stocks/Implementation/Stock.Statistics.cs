@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Common.Structure.MathLibrary.Vectors;
 
-namespace FinancialStructures.StockStructures.Implementation
+namespace FinancialStructures.Stocks.Implementation
 {
     public partial class Stock
     {

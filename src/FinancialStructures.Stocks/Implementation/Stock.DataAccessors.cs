@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FinancialStructures.StockStructures.Implementation
+namespace FinancialStructures.Stocks.Implementation
 {
     public partial class Stock
     {

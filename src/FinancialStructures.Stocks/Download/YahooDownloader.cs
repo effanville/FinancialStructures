@@ -4,11 +4,9 @@ using System.Threading.Tasks;
 using Common.Structure.Reporting;
 
 using FinancialStructures.Download.Implementation;
-using FinancialStructures.NamingStructures;
-using FinancialStructures.StockStructures;
-using FinancialStructures.StockStructures.Implementation;
+using FinancialStructures.Stocks.Implementation;
 
-namespace FinancialStructures.StockStructures.Download
+namespace FinancialStructures.Stocks.Download
 {
     /// <summary>
     /// An implementation of an <see cref="IStockDownloader"/> for Yahoo websites.

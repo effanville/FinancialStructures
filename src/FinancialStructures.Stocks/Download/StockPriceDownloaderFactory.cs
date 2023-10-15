@@ -1,7 +1,4 @@
-using FinancialStructures.Download.Implementation;
-using FinancialStructures.StockStructures.Download;
-
-namespace FinancialStructures.StockStructures.Download
+namespace FinancialStructures.Stocks.Download
 {
     public static class StockPriceDownloaderFactory
     {

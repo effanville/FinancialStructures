@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 using Common.Structure.Reporting;
 
 using FinancialStructures.NamingStructures;
-using FinancialStructures.StockStructures.Implementation;
+using FinancialStructures.Stocks.Implementation;
 using Nager.Date;
 
-namespace FinancialStructures.StockStructures
+namespace FinancialStructures.Stocks
 {
     /// <summary>
     /// Contains the contract for a Stock exchange.

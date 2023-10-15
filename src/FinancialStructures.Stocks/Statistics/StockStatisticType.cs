@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.StockStructures.Statistics
+﻿namespace FinancialStructures.Stocks.Statistics
 {
     /// <summary>
     /// The admissible types of stock statistic.
