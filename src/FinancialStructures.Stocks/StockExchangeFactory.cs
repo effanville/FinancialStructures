@@ -5,6 +5,7 @@ using System.Linq;
 using Common.Structure.Reporting;
 
 using FinancialStructures.Stocks.Implementation;
+using FinancialStructures.Stocks.Persistence;
 
 namespace FinancialStructures.Stocks
 {
@@ -26,8 +27,8 @@ namespace FinancialStructures.Stocks
         /// </summary>
         public static IStockExchange Create(string filePath, IFileSystem fileSystem, IReportLogger logger)
         {
-            StockExchange exchange = new StockExchange();
-            exchange.LoadStockExchange(filePath, fileSystem, logger);
+            IExchangePersistence persistence = new XmlExchangePersistence();
+            IStockExchange exchange = persistence.Load(new XmlFilePersistenceOptions(filePath, fileSystem), logger);
             if (!exchange.CheckValidity())
             {
                 _ = logger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, "Stock input data not suitable.");

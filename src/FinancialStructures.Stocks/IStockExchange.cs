@@ -101,26 +101,6 @@ namespace FinancialStructures.Stocks
         void Configure(string stockFilePath, IFileSystem fileSystem, IReportLogger logger = null);
 
         /// <summary>
-        /// Loads the <see cref="StockExchange"/> from the file specified.
-        /// </summary>
-        void LoadStockExchange(string filePath, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Loads the <see cref="StockExchange"/> from the file specified.
-        /// </summary>
-        void LoadStockExchange(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Saves the <see cref="StockExchange"/> to the file specified.
-        /// </summary>
-        void SaveStockExchange(string filePath, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Saves the <see cref="StockExchange"/> to the file specified.
-        /// </summary>
-        void SaveStockExchange(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null);
-
-        /// <summary>
         /// Downloads data for the stock exchange between the dates provided.
         /// </summary>
         Task Download(DateTime startDate, DateTime endDate, IReportLogger reportLogger = null);

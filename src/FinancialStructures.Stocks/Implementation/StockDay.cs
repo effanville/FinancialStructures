@@ -1,18 +1,15 @@
 ﻿using System;
-using System.Xml.Serialization;
 
 namespace FinancialStructures.Stocks.Implementation
 {
     /// <summary>
     /// Class containing all data pertaining to a stock.
     /// </summary>
-    [XmlType(TypeName = "StockDay")]
     public class StockDay : IComparable<StockDay>
     {
         /// <summary>
         /// The start time of the interval this data is about.
         /// </summary>
-        [XmlAttribute(AttributeName = "T")]
         public DateTime Start
         {
             get;
@@ -22,7 +19,6 @@ namespace FinancialStructures.Stocks.Implementation
         /// <summary>
         /// The length of time of the interval this data is about.
         /// </summary>
-        [XmlAttribute(AttributeName = "D")]
         public TimeSpan Duration
         {
             get;
@@ -32,13 +28,11 @@ namespace FinancialStructures.Stocks.Implementation
         /// <summary>
         /// The ending time of the interval this data is about.
         /// </summary>
-        [XmlIgnore]
         public DateTime End => Start + Duration;
 
         /// <summary>
         /// The opening price in the interval.
         /// </summary>
-        [XmlAttribute(AttributeName = "O")]
         public decimal Open
         {
             get;
@@ -48,7 +42,6 @@ namespace FinancialStructures.Stocks.Implementation
         /// <summary>
         /// The high value in this interval
         /// </summary>
-        [XmlAttribute(AttributeName = "H")]
         public decimal High
         {
             get;
@@ -58,7 +51,6 @@ namespace FinancialStructures.Stocks.Implementation
         /// <summary>
         /// The low value in this interval.
         /// </summary>
-        [XmlAttribute(AttributeName = "L")]
         public decimal Low
         {
             get;
@@ -68,7 +60,6 @@ namespace FinancialStructures.Stocks.Implementation
         /// <summary>
         /// The closing value in this interval.
         /// </summary>
-        [XmlAttribute(AttributeName = "C")]
         public decimal Close
         {
             get;
@@ -78,7 +69,6 @@ namespace FinancialStructures.Stocks.Implementation
         /// <summary>
         /// The trading volume experienced in the interval.
         /// </summary>
-        [XmlAttribute(AttributeName = "V")]
         public decimal Volume
         {
             get;

@@ -10,7 +10,7 @@ namespace FinancialStructures.Stocks.Implementation
     /// </summary>
     public partial class Stock : IStock
     {
-        private List<StockDay> fValuations;
+        private List<StockDay> fValuations = new();
         internal int LastValueIndex = 0;
 
         /// <inheritdoc/>
@@ -36,7 +36,6 @@ namespace FinancialStructures.Stocks.Implementation
         /// </summary>
         public Stock()
         {
-            Valuations = new List<StockDay>();
         }
 
         /// <summary>

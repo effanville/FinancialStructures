@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
-using System.Xml.Serialization;
-using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
 using FinancialStructures.Stocks.Download;
 using FinancialStructures.NamingStructures;
@@ -24,7 +22,6 @@ namespace FinancialStructures.Stocks.Implementation
         }
 
         /// <inheritdoc/>
-        [XmlIgnore]
         public TimeZoneInfo TimeZone
         {
             get;
@@ -175,55 +172,7 @@ namespace FinancialStructures.Stocks.Implementation
 
             return true;
         }
-
-        /// <inheritdoc/>
-        public void LoadStockExchange(string filePath, IReportLogger reportLogger = null)
-        {
-            LoadStockExchange(filePath, new FileSystem(), reportLogger);
-        }
-
-        /// <inheritdoc/>
-        public void LoadStockExchange(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null)
-        {
-            if (fileSystem.File.Exists(filePath))
-            {
-                StockExchange database = XmlFileAccess.ReadFromXmlFile<StockExchange>(fileSystem, filePath, out string error);
-                if (database != null)
-                {
-                    reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(), $"Loaded StockExchange from {filePath}.");
-                    Stocks = database.Stocks;
-                }
-                else
-                {
-                    reportLogger?.Log(ReportType.Error, ReportLocation.Loading.ToString(), $"No StockExchange Loaded from {filePath}. Error {error}.");
-                }
-                return;
-            }
-
-            reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(), "Loaded Empty New StockExchange.");
-            Stocks = new List<Stock>();
-        }
-
-        /// <inheritdoc/>
-        public void SaveStockExchange(string filePath, IReportLogger reportLogger = null)
-        {
-            SaveStockExchange(filePath, new FileSystem(), reportLogger);
-        }
-
-        /// <inheritdoc/>
-        public void SaveStockExchange(string filePath, IFileSystem fileSystem, IReportLogger reportLogger)
-        {
-            XmlFileAccess.WriteToXmlFile<StockExchange>(fileSystem, filePath, this, out string error);
-            if (error == null)
-            {
-                reportLogger?.Log(ReportType.Information, ReportLocation.Saving.ToString(), $"Saved StockExchange at {filePath}");
-            }
-            else
-            {
-                reportLogger?.Log(ReportType.Error, ReportLocation.Saving.ToString(), error);
-            }
-        }
-
+        
         /// <inheritdoc/>
         public async Task Download(DateTime startDate, DateTime endDate, IReportLogger reportLogger = null)
         {
