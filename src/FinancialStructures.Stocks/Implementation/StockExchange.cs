@@ -13,7 +13,14 @@ namespace FinancialStructures.Stocks.Implementation
     /// Simulates a stock exchange.
     /// </summary>
     public class StockExchange : IStockExchange
-    {
+    {       
+        /// <inheritdoc/>
+        public string ExchangeIdentifier
+        {
+            get;
+            set;
+        }
+        
         /// <inheritdoc/>
         public string Name
         {
@@ -35,10 +42,8 @@ namespace FinancialStructures.Stocks.Implementation
             set;
         } = CountryCode.GB;
 
-        /// <inheritdoc/>
         private TimeOnly ExchangeOpen => new TimeOnly(8, 0, 0);
 
-        /// <inheritdoc/>
         private TimeOnly ExchangeClose => new TimeOnly(16, 30, 0);
 
         public DateTime ExchangeOpenInUtc(DateTime date)

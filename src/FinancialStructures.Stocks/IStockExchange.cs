@@ -18,6 +18,14 @@ namespace FinancialStructures.Stocks
         /// <summary>
         /// The stock exchange name, eg London stock exchange.
         /// </summary>
+        string ExchangeIdentifier
+        {
+            get;
+        }
+        
+        /// <summary>
+        /// The stock exchange name, eg London stock exchange.
+        /// </summary>
         string Name
         {
             get;
