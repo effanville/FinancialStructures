@@ -1,5 +1,7 @@
 using Common.Structure.Reporting;
 
+using FinancialStructures.Persistence;
+
 namespace FinancialStructures.Stocks.Persistence
 {
     public interface IExchangePersistence

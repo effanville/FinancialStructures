@@ -5,6 +5,7 @@ using System.IO.Abstractions;
 using Common.Structure.FileAccess;
 using Common.Structure.Reporting;
 
+using FinancialStructures.Persistence;
 using FinancialStructures.Stocks.Implementation;
 using FinancialStructures.Stocks.Persistence.Xml;
 

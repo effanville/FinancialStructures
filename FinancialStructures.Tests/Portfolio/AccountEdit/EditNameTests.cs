@@ -44,7 +44,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
         {
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(newComp, newName, newCurrency, newUrl, newSectors));
 
-            NameData accountNames = database.FundsThreadSafe[0].Names;
+            NameData accountNames = database.Funds[0].Names;
             Assert.AreEqual(newName, accountNames.Name);
             Assert.AreEqual(newComp, accountNames.Company);
             Assert.AreEqual(newUrl, accountNames.Url);

@@ -41,8 +41,8 @@ namespace FinancialStructures.Database.Download
         {
             List<Task> downloadTasks = new List<Task>();
             Add(portfo.Accounts(Account.All));
-            Add(portfo.CurrenciesThreadSafe);
-            Add(portfo.BenchMarksThreadSafe);
+            Add(portfo.Currencies);
+            Add(portfo.BenchMarks);
 
             void Add(IReadOnlyList<IValueList> accounts)
             {

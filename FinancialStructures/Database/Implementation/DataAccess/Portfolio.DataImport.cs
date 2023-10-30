@@ -8,7 +8,7 @@ namespace FinancialStructures.Database.Implementation
         /// <inheritdoc/>
         public void ImportValuesFrom(IPortfolio other, IReportLogger reportLogger = null)
         {
-            foreach (ISecurity security in Funds)
+            foreach (ISecurity security in _fundsBackingList)
             {
                 if (other.TryGetAccount(Account.Security, security.Names, out var otherSecurity)
                     && otherSecurity is ISecurity sec)
@@ -20,7 +20,7 @@ namespace FinancialStructures.Database.Implementation
                 }
             }
 
-            foreach (IExchangableValueList bankAccount in BankAccounts)
+            foreach (IExchangableValueList bankAccount in _bankAccountBackingList)
             {
                 if (other.TryGetAccount(Account.BankAccount, bankAccount.Names, out var otherBankAccount)
                     && otherBankAccount is IExchangableValueList sec)
@@ -32,7 +32,7 @@ namespace FinancialStructures.Database.Implementation
                 }
             }
 
-            foreach (IValueList sector in BenchMarks)
+            foreach (IValueList sector in _benchMarksBackingList)
             {
                 if (other.TryGetAccount(Account.Benchmark, sector.Names, out var otherBankAccount)
                     && otherBankAccount is IValueList sec)
@@ -44,7 +44,7 @@ namespace FinancialStructures.Database.Implementation
                 }
             }
 
-            foreach (ICurrency currency in Currencies)
+            foreach (ICurrency currency in _currenciesBackingList)
             {
                 if (other.TryGetAccount(Account.Currency, currency.Names, out var otherBankAccount)
                     && otherBankAccount is ICurrency sec)
@@ -56,7 +56,7 @@ namespace FinancialStructures.Database.Implementation
                 }
             }
 
-            foreach (IAmortisableAsset asset in AssetsBackingList)
+            foreach (IAmortisableAsset asset in _assetsBackingList)
             {
                 if (other.TryGetAccount(Account.Asset, asset.Names, out var otherBankAccount)
                     && otherBankAccount is IAmortisableAsset sec)
@@ -68,7 +68,7 @@ namespace FinancialStructures.Database.Implementation
                 }
             }
 
-            foreach (ISecurity pension in PensionsBackingList)
+            foreach (ISecurity pension in _pensionsBackingList)
             {
                 if (other.TryGetAccount(Account.Pension, pension.Names, out var otherPension)
                     && otherPension is ISecurity sec)

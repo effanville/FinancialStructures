@@ -6,6 +6,7 @@ using Common.Structure.DataStructures;
 using Common.Structure.Reporting;
 
 using FinancialStructures.NamingStructures;
+using FinancialStructures.Persistence;
 using FinancialStructures.Stocks.Implementation;
 using FinancialStructures.Stocks.Persistence.Database;
 using FinancialStructures.Stocks.Persistence.Models;

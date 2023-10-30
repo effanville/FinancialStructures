@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Serialization;
+using System.Threading;
+
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.FinanceStructures.Implementation.Asset;
@@ -13,26 +14,24 @@ namespace FinancialStructures.Database.Implementation
     /// </summary>
     public partial class Portfolio : IPortfolio
     {
-        private readonly object FundsLock = new object();
-        private readonly object BankAccountsLock = new object();
-        private readonly object CurrenciesLock = new object();
-        private readonly object BenchmarksLock = new object();
-        private readonly object AssetsLock = new object();
-        private readonly object PensionsLock = new object();
+        private readonly object _fundsLock = new object();
+        private readonly object _bankAccountsLock = new object();
+        private readonly object _currenciesLock = new object();
+        private readonly object _benchmarksLock = new object();
+        private readonly object _assetsLock = new object();
+        private readonly object _pensionsLock = new object();
 
         /// <summary>
         /// Flag to state when the user has altered values in the portfolio
         /// after the last save.
         /// </summary>
-        [XmlIgnore]
         public bool IsAlteredSinceSave
         {
             get;
             private set;
-        } = false;
+        }
 
         /// <inheritdoc/>
-        [XmlAttribute(AttributeName = "Name")]
         public string Name
         {
             get;
@@ -40,151 +39,152 @@ namespace FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
-        [XmlElement(ElementName = "BaseCurrency")]
         public string BaseCurrency
         {
             get;
             set;
         }
 
-        /// <inheritdoc/>
-        [XmlArray(ElementName = "Funds")]
-        [XmlArrayItem(ElementName = "Security")]
-        public List<Security> Funds
-        {
-            get;
-            private set;
-        } = new List<Security>();
-
+        private List<Security> _fundsBackingList = new List<Security>();
 
         /// <inheritdoc/>
-        [XmlIgnore]
-        public IReadOnlyList<ISecurity> FundsThreadSafe
+        public IReadOnlyList<ISecurity> Funds
         {
             get
             {
-                lock (FundsLock)
+                lock(_fundsLock)
                 {
-                    return Funds.ToList();
+                    return _fundsBackingList.ToList();
                 }
+            }
+        }
+
+        internal void AddFund(Security security)
+        {
+            lock(_fundsLock)
+            {
+                _fundsBackingList.Add(security);
             }
         }
 
         /// <summary>
         /// Backing for the BankAccounts.
         /// </summary>
-        [XmlArray(ElementName = "BankAccounts")]
-        [XmlArrayItem(ElementName = "CashAccount")]
-        public List<CashAccount> BankAccounts
-        {
-            get;
-            private set;
-        } = new List<CashAccount>();
+        private List<CashAccount> _bankAccountBackingList = new List<CashAccount>();
 
         /// <inheritdoc/>
-        [XmlIgnore]
-        public IReadOnlyList<IExchangableValueList> BankAccountsThreadSafe
+        public IReadOnlyList<IExchangableValueList> BankAccounts
         {
             get
             {
-                lock (BankAccountsLock)
+                lock (_bankAccountsLock)
                 {
-                    return BankAccounts.ToList();
+                    return _bankAccountBackingList.ToList();
                 }
+            }
+        }
+
+        internal void AddBankAccount(CashAccount cashAccount)
+        {
+            lock (_bankAccountsLock)
+            {_bankAccountBackingList.Add(cashAccount);
             }
         }
 
         /// <summary>
         /// Backing for the currencies.
         /// </summary>
-        [XmlArray(ElementName = "Currencies")]
-        [XmlArrayItem(ElementName = "Currency")]
-        public List<Currency> Currencies
-        {
-            get;
-            private set;
-        } = new List<Currency>();
+        private List<Currency> _currenciesBackingList = new List<Currency>();
 
         /// <inheritdoc/>
-        [XmlIgnore]
-        public IReadOnlyList<ICurrency> CurrenciesThreadSafe
+        public IReadOnlyList<ICurrency> Currencies
         {
             get
             {
-                lock (CurrenciesLock)
+                lock (_currenciesLock)
                 {
-                    return Currencies.ToList();
+                    return _currenciesBackingList.ToList();
                 }
             }
         }
 
-        /// <inheritdoc/>
-        [XmlArray(ElementName = "BenchMarks")]
-        [XmlArrayItem(ElementName = "Sector")]
-        public List<Sector> BenchMarks
+        internal void AddCurrency(Currency currency)
         {
-            get;
-            set;
-        } = new List<Sector>();
+            lock (_currenciesLock)
+            {
+                _currenciesBackingList.Add(currency);
+            }
+        }
+
+        private List<Sector> _benchMarksBackingList = new List<Sector>();
 
         /// <inheritdoc/>
-        [XmlIgnore]
-        public IReadOnlyList<IValueList> BenchMarksThreadSafe
+        public IReadOnlyList<IValueList> BenchMarks
         {
             get
             {
-                lock (BenchmarksLock)
+                lock (_benchmarksLock)
                 {
-                    return BenchMarks.ToList();
+                    return _benchMarksBackingList.ToList();
                 }
+            }
+        }
+
+        internal void AddBenchMark(Sector sector)
+        {                
+            lock (_benchmarksLock)
+            {
+                _benchMarksBackingList.Add(sector);
             }
         }
 
         /// <summary>
         /// The list of assets in the portfolio.
         /// </summary>
-        [XmlArray(ElementName = "Assets")]
-        [XmlArrayItem(ElementName = "AmortisableAsset")]
-        public List<AmortisableAsset> AssetsBackingList
-        {
-            get;
-            set;
-        } = new List<AmortisableAsset>();
+        private List<AmortisableAsset> _assetsBackingList = new List<AmortisableAsset>();
 
         /// <inheritdoc/>
-        [XmlIgnore]
         public IReadOnlyList<IAmortisableAsset> Assets
         {
             get
             {
-                lock (AssetsLock)
+                lock (_assetsLock)
                 {
-                    return AssetsBackingList.ToList();
+                    return _assetsBackingList.ToList();
                 }
+            }
+        }
+
+        internal void AddAsset(AmortisableAsset asset)
+        {
+            lock (_assetsLock)
+            {
+                _assetsBackingList.Add(asset);
             }
         }
 
         /// <summary>
         /// A list storing the actual data for all Pensions
         /// </summary>
-        [XmlArray(ElementName = "Pensions")]
-        [XmlArrayItem(ElementName = "Pension")]
-        public List<Security> PensionsBackingList
-        {
-            get;
-            private set;
-        } = new List<Security>();
+        private List<Security> _pensionsBackingList = new List<Security>();
 
         /// <inheritdoc />
-        [XmlIgnore]
         public IReadOnlyList<ISecurity> Pensions
         {
             get
             {
-                lock (PensionsLock)
+                lock (_pensionsLock)
                 {
-                    return PensionsBackingList.ToList();
+                    return _pensionsBackingList.ToList();
                 }
+            }
+        }
+
+        internal void AddPension(Security security)
+        {
+            lock (_pensionsLock)
+            {
+                _pensionsBackingList.Add(security);
             }
         }
 
@@ -195,17 +195,16 @@ namespace FinancialStructures.Database.Implementation
         {
         }
 
-        /// <inheritdoc/>
-        public void SetFrom(Portfolio portfolio)
+        private void SetFrom(Portfolio portfolio)
         {
             BaseCurrency = portfolio.BaseCurrency;
             Name = portfolio.Name;
-            Funds = portfolio.Funds;
-            BankAccounts = portfolio.BankAccounts;
-            Currencies = portfolio.Currencies;
-            BenchMarks = portfolio.BenchMarks;
-            AssetsBackingList = portfolio.AssetsBackingList;
-            PensionsBackingList = portfolio.PensionsBackingList;
+            _fundsBackingList = portfolio._fundsBackingList;
+            _bankAccountBackingList = portfolio._bankAccountBackingList;
+            _currenciesBackingList = portfolio._currenciesBackingList;
+            _benchMarksBackingList = portfolio._benchMarksBackingList;
+            _assetsBackingList = portfolio._assetsBackingList;
+            _pensionsBackingList = portfolio._pensionsBackingList;
             NotesInternal = portfolio.NotesInternal;
         }
 
@@ -222,10 +221,10 @@ namespace FinancialStructures.Database.Implementation
         /// </summary>
         public void SetBenchMarks(List<Sector> sectors)
         {
-            lock (BenchmarksLock)
+            lock (_benchmarksLock)
             {
-                BenchMarks.Clear();
-                BenchMarks.AddRange(sectors);
+                _benchMarksBackingList.Clear();
+                _benchMarksBackingList.AddRange(sectors);
             }
         }
 
@@ -241,10 +240,7 @@ namespace FinancialStructures.Database.Implementation
         {
             IsAlteredSinceSave = true;
             EventHandler<PortfolioEventArgs> handler = PortfolioChanged;
-            if (handler != null)
-            {
-                handler?.Invoke(obj, e);
-            }
+            handler?.Invoke(obj, e);
 
             if (obj is bool _)
             {
@@ -252,129 +248,79 @@ namespace FinancialStructures.Database.Implementation
             }
         }
 
-        /// <inheritdoc/>
-        public void Saving()
-        {
-            IsAlteredSinceSave = false;
-        }
+        public void Saving() => IsAlteredSinceSave = false;
 
         /// <inheritdoc/>
         public int NumberOf(Account elementType)
-        {
-            switch (elementType)
+            => elementType switch
             {
-                case Account.All:
-                {
-                    return FundsThreadSafe.Count + CurrenciesThreadSafe.Count + BankAccountsThreadSafe.Count + BenchMarksThreadSafe.Count;
-                }
-                case Account.Security:
-                {
-                    return FundsThreadSafe.Count;
-                }
-                case Account.Currency:
-                {
-                    return CurrenciesThreadSafe.Count;
-                }
-                case Account.BankAccount:
-                {
-                    return BankAccountsThreadSafe.Count;
-                }
-                case Account.Benchmark:
-                {
-                    return BenchMarksThreadSafe.Count;
-                }
-                case Account.Asset:
-                {
-                    return AssetsBackingList.Count;
-                }
-                case Account.Pension:
-                {
-                    return PensionsBackingList.Count;
-                }
-                default:
-                    break;
-            }
-
-            return 0;
-        }
+                Account.All => Funds.Count + Currencies.Count + BankAccounts.Count +
+                               BenchMarks.Count,
+                Account.Security => Funds.Count,
+                Account.Currency => Currencies.Count,
+                Account.BankAccount => BankAccounts.Count,
+                Account.Benchmark => BenchMarks.Count,
+                Account.Asset => Assets.Count,
+                Account.Pension => Pensions.Count,
+                Account.Unknown => 0,
+                _ => 0
+            };
 
         /// <inheritdoc/>
-        public int NumberOf(Account account, Func<IValueList, bool> selector)
-        {
-            switch (account)
+        public int NumberOf(Account account, Func<IValueList, bool> selector) 
+            => account switch
             {
-                case Account.Security:
-                {
-                    return FundsThreadSafe.Where(fund => selector(fund)).Count();
-                }
-                case Account.BankAccount:
-                {
-                    return BankAccountsThreadSafe.Where(fund => selector(fund)).Count();
-                }
-                case Account.Benchmark:
-                {
-                    return BenchMarksThreadSafe.Where(fund => selector(fund)).Count();
-                }
-                case Account.Currency:
-                {
-                    return CurrenciesThreadSafe.Where(fund => selector(fund)).Count();
-                }
-                case Account.Asset:
-                {
-                    return AssetsBackingList.Where(fund => selector(fund)).Count();
-                }
-                case Account.Pension:
-                {
-                    return PensionsBackingList.Where(fund => selector(fund)).Count();
-                }
-                default:
-                    return 0;
-            }
-        }
+                Account.Security => Funds.Count(fund => selector(fund)),
+                Account.BankAccount => BankAccounts.Count(fund => selector(fund)),
+                Account.Benchmark => BenchMarks.Count(selector),
+                Account.Currency => Currencies.Count(fund => selector(fund)),
+                Account.Asset => Assets.Count(fund => selector(fund)),
+                Account.Pension => Pensions.Count(fund => selector(fund)),
+                _ => 0
+            };
 
         /// <inheritdoc/>
         public void CleanData()
         {
-            foreach (ISecurity security in FundsThreadSafe)
+            foreach (ISecurity security in Funds)
             {
                 security.CleanData();
             }
         }
 
-        /// <inheritdoc/>
         public void WireDataChangedEvents()
         {
-            foreach (Security security in Funds)
+            foreach (Security security in _fundsBackingList)
             {
                 security.DataEdit += OnPortfolioChanged;
                 security.SetupEventListening();
             }
 
-            foreach (CashAccount bankAccount in BankAccounts)
+            foreach (CashAccount bankAccount in _bankAccountBackingList)
             {
                 bankAccount.DataEdit += OnPortfolioChanged;
                 bankAccount.SetupEventListening();
             }
 
-            foreach (Sector sector in BenchMarks)
+            foreach (Sector sector in _benchMarksBackingList)
             {
                 sector.DataEdit += OnPortfolioChanged;
                 sector.SetupEventListening();
             }
 
-            foreach (Currency currency in Currencies)
+            foreach (Currency currency in _currenciesBackingList)
             {
                 currency.DataEdit += OnPortfolioChanged;
                 currency.SetupEventListening();
             }
 
-            foreach (AmortisableAsset asset in AssetsBackingList)
+            foreach (AmortisableAsset asset in _assetsBackingList)
             {
                 asset.DataEdit += OnPortfolioChanged;
                 asset.SetupEventListening();
             }
 
-            foreach (Security pension in PensionsBackingList)
+            foreach (Security pension in _pensionsBackingList)
             {
                 pension.DataEdit += OnPortfolioChanged;
                 pension.SetupEventListening();

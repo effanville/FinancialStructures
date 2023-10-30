@@ -1,6 +1,6 @@
 using System.IO.Abstractions;
 
-namespace FinancialStructures.Stocks.Persistence
+namespace FinancialStructures.Persistence
 {
     public class SqlitePersistenceOptions : PersistenceOptions
     {

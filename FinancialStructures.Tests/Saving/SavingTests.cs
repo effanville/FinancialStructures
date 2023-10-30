@@ -8,6 +8,7 @@ using FinancialStructures.Database.Implementation;
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
+using FinancialStructures.Persistence;
 using FinancialStructures.Tests.TestDatabaseConstructor;
 using NUnit.Framework;
 
@@ -153,9 +154,6 @@ namespace FinancialStructures.Tests.Saving
           <Name>name</Name>
           <Sectors />
         </Names>
-        <Values>
-          <Values />
-        </Values>
         <Shares>
           <Values />
         </Shares>
@@ -178,9 +176,6 @@ namespace FinancialStructures.Tests.Saving
         <Values>
           <Values />
         </Values>
-        <Amounts>
-          <Values />
-        </Amounts>
       </CashAccount>
     </BankAccounts>
     <Currencies>
@@ -236,9 +231,6 @@ namespace FinancialStructures.Tests.Saving
           </Sectors>
           <Notes>some information</Notes>
         </Names>
-        <Values>
-          <Values />
-        </Values>
         <Shares>
           <Values>
             <DV D=""2015-01-01T00:00:00"" V=""5.0"" />
@@ -269,9 +261,6 @@ namespace FinancialStructures.Tests.Saving
         <Values>
           <Values />
         </Values>
-        <Amounts>
-          <Values />
-        </Amounts>
       </CashAccount>
     </BankAccounts>
     <Currencies>
@@ -328,16 +317,6 @@ namespace FinancialStructures.Tests.Saving
             <DV D=""2020-01-01T00:00:00"" V=""101.1"" />
           </Values>
         </Values>
-        <Amounts>
-          <Values>
-            <DV D=""2010-01-01T00:00:00"" V=""100.0"" />
-            <DV D=""2011-01-01T00:00:00"" V=""100.0"" />
-            <DV D=""2012-05-01T00:00:00"" V=""125.2"" />
-            <DV D=""2015-04-03T00:00:00"" V=""90.6"" />
-            <DV D=""2018-05-06T00:00:00"" V=""77.7"" />
-            <DV D=""2020-01-01T00:00:00"" V=""101.1"" />
-          </Values>
-        </Amounts>
       </CashAccount>
     </BankAccounts>
     <Currencies />
@@ -359,9 +338,6 @@ namespace FinancialStructures.Tests.Saving
           <Name>UK Stock</Name>
           <Sectors />
         </Names>
-        <Values>
-          <Values />
-        </Values>
         <Shares>
           <Values>
             <DV D=""2010-01-01T00:00:00"" V=""2.0"" />
@@ -417,9 +393,6 @@ namespace FinancialStructures.Tests.Saving
           <Name>UK Stock</Name>
           <Sectors />
         </Names>
-        <Values>
-          <Values />
-        </Values>
         <Shares>
           <Values>
             <DV D=""2010-01-01T00:00:00"" V=""2.0"" />
@@ -472,16 +445,6 @@ namespace FinancialStructures.Tests.Saving
             <DV D=""2020-01-01T00:00:00"" V=""101.1"" />
           </Values>
         </Values>
-        <Amounts>
-          <Values>
-            <DV D=""2010-01-01T00:00:00"" V=""100.0"" />
-            <DV D=""2011-01-01T00:00:00"" V=""100.0"" />
-            <DV D=""2012-05-01T00:00:00"" V=""125.2"" />
-            <DV D=""2015-04-03T00:00:00"" V=""90.6"" />
-            <DV D=""2018-05-06T00:00:00"" V=""77.7"" />
-            <DV D=""2020-01-01T00:00:00"" V=""101.1"" />
-          </Values>
-        </Amounts>
       </CashAccount>
     </BankAccounts>
     <Currencies />
@@ -508,7 +471,9 @@ namespace FinancialStructures.Tests.Saving
             MockFileSystem tempFileSystem = new MockFileSystem();
             string savePath = "c:/temp/saved.xml";
 
-            times.SavePortfolio(savePath, tempFileSystem, null);
+            var xmlPersistence = new XmlPortfolioPersistence();
+            var options = new XmlFilePersistenceOptions(savePath, tempFileSystem);
+            xmlPersistence.Save(times, options, null);
 
             string file = tempFileSystem.File.ReadAllText(savePath);
 
@@ -533,11 +498,11 @@ namespace FinancialStructures.Tests.Saving
         [TestCaseSource(nameof(ReadSerializationData), new object[] { nameof(ReadXmlTests) })]
         public void ReadXmlTests(string expectedXml, IPortfolio times)
         {
-            Portfolio loadedPortfolio = new Portfolio();
             MockFileSystem tempFileSystem = new MockFileSystem();
             string savePath = "c:/temp/saved.xml";
             tempFileSystem.AddFile(savePath, new MockFileData(expectedXml));
-            loadedPortfolio.LoadPortfolio(savePath, tempFileSystem, null);
+            var xmlPersistence = new XmlPortfolioPersistence();
+            var loadedPortfolio = xmlPersistence.Load(new XmlFilePersistenceOptions(savePath, tempFileSystem), null);
 
             AreEqual(times, loadedPortfolio);
         }
@@ -549,14 +514,15 @@ namespace FinancialStructures.Tests.Saving
             MockFileSystem tempFileSystem = new MockFileSystem();
             string savePath = "c:/temp/saved.xml";
 
-            database.SavePortfolio(savePath, tempFileSystem, null);
+            var xmlPersistence = new XmlPortfolioPersistence();
+            var options = new XmlFilePersistenceOptions(savePath, tempFileSystem);
+            xmlPersistence.Save(database, options, null);
 
             string file = tempFileSystem.File.ReadAllText(savePath);
 
             Assert.AreEqual(expectedXml, file);
 
-            Portfolio loadedPortfolio = new Portfolio();
-            loadedPortfolio.LoadPortfolio(savePath, tempFileSystem, null);
+            IPortfolio loadedPortfolio = xmlPersistence.Load(new XmlFilePersistenceOptions(savePath, tempFileSystem), null);
 
             AreEqual(database, loadedPortfolio);
         }
@@ -570,12 +536,12 @@ namespace FinancialStructures.Tests.Saving
 
             Assert.AreEqual(expected.Name, actual.Name);
 
-            if (expected.FundsThreadSafe.Count == actual.FundsThreadSafe.Count)
+            if (expected.Funds.Count == actual.Funds.Count)
             {
-                for (int i = 0; i < expected.FundsThreadSafe.Count; i++)
+                for (int i = 0; i < expected.Funds.Count; i++)
                 {
-                    ISecurity expectedSec = expected.FundsThreadSafe[i];
-                    ISecurity actualSec = actual.FundsThreadSafe[i];
+                    ISecurity expectedSec = expected.Funds[i];
+                    ISecurity actualSec = actual.Funds[i];
                     Assert.AreEqual(expectedSec.Names, actualSec.Names);
                 }
             }
@@ -584,12 +550,12 @@ namespace FinancialStructures.Tests.Saving
                 Assert.IsTrue(false, "Funds dont have the same number.");
             }
 
-            if (expected.BankAccountsThreadSafe.Count == actual.BankAccountsThreadSafe.Count)
+            if (expected.BankAccounts.Count == actual.BankAccounts.Count)
             {
-                for (int i = 0; i < expected.BankAccountsThreadSafe.Count; i++)
+                for (int i = 0; i < expected.BankAccounts.Count; i++)
                 {
-                    IExchangableValueList expectedSec = expected.BankAccountsThreadSafe[i];
-                    IExchangableValueList actualSec = actual.BankAccountsThreadSafe[i];
+                    IExchangableValueList expectedSec = expected.BankAccounts[i];
+                    IExchangableValueList actualSec = actual.BankAccounts[i];
                     Assert.AreEqual(expectedSec.Names, actualSec.Names);
                 }
             }
@@ -598,12 +564,12 @@ namespace FinancialStructures.Tests.Saving
                 Assert.IsTrue(false, "Funds dont have the same number.");
             }
 
-            if (expected.CurrenciesThreadSafe.Count == actual.CurrenciesThreadSafe.Count)
+            if (expected.Currencies.Count == actual.Currencies.Count)
             {
-                for (int i = 0; i < expected.CurrenciesThreadSafe.Count; i++)
+                for (int i = 0; i < expected.Currencies.Count; i++)
                 {
-                    ICurrency expectedSec = expected.CurrenciesThreadSafe[i];
-                    ICurrency actualSec = actual.CurrenciesThreadSafe[i];
+                    ICurrency expectedSec = expected.Currencies[i];
+                    ICurrency actualSec = actual.Currencies[i];
                     Assert.AreEqual(expectedSec.Names, actualSec.Names);
                 }
             }
@@ -612,12 +578,12 @@ namespace FinancialStructures.Tests.Saving
                 Assert.IsTrue(false, "Funds dont have the same number.");
             }
 
-            if (expected.BenchMarksThreadSafe.Count == actual.BenchMarksThreadSafe.Count)
+            if (expected.BenchMarks.Count == actual.BenchMarks.Count)
             {
-                for (int i = 0; i < expected.BenchMarksThreadSafe.Count; i++)
+                for (int i = 0; i < expected.BenchMarks.Count; i++)
                 {
-                    IValueList expectedBenchMark = expected.BenchMarksThreadSafe[i];
-                    IValueList actualBenchMark = actual.BenchMarksThreadSafe[i];
+                    IValueList expectedBenchMark = expected.BenchMarks[i];
+                    IValueList actualBenchMark = actual.BenchMarks[i];
                     Assert.AreEqual(expectedBenchMark.Names, actualBenchMark.Names);
                 }
             }

@@ -1,4 +1,4 @@
-namespace FinancialStructures.Stocks.Persistence
+namespace FinancialStructures.Persistence
 {
     public class PersistenceOptions
     {

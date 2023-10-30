@@ -5,10 +5,12 @@ using System.Linq;
 using NUnit.Framework;
 
 using System.IO.Abstractions.TestingHelpers;
+using System.Net;
 
 using Common.Structure.Reporting;
 
 using FinancialStructures.NamingStructures;
+using FinancialStructures.Persistence;
 using FinancialStructures.Stocks.Implementation;
 using FinancialStructures.Stocks.Persistence;
 
@@ -95,8 +97,10 @@ namespace FinancialStructures.Stocks.Tests
             {
             }
 
-            var logger = new LogReporter(reportAction, saveInternally: true);
             var fileSystem = new MockFileSystem();
+            System.IO.File.Delete(fileSystem.Path.Combine(ExampleDatabaseLocation, "test.db"));
+            var logger = new LogReporter(reportAction, saveInternally: true);
+            var testDbPath = fileSystem.Path.Combine(ExampleDatabaseLocation, "test.db");
             var exchange = new StockExchange();
             exchange.ExchangeIdentifier = "LSE";
             exchange.Name = "London Stock Exchange";
@@ -105,7 +109,7 @@ namespace FinancialStructures.Stocks.Tests
             stock.Valuations.Add(new StockDay(new DateTime(2023, 1, 1, 9, 0, 0), 23, 24, 22, 23.5m, 100000));
             exchange.Stocks.Add(stock);
             var sqlitePersistence = new SqliteExchangePersistence();
-            sqlitePersistence.Save(exchange, new SqlitePersistenceOptions(true, fileSystem.Path.Combine(ExampleDatabaseLocation,"test.db"), new FileSystem()), logger);
+            sqlitePersistence.Save(exchange, new SqlitePersistenceOptions(true, testDbPath, new FileSystem()), logger);
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+
 using Common.Structure.Reporting;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.FinanceStructures.Implementation.Asset;
@@ -28,7 +30,7 @@ namespace FinancialStructures.Database.Implementation
             {
                 case Account.Security:
                 {
-                    AddAccount(accountType, new Security(name), Funds, FundsLock);
+                    AddAccount(accountType, new Security(name), _fundsBackingList, _fundsLock);
                     break;
                 }
                 case Account.Currency:
@@ -38,27 +40,27 @@ namespace FinancialStructures.Database.Implementation
                         name.Company = "GBP";
                     }
 
-                    AddAccount(accountType, new Currency(name), Currencies, CurrenciesLock);
+                    AddAccount(accountType, new Currency(name), _currenciesBackingList, _currenciesLock);
                     break;
                 }
                 case Account.BankAccount:
                 {
-                    AddAccount(accountType, new CashAccount(name), BankAccounts, BankAccountsLock);
+                    AddAccount(accountType, new CashAccount(name), _bankAccountBackingList, _bankAccountsLock);
                     break;
                 }
                 case Account.Benchmark:
                 {
-                    AddAccount(accountType, new Sector(name), BenchMarks, BenchmarksLock);
+                    AddAccount(accountType, new Sector(name), _benchMarksBackingList, _benchmarksLock);
                     break;
                 }
                 case Account.Asset:
                 {
-                    AddAccount(accountType, new AmortisableAsset(name), AssetsBackingList, AssetsLock);
+                    AddAccount(accountType, new AmortisableAsset(name), _assetsBackingList, _assetsLock);
                     break;
                 }
                 case Account.Pension:
                 {
-                    AddAccount(accountType, new Security(name), PensionsBackingList, PensionsLock);
+                    AddAccount(accountType, new Security(name), _pensionsBackingList, _pensionsLock);
                     break;
                 }
                 default:

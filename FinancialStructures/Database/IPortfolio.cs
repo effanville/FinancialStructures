@@ -69,7 +69,7 @@ namespace FinancialStructures.Database
         /// This is a shallow copy of the actual list, accessed in a
         /// threadsafe manner.
         /// </summary>
-        IReadOnlyList<ISecurity> FundsThreadSafe
+        IReadOnlyList<ISecurity> Funds
         {
             get;
         }
@@ -81,7 +81,7 @@ namespace FinancialStructures.Database
         /// threadsafe manner.
         /// </para>
         /// </summary>
-        IReadOnlyList<IExchangableValueList> BankAccountsThreadSafe
+        IReadOnlyList<IExchangableValueList> BankAccounts
         {
             get;
         }
@@ -89,7 +89,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// The currencies other objects are held in.
         /// </summary>
-        IReadOnlyList<ICurrency> CurrenciesThreadSafe
+        IReadOnlyList<ICurrency> Currencies
         {
             get;
         }
@@ -97,7 +97,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Sector benchmarks for comparison of held data.
         /// </summary>
-        IReadOnlyList<IValueList> BenchMarksThreadSafe
+        IReadOnlyList<IValueList> BenchMarks
         {
             get;
         }
@@ -191,23 +191,7 @@ namespace FinancialStructures.Database
         /// <param name="company">The company of the item to find.</param>
         /// <returns>Whether exists or not.</returns>
         bool CompanyExists(Account elementType, string company);
-
-        /// <summary>
-        /// Load database from xml file.
-        /// </summary>
-        /// <param name="filePath">The path to load from.</param>
-        /// <param name="fileSystem">The file system abstraction to use to resolve the file.</param>
-        /// <param name="reportLogger">Callback to report information.</param>
-        void LoadPortfolio(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Save database to xml file.
-        /// </summary>
-        /// <param name="filePath">The path to save to.</param>
-        /// <param name="fileSystem">The file system abstraction to use to resolve the file.</param>
-        /// <param name="reportLogger">Callback to report information.</param>
-        void SavePortfolio(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null);
-
+        
         /// <summary>
         /// Clears all data in the portfolio.
         /// </summary>

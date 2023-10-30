@@ -13,7 +13,7 @@ namespace FinancialStructures.Database.Extensions
         /// </summary>
         public static void MigrateRepriceToReset(this IPortfolio portfolio)
         {
-            var securities = portfolio.FundsThreadSafe;
+            var securities = portfolio.Funds;
             foreach (var security in securities)
             {
                 security.MigrateRepriceToReset();

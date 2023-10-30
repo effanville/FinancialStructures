@@ -4,6 +4,7 @@ using System.Linq;
 
 using Common.Structure.Reporting;
 
+using FinancialStructures.Persistence;
 using FinancialStructures.Stocks.Implementation;
 using FinancialStructures.Stocks.Persistence;
 

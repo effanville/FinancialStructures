@@ -65,7 +65,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Constructor to make a new security from known data, where the data is assumed to be consistent.
         /// </summary>
-        private Security(NameData names, TimeList unitPrices, TimeList shares, TimeList investments, List<SecurityTrade> trades)
+        internal Security(NameData names, TimeList unitPrices, TimeList shares, TimeList investments, List<SecurityTrade> trades)
             : base(names.Copy())
         {
             UnitPrice = unitPrices;
