@@ -21,6 +21,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{8989B308
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Structure", "Common\Common.Structure\Common.Structure.csproj", "{A2CB7343-EE36-451E-A71B-5CC4E38C2589}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialStructures.Stocks", "src\FinancialStructures.Stocks\FinancialStructures.Stocks.csproj", "{D5704678-F6AB-4F12-9C52-828C5C8CAF22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialStructures.Stocks.Tests", "test\FinancialStructures.Stocks.Tests\FinancialStructures.Stocks.Tests.csproj", "{35A15957-D48E-4EFF-9219-22E991537503}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -39,6 +43,14 @@ Global
 		{A2CB7343-EE36-451E-A71B-5CC4E38C2589}.Debug|x64.Build.0 = Debug|x64
 		{A2CB7343-EE36-451E-A71B-5CC4E38C2589}.Release|x64.ActiveCfg = Release|x64
 		{A2CB7343-EE36-451E-A71B-5CC4E38C2589}.Release|x64.Build.0 = Release|x64
+		{D5704678-F6AB-4F12-9C52-828C5C8CAF22}.Debug|x64.ActiveCfg = Debug|x64
+		{D5704678-F6AB-4F12-9C52-828C5C8CAF22}.Debug|x64.Build.0 = Debug|x64
+		{D5704678-F6AB-4F12-9C52-828C5C8CAF22}.Release|x64.ActiveCfg = Release|x64
+		{D5704678-F6AB-4F12-9C52-828C5C8CAF22}.Release|x64.Build.0 = Release|x64
+		{35A15957-D48E-4EFF-9219-22E991537503}.Debug|x64.ActiveCfg = Debug|x64
+		{35A15957-D48E-4EFF-9219-22E991537503}.Debug|x64.Build.0 = Debug|x64
+		{35A15957-D48E-4EFF-9219-22E991537503}.Release|x64.ActiveCfg = Release|x64
+		{35A15957-D48E-4EFF-9219-22E991537503}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

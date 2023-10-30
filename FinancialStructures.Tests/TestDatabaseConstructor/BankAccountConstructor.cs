@@ -29,7 +29,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 
         private BankAccountConstructor WithData(DateTime date, decimal price)
         {
-            Item.Amounts.SetData(date, price);
+            Item.Values.SetData(date, price);
             return this;
         }
 

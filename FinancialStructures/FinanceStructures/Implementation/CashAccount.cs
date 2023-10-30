@@ -22,13 +22,6 @@ namespace FinancialStructures.FinanceStructures.Implementation
             return new CashAccount(Names.Copy(), Values);
         }
 
-        /// <inheritdoc/>
-        public TimeList Amounts
-        {
-            get => Values;
-            set => Values = value;
-        }
-
         /// <summary>
         /// Default constructor where no data is known.
         /// </summary>
@@ -40,7 +33,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Constructor used when data is known.
         /// </summary>
-        protected CashAccount(NameData names, TimeList amounts)
+        internal CashAccount(NameData names, TimeList amounts)
             : base(names, amounts)
         {
         }

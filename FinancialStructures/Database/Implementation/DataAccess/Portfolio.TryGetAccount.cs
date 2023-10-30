@@ -13,7 +13,7 @@ namespace FinancialStructures.Database.Implementation
             {
                 case Account.Security:
                 {
-                    foreach (ISecurity sec in FundsThreadSafe)
+                    foreach (ISecurity sec in Funds)
                     {
                         if (names.IsEqualTo(sec.Names))
                         {
@@ -26,7 +26,7 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Account.BankAccount:
                 {
-                    foreach (IExchangableValueList sec in BankAccountsThreadSafe)
+                    foreach (IExchangableValueList sec in BankAccounts)
                     {
                         if (names.IsEqualTo(sec.Names))
                         {
@@ -39,7 +39,7 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Account.Currency:
                 {
-                    foreach (ICurrency currency in CurrenciesThreadSafe)
+                    foreach (ICurrency currency in Currencies)
                     {
                         if (names.IsEqualTo(currency.Names))
                         {
@@ -52,7 +52,7 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Account.Benchmark:
                 {
-                    foreach (IValueList sector in BenchMarksThreadSafe)
+                    foreach (IValueList sector in BenchMarks)
                     {
                         if (sector.Names.Name == names.Name)
                         {

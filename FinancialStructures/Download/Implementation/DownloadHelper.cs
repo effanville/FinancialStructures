@@ -9,7 +9,7 @@ namespace FinancialStructures.Download.Implementation
     /// <summary>
     /// Helper methods for downloading financial data.
     /// </summary>
-    internal static class DownloadHelper
+    public static class DownloadHelper
     {
         public static readonly string PenceName = "GBX";
         public static readonly string PoundsName = "GBP";

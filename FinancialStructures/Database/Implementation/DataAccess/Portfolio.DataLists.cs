@@ -26,29 +26,29 @@ namespace FinancialStructures.Database.Implementation
                 Name = Name
             };
 
-            foreach (Security security in Funds)
+            foreach (Security security in _fundsBackingList)
             {
-                PortfoCopy.Funds.Add((Security)security.Copy());
+                PortfoCopy._fundsBackingList.Add((Security)security.Copy());
             }
-            foreach (CashAccount bankAcc in BankAccounts)
+            foreach (CashAccount bankAcc in _bankAccountBackingList)
             {
-                PortfoCopy.BankAccounts.Add((CashAccount)bankAcc.Copy());
+                PortfoCopy._bankAccountBackingList.Add((CashAccount)bankAcc.Copy());
             }
-            foreach (Currency currency in Currencies)
+            foreach (Currency currency in _currenciesBackingList)
             {
-                PortfoCopy.Currencies.Add((Currency)currency.Copy());
+                PortfoCopy._currenciesBackingList.Add((Currency)currency.Copy());
             }
-            foreach (Sector sector in BenchMarks)
+            foreach (Sector sector in _benchMarksBackingList)
             {
-                PortfoCopy.BenchMarks.Add((Sector)sector.Copy());
+                PortfoCopy._benchMarksBackingList.Add((Sector)sector.Copy());
             }
-            foreach (AmortisableAsset asset in AssetsBackingList)
+            foreach (AmortisableAsset asset in _assetsBackingList)
             {
-                PortfoCopy.AssetsBackingList.Add((AmortisableAsset)asset.Copy());
+                PortfoCopy._assetsBackingList.Add((AmortisableAsset)asset.Copy());
             }
-            foreach (Security pension in PensionsBackingList)
+            foreach (Security pension in _pensionsBackingList)
             {
-                PortfoCopy.PensionsBackingList.Add((Security)pension.Copy());
+                PortfoCopy._pensionsBackingList.Add((Security)pension.Copy());
             }
 
             return PortfoCopy;
@@ -62,19 +62,19 @@ namespace FinancialStructures.Database.Implementation
                 case Account.All:
                 {
                     List<IValueList> accountList = new List<IValueList>();
-                    accountList.AddRange(FundsThreadSafe);
-                    accountList.AddRange(BankAccountsThreadSafe);
+                    accountList.AddRange(Funds);
+                    accountList.AddRange(BankAccounts);
                     accountList.AddRange(Assets);
                     accountList.AddRange(Pensions);
                     return accountList;
                 }
                 case Account.Security:
                 {
-                    return FundsThreadSafe;
+                    return Funds;
                 }
                 case Account.BankAccount:
                 {
-                    return BankAccountsThreadSafe;
+                    return BankAccounts;
                 }
                 case Account.Asset:
                 {
@@ -82,11 +82,11 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Account.Benchmark:
                 {
-                    return BenchMarksThreadSafe;
+                    return BenchMarks;
                 }
                 case Account.Currency:
                 {
-                    return CurrenciesThreadSafe;
+                    return Currencies;
                 }
                 case Account.Pension:
                 {
@@ -104,11 +104,11 @@ namespace FinancialStructures.Database.Implementation
             {
                 case Totals.SecurityCompany:
                 {
-                    return FundsThreadSafe.Where(fund => fund.Names.Company == name.Company).ToList();
+                    return Funds.Where(fund => fund.Names.Company == name.Company).ToList();
                 }
                 case Totals.BankAccountCompany:
                 {
-                    return BankAccountsThreadSafe.Where(fund => fund.Names.Company == name.Company).ToList();
+                    return BankAccounts.Where(fund => fund.Names.Company == name.Company).ToList();
                 }
                 case Totals.AssetCompany:
                 {
@@ -120,15 +120,15 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.Security:
                 {
-                    return FundsThreadSafe;
+                    return Funds;
                 }
                 case Totals.Benchmark:
                 {
-                    return BenchMarksThreadSafe;
+                    return BenchMarks;
                 }
                 case Totals.BankAccount:
                 {
-                    return BankAccountsThreadSafe;
+                    return BankAccounts;
                 }
                 case Totals.Asset:
                 {
@@ -140,19 +140,19 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.All:
                 {
-                    return FundsThreadSafe
-                        .Union(BankAccountsThreadSafe
+                    return Funds
+                        .Union(BankAccounts
                         .Union(Assets))
                         .Union(Pensions)
                         .ToList();
                 }
                 case Totals.SecuritySector:
                 {
-                    return FundsThreadSafe.Where(fund => fund.IsSectorLinked(name)).ToList();
+                    return Funds.Where(fund => fund.IsSectorLinked(name)).ToList();
                 }
                 case Totals.BankAccountSector:
                 {
-                    return BankAccountsThreadSafe.Where(fund => fund.IsSectorLinked(name)).ToList();
+                    return BankAccounts.Where(fund => fund.IsSectorLinked(name)).ToList();
                 }
                 case Totals.AssetSector:
                 {
@@ -188,11 +188,11 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.SecurityCurrency:
                 {
-                    return FundsThreadSafe.Where(fund => fund.Names.Currency == name.Company).ToList();
+                    return Funds.Where(fund => fund.Names.Currency == name.Company).ToList();
                 }
                 case Totals.BankAccountCurrency:
                 {
-                    return BankAccountsThreadSafe.Where(fund => fund.Names.Currency == name.Company).ToList();
+                    return BankAccounts.Where(fund => fund.Names.Currency == name.Company).ToList();
                 }
                 case Totals.AssetCurrency:
                 {

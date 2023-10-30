@@ -71,7 +71,7 @@ namespace FinancialStructures.Database.Export.History
                 return true;
             }
 
-            if (!(settings[Account.Security].GenerateRates || settings[Account.Benchmark].GenerateRates) && portfolio.FundsThreadSafe.Count >= 15)
+            if (!(settings[Account.Security].GenerateRates || settings[Account.Benchmark].GenerateRates) && portfolio.Funds.Count >= 15)
             {
                 return true;
             }

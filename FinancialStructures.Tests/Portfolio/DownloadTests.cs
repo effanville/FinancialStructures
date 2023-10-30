@@ -1,10 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using FinancialStructures.Database.Download;
 using FinancialStructures.Download;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.StockStructures;
-using FinancialStructures.StockStructures.Implementation;
 using NUnit.Framework;
 
 namespace FinancialStructures.Tests.Database

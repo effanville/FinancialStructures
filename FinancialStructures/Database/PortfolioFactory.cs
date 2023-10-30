@@ -1,6 +1,7 @@
 ﻿using System.IO.Abstractions;
 using Common.Structure.Reporting;
 using FinancialStructures.Database.Implementation;
+using FinancialStructures.Persistence;
 
 namespace FinancialStructures.Database
 {
@@ -23,7 +24,8 @@ namespace FinancialStructures.Database
         public static void FillDetailsFromFile(this IPortfolio portfolio, IFileSystem fileSystem, string filePath, IReportLogger logger)
         {
             portfolio.Clear();
-            portfolio.LoadPortfolio(filePath, fileSystem, logger);
+            var xmlPersistence = new XmlPortfolioPersistence();
+            portfolio = xmlPersistence.Load(new XmlFilePersistenceOptions(filePath, fileSystem), logger);
         }
 
         /// <summary>
@@ -39,8 +41,8 @@ namespace FinancialStructures.Database
         /// </summary>
         public static IPortfolio CreateFromFile(IFileSystem fileSystem, string filepath, IReportLogger logger)
         {
-            Portfolio portfolio = new Portfolio();
-            portfolio.LoadPortfolio(filepath, fileSystem, logger);
+            var xmlPersistence = new XmlPortfolioPersistence();
+            IPortfolio portfolio = xmlPersistence.Load(new XmlFilePersistenceOptions(filepath, fileSystem), logger);
             return portfolio;
         }
     }

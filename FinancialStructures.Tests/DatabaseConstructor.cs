@@ -4,6 +4,7 @@ using FinancialStructures.Database;
 using FinancialStructures.Database.Implementation;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
+using FinancialStructures.Persistence;
 
 namespace FinancialStructures.Tests.TestDatabaseConstructor
 {
@@ -22,7 +23,8 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 
         public DatabaseConstructor LoadDatabaseFromFilepath(IFileSystem fileSystem, string filepath)
         {
-            Database.LoadPortfolio(filepath, fileSystem, null);
+            var xmlPersistence = new XmlPortfolioPersistence();
+            Database = xmlPersistence.Load(new XmlFilePersistenceOptions(filepath, fileSystem), null) as Portfolio;
             return this;
         }
 
@@ -173,19 +175,19 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 
         public DatabaseConstructor WithDefaultSecurity()
         {
-            Database.Funds.Add(SecurityConstructor.Default());
+            Database.AddFund(SecurityConstructor.Default());
             return this;
         }
 
         public DatabaseConstructor WithSecondarySecurity()
         {
-            Database.Funds.Add(SecurityConstructor.Secondary());
+            Database.AddFund(SecurityConstructor.Secondary());
             return this;
         }
 
         public DatabaseConstructor WithSecurity(string company, string name)
         {
-            Database.Funds.Add(SecurityConstructor.WithName(company, name).GetItem());
+            Database.AddFund(SecurityConstructor.WithName(company, name).GetItem());
             return this;
         }
 
@@ -200,31 +202,31 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             decimal[] numberUnits = null,
             decimal[] investment = null)
         {
-            Database.Funds.Add(SecurityConstructor.WithNameAndData(company, name, currency, url, sectors, dates, sharePrice, numberUnits, investment).GetItem());
+            Database.AddFund(SecurityConstructor.WithNameAndData(company, name, currency, url, sectors, dates, sharePrice, numberUnits, investment).GetItem());
             return this;
         }
 
         public DatabaseConstructor WithDefaultBankAccount()
         {
-            Database.BankAccounts.Add(BankAccountConstructor.Default().Item);
+            Database.AddBankAccount(BankAccountConstructor.Default().Item);
             return this;
         }
 
         public DatabaseConstructor WithSecondaryBankAccount()
         {
-            Database.BankAccounts.Add(BankAccountConstructor.Secondary().Item);
+            Database.AddBankAccount(BankAccountConstructor.Secondary().Item);
             return this;
         }
 
         public DatabaseConstructor WithBankAccount(string company, string name)
         {
-            Database.BankAccounts.Add(BankAccountConstructor.FromName(company, name).Item);
+            Database.AddBankAccount(BankAccountConstructor.FromName(company, name).Item);
             return this;
         }
 
         public DatabaseConstructor WithBankAccount(string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] dates = null, decimal[] values = null)
         {
-            Database.BankAccounts.Add(BankAccountConstructor.FromNameAndData(company, name, currency, url, sectors, dates: dates, values: values).Item);
+            Database.AddBankAccount(BankAccountConstructor.FromNameAndData(company, name, currency, url, sectors, dates: dates, values: values).Item);
             return this;
         }
 
@@ -239,7 +241,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 
         public DatabaseConstructor WithCurrency(string company, string name, string url = null, string sectors = null)
         {
-            Database.Currencies.Add(new CurrencyConstructor(company, name, null, url, sectors).GetInstance());
+            Database.AddCurrency(new CurrencyConstructor(company, name, null, url, sectors).GetInstance());
             return this;
         }
 
@@ -254,13 +256,13 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
                 }
             }
 
-            Database.Currencies.Add(bankConstructor.GetInstance());
+            Database.AddCurrency(bankConstructor.GetInstance());
             return this;
         }
 
         public DatabaseConstructor WithSectorFromName(string company, string name, string currency = null, string url = null)
         {
-            Database.BenchMarks.Add(new Sector(new NameData(company, name, currency, url)));
+            Database.AddBenchMark(new Sector(new NameData(company, name, currency, url)));
             return this;
         }
 
@@ -275,25 +277,25 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
                 }
             }
 
-            Database.BenchMarks.Add(bankConstructor.item);
+            Database.AddBenchMark(bankConstructor.item);
             return this;
         }
 
         public DatabaseConstructor WithDefaultAsset()
         {
-            Database.AssetsBackingList.Add(AmortizableAssetConstructor.Default());
+            Database.AddAsset(AmortizableAssetConstructor.Default());
             return this;
         }
 
         public DatabaseConstructor WithSecondaryAsset()
         {
-            Database.AssetsBackingList.Add(AmortizableAssetConstructor.Secondary());
+            Database.AddAsset(AmortizableAssetConstructor.Secondary());
             return this;
         }
 
         public DatabaseConstructor WithAsset(string company, string name, string url = null, string sectors = null)
         {
-            Database.AssetsBackingList.Add(AmortizableAssetConstructor.FromNameAndData(company, name, null, url, sectors).GetItem());
+            Database.AddAsset(AmortizableAssetConstructor.FromNameAndData(company, name, null, url, sectors).GetItem());
             return this;
         }
 
@@ -308,7 +310,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             DateTime[] debtDates = null,
             decimal[] debt = null)
         {
-            Database.AssetsBackingList.Add(AmortizableAssetConstructor.FromNameAndData(company, name, currency, url, sectors, valueDates, value, debtDates, debt).GetItem());
+            Database.AddAsset(AmortizableAssetConstructor.FromNameAndData(company, name, currency, url, sectors, valueDates, value, debtDates, debt).GetItem());
             return this;
         }
 

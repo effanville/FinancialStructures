@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 
 using Common.Structure.Reporting;
 
@@ -22,30 +23,31 @@ namespace FinancialStructures.Database.Implementation
             {
                 case Account.Security:
                 {
-                    return RemoveAccount(Funds, elementType, name, FundsLock, reportLogger);
+                    return RemoveAccount(_fundsBackingList, elementType, name, _fundsLock, reportLogger);
                 }
                 case Account.Currency:
                 {
-                    return RemoveAccount(Currencies, elementType, name, CurrenciesLock, reportLogger);
+                    return RemoveAccount(_currenciesBackingList, elementType, name, _currenciesLock, reportLogger);
                 }
                 case Account.BankAccount:
                 {
-                    return RemoveAccount(BankAccounts, elementType, name, BankAccountsLock, reportLogger);
+                    return RemoveAccount(_bankAccountBackingList, elementType, name, _bankAccountsLock, reportLogger);
                 }
                 case Account.Benchmark:
                 {
-                    return RemoveAccount(BenchMarks, elementType, name, BenchmarksLock, reportLogger);
+                    return RemoveAccount(_benchMarksBackingList, elementType, name, _benchmarksLock, reportLogger);
                 }
                 case Account.Asset:
                 {
-                    return RemoveAccount(AssetsBackingList, elementType, name, AssetsLock, reportLogger);
+                    return RemoveAccount(_assetsBackingList, elementType, name, _assetsLock, reportLogger);
                 }
                 case Account.Pension:
                 {
-                    return RemoveAccount(PensionsBackingList, elementType, name, PensionsLock, reportLogger);
+                    return RemoveAccount(_pensionsBackingList, elementType, name, _pensionsLock, reportLogger);
                 }
                 default:
-                    reportLogger?.Log(ReportType.Error, ReportLocation.DeletingData.ToString(), $"Editing an Unknown type.");
+                    reportLogger?.Log(ReportType.Error, ReportLocation.DeletingData.ToString(),
+                        $"Editing an Unknown type.");
                     return false;
             }
 

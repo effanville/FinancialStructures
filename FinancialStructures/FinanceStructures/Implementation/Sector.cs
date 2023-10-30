@@ -38,7 +38,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
         }
 
-        private Sector(NameData names, TimeList values)
+        internal Sector(NameData names, TimeList values)
             : base(names, values)
         {
         }
