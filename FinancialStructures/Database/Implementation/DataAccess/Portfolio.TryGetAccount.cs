@@ -6,93 +6,100 @@ namespace FinancialStructures.Database.Implementation
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public bool TryGetAccount(Account accountType, TwoName names, out IValueList desired)
+        public bool TryGetAccount(Account accountType, TwoName names, out IValueList valueList)
         {
-            desired = null;
+            valueList = null;
             switch (accountType)
             {
                 case Account.Security:
                 {
-                    foreach (ISecurity sec in Funds)
+                    lock (_fundsLock)
                     {
-                        if (names.IsEqualTo(sec.Names))
+                        var searchName = new TwoName(names.Company, names.Name);
+                        if (!_fundsDictionary.TryGetValue(searchName, out var security))
                         {
-                            desired = sec;
-                            return true;
+                            return false;
                         }
-                    }
 
-                    return false;
+                        valueList = security;
+                        return true;
+                    }
                 }
                 case Account.BankAccount:
                 {
-                    foreach (IExchangableValueList sec in BankAccounts)
+                    lock (_bankAccountsLock)
                     {
-                        if (names.IsEqualTo(sec.Names))
+                        var searchName = new TwoName(names.Company, names.Name);
+                        if (!_bankAccountsDictionary.TryGetValue(searchName, out var bankAccount))
                         {
-                            desired = sec;
-                            return true;
+                            return false;
                         }
+                        
+                        valueList = bankAccount;
+                        return true;
                     }
-
-                    return false;
                 }
                 case Account.Currency:
                 {
-                    foreach (ICurrency currency in Currencies)
+                    lock (_currenciesLock)
                     {
-                        if (names.IsEqualTo(currency.Names))
+                        var searchName = new TwoName(names.Company, names.Name);
+                        if (!_currenciesDictionary.TryGetValue(searchName, out var bankAccount))
                         {
-                            desired = currency;
-                            return true;
+                            return false;
                         }
+                        
+                        valueList = bankAccount;
+                        return true;
                     }
-
-                    return false;
                 }
                 case Account.Benchmark:
                 {
-                    foreach (IValueList sector in BenchMarks)
+                    lock (_benchmarksLock)
                     {
-                        if (sector.Names.Name == names.Name)
+                        var searchName = new TwoName(names.Company, names.Name);
+                        if (!_benchMarksDictionary.TryGetValue(searchName, out var bankAccount))
                         {
-                            desired = sector;
-                            return true;
+                            return false;
                         }
+                        
+                        valueList = bankAccount;
+                        return true;
                     }
-
-                    return false;
                 }
                 case Account.Asset:
                 {
-                    foreach (IValueList asset in Assets)
+                    lock (_assetsLock)
                     {
-                        if (names.IsEqualTo(asset.Names))
+                        var searchName = new TwoName(names.Company, names.Name);
+                        if (!_assetsDictionary.TryGetValue(searchName, out var bankAccount))
                         {
-                            desired = asset;
-                            return true;
+                            return false;
                         }
+                        
+                        valueList = bankAccount;
+                        return true;
                     }
-
-                    return false;
                 }
                 case Account.Pension:
                 {
-                    foreach (IValueList pension in Pensions)
+                    lock (_pensionsLock)
                     {
-                        if (names.IsEqualTo(pension.Names))
+                        var searchName = new TwoName(names.Company, names.Name);
+                        if (!_pensionsDictionary.TryGetValue(searchName, out var bankAccount))
                         {
-                            desired = pension;
-                            return true;
+                            return false;
                         }
+                        
+                        valueList = bankAccount;
+                        return true;
                     }
-
-                    return false;
                 }
                 default:
                 case Account.All:
+                case Account.Unknown:
                 {
-                    desired = null;
+                    valueList = null;
                     return false;
                 }
             }

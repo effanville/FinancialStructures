@@ -20,38 +20,61 @@ namespace FinancialStructures.Database.Implementation
         /// </remarks>
         public IPortfolio Copy()
         {
-            Portfolio PortfoCopy = new Portfolio
+            Portfolio portfolioCopy = new Portfolio
             {
                 BaseCurrency = BaseCurrency,
                 Name = Name
             };
-
-            foreach (Security security in _fundsBackingList)
+            
+            lock (_fundsLock)
             {
-                PortfoCopy._fundsBackingList.Add((Security)security.Copy());
-            }
-            foreach (CashAccount bankAcc in _bankAccountBackingList)
-            {
-                PortfoCopy._bankAccountBackingList.Add((CashAccount)bankAcc.Copy());
-            }
-            foreach (Currency currency in _currenciesBackingList)
-            {
-                PortfoCopy._currenciesBackingList.Add((Currency)currency.Copy());
-            }
-            foreach (Sector sector in _benchMarksBackingList)
-            {
-                PortfoCopy._benchMarksBackingList.Add((Sector)sector.Copy());
-            }
-            foreach (AmortisableAsset asset in _assetsBackingList)
-            {
-                PortfoCopy._assetsBackingList.Add((AmortisableAsset)asset.Copy());
-            }
-            foreach (Security pension in _pensionsBackingList)
-            {
-                PortfoCopy._pensionsBackingList.Add((Security)pension.Copy());
+                foreach (var security in _fundsDictionary)
+                {
+                    portfolioCopy._fundsDictionary.Add(security.Key, (Security)security.Value.Copy());
+                }
             }
 
-            return PortfoCopy;
+            lock (_bankAccountsLock)
+            {
+                foreach (var bankAcc in _bankAccountsDictionary)
+                {
+                    portfolioCopy._bankAccountsDictionary.Add(bankAcc.Key, (CashAccount)bankAcc.Value.Copy());
+                }
+            }
+
+            lock (_currenciesLock)
+            {
+                foreach (var currency in _currenciesDictionary)
+                {
+                    portfolioCopy._currenciesDictionary.Add(currency.Key, (Currency)currency.Value.Copy());
+                }
+            }
+
+            lock (_benchmarksLock)
+            {
+                foreach (var sector in _benchMarksDictionary)
+                {
+                    portfolioCopy._benchMarksDictionary.Add(sector.Key, (Sector)sector.Value.Copy());
+                }
+            }
+
+            lock (_assetsLock)
+            {
+                foreach (var asset in _assetsDictionary)
+                {
+                    portfolioCopy._assetsDictionary.Add(asset.Key, (AmortisableAsset)asset.Value.Copy());
+                }
+            }
+
+            lock (_pensionsLock)
+            {
+                foreach (var pension in _pensionsDictionary)
+                {
+                    portfolioCopy._pensionsDictionary.Add(pension.Key, (Security)pension.Value.Copy());
+                }
+            }
+
+            return portfolioCopy;
         }
 
         /// <inheritdoc/>

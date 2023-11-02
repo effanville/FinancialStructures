@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.FinanceStructures.Implementation.Asset;
+using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Implementation
 {
@@ -45,8 +45,8 @@ namespace FinancialStructures.Database.Implementation
             set;
         }
 
-        private List<Security> _fundsBackingList = new List<Security>();
-
+        private Dictionary<TwoName, Security> _fundsDictionary = new Dictionary<TwoName, Security>();
+        
         /// <inheritdoc/>
         public IReadOnlyList<ISecurity> Funds
         {
@@ -54,7 +54,7 @@ namespace FinancialStructures.Database.Implementation
             {
                 lock(_fundsLock)
                 {
-                    return _fundsBackingList.ToList();
+                    return _fundsDictionary.Values.ToList();
                 }
             }
         }
@@ -63,14 +63,14 @@ namespace FinancialStructures.Database.Implementation
         {
             lock(_fundsLock)
             {
-                _fundsBackingList.Add(security);
+                _fundsDictionary.Add(security.Names.ToTwoName(), security);
             }
         }
 
         /// <summary>
         /// Backing for the BankAccounts.
         /// </summary>
-        private List<CashAccount> _bankAccountBackingList = new List<CashAccount>();
+        private Dictionary<TwoName, CashAccount> _bankAccountsDictionary = new Dictionary<TwoName, CashAccount>();
 
         /// <inheritdoc/>
         public IReadOnlyList<IExchangableValueList> BankAccounts
@@ -79,7 +79,7 @@ namespace FinancialStructures.Database.Implementation
             {
                 lock (_bankAccountsLock)
                 {
-                    return _bankAccountBackingList.ToList();
+                    return _bankAccountsDictionary.Values.ToList();
                 }
             }
         }
@@ -87,14 +87,15 @@ namespace FinancialStructures.Database.Implementation
         internal void AddBankAccount(CashAccount cashAccount)
         {
             lock (_bankAccountsLock)
-            {_bankAccountBackingList.Add(cashAccount);
+            {
+                _bankAccountsDictionary.Add(cashAccount.Names.ToTwoName(), cashAccount);
             }
         }
 
         /// <summary>
         /// Backing for the currencies.
         /// </summary>
-        private List<Currency> _currenciesBackingList = new List<Currency>();
+        private Dictionary<TwoName, Currency> _currenciesDictionary = new Dictionary<TwoName, Currency>();
 
         /// <inheritdoc/>
         public IReadOnlyList<ICurrency> Currencies
@@ -103,7 +104,7 @@ namespace FinancialStructures.Database.Implementation
             {
                 lock (_currenciesLock)
                 {
-                    return _currenciesBackingList.ToList();
+                    return _currenciesDictionary.Values.ToList();
                 }
             }
         }
@@ -112,11 +113,11 @@ namespace FinancialStructures.Database.Implementation
         {
             lock (_currenciesLock)
             {
-                _currenciesBackingList.Add(currency);
+                _currenciesDictionary.Add(currency.Names.ToTwoName(), currency);
             }
         }
 
-        private List<Sector> _benchMarksBackingList = new List<Sector>();
+        private Dictionary<TwoName,Sector> _benchMarksDictionary = new Dictionary<TwoName,Sector>();
 
         /// <inheritdoc/>
         public IReadOnlyList<IValueList> BenchMarks
@@ -125,7 +126,7 @@ namespace FinancialStructures.Database.Implementation
             {
                 lock (_benchmarksLock)
                 {
-                    return _benchMarksBackingList.ToList();
+                    return _benchMarksDictionary.Values.ToList();
                 }
             }
         }
@@ -134,14 +135,14 @@ namespace FinancialStructures.Database.Implementation
         {                
             lock (_benchmarksLock)
             {
-                _benchMarksBackingList.Add(sector);
+                _benchMarksDictionary.Add(sector.Names.ToTwoName(), sector);
             }
         }
 
         /// <summary>
         /// The list of assets in the portfolio.
         /// </summary>
-        private List<AmortisableAsset> _assetsBackingList = new List<AmortisableAsset>();
+        private Dictionary<TwoName, AmortisableAsset> _assetsDictionary = new Dictionary<TwoName, AmortisableAsset>();
 
         /// <inheritdoc/>
         public IReadOnlyList<IAmortisableAsset> Assets
@@ -150,7 +151,7 @@ namespace FinancialStructures.Database.Implementation
             {
                 lock (_assetsLock)
                 {
-                    return _assetsBackingList.ToList();
+                    return _assetsDictionary.Values.ToList();
                 }
             }
         }
@@ -159,14 +160,14 @@ namespace FinancialStructures.Database.Implementation
         {
             lock (_assetsLock)
             {
-                _assetsBackingList.Add(asset);
+                _assetsDictionary.Add(asset.Names.ToTwoName(), asset);
             }
         }
 
         /// <summary>
         /// A list storing the actual data for all Pensions
         /// </summary>
-        private List<Security> _pensionsBackingList = new List<Security>();
+        private Dictionary<TwoName,Security> _pensionsDictionary = new Dictionary<TwoName, Security>();
 
         /// <inheritdoc />
         public IReadOnlyList<ISecurity> Pensions
@@ -175,16 +176,16 @@ namespace FinancialStructures.Database.Implementation
             {
                 lock (_pensionsLock)
                 {
-                    return _pensionsBackingList.ToList();
+                    return _pensionsDictionary.Values.ToList();
                 }
             }
         }
 
-        internal void AddPension(Security security)
+        internal void AddPension(Security pension)
         {
             lock (_pensionsLock)
             {
-                _pensionsBackingList.Add(security);
+                _pensionsDictionary.Add(pension.Names.ToTwoName(), pension);
             }
         }
 
@@ -199,12 +200,30 @@ namespace FinancialStructures.Database.Implementation
         {
             BaseCurrency = portfolio.BaseCurrency;
             Name = portfolio.Name;
-            _fundsBackingList = portfolio._fundsBackingList;
-            _bankAccountBackingList = portfolio._bankAccountBackingList;
-            _currenciesBackingList = portfolio._currenciesBackingList;
-            _benchMarksBackingList = portfolio._benchMarksBackingList;
-            _assetsBackingList = portfolio._assetsBackingList;
-            _pensionsBackingList = portfolio._pensionsBackingList;
+            lock (_fundsLock)
+            {
+                _fundsDictionary = portfolio._fundsDictionary;
+            }
+            lock (_bankAccountsLock)
+            {
+                _bankAccountsDictionary = portfolio._bankAccountsDictionary;
+            }
+            lock (_currenciesLock)
+            {
+                _currenciesDictionary = portfolio._currenciesDictionary;
+            }
+            lock (_benchmarksLock)
+            {
+                _benchMarksDictionary = portfolio._benchMarksDictionary;
+            }
+            lock (_assetsLock)
+            {
+                _assetsDictionary = portfolio._assetsDictionary;
+            }
+            lock (_pensionsLock)
+            {
+                _pensionsDictionary = portfolio._pensionsDictionary;
+            }
             NotesInternal = portfolio.NotesInternal;
         }
 
@@ -212,20 +231,7 @@ namespace FinancialStructures.Database.Implementation
         public void Clear()
         {
             SetFrom(new Portfolio());
-            WireDataChangedEvents();
             OnPortfolioChanged(this, new PortfolioEventArgs(changedPortfolio: true));
-        }
-
-        /// <summary>
-        /// For legacy loading this is required to set the benchmarks.
-        /// </summary>
-        public void SetBenchMarks(List<Sector> sectors)
-        {
-            lock (_benchmarksLock)
-            {
-                _benchMarksBackingList.Clear();
-                _benchMarksBackingList.AddRange(sectors);
-            }
         }
 
         /// <summary>
@@ -290,40 +296,58 @@ namespace FinancialStructures.Database.Implementation
 
         public void WireDataChangedEvents()
         {
-            foreach (Security security in _fundsBackingList)
+            lock (_fundsLock)
             {
-                security.DataEdit += OnPortfolioChanged;
-                security.SetupEventListening();
+                foreach (Security security in _fundsDictionary.Values)
+                {
+                    security.DataEdit += OnPortfolioChanged;
+                    security.SetupEventListening();
+                }
             }
 
-            foreach (CashAccount bankAccount in _bankAccountBackingList)
+            lock (_bankAccountsLock)
             {
-                bankAccount.DataEdit += OnPortfolioChanged;
-                bankAccount.SetupEventListening();
+                foreach (CashAccount bankAccount in _bankAccountsDictionary.Values)
+                {
+                    bankAccount.DataEdit += OnPortfolioChanged;
+                    bankAccount.SetupEventListening();
+                }
             }
 
-            foreach (Sector sector in _benchMarksBackingList)
+            lock (_benchmarksLock)
             {
-                sector.DataEdit += OnPortfolioChanged;
-                sector.SetupEventListening();
+                foreach (Sector sector in _benchMarksDictionary.Values)
+                {
+                    sector.DataEdit += OnPortfolioChanged;
+                    sector.SetupEventListening();
+                }
             }
 
-            foreach (Currency currency in _currenciesBackingList)
+            lock (_currenciesLock)
             {
-                currency.DataEdit += OnPortfolioChanged;
-                currency.SetupEventListening();
+                foreach (Currency currency in _currenciesDictionary.Values)
+                {
+                    currency.DataEdit += OnPortfolioChanged;
+                    currency.SetupEventListening();
+                }
             }
 
-            foreach (AmortisableAsset asset in _assetsBackingList)
+            lock (_assetsLock)
             {
-                asset.DataEdit += OnPortfolioChanged;
-                asset.SetupEventListening();
+                foreach (AmortisableAsset asset in _assetsDictionary.Values)
+                {
+                    asset.DataEdit += OnPortfolioChanged;
+                    asset.SetupEventListening();
+                }
             }
 
-            foreach (Security pension in _pensionsBackingList)
+            lock (_pensionsLock)
             {
-                pension.DataEdit += OnPortfolioChanged;
-                pension.SetupEventListening();
+                foreach (Security pension in _pensionsDictionary.Values)
+                {
+                    pension.DataEdit += OnPortfolioChanged;
+                    pension.SetupEventListening();
+                }
             }
         }
     }

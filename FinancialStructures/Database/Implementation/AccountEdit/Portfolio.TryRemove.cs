@@ -23,48 +23,52 @@ namespace FinancialStructures.Database.Implementation
             {
                 case Account.Security:
                 {
-                    return RemoveAccount(_fundsBackingList, elementType, name, _fundsLock, reportLogger);
+                    return RemoveAccount(_fundsDictionary, elementType, name, _fundsLock, reportLogger);
                 }
                 case Account.Currency:
                 {
-                    return RemoveAccount(_currenciesBackingList, elementType, name, _currenciesLock, reportLogger);
+                    return RemoveAccount(_currenciesDictionary, elementType, name, _currenciesLock, reportLogger);
                 }
                 case Account.BankAccount:
                 {
-                    return RemoveAccount(_bankAccountBackingList, elementType, name, _bankAccountsLock, reportLogger);
+                    return RemoveAccount(_bankAccountsDictionary, elementType, name, _bankAccountsLock, reportLogger);
                 }
                 case Account.Benchmark:
                 {
-                    return RemoveAccount(_benchMarksBackingList, elementType, name, _benchmarksLock, reportLogger);
+                    return RemoveAccount(_benchMarksDictionary, elementType, name, _benchmarksLock, reportLogger);
                 }
                 case Account.Asset:
                 {
-                    return RemoveAccount(_assetsBackingList, elementType, name, _assetsLock, reportLogger);
+                    return RemoveAccount(_assetsDictionary, elementType, name, _assetsLock, reportLogger);
                 }
                 case Account.Pension:
                 {
-                    return RemoveAccount(_pensionsBackingList, elementType, name, _pensionsLock, reportLogger);
+                    return RemoveAccount(_pensionsDictionary, elementType, name, _pensionsLock, reportLogger);
                 }
+                case Account.Unknown:
+                case Account.All:
                 default:
-                    reportLogger?.Log(ReportType.Error, ReportLocation.DeletingData.ToString(),
-                        $"Editing an Unknown type.");
+                    reportLogger?.Log(ReportType.Error, ReportLocation.DeletingData.ToString(), $"Editing an Unknown type.");
                     return false;
             }
-
-            bool RemoveAccount<T>(List<T> currentItems, Account account, TwoName name, object lockObject, IReportLogger reportLogger = null)
+            
+            bool RemoveAccount<T>(Dictionary<TwoName, T> currentItems, Account account, TwoName name, object lockObject, IReportLogger reportLogger = null)
                 where T : ValueList
             {
                 lock (lockObject)
                 {
-                    foreach (T sec in currentItems)
+                    var nameToRemove = new TwoName(name.Company, name.Name);
+                    if (currentItems.TryGetValue(nameToRemove, out var list))
                     {
-                        if (name.IsEqualTo(sec.Names))
-                        {
-                            _ = currentItems.Remove(sec);
-                            reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData.ToString(), $"{account}-{name} removed from the database.");
-                            OnPortfolioChanged(currentItems, new PortfolioEventArgs(account));
-                            return true;
-                        }
+                        list.DataEdit -= OnPortfolioChanged;
+                    }
+                    
+                    bool removed = currentItems.Remove(nameToRemove);
+                    if (removed)
+                    {
+                        reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData.ToString(), $"{account}-{name} removed from the database.");
+                        OnPortfolioChanged(currentItems, new PortfolioEventArgs(account));
+                        return true;
                     }
                 }
 

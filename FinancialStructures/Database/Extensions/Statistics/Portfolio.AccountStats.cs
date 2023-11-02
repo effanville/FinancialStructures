@@ -74,7 +74,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 DailyValuation latest = security.LatestValue();
                 if ((displayValueFunds && latest?.Value > 0) || !displayValueFunds)
                 {
-                    stats.Add(new AccountStatistics(portfolio, dateToCalculate, account, security.Names, statisticsToDisplay));
+                    stats.Add(new AccountStatistics(portfolio, dateToCalculate, account, security.Names.ToTwoName(), statisticsToDisplay));
                 }
             }
 
