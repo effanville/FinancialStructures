@@ -25,6 +25,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialStructures.Stocks"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialStructures.Stocks.Tests", "test\FinancialStructures.Stocks.Tests\FinancialStructures.Stocks.Tests.csproj", "{35A15957-D48E-4EFF-9219-22E991537503}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{1C2E5605-09C7-48B7-BA9A-2CE96ABA232D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Structure.Tests", "Common\Common.Structure.Tests\Common.Structure.Tests.csproj", "{CD684437-1BCB-4DA6-9951-545137034F5F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -51,11 +55,19 @@ Global
 		{35A15957-D48E-4EFF-9219-22E991537503}.Debug|x64.Build.0 = Debug|x64
 		{35A15957-D48E-4EFF-9219-22E991537503}.Release|x64.ActiveCfg = Release|x64
 		{35A15957-D48E-4EFF-9219-22E991537503}.Release|x64.Build.0 = Release|x64
+		{CD684437-1BCB-4DA6-9951-545137034F5F}.Debug|x64.ActiveCfg = Debug|x64
+		{CD684437-1BCB-4DA6-9951-545137034F5F}.Debug|x64.Build.0 = Debug|x64
+		{CD684437-1BCB-4DA6-9951-545137034F5F}.Release|x64.ActiveCfg = Release|x64
+		{CD684437-1BCB-4DA6-9951-545137034F5F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4CD79E05-68D6-4E90-87E0-3232C41F7565}
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A2CB7343-EE36-451E-A71B-5CC4E38C2589} = {1C2E5605-09C7-48B7-BA9A-2CE96ABA232D}
+		{CD684437-1BCB-4DA6-9951-545137034F5F} = {1C2E5605-09C7-48B7-BA9A-2CE96ABA232D}
 	EndGlobalSection
 EndGlobal
