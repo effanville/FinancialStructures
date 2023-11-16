@@ -98,7 +98,11 @@ namespace FinancialStructures.Stocks.Tests
             }
 
             var fileSystem = new MockFileSystem();
-            System.IO.File.Delete(fileSystem.Path.Combine(ExampleDatabaseLocation, "test.db"));
+            if (System.IO.File.Exists(fileSystem.Path.Combine(ExampleDatabaseLocation, "test.db")))
+            {
+                System.IO.File.Delete(fileSystem.Path.Combine(ExampleDatabaseLocation, "test.db"));
+            }
+
             var logger = new LogReporter(reportAction, saveInternally: true);
             var testDbPath = fileSystem.Path.Combine(ExampleDatabaseLocation, "test.db");
             var exchange = new StockExchange();
