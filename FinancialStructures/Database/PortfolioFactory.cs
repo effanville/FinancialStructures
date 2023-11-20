@@ -25,7 +25,7 @@ namespace FinancialStructures.Database
         {
             portfolio.Clear();
             var xmlPersistence = new XmlPortfolioPersistence();
-            portfolio = xmlPersistence.Load(new XmlFilePersistenceOptions(filePath, fileSystem), logger);
+            xmlPersistence.Load(portfolio, new XmlFilePersistenceOptions(filePath, fileSystem), logger);
         }
 
         /// <summary>
