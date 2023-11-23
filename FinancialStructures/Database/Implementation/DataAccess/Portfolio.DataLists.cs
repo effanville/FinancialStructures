@@ -26,52 +26,82 @@ namespace FinancialStructures.Database.Implementation
                 Name = Name
             };
             
-            lock (_fundsLock)
+            _fundsLock.EnterReadLock();
+            try
             {
                 foreach (var security in _fundsDictionary)
                 {
                     portfolioCopy._fundsDictionary.Add(security.Key, (Security)security.Value.Copy());
                 }
             }
+            finally
+            {
+                _fundsLock.ExitReadLock();
+            }
 
-            lock (_bankAccountsLock)
+            _bankAccountsLock.EnterReadLock();
+            try
             {
                 foreach (var bankAcc in _bankAccountsDictionary)
                 {
-                    portfolioCopy._bankAccountsDictionary.Add(bankAcc.Key, (CashAccount)bankAcc.Value.Copy());
+                    portfolioCopy._bankAccountsDictionary.TryAdd(bankAcc.Key, (CashAccount)bankAcc.Value.Copy());
                 }
             }
+            finally
+            {
+                _bankAccountsLock.ExitReadLock();
+            }
 
-            lock (_currenciesLock)
+            _currenciesLock.EnterReadLock();
+            try
             {
                 foreach (var currency in _currenciesDictionary)
                 {
                     portfolioCopy._currenciesDictionary.Add(currency.Key, (Currency)currency.Value.Copy());
                 }
             }
+            finally
+            {
+                _currenciesLock.ExitReadLock();
+            }
 
-            lock (_benchmarksLock)
+            _benchmarksLock.EnterReadLock();
+            try
             {
                 foreach (var sector in _benchMarksDictionary)
                 {
                     portfolioCopy._benchMarksDictionary.Add(sector.Key, (Sector)sector.Value.Copy());
                 }
             }
+            finally
+            {
+                _benchmarksLock.ExitReadLock();
+            }
 
-            lock (_assetsLock)
+            _assetsLock.EnterReadLock();
+            try
             {
                 foreach (var asset in _assetsDictionary)
                 {
                     portfolioCopy._assetsDictionary.Add(asset.Key, (AmortisableAsset)asset.Value.Copy());
                 }
             }
+            finally
+            {
+                _assetsLock.ExitReadLock();
+            }
 
-            lock (_pensionsLock)
+            _pensionsLock.EnterReadLock();
+            try
             {
                 foreach (var pension in _pensionsDictionary)
                 {
                     portfolioCopy._pensionsDictionary.Add(pension.Key, (Security)pension.Value.Copy());
                 }
+            }
+            finally
+            {
+                _pensionsLock.ExitReadLock();
             }
 
             return portfolioCopy;

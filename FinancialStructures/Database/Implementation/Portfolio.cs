@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Implementation;
@@ -14,12 +15,12 @@ namespace FinancialStructures.Database.Implementation
     /// </summary>
     public partial class Portfolio : IPortfolio
     {
-        private readonly object _fundsLock = new object();
-        private readonly object _bankAccountsLock = new object();
-        private readonly object _currenciesLock = new object();
-        private readonly object _benchmarksLock = new object();
-        private readonly object _assetsLock = new object();
-        private readonly object _pensionsLock = new object();
+        private readonly ReaderWriterLockSlim _fundsLock = new ReaderWriterLockSlim();
+        private readonly ReaderWriterLockSlim _bankAccountsLock = new ReaderWriterLockSlim();
+        private readonly ReaderWriterLockSlim _currenciesLock = new ReaderWriterLockSlim();
+        private readonly ReaderWriterLockSlim _benchmarksLock = new ReaderWriterLockSlim();
+        private readonly ReaderWriterLockSlim _assetsLock = new ReaderWriterLockSlim();
+        private readonly ReaderWriterLockSlim _pensionsLock = new ReaderWriterLockSlim();
 
         /// <summary>
         /// Flag to state when the user has altered values in the portfolio
@@ -52,18 +53,27 @@ namespace FinancialStructures.Database.Implementation
         {
             get
             {
-                lock(_fundsLock)
+                _fundsLock.EnterReadLock();
+                try
                 {
                     return _fundsDictionary.Values.ToList();
+                }
+                finally
+                {
+                    _fundsLock.ExitReadLock();
                 }
             }
         }
 
         internal void AddFund(Security security)
         {
-            lock(_fundsLock)
+            _fundsLock.EnterWriteLock();
+            try
             {
                 _fundsDictionary.Add(security.Names.ToTwoName(), security);
+            }finally
+            {
+                _fundsLock.ExitWriteLock();
             }
         }
 
@@ -77,18 +87,28 @@ namespace FinancialStructures.Database.Implementation
         {
             get
             {
-                lock (_bankAccountsLock)
+                _bankAccountsLock.EnterReadLock();
+                try
                 {
                     return _bankAccountsDictionary.Values.ToList();
+                }
+                finally
+                {
+                    _bankAccountsLock.ExitReadLock();
                 }
             }
         }
 
         internal void AddBankAccount(CashAccount cashAccount)
         {
-            lock (_bankAccountsLock)
+            _bankAccountsLock.EnterWriteLock();
+            try
             {
-                _bankAccountsDictionary.Add(cashAccount.Names.ToTwoName(), cashAccount);
+                _bankAccountsDictionary.TryAdd(cashAccount.Names.ToTwoName(), cashAccount);
+            }
+            finally
+            {
+                _bankAccountsLock.ExitWriteLock();
             }
         }
 
@@ -102,18 +122,28 @@ namespace FinancialStructures.Database.Implementation
         {
             get
             {
-                lock (_currenciesLock)
+                _currenciesLock.EnterReadLock();
+                try
                 {
                     return _currenciesDictionary.Values.ToList();
+                }
+                finally
+                {
+                    _currenciesLock.ExitReadLock();
                 }
             }
         }
 
         internal void AddCurrency(Currency currency)
         {
-            lock (_currenciesLock)
+            _currenciesLock.EnterWriteLock();
+            try
             {
                 _currenciesDictionary.Add(currency.Names.ToTwoName(), currency);
+            }
+            finally
+            {
+                _currenciesLock.ExitWriteLock();
             }
         }
 
@@ -124,18 +154,28 @@ namespace FinancialStructures.Database.Implementation
         {
             get
             {
-                lock (_benchmarksLock)
+                _benchmarksLock.EnterReadLock();
+                try
                 {
                     return _benchMarksDictionary.Values.ToList();
+                }
+                finally
+                {
+                    _benchmarksLock.ExitReadLock();
                 }
             }
         }
 
         internal void AddBenchMark(Sector sector)
         {                
-            lock (_benchmarksLock)
+            _benchmarksLock.EnterWriteLock();
+            try
             {
                 _benchMarksDictionary.Add(sector.Names.ToTwoName(), sector);
+            }
+            finally
+            {
+                _benchmarksLock.ExitWriteLock();
             }
         }
 
@@ -149,18 +189,28 @@ namespace FinancialStructures.Database.Implementation
         {
             get
             {
-                lock (_assetsLock)
+                _assetsLock.EnterReadLock();
+                try
                 {
                     return _assetsDictionary.Values.ToList();
+                }
+                finally
+                {
+                    _assetsLock.ExitReadLock();
                 }
             }
         }
 
         internal void AddAsset(AmortisableAsset asset)
         {
-            lock (_assetsLock)
+            _assetsLock.EnterWriteLock();
+            try
             {
                 _assetsDictionary.Add(asset.Names.ToTwoName(), asset);
+            }
+            finally
+            {
+                _assetsLock.ExitWriteLock();
             }
         }
 
@@ -174,18 +224,28 @@ namespace FinancialStructures.Database.Implementation
         {
             get
             {
-                lock (_pensionsLock)
+                _pensionsLock.EnterReadLock();
+                try
                 {
                     return _pensionsDictionary.Values.ToList();
+                }
+                finally
+                {
+                    _pensionsLock.ExitReadLock();
                 }
             }
         }
 
         internal void AddPension(Security pension)
         {
-            lock (_pensionsLock)
+            _pensionsLock.EnterWriteLock();
+            try
             {
                 _pensionsDictionary.Add(pension.Names.ToTwoName(), pension);
+            }
+            finally
+            {
+                _pensionsLock.ExitWriteLock();
             }
         }
 
@@ -200,29 +260,59 @@ namespace FinancialStructures.Database.Implementation
         {
             BaseCurrency = portfolio.BaseCurrency;
             Name = portfolio.Name;
-            lock (_fundsLock)
+            _fundsLock.EnterWriteLock();
+            try
             {
                 _fundsDictionary = portfolio._fundsDictionary;
             }
-            lock (_bankAccountsLock)
+            finally
+            {
+                _fundsLock.ExitWriteLock();
+            }
+            _bankAccountsLock.EnterWriteLock();
+            try
             {
                 _bankAccountsDictionary = portfolio._bankAccountsDictionary;
             }
-            lock (_currenciesLock)
+            finally
+            {
+                _bankAccountsLock.ExitWriteLock();
+            }
+            _currenciesLock.EnterWriteLock();
+            try
             {
                 _currenciesDictionary = portfolio._currenciesDictionary;
             }
-            lock (_benchmarksLock)
+            finally
+            {
+                _currenciesLock.ExitWriteLock();
+            }
+            _benchmarksLock.EnterWriteLock();
+            try
             {
                 _benchMarksDictionary = portfolio._benchMarksDictionary;
             }
-            lock (_assetsLock)
+            finally
+            {
+                _benchmarksLock.ExitWriteLock();
+            }
+            _assetsLock.EnterWriteLock();
+            try
             {
                 _assetsDictionary = portfolio._assetsDictionary;
             }
-            lock (_pensionsLock)
+            finally
+            {
+                _assetsLock.ExitWriteLock();
+            }
+            _pensionsLock.EnterWriteLock();
+            try
             {
                 _pensionsDictionary = portfolio._pensionsDictionary;
+            }
+            finally
+            {
+                _pensionsLock.ExitWriteLock();
             }
             NotesInternal = portfolio.NotesInternal;
         }
@@ -296,7 +386,8 @@ namespace FinancialStructures.Database.Implementation
 
         public void WireDataChangedEvents()
         {
-            lock (_fundsLock)
+            _fundsLock.EnterWriteLock();
+            try
             {
                 foreach (Security security in _fundsDictionary.Values)
                 {
@@ -304,8 +395,13 @@ namespace FinancialStructures.Database.Implementation
                     security.SetupEventListening();
                 }
             }
+            finally
+            {
+                _fundsLock.ExitWriteLock();
+            }
 
-            lock (_bankAccountsLock)
+            _bankAccountsLock.EnterWriteLock();
+            try
             {
                 foreach (CashAccount bankAccount in _bankAccountsDictionary.Values)
                 {
@@ -313,8 +409,13 @@ namespace FinancialStructures.Database.Implementation
                     bankAccount.SetupEventListening();
                 }
             }
+            finally
+            {
+                _bankAccountsLock.ExitWriteLock();
+            }
 
-            lock (_benchmarksLock)
+            _benchmarksLock.EnterWriteLock();
+            try
             {
                 foreach (Sector sector in _benchMarksDictionary.Values)
                 {
@@ -322,8 +423,13 @@ namespace FinancialStructures.Database.Implementation
                     sector.SetupEventListening();
                 }
             }
+            finally
+            {
+                _benchmarksLock.ExitWriteLock();
+            }
 
-            lock (_currenciesLock)
+            _currenciesLock.EnterWriteLock();
+            try
             {
                 foreach (Currency currency in _currenciesDictionary.Values)
                 {
@@ -331,8 +437,13 @@ namespace FinancialStructures.Database.Implementation
                     currency.SetupEventListening();
                 }
             }
+            finally
+            {
+                _currenciesLock.ExitWriteLock();
+            }
 
-            lock (_assetsLock)
+            _assetsLock.EnterWriteLock();
+            try
             {
                 foreach (AmortisableAsset asset in _assetsDictionary.Values)
                 {
@@ -340,14 +451,23 @@ namespace FinancialStructures.Database.Implementation
                     asset.SetupEventListening();
                 }
             }
+            finally
+            {
+                _assetsLock.ExitWriteLock();
+            }
 
-            lock (_pensionsLock)
+            _pensionsLock.EnterWriteLock();
+            try
             {
                 foreach (Security pension in _pensionsDictionary.Values)
                 {
                     pension.DataEdit += OnPortfolioChanged;
                     pension.SetupEventListening();
                 }
+            }
+            finally
+            {
+                _pensionsLock.ExitWriteLock();
             }
         }
     }

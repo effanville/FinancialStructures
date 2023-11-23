@@ -70,15 +70,16 @@ namespace FinancialStructures.Database.Implementation
 
             reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.AddingData.ToString(), $"{accountType}-{name} added to database.");
             return true;
-            
-            void AddAccount<T>(Account account, T newObject, Dictionary<TwoName, T> currentItems, object lockObject)
+            void AddAccount<T>(Account account, T newObject, Dictionary<TwoName, T> currentItems, ReaderWriterLockSlim lockObject)
                 where T : ValueList
             {
                 newObject.DataEdit += OnPortfolioChanged;
-                lock (lockObject)
+                lockObject.EnterWriteLock();
+                try
                 {
                     currentItems.Add(newObject.Names.ToTwoName(), newObject);
                 }
+                finally{lockObject.ExitWriteLock();}
 
                 OnPortfolioChanged(newObject, new PortfolioEventArgs(account));
             }

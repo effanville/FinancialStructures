@@ -23,9 +23,14 @@ namespace FinancialStructures.Database.Implementation
         {
             if (elementType == Account.Security)
             {
-                lock (_fundsLock)
+                _fundsLock.EnterReadLock();
+                try
                 {
                     return _fundsDictionary.ContainsKey(name);
+                }
+                finally
+                {
+                    _fundsLock.ExitReadLock();
                 }
             }
 

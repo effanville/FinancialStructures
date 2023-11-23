@@ -51,30 +51,36 @@ namespace FinancialStructures.Database.Implementation
                     reportLogger?.Log(ReportType.Error, ReportLocation.DeletingData.ToString(), $"Editing an Unknown type.");
                     return false;
             }
-            
-            bool RemoveAccount<T>(Dictionary<TwoName, T> currentItems, Account account, TwoName name, object lockObject, IReportLogger reportLogger = null)
+            bool RemoveAccount<T>(Dictionary<TwoName, T> currentItems, Account account, TwoName name, ReaderWriterLockSlim lockObject, IReportLogger reportLogger = null)
                 where T : ValueList
             {
-                lock (lockObject)
+                lockObject.EnterWriteLock();
+                try
                 {
                     var nameToRemove = new TwoName(name.Company, name.Name);
                     if (currentItems.TryGetValue(nameToRemove, out var list))
                     {
                         list.DataEdit -= OnPortfolioChanged;
                     }
-                    
+
                     bool removed = currentItems.Remove(nameToRemove);
                     if (removed)
                     {
-                        reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData.ToString(), $"{account}-{name} removed from the database.");
+                        reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information,
+                            ReportLocation.DeletingData.ToString(), $"{account}-{name} removed from the database.");
                         OnPortfolioChanged(currentItems, new PortfolioEventArgs(account));
                         return true;
                     }
+                }
+                finally
+                {
+                    lockObject.ExitWriteLock();
                 }
 
                 reportLogger?.Log(ReportType.Error, ReportLocation.DeletingData.ToString(), $"{account} - {name} could not be found in the database.");
                 return false;
             }
+            
         }
     }
 }
