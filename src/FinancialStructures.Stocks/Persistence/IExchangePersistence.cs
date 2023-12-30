@@ -14,6 +14,6 @@ namespace FinancialStructures.Stocks.Persistence
         /// <summary>
         /// Saves the <see cref="IStockExchange"/> to the file specified.
         /// </summary>
-        void Save(IStockExchange exchange, PersistenceOptions options, IReportLogger reportLogger = null);
+        bool Save(IStockExchange exchange, PersistenceOptions options, IReportLogger reportLogger = null);
     }
 }

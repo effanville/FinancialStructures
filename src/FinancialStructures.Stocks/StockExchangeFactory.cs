@@ -18,10 +18,7 @@ namespace FinancialStructures.Stocks
         /// <summary>
         /// Create an empty stock exchange.
         /// </summary>
-        public static IStockExchange Create()
-        {
-            return new StockExchange();
-        }
+        public static IStockExchange Create() => new StockExchange();
 
         /// <summary>
         /// Create a stock exchange by loading from file.

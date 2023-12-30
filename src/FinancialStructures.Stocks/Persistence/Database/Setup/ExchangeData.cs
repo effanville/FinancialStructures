@@ -4,7 +4,7 @@ using System.IO.Abstractions;
 
 using Common.Structure.Reporting;
 
-using FinancialStructures.Stocks.Persistence.Models;
+using FinancialStructures.Stocks.Persistence.Database.Models;
 
 namespace FinancialStructures.Stocks.Persistence.Database.Setup
 {

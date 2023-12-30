@@ -14,20 +14,17 @@ namespace FinancialStructures.Stocks
         /// <summary>
         /// The name of the stock in question.
         /// </summary>
-        NameData Name
-        {
-            get;
-            set;
-        }
-
+        NameData Name { get; set; }
+        
+        /// <summary>
+        /// The fundamental data associated with this stock.
+        /// </summary>
+        StockFundamentalData Fundamentals { get; }
+        
         /// <summary>
         /// Values associated to this stock in order earliest -> latest.
         /// </summary>
-        List<StockDay> Valuations
-        {
-            get;
-            set;
-        }
+        List<StockDay> Valuations { get; }
 
         /// <summary>
         /// Adds a value to the Stock. Note this does not sort the values, so <see cref="Sort"/> should be called after this.

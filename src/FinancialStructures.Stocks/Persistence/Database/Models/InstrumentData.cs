@@ -1,16 +1,17 @@
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FinancialStructures.Stocks.Persistence.Models
+namespace FinancialStructures.Stocks.Persistence.Database.Models
 {
     public class InstrumentData
     {
         public int Id { get; set; }
         public int InstrumentId { get; set; }
-        public DateTime SnapshotTime { get; set; }
+        public DateTime ValidFrom { get; set; }
         public string Index { get; set; }
-        public double PERatio { get; set; }
+        public double PeRatio { get; set; }
         public double EPS { get; set; }
-        public double Beta_5YMonth { get; set; }
+        public double Beta5YearMonth { get; set; }
         public double AverageVolume { get; set; }
         public double ForwardDividend { get; set; }
         public double ForwardYield { get; set; }
@@ -25,13 +26,15 @@ namespace FinancialStructures.Stocks.Persistence.Models
         {
             InstrumentId = instrumentData.InstrumentId;
             Index = instrumentData.Index;
-            PERatio = instrumentData.PERatio;
+            PeRatio = instrumentData.PeRatio;
             EPS = instrumentData.EPS;
-            Beta_5YMonth = instrumentData.Beta_5YMonth;
+            Beta5YearMonth = instrumentData.Beta5YearMonth;
             AverageVolume = instrumentData.AverageVolume;
             ForwardDividend = instrumentData.ForwardDividend;
             ForwardYield = instrumentData.ForwardYield;
             MarketCap = instrumentData.MarketCap;
         }
+        
+        public override string ToString() => $"[InstrumentData:{Id}-{InstrumentId}-{ValidFrom}";
     }
 }

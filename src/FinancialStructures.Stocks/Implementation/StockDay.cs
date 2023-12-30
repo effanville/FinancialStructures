@@ -99,18 +99,17 @@ namespace FinancialStructures.Stocks.Implementation
         /// <summary>
         /// Constructor setting all values.
         /// </summary>
-        public StockDay(DateTime time, decimal open, decimal high, decimal low, decimal close, decimal volume, TimeSpan duration)
+        private StockDay(DateTime time, decimal open, decimal high, decimal low, decimal close, decimal volume, TimeSpan duration)
             : this(time, open, high, low, close, volume)
         {
             Duration = duration;
         }
 
         /// <summary>
-        /// Get the relevant value based on the datastream.
+        /// Get the relevant value based on the <see cref="StockDataStream"/>.
         /// </summary>
-        public decimal Value(StockDataStream data)
-        {
-            return data switch
+        public decimal Value(StockDataStream data) 
+            => data switch
             {
                 StockDataStream.Open => Open,
                 StockDataStream.High => High,
@@ -121,13 +120,10 @@ namespace FinancialStructures.Stocks.Implementation
                 StockDataStream.Volume => Volume,
                 _ => Close,
             };
-        }
 
         /// <inheritdoc/>
         public override string ToString()
-        {
-            return $"{Start}-O{Open}-H{High}-L{Low}-C{Close}-V{Volume}";
-        }
+            => $"[{Start:yyyy-MM-ddThh:mm:ss.fff}]-O{Open}-H{High}-L{Low}-C{Close}-V{Volume}";
 
         /// <inheritdoc/>
         public int CompareTo(StockDay obj)
@@ -144,9 +140,7 @@ namespace FinancialStructures.Stocks.Implementation
         /// Copy only the open value into a new StockDay.
         /// </summary>
         /// <returns></returns>
-        public StockDay CopyAsOpenOnly()
-        {
-            return new StockDay(Start, Open, 0, 0, 0, 0, Duration);
-        }
+        public StockDay CopyAsOpenOnly() 
+            => new(Start, Open, 0, 0, 0, 0, Duration);
     }
 }

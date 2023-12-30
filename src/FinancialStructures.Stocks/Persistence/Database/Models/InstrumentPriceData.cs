@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FinancialStructures.Stocks.Persistence.Models
+namespace FinancialStructures.Stocks.Persistence.Database.Models
 {
     public class InstrumentPriceData
     {
@@ -16,8 +16,9 @@ namespace FinancialStructures.Stocks.Persistence.Models
         public double Close { get; set; }
         public double Volume { get; set; }
 
-        [ForeignKey("DataSourceId")]
-        public DataSource DataSource { get; set; }
+        [ForeignKey("DataSourceId")] public DataSource DataSource { get; set; }
         public Instrument Instrument { get; set; }
+        
+        public override string ToString() => $"[InstrumentData:{Id}-{InstrumentId}-{StartTime}-{EndTime}-{Close}";
     }
 }
