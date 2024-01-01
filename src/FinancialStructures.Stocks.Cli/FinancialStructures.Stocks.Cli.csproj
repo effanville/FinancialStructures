@@ -5,10 +5,19 @@
     
     <PropertyGroup>
         <PublishTrimmed>true</PublishTrimmed>
-        <TrimMode>CopyUsed</TrimMode>
+        <TrimMode>full</TrimMode>
         <LangVersion>9.0</LangVersion>
+        <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
+        <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+        <TrimmerRemoveSymbols>true</TrimmerRemoveSymbols>
     </PropertyGroup>
-
+    
+    <PropertyGroup>
+        <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
+        <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+        <TrimmerRemoveSymbols>true</TrimmerRemoveSymbols>
+    </PropertyGroup>
+    
     <PropertyGroup>
         <Version>23.07.0</Version>
     </PropertyGroup>
