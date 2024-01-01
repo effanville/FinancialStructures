@@ -29,6 +29,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{1C2E56
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Structure.Tests", "Common\Common.Structure.Tests\Common.Structure.Tests.csproj", "{CD684437-1BCB-4DA6-9951-545137034F5F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_build", "BuildProcess\source\_build.csproj", "{03BEDBA1-8BB2-4F05-AA0A-787E66201EB4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -59,6 +61,10 @@ Global
 		{CD684437-1BCB-4DA6-9951-545137034F5F}.Debug|x64.Build.0 = Debug|x64
 		{CD684437-1BCB-4DA6-9951-545137034F5F}.Release|x64.ActiveCfg = Release|x64
 		{CD684437-1BCB-4DA6-9951-545137034F5F}.Release|x64.Build.0 = Release|x64
+		{03BEDBA1-8BB2-4F05-AA0A-787E66201EB4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{03BEDBA1-8BB2-4F05-AA0A-787E66201EB4}.Debug|x64.Build.0 = Debug|Any CPU
+		{03BEDBA1-8BB2-4F05-AA0A-787E66201EB4}.Release|x64.ActiveCfg = Release|Any CPU
+		{03BEDBA1-8BB2-4F05-AA0A-787E66201EB4}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,5 +75,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{A2CB7343-EE36-451E-A71B-5CC4E38C2589} = {1C2E5605-09C7-48B7-BA9A-2CE96ABA232D}
 		{CD684437-1BCB-4DA6-9951-545137034F5F} = {1C2E5605-09C7-48B7-BA9A-2CE96ABA232D}
+		{03BEDBA1-8BB2-4F05-AA0A-787E66201EB4} = {8989B308-837A-402C-BE70-82764592AC9C}
 	EndGlobalSection
 EndGlobal

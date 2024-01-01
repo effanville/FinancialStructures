@@ -27,7 +27,7 @@
         },
         "Framework": {
           "type": "string",
-          "description": "Framework to build with - Current is net6.0"
+          "description": "Framework to build with - Current is net7.0"
         },
         "Help": {
           "type": "boolean",
@@ -84,6 +84,10 @@
             "type": "string"
           }
         },
+        "PushTag": {
+          "type": "boolean",
+          "description": "Should this tag be pushed to the remote"
+        },
         "Root": {
           "type": "string",
           "description": "Root directory during build execution"
@@ -100,16 +104,24 @@
               "Clean",
               "Compile",
               "DiagnosticPrint",
+              "GitTag",
               "Publish",
               "PublishExe",
               "PublishNuget",
-              "Test"
+              "Release",
+              "ReleaseNotes",
+              "Test",
+              "UpdateVersion"
             ]
           }
         },
         "Solution": {
           "type": "string",
           "description": "Path to a solution file that is automatically loaded"
+        },
+        "TagRepo": {
+          "type": "boolean",
+          "description": "Should this version be tagged"
         },
         "Target": {
           "type": "array",
@@ -120,11 +132,22 @@
               "Clean",
               "Compile",
               "DiagnosticPrint",
+              "GitTag",
               "Publish",
               "PublishExe",
               "PublishNuget",
-              "Test"
+              "Release",
+              "ReleaseNotes",
+              "Test",
+              "UpdateVersion"
             ]
+          }
+        },
+        "TestProjects": {
+          "type": "array",
+          "description": "Projects to run unit tests for",
+          "items": {
+            "type": "string"
           }
         },
         "Verbosity": {

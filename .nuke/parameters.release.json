@@ -4,10 +4,18 @@
   "ExecutablePublishProjects": [
   ],
   "NugetPackageProjects": [
-    "FinancialStructures"
+    "FinancialStructures",
+    "FinancialStructures.Stocks"
   ],
   "Configuration": "Release",
-  "Framework": "net6.0-windows",
+  "Framework": "net7.0-windows",
   "Runtime": "win-x64",
-  "IsProd": true
+  "IsProd": true,  
+  "TagRepo": true,
+  "PushTag": true,
+  "TestProjects": [
+    "Common.Structure.Tests",
+    "FinancialStructures.Tests",
+    "FinancialStructures.Stocks.Tests"
+  ]
 }
