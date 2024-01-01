@@ -10,7 +10,11 @@
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <Platforms>x64</Platforms>
   </PropertyGroup>
-	
+  
+  <PropertyGroup>
+    <Version>23.07.0</Version>
+  </PropertyGroup>
+  
   <PropertyGroup>
 	<EnableWindowsTargeting>true</EnableWindowsTargeting>
     <AppxAutoIncrementPackageRevision>false</AppxAutoIncrementPackageRevision>

@@ -1,33 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <PublishTrimmed>true</PublishTrimmed>
     <TrimMode>CopyUsed</TrimMode>
     <LangVersion>9.0</LangVersion>
   </PropertyGroup>
-
   <PropertyGroup>
-	<Version>23.07.0</Version>
+    <Version>23.07.0</Version>
   </PropertyGroup>
-
-	<ItemGroup Condition="Exists('..\Common\Common.Structure\Common.Structure.csproj')" >
-		<ProjectReference Include="..\Common\Common.Structure\Common.Structure.csproj" />
-	</ItemGroup>
-	<ItemGroup Condition="!Exists('..\Common\Common.Structure\Common.Structure.csproj') And Exists('..\..\FinancePortfolioDatabase.sln')" >
-		<ProjectReference Include="..\..\Common\Common.Structure\Common.Structure.csproj" />
-	</ItemGroup>
-
+  <ItemGroup Condition="Exists('..\Common\Common.Structure\Common.Structure.csproj')">
+    <ProjectReference Include="..\Common\Common.Structure\Common.Structure.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="!Exists('..\Common\Common.Structure\Common.Structure.csproj') And Exists('..\..\FinancePortfolioDatabase.sln')">
+    <ProjectReference Include="..\..\Common\Common.Structure\Common.Structure.csproj" />
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Nager.Date" Version="1.30.0" />
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
     <PackageReference Include="System.IO.Abstractions" Version="17.2.3" />
   </ItemGroup>
-
   <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-    <_Parameter1>FinancialStructures.Tests</_Parameter1>
+      <_Parameter1>FinancialStructures.Tests</_Parameter1>
     </AssemblyAttribute>
   </ItemGroup>
-
-
 </Project>
