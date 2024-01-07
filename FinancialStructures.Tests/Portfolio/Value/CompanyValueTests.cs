@@ -38,7 +38,7 @@ namespace FinancialStructures.Tests.Database.Value
                 .WithAccountFromNameAndData(
                     accountType,
                     defaultName.Company,
-                    defaultName.Name,
+                    defaultName.Name + "2",
                     dates: new DateTime[] { new DateTime(2010, 1, 1) },
                     sharePrice: new decimal[] { 50 },
                     numberUnits: new decimal[] { 100 },

@@ -30,20 +30,20 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 case Account.Security:
                 default:
                 {
-                    return GenerateFromList(portfolio.FundsThreadSafe, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats());
+                    return GenerateFromList(portfolio.Funds, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats());
 
                 }
                 case Account.BankAccount:
                 {
-                    return GenerateFromList(portfolio.BankAccountsThreadSafe, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats());
+                    return GenerateFromList(portfolio.BankAccounts, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats());
                 }
                 case Account.Benchmark:
                 {
-                    return GenerateFromList(portfolio.BenchMarksThreadSafe, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats());
+                    return GenerateFromList(portfolio.BenchMarks, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats());
                 }
                 case Account.Currency:
                 {
-                    return GenerateFromList(portfolio.CurrenciesThreadSafe, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats());
+                    return GenerateFromList(portfolio.Currencies, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats());
                 }
                 case Account.Asset:
                 {
@@ -74,7 +74,7 @@ namespace FinancialStructures.Database.Extensions.Statistics
                 DailyValuation latest = security.LatestValue();
                 if ((displayValueFunds && latest?.Value > 0) || !displayValueFunds)
                 {
-                    stats.Add(new AccountStatistics(portfolio, dateToCalculate, account, security.Names, statisticsToDisplay));
+                    stats.Add(new AccountStatistics(portfolio, dateToCalculate, account, security.Names.ToTwoName(), statisticsToDisplay));
                 }
             }
 

@@ -10,13 +10,17 @@ namespace FinancialStructures.Database.Implementation
         /// <inheritdoc/>
         public IReadOnlyList<string> Companies(Account elementType)
         {
-            return NameDataForAccount(elementType).Select(NameData => NameData.Company).Distinct().ToList();
+            var companies = NameDataForAccount(elementType).Select(NameData => NameData.Company).Distinct().ToList();
+            companies.Sort();
+            return companies;
         }
 
         /// <inheritdoc/>
         public IReadOnlyList<string> Names(Account elementType)
         {
-            return NameDataForAccount(elementType).Select(NameData => NameData.Name).ToList();
+            var names = NameDataForAccount(elementType).Select(NameData => NameData.Name).ToList();
+            names.Sort();
+            return names;
         }
 
         /// <inheritdoc/>

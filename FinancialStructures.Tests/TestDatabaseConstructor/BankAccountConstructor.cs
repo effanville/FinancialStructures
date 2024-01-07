@@ -29,7 +29,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 
         private BankAccountConstructor WithData(DateTime date, decimal price)
         {
-            Item.Amounts.SetData(date, price);
+            Item.Values.SetData(date, price);
             return this;
         }
 
@@ -45,7 +45,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
 
         public static BankAccountConstructor Secondary()
         {
-            return FromNameAndData(SecondaryCompany, SecondaryName, currency: DatabaseConstructor.DefaultCurrencyCompany, dates: SecondaryDates, values: SecondaryValues);
+            return FromNameAndData(SecondaryCompany, SecondaryName, currency: CurrencyConstructor.DefaultCompany, dates: SecondaryDates, values: SecondaryValues);
         }
 
         public static BankAccountConstructor FromName(string company, string name, string currency = null, string url = null, string sectors = null)

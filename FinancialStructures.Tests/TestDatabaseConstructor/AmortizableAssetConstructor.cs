@@ -21,7 +21,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
         public static readonly DateTime[] SecondaryDebtDates = new DateTime[] { new DateTime(2010, 1, 5), new DateTime(2011, 2, 1), new DateTime(2019, 5, 6), new DateTime(2020, 1, 1) };
         public static readonly decimal[] SecondaryDebt = new decimal[] { 1010.0m, 1110.0m, 1215.2m, 900.6m };
 
-        private readonly AmortisableAsset Item;
+        private AmortisableAsset Item;
 
         private AmortizableAssetConstructor(string company, string name, string currency = null, string url = null, string sectors = null)
         {
@@ -42,6 +42,17 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             Item.Debt.SetData(debtDate, debtValue);
         }
 
+        public AmortisableAsset GetItem()
+        {
+            return Item;
+        }
+
+        public AmortizableAssetConstructor Clear()
+        {
+            Item = null;
+            Item = new AmortisableAsset();
+            return this;
+        }
         public static AmortisableAsset Empty()
         {
             return new AmortizableAssetConstructor(DefaultCompany, DefaultName).Item;
@@ -63,7 +74,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             return FromNameAndData(
                 SecondaryCompany,
                 SecondaryName,
-                currency: DatabaseConstructor.DefaultCurrencyCompany,
+                currency: CurrencyConstructor.DefaultCompany,
                 valueDates: SecondaryValueDates,
                 value: SecondaryValues,
                 debtDates: SecondaryDebtDates,

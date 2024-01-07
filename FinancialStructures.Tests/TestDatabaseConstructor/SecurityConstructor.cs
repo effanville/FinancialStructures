@@ -119,7 +119,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             return WithNameAndData(
                 SecondaryCompany,
                 SecondaryName,
-                currency: DatabaseConstructor.DefaultCurrencyCompany,
+                currency: CurrencyConstructor.DefaultCompany,
                 dates: SecondaryDates,
                 sharePrice: SecondaryUnitPrices,
                 numberUnits: SecondaryShareValues,

@@ -6,93 +6,130 @@ namespace FinancialStructures.Database.Implementation
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public bool TryGetAccount(Account accountType, TwoName names, out IValueList desired)
+        public bool TryGetAccount(Account accountType, TwoName names, out IValueList valueList)
         {
-            desired = null;
+            valueList = null;
             switch (accountType)
             {
                 case Account.Security:
                 {
-                    foreach (ISecurity sec in FundsThreadSafe)
+                    _fundsLock.EnterReadLock();
+                    try
                     {
-                        if (names.IsEqualTo(sec.Names))
+                        var searchName = new TwoName(names.Company, names.Name);
+                        if (!_fundsDictionary.TryGetValue(searchName, out var security))
                         {
-                            desired = sec;
-                            return true;
+                            return false;
                         }
-                    }
 
-                    return false;
+                        valueList = security;
+                        return true;
+                    }
+                    finally
+                    {
+                        _fundsLock.ExitReadLock();
+                    }
                 }
                 case Account.BankAccount:
                 {
-                    foreach (IExchangableValueList sec in BankAccountsThreadSafe)
+                    _bankAccountsLock.EnterReadLock();
+                    try
                     {
-                        if (names.IsEqualTo(sec.Names))
+                        var searchName = new TwoName(names.Company, names.Name);
+                        if (!_bankAccountsDictionary.TryGetValue(searchName, out var bankAccount))
                         {
-                            desired = sec;
-                            return true;
+                            return false;
                         }
-                    }
 
-                    return false;
+                        valueList = bankAccount;
+                        return true;
+                    }
+                    finally
+                    {
+                        _bankAccountsLock.ExitReadLock();
+                    }
                 }
                 case Account.Currency:
                 {
-                    foreach (ICurrency currency in CurrenciesThreadSafe)
+                    _currenciesLock.EnterReadLock();
+                    try
                     {
-                        if (names.IsEqualTo(currency.Names))
+                        var searchName = new TwoName(names.Company, names.Name);
+                        if (!_currenciesDictionary.TryGetValue(searchName, out var bankAccount))
                         {
-                            desired = currency;
-                            return true;
+                            return false;
                         }
-                    }
 
-                    return false;
+                        valueList = bankAccount;
+                        return true;
+                    }
+                    finally
+                    {
+                        _currenciesLock.ExitReadLock();
+                    }
                 }
                 case Account.Benchmark:
                 {
-                    foreach (IValueList sector in BenchMarksThreadSafe)
+                    _benchmarksLock.EnterReadLock();
+                    try
                     {
-                        if (sector.Names.Name == names.Name)
+                        var searchName = new TwoName(names.Company, names.Name);
+                        if (!_benchMarksDictionary.TryGetValue(searchName, out var bankAccount))
                         {
-                            desired = sector;
-                            return true;
+                            return false;
                         }
-                    }
 
-                    return false;
+                        valueList = bankAccount;
+                        return true;
+                    }
+                    finally
+                    {
+                        _benchmarksLock.ExitReadLock();
+                    }
                 }
                 case Account.Asset:
                 {
-                    foreach (IValueList asset in Assets)
+                    _assetsLock.EnterReadLock();
+                    try
                     {
-                        if (names.IsEqualTo(asset.Names))
+                        var searchName = new TwoName(names.Company, names.Name);
+                        if (!_assetsDictionary.TryGetValue(searchName, out var bankAccount))
                         {
-                            desired = asset;
-                            return true;
+                            return false;
                         }
-                    }
 
-                    return false;
+                        valueList = bankAccount;
+                        return true;
+                    }
+                    finally
+                    {
+                        _assetsLock.ExitReadLock();
+                    }
                 }
                 case Account.Pension:
                 {
-                    foreach (IValueList pension in Pensions)
+                    _pensionsLock.EnterReadLock();
+                    try
                     {
-                        if (names.IsEqualTo(pension.Names))
+                        var searchName = new TwoName(names.Company, names.Name);
+                        if (!_pensionsDictionary.TryGetValue(searchName, out var bankAccount))
                         {
-                            desired = pension;
-                            return true;
+                            return false;
                         }
-                    }
 
-                    return false;
+                        valueList = bankAccount;
+                        return true;
+                    }
+                    finally
+                    {
+                        _pensionsLock.ExitReadLock();
+                    }
                 }
                 default:
                 case Account.All:
+                case Account.Unknown:
                 {
-                    desired = null;
+                    valueList = null;
                     return false;
                 }
             }

@@ -69,7 +69,7 @@ namespace FinancialStructures.Database
         /// This is a shallow copy of the actual list, accessed in a
         /// threadsafe manner.
         /// </summary>
-        IReadOnlyList<ISecurity> FundsThreadSafe
+        IReadOnlyList<ISecurity> Funds
         {
             get;
         }
@@ -78,10 +78,10 @@ namespace FinancialStructures.Database
         /// Bank accounts stored in this database.
         /// <para>
         /// This is a shallow copy of the actual list, accessed in a
-        /// threadsafe manner.
+        /// thread safe manner.
         /// </para>
         /// </summary>
-        IReadOnlyList<IExchangableValueList> BankAccountsThreadSafe
+        IReadOnlyList<IExchangableValueList> BankAccounts
         {
             get;
         }
@@ -89,7 +89,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// The currencies other objects are held in.
         /// </summary>
-        IReadOnlyList<ICurrency> CurrenciesThreadSafe
+        IReadOnlyList<ICurrency> Currencies
         {
             get;
         }
@@ -97,7 +97,7 @@ namespace FinancialStructures.Database
         /// <summary>
         /// Sector benchmarks for comparison of held data.
         /// </summary>
-        IReadOnlyList<IValueList> BenchMarksThreadSafe
+        IReadOnlyList<IValueList> BenchMarks
         {
             get;
         }
@@ -117,6 +117,24 @@ namespace FinancialStructures.Database
         {
             get;
         }
+        
+        /// <summary>
+        /// Outputs the account if it exists.
+        /// </summary>
+        /// <param name="accountType">The type of element to find.</param>
+        /// <param name="name">The name of the element to find.</param>
+        /// <param name="valueList">The account if it exists.</param>
+        bool TryGetAccount(Account accountType, TwoName name, out IValueList valueList);
+
+        /// <summary>
+        /// Returns a copy of all accounts related to the account type.
+        /// </summary>
+        IReadOnlyList<IValueList> Accounts(Account account);
+
+        /// <summary>
+        /// Returns a copy of all accounts related to the total.
+        /// </summary>
+        IReadOnlyList<IValueList> Accounts(Totals totals, TwoName name = null);
 
         /// <summary>
         /// Number of type in the database.
@@ -191,23 +209,7 @@ namespace FinancialStructures.Database
         /// <param name="company">The company of the item to find.</param>
         /// <returns>Whether exists or not.</returns>
         bool CompanyExists(Account elementType, string company);
-
-        /// <summary>
-        /// Load database from xml file.
-        /// </summary>
-        /// <param name="filePath">The path to load from.</param>
-        /// <param name="fileSystem">The file system abstraction to use to resolve the file.</param>
-        /// <param name="reportLogger">Callback to report information.</param>
-        void LoadPortfolio(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Save database to xml file.
-        /// </summary>
-        /// <param name="filePath">The path to save to.</param>
-        /// <param name="fileSystem">The file system abstraction to use to resolve the file.</param>
-        /// <param name="reportLogger">Callback to report information.</param>
-        void SavePortfolio(string filePath, IFileSystem fileSystem, IReportLogger reportLogger = null);
-
+        
         /// <summary>
         /// Clears all data in the portfolio.
         /// </summary>
@@ -252,24 +254,6 @@ namespace FinancialStructures.Database
         IReadOnlyList<DailyValuation> NumberData(Account account, TwoName name, IReportLogger reportLogger = null);
 
         /// <summary>
-        /// Outputs the account if it exists.
-        /// </summary>
-        /// <param name="accountType">The type of element to find.</param>
-        /// <param name="name">The name of the element to find.</param>
-        /// <param name="desired">The account if it exists.</param>
-        bool TryGetAccount(Account accountType, TwoName name, out IValueList desired);
-
-        /// <summary>
-        /// Returns a copy of all accounts related to the account type.
-        /// </summary>
-        IReadOnlyList<IValueList> Accounts(Account account);
-
-        /// <summary>
-        /// Returns a copy of all accounts related to the total.
-        /// </summary>
-        IReadOnlyList<IValueList> Accounts(Totals totals, TwoName name = null);
-
-        /// <summary>
         /// Returns a copy of the currently held portfolio.
         /// Note one cannot use this portfolio to edit as it makes a copy.
         /// </summary>
@@ -288,5 +272,11 @@ namespace FinancialStructures.Database
         /// returns the currency associated to the name.
         /// </summary>
         ICurrency Currency(string currencyName);
+
+        /// <summary>
+        /// Adds values to the current portfolio from another specified portfolio.
+        /// Matches on entity name only. If other 
+        /// </summary>
+        void ImportValuesFrom(IPortfolio other, IReportLogger reportLogger = null);
     }
 }

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Common.Structure.Reporting;
-using FinancialStructures.NamingStructures;
-using FinancialStructures.StockStructures;
-using FinancialStructures.StockStructures.Implementation;
 
 namespace FinancialStructures.Download.Implementation
 {
@@ -14,12 +11,6 @@ namespace FinancialStructures.Download.Implementation
     {
         /// <inheritdoc/>
         public string BaseUrl => "https://www.morningstar.co.uk/";
-
-        /// <inheritdoc/>
-        public Task<bool> TryGetIdentifier(TwoName name, Action<string> getIdentifierAction, IReportLogger reportLogger = null)
-        {
-            throw new NotImplementedException();
-        }
 
         /// <inheritdoc/>
         public async Task<bool> TryGetLatestPriceFromUrl(string url, Action<decimal> retrieveValueAction, IReportLogger reportLogger = null)
@@ -41,30 +32,12 @@ namespace FinancialStructures.Download.Implementation
             return true;
         }
 
-        /// <inheritdoc/>
-        public Task<bool> TryGetLatestPrice(string financialCode, Action<decimal> retrieveValueAction, IReportLogger reportLogger = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<bool> TryGetLatestPriceData(string financialCode, Action<StockDay> retrieveValueAction, IReportLogger reportLogger = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc/>
-        public Task<bool> TryGetFullPriceHistory(string financialCode, DateTime firstDate, DateTime lastDate, TimeSpan recordInterval, Action<IStock> getHistory, IReportLogger reportLogger = null)
-        {
-            throw new NotImplementedException();
-        }
-
-
         /// <summary>
         /// Enables retrieval of the financial code specifier for the url.
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static string GetFinancialCode(string url)
+        public string GetFinancialCode(string url)
         {
             string urlSearchString = "id=";
             int startIndex = url.IndexOf(urlSearchString);

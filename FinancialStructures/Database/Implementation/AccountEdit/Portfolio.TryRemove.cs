@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
 
 using Common.Structure.Reporting;
 
@@ -22,53 +23,64 @@ namespace FinancialStructures.Database.Implementation
             {
                 case Account.Security:
                 {
-                    return RemoveAccount(Funds, elementType, name, FundsLock, reportLogger);
+                    return RemoveAccount(_fundsDictionary, elementType, name, _fundsLock, reportLogger);
                 }
                 case Account.Currency:
                 {
-                    return RemoveAccount(Currencies, elementType, name, CurrenciesLock, reportLogger);
+                    return RemoveAccount(_currenciesDictionary, elementType, name, _currenciesLock, reportLogger);
                 }
                 case Account.BankAccount:
                 {
-                    return RemoveAccount(BankAccounts, elementType, name, BankAccountsLock, reportLogger);
+                    return RemoveAccount(_bankAccountsDictionary, elementType, name, _bankAccountsLock, reportLogger);
                 }
                 case Account.Benchmark:
                 {
-                    return RemoveAccount(BenchMarks, elementType, name, BenchmarksLock, reportLogger);
+                    return RemoveAccount(_benchMarksDictionary, elementType, name, _benchmarksLock, reportLogger);
                 }
                 case Account.Asset:
                 {
-                    return RemoveAccount(AssetsBackingList, elementType, name, AssetsLock, reportLogger);
+                    return RemoveAccount(_assetsDictionary, elementType, name, _assetsLock, reportLogger);
                 }
                 case Account.Pension:
                 {
-                    return RemoveAccount(PensionsBackingList, elementType, name, PensionsLock, reportLogger);
+                    return RemoveAccount(_pensionsDictionary, elementType, name, _pensionsLock, reportLogger);
                 }
+                case Account.Unknown:
+                case Account.All:
                 default:
                     reportLogger?.Log(ReportType.Error, ReportLocation.DeletingData.ToString(), $"Editing an Unknown type.");
                     return false;
             }
-
-            bool RemoveAccount<T>(List<T> currentItems, Account account, TwoName name, object lockObject, IReportLogger reportLogger = null)
+            bool RemoveAccount<T>(Dictionary<TwoName, T> currentItems, Account account, TwoName name, ReaderWriterLockSlim lockObject, IReportLogger reportLogger = null)
                 where T : ValueList
             {
-                lock (lockObject)
+                lockObject.EnterWriteLock();
+                try
                 {
-                    foreach (T sec in currentItems)
+                    var nameToRemove = new TwoName(name.Company, name.Name);
+                    if (currentItems.TryGetValue(nameToRemove, out var list))
                     {
-                        if (name.IsEqualTo(sec.Names))
-                        {
-                            _ = currentItems.Remove(sec);
-                            reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.DeletingData.ToString(), $"{account}-{name} removed from the database.");
-                            OnPortfolioChanged(currentItems, new PortfolioEventArgs(account));
-                            return true;
-                        }
+                        list.DataEdit -= OnPortfolioChanged;
                     }
+
+                    bool removed = currentItems.Remove(nameToRemove);
+                    if (removed)
+                    {
+                        reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information,
+                            ReportLocation.DeletingData.ToString(), $"{account}-{name} removed from the database.");
+                        OnPortfolioChanged(currentItems, new PortfolioEventArgs(account));
+                        return true;
+                    }
+                }
+                finally
+                {
+                    lockObject.ExitWriteLock();
                 }
 
                 reportLogger?.Log(ReportType.Error, ReportLocation.DeletingData.ToString(), $"{account} - {name} could not be found in the database.");
                 return false;
             }
+            
         }
     }
 }

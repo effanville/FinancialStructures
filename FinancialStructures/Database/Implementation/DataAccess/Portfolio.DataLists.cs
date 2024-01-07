@@ -20,38 +20,91 @@ namespace FinancialStructures.Database.Implementation
         /// </remarks>
         public IPortfolio Copy()
         {
-            Portfolio PortfoCopy = new Portfolio
+            Portfolio portfolioCopy = new Portfolio
             {
                 BaseCurrency = BaseCurrency,
                 Name = Name
             };
-
-            foreach (Security security in Funds)
+            
+            _fundsLock.EnterReadLock();
+            try
             {
-                PortfoCopy.Funds.Add((Security)security.Copy());
+                foreach (var security in _fundsDictionary)
+                {
+                    portfolioCopy._fundsDictionary.Add(security.Key, (Security)security.Value.Copy());
+                }
             }
-            foreach (CashAccount bankAcc in BankAccounts)
+            finally
             {
-                PortfoCopy.BankAccounts.Add((CashAccount)bankAcc.Copy());
-            }
-            foreach (Currency currency in Currencies)
-            {
-                PortfoCopy.Currencies.Add((Currency)currency.Copy());
-            }
-            foreach (Sector sector in BenchMarks)
-            {
-                PortfoCopy.BenchMarks.Add((Sector)sector.Copy());
-            }
-            foreach (AmortisableAsset asset in AssetsBackingList)
-            {
-                PortfoCopy.AssetsBackingList.Add((AmortisableAsset)asset.Copy());
-            }
-            foreach (Security pension in PensionsBackingList)
-            {
-                PortfoCopy.PensionsBackingList.Add((Security)pension.Copy());
+                _fundsLock.ExitReadLock();
             }
 
-            return PortfoCopy;
+            _bankAccountsLock.EnterReadLock();
+            try
+            {
+                foreach (var bankAcc in _bankAccountsDictionary)
+                {
+                    portfolioCopy._bankAccountsDictionary.TryAdd(bankAcc.Key, (CashAccount)bankAcc.Value.Copy());
+                }
+            }
+            finally
+            {
+                _bankAccountsLock.ExitReadLock();
+            }
+
+            _currenciesLock.EnterReadLock();
+            try
+            {
+                foreach (var currency in _currenciesDictionary)
+                {
+                    portfolioCopy._currenciesDictionary.Add(currency.Key, (Currency)currency.Value.Copy());
+                }
+            }
+            finally
+            {
+                _currenciesLock.ExitReadLock();
+            }
+
+            _benchmarksLock.EnterReadLock();
+            try
+            {
+                foreach (var sector in _benchMarksDictionary)
+                {
+                    portfolioCopy._benchMarksDictionary.Add(sector.Key, (Sector)sector.Value.Copy());
+                }
+            }
+            finally
+            {
+                _benchmarksLock.ExitReadLock();
+            }
+
+            _assetsLock.EnterReadLock();
+            try
+            {
+                foreach (var asset in _assetsDictionary)
+                {
+                    portfolioCopy._assetsDictionary.Add(asset.Key, (AmortisableAsset)asset.Value.Copy());
+                }
+            }
+            finally
+            {
+                _assetsLock.ExitReadLock();
+            }
+
+            _pensionsLock.EnterReadLock();
+            try
+            {
+                foreach (var pension in _pensionsDictionary)
+                {
+                    portfolioCopy._pensionsDictionary.Add(pension.Key, (Security)pension.Value.Copy());
+                }
+            }
+            finally
+            {
+                _pensionsLock.ExitReadLock();
+            }
+
+            return portfolioCopy;
         }
 
         /// <inheritdoc/>
@@ -62,19 +115,19 @@ namespace FinancialStructures.Database.Implementation
                 case Account.All:
                 {
                     List<IValueList> accountList = new List<IValueList>();
-                    accountList.AddRange(FundsThreadSafe);
-                    accountList.AddRange(BankAccountsThreadSafe);
+                    accountList.AddRange(Funds);
+                    accountList.AddRange(BankAccounts);
                     accountList.AddRange(Assets);
                     accountList.AddRange(Pensions);
                     return accountList;
                 }
                 case Account.Security:
                 {
-                    return FundsThreadSafe;
+                    return Funds;
                 }
                 case Account.BankAccount:
                 {
-                    return BankAccountsThreadSafe;
+                    return BankAccounts;
                 }
                 case Account.Asset:
                 {
@@ -82,11 +135,11 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Account.Benchmark:
                 {
-                    return BenchMarksThreadSafe;
+                    return BenchMarks;
                 }
                 case Account.Currency:
                 {
-                    return CurrenciesThreadSafe;
+                    return Currencies;
                 }
                 case Account.Pension:
                 {
@@ -104,11 +157,11 @@ namespace FinancialStructures.Database.Implementation
             {
                 case Totals.SecurityCompany:
                 {
-                    return FundsThreadSafe.Where(fund => fund.Names.Company == name.Company).ToList();
+                    return Funds.Where(fund => fund.Names.Company == name.Company).ToList();
                 }
                 case Totals.BankAccountCompany:
                 {
-                    return BankAccountsThreadSafe.Where(fund => fund.Names.Company == name.Company).ToList();
+                    return BankAccounts.Where(fund => fund.Names.Company == name.Company).ToList();
                 }
                 case Totals.AssetCompany:
                 {
@@ -120,15 +173,15 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.Security:
                 {
-                    return FundsThreadSafe;
+                    return Funds;
                 }
                 case Totals.Benchmark:
                 {
-                    return BenchMarksThreadSafe;
+                    return BenchMarks;
                 }
                 case Totals.BankAccount:
                 {
-                    return BankAccountsThreadSafe;
+                    return BankAccounts;
                 }
                 case Totals.Asset:
                 {
@@ -140,18 +193,19 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.All:
                 {
-                    return FundsThreadSafe
-                        .Union(BankAccountsThreadSafe
+                    return Funds
+                        .Union(BankAccounts
                         .Union(Assets))
+                        .Union(Pensions)
                         .ToList();
                 }
                 case Totals.SecuritySector:
                 {
-                    return FundsThreadSafe.Where(fund => fund.IsSectorLinked(name)).ToList();
+                    return Funds.Where(fund => fund.IsSectorLinked(name)).ToList();
                 }
                 case Totals.BankAccountSector:
                 {
-                    return BankAccountsThreadSafe.Where(fund => fund.IsSectorLinked(name)).ToList();
+                    return BankAccounts.Where(fund => fund.IsSectorLinked(name)).ToList();
                 }
                 case Totals.AssetSector:
                 {
@@ -187,11 +241,11 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.SecurityCurrency:
                 {
-                    return FundsThreadSafe.Where(fund => fund.Names.Currency == name.Company).ToList();
+                    return Funds.Where(fund => fund.Names.Currency == name.Company).ToList();
                 }
                 case Totals.BankAccountCurrency:
                 {
-                    return BankAccountsThreadSafe.Where(fund => fund.Names.Currency == name.Company).ToList();
+                    return BankAccounts.Where(fund => fund.Names.Currency == name.Company).ToList();
                 }
                 case Totals.AssetCurrency:
                 {

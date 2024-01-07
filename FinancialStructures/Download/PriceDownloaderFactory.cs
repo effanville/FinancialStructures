@@ -53,15 +53,15 @@ namespace FinancialStructures.Download
 
             if (url.Contains("morningstar"))
             {
-                return MorningstarDownloader.GetFinancialCode(url);
+                return fMorningstarDownloader.GetFinancialCode(url);
             }
             else if (url.Contains("yahoo"))
             {
-                return YahooDownloader.GetFinancialCode(url);
+                return fYahooDownloader.GetFinancialCode(url);
             }
             else if (url.Contains("markets.ft"))
             {
-                return FtDownloader.GetFinancialCode(url);
+                return fFtDownloader.GetFinancialCode(url);
             }
             else
             {

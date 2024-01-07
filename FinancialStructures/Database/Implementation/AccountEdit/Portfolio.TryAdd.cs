@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Threading;
+
 using Common.Structure.Reporting;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.FinanceStructures.Implementation.Asset;
@@ -17,7 +19,7 @@ namespace FinancialStructures.Database.Implementation
                 return false;
             }
 
-            if (Exists(accountType, name))
+            if (Exists(accountType, name.ToTwoName()))
             {
                 reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.AddingData.ToString(), $"{accountType}-{name} already exists.");
                 OnPortfolioChanged(null, new PortfolioEventArgs(accountType));
@@ -28,7 +30,7 @@ namespace FinancialStructures.Database.Implementation
             {
                 case Account.Security:
                 {
-                    AddAccount(accountType, new Security(name), Funds, FundsLock);
+                    AddAccount(accountType, new Security(name), _fundsDictionary, _fundsLock);
                     break;
                 }
                 case Account.Currency:
@@ -38,27 +40,27 @@ namespace FinancialStructures.Database.Implementation
                         name.Company = "GBP";
                     }
 
-                    AddAccount(accountType, new Currency(name), Currencies, CurrenciesLock);
+                    AddAccount(accountType, new Currency(name), _currenciesDictionary, _currenciesLock);
                     break;
                 }
                 case Account.BankAccount:
                 {
-                    AddAccount(accountType, new CashAccount(name), BankAccounts, BankAccountsLock);
+                    AddAccount(accountType, new CashAccount(name), _bankAccountsDictionary, _bankAccountsLock);
                     break;
                 }
                 case Account.Benchmark:
                 {
-                    AddAccount(accountType, new Sector(name), BenchMarks, BenchmarksLock);
+                    AddAccount(accountType, new Sector(name), _benchMarksDictionary, _benchmarksLock);
                     break;
                 }
                 case Account.Asset:
                 {
-                    AddAccount(accountType, new AmortisableAsset(name), AssetsBackingList, AssetsLock);
+                    AddAccount(accountType, new AmortisableAsset(name), _assetsDictionary, _assetsLock);
                     break;
                 }
                 case Account.Pension:
                 {
-                    AddAccount(accountType, new Security(name), PensionsBackingList, PensionsLock);
+                    AddAccount(accountType, new Security(name), _pensionsDictionary, _pensionsLock);
                     break;
                 }
                 default:
@@ -68,15 +70,16 @@ namespace FinancialStructures.Database.Implementation
 
             reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.AddingData.ToString(), $"{accountType}-{name} added to database.");
             return true;
-
-            void AddAccount<T>(Account account, T newObject, List<T> currentItems, object lockObject)
+            void AddAccount<T>(Account account, T newObject, Dictionary<TwoName, T> currentItems, ReaderWriterLockSlim lockObject)
                 where T : ValueList
             {
                 newObject.DataEdit += OnPortfolioChanged;
-                lock (lockObject)
+                lockObject.EnterWriteLock();
+                try
                 {
-                    currentItems.Add(newObject);
+                    currentItems.Add(newObject.Names.ToTwoName(), newObject);
                 }
+                finally{lockObject.ExitWriteLock();}
 
                 OnPortfolioChanged(newObject, new PortfolioEventArgs(account));
             }

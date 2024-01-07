@@ -29,8 +29,8 @@ namespace FinancialStructures.Database.Implementation
         /// </summary>
         public ICurrency Currency(string currencyName)
         {
-            ICurrency currency = CurrenciesThreadSafe.FirstOrDefault(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == BaseCurrency);
-            return currency ?? (CurrenciesThreadSafe.FirstOrDefault(cur => cur.BaseCurrency == BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted());
+            ICurrency currency = Currencies.FirstOrDefault(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == BaseCurrency);
+            return currency ?? (Currencies.FirstOrDefault(cur => cur.BaseCurrency == BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted());
         }
     }
 }

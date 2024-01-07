@@ -21,6 +21,19 @@ namespace FinancialStructures.Database.Implementation
         /// <inheritdoc/>
         public bool Exists(Account elementType, TwoName name)
         {
+            if (elementType == Account.Security)
+            {
+                _fundsLock.EnterReadLock();
+                try
+                {
+                    return _fundsDictionary.ContainsKey(name);
+                }
+                finally
+                {
+                    _fundsLock.ExitReadLock();
+                }
+            }
+
             foreach (TwoName sec in NameDataForAccount(elementType))
             {
                 if (sec.IsEqualTo(name))

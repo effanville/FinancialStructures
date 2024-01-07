@@ -27,7 +27,7 @@ namespace FinancialStructures.FinanceStructures.Implementation
         {
         }
 
-        private Currency(NameData name, TimeList values)
+        internal Currency(NameData name, TimeList values)
             : base(name, values)
         {
         }

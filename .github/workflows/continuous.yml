@@ -16,7 +16,7 @@
 
 name: continuous
 
-on: [pull_request]
+on: [pull_request, workflow_dispatch]
 
 jobs:
   windows-latest:
@@ -25,7 +25,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
+          token: ${{ secrets.INTERNAL_PAT }}
           submodules: recursive
+          fetch-depth: 0
       - name: Cache .nuke/temp, ~/.nuget/packages
         uses: actions/cache@v3
         with:
@@ -33,13 +35,11 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj') }}
-      - name: Run './build.cmd Publish'
-        run: ./build.cmd Publish
-      - uses: actions/upload-artifact@v3
+      - name: Run './build.cmd Release'
+        run: ./build.cmd Release
+      - uses: dorny/test-reporter@v1
+        if: success() || failure()
         with:
-          name: bin
-          path: Publish/bin
-      - uses: actions/upload-artifact@v3
-        with:
-          name: package
-          path: Publish/package
+          name: Test results
+          path: '**/*.trx'
+          reporter: dotnet-trx

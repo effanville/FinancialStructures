@@ -12,7 +12,7 @@ namespace FinancialStructures.Database.Implementation
         {
             return this.TryPerformEdit(
                 elementType,
-                oldName,
+                oldName.ToTwoName(),
                 valueList => valueList.EditNameData(newName),
                 ReportLocation.EditingData,
                 reportLogger);

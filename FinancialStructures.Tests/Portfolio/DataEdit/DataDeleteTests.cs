@@ -21,7 +21,7 @@ namespace FinancialStructures.Tests.Database.DataEdit
 
             Portfolio portfolio = constructor.Database;
 
-            bool success = portfolio.TryDeleteData(Account.Security, new NameData("Company", "Name"), new DateTime(2010, 1, 1), null);
+            bool success = portfolio.TryDeleteData(Account.Security, new TwoName("Company", "Name"), new DateTime(2010, 1, 1), null);
 
             Assert.AreEqual(0, portfolio.Funds.Single().Count());
 

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Globalization;
 using System.Threading.Tasks;
 using Common.Structure.Reporting;
-using FinancialStructures.NamingStructures;
-using FinancialStructures.StockStructures;
-using FinancialStructures.StockStructures.Implementation;
 
 namespace FinancialStructures.Download.Implementation
 {
@@ -23,19 +19,12 @@ namespace FinancialStructures.Download.Implementation
         }
 
         /// <inheritdoc/>
-        public Task<bool> TryGetIdentifier(TwoName name, Action<string> getIdentifierAction, IReportLogger reportLogger = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc/>
         public async Task<bool> TryGetLatestPriceFromUrl(string url, Action<decimal> retrieveValueAction, IReportLogger reportLogger = null)
         {
             string financialCode = GetFinancialCode(url);
             return await TryGetPriceInternal(url, financialCode, retrieveValueAction, reportLogger);
         }
 
-        /// <inheritdoc/>
         public async Task<bool> TryGetLatestPrice(string financialCode, Action<decimal> retrieveValueAction, IReportLogger reportLogger = null)
         {
             string url = BuildQueryUrl(BaseUrl, financialCode);
@@ -61,91 +50,9 @@ namespace FinancialStructures.Download.Implementation
             return true;
         }
 
-        /// <inheritdoc/>
-        public async Task<bool> TryGetLatestPriceData(
-            string financialCode,
-            Action<StockDay> retrieveValueAction,
-            IReportLogger reportLogger = null)
-        {
-            string url = BuildQueryUrl(BaseUrl, financialCode);
-            string stockWebsite = await DownloadHelper.GetWebData(url, reportLogger);
-            if (string.IsNullOrEmpty(stockWebsite))
-            {
-                reportLogger?.Error("Downloading", $"Could not download data from {url}");
-                return false;
-            }
-
-            decimal? close = GetValue(stockWebsite, financialCode);
-            decimal? open = FindAndGetSingleValue(stockWebsite, "data-test=\"OPEN-value\"", true);
-            Tuple<decimal, decimal> range = FindAndGetDoubleValues(stockWebsite, "data-test=\"DAYS_RANGE-value\"");
-            decimal? volume = FindAndGetSingleValue(stockWebsite, $"data-test=\"TD_VOLUME-value\"><fin-streamer data-symbol=\"{financialCode}\" data-field=\"regularMarketVolume\" data-trend=\"none\" data-pricehint=\"2\" data-dfield=\"longFmt\"", true);
-
-            DateTime date = DateTime.Now.TimeOfDay > new DateTime(2010, 1, 1, 16, 30, 0).TimeOfDay ? DateTime.Today : DateTime.Today.AddDays(-1);
-            retrieveValueAction(new StockDay(date, open.Value, range.Item2, range.Item1, close.Value, volume ?? 0.0m));
-            return true;
-        }
-
-        /// <inheritdoc/>
-        public async Task<bool> TryGetFullPriceHistory(
-            string financialCode,
-            DateTime firstDate,
-            DateTime lastDate,
-            TimeSpan recordInterval,
-            Action<IStock> getHistory,
-            IReportLogger reportLogger = null)
-        {
-            Uri downloadUrl = new Uri($"https://query1.finance.yahoo.com/v7/finance/download/{financialCode}?period1={DateToYahooInt(firstDate)}&period2={DateToYahooInt(lastDate)}&interval=1d&&events=history&includeAdjustedClose=true&filter=history&frequency=1d");
-            string stockWebsite = await DownloadHelper.GetWebData(downloadUrl.ToString(), reportLogger);
-            Stock stock = new Stock();
-
-            // stockWebsite here is a csv file
-            string newLineSeparator = stockWebsite.Contains("\r\n") ? "\r\n" : "\n";
-            string[] lines = stockWebsite.Split(newLineSeparator);
-
-            if (lines.Length <= 1)
-            {
-                getHistory(stock);
-                return true;
-            }
-
-            int numberEntries = 0;
-            for (int lineIndex = 1; lineIndex < lines.Length; lineIndex++)
-            {
-                string[] entries = lines[lineIndex].Split(DefaultCommaSeparator);
-                string dateString = entries[0];
-                try
-                {
-                    DateTime date = DateTime.Parse(dateString, CultureInfo.InvariantCulture);
-                    var utcDate = DateTime.SpecifyKind(date, DateTimeKind.Utc);
-                    decimal open = decimal.Parse(entries[1]);
-                    decimal high = decimal.Parse(entries[2]);
-                    decimal low = decimal.Parse(entries[3]);
-                    decimal close = decimal.Parse(entries[4]);
-                    decimal volume = decimal.Parse(entries[6]);
-                    stock.AddValue(utcDate, open, high, low, close, volume);
-                    numberEntries++;
-                }
-                catch (Exception ex)
-                {
-                    reportLogger?.Error("Downloading", $"Could not convert stock {stock.Name} data- {lines[lineIndex]}. Error {ex.Message}");
-                }
-            }
-
-            reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, "Downloading", $"Added {lines.Length - 1} to stock {stock.Name}");
-
-            stock.Sort();
-            getHistory(stock);
-            return true;
-        }
-
         private static string BuildQueryUrl(string url, string identifier)
         {
             return $"{url}/quote/{identifier}";
-        }
-
-        private static int DateToYahooInt(DateTime date)
-        {
-            return int.Parse((date - new DateTime(1970, 1, 1)).TotalSeconds.ToString());
         }
 
         /// <summary>
@@ -153,7 +60,7 @@ namespace FinancialStructures.Download.Implementation
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
-        public static string GetFinancialCode(string url)
+        public string GetFinancialCode(string url)
         {
             string urlSearchString = "/quote/";
             int startIndex = url.IndexOf(urlSearchString);
@@ -172,35 +79,6 @@ namespace FinancialStructures.Download.Implementation
             }
 
             return code;
-        }
-
-        private static decimal? FindAndGetSingleValue(string searchString, string findString, bool includeComma, int containedWithin = 50)
-        {
-            int index = searchString.IndexOf(findString);
-            int lengthToSearch = Math.Min(containedWithin, searchString.Length - index - findString.Length);
-            return DownloadHelper.ParseDataIntoNumber(searchString, index, findString.Length, lengthToSearch, includeComma);
-        }
-
-        private static Tuple<decimal, decimal> FindAndGetDoubleValues(string searchString, string findString, int containedWithin = 50)
-        {
-            int index = searchString.IndexOf(findString);
-            int lengthToSearch = Math.Min(containedWithin, searchString.Length - index - findString.Length);
-            decimal? firstValue = DownloadHelper.ParseDataIntoNumber(searchString, index, findString.Length, lengthToSearch, true);
-
-            if (!firstValue.HasValue)
-            {
-                return new Tuple<decimal, decimal>(decimal.MinValue, decimal.MinValue);
-            }
-
-            string value = searchString.Substring(index + findString.Length, lengthToSearch);
-            int separator = value.IndexOf("-");
-            decimal? value2 = DownloadHelper.ParseDataIntoNumber(value, separator, 0, lengthToSearch, true);
-            if (!value2.HasValue)
-            {
-                return new Tuple<decimal, decimal>(decimal.MinValue, decimal.MinValue);
-            }
-
-            return new Tuple<decimal, decimal>(firstValue.Value, value2.Value);
         }
 
         private static decimal? GetValue(string webData, string financialCode)

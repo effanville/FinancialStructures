@@ -33,7 +33,7 @@ namespace FinancialStructures.FinanceStructures.Implementation.Asset
         /// <summary>
         /// Default constructor.
         /// </summary>
-        private AmortisableAsset(NameData names, TimeList values, TimeList debt, TimeList payments)
+        internal AmortisableAsset(NameData names, TimeList values, TimeList debt, TimeList payments)
             : base(names, values)
         {
             Debt = debt;

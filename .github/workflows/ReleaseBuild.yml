@@ -20,6 +20,12 @@ on:
   push:
     branches:
       - master
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Test scenario tags'
+        required: false
+        type: boolean
 
 jobs:
   windows-latest:
@@ -28,7 +34,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
+          token: ${{ secrets.INTERNAL_PAT }}
           submodules: recursive
+          fetch-depth: 0
       - name: Cache .nuke/temp, ~/.nuget/packages
         uses: actions/cache@v3
         with:
@@ -36,8 +44,14 @@ jobs:
             .nuke/temp
             ~/.nuget/packages
           key: ${{ runner.os }}-${{ hashFiles('**/global.json', '**/*.csproj') }}
-      - name: Run './build.cmd Publish'
-        run: ./build.cmd Publish
+      - name: Run './build.cmd Release with release profile'
+        run: ./build.cmd Release --profile Release
+      - uses: dorny/test-reporter@v1
+        if: success() || failure()
+        with:
+          name: Test results
+          path: '**/*.trx'
+          reporter: dotnet-trx
       - uses: actions/upload-artifact@v3
         with:
           name: bin
@@ -46,3 +60,4 @@ jobs:
         with:
           name: package
           path: Publish/package
+          

@@ -22,7 +22,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
                 .WithSecurity(BaseCompanyName, BaseName)
                 .GetInstance();
 
-            _ = database.TryRemove(Account.Security, new NameData(BaseCompanyName, BaseName));
+            _ = database.TryRemove(Account.Security, new TwoName(BaseCompanyName, BaseName));
 
             Assert.AreEqual(0, database.Funds.Count);
         }
@@ -74,7 +74,7 @@ namespace FinancialStructures.Tests.Database.AccountEdit
                 .WithSecurity(BaseCompanyName, BaseName)
                 .GetInstance();
             IReportLogger logging = new LogReporter(null, saveInternally: true);
-            _ = database.TryRemove(Account.Security, new NameData(BaseCompanyName, BaseName), logging);
+            _ = database.TryRemove(Account.Security, new TwoName(BaseCompanyName, BaseName), logging);
 
             ErrorReports reports = logging.Reports;
             Assert.AreEqual(1, reports.Count());

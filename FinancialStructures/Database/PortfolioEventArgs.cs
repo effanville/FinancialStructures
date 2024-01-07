@@ -33,7 +33,6 @@ namespace FinancialStructures.Database
         public bool ChangedPortfolio
         {
             get;
-            set;
         }
 
         /// <summary>
@@ -42,6 +41,23 @@ namespace FinancialStructures.Database
         public Account ChangedAccount
         {
             get;
+        }
+
+        /// <summary>
+        /// Was the change initiated from a user action?
+        /// </summary>
+        public bool UserInitiated
+        {
+            get;
+        }
+
+        /// <summary>
+        /// Default Constructor that alerts to all changed.
+        /// </summary>
+        public PortfolioEventArgs()
+            : base()
+        {
+            ChangedAccount = Account.All;
         }
 
         /// <summary>
@@ -63,20 +79,21 @@ namespace FinancialStructures.Database
         }
 
         /// <summary>
-        /// Default Constructor that alerts to all changed.
+        /// Constructor taking an account type.
         /// </summary>
-        public PortfolioEventArgs()
+        public PortfolioEventArgs(Account type, bool userInitiated)
             : base()
         {
-            ChangedAccount = Account.All;
+            ChangedAccount = type;
+            UserInitiated = userInitiated;
         }
 
         /// <summary>
         /// Should the type of account be updated or not.
         /// </summary>
-        public bool ShouldUpdate(Account dataType)
+        public static bool ShouldUpdate(Account change, Account dataType)
         {
-            return ChangedAccount == Account.All || dataType.Equals(ChangedAccount) || dataType == Account.All;
+            return change == Account.All || dataType.Equals(change) || dataType == Account.All;
         }
     }
 }

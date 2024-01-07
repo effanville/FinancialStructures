@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "git-cliff": "^1.4.0"
+  }
+}
