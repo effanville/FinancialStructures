@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <PublishTrimmed>true</PublishTrimmed>
+        <TrimMode>full</TrimMode>
+        <LangVersion>9.0</LangVersion>
+        <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
+        <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+        <TrimmerRemoveSymbols>true</TrimmerRemoveSymbols>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <SuppressTrimAnalysisWarnings>false</SuppressTrimAnalysisWarnings>
+        <EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+        <TrimmerRemoveSymbols>true</TrimmerRemoveSymbols>
+    </PropertyGroup>
+    
+    <PropertyGroup>
+        <Version>23.07.0</Version>
+    </PropertyGroup>
+    <ItemGroup Condition="Exists('..\..\Common\Common.Structure\Common.Structure.csproj')">
+        <ProjectReference Include="..\..\Common\Common.Structure\Common.Structure.csproj"/>
+    </ItemGroup>
+    <ItemGroup Condition="Exists('..\..\Common\Common.Console\Common.Console.csproj')">
+        <ProjectReference Include="..\..\Common\Common.Console\Common.Console.csproj"/>
+    </ItemGroup>
+    <ItemGroup Condition="!Exists('..\..\Common\Common.Structure\Common.Structure.csproj') And Exists('..\..\..\FinancePortfolioDatabase.sln')">
+        <ProjectReference Include="..\..\..\Common\Common.Structure\Common.Structure.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+            <_Parameter1>$(AssemblyName).Tests</_Parameter1>
+        </AssemblyAttribute>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\FinancialStructures\FinancialStructures.csproj"/>
+        <ProjectReference Include="..\FinancialStructures.Stocks\FinancialStructures.Stocks.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Content Include="..\..\test\FinancialStructures.Stocks.Tests\ExampleConfigFiles\Exchanges.csv" 
+                 Link="ExampleConfigFiles\Exchanges.csv">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+</Project>

@@ -25,4 +25,17 @@
   <ItemGroup Condition="Exists('..\..\Common\Common.Structure\Common.Structure.csproj')">
 	<ProjectReference Include="..\..\Common\Common.Structure\Common.Structure.csproj" />
   </ItemGroup>
+
+
+  <ItemGroup>
+    <None Update="ExampleConfigFiles\Exchanges.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="ExampleConfigFiles\Instruments.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+
+
 </Project>

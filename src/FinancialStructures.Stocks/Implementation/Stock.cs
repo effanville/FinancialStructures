@@ -10,24 +10,23 @@ namespace FinancialStructures.Stocks.Implementation
     /// </summary>
     public partial class Stock : IStock
     {
-        private List<StockDay> fValuations = new();
-        internal int LastValueIndex = 0;
+        private List<StockDay> _valuations = new();
+        private int _lastValueIndex;
 
         /// <inheritdoc/>
-        public NameData Name
-        {
-            get;
-            set;
-        }
+        public NameData Name { get; set; }
 
+        /// <inheritdoc/>
+        public StockFundamentalData Fundamentals { get; } = new();
+        
         /// <inheritdoc/>
         public List<StockDay> Valuations
         {
-            get => fValuations;
+            get => _valuations;
             set
             {
-                fValuations = value;
-                fValuations.Sort();
+                _valuations = value;
+                _valuations.Sort();
             }
         }
 
@@ -42,24 +41,20 @@ namespace FinancialStructures.Stocks.Implementation
         /// Constructor setting basic name information
         /// </summary>
         public Stock(string ticker, string company, string name, string currency, string url)
+            : this()
         {
-            Name = new NameData(company.Trim(), name.Trim(), currency, url.Trim());
-            Name.Ticker = ticker;
-            Valuations = new List<StockDay>();
+            Name = new NameData(company.Trim(), name.Trim(), currency, url.Trim())
+            {
+                Ticker = ticker
+            };
         }
 
-        public void AddValue(StockDay candle)
-        {
-            Valuations.Add(candle);
-        }
-
-        /// <inheritdoc/>
-        public void AddValue(DateTime time, decimal open, decimal high, decimal low, decimal close, decimal volume)
-        {
-            AddValue(new StockDay(time, open, high, low, close, volume));
-        }
+        private void AddValue(StockDay candle) => Valuations.Add(candle);
 
         /// <inheritdoc/>
+        public void AddValue(DateTime time, decimal open, decimal high, decimal low, decimal close, decimal volume) 
+            => AddValue(new StockDay(time, open, high, low, close, volume));
+
         public void AddOrEditValue(DateTime time, decimal? newOpen = null, decimal? newHigh = null, decimal? newLow = null, decimal? newClose = null, decimal? newVolume = null)
         {
             var value = Valuations.FirstOrDefault(val => val.Start.Equals(time));
@@ -92,16 +87,10 @@ namespace FinancialStructures.Stocks.Implementation
         }
 
         /// <inheritdoc/>
-        public void Sort()
-        {
-            Valuations.Sort();
-        }
+        public void Sort() => Valuations.Sort();
 
         /// <inheritdoc/>
-        public override string ToString()
-        {
-            return $"Stock: {Name.Ticker}-{Name}-{Valuations.Count}";
-        }
+        public override string ToString() => $"Stock: {Name.Ticker}-{Name}-{Valuations.Count}";
 
         /// <summary>
         /// Takes a copy of the stock with all data strictly before <paramref name="date"/>

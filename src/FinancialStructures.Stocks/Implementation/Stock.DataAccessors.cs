@@ -27,7 +27,7 @@ namespace FinancialStructures.Stocks.Implementation
 
         /// <summary>
         /// This retrieves the data on the date <paramref name="date"/> as well
-        /// as setting <see cref="LastValueIndex"/> to the index of this
+        /// as setting <see cref="_lastValueIndex"/> to the index of this
         /// value.
         /// </summary>
         public StockDay GetData(DateTime date)
@@ -52,7 +52,7 @@ namespace FinancialStructures.Stocks.Implementation
         {
             _ = GetDataAndSetAccessor(date);
             List<decimal> desiredValues = new List<decimal>();
-            for (int valuationIndex = LastValueIndex - numberValuesBefore + 1; valuationIndex < LastValueIndex + numberValuesAfter + 1; valuationIndex++)
+            for (int valuationIndex = _lastValueIndex - numberValuesBefore + 1; valuationIndex < _lastValueIndex + numberValuesAfter + 1; valuationIndex++)
             {
                 desiredValues.Add(Valuations[valuationIndex].Value(data));
             }
@@ -62,7 +62,7 @@ namespace FinancialStructures.Stocks.Implementation
 
         /// <summary>
         /// Calculates the value of the stock at the index in the list of values.
-        /// This does not set <see cref="LastValueIndex"/>.
+        /// This does not set <see cref="_lastValueIndex"/>.
         /// </summary>
         private decimal Value(int valuationIndex, StockDataStream data = StockDataStream.Close)
         {
@@ -71,7 +71,7 @@ namespace FinancialStructures.Stocks.Implementation
 
         /// <summary>
         /// This retrieves the data at the time specified in <paramref name="date"/> as well
-        /// as setting <see cref="LastValueIndex"/> to the index of this
+        /// as setting <see cref="_lastValueIndex"/> to the index of this
         /// value. If the time is within the duration of the Day here, then only the open
         /// is returned.
         /// </summary>
@@ -85,7 +85,7 @@ namespace FinancialStructures.Stocks.Implementation
             }
             while (dayIndex < numberValues && date >= Valuations[dayIndex].Start);
 
-            LastValueIndex = dayIndex - 1;
+            _lastValueIndex = dayIndex - 1;
             var value = Valuations[dayIndex - 1];
             var endTime = value.End;
             if (date >= endTime)
