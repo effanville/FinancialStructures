@@ -18,42 +18,27 @@ namespace FinancialStructures.Stocks
         /// <summary>
         /// The stock exchange name, eg London stock exchange.
         /// </summary>
-        string ExchangeIdentifier
-        {
-            get;
-        }
+        string ExchangeIdentifier { get; }
         
         /// <summary>
         /// The stock exchange name, eg London stock exchange.
         /// </summary>
-        string Name
-        {
-            get;
-        }
+        string Name { get; }
 
         /// <summary>
         /// The time zone the exchange is in
         /// </summary>
-        TimeZoneInfo TimeZone
-        {
-            get;
-        }
+        TimeZoneInfo TimeZone { get; }
 
         /// <summary>
         /// The code for the country to determine trading days.
         /// </summary>
-        CountryCode CountryDateCode
-        {
-            get;
-        }
+        CountryCode CountryDateCode { get; }
 
         /// <summary>
         /// The stocks that are part of this exchange.
         /// </summary>
-        List<Stock> Stocks
-        {
-            get;
-        }
+        List<Stock> Stocks { get; }
 
         DateTime ExchangeOpenInUtc(DateTime date);
 

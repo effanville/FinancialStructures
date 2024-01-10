@@ -60,7 +60,7 @@ namespace FinancialStructures.Stocks
             {
                 Stock inheritedStock = inheritedStockExchange.Stocks.FirstOrDefault(thing => thing.Name.Equals(stock.Name));
                 StockDay stockData = stock.GetData(time);
-                if (stockData != null)
+                if (stockData != null && inheritedStock != null)
                 {
                     inheritedStock.AddOrEditValue(stockData.Start, stockData.Open, stockData.High, stockData.Low, stockData.Close, stockData.Volume);
                 }

@@ -10,20 +10,12 @@ namespace FinancialStructures.Stocks.Implementation
         /// <summary>
         /// The start time of the interval this data is about.
         /// </summary>
-        public DateTime Start
-        {
-            get;
-            set;
-        }
+        public DateTime Start { get; set; }
 
         /// <summary>
         /// The length of time of the interval this data is about.
         /// </summary>
-        public TimeSpan Duration
-        {
-            get;
-            set;
-        } = TimeSpan.FromHours(8.5);
+        public TimeSpan Duration { get; set; } = TimeSpan.FromHours(8.5);
 
         /// <summary>
         /// The ending time of the interval this data is about.
@@ -33,54 +25,32 @@ namespace FinancialStructures.Stocks.Implementation
         /// <summary>
         /// The opening price in the interval.
         /// </summary>
-        public decimal Open
-        {
-            get;
-            set;
-        }
+        public decimal Open { get; set; }
 
         /// <summary>
         /// The high value in this interval
         /// </summary>
-        public decimal High
-        {
-            get;
-            set;
-        }
+        public decimal High { get; set; }
 
         /// <summary>
         /// The low value in this interval.
         /// </summary>
-        public decimal Low
-        {
-            get;
-            set;
-        }
+        public decimal Low { get; set; }
 
         /// <summary>
         /// The closing value in this interval.
         /// </summary>
-        public decimal Close
-        {
-            get;
-            set;
-        }
+        public decimal Close { get; set; }
 
         /// <summary>
         /// The trading volume experienced in the interval.
         /// </summary>
-        public decimal Volume
-        {
-            get;
-            set;
-        }
+        public decimal Volume { get; set; }
 
         /// <summary>
         /// Default constructor setting nothing.
         /// </summary>
-        public StockDay()
-        {
-        }
+        public StockDay() { }
 
         /// <summary>
         /// Constructor setting all values.
@@ -99,7 +69,7 @@ namespace FinancialStructures.Stocks.Implementation
         /// <summary>
         /// Constructor setting all values.
         /// </summary>
-        private StockDay(DateTime time, decimal open, decimal high, decimal low, decimal close, decimal volume, TimeSpan duration)
+        public StockDay(DateTime time, decimal open, decimal high, decimal low, decimal close, decimal volume, TimeSpan duration)
             : this(time, open, high, low, close, volume)
         {
             Duration = duration;
@@ -139,7 +109,6 @@ namespace FinancialStructures.Stocks.Implementation
         /// <summary>
         /// Copy only the open value into a new StockDay.
         /// </summary>
-        /// <returns></returns>
         public StockDay CopyAsOpenOnly() 
             => new(Start, Open, 0, 0, 0, 0, Duration);
     }

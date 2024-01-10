@@ -17,7 +17,7 @@ namespace FinancialStructures.Stocks.Implementation
         public NameData Name { get; set; }
 
         /// <inheritdoc/>
-        public StockFundamentalData Fundamentals { get; } = new();
+        public StockFundamentalData Fundamentals { get; set; } = new();
         
         /// <inheritdoc/>
         public List<StockDay> Valuations
@@ -33,9 +33,7 @@ namespace FinancialStructures.Stocks.Implementation
         /// <summary>
         /// Empty constructor.
         /// </summary>
-        public Stock()
-        {
-        }
+        public Stock() { }
 
         /// <summary>
         /// Constructor setting basic name information
