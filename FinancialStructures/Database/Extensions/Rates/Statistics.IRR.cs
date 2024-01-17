@@ -30,6 +30,18 @@ namespace FinancialStructures.Database.Extensions.Rates
         public static double TotalIRR(this IPortfolio portfolio, Totals accountType, DateTime earlierTime, DateTime laterTime, TwoName name = null, int numIterations = 10)
         {
             var accounts = portfolio.Accounts(accountType, name);
+            DateTime earliestTime = portfolio.FirstValueDate(accountType, name);
+            if (earlierTime < earliestTime)
+            {
+                earlierTime = earliestTime;
+            }
+
+            DateTime latestTime = portfolio.LatestDate(accountType, name);
+            if (laterTime > latestTime)
+            {
+                laterTime = latestTime;
+            }
+
             switch (accountType)
             {
                 case Totals.All:
@@ -163,7 +175,18 @@ namespace FinancialStructures.Database.Extensions.Rates
         /// Calculates the IRR for the account with specified account and name between the times specified.
         /// </summary>
         public static double IRR(this IPortfolio portfolio, Account accountType, TwoName names, DateTime earlierTime, DateTime laterTime)
-        {
+        {            
+            DateTime earliestTime = portfolio.FirstDate(accountType, names);
+            if (earlierTime < earliestTime)
+            {
+                earlierTime = earliestTime;
+            }
+
+            DateTime latestTime = portfolio.LatestDate(accountType, names);
+            if (laterTime > latestTime)
+            {
+                laterTime = latestTime;
+            }
             return portfolio.CalculateStatistic(accountType,
                 names,
                 valueList => valueList.Any() ? valueList.CAR(earlierTime, laterTime) : double.NaN,

@@ -57,9 +57,16 @@ namespace FinancialStructures.FinanceStructures.Implementation
                 return null;
             }
 
-            decimal latestValue = latestDate.Value * Shares.LatestValue() * GetCurrencyValue(latestDate.Day, currency) ?? 0.0m;
+            var numShares = Shares.LatestValuation();
+            if (numShares == null)
+            {
+                return null;
+            }
 
-            return new DailyValuation(latestDate.Day, latestValue);
+            DateTime date = numShares.Value != 0m ? latestDate.Day : numShares.Day;
+            decimal latestValue = latestDate.Value * numShares.Value * GetCurrencyValue(latestDate.Day, currency);
+
+            return new DailyValuation(date, latestValue);
         }
 
         /// <inheritdoc/>
