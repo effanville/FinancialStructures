@@ -17,6 +17,6 @@ namespace FinancialStructures.Persistence
         /// <summary>
         /// Saves the <see cref="T"/> to the file specified.
         /// </summary>
-        void Save(T portfolio, PersistenceOptions options, IReportLogger reportLogger = null);
+        bool Save(T portfolio, PersistenceOptions options, IReportLogger reportLogger = null);
     }
 }

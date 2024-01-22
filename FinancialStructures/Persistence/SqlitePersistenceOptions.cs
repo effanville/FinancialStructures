@@ -2,16 +2,18 @@ using System.IO.Abstractions;
 
 namespace FinancialStructures.Persistence
 {
-    public class SqlitePersistenceOptions : PersistenceOptions
+    public sealed class SqlitePersistenceOptions : PersistenceOptions
     {
         public bool InMemory { get; }
-        public string FilePath { get; }
-        public IFileSystem FileSystem { get; }
 
-        public SqlitePersistenceOptions(bool inMemory, string filePath, IFileSystem fileSystem)
+        public SqlitePersistenceOptions(string filePath, IFileSystem fileSystem)           
+            : this(inMemory: false, filePath, fileSystem)
         {
-            FilePath = filePath;
-            FileSystem = fileSystem;
+        }
+        
+        public SqlitePersistenceOptions(bool inMemory, string filePath, IFileSystem fileSystem)           
+            : base(filePath, fileSystem)
+        {
             InMemory = inMemory;
         }
     }

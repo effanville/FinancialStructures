@@ -1,3 +1,5 @@
+using System;
+using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 
@@ -6,12 +8,13 @@ using Common.Structure.Reporting;
 
 using FinancialStructures.Database;
 using FinancialStructures.Database.Implementation;
+using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.Persistence.Xml;
 
 namespace FinancialStructures.Persistence
 {
-    public sealed class XmlPortfolioPersistence : IPersistence<IPortfolio>
+    public sealed class BinaryFilePortfolioPersistence: IPersistence<IPortfolio>
     {
         public IPortfolio Load(PersistenceOptions options, IReportLogger reportLogger = null)
         {
@@ -26,19 +29,19 @@ namespace FinancialStructures.Persistence
 
         public bool Load(IPortfolio portfolio, PersistenceOptions options, IReportLogger reportLogger = null)
         {
-            if (options is not XmlFilePersistenceOptions xmlOptions)
+            if (options is not BinaryFilePersistenceOptions binaryFileOptions)
             {
                 reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(),
-                    "Options for loading from Xml file not of correct type.");
+                    "Options for loading from Binary file not of correct type.");
                 return false;
             }
 
-            IFileSystem fileSystem = xmlOptions.FileSystem;
-            string filePath = xmlOptions.FilePath;
+            IFileSystem fileSystem = binaryFileOptions.FileSystem;
+            string filePath = binaryFileOptions.FilePath;
             if (!fileSystem.File.Exists(filePath))
             {
                 reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(),
-                    "Loaded Empty New StockExchange.");
+                    "Loaded Empty New Portfolio.");
                 return false;
             }
 
@@ -47,7 +50,17 @@ namespace FinancialStructures.Persistence
                 return false;
             }
 
-            AllData database = XmlFileAccess.ReadFromXmlFile<AllData>(fileSystem, filePath, out string error);
+            string output;
+            using (Stream file = fileSystem.FileStream.Create(filePath, FileMode.Open, FileAccess.Read))
+            using(StreamReader streamReader = new StreamReader(file))
+            {
+                output = streamReader.ReadToEnd();
+            }
+
+            byte[] byteInput = Convert.FromBase64String(output);
+            
+            MemoryStream stream = new MemoryStream(byteInput);
+            AllData database = XmlFileAccess.ReadFromStream<AllData>(stream, out string error);
             if (database != null)
             {
                 database.MyFunds.Set(portfolioImpl);
@@ -72,8 +85,9 @@ namespace FinancialStructures.Persistence
                     $" Failed to load new database from {filePath}. {error}.");
             }
 
-            foreach (Security sec in portfolio.Funds)
+            foreach (ISecurity security in portfolio.Funds)
             {
+                var sec = (Security)security;
                 sec.EnsureOnLoadDataConsistency();
             }
 
@@ -83,15 +97,15 @@ namespace FinancialStructures.Persistence
 
         public bool Save(IPortfolio portfolio, PersistenceOptions options, IReportLogger reportLogger = null)
         {
-            if (options is not XmlFilePersistenceOptions xmlOptions)
+            if (options is not BinaryFilePersistenceOptions binaryFileOptions)
             {
                 reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(),
                     "Options for loading from Xml file not of correct type.");
                 return false;
             }
 
-            IFileSystem fileSystem = xmlOptions.FileSystem;
-            string filePath = xmlOptions.FilePath;
+            IFileSystem fileSystem = binaryFileOptions.FileSystem;
+            string filePath = binaryFileOptions.FilePath;
             if (portfolio is not Portfolio portfolioImpl)
             {
                 reportLogger?.Log(ReportType.Error, ReportLocation.Saving.ToString(),
@@ -101,12 +115,21 @@ namespace FinancialStructures.Persistence
 
             AllData toSave = new AllData(portfolioImpl, null);
 
-            XmlFileAccess.WriteToXmlFile(fileSystem, filePath, toSave, out string error);
+            var stream = new MemoryStream();
+            XmlFileAccess.WriteToStream(stream, toSave, out string error);
             if (error != null)
             {
                 _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Saving,
                     $"Failed to save database: {error}");
                 return false;
+            }
+
+            byte[] bytes = stream.ToArray();
+            string base64 = Convert.ToBase64String(bytes);
+            using (Stream file = fileSystem.FileStream.Create(filePath, FileMode.Create, FileAccess.Write)) 
+            using (var streamWriter = new StreamWriter(file))
+            {
+                streamWriter.Write(base64);
             }
 
             portfolioImpl.Saving();

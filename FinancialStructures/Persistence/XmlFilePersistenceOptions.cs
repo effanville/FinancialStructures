@@ -4,13 +4,9 @@ namespace FinancialStructures.Persistence
 {
     public class XmlFilePersistenceOptions : PersistenceOptions
     {
-        public string FilePath { get; }
-        public IFileSystem FileSystem { get; }
-
         public XmlFilePersistenceOptions(string filePath, IFileSystem fileSystem)
+            : base(filePath, fileSystem)
         {
-            FilePath = filePath;
-            FileSystem = fileSystem;
         }
     }
 }
