@@ -7,12 +7,18 @@
   <PropertyGroup>
     <Version>24.01.00-20240101T0201</Version>
   </PropertyGroup>
-  <ItemGroup Condition="Exists('..\Common\Common.Structure\Common.Structure.csproj')">
-    <ProjectReference Include="..\Common\Common.Structure\Common.Structure.csproj" />
-  </ItemGroup>
-  <ItemGroup Condition="!Exists('..\Common\Common.Structure\Common.Structure.csproj') And Exists('..\..\FinancePortfolioDatabase.sln')">
-    <ProjectReference Include="..\..\Common\Common.Structure\Common.Structure.csproj" />
-  </ItemGroup>
+  <Choose>
+    <When Condition="Exists('..\..\FinancePortfolioDatabase.sln')">
+      <ItemGroup>
+        <ProjectReference Include="..\..\Common\Common.Structure\Common.Structure.csproj" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <ProjectReference Include="..\Common\Common.Structure\Common.Structure.csproj" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
   <ItemGroup>
     <PackageReference Include="Nager.Date" Version="1.30.0" />
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
