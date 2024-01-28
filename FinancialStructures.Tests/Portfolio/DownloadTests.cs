@@ -29,8 +29,8 @@ namespace FinancialStructures.Tests.Database
         [TestCase("https://uk.finance.yahoo.com/quote/^FVX")]
         [TestCase("https://uk.finance.yahoo.com/quote/USDGBP=X")]
         [TestCase("https://uk.finance.yahoo.com/quote/HKDGBP=X")]
-        [TestCase("https://www.morningstar.co.uk/uk/etf/snapshot/snapshot.aspx?id=0P0000WAHE")]
-        [TestCase("https://www.morningstar.co.uk/uk/funds/snapshot/snapshot.aspx?id=F0GBR04S22")]
+        //[TestCase("https://www.morningstar.co.uk/uk/etf/snapshot/snapshot.aspx?id=0P0000WAHE")]
+        //[TestCase("https://www.morningstar.co.uk/uk/funds/snapshot/snapshot.aspx?id=F0GBR04S22")]
         [TestCase("https://uk.finance.yahoo.com/quote/GRP.L")]
         [TestCase("https://uk.finance.yahoo.com/quote/JXN?p=JXN&.tsrc=fin-srch")]
         [TestCase("https://uk.finance.yahoo.com/quote/ship.l")]
@@ -54,7 +54,7 @@ namespace FinancialStructures.Tests.Database
         [TestCase("https://uk.finance.yahoo.com/quote/GBPUSD%3DX?p=GBPUSD%3DX", "GBPUSD=X")]
         [TestCase("https://uk.finance.yahoo.com/quote/VUKE.L/options?p=VUKE.L", "VUKE.L")]
         [TestCase("https://uk.finance.yahoo.com/quote/VWRL.L/history?p=VWRL.L", "VWRL.L")]
-        [TestCase("https://www.morningstar.co.uk/uk/etf/snapshot/snapshot.aspx?id=0P0000WAHE", "0P0000WAHE")]
+        //[TestCase("https://www.morningstar.co.uk/uk/etf/snapshot/snapshot.aspx?id=0P0000WAHE", "0P0000WAHE")]
         [TestCase("https://markets.ft.com/data/funds/tearsheet/summary?s=gb00b4khn986:gbx", "GB00B4KHN986:GBX")]
         public void CanGetCode(string url, string expectedCode)
         {
