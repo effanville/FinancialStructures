@@ -38,6 +38,18 @@ namespace FinancialStructures.Tests.FinanceStructuresTests.SecurityTests
                 new DateTime(2010, 5, 1),
                 new DateTime(2020, 1, 1),
                 0.11145534133627866).SetName("Car-DefaultSec2");
+            
+            yield return new TestCaseData(
+                SecurityConstructor.NowWithNoShares(),
+                new DateTime(2010, 5, 1),
+                new DateTime(2020, 1, 1),
+                -1.0).SetName("Car-NoShares");
+                        
+            yield return new TestCaseData(
+                SecurityConstructor.NowWithNoShares(),
+                new DateTime(2010, 5, 1),
+                new DateTime(2020, 5, 1),
+                -1.0).SetName("Car-NoShares2");
         }
 
         [TestCaseSource(nameof(CarData))]
@@ -72,6 +84,18 @@ namespace FinancialStructures.Tests.FinanceStructuresTests.SecurityTests
                 new DateTime(2010, 5, 1),
                 new DateTime(2020, 1, 1),
                 0.11145534133627866).SetName("IRR-DefaultSec2");
+            
+            yield return new TestCaseData(
+                SecurityConstructor.NowWithNoShares(),
+                new DateTime(2010, 5, 1),
+                new DateTime(2020, 1, 1),
+                0.01513671875).SetName("IRR-NoShares");
+            
+            yield return new TestCaseData(
+                SecurityConstructor.NowWithNoShares(),
+                new DateTime(2010, 5, 1),
+                new DateTime(2022, 1, 1),
+                -0.25).SetName("IRR-NoShares2");
         }
 
         [TestCaseSource(nameof(IRRData))]
@@ -94,6 +118,10 @@ namespace FinancialStructures.Tests.FinanceStructuresTests.SecurityTests
             yield return new TestCaseData(
                 SecurityConstructor.Secondary(),
                 0.01220703125).SetName("IRRAllTime-SecondarySec");
+            
+            yield return new TestCaseData(
+                SecurityConstructor.NowWithNoShares(),
+                -0.25).SetName("IRRAllTime-NoShares");
         }
 
         [TestCaseSource(nameof(IRRAllTimeData))]
@@ -116,6 +144,10 @@ namespace FinancialStructures.Tests.FinanceStructuresTests.SecurityTests
             yield return new TestCaseData(
                 SecurityConstructor.Secondary(),
                 23042.96m).SetName("TotalInvestments-SecondarySec");
+            
+            yield return new TestCaseData(
+                SecurityConstructor.NowWithNoShares(),
+                -2720.01m).SetName("TotalInvestments-NoSharesSec");
         }
 
         [TestCaseSource(nameof(TotalInvestmentsData))]
@@ -138,6 +170,9 @@ namespace FinancialStructures.Tests.FinanceStructuresTests.SecurityTests
             yield return new TestCaseData(
                 SecurityConstructor.Secondary(),
                 new DailyValuation(new DateTime(2020, 1, 1), 25528.05m)).SetName("LatestValue-SecondarySec");
+            yield return new TestCaseData(
+                SecurityConstructor.NowWithNoShares(),
+                new DailyValuation(new DateTime(2020, 4, 1),0m)).SetName("LatestValue-NoSharesSec");
         }
 
         [TestCaseSource(nameof(LatestValueData))]
@@ -223,6 +258,16 @@ namespace FinancialStructures.Tests.FinanceStructuresTests.SecurityTests
                 SecurityConstructor.Secondary(),
                 new DateTime(2015, 1, 1),
                 new DailyValuation(new DateTime(2015, 1, 1), 19828.324114765570328901329602m)).SetName("Value-SecondarySec");
+            
+            yield return new TestCaseData(
+                SecurityConstructor.NowWithNoShares(),
+                new DateTime(2015, 1, 1),
+                new DailyValuation(new DateTime(2015, 1, 1), 17324.747837648705388383484956m)).SetName("Value-NoSharesSec");
+            
+            yield return new TestCaseData(
+                SecurityConstructor.NowWithNoShares(),
+                new DateTime(2022, 1, 1),
+                new DailyValuation(new DateTime(2022, 1, 1), 0m)).SetName("Value-NoSharesSec2");
         }
 
         [TestCaseSource(nameof(ValueData))]
@@ -274,6 +319,16 @@ namespace FinancialStructures.Tests.FinanceStructuresTests.SecurityTests
                 SecurityConstructor.Secondary(),
                 new DateTime(2015, 1, 1),
                 new DailyValuation(new DateTime(2015, 1, 1), 24060.96m)).SetName("ValueBefore-SecondarySec");
+            
+            yield return new TestCaseData(
+                SecurityConstructor.NowWithNoShares(),
+                new DateTime(2015, 1, 1),
+                new DailyValuation(new DateTime(2015, 1, 1), 21022.96m)).SetName("ValueBefore-NoSharesSec");
+            
+            yield return new TestCaseData(
+                SecurityConstructor.NowWithNoShares(),
+                new DateTime(2022, 1, 1),
+                new DailyValuation(new DateTime(2022, 1, 1), 0m)).SetName("ValueBefore-NoSharesSec2");
         }
 
         [TestCaseSource(nameof(ValueBeforeData))]
@@ -325,6 +380,16 @@ namespace FinancialStructures.Tests.FinanceStructuresTests.SecurityTests
                 SecurityConstructor.Secondary(),
                 new DateTime(2015, 1, 1),
                 new DailyValuation(new DateTime(2015, 1, 1), 24060.96m)).SetName("ValueOnOrBefore-SecondarySec");
+            
+            yield return new TestCaseData(
+                SecurityConstructor.NowWithNoShares(),
+                new DateTime(2015, 1, 1),
+                new DailyValuation(new DateTime(2015, 1, 1), 21022.96m)).SetName("ValueOnOrBefore-NoSharesSec");
+            
+            yield return new TestCaseData(
+                SecurityConstructor.NowWithNoShares(),
+                new DateTime(2022, 1, 1),
+                new DailyValuation(new DateTime(2022, 1, 1), 0m)).SetName("ValueOnOrBefore-NoSharesSec2");
         }
 
         [TestCaseSource(nameof(ValueOnOrBeforeData))]
