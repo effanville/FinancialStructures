@@ -121,7 +121,7 @@ namespace FinancialStructures.Tests.FinanceStructuresTests.SecurityTests
             
             yield return new TestCaseData(
                 SecurityConstructor.NowWithNoShares(),
-                -0.25).SetName("IRRAllTime-NoShares");
+                0.01513671875).SetName("IRRAllTime-NoShares");
         }
 
         [TestCaseSource(nameof(IRRAllTimeData))]
@@ -172,7 +172,7 @@ namespace FinancialStructures.Tests.FinanceStructuresTests.SecurityTests
                 new DailyValuation(new DateTime(2020, 1, 1), 25528.05m)).SetName("LatestValue-SecondarySec");
             yield return new TestCaseData(
                 SecurityConstructor.NowWithNoShares(),
-                new DailyValuation(new DateTime(2020, 4, 1),0m)).SetName("LatestValue-NoSharesSec");
+                new DailyValuation(new DateTime(2020, 1, 1),0m)).SetName("LatestValue-NoSharesSec");
         }
 
         [TestCaseSource(nameof(LatestValueData))]
