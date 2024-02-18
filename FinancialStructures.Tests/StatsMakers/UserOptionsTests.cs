@@ -12,10 +12,11 @@ namespace FinancialStructures.Tests.DataExporters.Statistics
         {
             PortfolioStatisticsSettings options = PortfolioStatisticsSettings.DefaultSettings();
 
-            Assert.IsFalse(options.DisplayValueFunds);
+            Assert.IsTrue(options.DisplayValueFunds);
             Assert.IsTrue(options.SecurityGenerateOptions.ShouldGenerate);
             Assert.IsTrue(options.SectorGenerateOptions.ShouldGenerate);
             Assert.IsTrue(options.BankAccountGenerateOptions.ShouldGenerate);
+            Assert.IsTrue(options.AssetGenerateOptions.ShouldGenerate);
         }
 
         [Test]

@@ -27,6 +27,12 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
         public static readonly decimal[] SecondaryShareValues = new decimal[] { 2.0m, 2.5m, 17.3m, 22.5m, 22.7m, 25.5m };
         public static readonly decimal[] SecondaryUnitPrices = new decimal[] { 1010.0m, 1110.0m, 1215.2m, 900.6m, 1770.7m, 1001.1m };
         public static readonly decimal[] SecondaryInvestments = new decimal[] { 2020.0m, 0.0m, 21022.96m, 0.0m, 0.0m, 0.0m };
+        
+        
+        public static readonly DateTime[] TertiaryDates = new DateTime[] { new DateTime(2010, 1, 5), new DateTime(2011, 2, 1), new DateTime(2012, 5, 5), new DateTime(2016, 4, 3), new DateTime(2019, 5, 6), new DateTime(2020, 1, 1),new DateTime(2020, 4, 1) };
+        public static readonly decimal[] TertiaryUnitPrices = new decimal[] { 1010.0m, 1110.0m, 1215.2m, 900.6m, 1770.7m, 1001.1m, 1002.3m };
+        public static readonly decimal[] TertiaryInvestments = new decimal[] { 2020.0m, 0.0m, 21022.96m, 0.0m, 0.0m,  -1000m };
+        public static readonly decimal[] TertiaryShareValues = new decimal[] { 2.0m, 2.5m, 17.3m, 22.5m, 22.7m, 0m };
 
         private Security Item;
 
@@ -69,6 +75,26 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             {
                 Item.Investments.SetData(date, investment);
                 Item.SecurityTrades.Add(new SecurityTrade(investment > 0 ? TradeType.Buy : TradeType.Sell, Item.Names.ToTwoName(), date, numberUnits, sharePrice, 0.0m));
+            }
+
+            Item.EnsureOnLoadDataConsistency();
+            return this;
+        }
+        
+        private SecurityConstructor WithDataFromTrades(DateTime date, decimal? sharePrice, decimal numberUnits, decimal investment = 0.0m)
+        {
+            decimal previousNumUnits = Item.Shares.LatestValue() ?? 0.0m;
+            Item.Shares.SetData(date, numberUnits);
+            if (sharePrice.HasValue)
+            {
+                Item.UnitPrice.SetData(date, sharePrice.Value);
+            }
+
+            if (investment != 0.0m)
+            {
+                Item.Investments.SetData(date, investment);
+                decimal sharePriceValue = sharePrice.HasValue ? sharePrice.Value : Item.UnitPrice.LatestValue().Value;
+                Item.SecurityTrades.Add(new SecurityTrade(investment > 0 ? TradeType.Buy : TradeType.Sell, Item.Names.ToTwoName(), date, numberUnits- previousNumUnits, sharePriceValue, 0.0m));
             }
 
             Item.EnsureOnLoadDataConsistency();
@@ -126,6 +152,17 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
                 investment: SecondaryInvestments)
                 .GetItem();
         }
+        
+        public static Security NowWithNoShares()
+            => WithNameAndDataFromTrades(
+                    SecondaryCompany,
+                    SecondaryName,
+                    currency: CurrencyConstructor.DefaultCompany,
+                    dates: TertiaryDates,
+                    sharePrice: TertiaryUnitPrices,
+                    numberUnits: TertiaryShareValues,
+                    investment: TertiaryInvestments)
+                .GetItem();
 
         public static SecurityConstructor WithName(string company, string name, string currency = null, string url = null, string sectors = null)
         {
@@ -157,7 +194,33 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
             _ = securityConstructor.WithTrades(trades);
             return securityConstructor;
         }
-
+        
+        public static SecurityConstructor WithNameAndDataFromTrades(
+            string company,
+            string name,
+            string currency = null,
+            string url = null,
+            string sectors = null,
+            DateTime[] dates = null,
+            decimal[] sharePrice = null,
+            decimal[] numberUnits = null,
+            decimal[] investment = null)
+        {
+            SecurityConstructor securityConstructor = new SecurityConstructor(company, name, currency, url, sectors);
+            if (dates != null)
+            {
+                for (int i = 0; i < dates.Length; i++)
+                {
+                    if (dates[i] != default(DateTime))
+                    {
+                        decimal numUnits = i < numberUnits?.Length ? numberUnits[i] : 0.0m;
+                        decimal numInvestment = i < investment?.Length ? investment[i] : 0.0m;
+                        _ = securityConstructor.WithDataFromTrades(dates[i], sharePrice?[i] , numUnits, numInvestment);
+                    }
+                }
+            }
+            return securityConstructor;
+        }
         public static SecurityConstructor WithNameAndData(
             string company,
             string name,
@@ -176,7 +239,7 @@ namespace FinancialStructures.Tests.TestDatabaseConstructor
                 {
                     if (dates[i] != default(DateTime))
                     {
-                        _ = securityConstructor.WithData(dates[i], sharePrice[i], numberUnits?[i] ?? 0.0m, investment?[i] ?? 0.0m);
+                        _ = securityConstructor.WithData(dates[i], sharePrice[i] , numberUnits?[i] ?? 0.0m, investment?[i] ?? 0.0m);
                     }
                 }
             }
