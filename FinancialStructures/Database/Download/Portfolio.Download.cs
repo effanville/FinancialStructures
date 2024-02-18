@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Common.Structure.Reporting;
+
+using Effanville.Common.Structure.Reporting;
+
 using FinancialStructures.Download;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;

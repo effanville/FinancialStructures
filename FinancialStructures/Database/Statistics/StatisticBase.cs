@@ -1,5 +1,7 @@
 ﻿using System;
-using Common.Structure.Extensions;
+
+using Effanville.Common.Structure.Extensions;
+
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Database.Statistics

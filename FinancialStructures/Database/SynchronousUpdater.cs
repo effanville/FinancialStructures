@@ -1,5 +1,6 @@
 ﻿using System;
-using Common.Structure.DataEdit;
+
+using Effanville.Common.Structure.DataEdit;
 
 namespace FinancialStructures.Database
 {

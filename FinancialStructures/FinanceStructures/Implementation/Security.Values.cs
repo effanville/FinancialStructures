@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Common.Structure.DataStructures;
-using Common.Structure.NamingStructures;
+
+using Effanville.Common.Structure.DataStructures;
+using Effanville.Common.Structure.NamingStructures;
+
 using FinancialStructures.DataStructures;
 using FinancialStructures.NamingStructures;
 

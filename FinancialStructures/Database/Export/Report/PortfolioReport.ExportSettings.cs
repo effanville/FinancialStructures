@@ -1,4 +1,4 @@
-﻿using Common.Structure.ReportWriting;
+﻿using Effanville.Common.Structure.ReportWriting;
 
 namespace FinancialStructures.Database.Export.Report
 {

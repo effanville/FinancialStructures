@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Common.Structure.DataStructures;
+
+using Effanville.Common.Structure.DataStructures;
+
 using FinancialStructures.Database.Extensions.Values;
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.FinanceStructures;

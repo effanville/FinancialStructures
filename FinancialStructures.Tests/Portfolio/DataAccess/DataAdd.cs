@@ -1,5 +1,7 @@
 ﻿using System;
-using Common.Structure.DataStructures;
+
+using Effanville.Common.Structure.DataStructures;
+
 using FinancialStructures.Database;
 using FinancialStructures.Database.Extensions;
 using FinancialStructures.Tests.TestDatabaseConstructor;

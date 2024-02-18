@@ -1,6 +1,6 @@
 using System.Xml.Serialization;
 
-using Common.Structure.DataStructures;
+using Effanville.Common.Structure.DataStructures;
 
 using FinancialStructures.NamingStructures;
 

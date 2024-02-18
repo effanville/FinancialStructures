@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
-using Common.Structure.DataStructures;
+
+using Effanville.Common.Structure.DataStructures;
+
 using FinancialStructures.Database;
 using FinancialStructures.Database.Extensions;
 using FinancialStructures.Database.Implementation;

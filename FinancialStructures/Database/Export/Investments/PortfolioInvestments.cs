@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 
-using Common.Structure.DataStructures;
-using Common.Structure.NamingStructures;
-using Common.Structure.Reporting;
-using Common.Structure.ReportWriting;
+using Effanville.Common.Structure.DataStructures;
+using Effanville.Common.Structure.NamingStructures;
+using Effanville.Common.Structure.Reporting;
+using Effanville.Common.Structure.ReportWriting;
 
 using FinancialStructures.Database.Extensions.Values;
 using FinancialStructures.NamingStructures;

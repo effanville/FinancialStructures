@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 
-using Common.Structure.Reporting;
+using Effanville.Common.Structure.Reporting;
+
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.FinanceStructures.Implementation.Asset;
 using FinancialStructures.NamingStructures;

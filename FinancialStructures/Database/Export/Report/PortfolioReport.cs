@@ -3,15 +3,16 @@ using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 
-using Common.Structure.ReportWriting;
-using Common.Structure.Reporting;
-using Common.Structure.Extensions;
-
 using FinancialStructures.Database.Export.History;
 using FinancialStructures.Database.Extensions;
 using FinancialStructures.Database.Extensions.Statistics;
 using FinancialStructures.NamingStructures;
 using System.Collections.Generic;
+
+using Effanville.Common.Structure.Extensions;
+using Effanville.Common.Structure.Reporting;
+using Effanville.Common.Structure.ReportWriting;
+
 using FinancialStructures.Database.Statistics;
 using FinancialStructures.Database.Extensions.Values;
 

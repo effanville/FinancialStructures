@@ -5,8 +5,8 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Common.Structure.Reporting;
-using Common.Structure.ReportWriting;
+using Effanville.Common.Structure.Reporting;
+using Effanville.Common.Structure.ReportWriting;
 
 using FinancialStructures.Database.Extensions.Values;
 

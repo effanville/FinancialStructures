@@ -3,7 +3,8 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-using Common.Structure.Extensions;
+using Effanville.Common.Structure.Extensions;
+
 using FinancialStructures.ExpensesStructures.Helpers;
 
 namespace FinancialStructures.ExpensesStructures.Models

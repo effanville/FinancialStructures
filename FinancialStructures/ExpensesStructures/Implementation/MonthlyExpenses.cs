@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Xml;
-using Common.Structure.Extensions;
+
+using Effanville.Common.Structure.Extensions;
+
 using FinancialStructures.ExpensesStructures.Models;
 
 namespace FinancialStructures.ExpensesStructures.Implementation

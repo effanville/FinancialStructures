@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Common.Structure.Extensions;
+
+using Effanville.Common.Structure.Extensions;
+
 using FinancialStructures.Database.Extensions.Rates;
 using FinancialStructures.Database.Extensions.Values;
 using FinancialStructures.NamingStructures;

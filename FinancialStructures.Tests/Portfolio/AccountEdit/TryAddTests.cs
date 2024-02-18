@@ -1,5 +1,7 @@
 ﻿using System.Linq;
-using Common.Structure.Reporting;
+
+using Effanville.Common.Structure.Reporting;
+
 using FinancialStructures.Database;
 using FinancialStructures.Database.Implementation;
 using FinancialStructures.NamingStructures;

@@ -1,8 +1,8 @@
 using System.IO.Abstractions;
 using System.Linq;
 
-using Common.Structure.FileAccess;
-using Common.Structure.Reporting;
+using Effanville.Common.Structure.FileAccess;
+using Effanville.Common.Structure.Reporting;
 
 using FinancialStructures.Database;
 using FinancialStructures.Database.Implementation;

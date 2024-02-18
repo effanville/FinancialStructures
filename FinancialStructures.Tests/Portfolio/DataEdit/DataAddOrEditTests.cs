@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Common.Structure.DataStructures;
+
+using Effanville.Common.Structure.DataStructures;
+
 using FinancialStructures.Database;
 using FinancialStructures.Database.Extensions;
 using FinancialStructures.Database.Implementation;

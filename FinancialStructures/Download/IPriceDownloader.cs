@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-using Common.Structure.Reporting;
+using Effanville.Common.Structure.Reporting;
 
 namespace FinancialStructures.Download
 {

@@ -1,5 +1,6 @@
 ﻿using System;
-using Common.Structure.Extensions;
+
+using Effanville.Common.Structure.Extensions;
 
 using FinancialStructures.Database.Extensions.Statistics;
 using FinancialStructures.Database.Extensions.Values;

@@ -1,5 +1,6 @@
 ﻿using System;
-using Common.Structure.DataStructures;
+
+using Effanville.Common.Structure.DataStructures;
 
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;

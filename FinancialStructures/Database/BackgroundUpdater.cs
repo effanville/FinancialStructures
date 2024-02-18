@@ -1,6 +1,7 @@
 ﻿using System;
-using Common.Structure.DataEdit;
-using Common.Structure.DataStructures;
+
+using Effanville.Common.Structure.DataEdit;
+using Effanville.Common.Structure.DataStructures;
 
 namespace FinancialStructures.Database
 {

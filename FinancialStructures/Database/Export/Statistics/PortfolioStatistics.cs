@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
-using Common.Structure.Reporting;
-using Common.Structure.ReportWriting;
+
+using Effanville.Common.Structure.Reporting;
+using Effanville.Common.Structure.ReportWriting;
+
 using FinancialStructures.Database.Extensions;
 using FinancialStructures.Database.Extensions.Statistics;
 using FinancialStructures.Database.Statistics;

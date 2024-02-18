@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
-using Common.Structure.ReportWriting;
+
+using Effanville.Common.Structure.ReportWriting;
+
 using FinancialStructures.Database.Export.Statistics;
 using FinancialStructures.Database.Statistics;
 using NUnit.Framework;

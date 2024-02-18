@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Common.Structure.DataStructures;
-using Common.Structure.Reporting;
+
+using Effanville.Common.Structure.DataStructures;
+using Effanville.Common.Structure.Reporting;
+
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.FinanceStructures.Implementation

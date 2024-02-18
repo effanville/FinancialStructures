@@ -1,5 +1,6 @@
 ﻿using System;
-using Common.Structure.MathLibrary.Finance;
+
+using Effanville.Common.Structure.MathLibrary.Finance;
 
 namespace FinancialStructures.FinanceStructures.Implementation
 {

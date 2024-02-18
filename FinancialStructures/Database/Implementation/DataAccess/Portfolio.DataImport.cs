@@ -1,4 +1,5 @@
-﻿using Common.Structure.Reporting;
+﻿using Effanville.Common.Structure.Reporting;
+
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 

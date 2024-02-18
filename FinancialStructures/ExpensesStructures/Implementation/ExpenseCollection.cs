@@ -8,7 +8,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 
-using Common.Structure.ReportWriting;
+using Effanville.Common.Structure.ReportWriting;
 
 using FinancialStructures.ExpensesStructures.Models;
 

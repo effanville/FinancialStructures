@@ -1,5 +1,6 @@
 ﻿using System;
-using Common.Structure.DataStructures;
+
+using Effanville.Common.Structure.DataStructures;
 
 namespace FinancialStructures.FinanceStructures
 {

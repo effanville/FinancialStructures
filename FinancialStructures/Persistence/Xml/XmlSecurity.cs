@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-using Common.Structure.DataStructures;
+using Effanville.Common.Structure.DataStructures;
 
 using FinancialStructures.DataStructures;
 using FinancialStructures.NamingStructures;

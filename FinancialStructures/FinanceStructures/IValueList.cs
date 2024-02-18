@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Common.Structure.DataStructures;
-using Common.Structure.FileAccess;
-using Common.Structure.Reporting;
+
+using Effanville.Common.Structure.DataStructures;
+using Effanville.Common.Structure.FileAccess;
+using Effanville.Common.Structure.Reporting;
+
 using FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.FinanceStructures

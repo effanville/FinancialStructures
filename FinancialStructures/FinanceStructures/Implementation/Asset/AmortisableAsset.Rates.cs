@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Common.Structure.DataStructures;
-using Common.Structure.MathLibrary.Finance;
+
+using Effanville.Common.Structure.DataStructures;
+using Effanville.Common.Structure.MathLibrary.Finance;
 
 namespace FinancialStructures.FinanceStructures.Implementation.Asset
 {
