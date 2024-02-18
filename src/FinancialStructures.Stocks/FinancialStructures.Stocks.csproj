@@ -24,11 +24,7 @@
   <ItemGroup Condition="!Exists('..\..\Common\Common.Structure\Common.Structure.csproj') And Exists('..\..\..\FinancePortfolioDatabase.sln')">
     <ProjectReference Include="..\..\..\Common\Common.Structure\Common.Structure.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
-      <_Parameter1>$(AssemblyName).Tests</_Parameter1>
-    </AssemblyAttribute>
-  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\FinancialStructures\FinancialStructures.csproj" />
   </ItemGroup>
