@@ -5,17 +5,26 @@
     <Platforms>x64</Platforms>
   </PropertyGroup>
   <PropertyGroup>
-    <Version>24.01.00-20240101T0201</Version>
-  </PropertyGroup>
-  <PropertyGroup>
     <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <AppxAutoIncrementPackageRevision>false</AppxAutoIncrementPackageRevision>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Effanville</Authors>
   </PropertyGroup>
   <PropertyGroup>
+    <RootNamespace>Effanville.$(MSBuildProjectName)</RootNamespace>
+    <AssemblyName>Effanville.$(MSBuildProjectName)</AssemblyName>
     <Deterministic>false</Deterministic>
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$(MSBuildProjectFile.Contains('.Tests'))">
+    <PackageReference Include="coverlet.collector" Version="3.2.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>

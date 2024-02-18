@@ -15,17 +15,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FinancialStructures\FinancialStructures.csproj" />
+    <ProjectReference Include="..\..\src\FinancialStructures\FinancialStructures.csproj" />
   </ItemGroup>
   <Choose>
-    <When Condition="Exists('..\..\FinancePortfolioDatabase.sln')">
+    <When Condition="Exists('..\..\..\FinancePortfolioDatabase.sln')">
       <ItemGroup>
-        <ProjectReference Include="..\..\Common\src\Common.Structure\Common.Structure.csproj" />
+        <ProjectReference Include="..\..\..\Common\src\Common.Structure\Common.Structure.csproj" />
       </ItemGroup>
     </When>
     <Otherwise>
       <ItemGroup>
-        <ProjectReference Include="..\Common\src\Common.Structure\Common.Structure.csproj" />
+        <ProjectReference Include="..\..\Common\src\Common.Structure\Common.Structure.csproj" />
       </ItemGroup>
     </Otherwise>
   </Choose>
