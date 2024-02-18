@@ -4,9 +4,10 @@ using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.NamingStructures;
 
 using FinancialStructures.NamingStructures;
+
 using NUnit.Framework;
 
-namespace FinancialStructures.Tests.DataStructuresTests
+namespace Effanville.FinancialStructures.Tests.DataStructuresTests
 {
     [TestFixture]
     public class DayValue_NamedTests

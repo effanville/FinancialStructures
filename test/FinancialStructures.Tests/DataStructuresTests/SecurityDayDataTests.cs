@@ -1,8 +1,10 @@
 ﻿using System;
+
 using FinancialStructures.DataStructures;
+
 using NUnit.Framework;
 
-namespace FinancialStructures.Tests.DataStructuresTests
+namespace Effanville.FinancialStructures.Tests.DataStructuresTests
 {
     [TestFixture]
     public sealed class SecurityDayDataTests

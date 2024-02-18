@@ -3,7 +3,7 @@
 using FinancialStructures.FinanceStructures.Implementation.Asset;
 using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Tests.TestDatabaseConstructor
+namespace Effanville.FinancialStructures.Tests.TestDatabaseConstructor
 {
     public class AmortizableAssetConstructor
     {

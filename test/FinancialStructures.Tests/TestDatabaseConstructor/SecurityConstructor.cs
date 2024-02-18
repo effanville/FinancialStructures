@@ -4,7 +4,7 @@ using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Tests.TestDatabaseConstructor
+namespace Effanville.FinancialStructures.Tests.TestDatabaseConstructor
 {
     public class SecurityConstructor
     {

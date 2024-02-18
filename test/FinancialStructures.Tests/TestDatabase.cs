@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+
 using FinancialStructures.Database;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.Tests.TestDatabaseConstructor;
 
-namespace FinancialStructures.Tests
+namespace Effanville.FinancialStructures.Tests
 {
     public static class TestDatabase
     {

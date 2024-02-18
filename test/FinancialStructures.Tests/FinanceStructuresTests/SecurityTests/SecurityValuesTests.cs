@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 
 using Effanville.Common.Structure.DataStructures;
+using Effanville.FinancialStructures.Tests.TestDatabaseConstructor;
 
 using FinancialStructures.FinanceStructures;
-using FinancialStructures.Tests.TestDatabaseConstructor;
 
 using NUnit.Framework;
 
-namespace FinancialStructures.Tests.FinanceStructuresTests.SecurityTests
+namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTests
 {
     [TestFixture]
     public sealed class SecurityValuesTests

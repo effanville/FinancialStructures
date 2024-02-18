@@ -11,10 +11,10 @@ using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Persistence;
-using FinancialStructures.Tests.TestDatabaseConstructor;
+
 using NUnit.Framework;
 
-namespace FinancialStructures.Tests.Saving
+namespace Effanville.FinancialStructures.Tests.Saving
 {
     [TestFixture]
     public sealed class SavingTests

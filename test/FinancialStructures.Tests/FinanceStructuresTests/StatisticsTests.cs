@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 
 using Effanville.Common.Structure.DataStructures;
+using Effanville.FinancialStructures.Tests.TestDatabaseConstructor;
 
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.FinanceStructures.Statistics;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.Tests.TestDatabaseConstructor;
 
 using NUnit.Framework;
 
-namespace FinancialStructures.Tests.FinanceStructuresTests
+namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests
 {
     [TestFixture]
     public sealed class StatisticsTests

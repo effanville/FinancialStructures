@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 
 using Effanville.Common.Structure.DataStructures;
+using Effanville.FinancialStructures.Tests.TestDatabaseConstructor;
 
 using FinancialStructures.FinanceStructures;
-using FinancialStructures.Tests.TestDatabaseConstructor;
 
 using NUnit.Framework;
 
-namespace FinancialStructures.Tests.FinanceStructuresTests
+namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.AmortisableAssetTetss
 {
     [TestFixture]
     public sealed class AmortizableAssetValueTests

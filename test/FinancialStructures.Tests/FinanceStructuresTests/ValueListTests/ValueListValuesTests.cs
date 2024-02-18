@@ -9,7 +9,7 @@ using FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 
-namespace FinancialStructures.Tests.FinanceStructuresTests.ValueListTests
+namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.ValueListTests
 {
     [TestFixture]
     public sealed class ValueListValuesTests

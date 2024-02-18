@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
+using Effanville.FinancialStructures.Tests.TestDatabaseConstructor;
+
 using FinancialStructures.DataStructures;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
-using FinancialStructures.Tests.TestDatabaseConstructor;
+
 using NUnit.Framework;
 
-namespace FinancialStructures.Tests.FinanceStructuresTests.SecurityTests
+namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTests
 {
     [TestFixture]
     public sealed class SecurityEditTests

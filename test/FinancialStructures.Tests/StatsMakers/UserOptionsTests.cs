@@ -1,8 +1,9 @@
-﻿using FinancialStructures.Database.Statistics;
-using FinancialStructures.Database.Export.Statistics;
+﻿using FinancialStructures.Database.Export.Statistics;
+using FinancialStructures.Database.Statistics;
+
 using NUnit.Framework;
 
-namespace FinancialStructures.Tests.DataExporters.Statistics
+namespace Effanville.FinancialStructures.Tests.StatsMakers
 {
     [TestFixture]
     public sealed class UserOptionsTests

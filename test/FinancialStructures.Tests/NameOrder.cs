@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.Tests
+﻿namespace Effanville.FinancialStructures.Tests
 {
     public enum NameOrder
     {

@@ -1,12 +1,15 @@
 ﻿using System;
 using System.IO.Abstractions;
+
+using Effanville.FinancialStructures.Tests.TestDatabaseConstructor;
+
 using FinancialStructures.Database;
 using FinancialStructures.Database.Implementation;
 using FinancialStructures.FinanceStructures.Implementation;
 using FinancialStructures.NamingStructures;
 using FinancialStructures.Persistence;
 
-namespace FinancialStructures.Tests.TestDatabaseConstructor
+namespace Effanville.FinancialStructures.Tests
 {
     public class DatabaseConstructor
     {
