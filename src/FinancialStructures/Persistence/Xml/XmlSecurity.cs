@@ -2,11 +2,10 @@ using System.Collections.Generic;
 using System.Xml.Serialization;
 
 using Effanville.Common.Structure.DataStructures;
+using Effanville.FinancialStructures.DataStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.DataStructures;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Persistence.Xml
+namespace Effanville.FinancialStructures.Persistence.Xml
 {
     [XmlType(TypeName="Security")]
     public class XmlSecurity

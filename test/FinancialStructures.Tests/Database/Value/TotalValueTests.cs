@@ -1,7 +1,7 @@
 ﻿using System;
 
-using FinancialStructures.Database;
-using FinancialStructures.Database.Extensions.Values;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Extensions.Values;
 
 using NUnit.Framework;
 

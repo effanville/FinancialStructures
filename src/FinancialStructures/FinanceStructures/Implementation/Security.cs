@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Effanville.Common.Structure.DataStructures;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.DataStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.Database;
-using FinancialStructures.DataStructures;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.FinanceStructures.Implementation
+namespace Effanville.FinancialStructures.FinanceStructures.Implementation
 {
     /// <summary>
     /// Class to model a stock, or a unit trust.

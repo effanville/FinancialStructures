@@ -1,8 +1,8 @@
 ﻿using System.IO.Abstractions;
 
-using FinancialStructures.ExpensesStructures.Implementation;
+using Effanville.FinancialStructures.ExpensesStructures.Implementation;
 
-namespace FinancialStructures.ExpensesStructures
+namespace Effanville.FinancialStructures.ExpensesStructures
 {
     /// <summary>
     /// Constains factory methods for <see cref="IExpensesManager"/>s.

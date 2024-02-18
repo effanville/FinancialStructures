@@ -1,8 +1,8 @@
-﻿using FinancialStructures.Database;
-using FinancialStructures.FinanceStructures.Implementation;
-using FinancialStructures.FinanceStructures.Implementation.Asset;
+﻿using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.FinanceStructures.Implementation;
+using Effanville.FinancialStructures.FinanceStructures.Implementation.Asset;
 
-namespace FinancialStructures.FinanceStructures
+namespace Effanville.FinancialStructures.FinanceStructures
 {
     /// <summary>
     /// Provides factory methods for the <see cref="IValueList"/> interface implementations.

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 
 using Effanville.Common.Structure.DataStructures;
-
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.FinanceStructures.Implementation;
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Implementation;
+using Effanville.FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 

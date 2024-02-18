@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 using Effanville.Common.Structure.Reporting;
 
-namespace FinancialStructures.Download
+namespace Effanville.FinancialStructures.Download
 {
     /// <summary>
     /// Provides general mechanisms for downloading financial instrument price data from a website.

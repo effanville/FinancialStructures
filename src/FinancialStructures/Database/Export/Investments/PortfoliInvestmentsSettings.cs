@@ -1,6 +1,6 @@
-﻿using FinancialStructures.NamingStructures;
+﻿using Effanville.FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Database.Export.Investments
+namespace Effanville.FinancialStructures.Database.Export.Investments
 {
     /// <summary>
     /// Settings for generating portfolio investments <see cref="PortfolioInvestments"/>

@@ -1,12 +1,11 @@
 ﻿using System;
 
 using Effanville.Common.Structure.Extensions;
+using Effanville.FinancialStructures.Database.Extensions.Values;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.Database.Extensions.Values;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Database.Statistics.Implementation
+namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
     internal class StatisticFirstDate : IStatistic
     {

@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.Database
+﻿namespace Effanville.FinancialStructures.Database
 {
     /// <summary>
     /// The admissible total types one can calculate

@@ -4,11 +4,10 @@ using System.Linq;
 
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.NamingStructures;
+using Effanville.FinancialStructures.DataStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.DataStructures;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.FinanceStructures.Implementation
+namespace Effanville.FinancialStructures.FinanceStructures.Implementation
 {
     public partial class Security
     {

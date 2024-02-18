@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.Download;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.Download;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Database.Download
+namespace Effanville.FinancialStructures.Database.Download
 {
     /// <summary>
     /// Contains download routines to update portfolio.

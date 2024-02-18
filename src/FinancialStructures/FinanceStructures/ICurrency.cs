@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.FinanceStructures
+﻿namespace Effanville.FinancialStructures.FinanceStructures
 {
     /// <summary>
     /// Used to hold values to provide a currency exchange pair.

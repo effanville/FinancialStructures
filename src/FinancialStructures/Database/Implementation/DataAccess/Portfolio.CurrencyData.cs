@@ -1,7 +1,8 @@
 ﻿using System.Linq;
-using FinancialStructures.FinanceStructures;
 
-namespace FinancialStructures.Database.Implementation
+using Effanville.FinancialStructures.FinanceStructures;
+
+namespace Effanville.FinancialStructures.Database.Implementation
 {
     public partial class Portfolio
     {
@@ -29,8 +30,8 @@ namespace FinancialStructures.Database.Implementation
         /// </summary>
         public ICurrency Currency(string currencyName)
         {
-            ICurrency currency = Currencies.FirstOrDefault(cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == BaseCurrency);
-            return currency ?? (Currencies.FirstOrDefault(cur => cur.BaseCurrency == BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted());
+            ICurrency currency = Enumerable.FirstOrDefault<ICurrency>(Currencies, cur => cur.BaseCurrency == currencyName && cur.QuoteCurrency == BaseCurrency);
+            return currency ?? (Enumerable.FirstOrDefault<ICurrency>(Currencies, cur => cur.BaseCurrency == BaseCurrency && cur.QuoteCurrency == currencyName)?.Inverted());
         }
     }
 }

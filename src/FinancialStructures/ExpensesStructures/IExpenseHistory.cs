@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Xml.Serialization;
-using FinancialStructures.ExpensesStructures.Models;
 
-namespace FinancialStructures.ExpensesStructures
+using Effanville.FinancialStructures.ExpensesStructures.Models;
+
+namespace Effanville.FinancialStructures.ExpensesStructures
 {
     /// <summary>
     /// A container for the history of expenses.

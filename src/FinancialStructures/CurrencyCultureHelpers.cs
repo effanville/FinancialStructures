@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Globalization;
 
-namespace FinancialStructures
+namespace Effanville.FinancialStructures
 {
     /// <summary>
     /// Helper methods for obtaining culture info from a currency name.

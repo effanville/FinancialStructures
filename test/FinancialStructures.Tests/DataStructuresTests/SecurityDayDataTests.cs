@@ -1,6 +1,6 @@
 ﻿using System;
 
-using FinancialStructures.DataStructures;
+using Effanville.FinancialStructures.DataStructures;
 
 using NUnit.Framework;
 

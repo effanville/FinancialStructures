@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FinancialStructures.ExpensesStructures
+namespace Effanville.FinancialStructures.ExpensesStructures
 {
     /// <summary>
     /// An <see cref="IExpenseCollection"/> pertaining to expenses in a particular month.

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 using Effanville.Common.Structure.Reporting;
 
-namespace FinancialStructures.Download.Implementation
+namespace Effanville.FinancialStructures.Download.Implementation
 {
     /// <summary>
     /// An implementation of an <see cref="IPriceDownloader"/> for Financial Times websites.

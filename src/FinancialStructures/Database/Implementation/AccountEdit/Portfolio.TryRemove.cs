@@ -2,11 +2,11 @@
 using System.Threading;
 
 using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.FinanceStructures.Implementation;
+using Effanville.FinancialStructures.FinanceStructures.Implementation.Asset;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.FinanceStructures.Implementation;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Database.Implementation
+namespace Effanville.FinancialStructures.Database.Implementation
 {
     public partial class Portfolio
     {
@@ -23,27 +23,27 @@ namespace FinancialStructures.Database.Implementation
             {
                 case Account.Security:
                 {
-                    return RemoveAccount(_fundsDictionary, elementType, name, _fundsLock, reportLogger);
+                    return RemoveAccount<Security>(_fundsDictionary, elementType, name, _fundsLock, reportLogger);
                 }
                 case Account.Currency:
                 {
-                    return RemoveAccount(_currenciesDictionary, elementType, name, _currenciesLock, reportLogger);
+                    return RemoveAccount<Currency>(_currenciesDictionary, elementType, name, _currenciesLock, reportLogger);
                 }
                 case Account.BankAccount:
                 {
-                    return RemoveAccount(_bankAccountsDictionary, elementType, name, _bankAccountsLock, reportLogger);
+                    return RemoveAccount<CashAccount>(_bankAccountsDictionary, elementType, name, _bankAccountsLock, reportLogger);
                 }
                 case Account.Benchmark:
                 {
-                    return RemoveAccount(_benchMarksDictionary, elementType, name, _benchmarksLock, reportLogger);
+                    return RemoveAccount<Sector>(_benchMarksDictionary, elementType, name, _benchmarksLock, reportLogger);
                 }
                 case Account.Asset:
                 {
-                    return RemoveAccount(_assetsDictionary, elementType, name, _assetsLock, reportLogger);
+                    return RemoveAccount<AmortisableAsset>(_assetsDictionary, elementType, name, _assetsLock, reportLogger);
                 }
                 case Account.Pension:
                 {
-                    return RemoveAccount(_pensionsDictionary, elementType, name, _pensionsLock, reportLogger);
+                    return RemoveAccount<Security>(_pensionsDictionary, elementType, name, _pensionsLock, reportLogger);
                 }
                 case Account.Unknown:
                 case Account.All:

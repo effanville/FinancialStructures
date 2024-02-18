@@ -1,11 +1,10 @@
 using System.IO.Abstractions;
 
 using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Implementation;
 
-using FinancialStructures.Database;
-using FinancialStructures.Database.Implementation;
-
-namespace FinancialStructures.Persistence
+namespace Effanville.FinancialStructures.Persistence
 {
     public sealed class PortfolioPersistence : IPersistence<IPortfolio>
     {

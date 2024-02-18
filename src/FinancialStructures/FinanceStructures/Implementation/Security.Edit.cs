@@ -6,10 +6,9 @@ using System.Linq;
 
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.DataStructures;
 
-using FinancialStructures.DataStructures;
-
-namespace FinancialStructures.FinanceStructures.Implementation
+namespace Effanville.FinancialStructures.FinanceStructures.Implementation
 {
     /// <summary>
     /// Contains data editing of a security class.

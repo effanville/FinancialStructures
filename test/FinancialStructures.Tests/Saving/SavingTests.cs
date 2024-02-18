@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
 
 using Effanville.Common.Structure.DataStructures;
-
-using FinancialStructures.Database;
-using FinancialStructures.Database.Extensions;
-using FinancialStructures.Database.Implementation;
-using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
-using FinancialStructures.Persistence;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Extensions.DataEdit;
+using Effanville.FinancialStructures.Database.Implementation;
+using Effanville.FinancialStructures.DataStructures;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Persistence;
 
 using NUnit.Framework;
 

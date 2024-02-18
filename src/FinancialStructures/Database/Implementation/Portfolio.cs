@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.FinanceStructures.Implementation;
-using FinancialStructures.FinanceStructures.Implementation.Asset;
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Implementation;
+using Effanville.FinancialStructures.FinanceStructures.Implementation.Asset;
+using Effanville.FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Database.Implementation
+namespace Effanville.FinancialStructures.Database.Implementation
 {
     /// <summary>
     /// Data structure holding information about finances.

@@ -1,8 +1,9 @@
 ﻿using System;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Database.Statistics.Implementation
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.NamingStructures;
+
+namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
     internal class StatisticNumberUnits : StatisticBase
     {

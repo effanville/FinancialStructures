@@ -1,6 +1,6 @@
 ﻿using Effanville.Common.Structure.ReportWriting;
 
-namespace FinancialStructures.Database.Export.Report
+namespace Effanville.FinancialStructures.Database.Export.Report
 {
     public sealed partial class PortfolioReport
     {

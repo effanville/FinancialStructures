@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FinancialStructures.Database.Export.Statistics
+namespace Effanville.FinancialStructures.Database.Export.Statistics
 {
     /// <summary>
     /// Contains data for generation of values, where the values are specified

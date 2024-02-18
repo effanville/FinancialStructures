@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 
-using FinancialStructures.Database;
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Implementation;
+using Effanville.FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 
@@ -58,7 +59,7 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
         public void NameDataTests(Account elementType, string company1, string name1, string company2, string name2, string company3, string name3)
         {
             DatabaseConstructor constructor = CreateThreeAccounts(elementType, company1, name1, company2, name2, company3, name3);
-            global::FinancialStructures.Database.Implementation.Portfolio database = constructor.Database;
+            Portfolio database = constructor.Database;
 
             IReadOnlyList<NameData> names = database.NameDataForAccount(elementType);
             Assert.AreEqual(3, names.Count);
@@ -79,7 +80,7 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
         public void NamesTests(Account elementType, string company1, string name1, string company2, string name2, string company3, string name3)
         {
             DatabaseConstructor constructor = CreateThreeAccounts(elementType, company1, name1, company2, name2, company3, name3);
-            global::FinancialStructures.Database.Implementation.Portfolio database = constructor.Database;
+            Portfolio database = constructor.Database;
 
             IReadOnlyList<string> names = database.Names(elementType);
             Assert.AreEqual(3, names.Count);
@@ -96,7 +97,7 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
         public void CompaniesTests(Account elementType, string company1, string name1, string company2, string name2, string company3, string name3)
         {
             DatabaseConstructor constructor = CreateThreeAccounts(elementType, company1, name1, company2, name2, company3, name3);
-            global::FinancialStructures.Database.Implementation.Portfolio database = constructor.Database;
+            Portfolio database = constructor.Database;
 
             IReadOnlyList<string> names = database.Companies(elementType);
             Assert.AreEqual(3, names.Count);

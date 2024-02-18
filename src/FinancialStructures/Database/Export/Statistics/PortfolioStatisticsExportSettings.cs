@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using FinancialStructures.Database.Statistics;
 
-namespace FinancialStructures.Database.Export.Statistics
+using Effanville.FinancialStructures.Database.Statistics;
+
+namespace Effanville.FinancialStructures.Database.Export.Statistics
 {
     /// <summary>
     /// A class containing settings for the export to file of a <see cref="PortfolioStatistics"/> object.

@@ -1,11 +1,10 @@
 ﻿using System;
 
 using Effanville.Common.Structure.DataStructures;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.Database;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.FinanceStructures.Implementation
+namespace Effanville.FinancialStructures.FinanceStructures.Implementation
 {
     /// <summary>
     /// A class to detail overall data for a sector.

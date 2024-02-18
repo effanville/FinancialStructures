@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.FileAccess;
 using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.FinanceStructures
+namespace Effanville.FinancialStructures.FinanceStructures
 {
     /// <summary>
     /// A named list containing values.

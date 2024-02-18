@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.NamingStructures
+﻿namespace Effanville.FinancialStructures.NamingStructures
 {
     /// <summary>
     /// Static extension methods for <see cref="NameData"/>.

@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Xml;
 
 using Effanville.Common.Structure.Extensions;
+using Effanville.FinancialStructures.ExpensesStructures.Models;
 
-using FinancialStructures.ExpensesStructures.Models;
-
-namespace FinancialStructures.ExpensesStructures.Implementation
+namespace Effanville.FinancialStructures.ExpensesStructures.Implementation
 {
     /// <summary>
     /// Expenses associated to a specific month.

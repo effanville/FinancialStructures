@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace FinancialStructures.ExpensesStructures.Helpers
+namespace Effanville.FinancialStructures.ExpensesStructures.Helpers
 {
     internal static class EnumHelper
     {

@@ -1,5 +1,7 @@
-﻿using FinancialStructures.Database;
-using FinancialStructures.NamingStructures;
+﻿using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Implementation;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 
@@ -14,9 +16,9 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
             DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity("Company", "name");
 
-            global::FinancialStructures.Database.Implementation.Portfolio portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
-            bool result = portfolio.TryGetAccount(Account.Security, new TwoName("Company", "name"), out global::FinancialStructures.FinanceStructures.IValueList desired);
+            bool result = portfolio.TryGetAccount(Account.Security, new TwoName("Company", "name"), out IValueList desired);
 
             Assert.AreEqual(true, result);
             Assert.IsNotNull(desired);
@@ -30,9 +32,9 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
             DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity("Company", "name");
 
-            global::FinancialStructures.Database.Implementation.Portfolio portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
-            bool result = portfolio.TryGetAccount(Account.Security, new TwoName("Company", "NewName"), out global::FinancialStructures.FinanceStructures.IValueList desired);
+            bool result = portfolio.TryGetAccount(Account.Security, new TwoName("Company", "NewName"), out IValueList desired);
 
             Assert.AreEqual(false, result);
             Assert.IsNull(desired);
@@ -44,9 +46,9 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
             DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName("Company", "name");
 
-            global::FinancialStructures.Database.Implementation.Portfolio portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
-            bool result = portfolio.TryGetAccount(Account.Benchmark, new TwoName("Company", "name"), out global::FinancialStructures.FinanceStructures.IValueList desired);
+            bool result = portfolio.TryGetAccount(Account.Benchmark, new TwoName("Company", "name"), out IValueList desired);
 
             Assert.AreEqual(true, result);
             Assert.IsNotNull(desired);
@@ -60,9 +62,9 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
             DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName("Company", "name");
 
-            global::FinancialStructures.Database.Implementation.Portfolio portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
-            bool result = portfolio.TryGetAccount(Account.Benchmark, new TwoName("NewCompany", "NewName"), out global::FinancialStructures.FinanceStructures.IValueList desired);
+            bool result = portfolio.TryGetAccount(Account.Benchmark, new TwoName("NewCompany", "NewName"), out IValueList desired);
 
             Assert.AreEqual(false, result);
             Assert.IsNull(desired);

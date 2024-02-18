@@ -2,10 +2,9 @@
 using System.Linq;
 
 using Effanville.Common.Structure.Reporting;
-
-using FinancialStructures.Database;
-using FinancialStructures.Database.Implementation;
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Implementation;
+using Effanville.FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 
@@ -84,7 +83,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanEditBankAccountName()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database =
+            Portfolio database =
                 new DatabaseConstructor()
                 .WithBankAccount(BaseCompanyName, BaseName)
                 .GetInstance();
@@ -98,7 +97,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanEditBankAccountUrl()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database =
+            Portfolio database =
                 new DatabaseConstructor()
                 .WithBankAccount(BaseCompanyName, BaseName, url: "http://www.google.com")
                 .GetInstance();
@@ -114,7 +113,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanEditBankAccountCurrency()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database =
+            Portfolio database =
                 new DatabaseConstructor()
                 .WithBankAccount(BaseCompanyName, BaseName, currency: "Pounds")
                 .GetInstance();
@@ -130,7 +129,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanEditBankAccountSectors()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database =
+            Portfolio database =
                 new DatabaseConstructor()
                 .WithBankAccount(BaseCompanyName, BaseName)
                 .GetInstance();
@@ -153,7 +152,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanEditCurrencyName()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database =
+            Portfolio database =
                 new DatabaseConstructor()
                 .WithCurrency(BaseCompanyName, BaseName)
                 .GetInstance();
@@ -167,7 +166,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void ReportsSecurityCorrect()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database =
+            Portfolio database =
                 new DatabaseConstructor()
                 .WithSecurity(BaseCompanyName, BaseName)
                 .GetInstance();
@@ -184,7 +183,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void EditingSecurityFailReports()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database = new DatabaseConstructor().GetInstance();
+            Portfolio database = new DatabaseConstructor().GetInstance();
             IReportLogger logging = new LogReporter(null, saveInternally: true);
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
@@ -201,7 +200,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void ReportsSectorCorrect()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database =
+            Portfolio database =
                 new DatabaseConstructor()
                 .WithSectorFromName(BaseCompanyName, BaseName)
                 .GetInstance();
@@ -217,7 +216,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void EditingSectorFailReports()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database = new DatabaseConstructor().GetInstance();
+            Portfolio database = new DatabaseConstructor().GetInstance();
             IReportLogger logging = new LogReporter(null, saveInternally: true);
             _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 

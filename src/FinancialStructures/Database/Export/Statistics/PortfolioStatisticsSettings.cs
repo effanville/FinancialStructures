@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FinancialStructures.Database.Statistics;
 
-namespace FinancialStructures.Database.Export.Statistics
+using Effanville.FinancialStructures.Database.Statistics;
+
+namespace Effanville.FinancialStructures.Database.Export.Statistics
 {
     /// <summary>
     /// Class containing all settings for creation of a <see cref="PortfolioStatistics"/> object.

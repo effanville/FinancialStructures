@@ -1,10 +1,9 @@
 ﻿using System;
 
 using Effanville.Common.Structure.Extensions;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Database.Statistics
+namespace Effanville.FinancialStructures.Database.Statistics
 {
     /// <summary>
     /// A base of common statistic method implementations.

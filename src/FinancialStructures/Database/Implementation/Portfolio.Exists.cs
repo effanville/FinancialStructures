@@ -1,6 +1,6 @@
-﻿using FinancialStructures.NamingStructures;
+﻿using Effanville.FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Database.Implementation
+namespace Effanville.FinancialStructures.Database.Implementation
 {
     public partial class Portfolio
     {

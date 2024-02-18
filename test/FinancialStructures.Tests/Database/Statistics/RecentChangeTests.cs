@@ -1,5 +1,5 @@
-﻿using FinancialStructures.Database;
-using FinancialStructures.Database.Extensions.Statistics;
+﻿using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Extensions.Statistics;
 
 using NUnit.Framework;
 

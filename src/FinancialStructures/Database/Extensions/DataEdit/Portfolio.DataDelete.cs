@@ -1,11 +1,10 @@
 ﻿using System;
 
 using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Database.Extensions
+namespace Effanville.FinancialStructures.Database.Extensions.DataEdit
 {
     /// <summary>
     /// Contains static extension methods for deleting account data.

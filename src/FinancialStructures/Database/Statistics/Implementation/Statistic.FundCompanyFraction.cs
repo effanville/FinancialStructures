@@ -1,8 +1,9 @@
 ﻿using System;
-using FinancialStructures.Database.Extensions.Statistics;
-using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Database.Statistics.Implementation
+using Effanville.FinancialStructures.Database.Extensions.Statistics;
+using Effanville.FinancialStructures.NamingStructures;
+
+namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
     /// <summary>
     /// Statistic for the <see cref="Statistic.FundCompanyFraction"/> enum value. This

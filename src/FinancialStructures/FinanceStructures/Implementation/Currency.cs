@@ -1,11 +1,10 @@
 ﻿using System;
 
 using Effanville.Common.Structure.DataStructures;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.Database;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.FinanceStructures.Implementation
+namespace Effanville.FinancialStructures.FinanceStructures.Implementation
 {
     /// <summary>
     /// A wrapper class of a single list to desribe a currency pair.

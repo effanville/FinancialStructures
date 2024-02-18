@@ -1,10 +1,11 @@
 ﻿using System;
-using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.FinanceStructures.Statistics;
-using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Database.Statistics.Implementation
+using Effanville.FinancialStructures.DataStructures;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Statistics;
+using Effanville.FinancialStructures.NamingStructures;
+
+namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
     internal class StatisticMeanSharePrice : StatisticBase
     {

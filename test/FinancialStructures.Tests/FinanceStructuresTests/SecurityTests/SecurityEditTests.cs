@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Effanville.FinancialStructures.DataStructures;
+using Effanville.FinancialStructures.FinanceStructures.Implementation;
+using Effanville.FinancialStructures.NamingStructures;
 using Effanville.FinancialStructures.Tests.TestDatabaseConstructor;
-
-using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceStructures.Implementation;
-using FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 

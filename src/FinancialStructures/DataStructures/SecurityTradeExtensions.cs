@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.DataStructures
+﻿namespace Effanville.FinancialStructures.DataStructures
 {
     /// <summary>
     /// Helper extensions for <see cref="SecurityTrade"/> logic.

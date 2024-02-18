@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Database.Statistics
+using Effanville.FinancialStructures.NamingStructures;
+
+namespace Effanville.FinancialStructures.Database.Statistics
 {
     /// <summary>
     /// A holder for statistics about a specific account.

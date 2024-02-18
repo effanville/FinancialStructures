@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 
 using Effanville.Common.Structure.DataStructures;
+using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.Tests.TestDatabaseConstructor;
-
-using FinancialStructures.FinanceStructures;
 
 using NUnit.Framework;
 

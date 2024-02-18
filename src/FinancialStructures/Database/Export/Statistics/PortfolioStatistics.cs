@@ -6,14 +6,12 @@ using System.Linq;
 
 using Effanville.Common.Structure.Reporting;
 using Effanville.Common.Structure.ReportWriting;
+using Effanville.FinancialStructures.Database.Extensions.Statistics;
+using Effanville.FinancialStructures.Database.Statistics;
+using Effanville.FinancialStructures.DataStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.Database.Extensions;
-using FinancialStructures.Database.Extensions.Statistics;
-using FinancialStructures.Database.Statistics;
-using FinancialStructures.DataStructures;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Database.Export.Statistics
+namespace Effanville.FinancialStructures.Database.Export.Statistics
 {
     /// <summary>
     /// Container for statistics on a portfolio.

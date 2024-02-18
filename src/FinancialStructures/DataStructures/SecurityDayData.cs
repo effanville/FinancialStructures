@@ -1,10 +1,9 @@
 ﻿using System;
 
 using Effanville.Common.Structure.Extensions;
+using Effanville.FinancialStructures.FinanceStructures;
 
-using FinancialStructures.FinanceStructures;
-
-namespace FinancialStructures.DataStructures
+namespace Effanville.FinancialStructures.DataStructures
 {
     /// <summary>
     /// Contains a single day record of the data in a <see cref="ISecurity"/>.

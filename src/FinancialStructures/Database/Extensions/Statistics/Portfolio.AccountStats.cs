@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 
 using Effanville.Common.Structure.DataStructures;
+using Effanville.FinancialStructures.Database.Extensions.Values;
+using Effanville.FinancialStructures.Database.Statistics;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.Database.Extensions.Values;
-using FinancialStructures.Database.Statistics;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Database.Extensions.Statistics
+namespace Effanville.FinancialStructures.Database.Extensions.Statistics
 {
     /// <summary>
     /// Static extensions for calculating <see cref="AccountStatistics"/> classes for portfolio.

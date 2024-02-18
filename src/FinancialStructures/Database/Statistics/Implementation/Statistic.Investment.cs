@@ -4,13 +4,12 @@ using System.Linq;
 
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.NamingStructures;
+using Effanville.FinancialStructures.Database.Extensions;
+using Effanville.FinancialStructures.Database.Extensions.Values;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.Database.Extensions;
-using FinancialStructures.Database.Extensions.Values;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Database.Statistics.Implementation
+namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
     internal class StatisticInvestment : StatisticBase
     {

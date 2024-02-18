@@ -1,8 +1,9 @@
 ﻿using System;
-using FinancialStructures.Database.Statistics.Implementation;
-using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Database.Statistics
+using Effanville.FinancialStructures.Database.Statistics.Implementation;
+using Effanville.FinancialStructures.NamingStructures;
+
+namespace Effanville.FinancialStructures.Database.Statistics
 {
     /// <summary>
     /// Provides mechanisms to generate statistics objects.

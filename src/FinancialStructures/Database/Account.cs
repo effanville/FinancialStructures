@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.Database
+﻿namespace Effanville.FinancialStructures.Database
 {
     /// <summary>
     /// The admissible account types that the Portfolio stores.

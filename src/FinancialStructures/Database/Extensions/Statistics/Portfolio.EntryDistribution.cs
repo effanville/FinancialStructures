@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 
 using Effanville.Common.Structure.DataStructures;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Database.Extensions.Statistics
+namespace Effanville.FinancialStructures.Database.Extensions.Statistics
 {
     public static partial class Statistics
     {

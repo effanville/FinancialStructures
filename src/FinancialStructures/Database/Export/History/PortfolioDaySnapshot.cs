@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Effanville.Common.Structure.Extensions;
+using Effanville.FinancialStructures.Database.Extensions.Rates;
+using Effanville.FinancialStructures.Database.Extensions.Values;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.Database.Extensions.Rates;
-using FinancialStructures.Database.Extensions.Values;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Database.Export.History
+namespace Effanville.FinancialStructures.Database.Export.History
 {
     /// <summary>
     /// Stores all values and some IRRs of a portfolio on a given day

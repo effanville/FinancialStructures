@@ -1,6 +1,6 @@
-﻿using FinancialStructures.DataStructures;
+﻿using Effanville.FinancialStructures.DataStructures;
 
-namespace FinancialStructures.FinanceStructures.Statistics
+namespace Effanville.FinancialStructures.FinanceStructures.Statistics
 {
     /// <summary>
     /// Contains extension methods for calculating statistics for securities.

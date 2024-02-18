@@ -7,11 +7,10 @@ using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.NamingStructures;
 using Effanville.Common.Structure.Reporting;
 using Effanville.Common.Structure.ReportWriting;
+using Effanville.FinancialStructures.Database.Extensions.Values;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.Database.Extensions.Values;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Database.Export.Investments
+namespace Effanville.FinancialStructures.Database.Export.Investments
 {
     /// <summary>
     /// Stores all investments in a <see cref="IPortfolio"/>.

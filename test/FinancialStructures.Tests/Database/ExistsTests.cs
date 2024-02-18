@@ -1,5 +1,6 @@
-﻿using FinancialStructures.Database;
-using FinancialStructures.NamingStructures;
+﻿using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Implementation;
+using Effanville.FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 
@@ -15,7 +16,7 @@ namespace Effanville.FinancialStructures.Tests.Database
             DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity(company, name);
 
-            global::FinancialStructures.Database.Implementation.Portfolio portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
             bool exists = portfolio.Exists(Account.Security, new TwoName(company, name));
 
@@ -30,7 +31,7 @@ namespace Effanville.FinancialStructures.Tests.Database
             DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity(company, name);
 
-            global::FinancialStructures.Database.Implementation.Portfolio portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
             bool exists = portfolio.Exists(Account.Security, new TwoName("Man", name));
 
@@ -45,7 +46,7 @@ namespace Effanville.FinancialStructures.Tests.Database
             DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName(company, name);
 
-            global::FinancialStructures.Database.Implementation.Portfolio portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
             bool exists = portfolio.Exists(Account.Benchmark, new TwoName(company, name));
 
@@ -60,7 +61,7 @@ namespace Effanville.FinancialStructures.Tests.Database
             DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName(company, name);
 
-            global::FinancialStructures.Database.Implementation.Portfolio portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
             bool exists = portfolio.Exists(Account.Benchmark, new TwoName("Man", name));
 

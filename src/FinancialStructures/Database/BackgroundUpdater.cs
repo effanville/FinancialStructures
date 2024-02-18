@@ -3,7 +3,7 @@
 using Effanville.Common.Structure.DataEdit;
 using Effanville.Common.Structure.DataStructures;
 
-namespace FinancialStructures.Database
+namespace Effanville.FinancialStructures.Database
 {
     /// <summary>
     /// Implementation of a <see cref="IUpdater{T}"/> that performs the action asyncronously.

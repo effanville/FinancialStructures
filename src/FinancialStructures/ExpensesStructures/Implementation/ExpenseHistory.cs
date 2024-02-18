@@ -4,9 +4,10 @@ using System.IO.Abstractions;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-using FinancialStructures.ExpensesStructures.Models;
 
-namespace FinancialStructures.ExpensesStructures.Implementation
+using Effanville.FinancialStructures.ExpensesStructures.Models;
+
+namespace Effanville.FinancialStructures.ExpensesStructures.Implementation
 {
     internal class ExpenseHistory : IExpenseHistory, IXmlSerializable
     {

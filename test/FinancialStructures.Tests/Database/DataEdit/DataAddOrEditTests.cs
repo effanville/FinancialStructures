@@ -2,11 +2,11 @@
 using System.Linq;
 
 using Effanville.Common.Structure.DataStructures;
-
-using FinancialStructures.Database;
-using FinancialStructures.Database.Extensions;
-using FinancialStructures.DataStructures;
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Extensions.DataEdit;
+using Effanville.FinancialStructures.Database.Implementation;
+using Effanville.FinancialStructures.DataStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 
@@ -21,7 +21,7 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
             DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity("Company", "Name");
 
-            global::FinancialStructures.Database.Implementation.Portfolio portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
             _ = portfolio.TryAddOrEditData(Account.Security, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 1), new DailyValuation(new DateTime(2010, 1, 1), 1));
             bool success = portfolio.TryAddOrEditTradeData(Account.Security, new TwoName("Company", "Name"), new SecurityTrade(new DateTime(2010, 1, 1)), new SecurityTrade(TradeType.Buy, new TwoName("Company", "Name"), new DateTime(2010, 1, 1), 1, 1, 0));
 
@@ -35,7 +35,7 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
             DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName("Company", "Name");
 
-            global::FinancialStructures.Database.Implementation.Portfolio portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
             DailyValuation data = new DailyValuation(new DateTime(2010, 1, 1), 1);
             bool success = portfolio.TryAddOrEditData(Account.Benchmark, new TwoName("Company", "Name"), data, data);
 
@@ -49,7 +49,7 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
             DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity("Company", "Name", dates: new DateTime[] { new DateTime(2010, 1, 1) }, sharePrice: new decimal[] { 2.0m }, numberUnits: new decimal[] { 100.0m }, investment: new decimal[] { 0.0m });
 
-            global::FinancialStructures.Database.Implementation.Portfolio portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
             _ = portfolio.TryAddOrEditData(Account.Security, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 1), new DailyValuation(new DateTime(2010, 1, 1), 1));
             bool success = portfolio.TryAddOrEditTradeData(Account.Security, new TwoName("Company", "Name"), new SecurityTrade(new DateTime(2010, 1, 1)), new SecurityTrade(TradeType.Buy, new TwoName("Company", "Name"), new DateTime(2010, 1, 1), 1, 1, 0));
@@ -64,7 +64,7 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
             DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromNameAndData("Company", "Name", date: new DateTime[] { new DateTime(2010, 1, 1) }, value: new decimal[] { 2.0m });
 
-            global::FinancialStructures.Database.Implementation.Portfolio portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
             bool success = portfolio.TryAddOrEditData(Account.Benchmark, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 2), new DailyValuation(new DateTime(2010, 1, 1), 1));
 
             Assert.IsTrue(success);
@@ -80,7 +80,7 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
             DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity("Company", "Name");
 
-            global::FinancialStructures.Database.Implementation.Portfolio portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
             _ = portfolio.TryAddOrEditData(Account.Security, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 1), new DailyValuation(new DateTime(2010, 1, 1), 1));
             bool success = portfolio.TryAddOrEditTradeData(Account.Security, new TwoName("Company", "Name"), new SecurityTrade(new DateTime(2010, 1, 1)), new SecurityTrade(TradeType.Buy, new TwoName("Company", "Name"), new DateTime(2010, 1, 1), 1, 1, 0));
@@ -95,7 +95,7 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
             DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromName("Company", "Name");
 
-            global::FinancialStructures.Database.Implementation.Portfolio portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
             bool success = portfolio.TryAddOrEditData(Account.Benchmark, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 1), new DailyValuation(new DateTime(2010, 1, 1), 1));
 
@@ -109,7 +109,7 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
             DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity("Company", "Name", dates: new DateTime[] { new DateTime(2010, 1, 1) }, sharePrice: new decimal[] { 2.0m }, numberUnits: new decimal[] { 100.0m }, investment: new decimal[] { 0.0m });
 
-            global::FinancialStructures.Database.Implementation.Portfolio portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
             _ = portfolio.TryAddOrEditData(Account.Security, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 1), new DailyValuation(new DateTime(2010, 1, 1), 1));
             bool success = portfolio.TryAddOrEditTradeData(Account.Security, new TwoName("Company", "Name"), new SecurityTrade(new DateTime(2010, 1, 1)), new SecurityTrade(TradeType.Buy, new TwoName("Company", "Name"), new DateTime(2010, 1, 1), 1, 1, 0));
 
@@ -123,7 +123,7 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
             DatabaseConstructor constructor = new DatabaseConstructor();
             _ = constructor.WithSectorFromNameAndData("Company", "Name", date: new DateTime[] { new DateTime(2010, 1, 1) }, value: new decimal[] { 2.0m });
 
-            global::FinancialStructures.Database.Implementation.Portfolio portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
 
             bool success = portfolio.TryAddOrEditData(Account.Benchmark, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 2.0m), new DailyValuation(new DateTime(2011, 1, 1), 1));
 

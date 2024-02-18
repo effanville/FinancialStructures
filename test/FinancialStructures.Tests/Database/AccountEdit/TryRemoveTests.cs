@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 
 using Effanville.Common.Structure.Reporting;
-
-using FinancialStructures.Database;
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Implementation;
+using Effanville.FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 
@@ -18,7 +18,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanRemoveSecurity()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database =
+            Portfolio database =
                 new DatabaseConstructor()
                 .WithSecurity(BaseCompanyName, BaseName)
                 .GetInstance();
@@ -31,7 +31,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanRemoveSector()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database =
+            Portfolio database =
                 new DatabaseConstructor()
                 .WithSectorFromName(BaseCompanyName, BaseName)
                 .GetInstance();
@@ -44,7 +44,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanRemoveBankAccount()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database =
+            Portfolio database =
                 new DatabaseConstructor()
                 .WithBankAccount(BaseCompanyName, BaseName)
                 .GetInstance();
@@ -57,7 +57,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanRemoveCurrency()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database =
+            Portfolio database =
                 new DatabaseConstructor()
                 .WithCurrency(BaseCompanyName, BaseName)
                 .GetInstance();
@@ -70,7 +70,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void ReportsSecurityCorrect()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database =
+            Portfolio database =
                 new DatabaseConstructor()
                 .WithSecurity(BaseCompanyName, BaseName)
                 .GetInstance();
@@ -90,7 +90,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void RemovingSecurityFailReports()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database = new DatabaseConstructor().GetInstance();
+            Portfolio database = new DatabaseConstructor().GetInstance();
             IReportLogger logging = new LogReporter(null, saveInternally: true);
 
             _ = database.TryRemove(Account.Security, new NameData(BaseCompanyName, BaseName), logging);
@@ -108,7 +108,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void ReportSectorCorrect()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database =
+            Portfolio database =
                     new DatabaseConstructor()
                     .WithSectorFromName(BaseCompanyName, BaseName)
                     .GetInstance();
@@ -128,7 +128,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void RemovingSectorFailReports()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database = new DatabaseConstructor().GetInstance();
+            Portfolio database = new DatabaseConstructor().GetInstance();
             IReportLogger logging = new LogReporter(null, saveInternally: true);
 
             _ = database.TryRemove(Account.Benchmark, new NameData(BaseCompanyName, BaseName), logging);

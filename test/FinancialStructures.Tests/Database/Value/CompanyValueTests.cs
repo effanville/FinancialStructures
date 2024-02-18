@@ -1,8 +1,9 @@
 ﻿using System;
 
-using FinancialStructures.Database;
-using FinancialStructures.Database.Extensions.Values;
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Extensions.Values;
+using Effanville.FinancialStructures.Database.Implementation;
+using Effanville.FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 
@@ -41,7 +42,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Value
                     sharePrice: new decimal[] { 50 },
                     numberUnits: new decimal[] { 100 },
                     investment: new decimal[] { 0 });
-            global::FinancialStructures.Database.Implementation.Portfolio portfolio = constructor.Database;
+            Portfolio portfolio = constructor.Database;
             Assert.AreEqual(expectedValue, portfolio.TotalValue(totalsType, DateTime.Today, defaultName));
         }
     }

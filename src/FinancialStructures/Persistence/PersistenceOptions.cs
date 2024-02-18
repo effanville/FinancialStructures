@@ -1,6 +1,6 @@
 using System.IO.Abstractions;
 
-namespace FinancialStructures.Persistence
+namespace Effanville.FinancialStructures.Persistence
 {
     public abstract class PersistenceOptions
     {

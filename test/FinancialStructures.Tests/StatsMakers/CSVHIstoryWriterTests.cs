@@ -1,6 +1,6 @@
 ﻿using System.IO.Abstractions.TestingHelpers;
 
-using FinancialStructures.Database.Export.History;
+using Effanville.FinancialStructures.Database.Export.History;
 
 using NUnit.Framework;
 

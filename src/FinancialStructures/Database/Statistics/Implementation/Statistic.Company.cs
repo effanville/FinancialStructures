@@ -1,7 +1,8 @@
 ﻿using System;
-using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Database.Statistics.Implementation
+using Effanville.FinancialStructures.NamingStructures;
+
+namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
     internal class StatisticCompany : IStatistic
     {

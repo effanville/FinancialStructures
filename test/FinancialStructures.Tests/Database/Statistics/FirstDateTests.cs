@@ -1,10 +1,9 @@
 ﻿using System;
 
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Extensions.Values;
+using Effanville.FinancialStructures.NamingStructures;
 using Effanville.FinancialStructures.Tests.TestDatabaseConstructor;
-
-using FinancialStructures.Database;
-using FinancialStructures.Database.Extensions.Values;
-using FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 

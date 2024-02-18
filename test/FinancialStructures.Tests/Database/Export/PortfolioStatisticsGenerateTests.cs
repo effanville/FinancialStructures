@@ -2,7 +2,7 @@
 using System.IO.Abstractions;
 using System.Linq;
 
-using FinancialStructures.Database.Export.Statistics;
+using Effanville.FinancialStructures.Database.Export.Statistics;
 
 using NUnit.Framework;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FinancialStructures.NamingStructures
+namespace Effanville.FinancialStructures.NamingStructures
 {
     /// <summary>
     /// Contains naming information, allowing for a primary and secondary name.

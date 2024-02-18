@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.ExpensesStructures.Models
+﻿namespace Effanville.FinancialStructures.ExpensesStructures.Models
 {
     /// <summary>
     /// The category the expense is associated to.

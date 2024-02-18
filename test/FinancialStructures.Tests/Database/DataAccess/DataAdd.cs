@@ -1,9 +1,8 @@
 ﻿using System;
 
 using Effanville.Common.Structure.DataStructures;
-
-using FinancialStructures.Database;
-using FinancialStructures.Database.Extensions;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Extensions.DataEdit;
 
 using NUnit.Framework;
 

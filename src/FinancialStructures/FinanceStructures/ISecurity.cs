@@ -5,11 +5,10 @@ using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.FileAccess;
 using Effanville.Common.Structure.NamingStructures;
 using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.DataStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.DataStructures;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.FinanceStructures
+namespace Effanville.FinancialStructures.FinanceStructures
 {
     /// <summary>
     /// A named entity with Share, unit price and investment lists to detail price history.

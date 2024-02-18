@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Effanville.Common.Structure.Reporting;
 using Effanville.Common.Structure.WebAccess;
 
-namespace FinancialStructures.Download.Implementation
+namespace Effanville.FinancialStructures.Download.Implementation
 {
     /// <summary>
     /// Helper methods for downloading financial data.

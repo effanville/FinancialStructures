@@ -3,11 +3,10 @@ using System.Linq;
 
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.NamingStructures;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Database.Extensions.Values
+namespace Effanville.FinancialStructures.Database.Extensions.Values
 {
     /// <summary>
     /// Class containing static extension methods for values data for a portfolio.

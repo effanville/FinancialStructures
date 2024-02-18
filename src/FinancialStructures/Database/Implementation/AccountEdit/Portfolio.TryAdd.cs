@@ -2,12 +2,11 @@
 using System.Threading;
 
 using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.FinanceStructures.Implementation;
+using Effanville.FinancialStructures.FinanceStructures.Implementation.Asset;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.FinanceStructures.Implementation;
-using FinancialStructures.FinanceStructures.Implementation.Asset;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Database.Implementation
+namespace Effanville.FinancialStructures.Database.Implementation
 {
     public partial class Portfolio
     {

@@ -4,12 +4,11 @@ using System.Linq;
 
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.MathLibrary.Finance;
+using Effanville.FinancialStructures.Database.Extensions.Values;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.Database.Extensions.Values;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Database.Extensions.Rates
+namespace Effanville.FinancialStructures.Database.Extensions.Rates
 {
     /// <summary>
     /// Contains extension methods for calculating rates.

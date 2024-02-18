@@ -2,9 +2,10 @@
 using System.IO;
 using System.IO.Abstractions;
 using System.Xml;
-using FinancialStructures.ExpensesStructures.Models;
 
-namespace FinancialStructures.ExpensesStructures.Implementation
+using Effanville.FinancialStructures.ExpensesStructures.Models;
+
+namespace Effanville.FinancialStructures.ExpensesStructures.Implementation
 {
     internal class ExpensesManager : IExpensesManager
     {

@@ -1,11 +1,10 @@
 ﻿using System;
 
 using Effanville.Common.Structure.DataStructures;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.Database;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.FinanceStructures.Implementation.Asset
+namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
 {
     /// <summary>
     /// An implementation of an asset that can have a debt against it.

@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
-using FinancialStructures.DataStructures;
 
-namespace FinancialStructures.Database.Implementation
+using Effanville.FinancialStructures.DataStructures;
+
+namespace Effanville.FinancialStructures.Database.Implementation
 {
     public partial class Portfolio
     {

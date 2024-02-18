@@ -1,8 +1,9 @@
 ﻿using System;
-using FinancialStructures.Database.Extensions.Rates;
-using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Database.Statistics.Implementation
+using Effanville.FinancialStructures.Database.Extensions.Rates;
+using Effanville.FinancialStructures.NamingStructures;
+
+namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
     internal class StatisticIRR5Y : StatisticBase
     {

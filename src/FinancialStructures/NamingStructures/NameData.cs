@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace FinancialStructures.NamingStructures
+namespace Effanville.FinancialStructures.NamingStructures
 {
     /// <summary>
     /// Any name data associated to an instrument.

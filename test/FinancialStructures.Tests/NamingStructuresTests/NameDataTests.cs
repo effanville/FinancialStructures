@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 

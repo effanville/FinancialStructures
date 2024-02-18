@@ -1,8 +1,9 @@
 ﻿using System;
-using FinancialStructures.Database.Extensions.Statistics;
-using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Database.Statistics.Implementation
+using Effanville.FinancialStructures.Database.Extensions.Statistics;
+using Effanville.FinancialStructures.NamingStructures;
+
+namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
     internal class StatisticMDD : StatisticBase
     {

@@ -5,14 +5,13 @@ using System.Linq;
 
 using Effanville.Common.Structure.FileAccess;
 using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Implementation;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Implementation;
+using Effanville.FinancialStructures.Persistence.Xml;
 
-using FinancialStructures.Database;
-using FinancialStructures.Database.Implementation;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.FinanceStructures.Implementation;
-using FinancialStructures.Persistence.Xml;
-
-namespace FinancialStructures.Persistence
+namespace Effanville.FinancialStructures.Persistence
 {
     public sealed class BinaryFilePortfolioPersistence: IPersistence<IPortfolio>
     {

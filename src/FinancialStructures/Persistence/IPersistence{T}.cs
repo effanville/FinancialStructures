@@ -1,6 +1,6 @@
 using Effanville.Common.Structure.Reporting;
 
-namespace FinancialStructures.Persistence
+namespace Effanville.FinancialStructures.Persistence
 {
     public interface IPersistence<T> where T : class
     {

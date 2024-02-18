@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Effanville.Common.Structure.DataStructures;
 
-namespace FinancialStructures.FinanceStructures.Implementation
+namespace Effanville.FinancialStructures.FinanceStructures.Implementation
 {
     public partial class ValueList
     {

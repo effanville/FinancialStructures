@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
-using FinancialStructures.Database;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Implementation;
 
 using NUnit.Framework;
 
@@ -22,7 +23,7 @@ namespace Effanville.FinancialStructures.Tests.Database
             }
             DatabaseConstructor constructor = new DatabaseConstructor();
             constructor = constructor.WithSecurity("company1", "name1", sectors: firstSecuritySectors).WithSecurity("company2", "name2", sectors: secondSecuritySectors);
-            global::FinancialStructures.Database.Implementation.Portfolio database = constructor.Database;
+            Portfolio database = constructor.Database;
             IReadOnlyList<string> sectings = database.Sectors(Account.Security);
 
             Assert.AreEqual(sectors.Length, sectings.Count);

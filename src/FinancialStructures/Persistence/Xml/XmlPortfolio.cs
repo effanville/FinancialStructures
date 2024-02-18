@@ -2,12 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 
-using FinancialStructures.Database.Implementation;
-using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceStructures.Implementation;
-using FinancialStructures.FinanceStructures.Implementation.Asset;
+using Effanville.FinancialStructures.Database.Implementation;
+using Effanville.FinancialStructures.DataStructures;
+using Effanville.FinancialStructures.FinanceStructures.Implementation;
+using Effanville.FinancialStructures.FinanceStructures.Implementation.Asset;
 
-namespace FinancialStructures.Persistence.Xml
+namespace Effanville.FinancialStructures.Persistence.Xml
 {
     [XmlType(TypeName = "Portfolio")]
     public class XmlPortfolio

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace FinancialStructures.DataStructures
+namespace Effanville.FinancialStructures.DataStructures
 {
     /// <summary>
     /// Contains information about a note.

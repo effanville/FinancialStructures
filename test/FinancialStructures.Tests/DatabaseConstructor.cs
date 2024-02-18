@@ -1,13 +1,12 @@
 ﻿using System;
 using System.IO.Abstractions;
 
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Implementation;
+using Effanville.FinancialStructures.FinanceStructures.Implementation;
+using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Persistence;
 using Effanville.FinancialStructures.Tests.TestDatabaseConstructor;
-
-using FinancialStructures.Database;
-using FinancialStructures.Database.Implementation;
-using FinancialStructures.FinanceStructures.Implementation;
-using FinancialStructures.NamingStructures;
-using FinancialStructures.Persistence;
 
 namespace Effanville.FinancialStructures.Tests
 {

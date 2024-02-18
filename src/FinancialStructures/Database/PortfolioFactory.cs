@@ -1,6 +1,6 @@
-﻿using FinancialStructures.Database.Implementation;
+﻿using Effanville.FinancialStructures.Database.Implementation;
 
-namespace FinancialStructures.Database
+namespace Effanville.FinancialStructures.Database
 {
     /// <summary>
     /// Class for generating portfolios.

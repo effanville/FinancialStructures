@@ -1,10 +1,9 @@
 using System.Xml.Serialization;
 
 using Effanville.Common.Structure.DataStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Persistence.Xml
+namespace Effanville.FinancialStructures.Persistence.Xml
 {
     [XmlType(TypeName="CashAccount")]
     public class XmlCashAccount : XmlValueList

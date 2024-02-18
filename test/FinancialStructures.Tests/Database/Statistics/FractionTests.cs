@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using FinancialStructures.Database;
-using FinancialStructures.Database.Extensions.Statistics;
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Extensions.Statistics;
+using Effanville.FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 

@@ -2,7 +2,7 @@
 
 using Effanville.Common.Structure.MathLibrary.Finance;
 
-namespace FinancialStructures.FinanceStructures.Implementation
+namespace Effanville.FinancialStructures.FinanceStructures.Implementation
 {
     public partial class ValueList
     {

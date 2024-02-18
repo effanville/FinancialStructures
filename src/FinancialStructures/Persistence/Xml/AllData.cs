@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
-using FinancialStructures.Database.Implementation;
-using FinancialStructures.FinanceStructures.Implementation;
 
-namespace FinancialStructures.Persistence.Xml
+using Effanville.FinancialStructures.Database.Implementation;
+using Effanville.FinancialStructures.FinanceStructures.Implementation;
+
+namespace Effanville.FinancialStructures.Persistence.Xml
 {
     /// <summary>
     /// Saves into a file only. Used to ensure compatibility with legacy saved files.

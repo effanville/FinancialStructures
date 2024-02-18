@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using FinancialStructures.Database.Statistics;
 
-namespace FinancialStructures.Database.Export.Statistics
+using Effanville.FinancialStructures.Database.Statistics;
+
+namespace Effanville.FinancialStructures.Database.Export.Statistics
 {
     /// <summary>
     /// Contains data for display of a table, where values are specified

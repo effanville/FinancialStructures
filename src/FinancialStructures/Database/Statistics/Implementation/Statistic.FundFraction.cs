@@ -1,11 +1,10 @@
 ﻿using System;
 
 using Effanville.Common.Structure.Extensions;
+using Effanville.FinancialStructures.Database.Extensions.Statistics;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.Database.Extensions.Statistics;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Database.Statistics.Implementation
+namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
     /// <summary>
     /// Statistic for the <see cref="Statistic.FundFraction"/> enum value.

@@ -2,7 +2,7 @@
 
 using Effanville.Common.Structure.DataEdit;
 
-namespace FinancialStructures.Database
+namespace Effanville.FinancialStructures.Database
 {
     /// <summary>
     /// Implementation of a <see cref="IUpdater{IPortfolio}"/> that performs the action syncronously.

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Database.Extensions
+namespace Effanville.FinancialStructures.Database.Extensions
 {
     /// <summary>
     /// Helper methods for calculating 

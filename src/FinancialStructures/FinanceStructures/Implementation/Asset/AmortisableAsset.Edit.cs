@@ -2,7 +2,7 @@
 
 using Effanville.Common.Structure.Reporting;
 
-namespace FinancialStructures.FinanceStructures.Implementation.Asset
+namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
 {
     /// <summary>
     /// An implementation of an asset that can have a debt against it.

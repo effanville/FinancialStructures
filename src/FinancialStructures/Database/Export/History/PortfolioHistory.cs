@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 using Effanville.Common.Structure.Reporting;
 using Effanville.Common.Structure.ReportWriting;
+using Effanville.FinancialStructures.Database.Extensions.Values;
 
-using FinancialStructures.Database.Extensions.Values;
-
-namespace FinancialStructures.Database.Export.History
+namespace Effanville.FinancialStructures.Database.Export.History
 {
     /// <summary>
     /// Class to store the historic evolution of a <see cref="IPortfolio"/>

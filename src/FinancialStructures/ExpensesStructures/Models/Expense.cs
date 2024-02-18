@@ -4,10 +4,9 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 
 using Effanville.Common.Structure.Extensions;
+using Effanville.FinancialStructures.ExpensesStructures.Helpers;
 
-using FinancialStructures.ExpensesStructures.Helpers;
-
-namespace FinancialStructures.ExpensesStructures.Models
+namespace Effanville.FinancialStructures.ExpensesStructures.Models
 {
     /// <summary>
     /// Contains information about a specific expense,

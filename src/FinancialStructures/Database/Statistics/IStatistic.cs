@@ -1,7 +1,8 @@
 ﻿using System;
-using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Database.Statistics
+using Effanville.FinancialStructures.NamingStructures;
+
+namespace Effanville.FinancialStructures.Database.Statistics
 {
     /// <summary>
     /// Base for a statistic of an account

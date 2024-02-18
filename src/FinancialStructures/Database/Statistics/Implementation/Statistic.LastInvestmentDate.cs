@@ -1,11 +1,10 @@
 ﻿using System;
 
 using Effanville.Common.Structure.Extensions;
+using Effanville.FinancialStructures.Database.Extensions.Values;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.Database.Extensions.Values;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Database.Statistics.Implementation
+namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
     internal class StatisticLastInvestmentDate : IStatistic
     {

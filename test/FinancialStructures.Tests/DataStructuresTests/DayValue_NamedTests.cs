@@ -2,8 +2,7 @@
 
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.NamingStructures;
-
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 

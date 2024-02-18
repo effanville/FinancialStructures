@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.Database.Statistics
+﻿namespace Effanville.FinancialStructures.Database.Statistics
 {
     /// <summary>
     /// Contains all admissible statistics.

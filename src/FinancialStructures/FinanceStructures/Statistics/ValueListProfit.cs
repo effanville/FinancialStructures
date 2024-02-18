@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.FinanceStructures.Statistics
+﻿namespace Effanville.FinancialStructures.FinanceStructures.Statistics
 {
     /// <summary>
     /// Contains extension methods for statistics of <see cref="IValueList"/>s.

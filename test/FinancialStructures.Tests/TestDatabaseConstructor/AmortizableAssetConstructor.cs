@@ -1,7 +1,7 @@
 ﻿using System;
 
-using FinancialStructures.FinanceStructures.Implementation.Asset;
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.FinanceStructures.Implementation.Asset;
+using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Tests.TestDatabaseConstructor
 {

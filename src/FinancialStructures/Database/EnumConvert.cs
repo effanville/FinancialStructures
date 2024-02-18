@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.Database
+﻿namespace Effanville.FinancialStructures.Database
 {
     /// <summary>
     /// Provides conversions between <see cref="Account"/> and <see cref="Totals"/> enums.

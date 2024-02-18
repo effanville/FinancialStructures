@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Xml.Serialization;
 
-using FinancialStructures.ExpensesStructures.Models;
+using Effanville.FinancialStructures.ExpensesStructures.Models;
 
-namespace FinancialStructures.ExpensesStructures
+namespace Effanville.FinancialStructures.ExpensesStructures
 {
     /// <summary>
     /// A collection of expenses that allows for alteration of them.

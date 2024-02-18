@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-using FinancialStructures.DataStructures;
+using Effanville.FinancialStructures.DataStructures;
 
 using NUnit.Framework;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FinancialStructures.FinanceStructures
+namespace Effanville.FinancialStructures.FinanceStructures
 {
     /// <summary>
     /// Contains extension methods for <see cref="IExchangableValueList"/>s.

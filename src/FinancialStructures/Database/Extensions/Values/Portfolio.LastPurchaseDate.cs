@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 
-using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.DataStructures;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Database.Extensions.Values
+namespace Effanville.FinancialStructures.Database.Extensions.Values
 {
     /// <summary>
     /// Holds static extension classes generating values data for the portfolio.

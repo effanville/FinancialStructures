@@ -4,9 +4,8 @@ using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 
 using Effanville.Common.Structure.ReportWriting;
-
-using FinancialStructures.Database.Export.Statistics;
-using FinancialStructures.Database.Statistics;
+using Effanville.FinancialStructures.Database.Export.Statistics;
+using Effanville.FinancialStructures.Database.Statistics;
 
 using NUnit.Framework;
 

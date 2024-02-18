@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.MathLibrary.Finance;
 
-namespace FinancialStructures.FinanceStructures.Implementation.Asset
+namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
 {
     public partial class AmortisableAsset
     {

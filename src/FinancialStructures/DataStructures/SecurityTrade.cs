@@ -2,10 +2,9 @@
 using System.Xml.Serialization;
 
 using Effanville.Common.Structure.Extensions;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.DataStructures
+namespace Effanville.FinancialStructures.DataStructures
 {
     /// <summary>
     /// Contains all information about a Stock trade.

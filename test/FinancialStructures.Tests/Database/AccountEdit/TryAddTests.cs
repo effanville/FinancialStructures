@@ -1,9 +1,9 @@
 ﻿using System.Linq;
 
 using Effanville.Common.Structure.Reporting;
-
-using FinancialStructures.Database;
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Implementation;
+using Effanville.FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 
@@ -18,7 +18,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanAddSecurity()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database = new DatabaseConstructor().GetInstance();
+            Portfolio database = new DatabaseConstructor().GetInstance();
             _ = database.TryAdd(Account.Security, new NameData(BaseCompanyName, BaseName));
 
             Assert.AreEqual(1, database.Funds.Count);
@@ -30,7 +30,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanAddSector()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database = new DatabaseConstructor().GetInstance();
+            Portfolio database = new DatabaseConstructor().GetInstance();
             _ = database.TryAdd(Account.Benchmark, new NameData(BaseCompanyName, BaseName));
 
             Assert.AreEqual(1, database.BenchMarks.Count);
@@ -42,7 +42,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanAddBankAccount()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database = new DatabaseConstructor().GetInstance();
+            Portfolio database = new DatabaseConstructor().GetInstance();
             _ = database.TryAdd(Account.BankAccount, new NameData(BaseCompanyName, BaseName));
 
             Assert.AreEqual(1, database.BankAccounts.Count);
@@ -54,7 +54,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void CanAddCurrency()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database = new DatabaseConstructor().GetInstance();
+            Portfolio database = new DatabaseConstructor().GetInstance();
             _ = database.TryAdd(Account.Currency, new NameData(BaseCompanyName, BaseName));
 
             Assert.AreEqual(1, database.Currencies.Count);
@@ -66,7 +66,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void ReportsSecurityCorrect()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database = new DatabaseConstructor().GetInstance();
+            Portfolio database = new DatabaseConstructor().GetInstance();
             IReportLogger logging = new LogReporter(null, saveInternally: true);
             _ = database.TryAdd(Account.Security, new NameData(BaseCompanyName, BaseName), logging);
 
@@ -82,7 +82,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void AddingSecurityFailReports()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database =
+            Portfolio database =
                 new DatabaseConstructor()
                 .WithSecurity(BaseCompanyName, BaseName)
                 .GetInstance();
@@ -101,7 +101,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void ReportSectorCorrect()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database = new DatabaseConstructor().GetInstance();
+            Portfolio database = new DatabaseConstructor().GetInstance();
             IReportLogger logging = new LogReporter(null, saveInternally: true);
             _ = database.TryAdd(Account.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
 
@@ -117,7 +117,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         [Test]
         public void AddingSectorFailReports()
         {
-            global::FinancialStructures.Database.Implementation.Portfolio database =
+            Portfolio database =
                 new DatabaseConstructor()
                 .WithSectorFromName(BaseCompanyName, BaseName)
                 .GetInstance();

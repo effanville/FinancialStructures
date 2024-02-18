@@ -1,8 +1,9 @@
 ﻿using System;
-using FinancialStructures.Database.Extensions.Values;
-using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Database.Extensions.Statistics
+using Effanville.FinancialStructures.Database.Extensions.Values;
+using Effanville.FinancialStructures.NamingStructures;
+
+namespace Effanville.FinancialStructures.Database.Extensions.Statistics
 {
     public static partial class Statistics
     {

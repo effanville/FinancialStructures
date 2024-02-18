@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 
-using FinancialStructures.Database;
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Tests
 {

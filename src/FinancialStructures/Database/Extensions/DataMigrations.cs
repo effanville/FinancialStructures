@@ -1,6 +1,6 @@
-﻿using FinancialStructures.DataStructures;
+﻿using Effanville.FinancialStructures.DataStructures;
 
-namespace FinancialStructures.Database.Extensions
+namespace Effanville.FinancialStructures.Database.Extensions
 {
     /// <summary>
     /// Contains extension methods for migrating data from old to new.

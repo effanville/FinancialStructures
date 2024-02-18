@@ -1,22 +1,19 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 
-using FinancialStructures.Database.Export.History;
-using FinancialStructures.Database.Extensions;
-using FinancialStructures.Database.Extensions.Statistics;
-using FinancialStructures.NamingStructures;
-using System.Collections.Generic;
-
 using Effanville.Common.Structure.Extensions;
 using Effanville.Common.Structure.Reporting;
 using Effanville.Common.Structure.ReportWriting;
+using Effanville.FinancialStructures.Database.Export.History;
+using Effanville.FinancialStructures.Database.Extensions.Statistics;
+using Effanville.FinancialStructures.Database.Extensions.Values;
+using Effanville.FinancialStructures.Database.Statistics;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.Database.Statistics;
-using FinancialStructures.Database.Extensions.Values;
-
-namespace FinancialStructures.Database.Export.Report
+namespace Effanville.FinancialStructures.Database.Export.Report
 {
     /// <summary>
     /// Contains a report of the entire portfolio.

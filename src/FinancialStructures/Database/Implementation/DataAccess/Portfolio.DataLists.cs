@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.FinanceStructures.Implementation;
-using FinancialStructures.FinanceStructures.Implementation.Asset;
-using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Database.Implementation
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Implementation;
+using Effanville.FinancialStructures.FinanceStructures.Implementation.Asset;
+using Effanville.FinancialStructures.NamingStructures;
+
+namespace Effanville.FinancialStructures.Database.Implementation
 {
     public partial class Portfolio
     {
@@ -20,7 +21,7 @@ namespace FinancialStructures.Database.Implementation
         /// </remarks>
         public IPortfolio Copy()
         {
-            Portfolio portfolioCopy = new Portfolio
+            Implementation.Portfolio portfolioCopy = new Implementation.Portfolio
             {
                 BaseCurrency = BaseCurrency,
                 Name = Name
@@ -157,19 +158,19 @@ namespace FinancialStructures.Database.Implementation
             {
                 case Totals.SecurityCompany:
                 {
-                    return Funds.Where(fund => fund.Names.Company == name.Company).ToList();
+                    return Enumerable.Where<ISecurity>(Funds, fund => fund.Names.Company == name.Company).ToList();
                 }
                 case Totals.BankAccountCompany:
                 {
-                    return BankAccounts.Where(fund => fund.Names.Company == name.Company).ToList();
+                    return Enumerable.Where<IExchangableValueList>(BankAccounts, fund => fund.Names.Company == name.Company).ToList();
                 }
                 case Totals.AssetCompany:
                 {
-                    return Assets.Where(asset => asset.Names.Company == name.Company).ToList();
+                    return Enumerable.Where<IAmortisableAsset>(Assets, asset => asset.Names.Company == name.Company).ToList();
                 }
                 case Totals.PensionCompany:
                 {
-                    return Pensions.Where(pension => pension.Names.Company == name.Company).ToList();
+                    return Enumerable.Where<ISecurity>(Pensions, pension => pension.Names.Company == name.Company).ToList();
                 }
                 case Totals.Security:
                 {
@@ -193,27 +194,26 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.All:
                 {
-                    return Funds
-                        .Union(BankAccounts
-                        .Union(Assets))
+                    return Enumerable.Union(Funds, Enumerable
+                        .Union<IExchangableValueList>(BankAccounts, Assets))
                         .Union(Pensions)
                         .ToList();
                 }
                 case Totals.SecuritySector:
                 {
-                    return Funds.Where(fund => fund.IsSectorLinked(name)).ToList();
+                    return Enumerable.Where<ISecurity>(Funds, fund => fund.IsSectorLinked(name)).ToList();
                 }
                 case Totals.BankAccountSector:
                 {
-                    return BankAccounts.Where(fund => fund.IsSectorLinked(name)).ToList();
+                    return Enumerable.Where<IExchangableValueList>(BankAccounts, fund => fund.IsSectorLinked(name)).ToList();
                 }
                 case Totals.AssetSector:
                 {
-                    return Assets.Where(fund => fund.IsSectorLinked(name)).ToList();
+                    return Enumerable.Where<IAmortisableAsset>(Assets, fund => fund.IsSectorLinked(name)).ToList();
                 }
                 case Totals.PensionSector:
                 {
-                    return Pensions.Where(fund => fund.IsSectorLinked(name)).ToList();
+                    return Enumerable.Where<ISecurity>(Pensions, fund => fund.IsSectorLinked(name)).ToList();
                 }
                 case Totals.Sector:
                 {
@@ -241,19 +241,19 @@ namespace FinancialStructures.Database.Implementation
                 }
                 case Totals.SecurityCurrency:
                 {
-                    return Funds.Where(fund => fund.Names.Currency == name.Company).ToList();
+                    return Enumerable.Where<ISecurity>(Funds, fund => fund.Names.Currency == name.Company).ToList();
                 }
                 case Totals.BankAccountCurrency:
                 {
-                    return BankAccounts.Where(fund => fund.Names.Currency == name.Company).ToList();
+                    return Enumerable.Where<IExchangableValueList>(BankAccounts, fund => fund.Names.Currency == name.Company).ToList();
                 }
                 case Totals.AssetCurrency:
                 {
-                    return Assets.Where(fund => fund.Names.Currency == name.Company).ToList();
+                    return Enumerable.Where<IAmortisableAsset>(Assets, fund => fund.Names.Currency == name.Company).ToList();
                 }
                 case Totals.PensionCurrency:
                 {
-                    return Pensions.Where(fund => fund.Names.Currency == name.Company).ToList();
+                    return Enumerable.Where<ISecurity>(Pensions, fund => fund.Names.Currency == name.Company).ToList();
                 }
                 case Totals.CurrencySector:
                 default:

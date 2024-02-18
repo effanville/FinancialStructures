@@ -1,8 +1,8 @@
-﻿using FinancialStructures.FinanceStructures;
-using FinancialStructures.FinanceStructures.Statistics;
-using FinancialStructures.NamingStructures;
+﻿using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Statistics;
+using Effanville.FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Database.Extensions.Statistics
+namespace Effanville.FinancialStructures.Database.Extensions.Statistics
 {
     public static partial class Statistics
     {

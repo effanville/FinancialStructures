@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FinancialStructures.Database.Export.History
+namespace Effanville.FinancialStructures.Database.Export.History
 {
     public sealed partial class PortfolioHistory
     {

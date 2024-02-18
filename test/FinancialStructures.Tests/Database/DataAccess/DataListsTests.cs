@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using FinancialStructures.Database;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Implementation;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 
@@ -59,7 +60,7 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
 
             string bankCompany = "Bank";
             _ = generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0m });
-            global::FinancialStructures.Database.Implementation.Portfolio database = generator.Database;
+            Portfolio database = generator.Database;
 
             IReadOnlyList<IValueList> data = database.Accounts(Totals.BankAccountCompany, new TwoName("name"));
 

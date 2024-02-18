@@ -1,8 +1,9 @@
 ﻿using System;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Database.Extensions.Values
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.NamingStructures;
+
+namespace Effanville.FinancialStructures.Database.Extensions.Values
 {
     public static partial class Values
     {

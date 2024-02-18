@@ -1,6 +1,6 @@
-﻿using FinancialStructures.Download.Implementation;
+﻿using Effanville.FinancialStructures.Download.Implementation;
 
-namespace FinancialStructures.Download
+namespace Effanville.FinancialStructures.Download
 {
     /// <summary>
     /// Provides factory methods for creating price downloaders.

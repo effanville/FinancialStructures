@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO.Abstractions;
-using FinancialStructures.ExpensesStructures.Models;
 
-namespace FinancialStructures.ExpensesStructures
+using Effanville.FinancialStructures.ExpensesStructures.Models;
+
+namespace Effanville.FinancialStructures.ExpensesStructures
 {
     /// <summary>
     /// Interface for the interaction with expenses.

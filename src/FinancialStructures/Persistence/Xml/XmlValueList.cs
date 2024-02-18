@@ -1,8 +1,7 @@
 using Effanville.Common.Structure.DataStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Persistence.Xml
+namespace Effanville.FinancialStructures.Persistence.Xml
 {
     public class XmlValueList
     {

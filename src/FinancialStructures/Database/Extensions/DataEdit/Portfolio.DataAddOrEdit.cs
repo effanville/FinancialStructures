@@ -1,11 +1,10 @@
 ﻿using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.DataStructures;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
-using FinancialStructures.DataStructures;
-using FinancialStructures.FinanceStructures;
-using FinancialStructures.NamingStructures;
-
-namespace FinancialStructures.Database.Extensions
+namespace Effanville.FinancialStructures.Database.Extensions.DataEdit
 {
     /// <summary>
     /// Contains static extensions for editing account data.

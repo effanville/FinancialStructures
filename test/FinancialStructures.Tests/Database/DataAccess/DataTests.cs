@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Effanville.Common.Structure.DataStructures;
-
-using FinancialStructures.Database;
-using FinancialStructures.DataStructures;
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Implementation;
+using Effanville.FinancialStructures.DataStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 
@@ -21,7 +21,7 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
             DatabaseConstructor generator = new DatabaseConstructor();
             string secCompany = "company1";
             _ = generator.WithSecurity(secCompany, "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0m }, numberUnits: new[] { 12.0m });
-            global::FinancialStructures.Database.Implementation.Portfolio database = generator.Database;
+            Portfolio database = generator.Database;
 
             IReadOnlyList<SecurityDayData> data = database.SecurityData(new TwoName(secCompany, "name1"));
 
@@ -37,7 +37,7 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
             string secCompany = "company1";
             _ = generator.WithSecurity(secCompany, "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0m }, numberUnits: new[] { 12.0m });
 
-            global::FinancialStructures.Database.Implementation.Portfolio database = generator.Database;
+            Portfolio database = generator.Database;
 
             IReadOnlyList<SecurityDayData> data = database.SecurityData(new TwoName(secCompany, "name"));
 
@@ -51,7 +51,7 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
 
             string bankCompany = "Bank";
             _ = generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0m });
-            global::FinancialStructures.Database.Implementation.Portfolio database = generator.Database;
+            Portfolio database = generator.Database;
 
             IReadOnlyList<DailyValuation> data = database.NumberData(Account.BankAccount, new NameData(bankCompany, "AccountName"));
 
@@ -66,7 +66,7 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
 
             string bankCompany = "Bank";
             _ = generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0m });
-            global::FinancialStructures.Database.Implementation.Portfolio database = generator.Database;
+            Portfolio database = generator.Database;
 
             IReadOnlyList<DailyValuation> data = database.NumberData(Account.BankAccount, new NameData(bankCompany, "name"));
 

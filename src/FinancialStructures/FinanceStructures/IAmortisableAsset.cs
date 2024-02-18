@@ -3,7 +3,7 @@
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.Reporting;
 
-namespace FinancialStructures.FinanceStructures
+namespace Effanville.FinancialStructures.FinanceStructures
 {
     /// <summary>
     /// Contains logic for an object that can have a debt against it.

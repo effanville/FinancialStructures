@@ -1,7 +1,6 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
-namespace FinancialStructures.DataStructures
+namespace Effanville.FinancialStructures.DataStructures
 {
     /// <summary>
     /// The type of the trade.

@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.DataStructures
+﻿namespace Effanville.FinancialStructures.DataStructures
 {
     /// <summary>
     /// Extension methods for <see cref="TradeType"/>s.

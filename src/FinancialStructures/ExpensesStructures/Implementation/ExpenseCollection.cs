@@ -9,10 +9,9 @@ using System.Xml.Schema;
 using System.Xml.Serialization;
 
 using Effanville.Common.Structure.ReportWriting;
+using Effanville.FinancialStructures.ExpensesStructures.Models;
 
-using FinancialStructures.ExpensesStructures.Models;
-
-namespace FinancialStructures.ExpensesStructures.Implementation
+namespace Effanville.FinancialStructures.ExpensesStructures.Implementation
 {
     /// <summary>
     /// Contains a collection of expenses.

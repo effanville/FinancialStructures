@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-using FinancialStructures.Database.Download;
-using FinancialStructures.Download;
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Database.Download;
+using Effanville.FinancialStructures.Download;
+using Effanville.FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 
