@@ -101,7 +101,7 @@ namespace FinancialStructures.Database.Export.Statistics
         {
             return new PortfolioStatisticsSettings(
                 DateTime.Today,
-                displayValueFunds: false,
+                displayValueFunds: true,
                 generateBenchmarks: true,
                 includeSecurities: true,
                 securityDisplayFields: AccountStatisticsHelpers.DefaultSecurityStats().ToList(),
@@ -109,7 +109,7 @@ namespace FinancialStructures.Database.Export.Statistics
                 bankAccDisplayFields: AccountStatisticsHelpers.DefaultBankAccountStats().ToList(),
                 includeSectors: true,
                 sectorDisplayFields: AccountStatisticsHelpers.DefaultSectorStats().ToList(),
-                includeAssets: false,
+                includeAssets: true,
                 assetDisplayFields: AccountStatisticsHelpers.DefaultAssetStats().ToList());
         }
     }
