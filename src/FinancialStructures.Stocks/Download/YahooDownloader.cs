@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
-using Common.Structure.Reporting;
+using Effanville.Common.Structure.Reporting;
 
-using FinancialStructures.Download.Implementation;
+using Effanville.FinancialStructures.Download.Implementation;
 using FinancialStructures.Stocks.Implementation;
 
 namespace FinancialStructures.Stocks.Download

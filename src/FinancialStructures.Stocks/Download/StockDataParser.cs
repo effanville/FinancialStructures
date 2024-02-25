@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Common.Structure.Reporting;
+using Effanville.Common.Structure.Reporting;
 
 using FinancialStructures.Stocks.HistoricalRepository;
 using FinancialStructures.Stocks.Implementation;

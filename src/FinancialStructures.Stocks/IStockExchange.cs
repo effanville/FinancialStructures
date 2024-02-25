@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
-using Common.Structure.Reporting;
+using Effanville.Common.Structure.Reporting;
 
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.NamingStructures;
 using FinancialStructures.Stocks.Implementation;
 using Nager.Date;
 

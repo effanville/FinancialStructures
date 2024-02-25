@@ -1,6 +1,5 @@
-using Common.Structure.Reporting;
-
-using FinancialStructures.Persistence;
+using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.Persistence;
 
 namespace FinancialStructures.Stocks.Persistence
 {

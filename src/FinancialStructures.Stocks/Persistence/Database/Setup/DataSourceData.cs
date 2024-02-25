@@ -1,4 +1,4 @@
-using Common.Structure.Reporting;
+using Effanville.Common.Structure.Reporting;
 
 using FinancialStructures.Stocks.Persistence.Database.Models;
 

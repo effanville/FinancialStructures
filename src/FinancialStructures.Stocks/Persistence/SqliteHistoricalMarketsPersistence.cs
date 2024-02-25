@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using Common.Structure.Reporting;
+using Effanville.Common.Structure.Reporting;
 
-using FinancialStructures.NamingStructures;
-using FinancialStructures.Persistence;
+using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Persistence;
 using FinancialStructures.Stocks.HistoricalRepository;
 using FinancialStructures.Stocks.Implementation;
 using FinancialStructures.Stocks.Persistence.Database;

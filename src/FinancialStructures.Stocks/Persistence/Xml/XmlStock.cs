@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.NamingStructures;
 
 namespace FinancialStructures.Stocks.Persistence.Xml
 {

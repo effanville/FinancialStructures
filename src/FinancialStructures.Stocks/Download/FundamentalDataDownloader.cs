@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Common.Structure.Reporting;
-using Common.Structure.WebAccess;
+using Effanville.Common.Structure.Reporting;
+using Effanville.Common.Structure.WebAccess;
 
 using HtmlAgilityPack;
 

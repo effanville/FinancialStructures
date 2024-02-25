@@ -1,6 +1,6 @@
-using Common.Structure.Reporting;
+using Effanville.Common.Structure.Reporting;
 
-using FinancialStructures.Persistence;
+using Effanville.FinancialStructures.Persistence;
 using FinancialStructures.Stocks.HistoricalRepository;
 
 namespace FinancialStructures.Stocks.Persistence

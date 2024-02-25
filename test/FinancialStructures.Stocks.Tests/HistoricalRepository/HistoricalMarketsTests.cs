@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.NamingStructures;
 using FinancialStructures.Stocks.HistoricalRepository;
 using FinancialStructures.Stocks.Implementation;
 

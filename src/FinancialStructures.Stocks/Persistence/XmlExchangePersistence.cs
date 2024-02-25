@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
 
-using Common.Structure.FileAccess;
-using Common.Structure.Reporting;
-
-using FinancialStructures.Persistence;
+using Effanville.Common.Structure.FileAccess;
+using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.Persistence;
 using FinancialStructures.Stocks.Implementation;
 using FinancialStructures.Stocks.Persistence.Xml;
 

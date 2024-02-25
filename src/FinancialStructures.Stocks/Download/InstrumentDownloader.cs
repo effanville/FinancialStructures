@@ -1,9 +1,8 @@
 using System;
-using System.IO.Abstractions;
 using System.Text;
 
-using Common.Structure.Reporting;
-using Common.Structure.WebAccess;
+using Effanville.Common.Structure.Reporting;
+using Effanville.Common.Structure.WebAccess;
 
 namespace FinancialStructures.Stocks.Download
 {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.NamingStructures;
 using FinancialStructures.Stocks.Implementation;
 
 namespace FinancialStructures.Stocks
