@@ -12,8 +12,9 @@ namespace FinancialStructures.Stocks.HistoricalRepository
     public sealed class HistoricalMarkets
     {
         public List<HistoricalExchange> Exchanges { get; } = new();
-        
-        public static HistoricalMarkets Create(string stockFilePath, IFileSystem fileSystem, IReportLogger logger = null)
+
+        public static HistoricalMarkets Create(string stockFilePath, IFileSystem fileSystem,
+            IReportLogger logger = null)
         {
             string[] fileContents = Array.Empty<string>();
             try
@@ -31,10 +32,11 @@ namespace FinancialStructures.Stocks.HistoricalRepository
                 return null;
             }
 
-            logger?.Log(ReportType.Information, ReportLocation.AddingData.ToString(), $"Configured StockExchanges from file {stockFilePath}.");
+            logger?.Log(ReportType.Information, ReportLocation.AddingData.ToString(),
+                $"Configured StockExchanges from file {stockFilePath}.");
             return Configure(fileContents, logger);
         }
-        
+
         private static HistoricalMarkets Configure(string[] exchangeData, IReportLogger logger = null)
         {
             var historicalMarkets = new HistoricalMarkets();
@@ -48,8 +50,9 @@ namespace FinancialStructures.Stocks.HistoricalRepository
                     numberChanges++;
                 }
             }
-            
-            logger?.Log(ReportType.Information, ReportLocation.AddingData.ToString(), $"Added {numberChanges} exchanges into database.");
+
+            logger?.Log(ReportType.Information, ReportLocation.AddingData.ToString(),
+                $"Added {numberChanges} exchanges into database.");
             return historicalMarkets;
         }
 
@@ -63,8 +66,8 @@ namespace FinancialStructures.Stocks.HistoricalRepository
 
             var stockExchange = new StockExchange
             {
-                ExchangeIdentifier = historicalExchange.ExchangeIdentifier, 
-                Name = historicalExchange.Name, 
+                ExchangeIdentifier = historicalExchange.ExchangeIdentifier,
+                Name = historicalExchange.Name,
                 CountryDateCode = historicalExchange.CountryDateCode,
                 TimeZone = historicalExchange.TimeZone,
                 ExchangeOpen = historicalExchange.ExchangeOpen,
@@ -78,9 +81,11 @@ namespace FinancialStructures.Stocks.HistoricalRepository
                     continue;
                 }
 
-                var stock = new Stock();
-                stock.Name = historicalStock.ValidName(snapshotTime);
-                stock.Fundamentals = historicalStock.ValidFundamentals(snapshotTime);
+                var stock = new Stock
+                {
+                    Name = historicalStock.ValidName(snapshotTime),
+                    Fundamentals = historicalStock.ValidFundamentals(snapshotTime)
+                };
                 foreach (var valuation in historicalStock.Valuations)
                 {
                     if (valuation.End >= snapshotTime)
@@ -90,14 +95,15 @@ namespace FinancialStructures.Stocks.HistoricalRepository
 
                     var stockDay = new StockDay(
                         valuation.Start,
-                        valuation.Open, 
-                        valuation.High, 
-                        valuation.Low, 
-                        valuation.Close, 
-                        valuation.Volume, 
+                        valuation.Open,
+                        valuation.High,
+                        valuation.Low,
+                        valuation.Close,
+                        valuation.Volume,
                         valuation.Duration);
                     stock.Valuations.Add(stockDay);
                 }
+                stockExchange.Stocks.Add(stock);
             }
 
             return stockExchange;

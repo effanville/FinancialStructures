@@ -144,28 +144,30 @@ namespace FinancialStructures.Stocks.HistoricalRepository
 
         public NameData ValidName(DateTime snapshotTime)
         {
+            KeyValuePair<DateTime, NameData> lastPrecedingSnapshot = new (DateTime.MinValue, null);
             foreach (var name in Name)
             {
-                if (name.Key > snapshotTime)
+                if (name.Key < snapshotTime)
                 {
-                    return name.Value;
+                    lastPrecedingSnapshot = name;
                 }
             }
 
-            return null;
+            return lastPrecedingSnapshot.Value;
         }
         
         public StockFundamentalData ValidFundamentals(DateTime snapshotTime)
         {
+            KeyValuePair<DateTime, StockFundamentalData> lastPrecedingSnapshot = new (DateTime.MinValue, null);
             foreach (var kvp in Fundamentals)
             {
-                if (kvp.Key > snapshotTime)
+                if (kvp.Key < snapshotTime)
                 {
-                    return kvp.Value;
+                    lastPrecedingSnapshot = kvp;
                 }
             }
 
-            return null;
+            return lastPrecedingSnapshot.Value;
         }
         
         public override string ToString() => $"[HistStock: {Name.Last().Value.Ric}, Values: {Valuations.Count}]";
