@@ -4,10 +4,9 @@ using System.IO.Abstractions;
 using System.Linq;
 
 using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.Stocks.Implementation;
 
-using FinancialStructures.Stocks.Implementation;
-
-namespace FinancialStructures.Stocks.HistoricalRepository
+namespace Effanville.FinancialStructures.Stocks.HistoricalRepository
 {
     public sealed class HistoricalMarkets
     {

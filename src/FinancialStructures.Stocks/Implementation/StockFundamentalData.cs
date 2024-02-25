@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace FinancialStructures.Stocks.Implementation
+namespace Effanville.FinancialStructures.Stocks.Implementation
 {
     public class StockFundamentalData
     {

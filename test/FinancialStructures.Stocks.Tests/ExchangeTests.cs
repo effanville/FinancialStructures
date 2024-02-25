@@ -1,20 +1,17 @@
 ﻿using System;
 using System.IO.Abstractions;
+using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
+
+using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Persistence;
+using Effanville.FinancialStructures.Stocks.Implementation;
+using Effanville.FinancialStructures.Stocks.Persistence;
 
 using NUnit.Framework;
 
-using System.IO.Abstractions.TestingHelpers;
-using System.Net;
-
-using Effanville.Common.Structure.Reporting;
-
-using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.Persistence;
-using FinancialStructures.Stocks.Implementation;
-using FinancialStructures.Stocks.Persistence;
-
-namespace FinancialStructures.Stocks.Tests
+namespace Effanville.FinancialStructures.Stocks.Tests
 {
     internal sealed class ExchangeTests
     {

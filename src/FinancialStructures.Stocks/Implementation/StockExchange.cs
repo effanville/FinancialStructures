@@ -4,13 +4,12 @@ using System.IO.Abstractions;
 using System.Threading.Tasks;
 
 using Effanville.Common.Structure.Reporting;
-
-using FinancialStructures.Stocks.Download;
 using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Stocks.Download;
 
 using Nager.Date;
 
-namespace FinancialStructures.Stocks.Implementation
+namespace Effanville.FinancialStructures.Stocks.Implementation
 {
     /// <summary>
     /// Simulates a stock exchange.

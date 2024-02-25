@@ -4,10 +4,9 @@ using System.IO.Abstractions;
 using System.Threading.Tasks;
 
 using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.Stocks.Download;
 
-using FinancialStructures.Stocks.Download;
-
-namespace FinancialStructures.Stocks.HistoricalRepository
+namespace Effanville.FinancialStructures.Stocks.HistoricalRepository
 {
     public class HistoricalMarketsBuilder
     {

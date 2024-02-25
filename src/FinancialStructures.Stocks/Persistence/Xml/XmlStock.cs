@@ -3,7 +3,7 @@ using System.Xml.Serialization;
 
 using Effanville.FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Stocks.Persistence.Xml
+namespace Effanville.FinancialStructures.Stocks.Persistence.Xml
 {
     [XmlType(TypeName = "Stock")]
     public class XmlStock

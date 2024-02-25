@@ -6,12 +6,11 @@ using Effanville.Common.Console;
 using Effanville.Common.Console.Commands;
 using Effanville.Common.Console.Options;
 using Effanville.Common.Structure.Reporting;
-
 using Effanville.FinancialStructures.Persistence;
-using FinancialStructures.Stocks.HistoricalRepository;
-using FinancialStructures.Stocks.Persistence;
+using Effanville.FinancialStructures.Stocks.HistoricalRepository;
+using Effanville.FinancialStructures.Stocks.Persistence;
 
-namespace FinancialStructures.Stocks.Cli
+namespace Effanville.FinancialStructures.Stocks.Cli
 {
     /// <summary>
     /// Command that controls the downloading of stock data.

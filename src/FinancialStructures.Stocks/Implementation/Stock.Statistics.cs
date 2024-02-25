@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Effanville.Common.Structure.MathLibrary.Vectors;
 
-namespace FinancialStructures.Stocks.Implementation
+namespace Effanville.FinancialStructures.Stocks.Implementation
 {
     public partial class Stock
     {

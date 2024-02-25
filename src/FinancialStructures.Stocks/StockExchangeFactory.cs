@@ -3,12 +3,11 @@ using System.IO.Abstractions;
 using System.Linq;
 
 using Effanville.Common.Structure.Reporting;
-
 using Effanville.FinancialStructures.Persistence;
-using FinancialStructures.Stocks.Implementation;
-using FinancialStructures.Stocks.Persistence;
+using Effanville.FinancialStructures.Stocks.Implementation;
+using Effanville.FinancialStructures.Stocks.Persistence;
 
-namespace FinancialStructures.Stocks
+namespace Effanville.FinancialStructures.Stocks
 {
     /// <summary>
     /// Static factory methods for creating an <see cref="IStockExchange"/>.

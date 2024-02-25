@@ -7,7 +7,7 @@ using Effanville.Common.Structure.WebAccess;
 
 using HtmlAgilityPack;
 
-namespace FinancialStructures.Stocks.Download
+namespace Effanville.FinancialStructures.Stocks.Download
 {
     public static class FundamentalDataDownloader
     {

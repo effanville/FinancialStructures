@@ -2,14 +2,14 @@ using System;
 using System.Linq;
 
 using Effanville.FinancialStructures.NamingStructures;
-using FinancialStructures.Stocks.HistoricalRepository;
-using FinancialStructures.Stocks.Implementation;
+using Effanville.FinancialStructures.Stocks.HistoricalRepository;
+using Effanville.FinancialStructures.Stocks.Implementation;
 
 using Nager.Date;
 
 using NUnit.Framework;
 
-namespace FinancialStructures.Stocks.Tests.HistoricalRepository;
+namespace Effanville.FinancialStructures.Stocks.Tests.HistoricalRepository;
 
 public class HistoricalMarketsTests
 {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Effanville.FinancialStructures.NamingStructures;
-using FinancialStructures.Stocks.Implementation;
+using Effanville.FinancialStructures.Stocks.Implementation;
 
-namespace FinancialStructures.Stocks.HistoricalRepository
+namespace Effanville.FinancialStructures.Stocks.HistoricalRepository
 {
     /// <summary>
     /// Simulates a Stock, and records all data with a timestamp to view evolutions.

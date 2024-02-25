@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 
 using Effanville.FinancialStructures.NamingStructures;
-using FinancialStructures.Stocks.Implementation;
+using Effanville.FinancialStructures.Stocks.Implementation;
 
-namespace FinancialStructures.Stocks
+namespace Effanville.FinancialStructures.Stocks
 {
     /// <summary>
     /// The contract for a Stock.

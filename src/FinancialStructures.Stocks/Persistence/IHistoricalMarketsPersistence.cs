@@ -1,9 +1,8 @@
 using Effanville.Common.Structure.Reporting;
-
 using Effanville.FinancialStructures.Persistence;
-using FinancialStructures.Stocks.HistoricalRepository;
+using Effanville.FinancialStructures.Stocks.HistoricalRepository;
 
-namespace FinancialStructures.Stocks.Persistence
+namespace Effanville.FinancialStructures.Stocks.Persistence
 {
     public interface IHistoricalMarketsPersistence
     {

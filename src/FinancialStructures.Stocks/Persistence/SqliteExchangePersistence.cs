@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Effanville.Common.Structure.Reporting;
-
 using Effanville.FinancialStructures.NamingStructures;
 using Effanville.FinancialStructures.Persistence;
-using FinancialStructures.Stocks.Implementation;
-using FinancialStructures.Stocks.Persistence.Database;
-using FinancialStructures.Stocks.Persistence.Database.Models;
+using Effanville.FinancialStructures.Stocks.Implementation;
+using Effanville.FinancialStructures.Stocks.Persistence.Database;
+using Effanville.FinancialStructures.Stocks.Persistence.Database.Models;
 
 using Microsoft.EntityFrameworkCore;
 
 using Nager.Date;
 
-namespace FinancialStructures.Stocks.Persistence
+namespace Effanville.FinancialStructures.Stocks.Persistence
 {
     public sealed class SqliteExchangePersistence : IExchangePersistence
     {

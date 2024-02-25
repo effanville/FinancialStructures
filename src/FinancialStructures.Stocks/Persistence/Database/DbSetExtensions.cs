@@ -1,13 +1,11 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace FinancialStructures.Stocks.Persistence.Database
+namespace Effanville.FinancialStructures.Stocks.Persistence.Database
 {
     public static class DbSetExtensions
     {

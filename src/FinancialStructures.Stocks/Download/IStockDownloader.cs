@@ -2,10 +2,9 @@ using System;
 using System.Threading.Tasks;
 
 using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.Stocks.Implementation;
 
-using FinancialStructures.Stocks.Implementation;
-
-namespace FinancialStructures.Stocks.Download
+namespace Effanville.FinancialStructures.Stocks.Download
 {
     public interface IStockDownloader
     {

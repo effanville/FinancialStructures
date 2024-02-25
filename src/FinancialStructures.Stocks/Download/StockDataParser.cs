@@ -4,11 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.Stocks.HistoricalRepository;
+using Effanville.FinancialStructures.Stocks.Implementation;
 
-using FinancialStructures.Stocks.HistoricalRepository;
-using FinancialStructures.Stocks.Implementation;
-
-namespace FinancialStructures.Stocks.Download
+namespace Effanville.FinancialStructures.Stocks.Download
 {
     public static class StockDataParser
     {

@@ -1,7 +1,7 @@
 using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.Persistence;
 
-namespace FinancialStructures.Stocks.Persistence
+namespace Effanville.FinancialStructures.Stocks.Persistence
 {
     public interface IExchangePersistence
     {

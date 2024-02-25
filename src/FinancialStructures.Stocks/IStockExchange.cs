@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
-using Effanville.Common.Structure.Reporting;
 
+using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.NamingStructures;
-using FinancialStructures.Stocks.Implementation;
+using Effanville.FinancialStructures.Stocks.Implementation;
+
 using Nager.Date;
 
-namespace FinancialStructures.Stocks
+namespace Effanville.FinancialStructures.Stocks
 {
     /// <summary>
     /// Contains the contract for a Stock exchange.
