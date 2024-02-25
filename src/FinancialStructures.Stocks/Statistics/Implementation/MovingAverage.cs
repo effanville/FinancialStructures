@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Common.Structure.MathLibrary.Vectors;
 
-namespace FinancialStructures.Stocks.Statistics.Implementation
+using Effanville.Common.Structure.MathLibrary.Vectors;
+
+namespace Effanville.FinancialStructures.Stocks.Statistics.Implementation
 {
     internal class MovingAverage : IStockStatistic
     {

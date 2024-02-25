@@ -9,18 +9,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\FinancialStructures\FinancialStructures.csproj" />
+    <ProjectReference Include="..\..\src\FinancialStructures\FinancialStructures.csproj" />
     <ProjectReference Include="..\..\src\FinancialStructures.Stocks\FinancialStructures.Stocks.csproj" />
   </ItemGroup>
-  <ItemGroup Condition="!Exists('..\..\Common\Common.Structure\Common.Structure.csproj') And Exists('..\..\..\FinancePortfolioDatabase.sln')" >
-	<ProjectReference Include="..\..\..\Common\Common.Structure\Common.Structure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup Condition="Exists('..\..\Common\Common.Structure\Common.Structure.csproj')">
-	<ProjectReference Include="..\..\Common\Common.Structure\Common.Structure.csproj" />
-  </ItemGroup>
-
-
+  <Choose>
+    <When Condition="Exists('..\..\..\FinancePortfolioDatabase.sln')">
+      <ItemGroup>
+        <ProjectReference Include="..\..\..\Common\src\Common.Structure\Common.Structure.csproj" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <ProjectReference Include="..\..\Common\src\Common.Structure\Common.Structure.csproj" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
   <ItemGroup>
     <None Update="ExampleConfigFiles\Exchanges.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -29,7 +32,4 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
-
-
 </Project>

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using FinancialStructures.NamingStructures;
-using FinancialStructures.Stocks.Implementation;
+using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Stocks.Implementation;
 
-namespace FinancialStructures.Stocks.HistoricalRepository
+namespace Effanville.FinancialStructures.Stocks.HistoricalRepository
 {
     /// <summary>
     /// Simulates a Stock, and records all data with a timestamp to view evolutions.
@@ -140,6 +140,36 @@ namespace FinancialStructures.Stocks.HistoricalRepository
             return name;
         }
 
+        public DateTime EarliestValidity() => Name.Keys.FirstOrDefault();
+
+        public NameData ValidName(DateTime snapshotTime)
+        {
+            KeyValuePair<DateTime, NameData> lastPrecedingSnapshot = new (DateTime.MinValue, null);
+            foreach (var name in Name)
+            {
+                if (name.Key < snapshotTime)
+                {
+                    lastPrecedingSnapshot = name;
+                }
+            }
+
+            return lastPrecedingSnapshot.Value;
+        }
+        
+        public StockFundamentalData ValidFundamentals(DateTime snapshotTime)
+        {
+            KeyValuePair<DateTime, StockFundamentalData> lastPrecedingSnapshot = new (DateTime.MinValue, null);
+            foreach (var kvp in Fundamentals)
+            {
+                if (kvp.Key < snapshotTime)
+                {
+                    lastPrecedingSnapshot = kvp;
+                }
+            }
+
+            return lastPrecedingSnapshot.Value;
+        }
+        
         public override string ToString() => $"[HistStock: {Name.Last().Value.Ric}, Values: {Valuations.Count}]";
     }
 }

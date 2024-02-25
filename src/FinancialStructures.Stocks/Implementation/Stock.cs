@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FinancialStructures.NamingStructures;
 
-namespace FinancialStructures.Stocks.Implementation
+using Effanville.FinancialStructures.NamingStructures;
+
+namespace Effanville.FinancialStructures.Stocks.Implementation
 {
     /// <summary>
     /// Simulates a Stock.
@@ -17,7 +18,7 @@ namespace FinancialStructures.Stocks.Implementation
         public NameData Name { get; set; }
 
         /// <inheritdoc/>
-        public StockFundamentalData Fundamentals { get; } = new();
+        public StockFundamentalData Fundamentals { get; set; } = new();
         
         /// <inheritdoc/>
         public List<StockDay> Valuations
@@ -33,9 +34,7 @@ namespace FinancialStructures.Stocks.Implementation
         /// <summary>
         /// Empty constructor.
         /// </summary>
-        public Stock()
-        {
-        }
+        public Stock() { }
 
         /// <summary>
         /// Constructor setting basic name information

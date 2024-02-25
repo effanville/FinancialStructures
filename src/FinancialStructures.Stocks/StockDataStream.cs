@@ -1,6 +1,6 @@
-﻿using FinancialStructures.Stocks.Implementation;
+﻿using Effanville.FinancialStructures.Stocks.Implementation;
 
-namespace FinancialStructures.Stocks
+namespace Effanville.FinancialStructures.Stocks
 {
     /// <summary>
     /// Possible streams of data to retrieve from a <see cref="Stock"/>.

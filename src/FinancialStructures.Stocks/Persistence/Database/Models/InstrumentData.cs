@@ -1,7 +1,6 @@
 using System;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace FinancialStructures.Stocks.Persistence.Database.Models
+namespace Effanville.FinancialStructures.Stocks.Persistence.Database.Models
 {
     public class InstrumentData
     {

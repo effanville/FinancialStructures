@@ -1,4 +1,4 @@
-namespace FinancialStructures.Stocks.Persistence.Database.Models
+namespace Effanville.FinancialStructures.Stocks.Persistence.Database.Models
 {
     public class DataSource
     {

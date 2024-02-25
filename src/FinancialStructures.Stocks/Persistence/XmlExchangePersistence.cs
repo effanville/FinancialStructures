@@ -2,16 +2,15 @@ using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
 
-using Common.Structure.FileAccess;
-using Common.Structure.Reporting;
-
-using FinancialStructures.Persistence;
-using FinancialStructures.Stocks.Implementation;
-using FinancialStructures.Stocks.Persistence.Xml;
+using Effanville.Common.Structure.FileAccess;
+using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.Persistence;
+using Effanville.FinancialStructures.Stocks.Implementation;
+using Effanville.FinancialStructures.Stocks.Persistence.Xml;
 
 using Nager.Date;
 
-namespace FinancialStructures.Stocks.Persistence
+namespace Effanville.FinancialStructures.Stocks.Persistence
 {
     public sealed class XmlExchangePersistence : IExchangePersistence
     {

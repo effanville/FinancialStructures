@@ -1,13 +1,12 @@
 using System.IO.Abstractions;
 using System.Threading.Tasks;
 
-using Common.Structure.Reporting;
-
-using FinancialStructures.Stocks.Persistence.Database;
+using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.Stocks.Persistence.Database;
 
 using NUnit.Framework;
 
-namespace FinancialStructures.Stocks.Tests
+namespace Effanville.FinancialStructures.Stocks.Tests
 {
     [TestFixture]
     public class Setup

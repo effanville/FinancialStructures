@@ -2,13 +2,12 @@
 using System.IO.Abstractions;
 using System.Linq;
 
-using Common.Structure.Reporting;
+using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.Persistence;
+using Effanville.FinancialStructures.Stocks.Implementation;
+using Effanville.FinancialStructures.Stocks.Persistence;
 
-using FinancialStructures.Persistence;
-using FinancialStructures.Stocks.Implementation;
-using FinancialStructures.Stocks.Persistence;
-
-namespace FinancialStructures.Stocks
+namespace Effanville.FinancialStructures.Stocks
 {
     /// <summary>
     /// Static factory methods for creating an <see cref="IStockExchange"/>.
@@ -60,7 +59,7 @@ namespace FinancialStructures.Stocks
             {
                 Stock inheritedStock = inheritedStockExchange.Stocks.FirstOrDefault(thing => thing.Name.Equals(stock.Name));
                 StockDay stockData = stock.GetData(time);
-                if (stockData != null)
+                if (stockData != null && inheritedStock != null)
                 {
                     inheritedStock.AddOrEditValue(stockData.Start, stockData.Open, stockData.High, stockData.Low, stockData.Close, stockData.Volume);
                 }

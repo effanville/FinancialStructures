@@ -1,29 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FinancialStructures.Stocks.Implementation
+namespace Effanville.FinancialStructures.Stocks.Implementation
 {
     public partial class Stock
     {
         /// <inheritdoc/>
         public DateTime EarliestTime()
-        {
-            if (Valuations.Count == 0)
-            {
-                return DateTime.MinValue;
-            }
-            return Valuations[0].Start;
-        }
+            => Valuations.Count == 0 
+                ? DateTime.MinValue 
+                : Valuations[0].Start;
 
         /// <inheritdoc/>
-        public DateTime LastTime()
-        {
-            if (Valuations.Count == 0)
-            {
-                return DateTime.MinValue;
-            }
-            return Valuations[Valuations.Count - 1].Start;
-        }
+        public DateTime LastTime() 
+            => Valuations.Count == 0 
+                ? DateTime.MinValue 
+                : Valuations[Valuations.Count - 1].Start;
 
         /// <summary>
         /// This retrieves the data on the date <paramref name="date"/> as well
@@ -42,10 +34,8 @@ namespace FinancialStructures.Stocks.Implementation
         }
 
         /// <inheritdoc/>
-        public decimal Value(DateTime date, StockDataStream data = StockDataStream.Close)
-        {
-            return GetDataAndSetAccessor(date)?.Value(data) ?? decimal.MinValue;
-        }
+        public decimal Value(DateTime date, StockDataStream data = StockDataStream.Close) 
+            => GetDataAndSetAccessor(date)?.Value(data) ?? decimal.MinValue;
 
         /// <inheritdoc/>
         public List<decimal> Values(DateTime date, int numberValuesBefore, int numberValuesAfter = 0, StockDataStream data = StockDataStream.Close)
@@ -64,10 +54,8 @@ namespace FinancialStructures.Stocks.Implementation
         /// Calculates the value of the stock at the index in the list of values.
         /// This does not set <see cref="_lastValueIndex"/>.
         /// </summary>
-        private decimal Value(int valuationIndex, StockDataStream data = StockDataStream.Close)
-        {
-            return Valuations[valuationIndex].Value(data);
-        }
+        private decimal Value(int valuationIndex, StockDataStream data = StockDataStream.Close) 
+            => Valuations[valuationIndex].Value(data);
 
         /// <summary>
         /// This retrieves the data at the time specified in <paramref name="date"/> as well

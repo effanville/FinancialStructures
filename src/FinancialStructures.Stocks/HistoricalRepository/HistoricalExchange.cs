@@ -4,7 +4,7 @@ using System.Linq;
 
 using Nager.Date;
 
-namespace FinancialStructures.Stocks.HistoricalRepository
+namespace Effanville.FinancialStructures.Stocks.HistoricalRepository
 {
     /// <summary>
     /// Simulates a stock exchange.

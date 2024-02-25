@@ -21,14 +21,20 @@
     <PropertyGroup>
         <Version>23.07.0</Version>
     </PropertyGroup>
-    <ItemGroup Condition="Exists('..\..\Common\Common.Structure\Common.Structure.csproj')">
-        <ProjectReference Include="..\..\Common\Common.Structure\Common.Structure.csproj"/>
-    </ItemGroup>
-    <ItemGroup Condition="Exists('..\..\Common\Common.Console\Common.Console.csproj')">
-        <ProjectReference Include="..\..\Common\Common.Console\Common.Console.csproj"/>
-    </ItemGroup>
-    <ItemGroup Condition="!Exists('..\..\Common\Common.Structure\Common.Structure.csproj') And Exists('..\..\..\FinancePortfolioDatabase.sln')">
-        <ProjectReference Include="..\..\..\Common\Common.Structure\Common.Structure.csproj"/>
+    <Choose>
+        <When Condition="Exists('..\..\..\FinancePortfolioDatabase.sln')">
+            <ItemGroup>
+                <ProjectReference Include="..\..\..\Common\src\Common.Structure\Common.Structure.csproj" />
+            </ItemGroup>
+        </When>
+        <Otherwise>
+            <ItemGroup>
+                <ProjectReference Include="..\..\Common\src\Common.Structure\Common.Structure.csproj" />
+            </ItemGroup>
+        </Otherwise>
+    </Choose>
+    <ItemGroup Condition="Exists('..\..\Common\src\Common.Console\Common.Console.csproj')">
+        <ProjectReference Include="..\..\Common\src\Common.Console\Common.Console.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
@@ -38,7 +44,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\FinancialStructures\FinancialStructures.csproj"/>
+        <ProjectReference Include="..\FinancialStructures\FinancialStructures.csproj"/>
         <ProjectReference Include="..\FinancialStructures.Stocks\FinancialStructures.Stocks.csproj"/>
     </ItemGroup>
 

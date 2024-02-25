@@ -4,13 +4,12 @@ using System.IO.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Common.Structure.Reporting;
-
-using FinancialStructures.Stocks.HistoricalRepository;
+using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.Stocks.HistoricalRepository;
 
 using NUnit.Framework;
 
-namespace FinancialStructures.Stocks.Tests.HistoricalRepository
+namespace Effanville.FinancialStructures.Stocks.Tests.HistoricalRepository
 {
     [TestFixture]
     public class HistoricalMarketsBuilderTests

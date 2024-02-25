@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
 
-using Common.Console;
-using Common.Console.Commands;
-using Common.Structure.Extensions;
-using Common.Structure.Reporting;
+using Effanville.Common.Console;
+using Effanville.Common.Console.Commands;
+using Effanville.Common.Structure.Extensions;
+using Effanville.Common.Structure.Reporting;
 
-namespace FinancialStructures.Stocks.Cli
+namespace Effanville.FinancialStructures.Stocks.Cli
 {
     internal static class Program
     {

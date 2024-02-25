@@ -1,12 +1,12 @@
 using System;
 using System.Threading.Tasks;
 
-using FinancialStructures.Stocks.Download;
-using FinancialStructures.Stocks.Implementation;
+using Effanville.FinancialStructures.Stocks.Download;
+using Effanville.FinancialStructures.Stocks.Implementation;
 
 using NUnit.Framework;
 
-namespace FinancialStructures.Stocks.Tests;
+namespace Effanville.FinancialStructures.Stocks.Tests;
 
 public sealed class DownloadTests
 {

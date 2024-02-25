@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using FinancialStructures.NamingStructures;
-using FinancialStructures.Stocks.Implementation;
+using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Stocks.Implementation;
 
-namespace FinancialStructures.Stocks
+namespace Effanville.FinancialStructures.Stocks
 {
     /// <summary>
     /// The contract for a Stock.

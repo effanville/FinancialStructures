@@ -1,7 +1,7 @@
 using System;
 using System.Xml.Serialization;
 
-namespace FinancialStructures.Stocks.Persistence.Xml
+namespace Effanville.FinancialStructures.Stocks.Persistence.Xml
 {
     [XmlType(TypeName = "StockDay")]
     public class XmlStockCandle

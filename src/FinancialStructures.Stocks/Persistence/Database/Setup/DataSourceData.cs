@@ -1,8 +1,7 @@
-using Common.Structure.Reporting;
+using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.Stocks.Persistence.Database.Models;
 
-using FinancialStructures.Stocks.Persistence.Database.Models;
-
-namespace FinancialStructures.Stocks.Persistence.Database.Setup
+namespace Effanville.FinancialStructures.Stocks.Persistence.Database.Setup
 {
     internal static class DataSourceData
     {

@@ -1,10 +1,10 @@
 using System.IO.Abstractions;
 
-using FinancialStructures.Stocks.Persistence.Database.Models;
+using Effanville.FinancialStructures.Stocks.Persistence.Database.Models;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace FinancialStructures.Stocks.Persistence.Database
+namespace Effanville.FinancialStructures.Stocks.Persistence.Database
 {
     public class StockExchangeDbContext : DbContext
     {

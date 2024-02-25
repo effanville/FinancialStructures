@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FinancialStructures.Stocks.Statistics.Implementation
+namespace Effanville.FinancialStructures.Stocks.Statistics.Implementation
 {
     internal class ADXStat : IStockStatistic
     {
