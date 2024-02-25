@@ -15,9 +15,20 @@ using Nager.Date;
 
 namespace Effanville.FinancialStructures.Stocks.Persistence
 {
-    public sealed class SqliteExchangePersistence : IExchangePersistence
-    {
+    public sealed class SqliteExchangePersistence : IPersistence<IStockExchange>
+    {        
         public IStockExchange Load(PersistenceOptions options, IReportLogger reportLogger = null)
+        {
+            StockExchange stockExchange = new StockExchange();
+            if (!Load(stockExchange, options, reportLogger))
+            {
+                return null;
+            }
+
+            return stockExchange;
+        }
+        
+        public bool Load(IStockExchange stockExchange, PersistenceOptions options, IReportLogger reportLogger = null)
         {
             if (options is not SqlitePersistenceOptions sqliteOptions)
             {
@@ -25,28 +36,31 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                     ReportType.Information,
                     ReportLocation.Loading.ToString(),
                     "Options for loading from Xml file not of correct type.");
-                return null;
+                return false;
+            }
+
+            if (stockExchange is not StockExchange stockExchangeImpl)
+            {
+                return false;
             }
 
             var dbContext = new DatabaseFactory().Create(sqliteOptions.FileSystem, sqliteOptions.FilePath);
 
             if (dbContext == null)
             {
-                return null;
+                return false;
             }
 
             var exchange = dbContext.Exchanges.First();
-            var stockExchange = new StockExchange
-            {
-                ExchangeIdentifier = exchange.ExchangeIdentifier,
-                Name = exchange.Name,
-                TimeZone = TimeZoneInfo.FindSystemTimeZoneById(exchange.TimeZone)
-            };
+            stockExchangeImpl.ExchangeIdentifier = exchange.ExchangeIdentifier;
+            stockExchangeImpl.Name = exchange.Name;
+            stockExchangeImpl.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(exchange.TimeZone);
             if (Enum.TryParse<CountryCode>(exchange.CountryCode, out var code))
             {
-                stockExchange.CountryDateCode = code;
+                stockExchangeImpl.CountryDateCode = code;
             }
 
+            stockExchangeImpl.Stocks = new List<Stock>();
             foreach (var dbStock in dbContext.Instruments.Include(x => x.Exchange))
             {
                 var stock = new Stock();
@@ -79,10 +93,10 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                     stock.Valuations.Add(stockDay);
                 }
 
-                stockExchange.Stocks.Add(stock);
+                stockExchangeImpl.Stocks.Add(stock);
             }
 
-            return stockExchange;
+            return true;
         }
 
         public bool Save(IStockExchange exchange, PersistenceOptions options, IReportLogger reportLogger = null)

@@ -24,8 +24,8 @@ namespace Effanville.FinancialStructures.Stocks
         /// </summary>
         public static IStockExchange Create(string filePath, IFileSystem fileSystem, IReportLogger logger)
         {
-            IExchangePersistence persistence = new XmlExchangePersistence();
-            IStockExchange exchange = persistence.Load(new XmlFilePersistenceOptions(filePath, fileSystem), logger);
+            IPersistence<IStockExchange> persistence = new ExchangePersistence();
+            IStockExchange exchange = persistence.Load(ExchangePersistence.CreateOptions(filePath, fileSystem), logger);
             if (!exchange.CheckValidity())
             {
                 _ = logger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, "Stock input data not suitable.");

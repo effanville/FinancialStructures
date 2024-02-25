@@ -12,9 +12,19 @@ using Nager.Date;
 
 namespace Effanville.FinancialStructures.Stocks.Persistence
 {
-    public sealed class XmlExchangePersistence : IExchangePersistence
-    {
+    public sealed class XmlExchangePersistence : IPersistence<IStockExchange>
+    {        
         public IStockExchange Load(PersistenceOptions options, IReportLogger reportLogger = null)
+        {
+            StockExchange stockExchange = new StockExchange();
+            if (!Load(stockExchange, options, reportLogger))
+            {
+                return null;
+            }
+
+            return stockExchange;
+        }
+        public bool Load(IStockExchange stockExchange, PersistenceOptions options, IReportLogger reportLogger = null)
         {
             if (options is not XmlFilePersistenceOptions xmlOptions)
             {
@@ -22,7 +32,7 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                     ReportType.Information,
                     ReportLocation.Loading.ToString(), 
                     "Options for loading from Xml file not of correct type.");
-                return null;
+                return false;
             }
 
             IFileSystem fileSystem = xmlOptions.FileSystem;
@@ -31,7 +41,12 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
             {
                 reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(), 
                     "Loaded Empty New StockExchange.");
-                return null;
+                return false;
+            }
+
+            if (stockExchange is not StockExchange exchange)
+            {
+                return false;
             }
 
             XmlStockExchange database = XmlFileAccess.ReadFromXmlFile<XmlStockExchange>(
@@ -44,20 +59,20 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                     ReportType.Information, 
                     ReportLocation.Loading.ToString(), 
                     $"Loaded StockExchange from {filePath}.");
-                var stockExchange = new StockExchange { Name = database.Name };
+                exchange.Name = database.Name;
                 if (Enum.TryParse<CountryCode>(database.CountryCode, out var code))
                 {
-                    stockExchange.CountryDateCode = code;
+                    exchange.CountryDateCode = code;
                 }
 
                 if (database.TimeZone != null)
                 {
-                    stockExchange.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(database.TimeZone);
+                    exchange.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(database.TimeZone);
                 }
 
                 if (database.Stocks != null)
                 {
-                    stockExchange.Stocks = new List<Stock>();
+                    exchange.Stocks = new List<Stock>();
                     foreach (var xmlStock in database.Stocks)
                     {
                         var stock = new Stock { Name = xmlStock.Name };
@@ -81,10 +96,10 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                     }
                 }
 
-                return stockExchange;
+                return true;
             }
 
-            return null;
+            return false;
         }
 
         public bool Save(IStockExchange exchange, PersistenceOptions options, IReportLogger reportLogger = null)
