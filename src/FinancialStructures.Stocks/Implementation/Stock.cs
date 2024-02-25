@@ -48,7 +48,7 @@ namespace Effanville.FinancialStructures.Stocks.Implementation
             };
         }
 
-        private void AddValue(StockDay candle) => Valuations.Add(candle);
+        public void AddValue(StockDay candle) => Valuations.Add(candle);
 
         /// <inheritdoc/>
         public void AddValue(DateTime time, decimal open, decimal high, decimal low, decimal close, decimal volume) 
