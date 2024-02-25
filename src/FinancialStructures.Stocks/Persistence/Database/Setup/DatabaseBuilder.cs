@@ -65,6 +65,7 @@ namespace FinancialStructures.Stocks.Persistence.Database.Setup
                                    && instrument.Ric == otherEntity.Ric
                                    && instrument.ValidFrom == otherEntity.ValidFrom);
             }
+            _ = _context.SaveChanges();
 
             if (fundamentalData != null)
             {
@@ -73,6 +74,7 @@ namespace FinancialStructures.Stocks.Persistence.Database.Setup
                     otherEntity => fundamentalData.InstrumentId == otherEntity.InstrumentId
                                    && fundamentalData.ValidFrom == otherEntity.ValidFrom);
             }
+            _ = _context.SaveChanges();
 
             if (priceData != null)
             {
