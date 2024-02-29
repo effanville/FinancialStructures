@@ -73,11 +73,13 @@ namespace Effanville.FinancialStructures.Database.Implementation
             void AddAccount<T>(Account account, T newObject, Dictionary<TwoName, T> currentItems, ReaderWriterLockSlim lockObject)
                 where T : ValueList
             {
-                newObject.DataEdit += OnPortfolioChanged;
                 lockObject.EnterWriteLock();
                 try
                 {
-                    currentItems.Add(newObject.Names.ToTwoName(), newObject);
+                    if (currentItems.TryAdd(newObject.Names.ToTwoName(), newObject))
+                    {
+                        newObject.DataEdit += OnPortfolioChanged;
+                    }
                 }
                 finally{lockObject.ExitWriteLock();}
 
