@@ -139,7 +139,12 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public bool TryDeleteTradeData(DateTime date, IReportLogger reportLogger = null)
         {
-            bool edited = SecurityTrades.RemoveAll(trade => trade.Day.Equals(date)) != 0;
+            bool edited;
+            lock (TradesLock)
+            {
+                edited = SecurityTrades.RemoveAll(trade => trade.Day.Equals(date)) != 0;
+            }
+                
             EnsureDataConsistency(reportLogger);
             if (edited)
             {
@@ -184,6 +189,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             RemoveEventListening();
             CleanData();
 
+            var trades = Trades.ToList();
             // When a trade is present, number of shares bought/sold should correspond to share number difference before
             // and after.
             // Investment on that day should correspond also.
@@ -193,7 +199,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             for (int index = 0; index < Shares.Count(); index++)
             {
                 DailyValuation shareValue = Shares[index];
-                if (!SecurityTrades.Any(trade => trade.Day.Equals(shareValue.Day)))
+                if (!trades.Any(trade => trade.Day.Equals(shareValue.Day)))
                 {
                     if (Shares.TryDeleteValue(shareValue.Day, reportLogger))
                     {
@@ -204,8 +210,8 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
 
             // Cycle through all trades as trade can impact later share numbers.
             // Requires trades to be sorted in date order. (this should be a no-op)
-            SecurityTrades.Sort();
-            foreach (SecurityTrade trade in SecurityTrades)
+            trades.Sort();
+            foreach (SecurityTrade trade in trades)
             {
                 if (trade != null)
                 {
@@ -244,7 +250,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             for (int index = 0; index < Investments.Count(); index++)
             {
                 DailyValuation investmentValue = Investments[index];
-                if (!SecurityTrades.Any(trade => trade.Day.Equals(investmentValue.Day)))
+                if (!trades.Any(trade => trade.Day.Equals(investmentValue.Day)))
                 {
                     if (Investments.TryDeleteValue(investmentValue.Day, reportLogger))
                     {

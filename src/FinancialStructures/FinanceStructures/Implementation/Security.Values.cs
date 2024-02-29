@@ -19,7 +19,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             _ = UnitPrice.TryGetValue(day, out decimal unitPrice);
             _ = Shares.TryGetValue(day, out decimal shares);
             _ = Investments.TryGetValue(day, out decimal invest);
-            SecurityTrade trade = SecurityTrades.Where(t => t.Day.Equals(day)).FirstOrDefault();
+            SecurityTrade trade = Trades.FirstOrDefault(t => t.Day.Equals(day));
             return new SecurityDayData(day, unitPrice, shares, invest, trade);
         }
 

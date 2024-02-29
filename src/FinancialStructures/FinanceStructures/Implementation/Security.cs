@@ -117,7 +117,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public override IValueList Copy()
         {
-            return new Security(Names, UnitPrice, Shares, Investments, SecurityTrades);
+            return new Security(Names, UnitPrice, Shares, Investments, Trades.ToList());
         }
 
         /// <inheritdoc/>
