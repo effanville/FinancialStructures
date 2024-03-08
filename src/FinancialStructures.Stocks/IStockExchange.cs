@@ -40,7 +40,9 @@ namespace Effanville.FinancialStructures.Stocks
         /// The stocks that are part of this exchange.
         /// </summary>
         List<Stock> Stocks { get; }
-
+        
+        TimeOnly ExchangeOpen { get; set; } 
+        TimeOnly ExchangeClose { get; set; }
         DateTime ExchangeOpenInUtc(DateTime date);
 
         DateTime ExchangeCloseInUtc(DateTime date);
