@@ -1,10 +1,10 @@
 using System.IO.Abstractions;
 
-using FinancialStructures.Stocks.Persistence.Models;
+using Effanville.FinancialStructures.Stocks.Persistence.Database.Models;
 
 using Microsoft.EntityFrameworkCore;
 
-namespace FinancialStructures.Stocks.Persistence.Database
+namespace Effanville.FinancialStructures.Stocks.Persistence.Database
 {
     public class StockExchangeDbContext : DbContext
     {
@@ -29,14 +29,28 @@ namespace FinancialStructures.Stocks.Persistence.Database
                 .HasIndex(b => b.Name)
                 .IsUnique();
             _ = modelBuilder.Entity<Instrument>()
-                .HasIndex(b => b.Ric)
+                .HasIndex(b => new {b.CoreInstrumentId, b.Ric, b.ValidFrom})
                 .IsUnique();
+            _ = modelBuilder.Entity<Instrument>()
+                .HasIndex(b => b.CoreInstrumentId);
             _ = modelBuilder.Entity<Exchange>()
                 .HasIndex(b => b.ExchangeIdentifier)
                 .IsUnique();
             _ = modelBuilder.Entity<InstrumentData>()
-                .HasIndex(b => new { b.InstrumentId, b.SnapshotTime })
+                .HasIndex(b => new { b.InstrumentId, b.ValidFrom })
                 .IsUnique();
+            _ = modelBuilder.Entity<InstrumentData>()
+                .HasOne(typeof(Instrument))
+                .WithMany()
+                .HasForeignKey("CoreInstrumentId");
+            _ = modelBuilder.Entity<InstrumentPriceData>()
+                .HasIndex(b => new { b.InstrumentId, b.StartTime, b.EndTime })
+                .IsUnique();
+            _ = modelBuilder.Entity<InstrumentPriceData>()
+                .HasOne(typeof(Instrument))
+                .WithMany()
+                .HasForeignKey("CoreInstrumentId");
+            
         }
     }
 }

@@ -2,49 +2,35 @@
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
-using Common.Structure.Reporting;
-using FinancialStructures.Stocks.Download;
-using FinancialStructures.NamingStructures;
+
+using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Stocks.Download;
+
 using Nager.Date;
 
-namespace FinancialStructures.Stocks.Implementation
+namespace Effanville.FinancialStructures.Stocks.Implementation
 {
     /// <summary>
     /// Simulates a stock exchange.
     /// </summary>
     public class StockExchange : IStockExchange
-    {       
+    {
         /// <inheritdoc/>
-        public string ExchangeIdentifier
-        {
-            get;
-            set;
-        }
-        
-        /// <inheritdoc/>
-        public string Name
-        {
-            get;
-            set;
-        }
+        public string ExchangeIdentifier { get; set; }
 
         /// <inheritdoc/>
-        public TimeZoneInfo TimeZone
-        {
-            get;
-            set;
-        } = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+        public string Name { get; set; }
 
         /// <inheritdoc/>
-        public CountryCode CountryDateCode
-        {
-            get;
-            set;
-        } = CountryCode.GB;
+        public TimeZoneInfo TimeZone { get; set; } = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
 
-        private TimeOnly ExchangeOpen => new TimeOnly(8, 0, 0);
+        /// <inheritdoc/>
+        public CountryCode CountryDateCode { get; set; } = CountryCode.GB;
 
-        private TimeOnly ExchangeClose => new TimeOnly(16, 30, 0);
+        public TimeOnly ExchangeOpen { get; set; } = new TimeOnly(8, 0, 0);
+
+        public TimeOnly ExchangeClose { get; set; } = new TimeOnly(16, 30, 0);
 
         public DateTime ExchangeOpenInUtc(DateTime date)
         {
@@ -177,7 +163,7 @@ namespace FinancialStructures.Stocks.Implementation
 
             return true;
         }
-        
+
         /// <inheritdoc/>
         public async Task Download(DateTime startDate, DateTime endDate, IReportLogger reportLogger = null)
         {
@@ -186,7 +172,8 @@ namespace FinancialStructures.Stocks.Implementation
                 var downloader = new YahooDownloader();
                 IStock tempDataHolder = null;
                 string code = downloader.GetFinancialCode(stock.Name.Url);
-                if (await downloader.TryGetFullPriceHistory(code, startDate, endDate, TimeSpan.FromDays(1), value => tempDataHolder = value, reportLogger))
+                if (await downloader.TryGetFullPriceHistory(code, startDate, endDate, TimeSpan.FromDays(1),
+                        value => tempDataHolder = value, reportLogger))
                 {
                     stock.Valuations = tempDataHolder.Valuations;
                 }
@@ -203,17 +190,16 @@ namespace FinancialStructures.Stocks.Implementation
                 string code = downloader.GetFinancialCode(stock.Name.Url);
                 if (await downloader.TryGetLatestPriceData(code, value => stockDay = value, reportLogger))
                 {
-                    stock.AddValue(stockDay.Start, stockDay.Open, stockDay.High, stockDay.Low, stockDay.Close, stockDay.Volume);
+                    stock.AddValue(stockDay.Start, stockDay.Open, stockDay.High, stockDay.Low, stockDay.Close,
+                        stockDay.Volume);
                     stock.Sort();
                 }
             }
         }
 
         /// <inheritdoc/>
-        public void Configure(string stockFilePath, IReportLogger logger = null)
-        {
-            Configure(stockFilePath, new FileSystem(), logger);
-        }
+        public void Configure(string stockFilePath, IReportLogger logger = null) 
+            => Configure(stockFilePath, new FileSystem(), logger);
 
         /// <inheritdoc/>
         public void Configure(string stockFilePath, IFileSystem fileSystem, IReportLogger logger = null)
@@ -225,12 +211,14 @@ namespace FinancialStructures.Stocks.Implementation
             }
             catch (Exception ex)
             {
-                logger?.Error(ReportLocation.AddingData.ToString(), $"Failed to read from file located at {stockFilePath}: {ex.Message}.");
+                logger?.Error(ReportLocation.AddingData.ToString(),
+                    $"Failed to read from file located at {stockFilePath}: {ex.Message}.");
             }
 
             if (fileContents.Length == 0)
             {
-                logger?.Error(ReportLocation.AddingData.ToString(), "Nothing in file selected, but expected stock company, name, url data.");
+                logger?.Error(ReportLocation.AddingData.ToString(),
+                    "Nothing in file selected, but expected stock company, name, url data.");
                 return;
             }
 
@@ -240,7 +228,8 @@ namespace FinancialStructures.Stocks.Implementation
                 AddStock(inputs, logger);
             }
 
-            logger?.Log(ReportType.Information, ReportLocation.AddingData.ToString(), $"Configured StockExchange from file {stockFilePath}.");
+            logger?.Log(ReportType.Information, ReportLocation.AddingData.ToString(),
+                $"Configured StockExchange from file {stockFilePath}.");
         }
 
         private void AddStock(string[] parameters, IReportLogger logger = null)

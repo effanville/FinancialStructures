@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
 
-using Common.Structure.Reporting;
+using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.Stocks.Persistence.Database.Models;
 
-using FinancialStructures.Stocks.Persistence.Models;
-
-namespace FinancialStructures.Stocks.Persistence.Database.Setup
+namespace Effanville.FinancialStructures.Stocks.Persistence.Database.Setup
 {
     public static class ExchangeData
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace FinancialStructures.Stocks.Implementation
+namespace Effanville.FinancialStructures.Stocks.Implementation
 {
     /// <summary>
     /// Class containing all data pertaining to a stock.
@@ -10,20 +10,12 @@ namespace FinancialStructures.Stocks.Implementation
         /// <summary>
         /// The start time of the interval this data is about.
         /// </summary>
-        public DateTime Start
-        {
-            get;
-            set;
-        }
+        public DateTime Start { get; set; }
 
         /// <summary>
         /// The length of time of the interval this data is about.
         /// </summary>
-        public TimeSpan Duration
-        {
-            get;
-            set;
-        } = TimeSpan.FromHours(8.5);
+        public TimeSpan Duration { get; set; } = TimeSpan.FromHours(8.5);
 
         /// <summary>
         /// The ending time of the interval this data is about.
@@ -33,54 +25,32 @@ namespace FinancialStructures.Stocks.Implementation
         /// <summary>
         /// The opening price in the interval.
         /// </summary>
-        public decimal Open
-        {
-            get;
-            set;
-        }
+        public decimal Open { get; set; }
 
         /// <summary>
         /// The high value in this interval
         /// </summary>
-        public decimal High
-        {
-            get;
-            set;
-        }
+        public decimal High { get; set; }
 
         /// <summary>
         /// The low value in this interval.
         /// </summary>
-        public decimal Low
-        {
-            get;
-            set;
-        }
+        public decimal Low { get; set; }
 
         /// <summary>
         /// The closing value in this interval.
         /// </summary>
-        public decimal Close
-        {
-            get;
-            set;
-        }
+        public decimal Close { get; set; }
 
         /// <summary>
         /// The trading volume experienced in the interval.
         /// </summary>
-        public decimal Volume
-        {
-            get;
-            set;
-        }
+        public decimal Volume { get; set; }
 
         /// <summary>
         /// Default constructor setting nothing.
         /// </summary>
-        public StockDay()
-        {
-        }
+        public StockDay() { }
 
         /// <summary>
         /// Constructor setting all values.
@@ -106,11 +76,10 @@ namespace FinancialStructures.Stocks.Implementation
         }
 
         /// <summary>
-        /// Get the relevant value based on the datastream.
+        /// Get the relevant value based on the <see cref="StockDataStream"/>.
         /// </summary>
-        public decimal Value(StockDataStream data)
-        {
-            return data switch
+        public decimal Value(StockDataStream data) 
+            => data switch
             {
                 StockDataStream.Open => Open,
                 StockDataStream.High => High,
@@ -121,13 +90,10 @@ namespace FinancialStructures.Stocks.Implementation
                 StockDataStream.Volume => Volume,
                 _ => Close,
             };
-        }
 
         /// <inheritdoc/>
         public override string ToString()
-        {
-            return $"{Start}-O{Open}-H{High}-L{Low}-C{Close}-V{Volume}";
-        }
+            => $"[{Start:yyyy-MM-ddThh:mm:ss.fff}]-O{Open}-H{High}-L{Low}-C{Close}-V{Volume}";
 
         /// <inheritdoc/>
         public int CompareTo(StockDay obj)
@@ -143,10 +109,7 @@ namespace FinancialStructures.Stocks.Implementation
         /// <summary>
         /// Copy only the open value into a new StockDay.
         /// </summary>
-        /// <returns></returns>
-        public StockDay CopyAsOpenOnly()
-        {
-            return new StockDay(Start, Open, 0, 0, 0, 0, Duration);
-        }
+        public StockDay CopyAsOpenOnly() 
+            => new(Start, Open, 0, 0, 0, 0, Duration);
     }
 }

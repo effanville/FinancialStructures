@@ -2,53 +2,77 @@ using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
 
-using Common.Structure.FileAccess;
-using Common.Structure.Reporting;
-
-using FinancialStructures.Persistence;
-using FinancialStructures.Stocks.Implementation;
-using FinancialStructures.Stocks.Persistence.Xml;
+using Effanville.Common.Structure.FileAccess;
+using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.Persistence;
+using Effanville.FinancialStructures.Stocks.Implementation;
+using Effanville.FinancialStructures.Stocks.Persistence.Xml;
 
 using Nager.Date;
 
-namespace FinancialStructures.Stocks.Persistence
+namespace Effanville.FinancialStructures.Stocks.Persistence
 {
-    public sealed class XmlExchangePersistence : IExchangePersistence
-    {
+    public sealed class XmlExchangePersistence : IPersistence<IStockExchange>
+    {        
         public IStockExchange Load(PersistenceOptions options, IReportLogger reportLogger = null)
+        {
+            StockExchange stockExchange = new StockExchange();
+            if (!Load(stockExchange, options, reportLogger))
+            {
+                return null;
+            }
+
+            return stockExchange;
+        }
+        public bool Load(IStockExchange stockExchange, PersistenceOptions options, IReportLogger reportLogger = null)
         {
             if (options is not XmlFilePersistenceOptions xmlOptions)
             {
-                reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(), "Options for loading from Xml file not of correct type.");
-                return null;
+                reportLogger?.Log(
+                    ReportType.Information,
+                    ReportLocation.Loading.ToString(), 
+                    "Options for loading from Xml file not of correct type.");
+                return false;
             }
 
             IFileSystem fileSystem = xmlOptions.FileSystem;
             string filePath = xmlOptions.FilePath;
             if (!fileSystem.File.Exists(filePath))
             {
-                reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(), "Loaded Empty New StockExchange.");
-                return null;
+                reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(), 
+                    "Loaded Empty New StockExchange.");
+                return false;
             }
 
-            XmlStockExchange database = XmlFileAccess.ReadFromXmlFile<XmlStockExchange>(fileSystem, filePath, out string error);
+            if (stockExchange is not StockExchange exchange)
+            {
+                return false;
+            }
+
+            XmlStockExchange database = XmlFileAccess.ReadFromXmlFile<XmlStockExchange>(
+                fileSystem, 
+                filePath, 
+                out _);
             if (database != null)
             {
-                reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(), $"Loaded StockExchange from {filePath}.");
-                var stockExchange = new StockExchange { Name = database.Name };
+                reportLogger?.Log(
+                    ReportType.Information, 
+                    ReportLocation.Loading.ToString(), 
+                    $"Loaded StockExchange from {filePath}.");
+                exchange.Name = database.Name;
                 if (Enum.TryParse<CountryCode>(database.CountryCode, out var code))
                 {
-                    stockExchange.CountryDateCode = code;
+                    exchange.CountryDateCode = code;
                 }
 
                 if (database.TimeZone != null)
                 {
-                    stockExchange.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(database.TimeZone);
+                    exchange.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(database.TimeZone);
                 }
 
                 if (database.Stocks != null)
                 {
-                    stockExchange.Stocks = new List<Stock>();
+                    exchange.Stocks = new List<Stock>();
                     foreach (var xmlStock in database.Stocks)
                     {
                         var stock = new Stock { Name = xmlStock.Name };
@@ -72,26 +96,32 @@ namespace FinancialStructures.Stocks.Persistence
                     }
                 }
 
-                return stockExchange;
+                return true;
             }
 
-            return null;
+            return false;
         }
 
-        public void Save(IStockExchange exchange, PersistenceOptions options, IReportLogger reportLogger = null)
+        public bool Save(IStockExchange exchange, PersistenceOptions options, IReportLogger reportLogger = null)
         {
             if (options is not XmlFilePersistenceOptions xmlOptions)
             {
-                reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(), "Options for loading from Xml file not of correct type.");
-                return;
+                reportLogger?.Log(
+                    ReportType.Information,
+                    ReportLocation.Loading.ToString(), 
+                    "Options for loading from Xml file not of correct type.");
+                return false;
             }
 
             IFileSystem fileSystem = xmlOptions.FileSystem;
             string filePath = xmlOptions.FilePath;
             if (exchange is not StockExchange stockExchange)
             {
-                reportLogger?.Log(ReportType.Error, ReportLocation.Saving.ToString(), "Attempted to save a StockExchange that was not of the correct type.");
-                return;
+                reportLogger?.Log(
+                    ReportType.Error, 
+                    ReportLocation.Saving.ToString(), 
+                    "Attempted to save a StockExchange that was not of the correct type.");
+                return false;
             }
 
             var xmlStockExchange = new XmlStockExchange
@@ -133,7 +163,11 @@ namespace FinancialStructures.Stocks.Persistence
                 reportLogger?.Log(ReportType.Error, ReportLocation.Saving.ToString(), error);
             }
 
-            reportLogger?.Log(ReportType.Information, ReportLocation.Saving.ToString(), $"Saved StockExchange at {filePath}");
+            reportLogger?.Log(
+                ReportType.Information,
+                ReportLocation.Saving.ToString(), 
+                $"Saved StockExchange at {filePath}");
+            return true;
         }
     }
 }

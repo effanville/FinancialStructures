@@ -1,8 +1,8 @@
 using System.IO.Abstractions;
 
-using FinancialStructures.Stocks.Persistence.Database.Setup;
+using Effanville.FinancialStructures.Stocks.Persistence.Database.Setup;
 
-namespace FinancialStructures.Stocks.Persistence.Database
+namespace Effanville.FinancialStructures.Stocks.Persistence.Database
 {
     public class DatabaseFactory : IDatabaseFactory
     {

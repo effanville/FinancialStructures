@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
-namespace FinancialStructures.Stocks.Persistence.Xml
+namespace Effanville.FinancialStructures.Stocks.Persistence.Xml
 {
     /// <summary>
     /// Provides the class for serializing the stock exchange into Xml.

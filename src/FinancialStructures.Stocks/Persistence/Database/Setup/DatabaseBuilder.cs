@@ -1,13 +1,10 @@
-using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
-using System.Threading.Tasks;
 
-using Common.Structure.Reporting;
+using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.Stocks.Persistence.Database.Models;
 
-using FinancialStructures.Stocks.Persistence.Models;
-
-namespace FinancialStructures.Stocks.Persistence.Database.Setup
+namespace Effanville.FinancialStructures.Stocks.Persistence.Database.Setup
 {
     public sealed class DatabaseBuilder
     {
@@ -40,72 +37,104 @@ namespace FinancialStructures.Stocks.Persistence.Database.Setup
             return this;
         }
 
-        public DatabaseBuilder WithExchanges(IList<Exchange> exchanges, IReportLogger logger = null)
+        public DatabaseBuilder WithExchanges(IEnumerable<Exchange> exchanges, IReportLogger logger = null)
         {
-            _context.Exchanges.AddRange(exchanges);
-            int numberChanges = _context.SaveChanges();
-            return this;
-        }
+            foreach (var exchange in exchanges)
+            {
+                _context.Exchanges.AddIfNotExists(
+                    exchange,
+                    otherEntity => exchange.ExchangeIdentifier == otherEntity.ExchangeIdentifier);
+            }
 
-        public DatabaseBuilder WithInstrumentsFromFile(string stockFilePath, IFileSystem fileSystem,
-            IReportLogger logger = null)
-        {
-            _ = InstrumentLoader.ConfigureInstruments(_context, stockFilePath, fileSystem, logger);
-            return this;
-        }
-        
-        public DatabaseBuilder WithInstrument(Instrument instrument, InstrumentData instrumentData, IList<InstrumentPriceData> instrumentPriceData, IReportLogger logger = null)
-        {
-            _context.Instruments.Add(instrument);
-            
             _ = _context.SaveChanges();
-            var instrumentId = instrument.Id;
-            if(instrumentData != null)
-            {
-                instrumentData.InstrumentId = instrumentId;
-                _context.InstrumentData.Add(instrumentData);
-            }
-
-            foreach (var data in instrumentPriceData)
-            {
-                data.InstrumentId = instrumentId;
-            }
-
-            _context.InstrumentPrices.AddRange(instrumentPriceData);
-            int numberChanges = _context.SaveChanges();
-            return this;
-        }
-        
-        public async Task<DatabaseBuilder> WithIndexInstrumentsFromFTSE(string indexName, IReportLogger logger = null)
-        {
-            string[] instruments = InstrumentLoader.GetIndexInstrumentsFromFTSE(indexName);
-            _ = InstrumentLoader.ConfigureInstruments(_context, instruments, out _, out _, out _, logger);
-            _ = await InstrumentDataLoader.InsertInstrumentData(_context, indexName, instruments, logger);
             return this;
         }
 
-        public async Task<DatabaseBuilder> WithInstrumentPriceData(DateTime startDate, DateTime endDate,
+        public DatabaseBuilder WithInstrument(
+            Instrument instrument,
+            InstrumentData fundamentalData,
+            IEnumerable<InstrumentPriceData> priceData,
             IReportLogger logger = null)
         {
-            await InstrumentPriceDataLoader.Populate(_context, startDate, endDate, logger);
+            if (instrument != null)
+            {
+                _context.Instruments.AddIfNotExists(
+                    instrument,
+                    otherEntity => instrument.CoreInstrumentId == otherEntity.CoreInstrumentId
+                                   && instrument.Ric == otherEntity.Ric
+                                   && instrument.ValidFrom == otherEntity.ValidFrom);
+            }
+            _ = _context.SaveChanges();
+
+            if (fundamentalData != null)
+            {
+                _context.InstrumentData.AddIfNotExists(
+                    fundamentalData,
+                    otherEntity => fundamentalData.InstrumentId == otherEntity.InstrumentId
+                                   && fundamentalData.ValidFrom == otherEntity.ValidFrom);
+            }
+            _ = _context.SaveChanges();
+
+            if (priceData != null)
+            {
+                foreach (InstrumentPriceData data in priceData)
+                {
+                    _context.InstrumentPrices.AddIfNotExists(
+                        data,
+                        otherEntity => data.InstrumentId == otherEntity.InstrumentId
+                                       && data.StartTime == otherEntity.StartTime
+                                       && data.EndTime == otherEntity.EndTime);
+                }
+            }
+
+            _ = _context.SaveChanges();
             return this;
         }
 
-        public async Task<DatabaseBuilder> UpdateIndexInstrumentsFromFTSE(string indexName, IReportLogger logger = null)
+        public DatabaseBuilder WithInstrumentHistory(
+            IEnumerable<Instrument> instruments,
+            IEnumerable<InstrumentData> fundamentalData,
+            IEnumerable<InstrumentPriceData> priceData,
+            IReportLogger logger = null)
         {
-            string[] instruments = InstrumentLoader.GetIndexInstrumentsFromFTSE(indexName);
-            _ = InstrumentLoader.ConfigureInstruments(
-                _context,
-                instruments,
-                out var newInstrumentData,
-                out var existingInstrumentData,
-                out var removedInstruments,
-                logger);
+            if (instruments != null)
+            {
+                foreach (var data in instruments)
+                {
+                    _context.Instruments.AddIfNotExists(
+                        data,
+                        otherEntity => data.CoreInstrumentId == otherEntity.CoreInstrumentId
+                                       && data.Ric == otherEntity.Ric
+                                       && data.ValidFrom == otherEntity.ValidFrom);
+                }
+            }
 
-            _ = await InstrumentDataLoader.InsertInstrumentData(_context, indexName, newInstrumentData, logger);
-            _ = await InstrumentDataLoader.UpdateInstrumentData(_context, existingInstrumentData, removedInstruments,
-                logger);
+            _ = _context.SaveChanges();
+            if (fundamentalData != null)
+            {
+                foreach (var data in fundamentalData)
+                {
+                    _context.InstrumentData.AddIfNotExists(
+                        data,
+                        otherEntity => data.InstrumentId == otherEntity.InstrumentId
+                                       && data.ValidFrom == otherEntity.ValidFrom);
+                }
+            }
 
+            _ = _context.SaveChanges();
+            if (priceData != null)
+            {
+                foreach (InstrumentPriceData data in priceData)
+                {
+                    _context.InstrumentPrices.AddIfNotExists(
+                        data,
+                        otherEntity => data.InstrumentId == otherEntity.InstrumentId
+                                       && data.StartTime == otherEntity.StartTime
+                                       && data.EndTime == otherEntity.EndTime);
+                }
+            }
+
+            _ = _context.SaveChanges();
             return this;
         }
     }

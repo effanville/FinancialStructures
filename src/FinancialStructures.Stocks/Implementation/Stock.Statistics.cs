@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Common.Structure.MathLibrary.Vectors;
 
-namespace FinancialStructures.Stocks.Implementation
+using Effanville.Common.Structure.MathLibrary.Vectors;
+
+namespace Effanville.FinancialStructures.Stocks.Implementation
 {
     public partial class Stock
     {
@@ -59,9 +60,9 @@ namespace FinancialStructures.Stocks.Implementation
 
         private decimal DMPlus(DateTime date)
         {
-            if (Value(date, StockDataStream.High) - Value(LastValueIndex - 1, StockDataStream.High) > Value(date, StockDataStream.Low) - Value(LastValueIndex - 1, StockDataStream.Low))
+            if (Value(date, StockDataStream.High) - Value(_lastValueIndex - 1, StockDataStream.High) > Value(date, StockDataStream.Low) - Value(_lastValueIndex - 1, StockDataStream.Low))
             {
-                return Math.Max(Value(date, StockDataStream.High) - Value(LastValueIndex - 1, StockDataStream.High), 0.0m);
+                return Math.Max(Value(date, StockDataStream.High) - Value(_lastValueIndex - 1, StockDataStream.High), 0.0m);
             }
 
             return 0.0m;
@@ -69,9 +70,9 @@ namespace FinancialStructures.Stocks.Implementation
 
         private decimal DMMinus(DateTime date)
         {
-            if (Value(date, StockDataStream.High) - Value(LastValueIndex - 1, StockDataStream.High) <= Value(date, StockDataStream.Low) - Value(LastValueIndex - 1, StockDataStream.Low))
+            if (Value(date, StockDataStream.High) - Value(_lastValueIndex - 1, StockDataStream.High) <= Value(date, StockDataStream.Low) - Value(_lastValueIndex - 1, StockDataStream.Low))
             {
-                return Math.Max(Value(date, StockDataStream.Low) - Value(LastValueIndex - 1, StockDataStream.Low), 0.0m);
+                return Math.Max(Value(date, StockDataStream.Low) - Value(_lastValueIndex - 1, StockDataStream.Low), 0.0m);
             }
 
             return 0.0m;
@@ -79,7 +80,7 @@ namespace FinancialStructures.Stocks.Implementation
 
         private decimal TR(DateTime date)
         {
-            return Math.Max(Value(date, StockDataStream.High), Value(LastValueIndex - 1, StockDataStream.Close)) - Math.Min(Value(LastValueIndex, StockDataStream.Low), Value(LastValueIndex - 1, StockDataStream.Close));
+            return Math.Max(Value(date, StockDataStream.High), Value(_lastValueIndex - 1, StockDataStream.Close)) - Math.Min(Value(_lastValueIndex, StockDataStream.Low), Value(_lastValueIndex - 1, StockDataStream.Close));
         }
 
         private decimal DIPlus(DateTime date)

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace FinancialStructures.Stocks.Statistics.Implementation
+namespace Effanville.FinancialStructures.Stocks.Statistics.Implementation
 {
     internal class PreviousNDayValue : IStockStatistic
     {

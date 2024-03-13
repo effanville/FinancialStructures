@@ -2,13 +2,12 @@
 using System.IO.Abstractions;
 using System.Linq;
 
-using Common.Structure.Reporting;
+using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.Persistence;
+using Effanville.FinancialStructures.Stocks.Implementation;
+using Effanville.FinancialStructures.Stocks.Persistence;
 
-using FinancialStructures.Persistence;
-using FinancialStructures.Stocks.Implementation;
-using FinancialStructures.Stocks.Persistence;
-
-namespace FinancialStructures.Stocks
+namespace Effanville.FinancialStructures.Stocks
 {
     /// <summary>
     /// Static factory methods for creating an <see cref="IStockExchange"/>.
@@ -18,18 +17,15 @@ namespace FinancialStructures.Stocks
         /// <summary>
         /// Create an empty stock exchange.
         /// </summary>
-        public static IStockExchange Create()
-        {
-            return new StockExchange();
-        }
+        public static IStockExchange Create() => new StockExchange();
 
         /// <summary>
         /// Create a stock exchange by loading from file.
         /// </summary>
         public static IStockExchange Create(string filePath, IFileSystem fileSystem, IReportLogger logger)
         {
-            IExchangePersistence persistence = new XmlExchangePersistence();
-            IStockExchange exchange = persistence.Load(new XmlFilePersistenceOptions(filePath, fileSystem), logger);
+            IPersistence<IStockExchange> persistence = new ExchangePersistence();
+            IStockExchange exchange = persistence.Load(ExchangePersistence.CreateOptions(filePath, fileSystem), logger);
             if (!exchange.CheckValidity())
             {
                 _ = logger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, "Stock input data not suitable.");
@@ -63,7 +59,7 @@ namespace FinancialStructures.Stocks
             {
                 Stock inheritedStock = inheritedStockExchange.Stocks.FirstOrDefault(thing => thing.Name.Equals(stock.Name));
                 StockDay stockData = stock.GetData(time);
-                if (stockData != null)
+                if (stockData != null && inheritedStock != null)
                 {
                     inheritedStock.AddOrEditValue(stockData.Start, stockData.Open, stockData.High, stockData.Low, stockData.Close, stockData.Volume);
                 }

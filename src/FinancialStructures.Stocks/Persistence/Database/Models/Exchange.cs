@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace FinancialStructures.Stocks.Persistence.Models
+namespace Effanville.FinancialStructures.Stocks.Persistence.Database.Models
 {
     public class Exchange
     {
@@ -12,7 +12,9 @@ namespace FinancialStructures.Stocks.Persistence.Models
         public string CountryCode { get; set; }
         public TimeOnly ExchangeOpen { get; set; }
         public TimeOnly ExchangeClose { get; set; }
-
+        
         public List<Instrument> Instruments { get; set; }
+        
+        public override string ToString() => $"[Exchange:{Id}-{ExchangeIdentifier}-{Name}";
     }
 }

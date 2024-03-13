@@ -1,4 +1,4 @@
-﻿namespace FinancialStructures.Stocks.Statistics
+﻿namespace Effanville.FinancialStructures.Stocks.Statistics
 {
     /// <summary>
     /// The admissible types of stock statistic.

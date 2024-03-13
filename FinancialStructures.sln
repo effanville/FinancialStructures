@@ -2,13 +2,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialStructures.Tests", "FinancialStructures.Tests\FinancialStructures.Tests.csproj", "{709294DA-0BBE-4ACD-9C5E-29773FD18735}"
-	ProjectSection(ProjectDependencies) = postProject
-		{B86EADB1-3561-470B-9421-2E6992A25346} = {B86EADB1-3561-470B-9421-2E6992A25346}
-	EndProjectSection
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialStructures", "FinancialStructures\FinancialStructures.csproj", "{B86EADB1-3561-470B-9421-2E6992A25346}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{89F98A9D-5FE5-4238-A7FA-AA2C4ABC5077}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
@@ -19,17 +12,28 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{8989B308
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Structure", "Common\Common.Structure\Common.Structure.csproj", "{A2CB7343-EE36-451E-A71B-5CC4E38C2589}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialStructures.Stocks", "src\FinancialStructures.Stocks\FinancialStructures.Stocks.csproj", "{D5704678-F6AB-4F12-9C52-828C5C8CAF22}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialStructures.Stocks.Tests", "test\FinancialStructures.Stocks.Tests\FinancialStructures.Stocks.Tests.csproj", "{35A15957-D48E-4EFF-9219-22E991537503}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_build", "BuildProcess\source\_build.csproj", "{03BEDBA1-8BB2-4F05-AA0A-787E66201EB4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{1C2E5605-09C7-48B7-BA9A-2CE96ABA232D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Structure.Tests", "Common\Common.Structure.Tests\Common.Structure.Tests.csproj", "{CD684437-1BCB-4DA6-9951-545137034F5F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Console", "Common\src\Common.Console\Common.Console.csproj", "{8DEA4D0A-0ED4-41F8-A647-0168274B2A60}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_build", "BuildProcess\source\_build.csproj", "{03BEDBA1-8BB2-4F05-AA0A-787E66201EB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common.Structure", "Common\src\Common.Structure\Common.Structure.csproj", "{A2CB7343-EE36-451E-A71B-5CC4E38C2589}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Structure.Tests", "Common\test\Common.Structure.Tests\Common.Structure.Tests.csproj", "{CD684437-1BCB-4DA6-9951-545137034F5F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialStructures", "src\FinancialStructures\FinancialStructures.csproj", "{B86EADB1-3561-470B-9421-2E6992A25346}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialStructures.Stocks", "src\FinancialStructures.Stocks\FinancialStructures.Stocks.csproj", "{D5704678-F6AB-4F12-9C52-828C5C8CAF22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialStructures.Stocks.Cli", "src\FinancialStructures.Stocks.Cli\FinancialStructures.Stocks.Cli.csproj", "{D8906130-8D76-4475-8EAE-1E304F6A08E0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FinancialStructures.Tests", "test\FinancialStructures.Tests\FinancialStructures.Tests.csproj", "{709294DA-0BBE-4ACD-9C5E-29773FD18735}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B86EADB1-3561-470B-9421-2E6992A25346} = {B86EADB1-3561-470B-9421-2E6992A25346}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialStructures.Stocks.Tests", "test\FinancialStructures.Stocks.Tests\FinancialStructures.Stocks.Tests.csproj", "{35A15957-D48E-4EFF-9219-22E991537503}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -65,6 +69,14 @@ Global
 		{03BEDBA1-8BB2-4F05-AA0A-787E66201EB4}.Debug|x64.Build.0 = Debug|Any CPU
 		{03BEDBA1-8BB2-4F05-AA0A-787E66201EB4}.Release|x64.ActiveCfg = Release|Any CPU
 		{03BEDBA1-8BB2-4F05-AA0A-787E66201EB4}.Release|x64.Build.0 = Release|Any CPU
+		{D8906130-8D76-4475-8EAE-1E304F6A08E0}.Debug|x64.ActiveCfg = Debug|x64
+		{D8906130-8D76-4475-8EAE-1E304F6A08E0}.Debug|x64.Build.0 = Debug|x64
+		{D8906130-8D76-4475-8EAE-1E304F6A08E0}.Release|x64.ActiveCfg = Release|x64
+		{D8906130-8D76-4475-8EAE-1E304F6A08E0}.Release|x64.Build.0 = Release|x64
+		{8DEA4D0A-0ED4-41F8-A647-0168274B2A60}.Debug|x64.ActiveCfg = Debug|x64
+		{8DEA4D0A-0ED4-41F8-A647-0168274B2A60}.Debug|x64.Build.0 = Debug|x64
+		{8DEA4D0A-0ED4-41F8-A647-0168274B2A60}.Release|x64.ActiveCfg = Release|x64
+		{8DEA4D0A-0ED4-41F8-A647-0168274B2A60}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -76,5 +88,6 @@ Global
 		{A2CB7343-EE36-451E-A71B-5CC4E38C2589} = {1C2E5605-09C7-48B7-BA9A-2CE96ABA232D}
 		{CD684437-1BCB-4DA6-9951-545137034F5F} = {1C2E5605-09C7-48B7-BA9A-2CE96ABA232D}
 		{03BEDBA1-8BB2-4F05-AA0A-787E66201EB4} = {8989B308-837A-402C-BE70-82764592AC9C}
+		{8DEA4D0A-0ED4-41F8-A647-0168274B2A60} = {1C2E5605-09C7-48B7-BA9A-2CE96ABA232D}
 	EndGlobalSection
 EndGlobal

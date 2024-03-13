@@ -1,4 +1,4 @@
-namespace FinancialStructures.Stocks.Download
+namespace Effanville.FinancialStructures.Stocks.Download
 {
     public static class StockPriceDownloaderFactory
     {
