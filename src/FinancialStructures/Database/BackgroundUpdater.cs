@@ -19,6 +19,10 @@ namespace Effanville.FinancialStructures.Database
             set;
         }
 
+        public BackgroundUpdater() { }
+
+        public BackgroundUpdater(T database) => Database = database;
+
         /// <inheritdoc/>
         public void PerformUpdateAction(Action<T> action, T portfolio)
         {
