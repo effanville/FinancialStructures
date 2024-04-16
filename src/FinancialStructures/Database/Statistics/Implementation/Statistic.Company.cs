@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
@@ -38,7 +39,7 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         public object ValueAsObject => IsNumeric ? Value : StringValue;
 
         /// <inheritdoc/>
-        public void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
+        public void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
             StringValue = name.Company;
         }

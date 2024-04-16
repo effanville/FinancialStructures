@@ -13,13 +13,11 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
+        public override void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account,
+            TwoName name)
         {
-            if (!portfolio.TryGetAccount(account, name, out IValueList desired))
-            {
-                Value = 0.0;
-            }
-            if (desired is ISecurity security)
+            Value = 0.0;
+            if (valueList is ISecurity security)
             {
                 Value = (double)(security.UnitPrice.ValueOnOrBefore(date)?.Value ?? 0.0m);
                 fCurrency = security.Names.Currency ?? portfolio.BaseCurrency;

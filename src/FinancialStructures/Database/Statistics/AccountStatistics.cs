@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Statistics
@@ -49,10 +50,16 @@ namespace Effanville.FinancialStructures.Database.Statistics
         public AccountStatistics(IPortfolio portfolio, DateTime dateToCalculate, Account account, TwoName name, Statistic[] statsToGenerate)
         {
             NameData = name;
+            if (!portfolio.TryGetAccount(account, name, out IValueList valueList))
+            {
+                Statistics = new List<IStatistic>();
+                return;
+            }
+            
             var statistics = new List<IStatistic>();
             foreach (Statistic stat in statsToGenerate)
             {
-                IStatistic stats = StatisticFactory.Generate(stat, portfolio, dateToCalculate, account, name);
+                IStatistic stats = StatisticFactory.Generate(stat, valueList, portfolio, dateToCalculate, account, name);
                 statistics.Add(stats);
             }
 
@@ -65,7 +72,6 @@ namespace Effanville.FinancialStructures.Database.Statistics
         public AccountStatistics(IPortfolio portfolio, DateTime dateToCalculate, Totals total, TwoName name, Statistic[] statsToGenerate)
         {
             NameData = name;
-
             var statistics = new List<IStatistic>();
             foreach (Statistic stat in statsToGenerate)
             {

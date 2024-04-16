@@ -40,7 +40,7 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         public object ValueAsObject => IsNumeric ? Value : StringValue;
 
         /// <inheritdoc/>
-        public void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
+        public void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
             switch (account)
             {
@@ -49,12 +49,7 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
                 case Account.Currency:
                 case Account.Asset:
                 {
-                    if (!portfolio.TryGetAccount(account, name, out IValueList desired))
-                    {
-                        return;
-                    }
-
-                    StringValue = desired.Names.SectorsFlat;
+                    StringValue = valueList.Names.SectorsFlat;
                     return;
                 }
                 default:

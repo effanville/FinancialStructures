@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Statistics
@@ -52,7 +53,8 @@ namespace Effanville.FinancialStructures.Database.Statistics
         /// <summary>
         /// Calculates the value for this statistic from the account in question on the date specified.
         /// </summary>
-        void Calculate(IPortfolio portfolio, DateTime dateToCalculate, Account account, TwoName name);
+        void Calculate(IValueList valueList, IPortfolio portfolio, DateTime dateToCalculate, Account account,
+            TwoName name);
 
         /// <summary>
         /// Calculates the total statistic from the total type in question on the date specified.

@@ -14,16 +14,13 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
+        public override void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account,
+            TwoName name)
         {
             fCurrency = portfolio.BaseCurrency;
-            if (account == Account.Asset)
+            if (valueList is IAmortisableAsset asset)
             {
-                Value = portfolio.CalculateStatistic<IAmortisableAsset, double>(
-                    account,
-                    name,
-                    (acc, n) => acc == Account.Asset,
-                    asset => Calculate(portfolio, date, asset));
+                Value = Calculate(portfolio, date, asset);
                 return;
             }
             else

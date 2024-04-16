@@ -1,6 +1,8 @@
 ﻿using System;
 
 using Effanville.FinancialStructures.Database.Extensions.Statistics;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Statistics;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
@@ -13,10 +15,18 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
+        public override void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account,
+            TwoName name)
         {
             fCurrency = portfolio.BaseCurrency;
-            Value = (double)portfolio.Profit(account, name);
+            if (valueList is IExchangableValueList exchangeableValueList)
+            {
+                ICurrency currency = portfolio.Currency(exchangeableValueList);
+                Value = (double)exchangeableValueList.Profit(currency);
+                return;
+            }
+
+            Value = (double)(valueList.Any() ? valueList.Profit() : 0.0m);
         }
 
         /// <inheritdoc/>

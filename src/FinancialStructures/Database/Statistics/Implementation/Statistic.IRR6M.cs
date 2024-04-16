@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Effanville.FinancialStructures.Database.Extensions.Rates;
+using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
@@ -13,9 +14,10 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
+        public override void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account,
+            TwoName name)
         {
-            Value = 100 * portfolio.IRR(account, name, date.AddMonths(-6), date);
+            Value = 100 * IRRCalcHelpers.CalcIRR(portfolio, account, valueList, date.AddMonths(-6), date);
         }
 
         /// <inheritdoc/>

@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Effanville.FinancialStructures.Database.Statistics.Implementation;
+using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Statistics
@@ -95,7 +96,12 @@ namespace Effanville.FinancialStructures.Database.Statistics
         public static IStatistic Generate(Statistic statTypeToGenerate, IPortfolio portfolio, Account account, TwoName name)
         {
             IStatistic stats = Generate(statTypeToGenerate);
-            stats.Calculate(portfolio, DateTime.Today, account, name);
+            if (!portfolio.TryGetAccount(account, name, out IValueList valueList))
+            {
+                return null;
+            }
+
+            stats.Calculate(valueList, portfolio, DateTime.Today, account, name);
             return stats;
         }
 
@@ -103,15 +109,16 @@ namespace Effanville.FinancialStructures.Database.Statistics
         /// Generates a statistic class from the specific type enum.
         /// </summary>
         /// <param name="statTypeToGenerate">The <see cref="Statistic"/> to generate.</param>
+        /// <param name="valueList">The list to calculate values for.</param>
         /// <param name="portfolio">The portfolio to generate values from.</param>
         /// <param name="dateToCalculate">The date to calculate the stats on.</param>
         /// <param name="account">The Account type to generate statistics for.</param>
         /// <param name="name">A name to generate statistics with.</param>
         /// <returns>A statistic with the relevant type and no value set.</returns>
-        public static IStatistic Generate(Statistic statTypeToGenerate, IPortfolio portfolio, DateTime dateToCalculate, Account account, TwoName name)
+        public static IStatistic Generate(Statistic statTypeToGenerate, IValueList valueList, IPortfolio portfolio, DateTime dateToCalculate, Account account, TwoName name)
         {
             IStatistic stats = Generate(statTypeToGenerate);
-            stats.Calculate(portfolio, dateToCalculate, account, name);
+            stats.Calculate(valueList, portfolio, dateToCalculate, account, name);
             return stats;
         }
 

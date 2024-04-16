@@ -2,6 +2,7 @@
 
 using Effanville.Common.Structure.Extensions;
 using Effanville.FinancialStructures.Database.Extensions.Statistics;
+using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
@@ -28,7 +29,8 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
+        public override void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account,
+            TwoName name)
         {
             Value = portfolio.Fraction(account.ToTotals(), account, name, date);
         }

@@ -4,7 +4,6 @@ using System.Linq;
 
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.NamingStructures;
-using Effanville.FinancialStructures.Database.Extensions;
 using Effanville.FinancialStructures.Database.Extensions.Values;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
@@ -19,7 +18,8 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
+        public override void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account,
+            TwoName name)
         {
             fCurrency = portfolio.BaseCurrency;
             switch (account)
@@ -28,31 +28,30 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
                 case Account.Pension:
                 {
                     decimal sum = 0.0m;
-                    List<Labelled<TwoName, DailyValuation>> investments = portfolio.Investments(account, name);
-                    if (investments != null && investments.Any())
+                    if (valueList is ISecurity sec)
                     {
-                        foreach (Labelled<TwoName, DailyValuation> investment in investments)
+                        ICurrency currency = portfolio.Currency(sec);
+                        List<Labelled<TwoName, DailyValuation>> investments =sec.AllInvestmentsNamed(currency);
+                        if (investments != null && investments.Any())
                         {
-                            sum += investment.Instance.Value;
+                            foreach (Labelled<TwoName, DailyValuation> investment in investments)
+                            {
+                                sum += investment.Instance.Value;
+                            }
                         }
+
+                        Value = (double)sum;
                     }
 
-                    Value = (double)sum;
                     return;
                 }
                 case Account.Asset:
                 {
-                    Value = portfolio.CalculateStatistic<IAmortisableAsset, double>(
-                        account,
-                        name,
-                        (acc, n) => acc == Account.Asset,
-                        asset => Calculate(asset));
-                    double Calculate(IAmortisableAsset asset)
+                    if (valueList is IAmortisableAsset asset)
                     {
                         ICurrency currency = portfolio.Currency(asset);
-                        return (double)asset.TotalCost(date, currency);
+                        Value = (double)asset.TotalCost(date, currency);
                     }
-
                     return;
                 }
                 default:

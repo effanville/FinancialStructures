@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Effanville.Common.Structure.Extensions;
+using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Statistics
@@ -46,7 +47,8 @@ namespace Effanville.FinancialStructures.Database.Statistics
             StatType = stat;
         }
 
-        public virtual void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
+        public virtual void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account,
+            TwoName name)
         {
         }
 

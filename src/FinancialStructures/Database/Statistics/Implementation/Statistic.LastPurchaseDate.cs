@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Linq;
 
 using Effanville.Common.Structure.Extensions;
 using Effanville.FinancialStructures.Database.Extensions.Values;
+using Effanville.FinancialStructures.DataStructures;
+using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
@@ -40,9 +43,16 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         public object ValueAsObject => IsNumeric ? Value : StringValue;
 
         /// <inheritdoc/>
-        public void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
+        public void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
-            StringValue = portfolio.LastPurchaseDate(account, name).ToUkDateString();
+            if (valueList is not ISecurity sec)
+            {
+                StringValue = default(DateTime).ToUkDateString();
+                return;
+            }
+
+            DateTime latest = sec.Trades.LastOrDefault(trade => trade.TradeType.Equals(TradeType.Buy))?.Day ?? default(DateTime);
+            StringValue = latest.ToUkDateString();
         }
 
         /// <inheritdoc/>

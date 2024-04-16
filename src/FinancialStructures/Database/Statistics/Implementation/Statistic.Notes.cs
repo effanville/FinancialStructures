@@ -39,9 +39,9 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         public object ValueAsObject => IsNumeric ? Value : StringValue;
 
         /// <inheritdoc/>
-        public void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
+        public void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
-            StringValue = portfolio.TryGetAccount(account, name, out IValueList desired) ? desired.Names.Notes : string.Empty;
+            StringValue = valueList.Names.Notes;
         }
 
         /// <inheritdoc/>

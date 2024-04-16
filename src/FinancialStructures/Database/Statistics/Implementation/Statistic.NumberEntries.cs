@@ -16,14 +16,10 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IPortfolio portfolio, DateTime date, Account account, TwoName name)
+        public override void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account,
+            TwoName name)
         {
-            if (!portfolio.TryGetAccount(account, name, out IValueList desired))
-            {
-                return;
-            }
-
-            Value = desired.Count();
+            Value = valueList.Count();
         }
 
         /// <inheritdoc/>
