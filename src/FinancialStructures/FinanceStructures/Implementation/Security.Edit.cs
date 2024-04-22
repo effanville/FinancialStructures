@@ -19,15 +19,21 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         public override bool TryEditData(DateTime oldDate, DateTime newDate, decimal value, IReportLogger logger = null)
         {
             bool edited = AddOrEditData(UnitPrice, oldDate, newDate, value, logger);
-            EnsureDataConsistency(logger);
+            if(edited)
+            {
+                EnsureDataConsistency(logger);
+            }
+
             return edited;
         }
 
         /// <inheritdoc/>
         public override void SetData(DateTime date, decimal value, IReportLogger logger = null)
         {
-            _ = AddOrEditData(UnitPrice, date, date, value, logger);
-            EnsureDataConsistency(logger);
+            if (AddOrEditData(UnitPrice, date, date, value, logger))
+            {
+                EnsureDataConsistency(logger);
+            }
         }
 
         /// <inheritdoc/>
@@ -41,26 +47,36 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
                 AddOrEditTrade(oldDate, trade);
             }
 
-            EnsureDataConsistency(reportLogger);
+            if(editUnitPrice | editShares | editInvestments)
+            {
+                EnsureDataConsistency(reportLogger);
+            }
+
             return editUnitPrice & editShares & editInvestments;
         }
 
         /// <inheritdoc/>
         public bool TryAddOrEditTradeData(SecurityTrade oldTrade, SecurityTrade newTrade, IReportLogger reportLogger = null)
         {
-            AddOrEditTrade(oldTrade.Day, newTrade);
-            EnsureDataConsistency(reportLogger);
-            OnDataEdit(this, new EventArgs());
-            return true;
+            if(AddOrEditTrade(oldTrade.Day, newTrade))
+            {
+                EnsureDataConsistency(reportLogger);
+                OnDataEdit(this, new EventArgs());
+                return true;
+            }
+
+            return false;
         }
 
-        private void AddOrEditTrade(DateTime oldDate, SecurityTrade trade)
+        private bool AddOrEditTrade(DateTime oldDate, SecurityTrade trade)
         {
+            bool edited = false;
             lock (TradesLock)
             {
                 if (!SecurityTrades.Any(existingTrade => existingTrade.Day.Equals(oldDate)))
                 {
                     SecurityTrades.Add(trade);
+                    edited = true;
                 }
                 else
                 {
@@ -73,12 +89,19 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
                             tradeVal.UnitPrice = trade.UnitPrice;
                             tradeVal.TradeCosts = trade.TradeCosts;
                             tradeVal.TradeType = trade.TradeType;
+                            edited = true;
                         }
                     }
                 }
-                OnDataEdit(SecurityTrades, new EventArgs());
                 SecurityTrades.Sort();
             }
+            
+            if(edited)
+            {
+                OnDataEdit(SecurityTrades, new EventArgs());
+            }
+
+            return edited;
         }
 
         private static bool AddOrEditData(TimeList list, DateTime oldDate, DateTime date, decimal value, IReportLogger reportLogger = null)

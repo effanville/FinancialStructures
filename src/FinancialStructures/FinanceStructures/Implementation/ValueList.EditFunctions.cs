@@ -17,9 +17,14 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public virtual bool EditNameData(NameData newNames)
         {
-            Names = newNames;
-            OnDataEdit(this, new EventArgs());
-            return true;
+            if (!Names.Equals(newNames))
+            {
+                Names = newNames;
+                OnDataEdit(this, new EventArgs());
+                return true;
+            }
+
+            return false;
         }
 
         /// <inheritdoc/>
