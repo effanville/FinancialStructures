@@ -17,7 +17,7 @@ namespace Effanville.FinancialStructures.Tests.Database
         [TestCase("https://uk.finance.yahoo.com/quote/VUKE.L/options?p=VUKE.L")]
         [TestCase("https://uk.finance.yahoo.com/quote/%5EFVX")]
         [TestCase("https://uk.finance.yahoo.com/quote/%5ESTOXX50E")]
-        [TestCase("https://finance.yahoo.com/quote/AW01.FGI/")]
+        [TestCase("https://uk.finance.yahoo.com/quote/AW01.FGI")]
         [TestCase("https://uk.finance.yahoo.com/quote/%5EN225")]
         [TestCase("https://uk.finance.yahoo.com/quote/GOOGL?p=GOOGL&.tsrc=fin-srch")]
         [TestCase("https://uk.finance.yahoo.com/quote/abdp.L")]
