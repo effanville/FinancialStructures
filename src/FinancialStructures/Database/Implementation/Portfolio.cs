@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
+using Effanville.FinancialStructures.Database.Extensions.Values;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.FinanceStructures.Implementation;
 using Effanville.FinancialStructures.FinanceStructures.Implementation.Asset;
@@ -31,6 +32,8 @@ namespace Effanville.FinancialStructures.Database.Implementation
             get;
             private set;
         }
+
+        public IPortfolioStatisticsCache Cache { get; } = new PortfolioStatisticsCache();
 
         /// <inheritdoc/>
         public string Name
@@ -344,7 +347,11 @@ namespace Effanville.FinancialStructures.Database.Implementation
             }
         }
 
-        public void Saving() => IsAlteredSinceSave = false;
+        public void Saving()
+        {
+            IsAlteredSinceSave = false;
+            Cache.Clear();
+        }
 
         /// <inheritdoc/>
         public int NumberOf(Account elementType)

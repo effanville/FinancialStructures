@@ -64,6 +64,9 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
                 account,
                 names,
                 valueList => Calculate(valueList),
+                laterTime,
+                nameof(MDD),
+                portfolio.Cache,
                 double.NaN);
 
             double Calculate(IValueList valueList)

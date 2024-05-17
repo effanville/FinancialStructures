@@ -27,7 +27,7 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
             TwoName name)
         {            
 
-            Value = 100 * IRRCalcHelpers.CalcIRR(portfolio, account, valueList, date.AddMonths(-12), date);
+            Value = 100 * IRRCalcHelpers.CalcIRR(portfolio, account, valueList, date.AddMonths(-12), date, portfolio.Cache);
         }
 
         /// <inheritdoc/>
@@ -40,7 +40,7 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
     internal static class IRRCalcHelpers
     {
         public static double CalcIRR(IPortfolio portfolio, Account accountType, IValueList valueList, DateTime earlierTime,
-            DateTime laterTime)
+            DateTime laterTime, IPortfolioStatisticsCache cache)
         {
             DateTime earliestTime = portfolio.FirstDate(accountType, valueList.Names);
             if (earlierTime < earliestTime)

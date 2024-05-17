@@ -1,4 +1,6 @@
-﻿using Effanville.FinancialStructures.FinanceStructures;
+﻿using System;
+
+using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.FinanceStructures.Statistics;
 using Effanville.FinancialStructures.NamingStructures;
 
@@ -39,7 +41,10 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
                  account,
                  name,
                  valueList => valueList.Any() ? valueList.RecentChange() : 0.0m,
-                 valueList => Calculate(valueList));
+                 valueList => Calculate(valueList),
+                 DateTime.Today,
+                 nameof(RecentChange),
+                 portfolio.Cache);
 
             decimal Calculate(IExchangableValueList valueList)
             {

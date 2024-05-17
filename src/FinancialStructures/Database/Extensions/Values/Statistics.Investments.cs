@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Effanville.Common.Structure.DataStructures;
@@ -54,7 +55,10 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
                account,
                name,
                (acc, n) => acc == Account.Security || acc == Account.Pension,
-               security => Calculate(security));
+               security => Calculate(security),
+               DateTime.Today,
+               nameof(FirstDate),
+               portfolio.Cache);
             List<Labelled<TwoName, DailyValuation>> Calculate(ISecurity sec)
             {
                 ICurrency currency = portfolio.Currency(sec);

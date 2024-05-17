@@ -1,6 +1,5 @@
 ﻿using System;
 
-using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Values
@@ -14,9 +13,12 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
         /// <param name="account">The type of element to find.</param>
         /// <param name="name">The name of the element to find.</param>
         /// <returns>The latest value if it exists.</returns>
-        public static decimal LatestValue(this IPortfolio portfolio, Account account, TwoName name)
+        public static decimal LatestValue(
+            this IPortfolio portfolio, Account account, 
+            TwoName name,
+            IPortfolioStatisticsCache cache = null)
         {
-            return portfolio.Value(account, name, DateTime.Today);
+            return portfolio.Value(account, name, DateTime.Today, cache);
         }
 
         /// <summary>
@@ -27,12 +29,20 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
         /// <param name="name">The name of the element to find.</param>
         /// <param name="date">The date on which to find the value.</param>
         /// <returns>The  value if it exists.</returns>
-        public static decimal Value(this IPortfolio portfolio, Account account, TwoName name, DateTime date)
+        public static decimal Value(
+            this IPortfolio portfolio,
+            Account account, 
+            TwoName name, 
+            DateTime date,
+            IPortfolioStatisticsCache cache = null)
         {
             return portfolio.CalculateStatistic(
                 account,
                 name,
-                valueList => CalculateValue(valueList),
+                valueList => CalculateValue(portfolio, valueList, date),
+                date,
+                nameof(Value),
+                cache,
                 DefaultValue());
             decimal DefaultValue()
             {
@@ -42,29 +52,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
                 }
 
                 return 0.0m;
-            }
-
-            decimal CalculateValue(IValueList valueList)
-            {
-                if (!valueList.Any())
-                {
-                    return 0;
-                }
-
-                if (valueList is not IExchangableValueList eValueList)
-                {
-                    return valueList.Value(date)?.Value ?? 0.0m;
-                }
-
-                ICurrency currency = portfolio.Currency(eValueList);
-
-                if (account is Account.BankAccount)
-                {
-                    return eValueList.ValueOnOrBefore(date, currency)?.Value ?? 0.0m;
-                }
-
-                return eValueList.Value(date, currency)?.Value ?? 0.0m;
-            }
+            } 
         }
     }
 }

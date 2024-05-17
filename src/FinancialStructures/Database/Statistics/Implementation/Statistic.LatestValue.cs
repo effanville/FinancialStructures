@@ -6,6 +6,30 @@ using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
+    public static class ValueListCalculateStatistic
+    {
+        public static TValue CalculateStatistic<TValue>(
+            this IValueList valueList,
+            Func<IValueList, TValue> statisticCalculator,
+            DateTime date,
+            string statName, 
+            IPortfolioStatisticsCache cache,
+            TValue defaultValue = default)
+        {
+            if (cache?.TryGetValue(valueList.AccountType, valueList.Names.ToTwoName(), date, statName,
+                    out object result) ?? false)
+            {
+                return (TValue)result;
+            }
+            
+            TValue value = !valueList.Any() 
+                ? defaultValue
+                : statisticCalculator(valueList);
+            cache?.AddValue(valueList.AccountType, valueList.Names.ToTwoName(), date, statName, value);
+            return value;
+        }
+    }
+
     internal class StatisticLatestValue : StatisticBase
     {
         internal StatisticLatestValue()
@@ -23,6 +47,7 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
                 Value = 1.0d;
                 return;
             }
+            Value = valueList.CalculateStatistic(Calc)
             Value = (double)CalculateValue(portfolio, account, valueList, DateTime.Today);
         }            
         decimal CalculateValue(IPortfolio portfolio, Account account, IValueList valueList, DateTime date)

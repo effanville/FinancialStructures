@@ -17,7 +17,7 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         public override void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account,
             TwoName name)
         {
-            Value = 100 * IRRCalcHelpers.CalcIRR(portfolio, account, valueList, date.AddMonths(-3), date);
+            Value = 100 * IRRCalcHelpers.CalcIRR(portfolio, account, valueList, date.AddMonths(-3), date, portfolio.Cache);
         }
 
         /// <inheritdoc/>

@@ -12,6 +12,9 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
     /// </summary>
     public partial class ValueList : IValueList, IDisposable
     {
+        ///<inheritdoc />
+        public Account AccountType { get; protected set; }
+        
         /// <inheritdoc/>
         public NameData Names
         {

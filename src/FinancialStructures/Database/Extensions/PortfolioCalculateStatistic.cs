@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Effanville.FinancialStructures.Database.Extensions.Values;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
@@ -25,6 +26,9 @@ namespace Effanville.FinancialStructures.Database.Extensions
            Account account,
            TwoName name,
            Func<IValueList, S> statisticCalculator,
+           DateTime date,
+           string statName,
+           IPortfolioStatisticsCache cache,
            S defaultValue = default(S))
         {
             if (!portfolio.TryGetAccount(account, name, out IValueList valueList))
@@ -32,7 +36,15 @@ namespace Effanville.FinancialStructures.Database.Extensions
                 return defaultValue;
             }
 
-            return statisticCalculator(valueList);
+            if (cache?.TryGetValue(valueList.AccountType, valueList.Names.ToTwoName(), date, statName,
+                    out object result) ?? false)
+            {
+                return (S)result;
+            }
+            
+            var value = statisticCalculator(valueList);
+            cache?.AddValue(valueList.AccountType, valueList.Names.ToTwoName(), date, statName, value);
+            return value;
         }
 
         /// <summary>
@@ -52,6 +64,9 @@ namespace Effanville.FinancialStructures.Database.Extensions
            TwoName name,
            Func<IValueList, S> valueListCalculator,
            Func<IExchangableValueList, S> exchangableValueListCalculator,
+           DateTime date,
+           string statName,
+           IPortfolioStatisticsCache cache,
            S defaultValue = default(S))
         {
             if (!portfolio.TryGetAccount(account, name, out IValueList valueList))
@@ -59,12 +74,17 @@ namespace Effanville.FinancialStructures.Database.Extensions
                 return defaultValue;
             }
 
-            if (valueList is not IExchangableValueList exchangableValueList)
+            if (cache?.TryGetValue(valueList.AccountType, valueList.Names.ToTwoName(), date, statName,
+                    out object result) ?? false)
             {
-                return valueListCalculator(valueList);
+                return (S)result;
             }
 
-            return exchangableValueListCalculator(exchangableValueList);
+            var value = valueList is not IExchangableValueList exchangableValueList
+                ? valueListCalculator(valueList)
+                : exchangableValueListCalculator(exchangableValueList);
+            cache?.AddValue(valueList.AccountType, valueList.Names.ToTwoName(), date, statName, value);
+            return value;
         }
         /// <summary>
         /// Calcuates a statistic for an account.
@@ -84,7 +104,10 @@ namespace Effanville.FinancialStructures.Database.Extensions
            TwoName name,
            Func<IValueList, S> valueListCalculator,
            Func<IExchangableValueList, S> exchangableValueListCalculator,
-           Func<ISecurity, S> securityCalculator,
+           Func<ISecurity, S> securityCalculator,          
+           DateTime date,
+           string statName,
+           IPortfolioStatisticsCache cache,
            S defaultValue = default(S))
         {
             if (!portfolio.TryGetAccount(account, name, out IValueList valueList))
@@ -92,17 +115,19 @@ namespace Effanville.FinancialStructures.Database.Extensions
                 return defaultValue;
             }
 
-            if (valueList is not IExchangableValueList exchangableValueList)
+            if (cache?.TryGetValue(valueList.AccountType, valueList.Names.ToTwoName(), date, statName,
+                    out object result) ?? false)
             {
-                return valueListCalculator(valueList);
+                return (S)result;
             }
 
-            if (exchangableValueList is not ISecurity security)
-            {
-                return exchangableValueListCalculator(exchangableValueList);
-            }
-
-            return securityCalculator(security);
+            var value = valueList is not IExchangableValueList exchangableValueList
+                ? valueListCalculator(valueList)
+                : exchangableValueList is not ISecurity security
+                    ? exchangableValueListCalculator(exchangableValueList)
+                    : securityCalculator(security);
+            cache?.AddValue(valueList.AccountType, valueList.Names.ToTwoName(), date, statName, value);
+            return value;
         }
 
         /// <summary>
@@ -123,6 +148,9 @@ namespace Effanville.FinancialStructures.Database.Extensions
            TwoName name,
            Func<Account, TwoName, bool> preCalculationCheck,
            Func<IValueList, S> statisticCalculator,
+           DateTime date,
+           string statName,
+           IPortfolioStatisticsCache cache,
            S defaultValue = default(S))
         {
             if (!preCalculationCheck(account, name))
@@ -130,7 +158,13 @@ namespace Effanville.FinancialStructures.Database.Extensions
                 return defaultValue;
             }
 
-            return CalculateStatistic(portfolio, account, name, statisticCalculator);
+            return CalculateStatistic(portfolio,
+                account, 
+                name,
+                statisticCalculator, 
+                date, 
+                statName,
+                cache);
         }
 
         /// <summary>
@@ -149,7 +183,10 @@ namespace Effanville.FinancialStructures.Database.Extensions
             Account account,
             TwoName name,
             Func<T, S> statisticCalculator,
-           S defaultValue = default(S))
+            DateTime date,
+            string statName,
+            IPortfolioStatisticsCache cache,
+            S defaultValue = default(S))
             where T : IValueList
         {
             if (!portfolio.TryGetAccount(account, name, out IValueList valueList))
@@ -157,12 +194,17 @@ namespace Effanville.FinancialStructures.Database.Extensions
                 return defaultValue;
             }
 
-            if (valueList is not T specialValueList)
+            if (cache?.TryGetValue(valueList.AccountType, valueList.Names.ToTwoName(), date, statName,
+                    out object result) ?? false)
             {
-                return defaultValue;
+                return (S)result;
             }
-
-            return statisticCalculator(specialValueList);
+            
+            var value = valueList is not T specialValueList
+                ? defaultValue
+                :  statisticCalculator(specialValueList);
+            cache?.AddValue(valueList.AccountType, valueList.Names.ToTwoName(), date, statName, value);
+            return value;
         }
 
         /// <summary>
@@ -184,6 +226,9 @@ namespace Effanville.FinancialStructures.Database.Extensions
             TwoName name,
             Func<Account, TwoName, bool> preCalculationCheck,
             Func<T, S> statisticCalculator,
+            DateTime date,
+            string statName,
+            IPortfolioStatisticsCache cache,
            S defaultValue = default(S))
             where T : IValueList
         {
@@ -192,7 +237,14 @@ namespace Effanville.FinancialStructures.Database.Extensions
                 return defaultValue;
             }
 
-            return CalculateStatistic(portfolio, account, name, statisticCalculator);
+            return CalculateStatistic(
+                portfolio, 
+                account,
+                name, 
+                statisticCalculator, 
+                date, 
+                statName,
+                cache);
         }
     }
 }

@@ -29,6 +29,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         internal CashAccount(NameData names)
             : base(names)
         {
+            AccountType = Account.BankAccount;
         }
 
         /// <summary>
@@ -37,6 +38,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         internal CashAccount(NameData names, TimeList amounts)
             : base(names, amounts)
         {
+            AccountType = Account.BankAccount;
         }
 
         /// <summary>
@@ -45,6 +47,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         internal CashAccount()
             : base()
         {
+            AccountType = Account.BankAccount;
         }
 
         /// <inheritdoc/>

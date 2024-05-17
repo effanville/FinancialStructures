@@ -26,11 +26,13 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         internal Currency(NameData names)
             : base(names)
         {
+            AccountType = Account.Currency;
         }
 
         internal Currency(NameData name, TimeList values)
             : base(name, values)
         {
+            AccountType = Account.Currency;
         }
 
         /// <summary>

@@ -48,11 +48,13 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         internal Security()
             : base()
         {
+            AccountType = Account.Security;
         }
 
-        internal Security(NameData names)
+        internal Security(Account account, NameData names)
             : base(names)
         {
+            AccountType = account;
         }
 
         /// <summary>

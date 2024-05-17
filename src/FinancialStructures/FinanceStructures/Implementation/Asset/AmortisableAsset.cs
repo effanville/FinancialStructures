@@ -23,11 +23,13 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
         internal AmortisableAsset()
             : base()
         {
+            AccountType = Account.Asset;
         }
 
         internal AmortisableAsset(NameData name)
             : base(name)
         {
+            AccountType = Account.Asset;
         }
 
         /// <summary>
@@ -36,6 +38,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
         internal AmortisableAsset(NameData names, TimeList values, TimeList debt, TimeList payments)
             : base(names, values)
         {
+            AccountType = Account.Asset;
             Debt = debt;
             Payments = payments;
         }

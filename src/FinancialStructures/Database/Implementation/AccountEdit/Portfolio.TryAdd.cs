@@ -30,7 +30,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
             {
                 case Account.Security:
                 {
-                    AddAccount(accountType, new Security(name), _fundsDictionary, _fundsLock);
+                    AddAccount(accountType, new Security(Account.Security, name), _fundsDictionary, _fundsLock);
                     break;
                 }
                 case Account.Currency:
@@ -60,7 +60,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
                 }
                 case Account.Pension:
                 {
-                    AddAccount(accountType, new Security(name), _pensionsDictionary, _pensionsLock);
+                    AddAccount(accountType, new Security(Account.Pension, name), _pensionsDictionary, _pensionsLock);
                     break;
                 }
                 default:

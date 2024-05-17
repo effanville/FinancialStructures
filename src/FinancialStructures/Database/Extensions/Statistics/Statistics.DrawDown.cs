@@ -81,22 +81,27 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// <summary>
         /// Calculates the IRR for the account with specified account and name.
         /// </summary>
-        public static double Drawdown(this IPortfolio portfolio, Account accountType, TwoName names)
+        public static double Drawdown(this IPortfolio portfolio, Account accountType, TwoName names,
+            IPortfolioStatisticsCache cache)
         {
             DateTime firstDate = portfolio.FirstDate(accountType, names);
             DateTime lastDate = portfolio.LatestDate(accountType, names);
-            return portfolio.Drawdown(accountType, names, firstDate, lastDate);
+            return portfolio.Drawdown(accountType, names, firstDate, lastDate, cache);
         }
 
         /// <summary>
         /// Calculates the MDD for the account with specified account and name between the times specified.
         /// </summary>
-        public static double Drawdown(this IPortfolio portfolio, Account accountType, TwoName names, DateTime earlierTime, DateTime laterTime)
+        public static double Drawdown(this IPortfolio portfolio, Account accountType, TwoName names, DateTime earlierTime, DateTime laterTime,
+            IPortfolioStatisticsCache cache)
         {
             return portfolio.CalculateStatistic(
                accountType,
                names,
                valueList => Calculate(valueList),
+               laterTime,
+               nameof(Drawdown),
+               cache,
                double.NaN);
 
             double Calculate(IValueList valueList)

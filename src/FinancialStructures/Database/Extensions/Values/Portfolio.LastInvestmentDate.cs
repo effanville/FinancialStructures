@@ -42,13 +42,18 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
         /// <param name="portfolio">The database to query</param>
         /// <param name="account">The type of element to search for. All searches for Bank accounts and securities.</param>
         /// <param name="name">An ancillary name to use in the case of Sectors</param>
-        public static DateTime LastInvestmentDate(this IPortfolio portfolio, Account account, TwoName name)
+        public static DateTime LastInvestmentDate(this IPortfolio portfolio, Account account, TwoName name,
+            IPortfolioStatisticsCache cache)
         {
             return portfolio.CalculateStatistic<ISecurity, DateTime>(
                 account,
                 name,
                 (acc, n) => acc == Account.Security,
-                security => Calculate(security));
+                security => Calculate(security),
+                
+                DateTime.Today,
+                nameof(FirstDate),
+                cache);
             DateTime Calculate(ISecurity sec)
             {
                 ICurrency currency = portfolio.Currency(sec);

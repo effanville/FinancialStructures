@@ -29,6 +29,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         internal Sector()
             : base()
         {
+            AccountType = Account.Benchmark;
         }
 
         /// <summary>
@@ -37,11 +38,13 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         internal Sector(NameData names)
             : base(names)
         {
+            AccountType = Account.Benchmark;
         }
 
         internal Sector(NameData names, TimeList values)
             : base(names, values)
         {
+            AccountType = Account.Benchmark;
         }
 
         /// <inheritdoc/>

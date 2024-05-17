@@ -21,18 +21,9 @@
     <PropertyGroup>
         <Version>23.07.0</Version>
     </PropertyGroup>
-    <Choose>
-        <When Condition="Exists('..\..\..\FinancePortfolioDatabase.sln')">
-            <ItemGroup>
-                <ProjectReference Include="..\..\..\Common\src\Common.Structure\Common.Structure.csproj" />
-            </ItemGroup>
-        </When>
-        <Otherwise>
             <ItemGroup>
                 <ProjectReference Include="..\..\Common\src\Common.Structure\Common.Structure.csproj" />
             </ItemGroup>
-        </Otherwise>
-    </Choose>
     <ItemGroup Condition="Exists('..\..\Common\src\Common.Console\Common.Console.csproj')">
         <ProjectReference Include="..\..\Common\src\Common.Console\Common.Console.csproj"/>
     </ItemGroup>

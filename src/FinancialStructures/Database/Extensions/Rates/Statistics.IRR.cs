@@ -158,7 +158,10 @@ namespace Effanville.FinancialStructures.Database.Extensions.Rates
                names,
                valueList => valueList.Any() ? valueList.CAR(valueList.FirstValue().Day, valueList.LatestValue().Day) : double.NaN,
                valueList => valueList.Any() ? valueList.CAR(valueList.FirstValue().Day, valueList.LatestValue().Day) : double.NaN,
-               security => IRRForSecurity(security));
+               security => IRRForSecurity(security),
+               DateTime.Today,
+               nameof(IRR),
+               portfolio.Cache);
 
             double IRRForSecurity(ISecurity security)
             {
@@ -192,7 +195,10 @@ namespace Effanville.FinancialStructures.Database.Extensions.Rates
                 names,
                 valueList => valueList.Any() ? valueList.CAR(earlierTime, laterTime) : double.NaN,
                 valueList => valueList.Any() ? valueList.CAR(earlierTime, laterTime) : double.NaN,
-                security => IRRForSecurity(security));
+                security => IRRForSecurity(security),
+                laterTime,
+                nameof(IRR),
+                portfolio.Cache);
 
             double IRRForSecurity(ISecurity security)
             {

@@ -38,7 +38,10 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
             return portfolio.CalculateStatistic(
                 account,
                 name,
-                valueList => valueList.LatestValue()?.Day ?? DateTime.MinValue);
+                valueList => valueList.LatestValue()?.Day ?? DateTime.MinValue,
+                DateTime.Today,
+                nameof(FirstDate),
+                portfolio.Cache);
         }
     }
 }
