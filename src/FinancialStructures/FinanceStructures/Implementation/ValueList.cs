@@ -13,6 +13,9 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
     public partial class ValueList : IValueList, IDisposable
     {
         /// <inheritdoc/>
+        public Account AccountType { get; private set; }
+        
+        /// <inheritdoc/>
         public NameData Names
         {
             get;
@@ -72,28 +75,39 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// default constructor.
         /// </summary>
-        public ValueList()
-        {
-            Names = new NameData();
-            Values = new TimeList();
-            SetupEventListening();
-        }
-
+        public ValueList() 
+            : this(Account.Unknown)
+        { }
+        
         /// <summary>
         /// default constructor.
         /// </summary>
-        public ValueList(NameData names)
-        {
-            Names = names;
-            Values = new TimeList();
-            SetupEventListening();
-        }
-
+        public ValueList(Account account) 
+            : this(account, new NameData()) 
+        { }
+        
+        /// <summary>
+        /// default constructor.
+        /// </summary>
+        public ValueList(Account account, NameData names)
+            : this(account, names, new TimeList())
+        { }
         /// <summary>
         /// default constructor.
         /// </summary>
         public ValueList(NameData names, TimeList values)
         {
+            AccountType = Account.Unknown;
+            Names = names;
+            Values = values;
+            SetupEventListening();
+        }
+        /// <summary>
+        /// default constructor.
+        /// </summary>
+        public ValueList(Account account,NameData names, TimeList values)
+        {
+            AccountType = account;
             Names = names;
             Values = values;
             SetupEventListening();
@@ -148,7 +162,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc />
         public virtual IValueList Copy()
         {
-            return new ValueList(Names, Values);
+            return new ValueList(AccountType, Names, Values);
         }
 
         /// <inheritdoc />

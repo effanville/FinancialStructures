@@ -24,12 +24,12 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         public string QuoteCurrency => Names.Name;
 
         internal Currency(NameData names)
-            : base(names)
+            : base(Account.Currency, names)
         {
         }
 
         internal Currency(NameData name, TimeList values)
-            : base(name, values)
+            : base(Account.Currency, name, values)
         {
         }
 
@@ -37,7 +37,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// default constructor.
         /// </summary>
         public Currency()
-            : base()
+            : base(Account.Currency)
         {
         }
 

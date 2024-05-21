@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Effanville.Common.Structure.DataStructures;
+using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.FinanceStructures.Implementation;
 using Effanville.FinancialStructures.NamingStructures;
@@ -24,8 +25,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.ValueListT
             values.SetData(new DateTime(2010, 1, 1), 4.2m);
 
             yield return new TestCaseData(
-                new ValueList(
-                    new NameData(),
+                new ValueList(new NameData(),
                     values.Copy()),
                 new DateTime(2015, 1, 1),
                 new DailyValuation(new DateTime(2010, 1, 1), 4.2m))

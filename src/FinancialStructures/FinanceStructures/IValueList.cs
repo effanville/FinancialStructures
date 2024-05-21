@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.FileAccess;
 using Effanville.Common.Structure.Reporting;
+using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.FinanceStructures
@@ -13,6 +14,11 @@ namespace Effanville.FinancialStructures.FinanceStructures
     /// </summary>
     public interface IValueList : ICSVAccess, IComparable, IComparable<IValueList>, IEquatable<IValueList>
     {
+        /// <summary>
+        /// The type of this value list.
+        /// </summary>
+        Account AccountType { get; }
+        
         /// <summary>
         /// The Name data for this list, including company, name and urls.
         /// </summary>

@@ -27,7 +27,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// Default constructor where no data is known.
         /// </summary>
         internal CashAccount(NameData names)
-            : base(names)
+            : base(Account.BankAccount, names)
         {
         }
 
@@ -35,7 +35,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// Constructor used when data is known.
         /// </summary>
         internal CashAccount(NameData names, TimeList amounts)
-            : base(names, amounts)
+            : base(Account.BankAccount, names, amounts)
         {
         }
 
@@ -43,7 +43,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// Parameterless constructor for serialisation.
         /// </summary>
         internal CashAccount()
-            : base()
+            : base(Account.BankAccount)
         {
         }
 

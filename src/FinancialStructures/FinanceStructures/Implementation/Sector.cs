@@ -27,7 +27,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// Empty constructor.
         /// </summary>
         internal Sector()
-            : base()
+            : base(Account.Benchmark)
         {
         }
 
@@ -35,12 +35,12 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// Default constructor.
         /// </summary>
         internal Sector(NameData names)
-            : base(names)
+            : base(Account.Benchmark, names)
         {
         }
 
         internal Sector(NameData names, TimeList values)
-            : base(names, values)
+            : base(Account.Benchmark, names, values)
         {
         }
 
