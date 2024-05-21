@@ -88,10 +88,8 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        protected override void OnDataEdit(object edited, EventArgs e)
-        {
-            base.OnDataEdit(edited, new PortfolioEventArgs(Account.Security));
-        }
+        protected override void OnDataEdit(object edited, EventArgs e) 
+            => base.OnDataEdit(edited, new PortfolioEventArgs(Account.Security));
 
         /// <summary>
         /// Ensures that events for data edit are subscribed to.
@@ -111,22 +109,14 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public override IValueList Copy()
-        {
-            return new Security(AccountType, Names, UnitPrice, Shares, Investments, Trades.ToList());
-        }
+        public override IValueList Copy() 
+            => new Security(AccountType, Names, UnitPrice, Shares, Investments, Trades.ToList());
 
         /// <inheritdoc/>
-        public override bool Any()
-        {
-            return UnitPrice.Any() && Shares.Any();
-        }
+        public override bool Any() => UnitPrice.Any() && Shares.Any();
 
         /// <inheritdoc/>
-        public override int Count()
-        {
-            return UnitPrice.Count();
-        }
+        public override int Count() => UnitPrice.Count();
 
         /// <inheritdoc/>
         public override bool Equals(IValueList otherList)
@@ -140,10 +130,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public bool Equals(ISecurity otherSecurity)
-        {
-            return base.Equals(otherSecurity);
-        }
+        public bool Equals(ISecurity otherSecurity) => base.Equals(otherSecurity);
 
         /// <inheritdoc />
         public override int CompareTo(IValueList other)
@@ -157,9 +144,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public int CompareTo(ISecurity other)
-        {
-            return base.CompareTo(other);
-        }
+        public int CompareTo(ISecurity other) => base.CompareTo(other);
     }
 }

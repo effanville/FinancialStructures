@@ -22,19 +22,13 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// <summary>
         /// The Name data for this list, including company, name and urls.
         /// </summary>
-        NameData Names
-        {
-            get;
-        }
+        NameData Names { get; }
 
         /// <summary>
         /// The values stored in this list. For use in serialisation or for cycling through
         /// the values stored. Should not be used for editing data.
         /// </summary>
-        TimeList Values
-        {
-            get;
-        }
+        TimeList Values { get; }
 
         /// <summary>
         /// Compares to another valueList based upon the value on the specified date.

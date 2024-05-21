@@ -16,11 +16,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         public Account AccountType { get; private set; }
         
         /// <inheritdoc/>
-        public NameData Names
-        {
-            get;
-            set;
-        }
+        public NameData Names { get; set; }
 
         /// <summary>
         /// This should only be used for serialisation.
@@ -29,7 +25,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         public string Name
         {
             get => Names.Name;
-
             set => Names.Name = value;
         }
 
@@ -40,7 +35,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         public string Company
         {
             get => Names.Company;
-
             set => Names.Company = value;
         }
 
@@ -51,7 +45,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         public string Url
         {
             get => Names.Url;
-
             set => Names.Url = value;
         }
 
@@ -66,11 +59,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc />
-        public TimeList Values
-        {
-            get;
-            set;
-        }
+        public TimeList Values { get; set; }
 
         /// <summary>
         /// default constructor.
@@ -154,34 +143,19 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc />
-        public override string ToString()
-        {
-            return Names.ToString();
-        }
+        public override string ToString() => Names.ToString();
 
         /// <inheritdoc />
-        public virtual IValueList Copy()
-        {
-            return new ValueList(AccountType, Names, Values);
-        }
+        public virtual IValueList Copy() => new ValueList(AccountType, Names, Values);
 
         /// <inheritdoc />
-        public virtual bool Any()
-        {
-            return Values != null && Values.Any();
-        }
+        public virtual bool Any() => Values != null && Values.Any();
 
         /// <inheritdoc/>
-        public virtual int Count()
-        {
-            return Values.Count();
-        }
+        public virtual int Count() => Values.Count();
 
         /// <inheritdoc/>
-        public virtual bool Equals(IValueList other)
-        {
-            return Names.IsEqualTo(other.Names);
-        }
+        public virtual bool Equals(IValueList other) => Names.IsEqualTo(other?.Names);
 
         /// <inheritdoc />
         public int CompareTo(object obj)
@@ -195,17 +169,14 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc />
-        public virtual int CompareTo(IValueList other)
-        {
-            return Names.CompareTo(other.Names);
-        }
+        public virtual int CompareTo(IValueList other) => Names.CompareTo(other.Names);
 
         /// <inheritdoc />
         public int ValueComparison(IValueList otherList, DateTime dateTime)
         {
-            decimal thislistValue = Value(dateTime)?.Value ?? 0.0m;
+            decimal thisListValue = Value(dateTime)?.Value ?? 0.0m;
             decimal otherListValue = otherList.Value(dateTime)?.Value ?? 0.0m;
-            return otherListValue.CompareTo(thislistValue);
+            return otherListValue.CompareTo(thisListValue);
         }
     }
 }

@@ -15,18 +15,12 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// <summary>
         /// The value of the debt at any given time.
         /// </summary>
-        TimeList Debt
-        {
-            get;
-        }
+        TimeList Debt { get; }
 
         /// <summary>
         /// The list of payments towards this debt.
         /// </summary>
-        TimeList Payments
-        {
-            get;
-        }
+        TimeList Payments { get; }
 
         /// <summary>
         /// Tries to add a debt value for the date specified if it doesnt exist, or edits data if it exists.

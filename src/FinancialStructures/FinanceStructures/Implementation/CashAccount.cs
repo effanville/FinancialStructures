@@ -12,16 +12,11 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
     public class CashAccount : ValueList, IExchangableValueList
     {
         /// <inheritdoc/>
-        protected override void OnDataEdit(object edited, EventArgs e)
-        {
-            base.OnDataEdit(edited, new PortfolioEventArgs(Account.BankAccount));
-        }
+        protected override void OnDataEdit(object edited, EventArgs e) 
+            => base.OnDataEdit(edited, new PortfolioEventArgs(Account.BankAccount));
 
         /// <inheritdoc/>
-        public override IValueList Copy()
-        {
-            return new CashAccount(Names.Copy(), Values);
-        }
+        public override IValueList Copy() => new CashAccount(Names.Copy(), Values);
 
         /// <summary>
         /// Default constructor where no data is known.
@@ -110,9 +105,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             return value;
         }
 
-        private static decimal GetCurrencyValue(DateTime date, ICurrency currency)
-        {
-            return currency == null ? 1.0m : currency.Value(date)?.Value ?? 1.0m;
-        }
+        private static decimal GetCurrencyValue(DateTime date, ICurrency currency) 
+            => currency == null ? 1.0m : currency.Value(date)?.Value ?? 1.0m;
     }
 }

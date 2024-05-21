@@ -18,10 +18,8 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
     public class Sector : ValueList, IValueList
     {
         /// <inheritdoc/>
-        protected override void OnDataEdit(object edited, EventArgs e)
-        {
-            base.OnDataEdit(edited, new PortfolioEventArgs(Account.Benchmark));
-        }
+        protected override void OnDataEdit(object edited, EventArgs e) 
+            => base.OnDataEdit(edited, new PortfolioEventArgs(Account.Benchmark));
 
         /// <summary>
         /// Empty constructor.
@@ -45,9 +43,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public override IValueList Copy()
-        {
-            return new Sector(Names, Values);
-        }
+        public override IValueList Copy() => new Sector(Names, Values);
     }
 }

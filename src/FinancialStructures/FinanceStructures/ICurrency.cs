@@ -9,19 +9,13 @@
         /// The base currency the currency is derived from.
         /// E.g. in the pair GBP.HKD this is the GBP.
         /// </summary>
-        string BaseCurrency
-        {
-            get;
-        }
+        string BaseCurrency { get; }
 
         /// <summary>
         /// The currency of the valuation.
         /// E.g. in the pair GBP.HKD this is the HKD.
         /// </summary>
-        string QuoteCurrency
-        {
-            get;
-        }
+        string QuoteCurrency { get; }
 
         /// <summary>
         /// Returns a currency where the values are given by the reciprocal of the current currency values.
