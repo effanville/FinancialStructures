@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Effanville.Common.Structure.DataStructures;
@@ -50,13 +51,17 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
         /// <param name="name">The name of the account.</param>
         public static List<Labelled<TwoName, DailyValuation>> Investments(this IPortfolio portfolio, Account account, TwoName name)
         {
-            return portfolio.CalculateStatistic<ISecurity, List<Labelled<TwoName, DailyValuation>>>(
-               account,
-               name,
-               (acc, n) => acc == Account.Security || acc == Account.Pension,
-               security => Calculate(security));
-            List<Labelled<TwoName, DailyValuation>> Calculate(ISecurity sec)
+            return portfolio.CalculateValue(
+                account,
+                name,
+                Calculate);
+            List<Labelled<TwoName, DailyValuation>> Calculate(IValueList valueList)
             {
+                if (valueList is not ISecurity sec)
+                {
+                    return null; 
+                }
+
                 ICurrency currency = portfolio.Currency(sec);
                 return sec.AllInvestmentsNamed(currency);
             }

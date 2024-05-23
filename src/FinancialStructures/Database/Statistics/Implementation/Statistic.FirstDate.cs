@@ -43,7 +43,9 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
-            StringValue = valueList.FirstValue()?.Day.ToUkDateString();
+            StringValue = valueList.CalculateValue(
+                x => x.FirstDate())
+                .ToUkDateString();
         }
 
         /// <inheritdoc/>

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
 
+using Effanville.FinancialStructures.Database.Statistics.Implementation;
 using Effanville.FinancialStructures.DataStructures;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Values
 {
@@ -33,7 +35,6 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
               (date, otherDate) => otherDate > date ? otherDate : date);
             DateTime Calculate(ISecurity valueList)
             {
-                ICurrency currency = portfolio.Currency(valueList);
                 return valueList.Trades.LastOrDefault(trade => trade.TradeType.Equals(TradeType.Buy))?.Day ?? default(DateTime);
             }
         }
@@ -47,17 +48,10 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
         /// <returns></returns>
         public static DateTime LastPurchaseDate(this IPortfolio portfolio, Account elementType, TwoName name)
         {
-            if (portfolio.TryGetAccount(elementType, name, out IValueList desired))
-            {
-                if (desired is ISecurity sec)
-                {
-                    ICurrency currency = portfolio.Currency(sec);
-                    DateTime latest = sec.Trades.LastOrDefault(trade => trade.TradeType.Equals(TradeType.Buy))?.Day ?? default(DateTime);
-                    return latest;
-                }
-            }
-
-            return default(DateTime);
+            return portfolio.CalculateValue(
+                elementType,
+                name,
+                LastPurchaseCalculators.DefaultCalculator);
         }
     }
 }

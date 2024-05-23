@@ -2,8 +2,8 @@
 
 using Effanville.FinancialStructures.Database.Extensions.Statistics;
 using Effanville.FinancialStructures.FinanceStructures;
-using Effanville.FinancialStructures.FinanceStructures.Statistics;
 using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
@@ -19,16 +19,11 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
             TwoName name)
         {
             fCurrency = portfolio.BaseCurrency;
-            if (valueList is IExchangableValueList exchangeableValueList)
-            {
-                ICurrency currency = portfolio.Currency(exchangeableValueList);
-                Value = (double)exchangeableValueList.Profit(currency);
-                return;
-            }
-
-            Value = (double)(valueList.Any() ? valueList.Profit() : 0.0m);
+            Value = (double)valueList.CalculateValue(
+                ProfitCalculators.DefaultCalculator,
+                ProfitCalculators.Calculators(portfolio));
         }
-
+        
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {

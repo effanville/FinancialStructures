@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Runtime.InteropServices.JavaScript;
-
 using Effanville.Common.Structure.Extensions;
 using Effanville.FinancialStructures.Database.Extensions.Values;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
@@ -44,14 +43,7 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
-            if (valueList is not ISecurity sec)
-            {
-                StringValue = default(DateTime).ToUkDateString();
-                return;
-            }
-
-            ICurrency currency = portfolio.Currency(sec);
-            StringValue = (sec.LastInvestment(currency)?.Day ?? DateTime.MinValue).ToUkDateString();
+            StringValue = valueList.CalculateValue(LastInvestmentDateCalculators.DefaultCalculator).ToUkDateString();
         }
 
         /// <inheritdoc/>

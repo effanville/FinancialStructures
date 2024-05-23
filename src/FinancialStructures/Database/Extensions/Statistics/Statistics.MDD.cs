@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-
-using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.MathLibrary.Finance;
 using Effanville.FinancialStructures.Database.Extensions.Values;
+using Effanville.FinancialStructures.Database.Statistics.Implementation;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Statistics
 {
@@ -60,23 +59,11 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// </summary>
         public static double MDD(this IPortfolio portfolio, Account account, TwoName names, DateTime earlierTime, DateTime laterTime)
         {
-            return portfolio.CalculateStatistic(
+            return portfolio.CalculateValue(
                 account,
                 names,
-                valueList => Calculate(valueList),
-                double.NaN);
-
-            double Calculate(IValueList valueList)
-            {
-                List<DailyValuation> values = valueList.ListOfValues().Where(value => value.Day >= earlierTime && value.Day <= laterTime && !value.Value.Equals(0.0)).ToList();
-                decimal dd = FinanceFunctions.MDD(values);
-                if(dd == decimal.MaxValue)
-                {
-                    return 0.0;
-                }
-
-                return (double)dd;
-            }
+                MDDCalculators.DefaultCalculator(earlierTime, laterTime),
+                defaultValue: double.NaN);
         }
     }
 }

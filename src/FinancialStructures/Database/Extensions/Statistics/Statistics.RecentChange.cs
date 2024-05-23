@@ -1,6 +1,8 @@
-﻿using Effanville.FinancialStructures.FinanceStructures;
+﻿using Effanville.FinancialStructures.Database.Statistics.Implementation;
+using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.FinanceStructures.Statistics;
 using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Statistics
 {
@@ -35,22 +37,11 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// </summary>
         public static decimal RecentChange(this IPortfolio portfolio, Account account, TwoName name)
         {
-            return portfolio.CalculateStatistic(
+            return portfolio.CalculateValue(
                  account,
                  name,
-                 valueList => valueList.Any() ? valueList.RecentChange() : 0.0m,
-                 valueList => Calculate(valueList));
-
-            decimal Calculate(IExchangableValueList valueList)
-            {
-                if (!valueList.Any())
-                {
-                    return 0.0m;
-                }
-
-                ICurrency currency = portfolio.Currency(valueList);
-                return valueList.RecentChange(currency);
-            }
+                 RecentChangeCalculators.DefaultCalculator,
+                 RecentChangeCalculators.Calculators(portfolio));
         }
     }
 }

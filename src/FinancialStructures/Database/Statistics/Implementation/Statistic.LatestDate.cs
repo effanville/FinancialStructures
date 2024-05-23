@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Effanville.Common.Structure.Extensions;
+using Effanville.FinancialStructures.Database.Extensions;
 using Effanville.FinancialStructures.Database.Extensions.Values;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
@@ -43,7 +44,9 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account, TwoName name)
         {
-            StringValue = valueList.LatestValue()?.Day.ToUkDateString();
+            StringValue = valueList.CalculateValue(
+                vl => vl.LatestDate())
+                .ToUkDateString();
         }
 
         /// <inheritdoc/>

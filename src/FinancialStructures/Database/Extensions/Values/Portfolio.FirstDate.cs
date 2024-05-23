@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Values
@@ -34,10 +35,10 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
         /// <returns></returns>
         public static DateTime FirstDate(this IPortfolio portfolio, Account account, TwoName name)
         {
-            return portfolio.CalculateStatistic(
+            return portfolio.CalculateValue(
                 account,
                 name,
-                valueList => valueList.FirstValue()?.Day ?? DateTime.MaxValue);
+                valueList => valueList.FirstDate());
         }
     }
 }

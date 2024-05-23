@@ -3,6 +3,7 @@
 using Effanville.FinancialStructures.Database.Extensions;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
@@ -18,16 +19,8 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
             TwoName name)
         {
             fCurrency = portfolio.BaseCurrency;
-            if (valueList is IAmortisableAsset asset)
-            {
-                Value = Calculate(portfolio, date, asset);
-                return;
-            }
-            else
-            {
-                Value = 0.0;
-                return;
-            }
+            Value = (double)valueList.CalculateValue(DebtCalculators.DefaultCalculator(date),
+                DebtCalculators.Calculators(portfolio, date));
         }
 
         /// <inheritdoc/>

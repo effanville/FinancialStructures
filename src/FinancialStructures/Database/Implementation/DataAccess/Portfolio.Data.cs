@@ -14,19 +14,30 @@ namespace Effanville.FinancialStructures.Database.Implementation
         /// <inheritdoc/>
         public IReadOnlyList<SecurityDayData> SecurityData(TwoName name, IReportLogger reportLogger = null)
         {
-            return PortfolioCalculateStatistic.CalculateStatistic<ISecurity, IReadOnlyList<SecurityDayData>>(this, Account.Security,
-                name,
-                valueList => valueList.GetDataForDisplay(),
-                new List<SecurityDayData>());
+            return this.CalculateValue(
+                Account.Security,
+                name, 
+                Calculate,
+                defaultValue: new List<SecurityDayData>());
+
+            IReadOnlyList<SecurityDayData> Calculate(IValueList valueList)
+            {
+                if (valueList is ISecurity security)
+                {
+                    return security.GetDataForDisplay();
+                }
+
+                return new List<SecurityDayData>();
+            }
         }
 
         /// <inheritdoc/>
         public IReadOnlyList<DailyValuation> NumberData(Account elementType, TwoName name, IReportLogger reportLogger = null)
         {
-            return PortfolioCalculateStatistic.CalculateStatistic((IPortfolio)this, elementType,
+            return this.CalculateValue(elementType,
                 name,
                 valueList => valueList.ListOfValues(),
-                new List<DailyValuation>());
+                defaultValue: new List<DailyValuation>());
         }
     }
 }
