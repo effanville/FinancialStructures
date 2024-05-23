@@ -49,6 +49,7 @@ namespace Effanville.FinancialStructures.Persistence
             AllData database = XmlFileAccess.ReadFromXmlFile<AllData>(fileSystem, filePath, out string error);
             if (database != null)
             {
+                portfolioImpl.Clear();
                 database.MyFunds.Set(portfolioImpl);
 
                 if (!database.MyFunds.BenchMarks.Any())
