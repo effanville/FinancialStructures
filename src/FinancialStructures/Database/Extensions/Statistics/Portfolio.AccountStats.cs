@@ -75,7 +75,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
                 DailyValuation latest = security.LatestValue();
                 if ((displayValueFunds && latest?.Value > 0) || !displayValueFunds)
                 {
-                    stats.Add(new AccountStatistics(portfolio, dateToCalculate, account, security.Names.ToTwoName(), statisticsToDisplay));
+                    stats.Add(new AccountStatistics(portfolio, dateToCalculate, security, statisticsToDisplay));
                 }
             }
 
@@ -99,6 +99,11 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         public static List<AccountStatistics> GetStats(this IPortfolio portfolio, DateTime dateToCalculate, Account account, TwoName name, Statistic[] statisticsToDisplay = null)
         {
             List<AccountStatistics> stats = new List<AccountStatistics>();
+            if (!portfolio.TryGetAccount(account, name, out IValueList valueList))
+            {
+                return stats;
+            }
+            
             if (portfolio != null)
             {
                 switch (account)
@@ -107,31 +112,31 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
                     case Account.Pension:
                     default:
                     {
-                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, account, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats()));
+                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, valueList, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats()));
                         break;
                     }
                     case Account.BankAccount:
                     {
-                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, account, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
+                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, valueList, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
                         break;
                     }
                     case Account.Benchmark:
                     {
                         if (portfolio.Exists(Account.Benchmark, new TwoName(null, name.Name)))
                         {
-                            stats.Add(new AccountStatistics(portfolio, dateToCalculate, account, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats()));
+                            stats.Add(new AccountStatistics(portfolio, dateToCalculate, valueList, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats()));
                         }
                         break;
                     }
                     case Account.Currency:
                     {
-                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, account, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
+                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, valueList, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
 
                         break;
                     }
                     case Account.Asset:
                     {
-                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, account, name, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultAssetStats()));
+                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, valueList, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultAssetStats()));
                         break;
                     }
                     case Account.All:
