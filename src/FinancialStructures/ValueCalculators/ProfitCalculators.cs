@@ -33,6 +33,8 @@ namespace Effanville.FinancialStructures.ValueCalculators
         {
             if (valueList is not IExchangableValueList exchangableValueList)
             {
+                // aggregation seems to want, need to understand why 
+                //return valueList.Profit();
                 return 0.0m;
             }
             ICurrency currency = portfolio.Currency(exchangableValueList);

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using Effanville.Common.Structure.DataStructures;
@@ -22,25 +21,21 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
         /// <param name="name"></param>
         public static List<Labelled<TwoName, DailyValuation>> TotalInvestments(this IPortfolio portfolio, Totals totals, TwoName name = null)
         {
-            var values = portfolio.CalculateAggregateStatistic<ISecurity, List<Labelled<TwoName, DailyValuation>>>(
+            var values = portfolio.CalculateAggregateValue(
               totals,
               name,
-              (tot, n) => tot == Totals.Security
+              (tot, _) => tot == Totals.Security
                   || tot == Totals.SecurityCompany
                   || tot == Totals.Sector
                   || tot == Totals.SecuritySector
                   || tot == Totals.All,
               new List<Labelled<TwoName, DailyValuation>>(),
-              valueList => Calculate(valueList),
-              (date, otherDate) => date.Union(otherDate).ToList());
+              (date, otherDate) => date.Union(otherDate).ToList(),
+              s => Calculate(portfolio, s),
+              defaultValue: new List<Labelled<TwoName, DailyValuation>>());
 
             values?.Sort();
             return values;
-            List<Labelled<TwoName, DailyValuation>> Calculate(ISecurity security)
-            {
-                ICurrency currency = portfolio.Currency(security);
-                return security.AllInvestmentsNamed(currency);
-            }
         }
 
         /// <summary>
@@ -54,17 +49,18 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
             return portfolio.CalculateValue(
                 account,
                 name,
-                Calculate);
-            List<Labelled<TwoName, DailyValuation>> Calculate(IValueList valueList)
+                s => Calculate(portfolio, s));
+        }            
+        
+        static List<Labelled<TwoName, DailyValuation>> Calculate(IPortfolio portfolio, IValueList valueList)
+        {
+            if (valueList is not ISecurity sec)
             {
-                if (valueList is not ISecurity sec)
-                {
-                    return null; 
-                }
-
-                ICurrency currency = portfolio.Currency(sec);
-                return sec.AllInvestmentsNamed(currency);
+                return new List<Labelled<TwoName, DailyValuation>>(); 
             }
+
+            ICurrency currency = portfolio.Currency(sec);
+            return sec.AllInvestmentsNamed(currency);
         }
     }
 }

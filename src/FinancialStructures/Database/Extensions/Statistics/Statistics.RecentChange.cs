@@ -1,7 +1,4 @@
-﻿using Effanville.FinancialStructures.Database.Statistics.Implementation;
-using Effanville.FinancialStructures.FinanceStructures;
-using Effanville.FinancialStructures.FinanceStructures.Statistics;
-using Effanville.FinancialStructures.NamingStructures;
+﻿using Effanville.FinancialStructures.NamingStructures;
 using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Statistics
@@ -13,23 +10,19 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// </summary>
         public static decimal RecentChange(this IPortfolio portfolio, Totals totals = Totals.Security, TwoName names = null)
         {
-            return portfolio.CalculateAggregateStatistic<IExchangableValueList, decimal>(
+            return portfolio.CalculateAggregateValue(
                 totals,
                 names,
                 (tot, n) => tot != Totals.Benchmark
-                    || tot != Totals.Currency
-                    || tot != Totals.CurrencySector
-                    || tot != Totals.SecurityCurrency
-                    || tot != Totals.BankAccountCurrency
-                    || tot != Totals.AssetCurrency,
+                            || tot != Totals.Currency
+                            || tot != Totals.CurrencySector
+                            || tot != Totals.SecurityCurrency
+                            || tot != Totals.BankAccountCurrency
+                            || tot != Totals.AssetCurrency,
                 0.0m,
-                valueList => Calculate(valueList),
-                (value, runningTotal) => runningTotal + value);
-            decimal Calculate(IExchangableValueList valueList)
-            {
-                ICurrency currency = portfolio.Currency(valueList);
-                return valueList.RecentChange(currency);
-            }
+                (value, runningTotal) => runningTotal + value,
+                RecentChangeCalculators.DefaultCalculator,
+                RecentChangeCalculators.Calculators(portfolio));
         }
 
         /// <summary>

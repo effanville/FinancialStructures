@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-
-using Effanville.Common.Structure.DataStructures;
-using Effanville.Common.Structure.NamingStructures;
-using Effanville.FinancialStructures.Database.Statistics.Implementation;
-using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 using Effanville.FinancialStructures.ValueCalculators;
 
@@ -23,7 +17,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
         /// <param name="name">An ancillary name to use in the case of Sectors</param>
         public static DateTime LastInvestmentDate(this IPortfolio portfolio, Totals total, TwoName name = null)
         {
-            return portfolio.CalculateAggregateStatistic<ISecurity, DateTime>(
+            return portfolio.CalculateAggregateValue(
                total,
                name,
                (tot, n) => tot == Totals.Security
@@ -32,13 +26,8 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
                    || tot == Totals.SecuritySector
                    || tot == Totals.All,
                DateTime.MinValue,
-               valueList => Calculate(valueList),
-               (date, otherDate) => otherDate > date ? otherDate : date);
-            DateTime Calculate(ISecurity valueList)
-            {
-                ICurrency currency = portfolio.Currency(valueList);
-                return valueList.LastInvestment(currency)?.Day ?? DateTime.MinValue;
-            }
+               (date, otherDate) => otherDate > date ? otherDate : date,
+               LastInvestmentDateCalculators.DefaultCalculator);
         }
 
         /// <summary>

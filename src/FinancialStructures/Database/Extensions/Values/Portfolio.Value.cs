@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Values
 {
@@ -31,8 +32,8 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
             return portfolio.CalculateValue(
                 account,
                 name,
-                ValueCalculators.ValueCalculators.DefaultCalculator(date),
-                ValueCalculators.ValueCalculators.Calculators(portfolio, date),
+                ValueCalculator.DefaultCalculator(date),
+                ValueCalculator.Calculators(portfolio, date),
                 defaultValue: DefaultValue());
 
             decimal DefaultValue()

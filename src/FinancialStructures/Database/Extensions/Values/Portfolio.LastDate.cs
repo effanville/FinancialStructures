@@ -19,12 +19,12 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
         /// <returns></returns>
         public static DateTime LatestDate(this IPortfolio portfolio, Totals total, TwoName name = null)
         {
-            return portfolio.CalculateAggregateStatistic(
+            return portfolio.CalculateAggregateValue(
                 total,
                 name,
                 DateTime.MinValue,
-                valueList => valueList.LatestValue().Day,
-                (newStat, previousStat) => newStat > previousStat ? newStat : previousStat);
+                (newStat, previousStat) => newStat > previousStat ? newStat : previousStat,
+                valueList => valueList.LatestDate());
         }
 
         /// <summary>

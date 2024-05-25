@@ -2,6 +2,7 @@
 using Effanville.FinancialStructures.Database.Extensions.Values;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
@@ -18,8 +19,8 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         {
             fCurrency = portfolio.BaseCurrency;
             Value = (double)valueList.CalculateValue(
-                ValueCalculators.ValueCalculators.DefaultCalculator(date),
-                ValueCalculators.ValueCalculators.Calculators(portfolio, date),
+                ValueCalculator.DefaultCalculator(date),
+                ValueCalculator.Calculators(portfolio, date),
                 defaultValue: DefaultValue());
             return;
 

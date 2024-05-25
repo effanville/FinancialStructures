@@ -18,12 +18,12 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
         /// <param name="name">An ancillary name to use in the case of Sectors</param>
         public static DateTime FirstValueDate(this IPortfolio portfolio, Totals total, TwoName name = null)
         {
-            return portfolio.CalculateAggregateStatistic(
+            return portfolio.CalculateAggregateValue(
                 total,
                 name,
                 DateTime.MaxValue,
-                valueList => valueList.FirstValue().Day,
-                (newStat, previousStat) => newStat < previousStat ? newStat : previousStat);
+                (newStat, previousStat) => newStat < previousStat ? newStat : previousStat,
+                valueList => valueList.FirstDate());
         }
 
         /// <summary>
