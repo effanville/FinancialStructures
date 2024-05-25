@@ -53,8 +53,7 @@ namespace Effanville.FinancialStructures.Database.Statistics
         /// <summary>
         /// Calculates the value for this statistic from the account in question on the date specified.
         /// </summary>
-        void Calculate(IValueList valueList, IPortfolio portfolio, DateTime dateToCalculate, Account account,
-            TwoName name);
+        void Calculate(IPortfolio portfolio, IValueList valueList, DateTime dateToCalculate);
 
         /// <summary>
         /// Calculates the total statistic from the total type in question on the date specified.

@@ -22,11 +22,10 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account,
-            TwoName name)
+        public override void Calculate(IPortfolio portfolio, IValueList valueList, DateTime date)
         {
-            Totals companyTotals = account.ToTotals().ToCompanyTotal();
-            Value = portfolio.Fraction(companyTotals, account, name, date);
+            Totals companyTotals = valueList.AccountType.ToTotals().ToCompanyTotal();
+            Value = portfolio.Fraction(companyTotals, valueList.AccountType, valueList.Names.ToTwoName(), date);
         }
 
         /// <inheritdoc/>

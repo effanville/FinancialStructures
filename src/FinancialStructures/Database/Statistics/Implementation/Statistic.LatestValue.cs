@@ -14,8 +14,7 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account,
-            TwoName name)
+        public override void Calculate(IPortfolio portfolio, IValueList valueList, DateTime date)
         {
             fCurrency = portfolio.BaseCurrency;
             Value = (double)valueList.CalculateValue(
@@ -26,7 +25,7 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 
             decimal DefaultValue()
             {
-                if (account == Account.Currency || account == Account.Benchmark)
+                if (valueList.AccountType == Account.Currency || valueList.AccountType == Account.Benchmark)
                 {
                     return 1.0m;
                 }

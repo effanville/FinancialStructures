@@ -53,7 +53,7 @@ namespace Effanville.FinancialStructures.Database.Statistics
             var statistics = new List<IStatistic>();
             foreach (Statistic stat in statsToGenerate)
             {
-                IStatistic stats = StatisticFactory.Generate(stat, valueList, portfolio, dateToCalculate, valueList.AccountType, valueList.Names.ToTwoName());
+                IStatistic stats = StatisticFactory.Generate(stat, valueList, portfolio, dateToCalculate);
                 statistics.Add(stats);
             }
 
