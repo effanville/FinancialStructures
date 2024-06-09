@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 
+using Effanville.Common.Structure.Reporting;
 using Effanville.Common.Structure.ReportWriting;
 using Effanville.FinancialStructures.Database.Export.Statistics;
 using Effanville.FinancialStructures.Database.Statistics;
@@ -99,7 +100,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
             var portfolio = TestDatabase.Databases[TestDatabaseName.TwoSecTwoBank];
             var settings = PortfolioStatisticsSettings.DefaultSettings();
             settings.DateToCalculate = new DateTime(2021, 12, 19);
-            var portfolioStatistics = new PortfolioStatistics(portfolio, settings, new MockFileSystem());
+            var portfolioStatistics = new PortfolioStatistics(portfolio, settings, new MockFileSystem(), new NothingReportLogger());
             var exportSettings = PortfolioStatisticsExportSettings.DefaultSettings();
             var statsString = portfolioStatistics.ExportString(includeHtmlHeaders: false, DocumentType.Html, exportSettings);
             string actual = statsString.ToString();
@@ -202,7 +203,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
                 includeAssets: false,
                 assetDisplayFields: AccountStatisticsHelpers.DefaultAssetStats().ToList());
             settings.DateToCalculate = new DateTime(2021, 12, 19);
-            var portfolioStatistics = new PortfolioStatistics(portfolio, settings, new MockFileSystem());
+            var portfolioStatistics = new PortfolioStatistics(portfolio, settings, new MockFileSystem(),new NothingReportLogger());
             var exportSettings = new PortfolioStatisticsExportSettings(
                 spacing: false,
                 colours: false,
@@ -466,7 +467,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
                 sectorDisplayFields: AccountStatisticsHelpers.DefaultSectorStats().ToList(),
                 includeAssets: false,
                 assetDisplayFields: AccountStatisticsHelpers.DefaultAssetStats().ToList());
-            var portfolioStatistics = new PortfolioStatistics(portfolio, settings, new MockFileSystem());
+            var portfolioStatistics = new PortfolioStatistics(portfolio, settings, new MockFileSystem(), new NothingReportLogger());
             var exportSettings = new PortfolioStatisticsExportSettings(
                 spacing: false,
                 colours: false,

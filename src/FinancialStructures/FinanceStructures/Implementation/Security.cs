@@ -88,8 +88,11 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        protected override void OnDataEdit(object edited, EventArgs e) 
-            => base.OnDataEdit(edited, new PortfolioEventArgs(Account.Security));
+        protected override void OnDataEdit(object edited, EventArgs e)
+        {
+            _displayData = null;
+            base.OnDataEdit(edited, new PortfolioEventArgs(Account.Security));
+        }
 
         /// <summary>
         /// Ensures that events for data edit are subscribed to.

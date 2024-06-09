@@ -37,7 +37,8 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public List<Labelled<TwoName, DailyValuation>> AllInvestmentsNamed(ICurrency currency = null)
         {
-            List<DailyValuation> values = Investments.GetValuesBetween(Investments.FirstDate(), Investments.LatestDate());
+            List<DailyValuation> values =
+                Investments.GetValuesBetween(Investments.FirstDate(), Investments.LatestDate());
             List<Labelled<TwoName, DailyValuation>> namedValues = new List<Labelled<TwoName, DailyValuation>>();
 
             foreach (DailyValuation value in values)
@@ -45,7 +46,8 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
                 if (value != null && value.Value != 0)
                 {
                     value.Value *= GetCurrencyValue(value.Day, currency);
-                    namedValues.Add(new Labelled<TwoName, DailyValuation>(new TwoName(Names.Company, Names.Name), value));
+                    namedValues.Add(
+                        new Labelled<TwoName, DailyValuation>(new TwoName(Names.Company, Names.Name), value));
                 }
             }
 
@@ -67,48 +69,141 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             return thing;
         }
 
+        private List<SecurityDayData> _displayData;
+
+        SecurityDayData Calc(
+            DateTime time,
+            List<DailyValuation> unitPrices,
+            List<DailyValuation> shs,
+            List<DailyValuation> investments,
+            int unitPriceIndex,
+            int shsIndex,
+            int investmentIndex)
+        {
+            decimal unitPriceValue;
+            if (unitPrices.Any())
+            {
+                if (unitPriceIndex == 0)
+                {
+                    unitPriceValue = unitPrices[unitPriceIndex].Value;
+                }
+                else if (unitPriceIndex == unitPrices.Count)
+                {
+                    unitPriceValue = unitPrices[unitPriceIndex - 1].Value;
+                }
+                else if (time == unitPrices[unitPriceIndex].Day)
+                {
+                    unitPriceValue = unitPrices[unitPriceIndex].Value;
+                }
+                else
+                {
+                    var currentValuation = unitPrices[unitPriceIndex];
+                    DailyValuation earlier =
+                        time < currentValuation.Day ? unitPrices[unitPriceIndex - 1] : currentValuation;
+                    DailyValuation later = time < currentValuation.Day
+                        ? currentValuation
+                        : unitPrices[unitPriceIndex + 1];
+                    unitPriceValue = earlier.Value + (later.Value - earlier.Value) /
+                        (decimal)(later.Day - earlier.Day).TotalDays * (decimal)(time - earlier.Day).TotalDays;
+                }
+            }
+            else { unitPriceValue = 0; }
+
+            decimal numShares;
+            if (shsIndex < shs.Count && time == shs[shsIndex].Day)
+            {
+                numShares = shs[shsIndex].Value;
+            }
+            else 
+            { 
+                numShares = shsIndex == 0
+                    ? 0.0m
+                    : shs[shsIndex - 1].Value;
+            }
+
+            decimal investmentValue = investmentIndex < investments.Count && time == investments[investmentIndex].Day
+                ? investments[investmentIndex].Value
+                : 0.0m;
+
+            return new SecurityDayData(time, unitPriceValue, numShares, investmentValue);
+        }
+
+        DateTime GetEarliestTime(
+            List<DailyValuation> unitPrices,
+            List<DailyValuation> shs,
+            List<DailyValuation> investments,
+            int unitPriceIndex,
+            int shsIndex,
+            int investmentIndex)
+        {
+            DateTime currentTime =
+                (unitPriceIndex < unitPrices.Count && shsIndex < shs.Count && unitPrices[unitPriceIndex].Day < shs[shsIndex].Day)
+                || unitPriceIndex < unitPrices.Count
+                    ? unitPrices[unitPriceIndex].Day
+                    : shsIndex < shs.Count
+                        ? shs[shsIndex].Day
+                        : default;
+
+            if (investmentIndex < investments.Count && currentTime > investments[investmentIndex].Day)
+            {
+                currentTime = investments[investmentIndex].Day;
+            }
+
+            return currentTime;
+        }
+
+        DateTime NextTime(
+            DateTime currentTime,
+            List<DailyValuation> unitPrices,
+            List<DailyValuation> shs,
+            List<DailyValuation> investments,
+            ref int unitPriceIndex,
+            ref int shsIndex,
+            ref int investmentIndex)
+        {
+            if (unitPriceIndex < unitPrices.Count && unitPrices[unitPriceIndex].Day == currentTime)
+            {
+                unitPriceIndex++;
+            }
+
+            if (shsIndex < shs.Count && shs[shsIndex].Day == currentTime)
+            {
+                shsIndex++;
+            }
+
+            if (investmentIndex < investments.Count && investments[investmentIndex].Day == currentTime)
+            {
+                investmentIndex++;
+            }
+
+            return GetEarliestTime(unitPrices, shs, investments, unitPriceIndex, shsIndex, investmentIndex);
+        }
+
         /// <inheritdoc/>
         public IReadOnlyList<SecurityDayData> GetDataForDisplay()
         {
-            List<SecurityDayData> output = new List<SecurityDayData>();
-            if (UnitPrice.Any())
+            if (_displayData != null)
             {
-                foreach (DailyValuation unitPriceValuation in UnitPrice.GetValuesBetween(UnitPrice.FirstDate(), UnitPrice.LatestDate()))
-                {
-                    decimal shares = Shares.ValueOnOrBefore(unitPriceValuation.Day)?.Value ?? 0.0m;
-                    _ = Investments.TryGetValue(unitPriceValuation.Day, out decimal invest);
-                    SecurityDayData thisday = new SecurityDayData(unitPriceValuation.Day, unitPriceValuation.Value, shares, invest);
-                    output.Add(thisday);
-                }
+                return _displayData;
             }
-            if (Shares.Any())
-            {
-                foreach (DailyValuation sharesValuation in Shares.GetValuesBetween(Shares.FirstDate(), Shares.LatestDate()))
-                {
-                    if (!UnitPrice.TryGetValue(sharesValuation.Day, out decimal _))
-                    {
-                        _ = Investments.TryGetValue(sharesValuation.Day, out decimal invest);
-                        decimal unitPriceInterpolation = UnitPrice.Value(sharesValuation.Day)?.Value ?? 0.0m;
-                        SecurityDayData thisday = new SecurityDayData(sharesValuation.Day, unitPriceInterpolation, sharesValuation.Value, invest);
-                        output.Add(thisday);
-                    }
-                }
-            }
-            if (Investments.Any())
-            {
-                foreach (DailyValuation investmentValuation in Investments.GetValuesBetween(Investments.FirstDate(), Investments.LatestDate()))
-                {
-                    if (!UnitPrice.TryGetValue(investmentValuation.Day, out decimal _) && !Shares.TryGetValue(investmentValuation.Day, out decimal _))
-                    {
-                        decimal shares = Shares.ValueOnOrBefore(investmentValuation.Day).Value;
-                        decimal unitPriceInterpolation = UnitPrice.Value(investmentValuation.Day)?.Value ?? 0.0m;
-                        SecurityDayData thisday = new SecurityDayData(investmentValuation.Day, unitPriceInterpolation, shares, investmentValuation.Value);
 
-                        output.Add(thisday);
-                    }
-                }
+            List<DailyValuation> unitPrices = UnitPrice.Values();
+            var shs = Shares.Values();
+            var investments = Investments.Values();
+            int unitPriceIndex = 0;
+            int shsIndex = 0;
+            int investmentIndex = 0;
+            List<SecurityDayData> output = new List<SecurityDayData>();
+            DateTime currentTime =
+                GetEarliestTime(unitPrices, shs, investments, unitPriceIndex, shsIndex, investmentIndex);
+            while (unitPriceIndex < unitPrices.Count || shsIndex < shs.Count || investmentIndex < investments.Count)
+            {
+                output.Add(Calc(currentTime, unitPrices, shs, investments, unitPriceIndex, shsIndex, investmentIndex));
+                currentTime = NextTime(currentTime, unitPrices, shs, investments, ref unitPriceIndex, ref shsIndex,
+                    ref investmentIndex);
             }
-            output.Sort();
+
+            _displayData = output;
             return output;
         }
 

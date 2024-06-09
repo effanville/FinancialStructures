@@ -2,6 +2,7 @@
 using System.IO.Abstractions;
 using System.Linq;
 
+using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.Database.Export.Statistics;
 
 using NUnit.Framework;
@@ -20,7 +21,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 
             string bankCompany = "Bank";
             _ = generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0m });
-            PortfolioStatistics stats = new PortfolioStatistics(generator.Database, PortfolioStatisticsSettings.DefaultSettings(), new FileSystem());
+            PortfolioStatistics stats = new PortfolioStatistics(generator.Database, PortfolioStatisticsSettings.DefaultSettings(), new FileSystem(), new NothingReportLogger());
 
             Assert.AreEqual(1, stats.SecurityStats.Count);
             Assert.AreEqual(secCompany, stats.SecurityStats.First().NameData.Company);

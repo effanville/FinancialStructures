@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
@@ -47,33 +48,41 @@ namespace Effanville.FinancialStructures.Database.Statistics
         /// <summary>
         /// Default constructor for statistics for a <see cref="Account"/> object.
         /// </summary>
-        public AccountStatistics(IPortfolio portfolio, DateTime dateToCalculate, IValueList valueList, Statistic[] statsToGenerate)
+        public AccountStatistics(IPortfolio portfolio, DateTime dateToCalculate, IValueList valueList, Statistic[] statsToGenerate, IReportLogger logger)
         {
-            NameData = valueList.Names;
-            var statistics = new List<IStatistic>();
-            foreach (Statistic stat in statsToGenerate)
-            {
-                IStatistic stats = StatisticFactory.Generate(stat, valueList, portfolio, dateToCalculate);
-                statistics.Add(stats);
-            }
+                NameData = valueList.Names;
+                var statistics = new List<IStatistic>();
+                foreach (Statistic stat in statsToGenerate)
+                {
+                    using (new Timer(logger, $"Stats,{stat},{dateToCalculate},{valueList.Names}"))
+                    {
+                        IStatistic stats = StatisticFactory.Generate(stat, valueList, portfolio, dateToCalculate);
+                        statistics.Add(stats);
+                    }
+                }
 
-            Statistics = statistics;
+                Statistics = statistics;
         }
 
         /// <summary>
         /// Default constructor for statistics for a <see cref="Totals"/>
         /// </summary>
-        public AccountStatistics(IPortfolio portfolio, DateTime dateToCalculate, Totals total, TwoName name, Statistic[] statsToGenerate)
+        public AccountStatistics(IPortfolio portfolio, DateTime dateToCalculate, Totals total, TwoName name, Statistic[] statsToGenerate, IReportLogger logger)
         {
-            NameData = name;
-            var statistics = new List<IStatistic>();
-            foreach (Statistic stat in statsToGenerate)
-            {
-                IStatistic stats = StatisticFactory.Generate(stat, portfolio, dateToCalculate, total, name);
-                statistics.Add(stats);
-            }
+                logger.Log(ReportSeverity.Useful, ReportType.Information, "Stats", "");
+                NameData = name;
+                var statistics = new List<IStatistic>();
+                foreach (Statistic stat in statsToGenerate)
+                {
+                    using (new Timer(logger, $"Stats,{stat},{dateToCalculate},{total}-{name}"))
+                    {
+                        IStatistic stats = StatisticFactory.Generate(stat, portfolio, dateToCalculate, total, name);
+                        statistics.Add(stats);
+                    }
+                }
 
-            Statistics = statistics;
+                Statistics = statistics;
+            
         }
 
         /// <summary>

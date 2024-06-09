@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Effanville.Common.Structure.DataStructures;
+using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.Database.Extensions.Values;
 using Effanville.FinancialStructures.Database.Statistics;
 using Effanville.FinancialStructures.FinanceStructures;
@@ -24,50 +25,50 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// <param name="displayValueFunds">Whether funds with 0 latest value should be displayed only, or all funds displayed.</param>
         /// <param name="displayTotals">Whether totals values should be calculated</param>
         /// <param name="statisticsToDisplay">The array of statistics to be displayed</param>
-        public static List<AccountStatistics> GetStats(this IPortfolio portfolio, DateTime dateToCalculate, Account account, bool displayValueFunds, bool displayTotals = true, Statistic[] statisticsToDisplay = null)
+        public static List<AccountStatistics> GetStats(this IPortfolio portfolio, DateTime dateToCalculate, Account account, bool displayValueFunds, bool displayTotals = true, Statistic[] statisticsToDisplay = null, IReportLogger logger = null)
         {
             switch (account)
             {
                 case Account.Security:
                 default:
                 {
-                    return GenerateFromList(portfolio.Funds, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats());
+                    return GenerateFromList(portfolio.Funds, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats(),logger);
 
                 }
                 case Account.BankAccount:
                 {
-                    return GenerateFromList(portfolio.BankAccounts, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats());
+                    return GenerateFromList(portfolio.BankAccounts, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats(),logger);
                 }
                 case Account.Benchmark:
                 {
-                    return GenerateFromList(portfolio.BenchMarks, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats());
+                    return GenerateFromList(portfolio.BenchMarks, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats(),logger);
                 }
                 case Account.Currency:
                 {
-                    return GenerateFromList(portfolio.Currencies, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats());
+                    return GenerateFromList(portfolio.Currencies, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats(),logger);
                 }
                 case Account.Asset:
                 {
-                    return GenerateFromList(portfolio.Assets, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultAssetStats());
+                    return GenerateFromList(portfolio.Assets, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultAssetStats(),logger);
                 }
                 case Account.Pension:
                 {
-                    return GenerateFromList(portfolio.Pensions, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats());
+                    return GenerateFromList(portfolio.Pensions, portfolio, dateToCalculate, account, displayValueFunds, displayTotals, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats(),logger);
                 }
                 case Account.All:
                 {
                     List<AccountStatistics> stats = new List<AccountStatistics>();
-                    stats.AddRange(portfolio.GetStats(dateToCalculate, Account.Security, displayValueFunds, displayTotals, statisticsToDisplay));
-                    stats.AddRange(portfolio.GetStats(dateToCalculate, Account.BankAccount, displayValueFunds, displayTotals, statisticsToDisplay));
-                    stats.AddRange(portfolio.GetStats(dateToCalculate, Account.Pension, displayValueFunds, displayTotals, statisticsToDisplay));
-                    stats.AddRange(portfolio.GetStats(dateToCalculate, Account.Asset, displayValueFunds, displayTotals, statisticsToDisplay));
+                    stats.AddRange(portfolio.GetStats(dateToCalculate, Account.Security, displayValueFunds, displayTotals, statisticsToDisplay, logger));
+                    stats.AddRange(portfolio.GetStats(dateToCalculate, Account.BankAccount, displayValueFunds, displayTotals, statisticsToDisplay, logger));
+                    stats.AddRange(portfolio.GetStats(dateToCalculate, Account.Pension, displayValueFunds, displayTotals, statisticsToDisplay, logger));
+                    stats.AddRange(portfolio.GetStats(dateToCalculate, Account.Asset, displayValueFunds, displayTotals, statisticsToDisplay, logger));
                     stats.Sort();
                     return stats;
                 }
             }
         }
 
-        private static List<AccountStatistics> GenerateFromList(IReadOnlyList<IValueList> values, IPortfolio portfolio, DateTime dateToCalculate, Account account, bool displayValueFunds, bool displayTotals, Statistic[] statisticsToDisplay)
+        private static List<AccountStatistics> GenerateFromList(IReadOnlyList<IValueList> values, IPortfolio portfolio, DateTime dateToCalculate, Account account, bool displayValueFunds, bool displayTotals, Statistic[] statisticsToDisplay, IReportLogger logger)
         {
             List<AccountStatistics> stats = new List<AccountStatistics>();
             foreach (IValueList security in values)
@@ -75,14 +76,14 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
                 DailyValuation latest = security.LatestValue();
                 if ((displayValueFunds && latest?.Value > 0) || !displayValueFunds)
                 {
-                    stats.Add(new AccountStatistics(portfolio, dateToCalculate, security, statisticsToDisplay));
+                    stats.Add(new AccountStatistics(portfolio, dateToCalculate, security, statisticsToDisplay,logger));
                 }
             }
 
             stats.Sort();
             if (displayTotals)
             {
-                stats.Add(new AccountStatistics(portfolio, dateToCalculate, account.ToTotals(), new NameData("Totals", ""), statisticsToDisplay));
+                stats.Add(new AccountStatistics(portfolio, dateToCalculate, account.ToTotals(), new NameData("Totals", ""), statisticsToDisplay,logger));
             }
             return stats;
         }
@@ -96,7 +97,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// <param name="account">The type of account data to display.</param>
         /// <param name="name">The name of the account to query for.</param>
         /// <param name="statisticsToDisplay">The array of statistics to be displayed.</param>
-        public static List<AccountStatistics> GetStats(this IPortfolio portfolio, DateTime dateToCalculate, Account account, TwoName name, Statistic[] statisticsToDisplay = null)
+        public static List<AccountStatistics> GetStats(this IPortfolio portfolio, DateTime dateToCalculate, Account account, TwoName name, Statistic[] statisticsToDisplay = null, IReportLogger logger = null)
         {
             List<AccountStatistics> stats = new List<AccountStatistics>();
             if (!portfolio.TryGetAccount(account, name, out IValueList valueList))
@@ -112,31 +113,31 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
                     case Account.Pension:
                     default:
                     {
-                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, valueList, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats()));
+                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, valueList, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats(),logger));
                         break;
                     }
                     case Account.BankAccount:
                     {
-                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, valueList, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
+                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, valueList, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats(),logger));
                         break;
                     }
                     case Account.Benchmark:
                     {
                         if (portfolio.Exists(Account.Benchmark, new TwoName(null, name.Name)))
                         {
-                            stats.Add(new AccountStatistics(portfolio, dateToCalculate, valueList, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats()));
+                            stats.Add(new AccountStatistics(portfolio, dateToCalculate, valueList, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats(),logger));
                         }
                         break;
                     }
                     case Account.Currency:
                     {
-                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, valueList, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats()));
+                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, valueList, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats(),logger));
 
                         break;
                     }
                     case Account.Asset:
                     {
-                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, valueList, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultAssetStats()));
+                        stats.Add(new AccountStatistics(portfolio, dateToCalculate, valueList, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultAssetStats(),logger));
                         break;
                     }
                     case Account.All:
@@ -156,7 +157,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// <param name="total">The type of Totals data to display.</param>
         /// <param name="displayValueFunds">Whether funds with 0 latest value should be displayed only, or all funds displayed.</param>
         /// <param name="statisticsToDisplay">The array of statistics to be displayed.</param>
-        public static List<AccountStatistics> GetStats(this IPortfolio portfolio, DateTime dateToCalculate, Totals total, bool displayValueFunds = true, Statistic[] statisticsToDisplay = null)
+        public static List<AccountStatistics> GetStats(this IPortfolio portfolio, DateTime dateToCalculate, Totals total, bool displayValueFunds = true, Statistic[] statisticsToDisplay = null, IReportLogger logger = null)
         {
             switch (total)
             {
@@ -164,7 +165,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
                 {
                     List<AccountStatistics> stats = new List<AccountStatistics>
                     {
-                        new AccountStatistics(portfolio, dateToCalculate, total, new NameData("Totals", "All"), statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics())
+                        new AccountStatistics(portfolio, dateToCalculate, total, new NameData("Totals", "All"), statisticsToDisplay ?? AccountStatisticsHelpers.AllStatistics(),logger)
                     };
                     return stats;
                 }
@@ -176,25 +177,25 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
                 case Totals.PensionSector:
                 default:
                 {
-                    return GenerateFromList(portfolio.Companies(total.ToAccount()), portfolio, dateToCalculate, total, displayValueFunds, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats());
+                    return GenerateFromList(portfolio.Companies(total.ToAccount()), portfolio, dateToCalculate, total, displayValueFunds, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats(), logger);
                 }
                 case Totals.BankAccount:
                 case Totals.BankAccountCompany:
                 {
-                    return GenerateFromList(portfolio.Companies(total.ToAccount()), portfolio, dateToCalculate, total, displayValueFunds, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats());
+                    return GenerateFromList(portfolio.Companies(total.ToAccount()), portfolio, dateToCalculate, total, displayValueFunds, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultBankAccountStats(), logger);
                 }
                 case Totals.BankAccountSector:
                 {
-                    return GenerateFromList(portfolio.Companies(total.ToAccount()), portfolio, dateToCalculate, total, displayValueFunds, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats());
+                    return GenerateFromList(portfolio.Companies(total.ToAccount()), portfolio, dateToCalculate, total, displayValueFunds, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats(), logger);
                 }
                 case Totals.Asset:
                 case Totals.AssetCompany:
                 {
-                    return GenerateFromList(portfolio.Companies(total.ToAccount()), portfolio, dateToCalculate, total, displayValueFunds, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultAssetStats());
+                    return GenerateFromList(portfolio.Companies(total.ToAccount()), portfolio, dateToCalculate, total, displayValueFunds, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultAssetStats(), logger);
                 }
                 case Totals.AssetSector:
                 {
-                    return GenerateFromList(portfolio.Companies(total.ToAccount()), portfolio, dateToCalculate, total, displayValueFunds, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats());
+                    return GenerateFromList(portfolio.Companies(total.ToAccount()), portfolio, dateToCalculate, total, displayValueFunds, statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSectorStats(), logger);
                 }
                 case Totals.Benchmark:
                 case Totals.Currency:
@@ -210,7 +211,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
             }
         }
 
-        private static List<AccountStatistics> GenerateFromList(IReadOnlyList<string> values, IPortfolio portfolio, DateTime dateToCalculate, Totals totals, bool displayValueFunds, Statistic[] statisticsToDisplay)
+        private static List<AccountStatistics> GenerateFromList(IReadOnlyList<string> values, IPortfolio portfolio, DateTime dateToCalculate, Totals totals, bool displayValueFunds, Statistic[] statisticsToDisplay, IReportLogger logger)
         {
             List<AccountStatistics> stats = new List<AccountStatistics>();
             foreach (string company in values)
@@ -218,7 +219,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
                 decimal latest = portfolio.TotalValue(totals, new TwoName(company));
                 if ((displayValueFunds && latest > 0) || !displayValueFunds)
                 {
-                    stats.Add(new AccountStatistics(portfolio, dateToCalculate, totals, new NameData(company, "Totals"), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats()));
+                    stats.Add(new AccountStatistics(portfolio, dateToCalculate, totals, new NameData(company, "Totals"), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats(), logger));
                 }
             }
             return stats;
@@ -233,12 +234,12 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// <param name="total">The type of account data to display.</param>
         /// <param name="name">The name of the account to query for.</param>
         /// <param name="statisticsToDisplay">The array of statistics to be displayed.</param>
-        public static List<AccountStatistics> GetStats(this IPortfolio portfolio, DateTime dateToCalculate, Totals total, TwoName name, Statistic[] statisticsToDisplay = null)
+        public static List<AccountStatistics> GetStats(this IPortfolio portfolio, DateTime dateToCalculate, Totals total, TwoName name, Statistic[] statisticsToDisplay = null, IReportLogger logger = null)
         {
             if (portfolio != null)
             {
                 List<AccountStatistics> stats = new List<AccountStatistics>();
-                stats.Add(new AccountStatistics(portfolio, dateToCalculate, total, StatName(total, name), statisticsToDisplay ?? DefaultStatistics(total)));
+                stats.Add(new AccountStatistics(portfolio, dateToCalculate, total, StatName(total, name), statisticsToDisplay ?? DefaultStatistics(total), logger));
                 return stats;
             }
 

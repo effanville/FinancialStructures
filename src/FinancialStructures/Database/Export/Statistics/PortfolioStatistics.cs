@@ -165,77 +165,77 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
         /// <summary>
         /// Constructor from a portfolio.
         /// </summary>
-        public PortfolioStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings, IFileSystem fileSystem)
+        public PortfolioStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings, IFileSystem fileSystem, IReportLogger logger)
         {
             fDatabaseName = portfolio.Name;
-            GenerateStatistics(portfolio, settings);
+            GenerateStatistics(portfolio, settings, logger);
         }
 
-        private void GenerateStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings)
+        private void GenerateStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings, IReportLogger logger)
         {
             Statistic[] bankAccountStatistics = settings.BankAccountGenerateOptions.GenerateFields.ToArray();
 
             PortfolioTotals = new List<AccountStatistics>();
-            PortfolioTotals.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.Security, new TwoName(), bankAccountStatistics));
-            PortfolioTotals.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.BankAccount, new TwoName(), bankAccountStatistics));
-            PortfolioTotals.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.Pension, new TwoName(), bankAccountStatistics));
-            PortfolioTotals.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.Asset, new TwoName(), bankAccountStatistics));
-            PortfolioTotals.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.All, new TwoName(), bankAccountStatistics));
+            PortfolioTotals.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.Security, new TwoName(), bankAccountStatistics, logger));
+            PortfolioTotals.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.BankAccount, new TwoName(), bankAccountStatistics, logger));
+            PortfolioTotals.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.Pension, new TwoName(), bankAccountStatistics, logger));
+            PortfolioTotals.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.Asset, new TwoName(), bankAccountStatistics, logger));
+            PortfolioTotals.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.All, new TwoName(), bankAccountStatistics, logger));
 
-            GenerateSecurityStatistics(portfolio, settings);
-            GenerateBankAccountStatistics(portfolio, settings);
-            GenerateAssetStatistics(portfolio, settings);
-            GenerateSectorStatistics(portfolio, settings);
-            GeneratePensionStatistics(portfolio, settings);
+            GenerateSecurityStatistics(portfolio, settings, logger);
+            GenerateBankAccountStatistics(portfolio, settings, logger);
+            GenerateAssetStatistics(portfolio, settings, logger);
+            GenerateSectorStatistics(portfolio, settings, logger);
+            GeneratePensionStatistics(portfolio, settings, logger);
             PortfolioNotes = portfolio.Notes.ToList();
         }
 
-        private void GenerateSecurityStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings)
+        private void GenerateSecurityStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings, IReportLogger logger)
         {
             if (settings.SecurityGenerateOptions.ShouldGenerate)
             {
                 Statistic[] securityData = settings.SecurityGenerateOptions.GenerateFields.ToArray();
-                SecurityStats = portfolio.GetStats(settings.DateToCalculate, Account.Security, displayValueFunds: settings.DisplayValueFunds, displayTotals: false, securityData);
-                SecurityCompanyStats = portfolio.GetStats(settings.DateToCalculate, Totals.SecurityCompany, settings.DisplayValueFunds, securityData);
-                SecurityTotalStats = portfolio.GetStats(settings.DateToCalculate, Totals.Security, new TwoName(), securityData);
+                SecurityStats = portfolio.GetStats(settings.DateToCalculate, Account.Security, displayValueFunds: settings.DisplayValueFunds, displayTotals: false, securityData, logger);
+                SecurityCompanyStats = portfolio.GetStats(settings.DateToCalculate, Totals.SecurityCompany, settings.DisplayValueFunds, securityData, logger);
+                SecurityTotalStats = portfolio.GetStats(settings.DateToCalculate, Totals.Security, new TwoName(), securityData, logger);
             }
         }
 
-        private void GeneratePensionStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings)
+        private void GeneratePensionStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings, IReportLogger logger)
         {
             if (settings.SecurityGenerateOptions.ShouldGenerate)
             {
                 Statistic[] securityData = settings.SecurityGenerateOptions.GenerateFields.ToArray();
-                PensionStats = portfolio.GetStats(settings.DateToCalculate, Account.Pension, displayValueFunds: settings.DisplayValueFunds, displayTotals: false, securityData);
-                PensionCompanyStats = portfolio.GetStats(settings.DateToCalculate, Totals.PensionCompany, settings.DisplayValueFunds, securityData);
-                PensionTotalStats = portfolio.GetStats(settings.DateToCalculate, Totals.Pension, new TwoName(), securityData);
+                PensionStats = portfolio.GetStats(settings.DateToCalculate, Account.Pension, displayValueFunds: settings.DisplayValueFunds, displayTotals: false, securityData, logger);
+                PensionCompanyStats = portfolio.GetStats(settings.DateToCalculate, Totals.PensionCompany, settings.DisplayValueFunds, securityData, logger);
+                PensionTotalStats = portfolio.GetStats(settings.DateToCalculate, Totals.Pension, new TwoName(), securityData, logger);
             }
         }
 
-        private void GenerateBankAccountStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings)
+        private void GenerateBankAccountStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings, IReportLogger logger)
         {
             if (settings.BankAccountGenerateOptions.ShouldGenerate)
             {
                 Statistic[] bankAccountStatistics = settings.BankAccountGenerateOptions.GenerateFields.ToArray();
-                BankAccountStats = portfolio.GetStats(settings.DateToCalculate, Account.BankAccount, settings.DisplayValueFunds, displayTotals: false, bankAccountStatistics);
-                BankAccountCompanyStats = portfolio.GetStats(settings.DateToCalculate, Totals.BankAccountCompany, settings.DisplayValueFunds, bankAccountStatistics);
-                BankAccountTotalStats = portfolio.GetStats(settings.DateToCalculate, Totals.BankAccount, new TwoName("Totals", ""), bankAccountStatistics);
+                BankAccountStats = portfolio.GetStats(settings.DateToCalculate, Account.BankAccount, settings.DisplayValueFunds, displayTotals: false, bankAccountStatistics, logger);
+                BankAccountCompanyStats = portfolio.GetStats(settings.DateToCalculate, Totals.BankAccountCompany, settings.DisplayValueFunds, bankAccountStatistics, logger);
+                BankAccountTotalStats = portfolio.GetStats(settings.DateToCalculate, Totals.BankAccount, new TwoName("Totals", ""), bankAccountStatistics, logger);
             }
         }
 
-        private void GenerateAssetStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings)
+        private void GenerateAssetStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings, IReportLogger logger)
         {
             if (settings.AssetGenerateOptions.ShouldGenerate)
             {
                 Statistic[] assetStatistics = settings.AssetGenerateOptions.GenerateFields.ToArray();
-                AssetStats = portfolio.GetStats(settings.DateToCalculate, Account.Asset, settings.DisplayValueFunds, false, assetStatistics);
+                AssetStats = portfolio.GetStats(settings.DateToCalculate, Account.Asset, settings.DisplayValueFunds, false, assetStatistics, logger);
 
-                AssetCompanyStats = portfolio.GetStats(settings.DateToCalculate, Totals.AssetCompany, settings.DisplayValueFunds, assetStatistics);
-                AssetTotalStats = portfolio.GetStats(settings.DateToCalculate, Totals.Asset, new TwoName("Totals", ""), assetStatistics);
+                AssetCompanyStats = portfolio.GetStats(settings.DateToCalculate, Totals.AssetCompany, settings.DisplayValueFunds, assetStatistics, logger);
+                AssetTotalStats = portfolio.GetStats(settings.DateToCalculate, Totals.Asset, new TwoName("Totals", ""), assetStatistics, logger);
             }
         }
 
-        private void GenerateSectorStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings)
+        private void GenerateSectorStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings, IReportLogger logger)
         {
             if (settings.SectorGenerateOptions.ShouldGenerate)
             {
@@ -244,11 +244,11 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
                 IReadOnlyList<string> sectorNames = portfolio.Sectors(Account.Security);
                 foreach (string sectorName in sectorNames)
                 {
-                    SectorStats.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.Sector, new TwoName("Totals", sectorName), sectorData));
+                    SectorStats.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.Sector, new TwoName("Totals", sectorName), sectorData, logger));
 
                     if (settings.GenerateBenchmarks)
                     {
-                        SectorStats.AddRange(portfolio.GetStats(settings.DateToCalculate, Account.Benchmark, new TwoName("Benchmark", sectorName), sectorData));
+                        SectorStats.AddRange(portfolio.GetStats(settings.DateToCalculate, Account.Benchmark, new TwoName("Benchmark", sectorName), sectorData, logger));
                     }
                 }
             }
