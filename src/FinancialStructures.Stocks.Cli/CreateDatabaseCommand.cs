@@ -10,6 +10,9 @@ using Effanville.FinancialStructures.Persistence;
 using Effanville.FinancialStructures.Stocks.HistoricalRepository;
 using Effanville.FinancialStructures.Stocks.Persistence;
 
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+
 namespace Effanville.FinancialStructures.Stocks.Cli
 {
     /// <summary>
@@ -18,6 +21,8 @@ namespace Effanville.FinancialStructures.Stocks.Cli
     internal sealed class CreateDatabaseCommand : ICommand
     {
         private readonly IFileSystem _fileSystem;
+        private readonly ILogger _logger;
+        private readonly IReportLogger _reportLogger;
         private readonly CommandOption<string> _dbFilePathOption;
         private readonly CommandOption<string> _indexNameOption;
         private readonly CommandOption<DateTime> _startDateOption;
@@ -41,9 +46,11 @@ namespace Effanville.FinancialStructures.Stocks.Cli
         /// <summary>
         /// Default Constructor.
         /// </summary>
-        public CreateDatabaseCommand(IFileSystem fileSystem)
+        public CreateDatabaseCommand(IFileSystem fileSystem, ILogger<CreateDatabaseCommand> logger, IReportLogger reportLogger)
         {
             _fileSystem = fileSystem;
+            _logger = logger;
+            _reportLogger = reportLogger;
             _dbFilePathOption = new CommandOption<string>(
                 "filePath", 
                 "FilePath to the exchange information to create db for.", 
@@ -71,39 +78,30 @@ namespace Effanville.FinancialStructures.Stocks.Cli
 
         /// <inheritdoc/>
         public void WriteHelp(IConsole console)
-            => CommandExtensions.WriteHelp(this, console);
+            => this.WriteHelp(console, _logger);
 
-        /// <inheritdoc/>
-        public int Execute(IConsole console, string[] args)
-            => Execute(console, null, args);
-
-        /// <inheritdoc/>
-        public int Execute(IConsole console, IReportLogger logger, string[] args)
+        public int Execute(IConsole console, IConfiguration config)
         {
             string fullPath = _fileSystem.Path.GetFullPath(_dbFilePathOption.Value);
             if (!_fileSystem.File.Exists(fullPath))
             {
-                logger.Error(
-                    $"{nameof(CreateDatabaseCommand)}.{nameof(Execute)}",
-                    "File does not exist.");
+                _logger.Log(LogLevel.Error, "File does not exist.");
                 return -1;
             }
 
             if (_startDateOption.Value > _endDateOption.Value)
             {
-                logger.Error(
-                    $"{nameof(CreateDatabaseCommand)}.{nameof(Execute)}",
-                    "Start date is after end date");
+                _logger.Log(LogLevel.Error, "Start date is after end date");
                 return -1;
             }
 
             var historicalMarketsBuilder = new HistoricalMarketsBuilder()
-                .WithExchangesFromFile(fullPath, _fileSystem, logger);
-             historicalMarketsBuilder.WithIndexInstruments(_indexNameOption.Value, logger).Wait();
+                .WithExchangesFromFile(fullPath, _fileSystem, _reportLogger);
+             historicalMarketsBuilder.WithIndexInstruments(_indexNameOption.Value, _reportLogger).Wait();
              historicalMarketsBuilder.WithInstrumentPriceData(
                 _startDateOption.Value,
                 _endDateOption.Value,
-                logger).Wait();
+                _reportLogger).Wait();
             HistoricalMarkets historicalMarkets = historicalMarketsBuilder.GetInstance();
 
             string outputDbFilePath = _fileSystem.Path.Combine(
@@ -111,7 +109,7 @@ namespace Effanville.FinancialStructures.Stocks.Cli
                 _fileSystem.Path.GetFileNameWithoutExtension(fullPath) + ".db");
             IHistoricalMarketsPersistence persistence = new SqliteHistoricalMarketsPersistence();
             var options = new SqlitePersistenceOptions(inMemory: false, outputDbFilePath, _fileSystem);
-            if (persistence.Save(historicalMarkets, options, logger))
+            if (persistence.Save(historicalMarkets, options, _reportLogger))
             {
                 return 0;
             }
@@ -120,10 +118,7 @@ namespace Effanville.FinancialStructures.Stocks.Cli
         }
 
         /// <inheritdoc/>
-        public bool Validate(IConsole console, string[] args) => Validate(console, null, args);
-
-        /// <inheritdoc/>
-        public bool Validate(IConsole console, IReportLogger logger, string[] args)
-            => this.Validate(args, console, logger);
+        public bool Validate(IConsole console, IConfiguration config) 
+            => this.Validate(config, console, _logger);
     }
 }
