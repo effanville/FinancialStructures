@@ -179,7 +179,14 @@ namespace Effanville.FinancialStructures.Database.Statistics
                 Statistic.Name,
                 Statistic.Currency,
                 Statistic.LatestValue,
+                Statistic.RecentChange,
+                Statistic.FundFraction,
+                Statistic.FundCompanyFraction,
                 Statistic.Sectors,
+                Statistic.FirstDate,
+                Statistic.LatestDate,
+                Statistic.NumberEntries,
+                Statistic.EntryYearDensity,
                 Statistic.Notes
             };
         }
@@ -204,6 +211,8 @@ namespace Effanville.FinancialStructures.Database.Statistics
                 Statistic.NumberOfAccounts,
                 Statistic.FirstDate,
                 Statistic.LatestDate,
+                Statistic.NumberEntries,
+                Statistic.EntryYearDensity,
                 Statistic.Notes
             };
         }
