@@ -81,7 +81,7 @@ namespace Effanville.FinancialStructures.Database.Export.History
         private static List<DateTime> PrepareTimes(IPortfolio portfolio, Settings settings)
         {
             List<DateTime> times = new List<DateTime>();
-            if (!settings.SnapshotIncrement.Equals(0))
+            if (settings.SnapshotIncrement > 0)
             {
                 DateTime calculationDate = settings.EarliestDate != default ? settings.EarliestDate : portfolio.FirstValueDate(Totals.All);
                 DateTime lastDate = settings.LastDate != default ? settings.LastDate : portfolio.LatestDate(Totals.All);
@@ -92,9 +92,9 @@ namespace Effanville.FinancialStructures.Database.Export.History
                 }
                 if (calculationDate == lastDate)
                 {
-                    times.Add(calculationDate);
+                    times.Add(lastDate);
                 }
-                if (calculationDate == DateTime.MaxValue && !times.Contains(lastDate))
+                if (lastDate != DateTime.MinValue && !times.Contains(lastDate))
                 {
                     times.Add(lastDate);
                 }
