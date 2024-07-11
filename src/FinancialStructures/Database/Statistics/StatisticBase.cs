@@ -47,8 +47,7 @@ namespace Effanville.FinancialStructures.Database.Statistics
             StatType = stat;
         }
 
-        public virtual void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account,
-            TwoName name)
+        public virtual void Calculate(IPortfolio portfolio, IValueList valueList, DateTime date)
         {
         }
 

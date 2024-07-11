@@ -5,8 +5,10 @@ using System.Linq;
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.MathLibrary.Finance;
 using Effanville.FinancialStructures.Database.Extensions.Values;
+using Effanville.FinancialStructures.Database.Statistics.Implementation;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Rates
 {
@@ -154,56 +156,23 @@ namespace Effanville.FinancialStructures.Database.Extensions.Rates
         /// </summary>
         public static double IRR(this IPortfolio portfolio, Account accountType, TwoName names)
         {
-            return portfolio.CalculateStatistic(accountType,
-               names,
-               valueList => valueList.Any() ? valueList.CAR(valueList.FirstValue().Day, valueList.LatestValue().Day) : double.NaN,
-               valueList => valueList.Any() ? valueList.CAR(valueList.FirstValue().Day, valueList.LatestValue().Day) : double.NaN,
-               security => IRRForSecurity(security));
-
-            double IRRForSecurity(ISecurity security)
-            {
-                if (!security.Any())
-                {
-                    return double.NaN;
-                }
-
-                ICurrency currency = portfolio.Currency(security);
-                return security.IRR(currency);
-            }
+            return portfolio.CalculateValue(accountType,
+                names, 
+                IRRCalculators.DefaultCalculator(),
+                IRRCalculators.Calculators(portfolio),
+                double.NaN);
         }
 
         /// <summary>
         /// Calculates the IRR for the account with specified account and name between the times specified.
         /// </summary>
         public static double IRR(this IPortfolio portfolio, Account accountType, TwoName names, DateTime earlierTime, DateTime laterTime)
-        {            
-            DateTime earliestTime = portfolio.FirstDate(accountType, names);
-            if (earlierTime < earliestTime)
-            {
-                earlierTime = earliestTime;
-            }
-
-            DateTime latestTime = portfolio.LatestDate(accountType, names);
-            if (laterTime > latestTime)
-            {
-                laterTime = latestTime;
-            }
-            return portfolio.CalculateStatistic(accountType,
+        {
+            return portfolio.CalculateValue(accountType,
                 names,
-                valueList => valueList.Any() ? valueList.CAR(earlierTime, laterTime) : double.NaN,
-                valueList => valueList.Any() ? valueList.CAR(earlierTime, laterTime) : double.NaN,
-                security => IRRForSecurity(security));
-
-            double IRRForSecurity(ISecurity security)
-            {
-                if (!security.Any())
-                {
-                    return double.NaN;
-                }
-
-                ICurrency currency = portfolio.Currency(security);
-                return security.IRR(earlierTime, laterTime, currency);
-            }
+                IRRCalculators.DefaultCalculator(earlierTime, laterTime),
+                IRRCalculators.Calculators(portfolio, earlierTime, laterTime),
+                double.NaN);
         }
     }
 }

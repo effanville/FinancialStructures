@@ -1,8 +1,8 @@
 ﻿using System;
-
 using Effanville.FinancialStructures.Database.Extensions.Values;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
@@ -14,37 +14,24 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account,
-            TwoName name)
+        public override void Calculate(IPortfolio portfolio, IValueList valueList, DateTime date)
         {
             fCurrency = portfolio.BaseCurrency;
-            if (account == Account.Currency || account == Account.Benchmark)
-            {
-                Value = 1.0d;
-                return;
-            }
-            Value = (double)CalculateValue(portfolio, account, valueList, DateTime.Today);
-        }            
-        decimal CalculateValue(IPortfolio portfolio, Account account, IValueList valueList, DateTime date)
-        {
-            if (!valueList.Any())
-            {
-                return 0;
-            }
+            Value = (double)valueList.CalculateValue(
+                ValueCalculator.DefaultCalculator(date),
+                ValueCalculator.Calculators(portfolio, date),
+                defaultValue: DefaultValue());
+            return;
 
-            if (valueList is not IExchangableValueList eValueList)
+            decimal DefaultValue()
             {
-                return valueList.Value(date)?.Value ?? 0.0m;
+                if (valueList.AccountType == Account.Currency || valueList.AccountType == Account.Benchmark)
+                {
+                    return 1.0m;
+                }
+
+                return 0.0m;
             }
-
-            ICurrency currency = portfolio.Currency(eValueList);
-
-            if (account is Account.BankAccount)
-            {
-                return eValueList.ValueOnOrBefore(date, currency)?.Value ?? 0.0m;
-            }
-
-            return eValueList.Value(date, currency)?.Value ?? 0.0m;
         }
 
         /// <inheritdoc/>

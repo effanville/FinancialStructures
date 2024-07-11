@@ -12,22 +12,17 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
     public class CashAccount : ValueList, IExchangableValueList
     {
         /// <inheritdoc/>
-        protected override void OnDataEdit(object edited, EventArgs e)
-        {
-            base.OnDataEdit(edited, new PortfolioEventArgs(Account.BankAccount));
-        }
+        protected override void OnDataEdit(object edited, EventArgs e) 
+            => base.OnDataEdit(edited, new PortfolioEventArgs(Account.BankAccount));
 
         /// <inheritdoc/>
-        public override IValueList Copy()
-        {
-            return new CashAccount(Names.Copy(), Values);
-        }
+        public override IValueList Copy() => new CashAccount(Names.Copy(), Values);
 
         /// <summary>
         /// Default constructor where no data is known.
         /// </summary>
         internal CashAccount(NameData names)
-            : base(names)
+            : base(Account.BankAccount, names)
         {
         }
 
@@ -35,7 +30,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// Constructor used when data is known.
         /// </summary>
         internal CashAccount(NameData names, TimeList amounts)
-            : base(names, amounts)
+            : base(Account.BankAccount, names, amounts)
         {
         }
 
@@ -43,7 +38,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// Parameterless constructor for serialisation.
         /// </summary>
         internal CashAccount()
-            : base()
+            : base(Account.BankAccount)
         {
         }
 
@@ -110,9 +105,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             return value;
         }
 
-        private static decimal GetCurrencyValue(DateTime date, ICurrency currency)
-        {
-            return currency == null ? 1.0m : currency.Value(date)?.Value ?? 1.0m;
-        }
+        private static decimal GetCurrencyValue(DateTime date, ICurrency currency) 
+            => currency == null ? 1.0m : currency.Value(date)?.Value ?? 1.0m;
     }
 }

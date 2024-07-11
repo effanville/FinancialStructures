@@ -101,7 +101,7 @@ namespace Effanville.FinancialStructures.Database.Statistics
                 return null;
             }
 
-            stats.Calculate(valueList, portfolio, DateTime.Today, account, name);
+            stats.Calculate(portfolio, valueList, DateTime.Today);
             return stats;
         }
 
@@ -112,13 +112,11 @@ namespace Effanville.FinancialStructures.Database.Statistics
         /// <param name="valueList">The list to calculate values for.</param>
         /// <param name="portfolio">The portfolio to generate values from.</param>
         /// <param name="dateToCalculate">The date to calculate the stats on.</param>
-        /// <param name="account">The Account type to generate statistics for.</param>
-        /// <param name="name">A name to generate statistics with.</param>
         /// <returns>A statistic with the relevant type and no value set.</returns>
-        public static IStatistic Generate(Statistic statTypeToGenerate, IValueList valueList, IPortfolio portfolio, DateTime dateToCalculate, Account account, TwoName name)
+        public static IStatistic Generate(Statistic statTypeToGenerate, IValueList valueList, IPortfolio portfolio, DateTime dateToCalculate)
         {
             IStatistic stats = Generate(statTypeToGenerate);
-            stats.Calculate(valueList, portfolio, dateToCalculate, account, name);
+            stats.Calculate(portfolio, valueList, dateToCalculate);
             return stats;
         }
 

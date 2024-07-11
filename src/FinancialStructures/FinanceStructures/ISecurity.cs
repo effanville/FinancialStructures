@@ -18,26 +18,17 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// <summary>
         /// The Share data for this Security
         /// </summary>
-        TimeList Shares
-        {
-            get;
-        }
+        TimeList Shares { get; }
 
         /// <summary>
         /// The unit price data for this fund.
         /// </summary>
-        TimeList UnitPrice
-        {
-            get;
-        }
+        TimeList UnitPrice { get; }
 
         /// <summary>
         /// The investments in this security.
         /// </summary>
-        TimeList Investments
-        {
-            get;
-        }
+        TimeList Investments { get; }
 
         /// <summary>
         /// The list of Trades made in this <see cref="ISecurity"/>.

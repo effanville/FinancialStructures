@@ -3,7 +3,7 @@
 using Effanville.FinancialStructures.Database.Extensions.Statistics;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.FinanceStructures.Statistics;
+using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
@@ -15,20 +15,12 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account,
-            TwoName name)
+        public override void Calculate(IPortfolio portfolio, IValueList valueList, DateTime date)
         {
-            if (valueList is IExchangableValueList exchangeableValueList)
-            {
-                ICurrency currency = portfolio.Currency(exchangeableValueList);
-                Value = (double)exchangeableValueList.RecentChange(currency);
-            }
-            else
-            {
-                Value = (double)valueList.RecentChange();
-            }
-            
             fCurrency = portfolio.BaseCurrency;
+            Value = (double)valueList.CalculateValue(
+                RecentChangeCalculators.DefaultCalculator,
+                RecentChangeCalculators.Calculators(portfolio));
         }
 
         /// <inheritdoc/>

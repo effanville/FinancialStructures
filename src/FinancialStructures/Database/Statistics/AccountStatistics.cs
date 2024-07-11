@@ -43,23 +43,17 @@ namespace Effanville.FinancialStructures.Database.Statistics
         internal AccountStatistics()
         {
         }
-
+        
         /// <summary>
         /// Default constructor for statistics for a <see cref="Account"/> object.
         /// </summary>
-        public AccountStatistics(IPortfolio portfolio, DateTime dateToCalculate, Account account, TwoName name, Statistic[] statsToGenerate)
+        public AccountStatistics(IPortfolio portfolio, DateTime dateToCalculate, IValueList valueList, Statistic[] statsToGenerate)
         {
-            NameData = name;
-            if (!portfolio.TryGetAccount(account, name, out IValueList valueList))
-            {
-                Statistics = new List<IStatistic>();
-                return;
-            }
-            
+            NameData = valueList.Names;
             var statistics = new List<IStatistic>();
             foreach (Statistic stat in statsToGenerate)
             {
-                IStatistic stats = StatisticFactory.Generate(stat, valueList, portfolio, dateToCalculate, account, name);
+                IStatistic stats = StatisticFactory.Generate(stat, valueList, portfolio, dateToCalculate);
                 statistics.Add(stats);
             }
 

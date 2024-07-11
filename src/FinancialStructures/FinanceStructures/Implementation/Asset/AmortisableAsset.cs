@@ -21,12 +21,12 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
         /// Empty constructor.
         /// </summary>
         internal AmortisableAsset()
-            : base()
+            : base(Account.Asset)
         {
         }
 
         internal AmortisableAsset(NameData name)
-            : base(name)
+            : base(Account.Asset, name)
         {
         }
 
@@ -34,7 +34,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
         /// Default constructor.
         /// </summary>
         internal AmortisableAsset(NameData names, TimeList values, TimeList debt, TimeList payments)
-            : base(names, values)
+            : base(Account.Asset, names, values)
         {
             Debt = debt;
             Payments = payments;

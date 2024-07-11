@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.DataStructures;
 using Effanville.FinancialStructures.FinanceStructures.Implementation;
 using Effanville.FinancialStructures.NamingStructures;
@@ -42,7 +43,7 @@ namespace Effanville.FinancialStructures.Tests.TestDatabaseConstructor
             {
                 SectorsFlat = sectors
             };
-            Item = new Security(names);
+            Item = new Security(Account.Security, names);
         }
 
         public SecurityConstructor WithData(DateTime date, decimal sharePrice)

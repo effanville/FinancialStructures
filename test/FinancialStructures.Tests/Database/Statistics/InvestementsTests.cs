@@ -17,22 +17,22 @@ namespace Effanville.FinancialStructures.Tests.Database.Statistics
     {
         private static IEnumerable<TestCaseData> TotalInvestmentsCases()
         {
-            yield return new TestCaseData(TestDatabaseName.OneBank, Totals.BankAccount, null);
+            yield return new TestCaseData(TestDatabaseName.OneBank, Totals.BankAccount, new List<Labelled<TwoName, DailyValuation>>());
 
             yield return new TestCaseData(TestDatabaseName.OneBank, Totals.Security, new List<Labelled<TwoName, DailyValuation>>());
 
-            yield return new TestCaseData(TestDatabaseName.OneSec, Totals.BankAccount, null);
+            yield return new TestCaseData(TestDatabaseName.OneSec, Totals.BankAccount, new List<Labelled<TwoName, DailyValuation>>());
 
             yield return new TestCaseData(TestDatabaseName.OneSec, Totals.Security, new List<Labelled<TwoName, DailyValuation>>()
             {
                 new Labelled<TwoName, DailyValuation>(new TwoName(SecurityConstructor.DefaultCompany, SecurityConstructor.DefaultName), new DailyValuation(new DateTime(2010, 1, 1), 200))
             });
 
-            yield return new TestCaseData(TestDatabaseName.TwoBank, Totals.BankAccount, null);
+            yield return new TestCaseData(TestDatabaseName.TwoBank, Totals.BankAccount, new List<Labelled<TwoName, DailyValuation>>());
 
             yield return new TestCaseData(TestDatabaseName.TwoBank, Totals.Security, new List<Labelled<TwoName, DailyValuation>>());
 
-            yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.BankAccount, null);
+            yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.BankAccount, new List<Labelled<TwoName, DailyValuation>>());
 
             yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.Security, new List<Labelled<TwoName, DailyValuation>> {
                 new Labelled<TwoName, DailyValuation>(new TwoName(SecurityConstructor.DefaultCompany, SecurityConstructor.DefaultName), new DailyValuation(new DateTime(2010, 1, 1), 200)),
@@ -51,7 +51,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Statistics
 
         private static IEnumerable<TestCaseData> InvestmentsCases()
         {
-            yield return new TestCaseData(TestDatabaseName.OneBank, Account.BankAccount, TestDatabase.Name(Account.BankAccount, NameOrder.Default), null);
+            yield return new TestCaseData(TestDatabaseName.OneBank, Account.BankAccount, TestDatabase.Name(Account.BankAccount, NameOrder.Default), new List<Labelled<TwoName, DailyValuation>>());
 
             yield return new TestCaseData(TestDatabaseName.OneBank, Account.Security, TestDatabase.Name(Account.Security, NameOrder.Default), null);
 
@@ -62,7 +62,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Statistics
                 new Labelled<TwoName, DailyValuation>(new TwoName(SecurityConstructor.DefaultCompany, SecurityConstructor.DefaultName), new DailyValuation(new DateTime(2010, 1, 1), 200))
             });
 
-            yield return new TestCaseData(TestDatabaseName.TwoBank, Account.BankAccount, TestDatabase.Name(Account.BankAccount, NameOrder.Default), null);
+            yield return new TestCaseData(TestDatabaseName.TwoBank, Account.BankAccount, TestDatabase.Name(Account.BankAccount, NameOrder.Default), new List<Labelled<TwoName, DailyValuation>>());
 
             yield return new TestCaseData(TestDatabaseName.TwoBank, Account.Security, TestDatabase.Name(Account.Security, NameOrder.Default), null);
 

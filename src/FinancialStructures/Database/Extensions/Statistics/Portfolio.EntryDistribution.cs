@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Effanville.Common.Structure.DataStructures;
-using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Statistics
 {
@@ -15,78 +14,19 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// </summary>
         public static Dictionary<DateTime, int> EntryDistribution(this IPortfolio portfolio, Totals totals = Totals.Security, TwoName company = null)
         {
-            return portfolio.CalculateAggregateStatistic(
+            return portfolio.CalculateAggregateValue(
                 totals,
                 company,
                 new Dictionary<DateTime, int>(),
-                valueList => CalculateValues(valueList),
-                (a, b) => MergeDictionaries(a, b));
-
-            Dictionary<DateTime, int> CalculateValues(IValueList valueList)
-            {
-                if (valueList is ISecurity security)
-                {
-                    return CalculateValuesForSecurity(security);
-                }
-
-                Dictionary<DateTime, int> totals = new Dictionary<DateTime, int>();
-                foreach (DailyValuation value in valueList.ListOfValues())
-                {
-                    totals.Add(value.Day, 1);
-                }
-
-                return totals;
-            }
-
-            Dictionary<DateTime, int> CalculateValuesForSecurity(ISecurity security)
-            {
-                Dictionary<DateTime, int> totals = new Dictionary<DateTime, int>();
-                if (security.Any())
-                {
-                    foreach (DailyValuation value in security.Shares.Values())
-                    {
-                        if (totals.TryGetValue(value.Day, out _))
-                        {
-                            totals[value.Day] += 1;
-                        }
-                        else
-                        {
-                            totals.Add(value.Day, 1);
-                        }
-                    }
-
-                    foreach (DailyValuation priceValue in security.UnitPrice.Values())
-                    {
-                        if (totals.TryGetValue(priceValue.Day, out _))
-                        {
-                            totals[priceValue.Day] += 1;
-                        }
-                        else
-                        {
-                            totals.Add(priceValue.Day, 1);
-                        }
-                    }
-
-                    foreach (DailyValuation investmentValue in security.Investments.Values())
-                    {
-                        if (totals.TryGetValue(investmentValue.Day, out _))
-                        {
-                            totals[investmentValue.Day] += 1;
-                        }
-                        else
-                        {
-                            totals.Add(investmentValue.Day, 1);
-                        }
-                    }
-                }
-
-                return totals;
-            }
+                (a, b) => MergeDictionaries(a, b),
+                EntryDistributionCalculator.DefaultCalculator(),
+                EntryDistributionCalculator.Calculators(portfolio, DateTime.Today),
+                new Dictionary<DateTime, int>());
         }
 
         private static Dictionary<DateTime, int> MergeDictionaries(Dictionary<DateTime, int> first, Dictionary<DateTime, int> second)
         {
-            Dictionary<DateTime, int> merged = new Dictionary<DateTime, int>();
+            Dictionary<DateTime, int> merged = new ();
             foreach (KeyValuePair<DateTime, int> pair in first)
             {
                 if (second.TryGetValue(pair.Key, out int value))

@@ -1,7 +1,7 @@
 ﻿using System;
 
-using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Values
 {
@@ -29,11 +29,13 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
         /// <returns>The  value if it exists.</returns>
         public static decimal Value(this IPortfolio portfolio, Account account, TwoName name, DateTime date)
         {
-            return portfolio.CalculateStatistic(
+            return portfolio.CalculateValue(
                 account,
                 name,
-                valueList => CalculateValue(valueList),
-                DefaultValue());
+                ValueCalculator.DefaultCalculator(date),
+                ValueCalculator.Calculators(portfolio, date),
+                defaultValue: DefaultValue());
+
             decimal DefaultValue()
             {
                 if (account == Account.Currency || account == Account.Benchmark)
@@ -42,28 +44,6 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
                 }
 
                 return 0.0m;
-            }
-
-            decimal CalculateValue(IValueList valueList)
-            {
-                if (!valueList.Any())
-                {
-                    return 0;
-                }
-
-                if (valueList is not IExchangableValueList eValueList)
-                {
-                    return valueList.Value(date)?.Value ?? 0.0m;
-                }
-
-                ICurrency currency = portfolio.Currency(eValueList);
-
-                if (account is Account.BankAccount)
-                {
-                    return eValueList.ValueOnOrBefore(date, currency)?.Value ?? 0.0m;
-                }
-
-                return eValueList.Value(date, currency)?.Value ?? 0.0m;
             }
         }
     }

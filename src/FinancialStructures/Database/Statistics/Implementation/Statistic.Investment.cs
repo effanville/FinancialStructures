@@ -7,6 +7,7 @@ using Effanville.Common.Structure.NamingStructures;
 using Effanville.FinancialStructures.Database.Extensions.Values;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
@@ -18,48 +19,12 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override void Calculate(IValueList valueList, IPortfolio portfolio, DateTime date, Account account,
-            TwoName name)
+        public override void Calculate(IPortfolio portfolio, IValueList valueList, DateTime date)
         {
             fCurrency = portfolio.BaseCurrency;
-            switch (account)
-            {
-                case Account.Security:
-                case Account.Pension:
-                {
-                    decimal sum = 0.0m;
-                    if (valueList is ISecurity sec)
-                    {
-                        ICurrency currency = portfolio.Currency(sec);
-                        List<Labelled<TwoName, DailyValuation>> investments =sec.AllInvestmentsNamed(currency);
-                        if (investments != null && investments.Any())
-                        {
-                            foreach (Labelled<TwoName, DailyValuation> investment in investments)
-                            {
-                                sum += investment.Instance.Value;
-                            }
-                        }
-
-                        Value = (double)sum;
-                    }
-
-                    return;
-                }
-                case Account.Asset:
-                {
-                    if (valueList is IAmortisableAsset asset)
-                    {
-                        ICurrency currency = portfolio.Currency(asset);
-                        Value = (double)asset.TotalCost(date, currency);
-                    }
-                    return;
-                }
-                default:
-                {
-                    Value = 0.0;
-                    return;
-                }
-            }
+            Value = (double)valueList.CalculateValue(
+                InvestmentCalculators.DefaultCalculator,
+                InvestmentCalculators.Calculators(portfolio, date));
         }
 
         /// <inheritdoc/>

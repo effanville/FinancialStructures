@@ -1,5 +1,6 @@
 ﻿using System;
 
+using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Values
@@ -18,12 +19,12 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
         /// <returns></returns>
         public static DateTime LatestDate(this IPortfolio portfolio, Totals total, TwoName name = null)
         {
-            return portfolio.CalculateAggregateStatistic(
+            return portfolio.CalculateAggregateValue(
                 total,
                 name,
                 DateTime.MinValue,
-                valueList => valueList.LatestValue().Day,
-                (newStat, previousStat) => newStat > previousStat ? newStat : previousStat);
+                (newStat, previousStat) => newStat > previousStat ? newStat : previousStat,
+                valueList => valueList.LatestDate());
         }
 
         /// <summary>
@@ -35,10 +36,10 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
         /// <returns></returns>
         public static DateTime LatestDate(this IPortfolio portfolio, Account account, TwoName name)
         {
-            return portfolio.CalculateStatistic(
+            return portfolio.CalculateValue(
                 account,
                 name,
-                valueList => valueList.LatestValue()?.Day ?? DateTime.MinValue);
+                valueList => valueList.LatestDate());
         }
     }
 }

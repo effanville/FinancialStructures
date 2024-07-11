@@ -1,7 +1,7 @@
 ﻿using System;
 
-using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Values
 {
@@ -23,52 +23,19 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
         /// Total value of all accounts of type specified on date given.
         /// </summary>
         /// <param name="portfolio">The portfolio to calculate value for.</param>
-        /// <param name="account">The type to find the total of.</param>
+        /// <param name="totals">The type to find the total of.</param>
         /// <param name="date">The date to find the total on.</param>
         /// <param name="names">Any name associated with this total, e.g. the Sector name</param>
         /// <returns>The total value held.</returns>
-        public static decimal TotalValue(this IPortfolio portfolio, Totals account, DateTime date, TwoName names = null)
+        public static decimal TotalValue(this IPortfolio portfolio, Totals totals, DateTime date, TwoName names = null)
         {
-            return portfolio.CalculateAggregateStatistic(
-                account,
+            return portfolio.CalculateAggregateValue(
+                totals,
                 names,
                 0,
-                valueList => CalculateValue(valueList),
-                (a, b) => a + b);
-
-            decimal CalculateValue(IValueList valueList)
-            {
-                if (valueList is ISecurity sec)
-                {
-                    if (sec.Any())
-                    {
-                        ICurrency currency = portfolio.Currency(sec);
-                        return sec.Value(date, currency).Value;
-                    }
-                }
-                else if (valueList is IAmortisableAsset asset)
-                {
-                    if (asset.Any())
-                    {
-                        ICurrency currency = portfolio.Currency(asset);
-                        return asset.Value(date, currency).Value;
-                    }
-                }
-                else if (valueList is IExchangableValueList eValueList)
-                {
-                    if (eValueList.Any())
-                    {
-                        ICurrency currency = portfolio.Currency(eValueList);
-                        return eValueList.ValueOnOrBefore(date, currency).Value;
-                    }
-                }
-                else
-                {
-                    return valueList.Value(date).Value;
-                }
-
-                return 0.0m;
-            }
+                (a, b) => a + b,
+                ValueCalculator.DefaultCalculator(date),
+                ValueCalculator.Calculators(portfolio, date));
         }
     }
 }

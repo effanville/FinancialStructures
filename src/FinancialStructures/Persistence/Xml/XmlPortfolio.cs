@@ -2,10 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
 
+using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.Database.Implementation;
 using Effanville.FinancialStructures.DataStructures;
 using Effanville.FinancialStructures.FinanceStructures.Implementation;
 using Effanville.FinancialStructures.FinanceStructures.Implementation.Asset;
+using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Persistence.Xml
 {
@@ -147,7 +149,9 @@ namespace Effanville.FinancialStructures.Persistence.Xml
 
             foreach (var security in Funds)
             {
-                portfolio.AddFund(new Security(security.Names,
+                portfolio.AddFund(new Security(
+                    Account.Security,
+                    security.Names,
                     security.UnitPrice,
                     security.Shares,
                     security.Investments,
@@ -171,7 +175,9 @@ namespace Effanville.FinancialStructures.Persistence.Xml
 
             foreach (var security in Pensions)
             {
-                portfolio.AddPension(new Security(security.Names,
+                portfolio.AddPension(new Security(
+                    Account.Pension,
+                    security.Names,
                      security.UnitPrice,
                     security.Shares,
                     security.Investments,

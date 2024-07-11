@@ -1,6 +1,5 @@
-﻿using Effanville.FinancialStructures.FinanceStructures;
-using Effanville.FinancialStructures.FinanceStructures.Statistics;
-using Effanville.FinancialStructures.NamingStructures;
+﻿using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Statistics
 {
@@ -14,22 +13,13 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// </summary>
         public static decimal TotalProfit(this IPortfolio portfolio, Totals totals, TwoName names = null)
         {
-            return portfolio.CalculateAggregateStatistic(
+            return portfolio.CalculateAggregateValue(
                 totals,
                 names,
                 0.0m,
-                exchangableValueList => Calcuate(exchangableValueList),
-                (value, currentTotal) => value + currentTotal);
-            decimal Calcuate(IValueList valueList)
-            {
-                if (valueList is not IExchangableValueList exchangableValueList)
-                {
-                    return valueList.Profit();
-                }
-
-                ICurrency currency = portfolio.Currency(exchangableValueList);
-                return exchangableValueList.Profit(currency);
-            }
+                (value, currentTotal) => value + currentTotal,
+                ProfitCalculators.DefaultCalculator,
+                ProfitCalculators.Calculators(portfolio));
         }
 
         /// <summary>
@@ -37,21 +27,11 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// </summary>
         public static decimal Profit(this IPortfolio portfolio, Account account, TwoName name)
         {
-            return portfolio.CalculateStatistic(
+            return portfolio.CalculateValue(
                 account,
                 name,
-                valueList => valueList.Any() ? valueList.Profit() : 0.0m,
-                valueList => Calculate(valueList));
-
-            decimal Calculate(IExchangableValueList valueList)
-            {
-                if (!valueList.Any())
-                {
-                    return 0.0m;
-                }
-                ICurrency currency = portfolio.Currency(valueList);
-                return valueList.Profit(currency);
-            }
+                ProfitCalculators.DefaultCalculator,
+                ProfitCalculators.Calculators(portfolio));
         }
     }
 }
