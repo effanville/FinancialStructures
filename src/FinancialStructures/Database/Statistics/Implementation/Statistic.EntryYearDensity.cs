@@ -28,9 +28,6 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public override string ToString()
-        {
-            return IsNumeric ? Value.TruncateToString(4) : StringValue;
-        }
+        public override string ToString() => IsNumeric ? Value.TruncateToString(4) : StringValue;
     }
 }

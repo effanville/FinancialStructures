@@ -10,16 +10,8 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
     internal class StatisticLatestDate : IStatistic
     {
-        internal StatisticLatestDate()
-        {
-            StatType = Statistic.LatestDate;
-        }
-
         /// <inheritdoc/>
-        public Statistic StatType
-        {
-            get;
-        }
+        public Statistic StatType => Statistic.LatestDate;
 
         /// <inheritdoc/>
         public double Value
@@ -56,15 +48,9 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public int CompareTo(IStatistic other)
-        {
-            return Value.CompareTo(other.Value);
-        }
+        public int CompareTo(IStatistic other) => Value.CompareTo(other.Value);
 
         /// <inheritdoc/>
-        public override string ToString()
-        {
-            return StringValue;
-        }
+        public override string ToString() => StringValue;
     }
 }

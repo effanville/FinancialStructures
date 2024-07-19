@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Effanville.Common.Structure.DataStructures;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
@@ -8,16 +8,8 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
     internal class StatisticSectors : IStatistic
     {
-        internal StatisticSectors()
-        {
-            StatType = Statistic.Sectors;
-        }
-
         /// <inheritdoc/>
-        public Statistic StatType
-        {
-            get;
-        }
+        public Statistic StatType => Statistic.Sectors;
 
         /// <inheritdoc/>
         public double Value
@@ -62,12 +54,12 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
-            var accounts = portfolio.Accounts(total, name);
+            IReadOnlyList<IValueList> accounts = portfolio.Accounts(total, name);
             HashSet<string> sectors = new HashSet<string>();
 
-            foreach (var account in accounts)
+            foreach (IValueList account in accounts)
             {
-                var value = account.Value(date);
+                DailyValuation value = account.Value(date);
                 if (value != null && value.Value > 0.0m)
                 {
                     sectors.UnionWith(account.Names.Sectors);
@@ -78,15 +70,9 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public int CompareTo(IStatistic other)
-        {
-            return Value.CompareTo(other.Value);
-        }
+        public int CompareTo(IStatistic other) => Value.CompareTo(other.Value);
 
         /// <inheritdoc/>
-        public override string ToString()
-        {
-            return StringValue;
-        }
+        public override string ToString() => StringValue;
     }
 }

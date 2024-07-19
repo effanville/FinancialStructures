@@ -50,7 +50,7 @@ namespace Effanville.FinancialStructures.Database.Statistics
         public AccountStatistics(IPortfolio portfolio, DateTime dateToCalculate, IValueList valueList, Statistic[] statsToGenerate)
         {
             NameData = valueList.Names;
-            var statistics = new List<IStatistic>();
+            List<IStatistic> statistics = new List<IStatistic>();
             foreach (Statistic stat in statsToGenerate)
             {
                 IStatistic stats = StatisticFactory.Generate(stat, valueList, portfolio, dateToCalculate);
@@ -66,7 +66,7 @@ namespace Effanville.FinancialStructures.Database.Statistics
         public AccountStatistics(IPortfolio portfolio, DateTime dateToCalculate, Totals total, TwoName name, Statistic[] statsToGenerate)
         {
             NameData = name;
-            var statistics = new List<IStatistic>();
+            List<IStatistic> statistics = new List<IStatistic>();
             foreach (Statistic stat in statsToGenerate)
             {
                 IStatistic stats = StatisticFactory.Generate(stat, portfolio, dateToCalculate, total, name);
@@ -83,19 +83,22 @@ namespace Effanville.FinancialStructures.Database.Statistics
         /// <returns></returns>
         public AccountStatistics Restricted(IReadOnlyList<Statistic> statsToRestrict)
         {
-            var accountStats = new AccountStatistics();
-            accountStats.NameData = NameData;
+            AccountStatistics accountStats = new AccountStatistics
+            {
+                NameData = NameData
+            };
 
-            var statistics = new List<IStatistic>();
+            List<IStatistic> statistics = new List<IStatistic>();
             foreach (Statistic stat in statsToRestrict)
             {
-                var statistic = GetStatistic(stat);
+                IStatistic statistic = GetStatistic(stat);
                 if (statistic != null)
                 {
                     statistics.Add(statistic);
                 }
             }
 
+            accountStats.Statistics = statistics;
             return accountStats;
         }
 
@@ -113,10 +116,7 @@ namespace Effanville.FinancialStructures.Database.Statistics
         }
 
         /// <inheritdoc/>
-        public int CompareTo(AccountStatistics other)
-        {
-            return NameData.CompareTo(other.NameData);
-        }
+        public int CompareTo(AccountStatistics other) => NameData.CompareTo(other.NameData);
 
         /// <summary>
         /// Compares to another instance, where the comparison is on the specified
@@ -124,8 +124,8 @@ namespace Effanville.FinancialStructures.Database.Statistics
         /// </summary>
         public int CompareTo(AccountStatistics other, Statistic compareStatistic, SortDirection sortDirection)
         {
-                var firstField = Statistics.First(stat => stat.StatType == compareStatistic);
-                var secondField = other.Statistics.First(stat => stat.StatType == compareStatistic);
+                IStatistic firstField = Statistics.First(stat => stat.StatType == compareStatistic);
+                IStatistic secondField = other.Statistics.First(stat => stat.StatType == compareStatistic);
 
                 return sortDirection == SortDirection.Descending 
                     ? secondField.CompareTo(firstField) 

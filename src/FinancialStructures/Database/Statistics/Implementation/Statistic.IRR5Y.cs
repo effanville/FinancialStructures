@@ -17,7 +17,7 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, IValueList valueList, DateTime date)
         {
-            var earlierTime = date.AddMonths(-60);
+            DateTime earlierTime = date.AddMonths(-60);
             Value = 100 * valueList.CalculateValue(
                 IRRCalculators.DefaultCalculator(earlierTime, date),
                 IRRCalculators.Calculators(portfolio, earlierTime, date),

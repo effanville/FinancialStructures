@@ -20,18 +20,7 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
             Value = (double)valueList.CalculateValue(
                 ValueCalculator.DefaultCalculator(date),
                 ValueCalculator.Calculators(portfolio, date),
-                defaultValue: DefaultValue());
-            return;
-
-            decimal DefaultValue()
-            {
-                if (valueList.AccountType == Account.Currency || valueList.AccountType == Account.Benchmark)
-                {
-                    return 1.0m;
-                }
-
-                return 0.0m;
-            }
+                defaultValue: ValueCalculator.DefaultValue(valueList.AccountType));
         }
 
         /// <inheritdoc/>

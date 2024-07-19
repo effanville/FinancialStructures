@@ -28,10 +28,10 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
             if (valueList is ISecurity security)
             {
                 ICurrency currency = portfolio.Currency(security);
-                var v2Value = 100 * security.IRR(currency);
+                double v2Value = 100 * security.IRR(currency);
                 return;
             }
-            var vValue = 100 * valueList.CAR(
+            double vValue = 100 * valueList.CAR(
                 valueList.FirstValue().Day, 
                 valueList.LatestValue().Day);
         }

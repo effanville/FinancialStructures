@@ -9,30 +9,14 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
     internal class StatisticFirstDate : IStatistic
     {
-        internal StatisticFirstDate()
-        {
-            StatType = Statistic.FirstDate;
-        }
+        /// <inheritdoc/>
+        public Statistic StatType => Statistic.FirstDate;
 
         /// <inheritdoc/>
-        public Statistic StatType
-        {
-            get;
-        }
+        public double Value => double.NaN;
 
         /// <inheritdoc/>
-        public double Value
-        {
-            get;
-            private set;
-        }
-
-        /// <inheritdoc/>
-        public string StringValue
-        {
-            get;
-            private set;
-        }
+        public string StringValue { get; private set; }
 
         /// <inheritdoc/>
         public bool IsNumeric => false;
@@ -55,15 +39,8 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         }
 
         /// <inheritdoc/>
-        public int CompareTo(IStatistic other)
-        {
-            return Value.CompareTo(other.Value);
-        }
+        public int CompareTo(IStatistic other) => Value.CompareTo(other.Value);
 
-        /// <inheritdoc/>
-        public override string ToString()
-        {
-            return StringValue;
-        }
+        public override string ToString() => StringValue;
     }
 }

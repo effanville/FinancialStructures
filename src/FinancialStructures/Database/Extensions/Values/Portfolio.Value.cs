@@ -14,10 +14,8 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
         /// <param name="account">The type of element to find.</param>
         /// <param name="name">The name of the element to find.</param>
         /// <returns>The latest value if it exists.</returns>
-        public static decimal LatestValue(this IPortfolio portfolio, Account account, TwoName name)
-        {
-            return portfolio.Value(account, name, DateTime.Today);
-        }
+        public static decimal LatestValue(this IPortfolio portfolio, Account account, TwoName name) 
+            => portfolio.Value(account, name, DateTime.Today);
 
         /// <summary>
         /// Get the value of the selected element on the date provided. For a sector the name is only the surname
@@ -27,24 +25,12 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
         /// <param name="name">The name of the element to find.</param>
         /// <param name="date">The date on which to find the value.</param>
         /// <returns>The  value if it exists.</returns>
-        public static decimal Value(this IPortfolio portfolio, Account account, TwoName name, DateTime date)
-        {
-            return portfolio.CalculateValue(
+        public static decimal Value(this IPortfolio portfolio, Account account, TwoName name, DateTime date) 
+            => portfolio.CalculateValue(
                 account,
                 name,
                 ValueCalculator.DefaultCalculator(date),
                 ValueCalculator.Calculators(portfolio, date),
-                defaultValue: DefaultValue());
-
-            decimal DefaultValue()
-            {
-                if (account == Account.Currency || account == Account.Benchmark)
-                {
-                    return 1.0m;
-                }
-
-                return 0.0m;
-            }
-        }
+                defaultValue: ValueCalculator.DefaultValue(account));
     }
 }

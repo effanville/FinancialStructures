@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Globalization;
 using Effanville.Common.Structure.Extensions;
 using Effanville.FinancialStructures.Database.Extensions.Statistics;
 using Effanville.FinancialStructures.FinanceStructures;
@@ -17,7 +17,7 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         /// <summary>
         /// <inheritdoc/> Overrides default by truncating to 4 d.p.
         /// </summary>
-        public override string StringValue => Value.Truncate(4).ToString();
+        public override string StringValue => Value.Truncate(4).ToString(CultureInfo.InvariantCulture);
 
         /// <summary>
         /// Default constructor setting Statistic type.
