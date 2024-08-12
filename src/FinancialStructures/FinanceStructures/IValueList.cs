@@ -4,26 +4,14 @@ using System.Collections.Generic;
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.FileAccess;
 using Effanville.Common.Structure.Reporting;
-using Effanville.FinancialStructures.Database;
-using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.FinanceStructures
 {
     /// <summary>
     /// A named list containing values.
     /// </summary>
-    public interface IValueList : ICSVAccess, IComparable, IComparable<IValueList>, IEquatable<IValueList>
+    public interface IValueList : IEditableNamedFinancialObject, ICSVAccess, IComparable, IComparable<IValueList>, IEquatable<IValueList>
     {
-        /// <summary>
-        /// The type of this value list.
-        /// </summary>
-        Account AccountType { get; }
-        
-        /// <summary>
-        /// The Name data for this list, including company, name and urls.
-        /// </summary>
-        NameData Names { get; }
-
         /// <summary>
         /// The values stored in this list. For use in serialisation or for cycling through
         /// the values stored. Should not be used for editing data.
@@ -98,13 +86,6 @@ namespace Effanville.FinancialStructures.FinanceStructures
         List<DailyValuation> ListOfValues();
 
         /// <summary>
-        /// Edits the names of the Value list.
-        /// </summary>
-        /// <param name="newNames">The updated name to set.</param>
-        /// <returns>Was updating name successful.</returns>
-        bool EditNameData(NameData newNames);
-
-        /// <summary>
         /// Tries to add data for the date specified if it doesnt exist, or edits data if it exists.
         /// If cannot add any value that one wants to, then doesn't add all the values chosen.
         /// </summary>
@@ -131,23 +112,5 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// <param name="reportLogger">An optional logger to log progress.</param>
         /// <returns>Whether data was deleted or not.</returns>
         bool TryDeleteData(DateTime date, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Tries to remove a sector from the associated sectors.
-        /// </summary>
-        /// <param name="sectorName">The sector to remove.</param>
-        /// <returns>Whether removal was successful or not.</returns>
-        bool TryRemoveSector(TwoName sectorName);
-
-        /// <summary>
-        /// Is the sector listed in this <see cref="IValueList"/>
-        /// </summary>
-        /// <param name="sectorName">The sector to check.</param>
-        bool IsSectorLinked(TwoName sectorName);
-
-        /// <summary>
-        /// The total number of sectors associated to this <see cref="IValueList"/>
-        /// </summary>
-        int NumberSectors();
     }
 }
