@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 
 using Effanville.Common.Structure.Reporting;
+using Effanville.Common.Structure.WebAccess;
 
 namespace Effanville.FinancialStructures.Download.Implementation
 {
@@ -40,10 +41,29 @@ namespace Effanville.FinancialStructures.Download.Implementation
                 reportLogger?.Error("Downloading", $"Could not download data from {url}");
                 return false;
             }
+            
+            var driver = WebDownloader.GetCachedInstance(forceNew: true);
+            string text = null;
+            int numberTries = 0;
+            while (string.IsNullOrEmpty(text) && numberTries < 20)
+            {
+                text = WebDownloader.GetElementText(driver, url, "data-testId", "qsp-price", 1000 + 1000 * numberTries,
+                    reportLogger);
+                numberTries++;
+            }
 
             decimal? value = GetValue(webData, financialCode);
             if (!value.HasValue)
             {
+                if (!string.IsNullOrEmpty(text))
+                {
+                    if (decimal.TryParse(text, out var val))
+                    {
+                        retrieveValueAction(val);
+                        return true;
+                    }
+                }
+
                 return false;
             }
 
@@ -89,7 +109,8 @@ namespace Effanville.FinancialStructures.Download.Implementation
             string searchString;
             do
             {
-                searchString = $"data-symbol=\"{financialCode}\" data-test=\"qsp-price\" data-field=\"regularMarketPrice\" data-trend=\"none\" data-pricehint=\"{number}\"";
+                searchString = $"data-symbol=\"{financialCode}\" data-testid=\"qsp-price\" data-field=\"regularMarketPrice\" data-trend=\"none\" data-pricehint=\"{number}\"";
+                //searchString = $"data-symbol=\"{financialCode}\" data-test=\"qsp-price\" data-field=\"regularMarketPrice\" data-trend=\"none\" data-pricehint=\"{number}\"";
                 poundsIndex = webData.IndexOf(searchString);
                 number++;
             }
