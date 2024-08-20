@@ -145,7 +145,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc />
         public override string ToString() => Names.ToString();
 
-        /// <inheritdoc />
         public virtual IValueList Copy() => new ValueList(AccountType, Names, Values);
 
         /// <inheritdoc />
@@ -155,7 +154,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         public virtual int Count() => Values.Count();
 
         /// <inheritdoc/>
-        public virtual bool Equals(IValueList other) => Names.IsEqualTo(other?.Names);
+        public virtual bool Equals(IReadOnlyValueList other) => Names.IsEqualTo(other?.Names);
 
         /// <inheritdoc />
         public int CompareTo(object obj)
@@ -169,10 +168,9 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc />
-        public virtual int CompareTo(IValueList other) => Names.CompareTo(other.Names);
+        public virtual int CompareTo(IReadOnlyValueList other) => Names.CompareTo(other.Names);
 
-        /// <inheritdoc />
-        public int ValueComparison(IValueList otherList, DateTime dateTime)
+        public int ValueComparison(IReadOnlyValueList otherList, DateTime dateTime)
         {
             decimal thisListValue = Value(dateTime)?.Value ?? 0.0m;
             decimal otherListValue = otherList.Value(dateTime)?.Value ?? 0.0m;

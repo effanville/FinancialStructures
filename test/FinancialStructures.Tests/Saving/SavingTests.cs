@@ -555,8 +555,8 @@ namespace Effanville.FinancialStructures.Tests.Saving
             {
                 for (int i = 0; i < expected.BankAccounts.Count; i++)
                 {
-                    IExchangableValueList expectedSec = expected.BankAccounts[i];
-                    IExchangableValueList actualSec = actual.BankAccounts[i];
+                    IExchangeableValueList expectedSec = expected.BankAccounts[i];
+                    IExchangeableValueList actualSec = actual.BankAccounts[i];
                     Assert.AreEqual(expectedSec.Names, actualSec.Names);
                 }
             }

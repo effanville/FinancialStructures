@@ -35,7 +35,7 @@ namespace Effanville.FinancialStructures.ValueCalculators
 
         private static decimal BankAccountCalculate(IValueList valueList, IPortfolio portfolio, DateTime time)
         {
-            if (valueList is not IExchangableValueList eValueList)
+            if (valueList is not IExchangeableValueList eValueList)
             {
                 return 0.0m;
             }
@@ -46,7 +46,7 @@ namespace Effanville.FinancialStructures.ValueCalculators
 
         private static decimal ExchangeableCalculate(IValueList valueList, IPortfolio portfolio, DateTime time)
         {
-            if (valueList is not IExchangableValueList eValueList)
+            if (valueList is not IExchangeableValueList eValueList)
             {
                 return 0.0m;
             }

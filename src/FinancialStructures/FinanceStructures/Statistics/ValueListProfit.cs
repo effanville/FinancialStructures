@@ -19,9 +19,9 @@
         }
 
         /// <summary>
-        /// Calculates the difference between the last and investment of a <see cref="IExchangableValueList"/>.
+        /// Calculates the difference between the last and investment of a <see cref="IExchangeableValueList"/>.
         /// </summary>
-        public static decimal Profit(this IExchangableValueList valueList, ICurrency currency)
+        public static decimal Profit(this IExchangeableValueList valueList, ICurrency currency)
         {
             if (valueList is ISecurity security)
             {
@@ -43,7 +43,7 @@
 
 
         /// <summary>
-        /// Calculates the difference between the last two values of a <see cref="IExchangableValueList"/>.
+        /// Calculates the difference between the last two values of a <see cref="IExchangeableValueList"/>.
         /// </summary>
         public static decimal Profit(this ISecurity valueList, ICurrency currency)
         {

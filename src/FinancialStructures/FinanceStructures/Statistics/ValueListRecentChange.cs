@@ -27,9 +27,9 @@ namespace Effanville.FinancialStructures.FinanceStructures.Statistics
         }
 
         /// <summary>
-        /// Calculates the difference between the last two values of a <see cref="IExchangableValueList"/>.
+        /// Calculates the difference between the last two values of a <see cref="IExchangeableValueList"/>.
         /// </summary>
-        public static decimal RecentChange(this IExchangableValueList valueList, ICurrency currency)
+        public static decimal RecentChange(this IExchangeableValueList valueList, ICurrency currency)
         {
             if (!valueList.Any())
             {

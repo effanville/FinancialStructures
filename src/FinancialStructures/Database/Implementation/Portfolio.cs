@@ -83,7 +83,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
         private Dictionary<TwoName, CashAccount> _bankAccountsDictionary = new Dictionary<TwoName, CashAccount>();
 
         /// <inheritdoc/>
-        public IReadOnlyList<IExchangableValueList> BankAccounts
+        public IReadOnlyList<IExchangeableValueList> BankAccounts
         {
             get
             {

@@ -3,7 +3,7 @@
 using Effanville.Common.Structure.DataStructures;
 using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.Database.Extensions.DataEdit;
-
+using Effanville.FinancialStructures.FinanceStructures;
 using NUnit.Framework;
 
 namespace Effanville.FinancialStructures.Tests.Database.DataAccess
@@ -41,20 +41,20 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
 
             otherDatabase.ImportValuesFrom(constructor);
 
-            otherDatabase.TryGetAccount(Account.Security, defaultSecurityName, out var secList);
+            otherDatabase.TryGetAccount(Account.Security, defaultSecurityName, out IValueList secList);
             var value = secList.Value(new DateTime(2022, 5, 6));
             Assert.AreEqual(22, value.Value);
 
-            otherDatabase.TryGetAccount(Account.BankAccount, defaultBankAccountName, out var bankList);
+            otherDatabase.TryGetAccount(Account.BankAccount, defaultBankAccountName, out IValueList bankList);
             var value2 = bankList.Value(new DateTime(2022, 5, 6));
             Assert.AreEqual(4, value2.Value);
 
-            otherDatabase.TryGetAccount(Account.Currency, defaultCurrencyName, out var currencyList);
+            otherDatabase.TryGetAccount(Account.Currency, defaultCurrencyName, out IValueList currencyList);
             var value3 = currencyList.Value(new DateTime(2022, 5, 6));
             Assert.AreEqual(11.2m, value3.Value);
 
 
-            otherDatabase.TryGetAccount(Account.Asset, defaultAssetName, out var assetList);
+            otherDatabase.TryGetAccount(Account.Asset, defaultAssetName, out IValueList assetList);
             var value4 = assetList.Value(new DateTime(2022, 5, 6));
             Assert.AreEqual(-19988.80m, value4.Value);
         }

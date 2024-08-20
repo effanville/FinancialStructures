@@ -1,24 +1,14 @@
-using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.FinanceStructures
 {
-    public interface INamedFinancialObject
+    public interface INamedFinancialObject : IReadOnlyNamedFinancialObject
     {
         /// <summary>
-        /// The type of this value list.
+        /// Edits the names of the Value list.
         /// </summary>
-        Account AccountType { get; }
-        
-        /// <summary>
-        /// The Name data for this list, including company, name and urls.
-        /// </summary>
-        NameData Names { get; }
-        
-        /// <summary>
-        /// Is the sector listed in this <see cref="IValueList"/>
-        /// </summary>
-        /// <param name="sectorName">The sector to check.</param>
-        bool IsSectorLinked(TwoName sectorName);
+        /// <param name="newNames">The updated name to set.</param>
+        /// <returns>Was updating name successful.</returns>
+        bool EditNameData(NameData newNames);
     }
 }

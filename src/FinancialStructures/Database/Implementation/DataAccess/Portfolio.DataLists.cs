@@ -108,6 +108,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
             return portfolioCopy;
         }
 
+
         /// <inheritdoc/>
         public IReadOnlyList<IValueList> Accounts(Account account)
         {
@@ -115,7 +116,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
             {
                 case Account.All:
                 {
-                    List<IValueList> accountList = new List<IValueList>();
+                    List<IValueList> accountList  = new List<IValueList>();
                     accountList.AddRange(Funds);
                     accountList.AddRange(BankAccounts);
                     accountList.AddRange(Assets);
@@ -162,7 +163,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
                 }
                 case Totals.BankAccountCompany:
                 {
-                    return Enumerable.Where<IExchangableValueList>(BankAccounts, fund => fund.Names.Company == name.Company).ToList();
+                    return Enumerable.Where<IExchangeableValueList>(BankAccounts, fund => fund.Names.Company == name.Company).ToList();
                 }
                 case Totals.AssetCompany:
                 {
@@ -195,7 +196,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
                 case Totals.All:
                 {
                     return Enumerable.Union(Funds, Enumerable
-                        .Union<IExchangableValueList>(BankAccounts, Assets))
+                        .Union<IExchangeableValueList>(BankAccounts, Assets))
                         .Union(Pensions)
                         .ToList();
                 }
@@ -205,7 +206,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
                 }
                 case Totals.BankAccountSector:
                 {
-                    return Enumerable.Where<IExchangableValueList>(BankAccounts, fund => fund.IsSectorLinked(name)).ToList();
+                    return Enumerable.Where<IExchangeableValueList>(BankAccounts, fund => fund.IsSectorLinked(name)).ToList();
                 }
                 case Totals.AssetSector:
                 {
@@ -245,7 +246,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
                 }
                 case Totals.BankAccountCurrency:
                 {
-                    return Enumerable.Where<IExchangableValueList>(BankAccounts, fund => fund.Names.Currency == name.Company).ToList();
+                    return Enumerable.Where<IExchangeableValueList>(BankAccounts, fund => fund.Names.Currency == name.Company).ToList();
                 }
                 case Totals.AssetCurrency:
                 {

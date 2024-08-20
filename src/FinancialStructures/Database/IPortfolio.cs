@@ -81,7 +81,7 @@ namespace Effanville.FinancialStructures.Database
         /// thread safe manner.
         /// </para>
         /// </summary>
-        IReadOnlyList<IExchangableValueList> BankAccounts
+        IReadOnlyList<IExchangeableValueList> BankAccounts
         {
             get;
         }
@@ -117,14 +117,16 @@ namespace Effanville.FinancialStructures.Database
         {
             get;
         }
-        
+
         /// <summary>
-        /// Outputs the account if it exists.
+        /// Outputs the account if it exists in the specified type.
         /// </summary>
         /// <param name="accountType">The type of element to find.</param>
-        /// <param name="name">The name of the element to find.</param>
+        /// <param name="names">The name of the element to find.</param>
         /// <param name="valueList">The account if it exists.</param>
-        bool TryGetAccount(Account accountType, TwoName name, out IValueList valueList);
+        /// <typeparam name="TNamedFinancialObject">The type deriving from <see cref="IReadOnlyNamedFinancialObject"/></typeparam>
+        bool TryGetAccount<TNamedFinancialObject>(Account accountType, TwoName names, out TNamedFinancialObject valueList)
+            where TNamedFinancialObject : IReadOnlyNamedFinancialObject;
 
         /// <summary>
         /// Returns a copy of all accounts related to the account type.

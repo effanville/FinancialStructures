@@ -119,7 +119,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         public override int Count() => UnitPrice.Count();
 
         /// <inheritdoc/>
-        public override bool Equals(IValueList otherList)
+        public override bool Equals(IReadOnlyValueList otherList)
         {
             if (otherList is ISecurity otherSecurity)
             {
@@ -133,7 +133,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         public bool Equals(ISecurity otherSecurity) => base.Equals(otherSecurity);
 
         /// <inheritdoc />
-        public override int CompareTo(IValueList other)
+        public override int CompareTo(IReadOnlyValueList other)
         {
             if (other is ISecurity otherSecurity)
             {

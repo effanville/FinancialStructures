@@ -99,7 +99,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Rates
                     earlierValue += security.Value(earlierTime, currency, 0.0m);
                     laterValue += security.Value(laterTime, currency, 0.0m);
                 }
-                else if (valueList is IExchangableValueList exchangableValueList && exchangableValueList.Any())
+                else if (valueList is IExchangeableValueList exchangableValueList && exchangableValueList.Any())
                 {
                     ICurrency currency = portfolio.Currency(exchangableValueList.Names.Currency);
                     earlierValue += exchangableValueList.Value(earlierTime, currency, 0.0m);
@@ -135,7 +135,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Rates
                     laterValue += security.Value(laterTime, currency, 0.0m);
                     investments.AddRange(security.InvestmentsBetween(earlierTime, laterTime, currency));
                 }
-                else if (valueList is IExchangableValueList exchangableValueList && exchangableValueList.Any())
+                else if (valueList is IExchangeableValueList exchangableValueList && exchangableValueList.Any())
                 {
                     ICurrency currency = portfolio.Currency(exchangableValueList.Names.Currency);
                     earlierValue += exchangableValueList.Value(earlierTime, currency, 0.0m);

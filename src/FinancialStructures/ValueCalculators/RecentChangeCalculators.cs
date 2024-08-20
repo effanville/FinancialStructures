@@ -31,7 +31,7 @@ namespace Effanville.FinancialStructures.ValueCalculators
 
         static decimal Calculate(IPortfolio portfolio, IValueList valueList)
         {
-            if (valueList is not IExchangableValueList exchangableValueList)
+            if (valueList is not IExchangeableValueList exchangableValueList)
             {
                 return 0.0m;
             }

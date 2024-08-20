@@ -9,7 +9,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
     /// <summary>
     /// An account simulating a bank account.
     /// </summary>
-    public class CashAccount : ValueList, IExchangableValueList
+    public class CashAccount : ValueList, IExchangeableValueList
     {
         /// <inheritdoc/>
         protected override void OnDataEdit(object edited, EventArgs e) 
@@ -43,7 +43,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public DailyValuation Value(DateTime date, ICurrency currency = null)
+        public DailyValuation Value(DateTime date, IReadOnlyCurrency currency = null)
         {
             DailyValuation perSharePrice = Values.ValueZeroBefore(date);
             decimal value = perSharePrice?.Value * GetCurrencyValue(date, currency) ?? 0.0m;
@@ -51,7 +51,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public DailyValuation LatestValue(ICurrency currency)
+        public DailyValuation LatestValue(IReadOnlyCurrency currency)
         {
             DailyValuation latestDate = Values.LatestValuation();
             if (latestDate == null)
@@ -65,7 +65,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public DailyValuation ValueBefore(DateTime date, ICurrency currency)
+        public DailyValuation ValueBefore(DateTime date, IReadOnlyCurrency currency)
         {
             DailyValuation val = Values.ValueBefore(date);
 
@@ -79,7 +79,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public DailyValuation FirstValue(ICurrency currency)
+        public DailyValuation FirstValue(IReadOnlyCurrency currency)
         {
             DailyValuation firstDate = Values.FirstValuation();
             if (firstDate == null)
@@ -93,7 +93,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public DailyValuation ValueOnOrBefore(DateTime date, ICurrency currency = null)
+        public DailyValuation ValueOnOrBefore(DateTime date, IReadOnlyCurrency currency = null)
         {
             DailyValuation value = Values.ValueOnOrBefore(date);
             if (value == null)
@@ -105,7 +105,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             return value;
         }
 
-        private static decimal GetCurrencyValue(DateTime date, ICurrency currency) 
+        private static decimal GetCurrencyValue(DateTime date, IReadOnlyCurrency currency) 
             => currency == null ? 1.0m : currency.Value(date)?.Value ?? 1.0m;
     }
 }

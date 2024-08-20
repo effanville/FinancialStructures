@@ -102,7 +102,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests
         }
 
         [TestCaseSource(nameof(SecurityProfitAsIExchData))]
-        public void SecurityProfitAsIExchTests(IExchangableValueList valueList, decimal expectedValue)
+        public void SecurityProfitAsIExchTests(IExchangeableValueList valueList, decimal expectedValue)
         {
             decimal actualValue = valueList.Profit(null);
 
@@ -218,7 +218,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests
         }
 
         [TestCaseSource(nameof(BankAccRecentChangeData))]
-        public void BankAccRecentChangeTests(IExchangableValueList valueList, decimal expectedValue)
+        public void BankAccRecentChangeTests(IExchangeableValueList valueList, decimal expectedValue)
         {
             decimal actualValue = valueList.RecentChange(null);
 
