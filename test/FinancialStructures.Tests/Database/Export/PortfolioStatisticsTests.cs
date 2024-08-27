@@ -4,6 +4,7 @@ using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
 
 using Effanville.Common.Structure.ReportWriting;
+using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.Database.Export.Statistics;
 using Effanville.FinancialStructures.Database.Statistics;
 
@@ -14,26 +15,26 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
     [TestFixture]
     public sealed class PortfolioStatisticsTests
     {
-        private const string test =
+        private const string Test =
 @"<table>
 <thead><tr>
-<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>Sectors</th><th>Notes</th>
+<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>RecentChange</th><th>FundFraction</th><th>FundCompanyFraction</th><th>Sectors</th><th>FirstDate</th><th>LatestDate</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
 </tr></thead>
 <tbody>
 <tr>
-<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td></td><td></td>
+<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>0.95</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>BankAccount</td><td></td><td>£1,102.20</td><td></td><td></td>
+<td>Totals</td><td>BankAccount</td><td></td><td>£1,102.20</td><td>£253.80</td><td>0.04</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td></td><td></td>
+<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td></td><td></td>
+<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>All</td><td></td><td>£27,186.30</td><td></td><td></td>
+<td>Totals</td><td>All</td><td></td><td>£27,186.30</td><td>-£14,299.88</td><td>1</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -57,17 +58,17 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 <h2>Bank Account Data</h2>
 <table>
 <thead><tr>
-<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>Sectors</th><th>Notes</th>
+<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>RecentChange</th><th>FundFraction</th><th>FundCompanyFraction</th><th>Sectors</th><th>FirstDate</th><th>LatestDate</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Santander</th><td>Current</td><td></td><td>£101.10</td><td></td><td></td>
+<th scope=""row"">Santander</th><td>Current</td><td></td><td>£101.10</td><td>£23.40</td><td>0.09</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Halifax</th><td>Current</td><td>HKD</td><td>£1,001.10</td><td></td><td></td>
+<th scope=""row"">Halifax</th><td>Current</td><td>HKD</td><td>£1,001.10</td><td>£230.40</td><td>0.9</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Totals</th><td>BankAccount</td><td></td><td>£1,102.20</td><td></td><td></td>
+<th scope=""row"">Totals</th><td>BankAccount</td><td></td><td>£1,102.20</td><td>£253.80</td><td>0.04</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -85,7 +86,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 <h2>Analysis By Sector</h2>
 <table>
 <thead><tr>
-<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>RecentChange</th><th>Profit</th><th>IRR3M</th><th>IRR6M</th><th>IRR1Y</th><th>IRR5Y</th><th>IRRTotal</th><th>NumberOfAccounts</th><th>FirstDate</th><th>LatestDate</th><th>Notes</th>
+<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>RecentChange</th><th>Profit</th><th>IRR3M</th><th>IRR6M</th><th>IRR1Y</th><th>IRR5Y</th><th>IRRTotal</th><th>NumberOfAccounts</th><th>FirstDate</th><th>LatestDate</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
 </tr></thead>
 <tbody>
 </tbody>
@@ -96,36 +97,36 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
         [Test]
         public void CanCreateStatistics()
         {
-            var portfolio = TestDatabase.Databases[TestDatabaseName.TwoSecTwoBank];
-            var settings = PortfolioStatisticsSettings.DefaultSettings();
+            IPortfolio portfolio = TestDatabase.Databases[TestDatabaseName.TwoSecTwoBank];
+            PortfolioStatisticsSettings settings = PortfolioStatisticsSettings.DefaultSettings();
             settings.DateToCalculate = new DateTime(2021, 12, 19);
-            var portfolioStatistics = new PortfolioStatistics(portfolio, settings, new MockFileSystem());
-            var exportSettings = PortfolioStatisticsExportSettings.DefaultSettings();
-            var statsString = portfolioStatistics.ExportString(includeHtmlHeaders: false, DocumentType.Html, exportSettings);
+            PortfolioStatistics portfolioStatistics = new PortfolioStatistics(portfolio, settings, new MockFileSystem());
+            PortfolioStatisticsExportSettings exportSettings = PortfolioStatisticsExportSettings.DefaultSettings();
+            ReportBuilder statsString = portfolioStatistics.ExportString(includeHtmlHeaders: false, DocumentType.Html, exportSettings);
             string actual = statsString.ToString();
-            Assert.AreEqual(test, actual);
+            Assert.That(actual, Is.EqualTo(Test));
         }
 
         private const string FilteredOutput =
 @"<table>
 <thead><tr>
-<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>Sectors</th><th>Notes</th>
+<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>RecentChange</th><th>FundFraction</th><th>FundCompanyFraction</th><th>Sectors</th><th>FirstDate</th><th>LatestDate</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
 </tr></thead>
 <tbody>
 <tr>
-<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td></td><td></td>
+<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>0.95</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>BankAccount</td><td></td><td>£1,102.20</td><td></td><td></td>
+<td>Totals</td><td>BankAccount</td><td></td><td>£1,102.20</td><td>£253.80</td><td>0.04</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td></td><td></td>
+<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td></td><td></td>
+<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>All</td><td></td><td>£27,186.30</td><td></td><td></td>
+<td>Totals</td><td>All</td><td></td><td>£27,186.30</td><td>-£14,299.88</td><td>1</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -149,17 +150,17 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 <h2>Bank Account Data</h2>
 <table>
 <thead><tr>
-<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>Sectors</th><th>Notes</th>
+<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>RecentChange</th><th>FundFraction</th><th>FundCompanyFraction</th><th>Sectors</th><th>FirstDate</th><th>LatestDate</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Santander</th><td>Current</td><td></td><td>£101.10</td><td></td><td></td>
+<th scope=""row"">Santander</th><td>Current</td><td></td><td>£101.10</td><td>£23.40</td><td>0.09</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Halifax</th><td>Current</td><td>HKD</td><td>£1,001.10</td><td></td><td></td>
+<th scope=""row"">Halifax</th><td>Current</td><td>HKD</td><td>£1,001.10</td><td>£230.40</td><td>0.9</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Totals</th><td>BankAccount</td><td></td><td>£1,102.20</td><td></td><td></td>
+<th scope=""row"">Totals</th><td>BankAccount</td><td></td><td>£1,102.20</td><td>£253.80</td><td>0.04</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -177,7 +178,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 <h2>Analysis By Sector</h2>
 <table>
 <thead><tr>
-<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>RecentChange</th><th>Profit</th><th>IRR3M</th><th>IRR6M</th><th>IRR1Y</th><th>IRR5Y</th><th>IRRTotal</th><th>NumberOfAccounts</th><th>FirstDate</th><th>LatestDate</th><th>Notes</th>
+<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>RecentChange</th><th>Profit</th><th>IRR3M</th><th>IRR6M</th><th>IRR1Y</th><th>IRR5Y</th><th>IRRTotal</th><th>NumberOfAccounts</th><th>FirstDate</th><th>LatestDate</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
 </tr></thead>
 <tbody>
 </tbody>
@@ -188,8 +189,8 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
         [Test]
         public void CanSortOnNonDisplayedStatistics()
         {
-            var portfolio = TestDatabase.Databases[TestDatabaseName.TwoSecTwoBank];
-            var settings = new PortfolioStatisticsSettings(
+            IPortfolio portfolio = TestDatabase.Databases[TestDatabaseName.TwoSecTwoBank];
+            PortfolioStatisticsSettings settings = new PortfolioStatisticsSettings(
                 DateTime.Today,
                 displayValueFunds: false,
                 generateBenchmarks: true,
@@ -202,8 +203,8 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
                 includeAssets: false,
                 assetDisplayFields: AccountStatisticsHelpers.DefaultAssetStats().ToList());
             settings.DateToCalculate = new DateTime(2021, 12, 19);
-            var portfolioStatistics = new PortfolioStatistics(portfolio, settings, new MockFileSystem());
-            var exportSettings = new PortfolioStatisticsExportSettings(
+            PortfolioStatistics portfolioStatistics = new PortfolioStatistics(portfolio, settings, new MockFileSystem());
+            PortfolioStatisticsExportSettings exportSettings = new PortfolioStatisticsExportSettings(
                 spacing: false,
                 colours: false,
                 includeSecurities: true,
@@ -233,32 +234,32 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
                 Statistic.Company,
                 SortDirection.Descending,
                 AccountStatisticsHelpers.DefaultAssetStats().ToList());
-            var statsString = portfolioStatistics.ExportString(includeHtmlHeaders: false, DocumentType.Html, exportSettings);
+            ReportBuilder statsString = portfolioStatistics.ExportString(includeHtmlHeaders: false, DocumentType.Html, exportSettings);
             string actual = statsString.ToString();
-            Assert.AreEqual(FilteredOutput, actual);
+            Assert.That(actual, Is.EqualTo(FilteredOutput));
         }
 
         private static IEnumerable<TestCaseData> SortSecurityData()
         {
             yield return new TestCaseData(Statistic.Company, SortDirection.Ascending, @"<table>
 <thead><tr>
-<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>Sectors</th><th>Notes</th>
+<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>RecentChange</th><th>FundFraction</th><th>FundCompanyFraction</th><th>Sectors</th><th>FirstDate</th><th>LatestDate</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
 </tr></thead>
 <tbody>
 <tr>
-<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td></td><td></td>
+<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td></td><td></td>
+<td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td></td><td></td>
+<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td></td><td></td>
+<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>All</td><td></td><td>£26,084.10</td><td></td><td></td>
+<td>Totals</td><td>All</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -294,23 +295,23 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 ");
             yield return new TestCaseData(Statistic.Company, SortDirection.Descending, @"<table>
 <thead><tr>
-<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>Sectors</th><th>Notes</th>
+<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>RecentChange</th><th>FundFraction</th><th>FundCompanyFraction</th><th>Sectors</th><th>FirstDate</th><th>LatestDate</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
 </tr></thead>
 <tbody>
 <tr>
-<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td></td><td></td>
+<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td></td><td></td>
+<td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td></td><td></td>
+<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td></td><td></td>
+<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>All</td><td></td><td>£26,084.10</td><td></td><td></td>
+<td>Totals</td><td>All</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -346,23 +347,23 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 ");
             yield return new TestCaseData(Statistic.LatestValue, SortDirection.Ascending, @"<table>
 <thead><tr>
-<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>Sectors</th><th>Notes</th>
+<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>RecentChange</th><th>FundFraction</th><th>FundCompanyFraction</th><th>Sectors</th><th>FirstDate</th><th>LatestDate</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
 </tr></thead>
 <tbody>
 <tr>
-<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td></td><td></td>
+<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td></td><td></td>
+<td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td></td><td></td>
+<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td></td><td></td>
+<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>All</td><td></td><td>£26,084.10</td><td></td><td></td>
+<td>Totals</td><td>All</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -398,23 +399,23 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 ");
             yield return new TestCaseData(Statistic.LatestValue, SortDirection.Descending, @"<table>
 <thead><tr>
-<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>Sectors</th><th>Notes</th>
+<th scope=""col"">Company</th><th>Name</th><th>Currency</th><th>LatestValue</th><th>RecentChange</th><th>FundFraction</th><th>FundCompanyFraction</th><th>Sectors</th><th>FirstDate</th><th>LatestDate</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
 </tr></thead>
 <tbody>
 <tr>
-<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td></td><td></td>
+<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td></td><td></td>
+<td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td></td><td></td>
+<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td></td><td></td>
+<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>All</td><td></td><td>£26,084.10</td><td></td><td></td>
+<td>Totals</td><td>All</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -453,8 +454,8 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
         [TestCaseSource(nameof(SortSecurityData))]
         public void CanSortSecurityCorrectly(Statistic securitySortField, SortDirection securitySortDirection, string expectedOutput)
         {
-            var portfolio = TestDatabase.Databases[TestDatabaseName.TwoSec];
-            var settings = new PortfolioStatisticsSettings(
+            IPortfolio portfolio = TestDatabase.Databases[TestDatabaseName.TwoSec];
+            PortfolioStatisticsSettings settings = new PortfolioStatisticsSettings(
                 new DateTime(2021, 12, 19),
                 displayValueFunds: true,
                 generateBenchmarks: true,
@@ -466,8 +467,8 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
                 sectorDisplayFields: AccountStatisticsHelpers.DefaultSectorStats().ToList(),
                 includeAssets: false,
                 assetDisplayFields: AccountStatisticsHelpers.DefaultAssetStats().ToList());
-            var portfolioStatistics = new PortfolioStatistics(portfolio, settings, new MockFileSystem());
-            var exportSettings = new PortfolioStatisticsExportSettings(
+            PortfolioStatistics portfolioStatistics = new PortfolioStatistics(portfolio, settings, new MockFileSystem());
+            PortfolioStatisticsExportSettings exportSettings = new PortfolioStatisticsExportSettings(
                 spacing: false,
                 colours: false,
                 includeSecurities: true,
@@ -486,10 +487,10 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
                 Statistic.NumberOfAccounts,
                 SortDirection.Ascending,
                 assetDisplayFields: AccountStatisticsHelpers.DefaultAssetStats().ToList());
-            var statsString = portfolioStatistics.ExportString(false, DocumentType.Html, exportSettings);
+            ReportBuilder statsString = portfolioStatistics.ExportString(false, DocumentType.Html, exportSettings);
 
             string actualOutput = statsString.ToString();
-            Assert.AreEqual(expectedOutput, actualOutput);
+            Assert.That(actualOutput, Is.EqualTo(expectedOutput));
         }
     }
 }
