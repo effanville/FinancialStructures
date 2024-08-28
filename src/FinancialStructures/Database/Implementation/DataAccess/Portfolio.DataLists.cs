@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Effanville.FinancialStructures.FinanceStructures;
-using Effanville.FinancialStructures.FinanceStructures.Implementation;
-using Effanville.FinancialStructures.FinanceStructures.Implementation.Asset;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Implementation
@@ -21,90 +19,18 @@ namespace Effanville.FinancialStructures.Database.Implementation
         /// </remarks>
         public IPortfolio Copy()
         {
-            Implementation.Portfolio portfolioCopy = new Implementation.Portfolio
+            Portfolio portfolioCopy = new ()
             {
                 BaseCurrency = BaseCurrency,
                 Name = Name
             };
             
-            _fundsLock.EnterReadLock();
-            try
-            {
-                foreach (var security in _fundsDictionary)
-                {
-                    portfolioCopy._fundsDictionary.Add(security.Key, (Security)security.Value.Copy());
-                }
-            }
-            finally
-            {
-                _fundsLock.ExitReadLock();
-            }
-
-            _bankAccountsLock.EnterReadLock();
-            try
-            {
-                foreach (var bankAcc in _bankAccountsDictionary)
-                {
-                    portfolioCopy._bankAccountsDictionary.TryAdd(bankAcc.Key, (CashAccount)bankAcc.Value.Copy());
-                }
-            }
-            finally
-            {
-                _bankAccountsLock.ExitReadLock();
-            }
-
-            _currenciesLock.EnterReadLock();
-            try
-            {
-                foreach (var currency in _currenciesDictionary)
-                {
-                    portfolioCopy._currenciesDictionary.Add(currency.Key, (Currency)currency.Value.Copy());
-                }
-            }
-            finally
-            {
-                _currenciesLock.ExitReadLock();
-            }
-
-            _benchmarksLock.EnterReadLock();
-            try
-            {
-                foreach (var sector in _benchMarksDictionary)
-                {
-                    portfolioCopy._benchMarksDictionary.Add(sector.Key, (Sector)sector.Value.Copy());
-                }
-            }
-            finally
-            {
-                _benchmarksLock.ExitReadLock();
-            }
-
-            _assetsLock.EnterReadLock();
-            try
-            {
-                foreach (var asset in _assetsDictionary)
-                {
-                    portfolioCopy._assetsDictionary.Add(asset.Key, (AmortisableAsset)asset.Value.Copy());
-                }
-            }
-            finally
-            {
-                _assetsLock.ExitReadLock();
-            }
-
-            _pensionsLock.EnterReadLock();
-            try
-            {
-                foreach (var pension in _pensionsDictionary)
-                {
-                    portfolioCopy._pensionsDictionary.Add(pension.Key, (Security)pension.Value.Copy());
-                }
-            }
-            finally
-            {
-                _pensionsLock.ExitReadLock();
-            }
-
+            portfolioCopy._funds.CopyFrom(_funds);
+            portfolioCopy._bankAccounts.CopyFrom(_bankAccounts);
+            portfolioCopy._currencies.CopyFrom(_currencies);
+            portfolioCopy._benchmarks.CopyFrom(_benchmarks);
+            portfolioCopy._assets.CopyFrom(_assets);
+            portfolioCopy._pensions.CopyFrom(_pensions);
             return portfolioCopy;
         }
 

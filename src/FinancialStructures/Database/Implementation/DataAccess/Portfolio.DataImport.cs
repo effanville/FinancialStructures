@@ -1,4 +1,5 @@
-﻿using Effanville.Common.Structure.Reporting;
+﻿using Effanville.Common.Structure.DataStructures;
+using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
@@ -9,19 +10,19 @@ namespace Effanville.FinancialStructures.Database.Implementation
         /// <inheritdoc/>
         public void ImportValuesFrom(IPortfolio other, IReportLogger reportLogger = null)
         {
-            foreach (ISecurity security in _fundsDictionary.Values)
+            foreach (ISecurity security in _funds.Values)
             {
                 if (other.TryGetAccount(Account.Security, security.Names.ToTwoName(), out IValueList otherSecurity)
                     && otherSecurity is ISecurity sec)
                 {
-                    foreach (var unitPrice in sec.UnitPrice.Values())
+                    foreach (DailyValuation unitPrice in sec.UnitPrice.Values())
                     {
                         security.SetData(unitPrice.Day, unitPrice.Value, reportLogger);
                     }
                 }
             }
 
-            foreach (IExchangeableValueList bankAccount in _bankAccountsDictionary.Values)
+            foreach (IExchangeableValueList bankAccount in _bankAccounts.Values)
             {
                 if (other.TryGetAccount(Account.BankAccount, bankAccount.Names, out IValueList otherBankAccount)
                     && otherBankAccount is IExchangeableValueList sec)
@@ -33,7 +34,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
                 }
             }
 
-            foreach (IValueList sector in _benchMarksDictionary.Values)
+            foreach (IValueList sector in _benchmarks.Values)
             {
                 if (other.TryGetAccount(Account.Benchmark, sector.Names, out IValueList otherBankAccount)
                     && otherBankAccount is IValueList sec)
@@ -45,7 +46,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
                 }
             }
 
-            foreach (ICurrency currency in _currenciesDictionary.Values)
+            foreach (ICurrency currency in _currencies.Values)
             {
                 if (other.TryGetAccount(Account.Currency, currency.Names, out IValueList otherBankAccount)
                     && otherBankAccount is ICurrency sec)
@@ -57,7 +58,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
                 }
             }
 
-            foreach (IAmortisableAsset asset in _assetsDictionary.Values)
+            foreach (IAmortisableAsset asset in _assets.Values)
             {
                 if (other.TryGetAccount(Account.Asset, asset.Names, out IValueList otherBankAccount)
                     && otherBankAccount is IAmortisableAsset sec)
@@ -69,7 +70,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
                 }
             }
 
-            foreach (ISecurity pension in _pensionsDictionary.Values)
+            foreach (ISecurity pension in _pensions.Values)
             {
                 if (other.TryGetAccount(Account.Pension, pension.Names, out IValueList otherPension)
                     && otherPension is ISecurity sec)

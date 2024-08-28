@@ -23,15 +23,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
         {
             if (elementType == Account.Security)
             {
-                _fundsLock.EnterReadLock();
-                try
-                {
-                    return _fundsDictionary.ContainsKey(name);
-                }
-                finally
-                {
-                    _fundsLock.ExitReadLock();
-                }
+                return _funds.Exists(name);
             }
 
             foreach (TwoName sec in NameDataForAccount(elementType))

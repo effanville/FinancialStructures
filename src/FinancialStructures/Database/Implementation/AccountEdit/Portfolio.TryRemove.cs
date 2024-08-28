@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-
-using Effanville.Common.Structure.Reporting;
-using Effanville.FinancialStructures.FinanceStructures.Implementation;
-using Effanville.FinancialStructures.FinanceStructures.Implementation.Asset;
+﻿using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Implementation
@@ -23,27 +18,27 @@ namespace Effanville.FinancialStructures.Database.Implementation
             {
                 case Account.Security:
                 {
-                    return RemoveAccount<Security>(_fundsDictionary, elementType, name, _fundsLock, reportLogger);
+                    return _funds.Remove(name, reportLogger);
                 }
                 case Account.Currency:
                 {
-                    return RemoveAccount<Currency>(_currenciesDictionary, elementType, name, _currenciesLock, reportLogger);
+                    return _currencies.Remove(name, reportLogger);
                 }
                 case Account.BankAccount:
                 {
-                    return RemoveAccount<CashAccount>(_bankAccountsDictionary, elementType, name, _bankAccountsLock, reportLogger);
+                    return _bankAccounts.Remove(name, reportLogger);
                 }
                 case Account.Benchmark:
                 {
-                    return RemoveAccount<Sector>(_benchMarksDictionary, elementType, name, _benchmarksLock, reportLogger);
+                    return _benchmarks.Remove(name, reportLogger);
                 }
                 case Account.Asset:
                 {
-                    return RemoveAccount<AmortisableAsset>(_assetsDictionary, elementType, name, _assetsLock, reportLogger);
+                    return _assets.Remove(name, reportLogger);
                 }
                 case Account.Pension:
                 {
-                    return RemoveAccount<Security>(_pensionsDictionary, elementType, name, _pensionsLock, reportLogger);
+                    return _pensions.Remove(name, reportLogger);
                 }
                 case Account.Unknown:
                 case Account.All:
@@ -51,36 +46,6 @@ namespace Effanville.FinancialStructures.Database.Implementation
                     reportLogger?.Log(ReportType.Error, ReportLocation.DeletingData.ToString(), $"Editing an Unknown type.");
                     return false;
             }
-            bool RemoveAccount<T>(Dictionary<TwoName, T> currentItems, Account account, TwoName name, ReaderWriterLockSlim lockObject, IReportLogger reportLogger = null)
-                where T : ValueList
-            {
-                lockObject.EnterWriteLock();
-                try
-                {
-                    var nameToRemove = new TwoName(name.Company, name.Name);
-                    if (currentItems.TryGetValue(nameToRemove, out var list))
-                    {
-                        list.DataEdit -= OnPortfolioChanged;
-                    }
-
-                    bool removed = currentItems.Remove(nameToRemove);
-                    if (removed)
-                    {
-                        reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information,
-                            ReportLocation.DeletingData.ToString(), $"{account}-{name} removed from the database.");
-                        OnPortfolioChanged(currentItems, new PortfolioEventArgs(account));
-                        return true;
-                    }
-                }
-                finally
-                {
-                    lockObject.ExitWriteLock();
-                }
-
-                reportLogger?.Log(ReportType.Error, ReportLocation.DeletingData.ToString(), $"{account} - {name} could not be found in the database.");
-                return false;
-            }
-            
         }
     }
 }
