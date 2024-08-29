@@ -76,7 +76,7 @@ namespace Effanville.FinancialStructures.FinanceStructures
 
         public bool TryAdd(Account accountType, NameData name, IReportLogger reportLogger = null)
         {
-            if (_account != accountType)
+            if (_account != accountType && _account != Account.All)
             {
                 reportLogger?.Error(ReportLocation.AddingData.ToString(), $"{accountType}-{name} attempted to be added to type {_account}.");
                 return false;
