@@ -38,6 +38,16 @@ namespace Effanville.FinancialStructures.Tests.Database
         [TestCase("https://uk.finance.yahoo.com/quote/ship.l")]
         [TestCase("https://uk.finance.yahoo.com/quote/GBPEUR%3DX")]
         [TestCase("https://uk.finance.yahoo.com/quote/GBPUSD%3DX?p=GBPUSD%3DX")]
+        [TestCase("https://markets.ft.com/data/etfs/tearsheet/summary?s=2800:HKG:HKD")]
+        [TestCase("https://markets.ft.com/data/etfs/tearsheet/summary?s=Vwrl:LSE:GBP")]
+        [TestCase("https://markets.ft.com/data/etfs/tearsheet/summary?s=saaa:LSE:GBP")]
+        [TestCase("https://uk.finance.yahoo.com/quote/SAAA.L")]
+        [TestCase("https://markets.ft.com/data/equities/tearsheet/summary?s=IBKR:NSQ")]
+        [TestCase("https://finance.yahoo.com/quote/IBKR")]
+        [TestCase("https://markets.ft.com/data/currencies/tearsheet/summary?s=HKDGBP")]
+        [TestCase("https://markets.ft.com/data/indices/tearsheet/summary?s=HSI:HKG")]
+        [TestCase("https://markets.ft.com/data/indices/tearsheet/summary?s=INX:IOM")]
+        [TestCase("https://markets.ft.com/data/indices/tearsheet/summary?s=FTSE:FSI")]
         public async Task CanDownload(string url)
         {
             decimal value = 0;

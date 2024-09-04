@@ -73,12 +73,6 @@ namespace Effanville.FinancialStructures.Download.Implementation
             string code = url.Substring(startIndex + urlSearchString.Length, endIndex - startIndex - urlSearchString.Length);
             code = code.Replace("%5E", "^").Replace("%3D", "=").ToUpper();
 
-            // seems to be a bug in the website where it uses the wrong code.
-            if (code.Equals("USDGBP=X"))
-            {
-                code = "GBP=X";
-            }
-
             return code;
         }
 
@@ -89,7 +83,7 @@ namespace Effanville.FinancialStructures.Download.Implementation
             string searchString;
             do
             {
-                searchString = $"data-symbol=\"{financialCode}\" data-test=\"qsp-price\" data-field=\"regularMarketPrice\" data-trend=\"none\" data-pricehint=\"{number}\"";
+                searchString = $"data-symbol=\"{financialCode}\" data-testid=\"qsp-price\" data-field=\"regularMarketPrice\" data-trend=\"none\" data-pricehint=\"{number}\"";
                 poundsIndex = webData.IndexOf(searchString);
                 number++;
             }
