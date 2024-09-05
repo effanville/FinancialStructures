@@ -14,7 +14,11 @@ namespace Effanville.FinancialStructures.Download.Implementation
         public string BaseUrl => "https://www.morningstar.co.uk/";
 
         /// <inheritdoc/>
-        public async Task<bool> TryGetLatestPriceFromUrl(string url, Action<decimal> retrieveValueAction, IReportLogger reportLogger = null)
+        public async Task<bool> TryGetLatestPriceFromUrl(
+            string url,
+            string currency,
+            Action<decimal> retrieveValueAction, 
+            IReportLogger reportLogger = null)
         {
             string webData = await DownloadHelper.GetWebData(url, reportLogger);
             if (string.IsNullOrEmpty(webData))
@@ -23,7 +27,7 @@ namespace Effanville.FinancialStructures.Download.Implementation
                 return false;
             }
 
-            decimal? value = Process(webData, $"<td class=\"line text\">{DownloadHelper.PoundsName}", DownloadHelper.PenceName, 20);
+            decimal? value = Process(webData, $"<td class=\"line text\">{currency}", DownloadHelper.PenceName, 20);
             if (!value.HasValue)
             {
                 return false;

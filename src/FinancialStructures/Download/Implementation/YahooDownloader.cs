@@ -20,7 +20,11 @@ namespace Effanville.FinancialStructures.Download.Implementation
         }
 
         /// <inheritdoc/>
-        public async Task<bool> TryGetLatestPriceFromUrl(string url, Action<decimal> retrieveValueAction, IReportLogger reportLogger = null)
+        public async Task<bool> TryGetLatestPriceFromUrl(
+            string url,
+            string currency,
+            Action<decimal> retrieveValueAction, 
+            IReportLogger reportLogger = null)
         {
             string financialCode = GetFinancialCode(url);
             return await TryGetPriceInternal(url, financialCode, retrieveValueAction, reportLogger);

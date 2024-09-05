@@ -91,7 +91,7 @@ namespace Effanville.FinancialStructures.Database.Download
         internal static async Task DownloadLatestValue(NameData names, Action<decimal> updateValue, IReportLogger reportLogger = null)
         {
             var downloader = PriceDownloaderFactory.Retrieve(names.Url);
-            if (downloader == null || await downloader.TryGetLatestPriceFromUrl(names.Url, updateValue, reportLogger))
+            if (downloader == null || await downloader.TryGetLatestPriceFromUrl(names.Url, names.Currency, updateValue, reportLogger))
             {
                 reportLogger?.Error(ReportLocation.Downloading.ToString(), $"{names.Company}-{names.Name}: could not download data from {names.Url}");
             }

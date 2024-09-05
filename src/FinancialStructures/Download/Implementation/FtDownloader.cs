@@ -14,7 +14,11 @@ namespace Effanville.FinancialStructures.Download.Implementation
         public string BaseUrl => "https://markets.ft.com/";
 
         /// <inheritdoc/>
-        public async Task<bool> TryGetLatestPriceFromUrl(string url, Action<decimal> retrieveValueAction, IReportLogger reportLogger = null)
+        public async Task<bool> TryGetLatestPriceFromUrl(
+            string url,
+            string currency,
+            Action<decimal> retrieveValueAction,
+            IReportLogger reportLogger = null)
         {
             string webData = await DownloadHelper.GetWebData(url, reportLogger);
             if (string.IsNullOrEmpty(webData))
@@ -23,7 +27,7 @@ namespace Effanville.FinancialStructures.Download.Implementation
                 return false;
             }
 
-            decimal? value = Process(webData, $"Price ({DownloadHelper.PoundsName})", $"Price ({DownloadHelper.PenceName})", 200);
+            decimal? value = Process(webData, $"Price ({currency})", $"Price ({DownloadHelper.PenceName})", 200);
             if (!value.HasValue)
             {
                 return false;

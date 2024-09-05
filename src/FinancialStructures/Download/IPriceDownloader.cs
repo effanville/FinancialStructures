@@ -24,6 +24,7 @@ namespace Effanville.FinancialStructures.Download
         /// </summary>
         Task<bool> TryGetLatestPriceFromUrl(
             string url,
+            string currency,
             Action<decimal> retrieveValueAction,
             IReportLogger reportLogger = null);
     }
