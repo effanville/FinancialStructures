@@ -5,6 +5,7 @@ using Effanville.FinancialStructures.Download;
 using Effanville.FinancialStructures.NamingStructures;
 using Nager.Date.Model;
 using NUnit.Framework;
+using OpenQA.Selenium.DevTools.V113.Memory;
 
 namespace Effanville.FinancialStructures.Tests.Database
 {
@@ -17,7 +18,8 @@ namespace Effanville.FinancialStructures.Tests.Database
         [TestCase("https://uk.finance.yahoo.com/quote/VUKE.L/options?p=VUKE.L", "GBP", 10,100)]
         [TestCase("https://uk.finance.yahoo.com/quote/%5EFVX", "GBP", 1,10)]
         [TestCase("https://uk.finance.yahoo.com/quote/%5ESTOXX50E", "GBP", 2000,8000)]
-        [TestCase("https://uk.finance.yahoo.com/quote/AW01.FGI", "GBP", 200,1000)]
+        [TestCase("https://uk.finance.yahoo.com/quote/AW01.FGI", "USD", 200,1000)]
+        [TestCase("https://markets.ft.com/data/indices/tearsheet/summary?s=AW01:FSI", "USD", 200, 1000)]
         [TestCase("https://uk.finance.yahoo.com/quote/%5EN225", "GBP", 20000,80000)]
         [TestCase("https://uk.finance.yahoo.com/quote/GOOGL?p=GOOGL&.tsrc=fin-srch", "GBP", 50,500)]
         [TestCase("https://uk.finance.yahoo.com/quote/abdp.L", "GBP", 1100,5000)]
@@ -49,6 +51,8 @@ namespace Effanville.FinancialStructures.Tests.Database
         [TestCase("https://markets.ft.com/data/indices/tearsheet/summary?s=INX:IOM", "USD", 2000,9000)]
         [TestCase("https://markets.ft.com/data/indices/tearsheet/summary?s=FTSE:FSI", "GBP", 2000,20000)]
         [TestCase("https://www.morningstar.co.uk/uk/funds/snapshot/snapshot.aspx?id=F00000ZJEI", "EUR", 2,100)]
+        [TestCase("https://www.bloomberg.com/quote/MAMMGEE:HK", "HKD", 5, 50)]
+        [TestCase("https://www.bloomberg.com/quote/MLCOREA:HK", "HKD", 2, 200)]
         public async Task CanDownload(string url, string currency, double lower, double upper)
         {
             decimal value = 0;
@@ -72,6 +76,7 @@ namespace Effanville.FinancialStructures.Tests.Database
         [TestCase("https://uk.finance.yahoo.com/quote/VWRL.L/history?p=VWRL.L", "VWRL.L")]
         [TestCase("https://www.morningstar.co.uk/uk/etf/snapshot/snapshot.aspx?id=0P0000WAHE", "0P0000WAHE")] //VWRL
         [TestCase("https://markets.ft.com/data/funds/tearsheet/summary?s=gb00b4khn986:gbx", "GB00B4KHN986:GBX")]
+        [TestCase("https://www.bloomberg.com/quote/MAMMGEE:HK", "MAMMGEE:HK")]
         public void CanGetCode(string url, string expectedCode)
         {
             string code = PriceDownloaderFactory.RetrieveCodeFromUrl(url);

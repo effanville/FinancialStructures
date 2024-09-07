@@ -10,6 +10,7 @@ namespace Effanville.FinancialStructures.Download
         private static readonly MorningstarDownloader _morningstarDownloader = new MorningstarDownloader();
         private static readonly YahooDownloader _yahooDownloader = new YahooDownloader();
         private static readonly FtDownloader _ftDownloader = new FtDownloader();
+        private static readonly BloombergDownloader _bloombergDownloader = new BloombergDownloader();
 
         /// <summary>
         /// Retrieve the relevant price downloader.
@@ -32,6 +33,10 @@ namespace Effanville.FinancialStructures.Download
             if (url.Contains("markets.ft"))
             {
                 return _ftDownloader;
+            }
+            if (url.Contains("bloomberg"))
+            {
+                return _bloombergDownloader;
             }
             
             return null;
@@ -59,7 +64,12 @@ namespace Effanville.FinancialStructures.Download
             {
                 return _ftDownloader.GetFinancialCode(url);
             }
-                
+
+            if (url.Contains("bloomberg"))
+            {
+                return _bloombergDownloader.GetFinancialCode(url);
+            }
+
             return null;
         }
     }
