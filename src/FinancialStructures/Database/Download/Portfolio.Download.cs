@@ -31,26 +31,37 @@ namespace Effanville.FinancialStructures.Database.Download
             else
             {
                 _ = portfolio.TryGetAccount(accountType, names, out IValueList acc);
-                downloadTasks.Add(DownloadLatestValue(acc.Names, value => UpdateAndCheck(acc, value, reportLogger), reportLogger));
+                NameData nameData = acc.Names.Copy();
+                if (string.IsNullOrWhiteSpace(nameData.Currency))
+                {
+                    nameData.Currency = portfolio.BaseCurrency ?? "GBP";
+                }
+
+                downloadTasks.Add(DownloadLatestValue(nameData, value => UpdateAndCheck(acc, value, reportLogger), reportLogger));
             }
 
             await Task.WhenAll(downloadTasks);
             _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Downloading, "Downloader Completed");
         }
 
-        private static List<Task> DownloadPortfolioLatest(IPortfolio portfo, IReportLogger reportLogger)
+        private static List<Task> DownloadPortfolioLatest(IPortfolio portfolio, IReportLogger reportLogger)
         {
             List<Task> downloadTasks = new List<Task>();
-            Add(portfo.Accounts(Account.All));
-            Add(portfo.Currencies);
-            Add(portfo.BenchMarks);
+            Add(portfolio.Accounts(Account.All));
+            Add(portfolio.Currencies);
+            Add(portfolio.BenchMarks);
 
             void Add(IReadOnlyList<IValueList> accounts)
             {
                 foreach (IValueList acc in accounts)
                 {
                     if (!string.IsNullOrEmpty(acc.Names.Url))
-                    {
+                    {                
+                        NameData nameData = acc.Names.Copy();
+                        if (string.IsNullOrWhiteSpace(nameData.Currency))
+                        {
+                            nameData.Currency = portfolio.BaseCurrency ?? "GBP";
+                        }
                         downloadTasks.Add(DownloadLatestValue(acc.Names, value => UpdateAndCheck(acc, value, reportLogger), reportLogger));
                     }
                     else
