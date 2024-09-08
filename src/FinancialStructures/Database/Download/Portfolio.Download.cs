@@ -130,9 +130,15 @@ namespace Effanville.FinancialStructures.Database.Download
         internal static async Task DownloadLatestValue(NameData names, Action<decimal> updateValue, IReportLogger reportLogger = null)
         {
             var downloader = PriceDownloaderFactory.Retrieve(names.Url);
-            if (downloader == null || !await downloader.TryGetLatestPriceFromUrl(names.Url, names.Currency, updateValue, reportLogger))
+            if (downloader == null)
             {
-                reportLogger?.Error(ReportLocation.Downloading.ToString(), $"{names.Company}-{names.Name}: could not download data from {names.Url}");
+                reportLogger?.Error(ReportLocation.Downloading.ToString(), $"{names.Company}-{names.Name}: Url='{names.Url}' not of supported type");
+                return;
+            }
+
+            if (!await downloader.TryGetLatestPriceFromUrl(names.Url, names.Currency, updateValue, reportLogger))
+            {
+                reportLogger?.Error(ReportLocation.Downloading.ToString(), $"{names.Company}-{names.Name}: Couldnt get price data from {names.Url}");
             }
         }
     }

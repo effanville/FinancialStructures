@@ -19,9 +19,9 @@ namespace Effanville.FinancialStructures.Download.Implementation
             return url.Replace("^", "%5E");
         }
 
-        public static async Task<string> GetWebData(string url, IReportLogger reportLogger = null)
+        public static async Task<string> GetWebData(string url, bool addCookie = false, IReportLogger reportLogger = null)
         {
-            return await WebDownloader.DownloadFromURLasync(PrepareUrlString(url), reportLogger).ConfigureAwait(false);
+            return await WebDownloader.DownloadFromURLasync(PrepareUrlString(url), addCookie, reportLogger).ConfigureAwait(false);
         }
 
         public static decimal? ParseDataIntoNumber(string data, int startIndex, int offset, int searchLength, bool includeComma)

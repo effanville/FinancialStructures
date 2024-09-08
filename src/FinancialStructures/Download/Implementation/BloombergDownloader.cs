@@ -19,14 +19,15 @@ namespace Effanville.FinancialStructures.Download.Implementation
             Action<decimal> retrieveValueAction,
             IReportLogger reportLogger = null)
         {
-            string webData = await DownloadHelper.GetWebData(url, reportLogger);
+            string webData = await DownloadHelper.GetWebData(url, addCookie: true, reportLogger);
             if (string.IsNullOrEmpty(webData))
             {
                 reportLogger?.Error(ReportLocation.Downloading.ToString(), $"Could not download data from {url}");
                 return false;
             }
 
-            decimal? value = Process(webData,200);
+            reportLogger?.Log(ReportType.Information, ReportLocation.Downloading.ToString(), $"Retrieved data length {webData.Length} from url '{url}'");
+            decimal? value = Process(webData,200, reportLogger);
             if (!value.HasValue)
             {
                 return false;
@@ -57,7 +58,7 @@ namespace Effanville.FinancialStructures.Download.Implementation
             return code;
         }
         
-        private static decimal? Process(string data, int searchLength)
+        private static decimal? Process(string data, int searchLength, IReportLogger reportLogger)
         {
             string searchString =
                 "<div class=\"currentPrice_currentPriceContainer__nC8vw\"><div data-component=\"sized-price\" class=\"sized-price media-ui-SizedPrice_extraLarge-05pKbJRbUH8-\">";
@@ -68,6 +69,8 @@ namespace Effanville.FinancialStructures.Download.Implementation
                 return penceResult.Value;
             }
 
+            
+            reportLogger?.Log(ReportType.Information, ReportLocation.Downloading.ToString(), $"SearchIndex={penceValueIndex}, data={data}");
             return null;
         }
     }

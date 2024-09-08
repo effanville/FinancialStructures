@@ -20,7 +20,7 @@ namespace Effanville.FinancialStructures.Download.Implementation
             Action<decimal> retrieveValueAction,
             IReportLogger reportLogger = null)
         {
-            string webData = await DownloadHelper.GetWebData(url, reportLogger);
+            string webData = await DownloadHelper.GetWebData(url, addCookie: false, reportLogger);
             if (string.IsNullOrEmpty(webData))
             {
                 reportLogger?.Error(ReportLocation.Downloading.ToString(), $"Could not download data from {url}");

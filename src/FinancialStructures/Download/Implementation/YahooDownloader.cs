@@ -38,7 +38,7 @@ namespace Effanville.FinancialStructures.Download.Implementation
 
         private static async Task<bool> TryGetPriceInternal(string url, string financialCode, Action<decimal> retrieveValueAction, IReportLogger reportLogger = null)
         {
-            string webData = await DownloadHelper.GetWebData(url, reportLogger);
+            string webData = await DownloadHelper.GetWebData(url, addCookie: false, reportLogger);
             if (string.IsNullOrEmpty(webData))
             {
                 reportLogger?.Error("Downloading", $"Could not download data from {url}");
@@ -96,7 +96,7 @@ namespace Effanville.FinancialStructures.Download.Implementation
             decimal? value = DownloadHelper.ParseDataIntoNumber(webData, poundsIndex, searchString.Length, 20, true);
             if (value.HasValue)
             {
-                if (webData.Contains("Currency in GBp"))
+                if (webData.Contains("Currency in GBp") || webData.Contains("GBp"))
                 {
                     return value.Value / 100.0m;
                 }
