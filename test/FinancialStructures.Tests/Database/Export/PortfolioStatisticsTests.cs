@@ -22,19 +22,19 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>0.95</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>0.95</td><td>0</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>BankAccount</td><td></td><td>£1,102.20</td><td>£253.80</td><td>0.04</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
+<td>Totals</td><td>BankAccount</td><td></td><td>£1,102.20</td><td>£253.80</td><td>0.04</td><td>0</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
+<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
+<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>All</td><td></td><td>£27,186.30</td><td>-£14,299.88</td><td>1</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+<td>Totals</td><td>All</td><td></td><td>£27,186.30</td><td>-£14,299.88</td><td>1</td><td>1</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -45,13 +45,13 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Prudential</th><td>China Stock</td><td>HKD</td><td>£25,528.05</td><td>HK$1,001.10</td><td>25.5</td><td>£1,193.94</td><td>-£14,666.84</td><td>0.97</td><td>1</td><td>£23,042.96</td><td>£2,485.09</td><td>0</td><td>0</td><td>0</td><td>0.98</td><td>1.22</td><td>36.48</td><td>36.48</td><td></td><td>5/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>6</td><td>1.6657</td><td></td>
+<th scope=""row"">Prudential</th><td>China Stock</td><td>HKD</td><td>£25,528.05</td><td>HK$1,001.10</td><td>25.5</td><td>£1,193.94</td><td>-£14,666.84</td><td>0.97</td><td>1</td><td>£23,042.96</td><td>£2,485.09</td><td>0</td><td>0</td><td>0</td><td>0.98</td><td>1.22</td><td>36.48</td><td>36.48</td><td></td><td>2010-01-05</td><td>2012-05-05</td><td>2012-05-05</td><td>2020-01-01</td><td>6</td><td>1.6657</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">BlackRock</th><td>UK Stock</td><td></td><td>£556.05</td><td>£101.10</td><td>5.5</td><td>£100.00</td><td>£113.16</td><td>0.02</td><td>1</td><td>£200.00</td><td>£356.05</td><td>0</td><td>0</td><td>0</td><td>18.3</td><td>10.76</td><td>74.32</td><td>83.26</td><td></td><td>1/1/2010</td><td>1/1/2010</td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
+<th scope=""row"">BlackRock</th><td>UK Stock</td><td></td><td>£556.05</td><td>£101.10</td><td>5.5</td><td>£100.00</td><td>£113.16</td><td>0.02</td><td>1</td><td>£200.00</td><td>£356.05</td><td>0</td><td>0</td><td>0</td><td>18.3</td><td>10.76</td><td>74.32</td><td>83.26</td><td></td><td>2010-01-01</td><td>2010-01-01</td><td>2010-01-01</td><td>2020-01-01</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Totals</th><td>Security</td><td></td><td>£26,084.10</td><td>0</td><td>0</td><td>0</td><td>-£14,553.68</td><td>0.95</td><td>0</td><td>£23,242.96</td><td>£2,841.14</td><td>0</td><td>0</td><td>0</td><td>1.26</td><td>1.51</td><td>35.94</td><td>35.94</td><td></td><td>1/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+<th scope=""row"">Totals</th><td>Security</td><td></td><td>£26,084.10</td><td>0</td><td>0</td><td>0</td><td>-£14,553.68</td><td>0.95</td><td>0</td><td>£23,242.96</td><td>£2,841.14</td><td>0</td><td>0</td><td>0</td><td>1.26</td><td>1.51</td><td>35.94</td><td>35.94</td><td></td><td>2010-01-01</td><td>2012-05-05</td><td>2012-05-05</td><td>2020-01-01</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -62,13 +62,13 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Santander</th><td>Current</td><td></td><td>£101.10</td><td>£23.40</td><td>0.09</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
+<th scope=""row"">Santander</th><td>Current</td><td></td><td>£101.10</td><td>£23.40</td><td>0.09</td><td>1</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Halifax</th><td>Current</td><td>HKD</td><td>£1,001.10</td><td>£230.40</td><td>0.9</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
+<th scope=""row"">Halifax</th><td>Current</td><td>HKD</td><td>£1,001.10</td><td>£230.40</td><td>0.9</td><td>1</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Totals</th><td>BankAccount</td><td></td><td>£1,102.20</td><td>£253.80</td><td>0.04</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
+<th scope=""row"">Totals</th><td>BankAccount</td><td></td><td>£1,102.20</td><td>£253.80</td><td>0.04</td><td>0</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -79,7 +79,18 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
+<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0001-01-01</td><td>0001-01-01</td><td>0</td><td data-negative>-∞</td><td></td>
+</tr>
+</tbody>
+</table>
+<h2>Asset Data</h2>
+<table>
+<thead><tr>
+<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>RecentChange</th><th>Investment</th><th>Profit</th><th>Debt</th><th>IRR3M</th><th>IRR6M</th><th>IRR1Y</th><th>IRR5Y</th><th>IRRTotal</th><th>FirstDate</th><th>LatestDate</th><th>Sectors</th><th>Notes</th>
+</tr></thead>
+<tbody>
+<tr>
+<th scope=""row"">Totals</th><td>Asset</td><td>£0.00</td><td>£0.00</td><td>£0.00</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>9999-12-31</td><td>0001-01-01</td><td></td><td></td>
 </tr>
 </tbody>
 </table>
@@ -114,19 +125,19 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>0.95</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>0.95</td><td>0</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>BankAccount</td><td></td><td>£1,102.20</td><td>£253.80</td><td>0.04</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
+<td>Totals</td><td>BankAccount</td><td></td><td>£1,102.20</td><td>£253.80</td><td>0.04</td><td>0</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
+<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
+<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>All</td><td></td><td>£27,186.30</td><td>-£14,299.88</td><td>1</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+<td>Totals</td><td>All</td><td></td><td>£27,186.30</td><td>-£14,299.88</td><td>1</td><td>1</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -137,13 +148,13 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Security</th><td>Prudential</td><td>China Stock</td><td>HKD</td><td>£25,528.05</td><td>HK$1,001.10</td><td>25.5</td><td>£1,193.94</td><td>-£14,666.84</td><td>0.97</td><td>1</td><td>£23,042.96</td><td>£2,485.09</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0.98</td><td>1.22</td><td>36.48</td><td>36.48</td><td></td><td>1</td><td>5/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>6</td><td>1.6657</td><td></td>
+<th scope=""row"">Security</th><td>Prudential</td><td>China Stock</td><td>HKD</td><td>£25,528.05</td><td>HK$1,001.10</td><td>25.5</td><td>£1,193.94</td><td>-£14,666.84</td><td>0.97</td><td>1</td><td>£23,042.96</td><td>£2,485.09</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0.98</td><td>1.22</td><td>36.48</td><td>36.48</td><td></td><td>1</td><td>2010-01-05</td><td>2012-05-05</td><td>2012-05-05</td><td>2020-01-01</td><td>6</td><td>1.6657</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Security</th><td>BlackRock</td><td>UK Stock</td><td></td><td>£556.05</td><td>£101.10</td><td>5.5</td><td>£100.00</td><td>£113.16</td><td>0.02</td><td>1</td><td>£200.00</td><td>£356.05</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>18.3</td><td>10.76</td><td>74.32</td><td>83.26</td><td></td><td>1</td><td>1/1/2010</td><td>1/1/2010</td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
+<th scope=""row"">Security</th><td>BlackRock</td><td>UK Stock</td><td></td><td>£556.05</td><td>£101.10</td><td>5.5</td><td>£100.00</td><td>£113.16</td><td>0.02</td><td>1</td><td>£200.00</td><td>£356.05</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>18.3</td><td>10.76</td><td>74.32</td><td>83.26</td><td></td><td>1</td><td>2010-01-01</td><td>2010-01-01</td><td>2010-01-01</td><td>2020-01-01</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Security</th><td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>0</td><td>0</td><td>0</td><td>-£14,553.68</td><td>0.95</td><td>0</td><td>£23,242.96</td><td>£2,841.14</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>1.26</td><td>1.51</td><td>35.94</td><td>35.94</td><td></td><td>2</td><td>1/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+<th scope=""row"">Security</th><td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>0</td><td>0</td><td>0</td><td>-£14,553.68</td><td>0.95</td><td>0</td><td>£23,242.96</td><td>£2,841.14</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>1.26</td><td>1.51</td><td>35.94</td><td>35.94</td><td></td><td>2</td><td>2010-01-01</td><td>2012-05-05</td><td>2012-05-05</td><td>2020-01-01</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -154,13 +165,13 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Santander</th><td>Current</td><td></td><td>£101.10</td><td>£23.40</td><td>0.09</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
+<th scope=""row"">Santander</th><td>Current</td><td></td><td>£101.10</td><td>£23.40</td><td>0.09</td><td>1</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Halifax</th><td>Current</td><td>HKD</td><td>£1,001.10</td><td>£230.40</td><td>0.9</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
+<th scope=""row"">Halifax</th><td>Current</td><td>HKD</td><td>£1,001.10</td><td>£230.40</td><td>0.9</td><td>1</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Totals</th><td>BankAccount</td><td></td><td>£1,102.20</td><td>£253.80</td><td>0.04</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
+<th scope=""row"">Totals</th><td>BankAccount</td><td></td><td>£1,102.20</td><td>£253.80</td><td>0.04</td><td>0</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -171,7 +182,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Pension</th><td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>0</td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
+<th scope=""row"">Pension</th><td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>0</td><td>9999-12-31</td><td>0001-01-01</td><td>0001-01-01</td><td>0001-01-01</td><td>0</td><td data-negative>-∞</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -247,19 +258,19 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>0</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
+<td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
+<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
+<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>All</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+<td>Totals</td><td>All</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>1</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -270,13 +281,13 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">BlackRock</th><td>UK Stock</td><td></td><td>£556.05</td><td>£101.10</td><td>5.5</td><td>£100.00</td><td>£113.16</td><td>0.02</td><td>1</td><td>£200.00</td><td>£356.05</td><td>0</td><td>0</td><td>0</td><td>18.3</td><td>10.76</td><td>74.32</td><td>83.26</td><td></td><td>1/1/2010</td><td>1/1/2010</td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
+<th scope=""row"">BlackRock</th><td>UK Stock</td><td></td><td>£556.05</td><td>£101.10</td><td>5.5</td><td>£100.00</td><td>£113.16</td><td>0.02</td><td>1</td><td>£200.00</td><td>£356.05</td><td>0</td><td>0</td><td>0</td><td>18.3</td><td>10.76</td><td>74.32</td><td>83.26</td><td></td><td>2010-01-01</td><td>2010-01-01</td><td>2010-01-01</td><td>2020-01-01</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Prudential</th><td>China Stock</td><td>HKD</td><td>£25,528.05</td><td>HK$1,001.10</td><td>25.5</td><td>£1,193.94</td><td>-£14,666.84</td><td>0.97</td><td>1</td><td>£23,042.96</td><td>£2,485.09</td><td>0</td><td>0</td><td>0</td><td>0.98</td><td>1.22</td><td>36.48</td><td>36.48</td><td></td><td>5/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>6</td><td>1.6657</td><td></td>
+<th scope=""row"">Prudential</th><td>China Stock</td><td>HKD</td><td>£25,528.05</td><td>HK$1,001.10</td><td>25.5</td><td>£1,193.94</td><td>-£14,666.84</td><td>0.97</td><td>1</td><td>£23,042.96</td><td>£2,485.09</td><td>0</td><td>0</td><td>0</td><td>0.98</td><td>1.22</td><td>36.48</td><td>36.48</td><td></td><td>2010-01-05</td><td>2012-05-05</td><td>2012-05-05</td><td>2020-01-01</td><td>6</td><td>1.6657</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Totals</th><td>Security</td><td></td><td>£26,084.10</td><td>0</td><td>0</td><td>0</td><td>-£14,553.68</td><td>1</td><td>0</td><td>£23,242.96</td><td>£2,841.14</td><td>0</td><td>0</td><td>0</td><td>1.26</td><td>1.51</td><td>35.94</td><td>35.94</td><td></td><td>1/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+<th scope=""row"">Totals</th><td>Security</td><td></td><td>£26,084.10</td><td>0</td><td>0</td><td>0</td><td>-£14,553.68</td><td>1</td><td>0</td><td>£23,242.96</td><td>£2,841.14</td><td>0</td><td>0</td><td>0</td><td>1.26</td><td>1.51</td><td>35.94</td><td>35.94</td><td></td><td>2010-01-01</td><td>2012-05-05</td><td>2012-05-05</td><td>2020-01-01</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -287,7 +298,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
+<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0001-01-01</td><td>0001-01-01</td><td>0</td><td data-negative>-∞</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -299,19 +310,19 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>0</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
+<td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
+<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
+<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>All</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+<td>Totals</td><td>All</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>1</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -322,13 +333,13 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Prudential</th><td>China Stock</td><td>HKD</td><td>£25,528.05</td><td>HK$1,001.10</td><td>25.5</td><td>£1,193.94</td><td>-£14,666.84</td><td>0.97</td><td>1</td><td>£23,042.96</td><td>£2,485.09</td><td>0</td><td>0</td><td>0</td><td>0.98</td><td>1.22</td><td>36.48</td><td>36.48</td><td></td><td>5/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>6</td><td>1.6657</td><td></td>
+<th scope=""row"">Prudential</th><td>China Stock</td><td>HKD</td><td>£25,528.05</td><td>HK$1,001.10</td><td>25.5</td><td>£1,193.94</td><td>-£14,666.84</td><td>0.97</td><td>1</td><td>£23,042.96</td><td>£2,485.09</td><td>0</td><td>0</td><td>0</td><td>0.98</td><td>1.22</td><td>36.48</td><td>36.48</td><td></td><td>2010-01-05</td><td>2012-05-05</td><td>2012-05-05</td><td>2020-01-01</td><td>6</td><td>1.6657</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">BlackRock</th><td>UK Stock</td><td></td><td>£556.05</td><td>£101.10</td><td>5.5</td><td>£100.00</td><td>£113.16</td><td>0.02</td><td>1</td><td>£200.00</td><td>£356.05</td><td>0</td><td>0</td><td>0</td><td>18.3</td><td>10.76</td><td>74.32</td><td>83.26</td><td></td><td>1/1/2010</td><td>1/1/2010</td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
+<th scope=""row"">BlackRock</th><td>UK Stock</td><td></td><td>£556.05</td><td>£101.10</td><td>5.5</td><td>£100.00</td><td>£113.16</td><td>0.02</td><td>1</td><td>£200.00</td><td>£356.05</td><td>0</td><td>0</td><td>0</td><td>18.3</td><td>10.76</td><td>74.32</td><td>83.26</td><td></td><td>2010-01-01</td><td>2010-01-01</td><td>2010-01-01</td><td>2020-01-01</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Totals</th><td>Security</td><td></td><td>£26,084.10</td><td>0</td><td>0</td><td>0</td><td>-£14,553.68</td><td>1</td><td>0</td><td>£23,242.96</td><td>£2,841.14</td><td>0</td><td>0</td><td>0</td><td>1.26</td><td>1.51</td><td>35.94</td><td>35.94</td><td></td><td>1/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+<th scope=""row"">Totals</th><td>Security</td><td></td><td>£26,084.10</td><td>0</td><td>0</td><td>0</td><td>-£14,553.68</td><td>1</td><td>0</td><td>£23,242.96</td><td>£2,841.14</td><td>0</td><td>0</td><td>0</td><td>1.26</td><td>1.51</td><td>35.94</td><td>35.94</td><td></td><td>2010-01-01</td><td>2012-05-05</td><td>2012-05-05</td><td>2020-01-01</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -339,7 +350,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
+<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0001-01-01</td><td>0001-01-01</td><td>0</td><td data-negative>-∞</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -351,19 +362,19 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>0</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
+<td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
+<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
+<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>All</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+<td>Totals</td><td>All</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>1</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -374,13 +385,13 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">BlackRock</th><td>UK Stock</td><td></td><td>£556.05</td><td>£101.10</td><td>5.5</td><td>£100.00</td><td>£113.16</td><td>0.02</td><td>1</td><td>£200.00</td><td>£356.05</td><td>0</td><td>0</td><td>0</td><td>18.3</td><td>10.76</td><td>74.32</td><td>83.26</td><td></td><td>1/1/2010</td><td>1/1/2010</td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
+<th scope=""row"">BlackRock</th><td>UK Stock</td><td></td><td>£556.05</td><td>£101.10</td><td>5.5</td><td>£100.00</td><td>£113.16</td><td>0.02</td><td>1</td><td>£200.00</td><td>£356.05</td><td>0</td><td>0</td><td>0</td><td>18.3</td><td>10.76</td><td>74.32</td><td>83.26</td><td></td><td>2010-01-01</td><td>2010-01-01</td><td>2010-01-01</td><td>2020-01-01</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Prudential</th><td>China Stock</td><td>HKD</td><td>£25,528.05</td><td>HK$1,001.10</td><td>25.5</td><td>£1,193.94</td><td>-£14,666.84</td><td>0.97</td><td>1</td><td>£23,042.96</td><td>£2,485.09</td><td>0</td><td>0</td><td>0</td><td>0.98</td><td>1.22</td><td>36.48</td><td>36.48</td><td></td><td>5/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>6</td><td>1.6657</td><td></td>
+<th scope=""row"">Prudential</th><td>China Stock</td><td>HKD</td><td>£25,528.05</td><td>HK$1,001.10</td><td>25.5</td><td>£1,193.94</td><td>-£14,666.84</td><td>0.97</td><td>1</td><td>£23,042.96</td><td>£2,485.09</td><td>0</td><td>0</td><td>0</td><td>0.98</td><td>1.22</td><td>36.48</td><td>36.48</td><td></td><td>2010-01-05</td><td>2012-05-05</td><td>2012-05-05</td><td>2020-01-01</td><td>6</td><td>1.6657</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Totals</th><td>Security</td><td></td><td>£26,084.10</td><td>0</td><td>0</td><td>0</td><td>-£14,553.68</td><td>1</td><td>0</td><td>£23,242.96</td><td>£2,841.14</td><td>0</td><td>0</td><td>0</td><td>1.26</td><td>1.51</td><td>35.94</td><td>35.94</td><td></td><td>1/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+<th scope=""row"">Totals</th><td>Security</td><td></td><td>£26,084.10</td><td>0</td><td>0</td><td>0</td><td>-£14,553.68</td><td>1</td><td>0</td><td>£23,242.96</td><td>£2,841.14</td><td>0</td><td>0</td><td>0</td><td>1.26</td><td>1.51</td><td>35.94</td><td>35.94</td><td></td><td>2010-01-01</td><td>2012-05-05</td><td>2012-05-05</td><td>2020-01-01</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -391,7 +402,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
+<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0001-01-01</td><td>0001-01-01</td><td>0</td><td data-negative>-∞</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -403,19 +414,19 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>0</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+<td>Totals</td><td>Security</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>0</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
+<td>Totals</td><td>BankAccount</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
+<td>Totals</td><td>Pension</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>0</td><td>-∞</td><td></td>
+<td>Totals</td><td>Asset</td><td></td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0</td><td>-∞</td><td></td>
 </tr>
 <tr>
-<td>Totals</td><td>All</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>1</td><td></td><td>1/1/2010</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+<td>Totals</td><td>All</td><td></td><td>£26,084.10</td><td>-£14,553.68</td><td>1</td><td>1</td><td></td><td>2010-01-01</td><td>2020-01-01</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -426,13 +437,13 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Prudential</th><td>China Stock</td><td>HKD</td><td>£25,528.05</td><td>HK$1,001.10</td><td>25.5</td><td>£1,193.94</td><td>-£14,666.84</td><td>0.97</td><td>1</td><td>£23,042.96</td><td>£2,485.09</td><td>0</td><td>0</td><td>0</td><td>0.98</td><td>1.22</td><td>36.48</td><td>36.48</td><td></td><td>5/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>6</td><td>1.6657</td><td></td>
+<th scope=""row"">Prudential</th><td>China Stock</td><td>HKD</td><td>£25,528.05</td><td>HK$1,001.10</td><td>25.5</td><td>£1,193.94</td><td>-£14,666.84</td><td>0.97</td><td>1</td><td>£23,042.96</td><td>£2,485.09</td><td>0</td><td>0</td><td>0</td><td>0.98</td><td>1.22</td><td>36.48</td><td>36.48</td><td></td><td>2010-01-05</td><td>2012-05-05</td><td>2012-05-05</td><td>2020-01-01</td><td>6</td><td>1.6657</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">BlackRock</th><td>UK Stock</td><td></td><td>£556.05</td><td>£101.10</td><td>5.5</td><td>£100.00</td><td>£113.16</td><td>0.02</td><td>1</td><td>£200.00</td><td>£356.05</td><td>0</td><td>0</td><td>0</td><td>18.3</td><td>10.76</td><td>74.32</td><td>83.26</td><td></td><td>1/1/2010</td><td>1/1/2010</td><td>1/1/2010</td><td>1/1/2020</td><td>6</td><td>1.6675</td><td></td>
+<th scope=""row"">BlackRock</th><td>UK Stock</td><td></td><td>£556.05</td><td>£101.10</td><td>5.5</td><td>£100.00</td><td>£113.16</td><td>0.02</td><td>1</td><td>£200.00</td><td>£356.05</td><td>0</td><td>0</td><td>0</td><td>18.3</td><td>10.76</td><td>74.32</td><td>83.26</td><td></td><td>2010-01-01</td><td>2010-01-01</td><td>2010-01-01</td><td>2020-01-01</td><td>6</td><td>1.6675</td><td></td>
 </tr>
 <tr>
-<th scope=""row"">Totals</th><td>Security</td><td></td><td>£26,084.10</td><td>0</td><td>0</td><td>0</td><td>-£14,553.68</td><td>1</td><td>0</td><td>£23,242.96</td><td>£2,841.14</td><td>0</td><td>0</td><td>0</td><td>1.26</td><td>1.51</td><td>35.94</td><td>35.94</td><td></td><td>1/1/2010</td><td>5/5/2012</td><td>5/5/2012</td><td>1/1/2020</td><td>11</td><td>0.9095</td><td></td>
+<th scope=""row"">Totals</th><td>Security</td><td></td><td>£26,084.10</td><td>0</td><td>0</td><td>0</td><td>-£14,553.68</td><td>1</td><td>0</td><td>£23,242.96</td><td>£2,841.14</td><td>0</td><td>0</td><td>0</td><td>1.26</td><td>1.51</td><td>35.94</td><td>35.94</td><td></td><td>2010-01-01</td><td>2012-05-05</td><td>2012-05-05</td><td>2020-01-01</td><td>11</td><td>0.9095</td><td></td>
 </tr>
 </tbody>
 </table>
@@ -443,7 +454,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr></thead>
 <tbody>
 <tr>
-<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>31/12/9999</td><td>1/1/1</td><td>1/1/1</td><td>1/1/1</td><td>0</td><td data-negative>-∞</td><td></td>
+<th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td></td><td>9999-12-31</td><td>0001-01-01</td><td>0001-01-01</td><td>0001-01-01</td><td>0</td><td data-negative>-∞</td><td></td>
 </tr>
 </tbody>
 </table>

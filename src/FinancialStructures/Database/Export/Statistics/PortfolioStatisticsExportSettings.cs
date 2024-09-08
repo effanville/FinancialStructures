@@ -93,9 +93,8 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
         /// Creates default settings.
         /// </summary>
         /// <returns></returns>
-        public static PortfolioStatisticsExportSettings DefaultSettings()
-        {
-            return new PortfolioStatisticsExportSettings(
+        public static PortfolioStatisticsExportSettings DefaultSettings() 
+            => new(
                 spacing: false,
                 colours: false,
                 includeSecurities: true,
@@ -110,10 +109,9 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
                 Statistic.Company,
                 SortDirection.Descending,
                 AccountStatisticsHelpers.DefaultSectorStats().ToList(),
-                includeAssets: false,
+                includeAssets: true,
                 Statistic.Company,
                 SortDirection.Descending,
                 AccountStatisticsHelpers.DefaultAssetStats().ToList());
-        }
     }
 }

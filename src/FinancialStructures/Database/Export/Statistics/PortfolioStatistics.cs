@@ -291,11 +291,11 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
             ReportBuilder reportBuilder = new ReportBuilder(exportType, new ReportSettings(settings.Colours, false, false));
             if (includeHtmlHeaders && exportType == DocumentType.Html)
             {
-                _ = reportBuilder.WriteHeader($"Statement for funds as of {DateTime.Today.ToShortDateString()}")
-                    .WriteTitle($"{fDatabaseName} - Statement on {DateTime.Today.ToShortDateString()}", DocumentElement.h1);
+                _ = reportBuilder.WriteHeader($"Statement for funds as of {DateTime.Today:yyyy-MM-dd}")
+                    .WriteTitle($"{fDatabaseName} - Statement on {DateTime.Today:yyyy-MM-dd}", DocumentElement.h1);
             }
 
-            var totalFieldNames = PortfolioTotals.Select(data => data.Statistics).First().Select(stat => stat.StatType.ToString()).ToList();
+            List<string> totalFieldNames = PortfolioTotals.Select(data => data.Statistics).First().Select(stat => stat.StatType.ToString()).ToList();
             _ = reportBuilder.WriteTableFromEnumerable(
                 totalFieldNames,
                 PortfolioTotals.Select(data => data.Statistics),

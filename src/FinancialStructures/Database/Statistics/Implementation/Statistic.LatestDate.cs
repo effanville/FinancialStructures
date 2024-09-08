@@ -38,13 +38,13 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         {
             StringValue = valueList.CalculateValue(
                 vl => vl.LatestDate())
-                .ToUkDateString();
+                .ToIsoDateString();
         }
 
         /// <inheritdoc/>
         public void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
-            StringValue = portfolio.LatestDate(total, name).ToUkDateString();
+            StringValue = portfolio.LatestDate(total, name).ToIsoDateString();
         }
 
         /// <inheritdoc/>

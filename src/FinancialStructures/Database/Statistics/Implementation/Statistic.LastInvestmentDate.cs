@@ -27,13 +27,13 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public void Calculate(IPortfolio portfolio, IValueList valueList, DateTime date)
         {
-            StringValue = valueList.CalculateValue(LastInvestmentDateCalculators.DefaultCalculator).ToUkDateString();
+            StringValue = valueList.CalculateValue(LastInvestmentDateCalculators.DefaultCalculator).ToIsoDateString();
         }
 
         /// <inheritdoc/>
         public void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
-            StringValue = portfolio.LastInvestmentDate(total, name).ToUkDateString();
+            StringValue = portfolio.LastInvestmentDate(total, name).ToIsoDateString();
         }
 
         /// <inheritdoc/>
