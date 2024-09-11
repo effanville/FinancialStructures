@@ -25,7 +25,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
             IReportLogger reportLogger = null)
         {
             string url = BuildQueryUrl(BaseUrl, financialCode);
-            string stockWebsite = await DownloadHelper.GetWebData(url, reportLogger);
+            string stockWebsite = await DownloadHelper.GetWebData(url, addCookie: false, reportLogger);
             if (string.IsNullOrEmpty(stockWebsite))
             {
                 reportLogger?.Error("Downloading", $"Could not download data from {url}");
@@ -61,8 +61,8 @@ namespace Effanville.FinancialStructures.Stocks.Download
             while (string.IsNullOrWhiteSpace(stockWebsite) && firstDate < lastDate)
             {
                 Uri downloadUrl = new Uri(
-                    $"https://query1.finance.yahoo.com/v7/finance/download/{financialCode}?period1={DateToYahooInt(firstDate)}&period2={DateToYahooInt(lastDate)}&interval=1d&events=history&includeAdjustedClose=true&filter=history&frequency=1d");
-                stockWebsite = await DownloadHelper.GetWebData(downloadUrl.ToString(), reportLogger);
+                    $"https://query1.finance.yahoo.com/v8/finance/chart/{financialCode}?events=capitalGain%7Cdiv%7Csplit&formatted=true&includeAdjustedClose=true&interval=1d&period1={DateToYahooInt(firstDate)}&period2={DateToYahooInt(lastDate)}&symbol={financialCode}&userYfid=true&lang=en-GB&region=G");
+                stockWebsite = await DownloadHelper.GetWebData(downloadUrl.ToString(), addCookie: false, reportLogger);
                 firstDate = firstDate.AddMonths(1);
                 await Task.Delay(100);
             }
@@ -141,12 +141,6 @@ namespace Effanville.FinancialStructures.Stocks.Download
                 startIndex + urlSearchString.Length, 
                 endIndex - startIndex - urlSearchString.Length);
             code = code.Replace("%5E", "^").Replace("%3D", "=").ToUpper();
-
-            // seems to be a bug in the website where it uses the wrong code.
-            if (code.Equals("USDGBP=X"))
-            {
-                code = "GBP=X";
-            }
 
             return code;
         }

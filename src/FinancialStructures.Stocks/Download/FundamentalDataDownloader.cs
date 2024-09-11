@@ -13,7 +13,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
     {
         public static async Task<Dictionary<string, string>> GetExtraData(string instrumentUrl, IReportLogger logger = null)
         {
-            string urlData = await WebDownloader.DownloadFromURLasync(instrumentUrl, logger);
+            string urlData = await WebDownloader.DownloadFromURLasync(instrumentUrl, addCookie: false, logger);
 
             HtmlDocument htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(urlData);
