@@ -96,7 +96,8 @@ namespace Effanville.FinancialStructures.Download.Implementation
             decimal? value = DownloadHelper.ParseDataIntoNumber(webData, poundsIndex, searchString.Length, 20, true);
             if (value.HasValue)
             {
-                if (webData.Contains("Currency in GBp") || webData.Contains("GBp"))
+                int ind = webData.IndexOf("Delayed Quote</span>");
+                if (webData.Contains("Currency in GBp") || (ind > 0 && webData.Substring(ind, 200).Contains("GBp")))
                 {
                     return value.Value / 100.0m;
                 }
