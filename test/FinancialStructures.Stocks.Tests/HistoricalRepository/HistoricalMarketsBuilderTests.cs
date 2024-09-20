@@ -24,7 +24,7 @@ namespace Effanville.FinancialStructures.Stocks.Tests.HistoricalRepository
             _ = await historicalMarketsBuilder.WithIndexInstruments("FTSE-100", logger);
             _ = await historicalMarketsBuilder.WithInstrumentPriceData(
                 new DateTime(2020, 1, 1),
-                DateTime.Today, 
+                DateTime.Today,
                 logger);
             var markets = historicalMarketsBuilder.GetInstance();
             foreach (HistoricalExchange exchange in markets.Exchanges)
@@ -34,7 +34,7 @@ namespace Effanville.FinancialStructures.Stocks.Tests.HistoricalRepository
                     continue;
                 }
 
-                foreach (var instrument in exchange.Stocks)
+                foreach (HistoricalStock instrument in exchange.Stocks)
                 {
                     Assert.NotZero(instrument.Fundamentals.Count);
                     Assert.NotZero(instrument.Name.Count);
@@ -54,9 +54,9 @@ namespace Effanville.FinancialStructures.Stocks.Tests.HistoricalRepository
             _ = await historicalMarketsBuilder.WithIndexInstruments("FTSE-100", logger);
             _ = await historicalMarketsBuilder.WithInstrumentPriceData(
                 new DateTime(2020, 1, 1),
-                new DateTime(2021, 1, 1), 
+                new DateTime(2021, 1, 1),
                 logger);
-            
+
             var markets = historicalMarketsBuilder.GetInstance();
             Dictionary<string, int> valuationRecords = new Dictionary<string, int>();
             foreach (HistoricalExchange exchange in markets.Exchanges)
@@ -71,15 +71,15 @@ namespace Effanville.FinancialStructures.Stocks.Tests.HistoricalRepository
                     valuationRecords.Add(instrument.Name.Last().Value.Ric, instrument.Valuations.Count);
                 }
             }
-            
+
             // now add more data
-            
+
             _ = await historicalMarketsBuilder.UpdateIndexInstruments("FTSE-100", logger);
             _ = await historicalMarketsBuilder.WithInstrumentPriceData(
                 new DateTime(2020, 1, 1),
-                DateTime.Today, 
-                logger);            
-            
+                DateTime.Today,
+                logger);
+
             foreach (HistoricalExchange exchange in markets.Exchanges)
             {
                 if (exchange.ExchangeIdentifier != "LSE")

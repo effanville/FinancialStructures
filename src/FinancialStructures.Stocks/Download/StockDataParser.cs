@@ -123,73 +123,87 @@ namespace Effanville.FinancialStructures.Stocks.Download
                     string marketCapString = instValues[^4];
                     double marketCap = double.Parse(marketCapString) * 1000000;
                     StockFundamentalData data = new StockFundamentalData() { Index = indexName, MarketCap = marketCap };
-                    if (values.TryGetDoubleValue("PE ratio (TTM)", out double peRatio))
-                    {
-                        data.PeRatio = peRatio;
-                    }
 
-                    if (values.TryGetDoubleValue("Beta (5Y monthly)", out double beta))
+                    if (values != null)
                     {
-                        data.Beta5YearMonth = beta;
-                    }
-
-                    if (values.TryGetDoubleValue("Avg. volume", out double eps))
-                    {
-                        data.EPS = eps;
-                    }
-
-                    if (values.TryGetValue("Market cap", out string val))
-                    {
-                        int multiplier = 1;
-                        if (val.EndsWith('B'))
+                        if (values.TryGetDoubleValue("PE ratio (TTM)", out double peRatio))
                         {
-                            multiplier = 1000000000;
+                            data.PeRatio = peRatio;
                         }
 
-                        if (val.EndsWith('M'))
+                        if (values.TryGetDoubleValue("Beta (5Y monthly)", out double beta))
                         {
-                            multiplier = 1000000;
+                            data.Beta5YearMonth = beta;
                         }
 
-                        if (multiplier != 1)
+                        if (values.TryGetDoubleValue("Avg. volume", out double eps))
                         {
-                            val = val.Substring(0, val.Length - 1);
+                            data.EPS = eps;
                         }
 
-                        if (double.TryParse(val, out double newMarketCap))
+                        if (values.TryGetValue("Market cap", out string val))
                         {
-                            newMarketCap *= multiplier;
-                            if (Math.Abs(marketCap - newMarketCap) > 1e-8)
+                            int multiplier = 1;
+                            if (val.EndsWith('B'))
                             {
-                                logger?.Warning("dataLoader",
-                                    $"Instrument {inst.Name.Last().Value.Ric}. Received {marketCap} and {newMarketCap} for market cap.");
+                                multiplier = 1000000000;
+                            }
+
+                            if (val.EndsWith('M'))
+                            {
+                                multiplier = 1000000;
+                            }
+
+                            if (multiplier != 1)
+                            {
+                                val = val.Substring(0, val.Length - 1);
+                            }
+
+                            if (double.TryParse(val, out double newMarketCap))
+                            {
+                                newMarketCap *= multiplier;
+                                if (Math.Abs(marketCap - newMarketCap) > 1e-8)
+                                {
+                                    logger?.Warning("dataLoader",
+                                        $"Instrument {inst.Name.Last().Value.Ric}. Received {marketCap} and {newMarketCap} for market cap.");
+                                }
                             }
                         }
-                    }
 
-                    if (values.TryGetValue("Forward dividend &amp; yield", out val))
-                    {
-                        int dividendEnd = val.IndexOf('(');
-                        string dividend = val.Substring(0, dividendEnd);
-                        if (double.TryParse(dividend, out double price))
+                        if (values.TryGetValue("Forward dividend &amp; yield", out val))
                         {
-                            data.ForwardDividend = price;
+                            int dividendEnd = val.IndexOf('(');
+                            if (dividendEnd >= 0)
+                            {
+                                string dividend = val.Substring(0, dividendEnd);
+                                if (double.TryParse(dividend, out double price))
+                                {
+                                    data.ForwardDividend = price;
+                                }
+
+                                string yield = val.Substring(dividendEnd + 1).Trim(')').Trim('%');
+                                if (double.TryParse(yield, out price))
+                                {
+                                    data.ForwardYield = price / 100;
+                                }
+                            }
                         }
 
-                        string yield = val.Substring(dividendEnd + 1).Trim(')').Trim('%');
-                        if (double.TryParse(yield, out price))
+                        if (values.TryGetDoubleValue("Avg. volume", out double avVol))
                         {
-                            data.ForwardYield = price / 100;
+                            data.AverageVolume = avVol;
                         }
-                    }
-
-                    if (values.TryGetDoubleValue("Avg. volume", out double avVol))
-                    {
-                        data.AverageVolume = avVol;
                     }
 
                     numberAdditions++;
-                    inst.Fundamentals.Add(validFrom, data);
+                    if (inst.Fundamentals.ContainsKey(validFrom))
+                    {
+                        inst.Fundamentals[validFrom] = data;
+                    }
+                    else
+                    {
+                        inst.Fundamentals.Add(validFrom, data);
+                    }
                 }
             }
 
@@ -318,16 +332,19 @@ namespace Effanville.FinancialStructures.Stocks.Download
                 if (values.TryGetValue("Forward dividend &amp; yield", out val))
                 {
                     int dividendEnd = val.IndexOf('(');
-                    string dividend = val.Substring(0, dividendEnd);
-                    if (double.TryParse(dividend, out double forwardDividend))
+                    if (dividendEnd >= 0)
                     {
-                        dict["Forward dividend"] = forwardDividend;
-                    }
+                        string dividend = val.Substring(0, dividendEnd);
+                        if (double.TryParse(dividend, out double forwardDividend))
+                        {
+                            dict["Forward dividend"] = forwardDividend;
+                        }
 
-                    string yield = val.Substring(dividendEnd + 1).Trim(')').Trim('%');
-                    if (double.TryParse(yield, out double forwardYield))
-                    {
-                        dict["yield"] = forwardYield / 100;
+                        string yield = val.Substring(dividendEnd + 1).Trim(')').Trim('%');
+                        if (double.TryParse(yield, out double forwardYield))
+                        {
+                            dict["yield"] = forwardYield / 100;
+                        }
                     }
                 }
 

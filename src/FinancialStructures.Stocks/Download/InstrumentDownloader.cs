@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Text;
 
 using Effanville.Common.Structure.Reporting;
@@ -48,7 +49,15 @@ namespace Effanville.FinancialStructures.Stocks.Download
                 index++;
             }
 
-            return sb.ToString().Split("\r\n");
+            string[] instruments = sb.ToString().Split("\r\n", StringSplitOptions.RemoveEmptyEntries);
+            for (index = 0; index < instruments.Length; index++)
+            {
+                string item = instruments[index];
+                instruments[index] = item.Trim();
+            }
+
+            instruments = instruments.DistinctBy(x => x.Substring(8)).ToArray();
+            return instruments;
         }
     }
 }

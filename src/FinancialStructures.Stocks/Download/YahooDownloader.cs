@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.Download.Implementation;
+using Effanville.FinancialStructures.Stocks.Download.Yahoo;
 using Effanville.FinancialStructures.Stocks.Implementation;
 
 namespace Effanville.FinancialStructures.Stocks.Download
@@ -60,9 +61,9 @@ namespace Effanville.FinancialStructures.Stocks.Download
             string stockWebsite = "";
             while (string.IsNullOrWhiteSpace(stockWebsite) && firstDate < lastDate)
             {
-                Uri downloadUrl = new Uri(
-                    $"https://query1.finance.yahoo.com/v8/finance/chart/{financialCode}?events=capitalGain%7Cdiv%7Csplit&formatted=true&includeAdjustedClose=true&interval=1d&period1={DateToYahooInt(firstDate)}&period2={DateToYahooInt(lastDate)}&symbol={financialCode}&userYfid=true&lang=en-GB&region=G");
-                stockWebsite = await DownloadHelper.GetWebData(downloadUrl.ToString(), addCookie: false, reportLogger);
+                UriBuilder build = new UriBuilder($"https://query1.finance.yahoo.com/v8/finance/chart/{financialCode}");
+                build.Query = $"events=capitalGain%7Cdiv%7Csplit&formatted=true&includeAdjustedClose=true&interval=1d&period1={DateToYahooInt(firstDate)}&period2={DateToYahooInt(lastDate)}&symbol={financialCode}&userYfid=true&lang=en-US&region=US";
+                stockWebsite = await DownloadHelper.GetWebData(build.ToString(), addCookie: false, reportLogger);
                 firstDate = firstDate.AddMonths(1);
                 await Task.Delay(100);
             }
@@ -73,9 +74,49 @@ namespace Effanville.FinancialStructures.Stocks.Download
             }
             Stock stock = new Stock();
 
-            // stockWebsite here is a csv file
+            // stockWebsite here is a csv file or json file
             string newLineSeparator = stockWebsite.Contains("\r\n") ? "\r\n" : "\n";
             string[] lines = stockWebsite.Split(newLineSeparator);
+
+            if (lines.Length == 1 && lines[0].StartsWith("{"))
+            {
+                YahooStockHistoryData obj = System.Text.Json.JsonSerializer.Deserialize<YahooStockHistoryData>(lines[0]);
+                if (obj != null)
+                {
+                    if (obj.chart.result == null && obj.chart.error != null)
+                    {
+                        return false;
+                    }
+
+                    int[] timestamps = obj.chart.result[0].timestamp;
+
+                    Quote values = obj.chart.result[0].indicators.quote[0];
+                    for (int index = 0; index < timestamps.Length; index++)
+                    {
+                        DateTime timestamp = YahooIntToDate(timestamps[index]);
+                        try
+                        {
+
+                            stock.AddValue(
+                                timestamp, 
+                                Convert.ToDecimal(values.open[index]), 
+                                Convert.ToDecimal(values.high[index]),
+                                Convert.ToDecimal(values.low[index]),
+                                Convert.ToDecimal(values.close[index]),
+                                Convert.ToDecimal(values.volume[index]));
+                        }
+                        catch (Exception e)
+                        {
+                            var msg = e.Message;
+                        }
+                    }
+
+                    reportLogger?.Log(
+                        ReportType.Information,
+                        "Downloading", 
+                        $"Could not convert stock {stock.Name}");
+                }
+            }
 
             if (lines.Length <= 1)
             {
@@ -122,6 +163,9 @@ namespace Effanville.FinancialStructures.Stocks.Download
 
         private static int DateToYahooInt(DateTime date) 
             => int.Parse((date - new DateTime(1970, 1, 1)).TotalSeconds.ToString(CultureInfo.InvariantCulture));
+        
+        private static DateTime YahooIntToDate(int yahooInt) 
+            => new DateTime(1970, 1, 1).AddSeconds(yahooInt);
 
         /// <summary>
         /// Enables retrieval of the financial code specifier for the url.

@@ -13,7 +13,7 @@ namespace Effanville.FinancialStructures.Stocks.HistoricalRepository
         private HistoricalMarkets _instance;
 
         public HistoricalMarkets GetInstance() => _instance;
-        
+
         public HistoricalMarketsBuilder WithExchangesFromFile(string filePath, IFileSystem fileSystem,
             IReportLogger logger = null)
         {
@@ -32,7 +32,7 @@ namespace Effanville.FinancialStructures.Stocks.HistoricalRepository
             _instance.Exchanges.AddRange(exchanges);
             return this;
         }
-        
+
         public async Task<HistoricalMarketsBuilder> WithIndexInstruments(string indexName, IReportLogger logger = null)
         {
             string[] instruments = InstrumentDownloader.GetIndexInstruments(indexName);
@@ -40,7 +40,7 @@ namespace Effanville.FinancialStructures.Stocks.HistoricalRepository
             await StockDataParser.InsertInstrumentData(_instance, indexName, instruments, logger);
             return this;
         }
-        
+
         public async Task<HistoricalMarketsBuilder> WithInstrumentPriceData(DateTime startDate, DateTime endDate,
             IReportLogger logger = null)
         {
