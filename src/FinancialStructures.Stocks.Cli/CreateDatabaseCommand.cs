@@ -94,7 +94,7 @@ namespace Effanville.FinancialStructures.Stocks.Cli
                 return -1;
             }
 
-            var historicalMarketsBuilder = new HistoricalMarketsBuilder()
+            HistoricalMarketsBuilder historicalMarketsBuilder = new HistoricalMarketsBuilder()
                 .WithExchangesFromFile(fullPath, _fileSystem, _reportLogger);
              historicalMarketsBuilder.WithIndexInstruments(_indexNameOption.Value, _reportLogger).Wait();
              historicalMarketsBuilder.WithInstrumentPriceData(
@@ -107,7 +107,7 @@ namespace Effanville.FinancialStructures.Stocks.Cli
                 _fileSystem.Path.GetDirectoryName(fullPath),
                 _fileSystem.Path.GetFileNameWithoutExtension(fullPath) + ".db");
             IHistoricalMarketsPersistence persistence = new SqliteHistoricalMarketsPersistence();
-            var options = new SqlitePersistenceOptions(inMemory: false, outputDbFilePath, _fileSystem);
+            SqlitePersistenceOptions options = new SqlitePersistenceOptions(inMemory: false, outputDbFilePath, _fileSystem);
             if (persistence.Save(historicalMarkets, options, _reportLogger))
             {
                 return 0;

@@ -114,7 +114,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
                     reportLogger?.Log(
                         ReportType.Information,
                         "Downloading", 
-                        $"Could not convert stock {stock.Name}");
+                        $"Could not convert stock '{stock.Name}'");
                 }
             }
 

@@ -52,6 +52,9 @@
         <Content Include="..\..\test\FinancialStructures.Stocks.Tests\ExampleConfigFiles\Exchanges.csv" 
                  Link="ExampleConfigFiles\Exchanges.csv">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </Content>
+        </Content>   
+        <None Update="appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     </ItemGroup>
 </Project>

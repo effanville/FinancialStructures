@@ -95,16 +95,23 @@ namespace Effanville.FinancialStructures.Stocks.Cli
             }
 
             IHistoricalMarketsPersistence persistence = new SqliteHistoricalMarketsPersistence();
-            var options = new SqlitePersistenceOptions(inMemory: false, _dbFilePathOption.Value, _fileSystem);
-            var database = persistence.Load(options, _reportLogger);
-            var historicalMarketsBuilder = new HistoricalMarketsBuilder()
+            SqlitePersistenceOptions options = new SqlitePersistenceOptions(inMemory: false, _dbFilePathOption.Value, _fileSystem);
+            HistoricalMarkets database = persistence.Load(options, _reportLogger);
+            
+            _logger.Log(LogLevel.Information, $"Loaded database from file {_dbFilePathOption.Value}");
+            HistoricalMarketsBuilder historicalMarketsBuilder = new HistoricalMarketsBuilder()
                 .WithBaseInstance(database);
+            _logger.Log(LogLevel.Information, $"Updating index instruments from {_indexNameOption.Value}");
             historicalMarketsBuilder.UpdateIndexInstruments(_indexNameOption.Value, _reportLogger).Wait();
+            _logger.Log(LogLevel.Information, $"Updated index instruments.");
+            
+            _logger.Log(LogLevel.Information, $"Downloading prices from {_startDateOption.Value} to {_endDateOption.Value}");
             historicalMarketsBuilder.WithInstrumentPriceData(
                 _startDateOption.Value,
                 _endDateOption.Value,
                 _reportLogger).Wait();
 
+            _logger.Log(LogLevel.Information, $"Completed update, saving file");
             if(persistence.Save(historicalMarketsBuilder.GetInstance(), options, _reportLogger))
             {
                 return 0;

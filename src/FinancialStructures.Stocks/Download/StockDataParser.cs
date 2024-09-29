@@ -273,8 +273,13 @@ namespace Effanville.FinancialStructures.Stocks.Download
                     continue;
                 }
 
+                var dict = new Dictionary<string, double>();
                 string marketCapString = instValues[^4];
-                var dict = new Dictionary<string, double> { ["Market cap"] = double.Parse(marketCapString) * 1000000 };
+                if (double.TryParse(marketCapString, out double marketCapValue))
+                {
+                    dict["Market cap"] = marketCapValue * 1000000;
+                }
+                
                 if (values.TryGetValue("PE ratio (TTM)", out string val))
                 {
                     if (double.TryParse(val, out double peRatio))
