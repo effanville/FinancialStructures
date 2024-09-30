@@ -12,8 +12,8 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
     [TestFixture]
     public sealed class TryAddTests
     {
-        private readonly string BaseCompanyName = "someCompany";
-        private readonly string BaseName = "someName";
+        private const string BaseCompanyName = "someCompany";
+        private const string BaseName = "someName";
 
         [Test]
         public void CanAddSecurity()
@@ -21,10 +21,10 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             Portfolio database = new DatabaseConstructor().GetInstance();
             _ = database.TryAdd(Account.Security, new NameData(BaseCompanyName, BaseName));
 
-            Assert.AreEqual(1, database.Funds.Count);
+            Assert.That(database.Funds.Count, Is.EqualTo(1));
             NameData accountNames = database.Funds.First().Names;
-            Assert.AreEqual(BaseName, accountNames.Name);
-            Assert.AreEqual(BaseCompanyName, accountNames.Company);
+            Assert.That(accountNames.Name, Is.EqualTo(BaseName));
+            Assert.That(accountNames.Company, Is.EqualTo(BaseCompanyName));
         }
 
         [Test]
@@ -33,10 +33,10 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             Portfolio database = new DatabaseConstructor().GetInstance();
             _ = database.TryAdd(Account.Benchmark, new NameData(BaseCompanyName, BaseName));
 
-            Assert.AreEqual(1, database.BenchMarks.Count);
+            Assert.That(database.BenchMarks.Count, Is.EqualTo(1));
             NameData accountNames = database.BenchMarks.First().Names;
-            Assert.AreEqual(BaseName, accountNames.Name);
-            Assert.AreEqual(BaseCompanyName, accountNames.Company);
+            Assert.That(accountNames.Name, Is.EqualTo(BaseName));
+            Assert.That(accountNames.Company, Is.EqualTo(BaseCompanyName));
         }
 
         [Test]
@@ -45,10 +45,10 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             Portfolio database = new DatabaseConstructor().GetInstance();
             _ = database.TryAdd(Account.BankAccount, new NameData(BaseCompanyName, BaseName));
 
-            Assert.AreEqual(1, database.BankAccounts.Count);
+            Assert.That(database.BankAccounts.Count, Is.EqualTo(1));
             NameData accountNames = database.BankAccounts.First().Names;
-            Assert.AreEqual(BaseName, accountNames.Name);
-            Assert.AreEqual(BaseCompanyName, accountNames.Company);
+            Assert.That(accountNames.Name, Is.EqualTo(BaseName));
+            Assert.That(accountNames.Company, Is.EqualTo(BaseCompanyName));
         }
 
         [Test]
@@ -57,10 +57,10 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             Portfolio database = new DatabaseConstructor().GetInstance();
             _ = database.TryAdd(Account.Currency, new NameData(BaseCompanyName, BaseName));
 
-            Assert.AreEqual(1, database.Currencies.Count);
+            Assert.That(database.Currencies.Count, Is.EqualTo(1));
             NameData accountNames = database.Currencies.First().Names;
-            Assert.AreEqual(BaseName, accountNames.Name);
-            Assert.AreEqual(BaseCompanyName, accountNames.Company);
+            Assert.That(accountNames.Name, Is.EqualTo(BaseName));
+            Assert.That(accountNames.Company, Is.EqualTo(BaseCompanyName));
         }
 
         [Test]
@@ -71,12 +71,12 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = database.TryAdd(Account.Security, new NameData(BaseCompanyName, BaseName), logging);
 
             ErrorReports reports = logging.Reports;
-            Assert.AreEqual(1, reports.Count());
+            Assert.That(reports.Count(), Is.EqualTo(1));
             ErrorReport report = reports.First();
-            Assert.AreEqual(ReportType.Information, report.ErrorType);
-            Assert.AreEqual("AddingData", report.ErrorLocation);
-            Assert.AreEqual(ReportSeverity.Detailed, report.ErrorSeverity);
-            Assert.AreEqual($"Security-{BaseCompanyName}-{BaseName} added to database.", report.Message);
+            Assert.That(report.ErrorType, Is.EqualTo(ReportType.Information));
+            Assert.That(report.ErrorLocation, Is.EqualTo("AddingData"));
+            Assert.That(report.ErrorSeverity, Is.EqualTo(ReportSeverity.Detailed));
+            Assert.That(report.Message, Is.EqualTo($"Security-{BaseCompanyName}-{BaseName} added to database."));
         }
 
         [Test]
@@ -90,12 +90,12 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = database.TryAdd(Account.Security, new NameData(BaseCompanyName, BaseName), logging);
 
             ErrorReports reports = logging.Reports;
-            Assert.AreEqual(1, reports.Count());
+            Assert.That(reports.Count(), Is.EqualTo(1));
             ErrorReport report = reports.First();
-            Assert.AreEqual(ReportType.Error, report.ErrorType);
-            Assert.AreEqual("AddingData", report.ErrorLocation);
-            Assert.AreEqual(ReportSeverity.Critical, report.ErrorSeverity);
-            Assert.AreEqual($"Security-{BaseCompanyName}-{BaseName} already exists.", report.Message);
+            Assert.That(report.ErrorType, Is.EqualTo(ReportType.Error));
+            Assert.That(report.ErrorLocation, Is.EqualTo("AddingData"));
+            Assert.That(report.ErrorSeverity, Is.EqualTo(ReportSeverity.Critical));
+            Assert.That(report.Message, Is.EqualTo($"Security-{BaseCompanyName}-{BaseName} already exists."));
         }
 
         [Test]
@@ -106,12 +106,12 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = database.TryAdd(Account.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
 
             ErrorReports reports = logging.Reports;
-            Assert.AreEqual(1, reports.Count());
+            Assert.That(reports.Count(), Is.EqualTo(1));
             ErrorReport report = reports.First();
-            Assert.AreEqual(ReportType.Information, report.ErrorType);
-            Assert.AreEqual("AddingData", report.ErrorLocation);
-            Assert.AreEqual(ReportSeverity.Detailed, report.ErrorSeverity);
-            Assert.AreEqual($"Benchmark-{BaseCompanyName}-{BaseName} added to database.", report.Message);
+            Assert.That(report.ErrorType, Is.EqualTo(ReportType.Information));
+            Assert.That(report.ErrorLocation, Is.EqualTo("AddingData"));
+            Assert.That(report.ErrorSeverity, Is.EqualTo(ReportSeverity.Detailed));
+            Assert.That(report.Message, Is.EqualTo($"Benchmark-{BaseCompanyName}-{BaseName} added to database."));
         }
 
         [Test]
@@ -125,12 +125,12 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = database.TryAdd(Account.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
 
             ErrorReports reports = logging.Reports;
-            Assert.AreEqual(1, reports.Count());
+            Assert.That(reports.Count(), Is.EqualTo(1));
             ErrorReport report = reports.First();
-            Assert.AreEqual(ReportType.Error, report.ErrorType);
-            Assert.AreEqual("AddingData", report.ErrorLocation);
-            Assert.AreEqual(ReportSeverity.Critical, report.ErrorSeverity);
-            Assert.AreEqual($"Benchmark-{BaseCompanyName}-{BaseName} already exists.", report.Message);
+            Assert.That(report.ErrorType, Is.EqualTo(ReportType.Error));
+            Assert.That(report.ErrorLocation, Is.EqualTo("AddingData"));
+            Assert.That(report.ErrorSeverity, Is.EqualTo(ReportSeverity.Critical));
+            Assert.That(report.Message, Is.EqualTo($"Benchmark-{BaseCompanyName}-{BaseName} already exists."));
         }
     }
 }
