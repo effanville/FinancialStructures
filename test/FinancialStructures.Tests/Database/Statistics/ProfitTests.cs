@@ -18,7 +18,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Statistics
         public void ProfitTest(TestDatabaseName databaseName, Account totals, NameOrder order, decimal expectedValue)
         {
             IPortfolio portfolio = TestDatabase.Databases[databaseName];
-            Assert.AreEqual(expectedValue, portfolio.Profit(totals, TestDatabase.Name(totals, order)));
+            Assert.That(portfolio.Profit(totals, TestDatabase.Name(totals, order)), Is.EqualTo(expectedValue));
         }
 
         [TestCase(TestDatabaseName.OneBank, Totals.All, 1.1)]

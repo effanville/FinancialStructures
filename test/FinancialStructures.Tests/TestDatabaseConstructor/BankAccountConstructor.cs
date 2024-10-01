@@ -34,25 +34,13 @@ namespace Effanville.FinancialStructures.Tests.TestDatabaseConstructor
             return this;
         }
 
-        public static BankAccountConstructor Empty()
-        {
-            return new BankAccountConstructor(DefaultCompany, DefaultName);
-        }
+        public static BankAccountConstructor Empty() => new(DefaultCompany, DefaultName);
 
-        public static BankAccountConstructor Default()
-        {
-            return FromNameAndData(DefaultCompany, DefaultName, dates: DefaultDates, values: DefaultValues);
-        }
+        public static BankAccountConstructor Default() => FromNameAndData(DefaultCompany, DefaultName, dates: DefaultDates, values: DefaultValues);
 
-        public static BankAccountConstructor Secondary()
-        {
-            return FromNameAndData(SecondaryCompany, SecondaryName, currency: CurrencyConstructor.DefaultCompany, dates: SecondaryDates, values: SecondaryValues);
-        }
+        public static BankAccountConstructor Secondary() => FromNameAndData(SecondaryCompany, SecondaryName, currency: CurrencyConstructor.DefaultCompany, dates: SecondaryDates, values: SecondaryValues);
 
-        public static BankAccountConstructor FromName(string company, string name, string currency = null, string url = null, string sectors = null)
-        {
-            return new BankAccountConstructor(company, name, currency, url, sectors);
-        }
+        public static BankAccountConstructor FromName(string company, string name, string currency = null, string url = null, string sectors = null) => new(company, name, currency, url, sectors);
 
         public static BankAccountConstructor FromNameAndData(string company, string name, string currency = null, string url = null, string sectors = null, DateTime[] dates = null, decimal[] values = null)
         {

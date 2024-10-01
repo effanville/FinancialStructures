@@ -183,7 +183,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
             (TradeType TradeType, DateTime Date, decimal TradeShares, decimal TradePrice, decimal TradeCost) tradeEditData,
             (DateTime Date, decimal UnitPrice, decimal ShareNo, decimal Investment)[] expectedValues)
         {
-            var oldTrade = sut.SecurityTrades.First(trade => trade.Day.Equals(tradeEditData.Date));
+            SecurityTrade oldTrade = sut.SecurityTrades.First(trade => trade.Day.Equals(tradeEditData.Date));
             _ = sut.TryAddOrEditTradeData(
                 new SecurityTrade(tradeEditData.Date),
                 new SecurityTrade(

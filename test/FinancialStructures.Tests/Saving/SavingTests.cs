@@ -106,7 +106,7 @@ namespace Effanville.FinancialStructures.Tests.Saving
   </MyFunds>
 </AllData>");
             Portfolio portfolioWithData = new DatabaseConstructor().SetName("saved").GetInstance();
-            var name = new TwoName("company", "name");
+            TwoName name = new TwoName("company", "name");
             _ = portfolioWithData.TryAdd(Account.Security, new NameData("company", "name", "GBP", "http://temp.com", new HashSet<string>() { "UK", "China" }, "some information"));
             _ = portfolioWithData.TryAddOrEditTradeData(Account.Security, name, new SecurityTrade(new DateTime(2015, 1, 1)), new SecurityTrade(TradeType.Buy, name, new DateTime(2015, 1, 1), 5, 1.2m, 0.0m));
             _ = portfolioWithData.TryAddOrEditData(Account.Security, name, new DailyValuation(new DateTime(2015, 1, 1), 1.2m), new DailyValuation(new DateTime(2015, 1, 1), 1.2m));
@@ -472,8 +472,8 @@ namespace Effanville.FinancialStructures.Tests.Saving
             MockFileSystem tempFileSystem = new MockFileSystem();
             string savePath = "c:/temp/saved.xml";
 
-            var xmlPersistence = new XmlPortfolioPersistence();
-            var options = new XmlFilePersistenceOptions(savePath, tempFileSystem);
+            XmlPortfolioPersistence xmlPersistence = new XmlPortfolioPersistence();
+            XmlFilePersistenceOptions options = new XmlFilePersistenceOptions(savePath, tempFileSystem);
             xmlPersistence.Save(times, options, null);
 
             string file = tempFileSystem.File.ReadAllText(savePath);
@@ -502,8 +502,8 @@ namespace Effanville.FinancialStructures.Tests.Saving
             MockFileSystem tempFileSystem = new MockFileSystem();
             string savePath = "c:/temp/saved.xml";
             tempFileSystem.AddFile(savePath, new MockFileData(expectedXml));
-            var xmlPersistence = new XmlPortfolioPersistence();
-            var loadedPortfolio = xmlPersistence.Load(new XmlFilePersistenceOptions(savePath, tempFileSystem), null);
+            XmlPortfolioPersistence xmlPersistence = new XmlPortfolioPersistence();
+            IPortfolio loadedPortfolio = xmlPersistence.Load(new XmlFilePersistenceOptions(savePath, tempFileSystem), null);
 
             AreEqual(times, loadedPortfolio);
         }
@@ -515,8 +515,8 @@ namespace Effanville.FinancialStructures.Tests.Saving
             MockFileSystem tempFileSystem = new MockFileSystem();
             string savePath = "c:/temp/saved.xml";
 
-            var xmlPersistence = new XmlPortfolioPersistence();
-            var options = new XmlFilePersistenceOptions(savePath, tempFileSystem);
+            XmlPortfolioPersistence xmlPersistence = new XmlPortfolioPersistence();
+            XmlFilePersistenceOptions options = new XmlFilePersistenceOptions(savePath, tempFileSystem);
             xmlPersistence.Save(database, options, null);
 
             string file = tempFileSystem.File.ReadAllText(savePath);

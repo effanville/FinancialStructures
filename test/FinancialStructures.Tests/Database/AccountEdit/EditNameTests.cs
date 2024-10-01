@@ -30,7 +30,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = constructor.WithSecurity(BaseCompanyName, BaseName, url: "http://www.google.com");
             yield return new TestCaseData(constructor.Database, BaseCompanyName, BaseName, "http://www.amazon.com", null, new HashSet<string>()).SetName("CanEditSecurityUrl");
             constructor = new DatabaseConstructor();
-            _ = constructor.WithSecurity(BaseCompanyName, BaseName, currency: "poinds");
+            _ = constructor.WithSecurity(BaseCompanyName, BaseName, currency: "pounds");
             yield return new TestCaseData(constructor.Database, BaseCompanyName, BaseName, null, "dollars", new HashSet<string>()).SetName("CanEditSecurityCurrency");
             constructor = new DatabaseConstructor();
             _ = constructor.WithSecurity(BaseCompanyName, BaseName);
@@ -46,23 +46,23 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(newComp, newName, newCurrency, newUrl, newSectors));
 
             NameData accountNames = database.Funds[0].Names;
-            Assert.AreEqual(newName, accountNames.Name);
-            Assert.AreEqual(newComp, accountNames.Company);
-            Assert.AreEqual(newUrl, accountNames.Url);
-            Assert.AreEqual(newCurrency, accountNames.Currency);
+            Assert.That(accountNames.Name, Is.EqualTo(newName));
+            Assert.That(accountNames.Company, Is.EqualTo(newComp));
+            Assert.That(accountNames.Url, Is.EqualTo(newUrl));
+            Assert.That(accountNames.Currency, Is.EqualTo(newCurrency));
             List<string> actualSectors = accountNames.Sectors.ToList();
             if (newSectors != null)
             {
                 List<string> expectedSectors = newSectors.ToList();
-                Assert.AreEqual(newSectors.Count, actualSectors.Count);
+                Assert.That(actualSectors.Count, Is.EqualTo(newSectors.Count));
                 for (int sectorIndex = 0; sectorIndex < newSectors.Count; sectorIndex++)
                 {
-                    Assert.AreEqual(expectedSectors[sectorIndex], actualSectors[sectorIndex]);
+                    Assert.That(actualSectors[sectorIndex], Is.EqualTo(expectedSectors[sectorIndex]));
                 }
             }
             else
             {
-                Assert.AreEqual(0, actualSectors.Count);
+                Assert.That(actualSectors.Count, Is.EqualTo(0));
             }
         }
 
@@ -76,8 +76,8 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
             NameData accountNames = database.BenchMarks.First().Names;
-            Assert.AreEqual(NewName, accountNames.Name);
-            Assert.AreEqual(NewCompanyName, accountNames.Company);
+            Assert.That(accountNames.Name, Is.EqualTo(NewName));
+            Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
         }
 
         [Test]
@@ -90,8 +90,8 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
             NameData accountNames = database.BankAccounts.First().Names;
-            Assert.AreEqual(NewName, accountNames.Name);
-            Assert.AreEqual(NewCompanyName, accountNames.Company);
+            Assert.That(accountNames.Name, Is.EqualTo(NewName));
+            Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
         }
 
         [Test]
@@ -105,9 +105,9 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, url: newUrl));
 
             NameData accountNames = database.BankAccounts.First().Names;
-            Assert.AreEqual(BaseName, accountNames.Name);
-            Assert.AreEqual(BaseCompanyName, accountNames.Company);
-            Assert.AreEqual(newUrl, accountNames.Url);
+            Assert.That(accountNames.Name, Is.EqualTo(BaseName));
+            Assert.That(accountNames.Company, Is.EqualTo(BaseCompanyName));
+            Assert.That(accountNames.Url, Is.EqualTo(newUrl));
         }
 
         [Test]
@@ -121,9 +121,9 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, currency: newCurrency));
 
             NameData accountNames = database.BankAccounts.First().Names;
-            Assert.AreEqual(BaseName, accountNames.Name);
-            Assert.AreEqual(BaseCompanyName, accountNames.Company);
-            Assert.AreEqual(newCurrency, accountNames.Currency);
+            Assert.That(accountNames.Name, Is.EqualTo(BaseName));
+            Assert.That(accountNames.Company, Is.EqualTo(BaseCompanyName));
+            Assert.That(accountNames.Currency, Is.EqualTo(newCurrency));
         }
 
         [Test]
@@ -137,15 +137,15 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName, sectors: sectorValues));
 
             NameData accountNames = database.BankAccounts.First().Names;
-            Assert.AreEqual(NewName, accountNames.Name);
-            Assert.AreEqual(NewCompanyName, accountNames.Company);
+            Assert.That(accountNames.Name, Is.EqualTo(NewName));
+            Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
 
             List<string> actualSectors = accountNames.Sectors.ToList();
             List<string> expectedSectors = sectorValues.ToList();
-            Assert.AreEqual(sectorValues.Count, actualSectors.Count);
+            Assert.That(actualSectors.Count, Is.EqualTo(sectorValues.Count));
             for (int sectorIndex = 0; sectorIndex < sectorValues.Count; sectorIndex++)
             {
-                Assert.AreEqual(expectedSectors[sectorIndex], actualSectors[sectorIndex]);
+                Assert.That(actualSectors[sectorIndex], Is.EqualTo(expectedSectors[sectorIndex]));
             }
         }
 
@@ -159,8 +159,8 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = database.TryEditName(Account.Currency, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
             NameData accountNames = database.Currencies.First().Names;
-            Assert.AreEqual(NewName, accountNames.Name);
-            Assert.AreEqual(NewCompanyName, accountNames.Company);
+            Assert.That(accountNames.Name, Is.EqualTo(NewName));
+            Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
         }
 
         [Test]
@@ -174,10 +174,10 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
             NameData accountNames = database.Funds.First().Names;
-            Assert.AreEqual(NewName, accountNames.Name);
-            Assert.AreEqual(NewCompanyName, accountNames.Company);
+            Assert.That(accountNames.Name, Is.EqualTo(NewName));
+            Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
 
-            Assert.AreEqual(0, logging.Reports.Count());
+            Assert.That(logging.Reports.Count(), Is.EqualTo(0));
         }
 
         [Test]
@@ -187,14 +187,14 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             IReportLogger logging = new LogReporter(null, saveInternally: true);
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
-            var reports = logging.Reports;
-            Assert.AreEqual(1, reports.Count());
+            ErrorReports reports = logging.Reports;
+            Assert.That(reports.Count(), Is.EqualTo(1));
 
             ErrorReport report = reports.First();
-            Assert.AreEqual(ReportType.Error, report.ErrorType);
-            Assert.AreEqual("EditingData", report.ErrorLocation);
-            Assert.AreEqual(ReportSeverity.Critical, report.ErrorSeverity);
-            Assert.AreEqual($"Could not find Security - {BaseCompanyName}-{BaseName}.", report.Message);
+            Assert.That(report.ErrorType, Is.EqualTo(ReportType.Error));
+            Assert.That(report.ErrorLocation, Is.EqualTo("EditingData"));
+            Assert.That(report.ErrorSeverity, Is.EqualTo(ReportSeverity.Critical));
+            Assert.That(report.Message, Is.EqualTo($"Could not find Security - {BaseCompanyName}-{BaseName}."));
         }
 
         [Test]
@@ -208,9 +208,9 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
             NameData accountNames = database.BenchMarks.First().Names;
-            Assert.AreEqual(NewName, accountNames.Name);
-            Assert.AreEqual(NewCompanyName, accountNames.Company);
-            Assert.AreEqual(0, logging.Reports.Count());
+            Assert.That(accountNames.Name, Is.EqualTo(NewName));
+            Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
+            Assert.That(logging.Reports.Count(), Is.EqualTo(0));
         }
 
         [Test]
@@ -221,13 +221,13 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
             ErrorReports reports = logging.Reports;
-            Assert.AreEqual(1, reports.Count());
+            Assert.That(reports.Count(), Is.EqualTo(1));
 
             ErrorReport report = reports.First();
-            Assert.AreEqual(ReportType.Error, report.ErrorType);
-            Assert.AreEqual("EditingData", report.ErrorLocation);
-            Assert.AreEqual(ReportSeverity.Critical, report.ErrorSeverity);
-            Assert.AreEqual($"Could not find Benchmark - {BaseCompanyName}-{BaseName}.", report.Message);
+            Assert.That(report.ErrorType, Is.EqualTo(ReportType.Error));
+            Assert.That(report.ErrorLocation, Is.EqualTo("EditingData"));
+            Assert.That(report.ErrorSeverity, Is.EqualTo(ReportSeverity.Critical));
+            Assert.That(report.Message, Is.EqualTo($"Could not find Benchmark - {BaseCompanyName}-{BaseName}."));
         }
     }
 }

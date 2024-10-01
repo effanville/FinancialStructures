@@ -1,9 +1,7 @@
-using System.Runtime.CompilerServices;
 using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.FinanceStructures.Implementation;
 using Effanville.FinancialStructures.NamingStructures;
-using NSubstitute;
 using NUnit.Framework;
 
 namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests;
@@ -51,7 +49,7 @@ public class ValueListCollectionTests
         Security testList = new Security(Account.Security, new NameData("Comp", "Name"));
         collection.AddValueList(testList);
 
-        bool ret = collection.TryGetAndCast<ISecurity>(
+        bool ret = collection.TryGetAndCast(
             new TwoName("Comp", "Name"), 
             out ISecurity result);
         Assert.Multiple(() =>

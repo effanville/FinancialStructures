@@ -21,7 +21,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.ValueListT
                 new DateTime(2010, 1, 1),
                 null).SetName($"{nameof(ValueTests)}-NoEntry");
 
-            var values = new TimeList();
+            TimeList values = new TimeList();
             values.SetData(new DateTime(2010, 1, 1), 4.2m);
 
             yield return new TestCaseData(
@@ -108,7 +108,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.ValueListT
                 new DailyValuation(new DateTime(2010, 1, 1), 0.0m))
                 .SetName($"{nameof(ValueBeforeTests)}-NoEntry");
 
-            var values = new TimeList();
+            TimeList values = new TimeList();
             values.SetData(new DateTime(2010, 1, 1), 4.2m);
 
             yield return new TestCaseData(
@@ -186,7 +186,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.ValueListT
                 new DateTime(2010, 1, 1),
                 null).SetName($"{nameof(ValueOnOrBeforeTests)}-NoEntry");
 
-            var values = new TimeList();
+            TimeList values = new TimeList();
             values.SetData(new DateTime(2010, 1, 1), 4.2m);
 
             yield return new TestCaseData(

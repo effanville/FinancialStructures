@@ -30,9 +30,9 @@ namespace Effanville.FinancialStructures.Tests.StatsMakers
             Assert.IsTrue(options.SecurityDisplayOptions.ShouldDisplay);
             Assert.IsTrue(options.SectorDisplayOptions.ShouldDisplay);
             Assert.IsTrue(options.BankAccountDisplayOptions.ShouldDisplay);
-            Assert.AreEqual(SortDirection.Descending, options.SecurityDisplayOptions.SortingDirection);
-            Assert.AreEqual(SortDirection.Descending, options.BankAccountDisplayOptions.SortingDirection);
-            Assert.AreEqual(SortDirection.Descending, options.SectorDisplayOptions.SortingDirection);
+            Assert.That(options.SecurityDisplayOptions.SortingDirection, Is.EqualTo(SortDirection.Descending));
+            Assert.That(options.BankAccountDisplayOptions.SortingDirection, Is.EqualTo(SortDirection.Descending));
+            Assert.That(options.SectorDisplayOptions.SortingDirection, Is.EqualTo(SortDirection.Descending));
         }
     }
 }

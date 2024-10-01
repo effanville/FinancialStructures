@@ -10,8 +10,6 @@ namespace Effanville.FinancialStructures.Download.Implementation
     /// </summary>
     internal sealed class YahooDownloader : IPriceDownloader
     {
-        private static readonly char DefaultCommaSeparator = ',';
-
         /// <inheritdoc/>
         public string BaseUrl => "https://uk.finance.yahoo.com/";
 

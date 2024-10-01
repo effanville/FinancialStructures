@@ -56,7 +56,7 @@ namespace Effanville.FinancialStructures.Tests.TestDatabaseConstructor
 
         public SecurityConstructor WithTrades(SecurityTrade[] trades)
         {
-            foreach (var trade in trades)
+            foreach (SecurityTrade trade in trades)
             {
                 if (trade != null)
                 {
@@ -102,10 +102,7 @@ namespace Effanville.FinancialStructures.Tests.TestDatabaseConstructor
             return this;
         }
 
-        public Security GetItem()
-        {
-            return Item;
-        }
+        public Security GetItem() => Item;
 
         public SecurityConstructor Clear()
         {
@@ -114,46 +111,34 @@ namespace Effanville.FinancialStructures.Tests.TestDatabaseConstructor
             return this;
         }
 
-        public static Security NameLess()
-        {
-            return new SecurityConstructor(null, null).GetItem();
-        }
+        public static Security NameLess() => new SecurityConstructor(null, null).GetItem();
 
-        public static Security Empty()
-        {
-            return new SecurityConstructor(DefaultCompany, DefaultName).GetItem();
-        }
+        public static Security Empty() => new SecurityConstructor(DefaultCompany, DefaultName).GetItem();
 
-        public static Security Default()
-        {
-            return WithNameAndData(DefaultCompany, DefaultName, dates: DefaultDates, sharePrice: DefaultUnitPrices, numberUnits: DefaultShareValues, investment: DefaultInvestments)
+        public static Security Default() =>
+            WithNameAndData(DefaultCompany, DefaultName, dates: DefaultDates, sharePrice: DefaultUnitPrices, numberUnits: DefaultShareValues, investment: DefaultInvestments)
                 .GetItem();
-        }
 
-        public static Security DefaultFromTrades()
-        {
-            return FromNameAndTradeData(
-                DefaultCompany,
-                DefaultName,
-                dates: DefaultDates,
-                sharePrice: DefaultUnitPrices,
-                trades: DefaultTrades)
+        public static Security DefaultFromTrades() =>
+            FromNameAndTradeData(
+                    DefaultCompany,
+                    DefaultName,
+                    dates: DefaultDates,
+                    sharePrice: DefaultUnitPrices,
+                    trades: DefaultTrades)
                 .GetItem();
-        }
 
-        public static Security Secondary()
-        {
-            return WithNameAndData(
-                SecondaryCompany,
-                SecondaryName,
-                currency: CurrencyConstructor.DefaultCompany,
-                dates: SecondaryDates,
-                sharePrice: SecondaryUnitPrices,
-                numberUnits: SecondaryShareValues,
-                investment: SecondaryInvestments)
+        public static Security Secondary() =>
+            WithNameAndData(
+                    SecondaryCompany,
+                    SecondaryName,
+                    currency: CurrencyConstructor.DefaultCompany,
+                    dates: SecondaryDates,
+                    sharePrice: SecondaryUnitPrices,
+                    numberUnits: SecondaryShareValues,
+                    investment: SecondaryInvestments)
                 .GetItem();
-        }
-        
+
         public static Security NowWithNoShares()
             => WithNameAndDataFromTrades(
                     SecondaryCompany,
@@ -165,10 +150,7 @@ namespace Effanville.FinancialStructures.Tests.TestDatabaseConstructor
                     investment: TertiaryInvestments)
                 .GetItem();
 
-        public static SecurityConstructor WithName(string company, string name, string currency = null, string url = null, string sectors = null)
-        {
-            return new SecurityConstructor(company, name, currency, url, sectors);
-        }
+        public static SecurityConstructor WithName(string company, string name, string currency = null, string url = null, string sectors = null) => new(company, name, currency, url, sectors);
 
         public static SecurityConstructor FromNameAndTradeData(
             string company,
