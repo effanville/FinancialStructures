@@ -5,7 +5,6 @@ using System.Linq;
 using Effanville.Common.Structure.DataStructures;
 using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.Database.Implementation;
-using Effanville.FinancialStructures.DataStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
@@ -23,11 +22,10 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
             _ = generator.WithSecurity(secCompany, "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0m }, numberUnits: new[] { 12.0m });
             Portfolio database = generator.Database;
 
-            IReadOnlyList<SecurityDayData> data = database.SecurityData(new TwoName(secCompany, "name1"));
+            IReadOnlyList<DailyValuation> data = database.NumberData(Account.Security,new TwoName(secCompany, "name1"));
 
-            Assert.AreEqual(1, data.Count);
-            Assert.AreEqual(12, data.Single().ShareNo);
-            Assert.AreEqual(101, data.Single().UnitPrice);
+            Assert.That(data.Count, Is.EqualTo(1));
+            Assert.That(data.Single().Value, Is.EqualTo(12 * 101));
         }
 
         [Test]
@@ -39,9 +37,9 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
 
             Portfolio database = generator.Database;
 
-            IReadOnlyList<SecurityDayData> data = database.SecurityData(new TwoName(secCompany, "name"));
+            IReadOnlyList<DailyValuation> data = database.NumberData(Account.Security, new TwoName(secCompany, "name"));
 
-            Assert.AreEqual(0, data.Count);
+            Assert.That(data.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -55,8 +53,8 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
 
             IReadOnlyList<DailyValuation> data = database.NumberData(Account.BankAccount, new NameData(bankCompany, "AccountName"));
 
-            Assert.AreEqual(1, data.Count);
-            Assert.AreEqual(53, data.Single().Value);
+            Assert.That(data.Count, Is.EqualTo(1));
+            Assert.That(data.Single().Value, Is.EqualTo(53));
         }
 
         [Test]
@@ -70,7 +68,7 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
 
             IReadOnlyList<DailyValuation> data = database.NumberData(Account.BankAccount, new NameData(bankCompany, "name"));
 
-            Assert.AreEqual(0, data.Count);
+            Assert.That(data.Count, Is.EqualTo(0));
         }
     }
 }

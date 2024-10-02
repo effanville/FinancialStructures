@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.DataStructures;
@@ -17,36 +16,22 @@ namespace Effanville.FinancialStructures.Database
         /// <summary>
         /// The name of the portfolio.
         /// </summary>
-        string Name
-        {
-            get;
-            set;
-        }
+        string Name { get; set; }
 
         /// <summary>
         /// Whether the user has changed the database since last save.
         /// </summary>
-        bool IsAlteredSinceSave
-        {
-            get;
-        }
+        bool IsAlteredSinceSave { get; }
 
         /// <summary>
         /// The default currency for the portfolio.
         /// </summary>
-        string BaseCurrency
-        {
-            get;
-            set;
-        }
+        string BaseCurrency { get; set; }
 
         /// <summary>
         /// A collection of notes for the portfolio.
         /// </summary>
-        IReadOnlyList<Note> Notes
-        {
-            get;
-        }
+        IReadOnlyList<Note> Notes { get; }
 
         /// <summary>
         /// Add a note to the list of notes <see cref="Notes"/>.
@@ -59,64 +44,34 @@ namespace Effanville.FinancialStructures.Database
         bool RemoveNote(Note note);
 
         /// <summary>
-        /// Delete a note from the list of notes <see cref="Notes"/>
-        /// at the index specified.
-        /// </summary>
-        void RemoveNote(int noteIndex);
-
-        /// <summary>
         /// Securities stored in this database.
-        /// This is a shallow copy of the actual list, accessed in a
-        /// threadsafe manner.
         /// </summary>
-        IReadOnlyList<ISecurity> Funds
-        {
-            get;
-        }
+        IReadOnlyList<ISecurity> Funds { get; }
 
         /// <summary>
         /// Bank accounts stored in this database.
-        /// <para>
-        /// This is a shallow copy of the actual list, accessed in a
-        /// thread safe manner.
-        /// </para>
         /// </summary>
-        IReadOnlyList<IExchangeableValueList> BankAccounts
-        {
-            get;
-        }
+        IReadOnlyList<IExchangeableValueList> BankAccounts { get; }
 
         /// <summary>
         /// The currencies other objects are held in.
         /// </summary>
-        IReadOnlyList<ICurrency> Currencies
-        {
-            get;
-        }
+        IReadOnlyList<ICurrency> Currencies { get; }
 
         /// <summary>
         /// Sector benchmarks for comparison of held data.
         /// </summary>
-        IReadOnlyList<IValueList> BenchMarks
-        {
-            get;
-        }
+        IReadOnlyList<IValueList> BenchMarks { get; }
 
         /// <summary>
         /// Extra assets that are held as part of this portfolio.
         /// </summary>
-        IReadOnlyList<IAmortisableAsset> Assets
-        {
-            get;
-        }
+        IReadOnlyList<IAmortisableAsset> Assets { get; }
 
         /// <summary>
         /// Accounts that are held as pensions.
         /// </summary>
-        IReadOnlyList<ISecurity> Pensions
-        {
-            get;
-        }
+        IReadOnlyList<ISecurity> Pensions { get; }
 
         /// <summary>
         /// Outputs the account if it exists in the specified type.
@@ -125,7 +80,9 @@ namespace Effanville.FinancialStructures.Database
         /// <param name="names">The name of the element to find.</param>
         /// <param name="valueList">The account if it exists.</param>
         /// <typeparam name="TNamedFinancialObject">The type deriving from <see cref="IReadOnlyNamedFinancialObject"/></typeparam>
-        bool TryGetAccount<TNamedFinancialObject>(Account accountType, TwoName names, out TNamedFinancialObject valueList)
+        bool TryGetAccount<TNamedFinancialObject>(Account accountType,
+            TwoName names,
+            out TNamedFinancialObject valueList)
             where TNamedFinancialObject : IReadOnlyNamedFinancialObject;
 
         /// <summary>
@@ -144,14 +101,6 @@ namespace Effanville.FinancialStructures.Database
         /// <param name="accountType">The type to search for.</param>
         /// <returns>The number of type in the database.</returns>
         int NumberOf(Account accountType);
-
-        /// <summary>
-        /// Number of type satisfying a certain condition in the database.
-        /// </summary>
-        /// <param name="account">The type to search for.</param>
-        /// <param name="selector">A fucntion to select certain accounts.</param>
-        /// <returns>The number of type in the database.</returns>
-        int NumberOf(Account account, Func<IValueList, bool> selector);
 
         /// <summary>
         /// Removes unnecessary data from the database.
@@ -205,20 +154,12 @@ namespace Effanville.FinancialStructures.Database
         bool Exists(Account elementType, TwoName name);
 
         /// <summary>
-        /// Queries whether database contains item.
-        /// </summary>
-        /// <param name="elementType">The type of item to search for.</param>
-        /// <param name="company">The company of the item to find.</param>
-        /// <returns>Whether exists or not.</returns>
-        bool CompanyExists(Account elementType, string company);
-        
-        /// <summary>
         /// Clears all data in the portfolio.
         /// </summary>
         void Clear();
 
         /// <summary>
-        /// Returns a list of all companes of the desired type in the database.
+        /// Returns a list of all companies of the desired type in the database.
         /// </summary>
         /// <param name="account">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
@@ -239,31 +180,16 @@ namespace Effanville.FinancialStructures.Database
         IReadOnlyList<string> Names(Account account);
 
         /// <summary>
-        /// Returns a list of all namedata in the database.
+        /// Returns a list of all name data in the database.
         /// </summary>
         /// <param name="account">Type of object to search for.</param>
         /// <returns>List of names of the desired type.</returns>
         IReadOnlyList<NameData> NameDataForAccount(Account account);
 
         /// <summary>
-        /// Queries for data for the security of name and company.
-        /// </summary>
-        IReadOnlyList<SecurityDayData> SecurityData(TwoName name, IReportLogger reportLogger = null);
-
-        /// <summary>
         /// Returns the valuations of the account.
         /// </summary>
         IReadOnlyList<DailyValuation> NumberData(Account account, TwoName name, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Returns a copy of the currently held portfolio.
-        /// Note one cannot use this portfolio to edit as it makes a copy.
-        /// </summary>
-        /// <remarks>
-        /// This is in theory dangerous. I know thought that a security copied
-        /// returns a genuine security, so I can case without trouble.
-        /// </remarks>
-        IPortfolio Copy();
 
         /// <summary>
         /// returns the currency associated to the account.

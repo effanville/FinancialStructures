@@ -159,19 +159,6 @@ namespace Effanville.FinancialStructures.Database.Implementation
             };
 
         /// <inheritdoc/>
-        public int NumberOf(Account account, Func<IValueList, bool> selector) 
-            => account switch
-            {
-                Account.Security => Funds.Count(fund => selector(fund)),
-                Account.BankAccount => BankAccounts.Count(fund => selector(fund)),
-                Account.Benchmark => BenchMarks.Count(selector),
-                Account.Currency => Currencies.Count(fund => selector(fund)),
-                Account.Asset => Assets.Count(fund => selector(fund)),
-                Account.Pension => Pensions.Count(fund => selector(fund)),
-                _ => 0
-            };
-
-        /// <inheritdoc/>
         public void CleanData()
         {
             foreach (ISecurity security in Funds)
