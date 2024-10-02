@@ -36,7 +36,7 @@ namespace Effanville.FinancialStructures.Download.Implementation
 
         private static async Task<bool> TryGetPriceInternal(string url, string financialCode, Action<decimal> retrieveValueAction, IReportLogger reportLogger = null)
         {
-            string webData = await DownloadHelper.GetWebData(url, addCookie: false, reportLogger);
+            string webData = await DownloadHelper.GetWebData(url, addCookie: true, reportLogger);
             if (string.IsNullOrEmpty(webData))
             {
                 reportLogger?.Error("Downloading", $"Could not download data from {url}");
