@@ -91,7 +91,7 @@ namespace Effanville.FinancialStructures.Persistence
                 sec.EnsureOnLoadDataConsistency();
             }
 
-            portfolioImpl.OnPortfolioChanged(this, new PortfolioEventArgs());
+            portfolioImpl.OnNewPortfolio(this, new PortfolioEventArgs(true));
             return true;
         }
 

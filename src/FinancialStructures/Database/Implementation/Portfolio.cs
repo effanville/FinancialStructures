@@ -139,6 +139,20 @@ namespace Effanville.FinancialStructures.Database.Implementation
                 IsAlteredSinceSave = false;
             }
         }
+        
+        public event EventHandler<PortfolioEventArgs> NewPortfolio;
+
+        public void OnNewPortfolio(object obj, PortfolioEventArgs e)
+        {
+            IsAlteredSinceSave = true;
+            EventHandler<PortfolioEventArgs> handler = NewPortfolio;
+            handler?.Invoke(obj, e);
+
+            if (obj is bool _)
+            {
+                IsAlteredSinceSave = false;
+            }
+        }
 
         public void Saving() => IsAlteredSinceSave = false;
 

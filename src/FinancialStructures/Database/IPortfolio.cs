@@ -111,11 +111,11 @@ namespace Effanville.FinancialStructures.Database
         /// Handler for the event that data stored in the portfolio has changed.
         /// </summary>
         event EventHandler<PortfolioEventArgs> PortfolioChanged;
-
+        
         /// <summary>
-        /// Raise event if something has changed.
+        /// Handler for the event that data stored in the portfolio has changed.
         /// </summary>
-        void OnPortfolioChanged(object obj, PortfolioEventArgs e);
+        event EventHandler<PortfolioEventArgs> NewPortfolio;
 
         /// <summary>
         /// Edits the name of the data currently held.
