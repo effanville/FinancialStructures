@@ -41,14 +41,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
                 }
             }
         }
-
-        /// <summary>
-        /// An empty constructor.
-        /// </summary>
-        internal Security()
-            : base(Account.Security)
-        {
-        }
         
         internal Security(Account account)
             : this(account, new NameData())

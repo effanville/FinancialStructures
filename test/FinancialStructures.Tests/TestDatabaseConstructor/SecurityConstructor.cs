@@ -104,13 +104,6 @@ namespace Effanville.FinancialStructures.Tests.TestDatabaseConstructor
 
         public Security GetItem() => Item;
 
-        public SecurityConstructor Clear()
-        {
-            Item = null;
-            Item = new Security();
-            return this;
-        }
-
         public static Security NameLess() => new SecurityConstructor(null, null).GetItem();
 
         public static Security Empty() => new SecurityConstructor(DefaultCompany, DefaultName).GetItem();

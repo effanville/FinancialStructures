@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.FinanceStructures.Implementation;
 using Effanville.FinancialStructures.FinanceStructures.Implementation.Asset;
-using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Implementation
 {
@@ -14,29 +12,30 @@ namespace Effanville.FinancialStructures.Database.Implementation
     /// </summary>
     public partial class Portfolio : IPortfolio
     {
-        private readonly ValueListCollection<ISecurity, Security> _funds = new ValueListCollection<ISecurity, Security>(
+        private readonly ValueListCollection<ISecurity, Security> _funds = new (
             Account.Security,
-            (account, name) => new Security(account, name));
+            new IValueListFactory<Security>());
         
         private readonly ValueListCollection<IExchangeableValueList, CashAccount> _bankAccounts = new (
             Account.BankAccount,
-            (account, name) => account == Account.BankAccount ? new CashAccount(name) : null);
+            new IValueListFactory<CashAccount>());
         
         private readonly ValueListCollection<ICurrency, Currency> _currencies = new (
             Account.Currency,
-            (account, name) => account == Account.Currency ? new Currency(name) : null);
+            new IValueListFactory<Currency>());
         
         private readonly ValueListCollection<IValueList, Sector> _benchmarks = new (
             Account.Benchmark,
-            (account, name) => account == Account.Benchmark ? new Sector(name) : null);
+            new IValueListFactory<Sector>());
         
         private readonly ValueListCollection<IAmortisableAsset, AmortisableAsset> _assets = new (
             Account.Asset,
-            (account, name) => account == Account.Asset ? new AmortisableAsset(name) : null);
+            new IValueListFactory<AmortisableAsset>());
 
         private readonly ValueListCollection<ISecurity, Security> _pensions = new (
             Account.Pension,
-            (account, name) => new Security(account, name));
+            new IValueListFactory<Security>());
+        
         /// <summary>
         /// Flag to state when the user has altered values in the portfolio
         /// after the last save.

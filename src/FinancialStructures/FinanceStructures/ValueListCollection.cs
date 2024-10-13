@@ -14,7 +14,7 @@ namespace Effanville.FinancialStructures.FinanceStructures
         where TImplementation : ValueList, TInterface
     {
         private readonly Account _account;
-        private readonly Func<Account, NameData, TImplementation> _constructor;
+        private readonly IValueListFactory<TImplementation> _factory;
         private readonly ReaderWriterLockSlim _collectionLock = new ReaderWriterLockSlim();
 
         private Dictionary<TwoName, TImplementation> _collectionDictionary =
@@ -26,7 +26,13 @@ namespace Effanville.FinancialStructures.FinanceStructures
         public ValueListCollection(Account account, Func<Account, NameData, TImplementation> constructor)
         {
             _account = account;
-            _constructor = constructor;
+            _factory = new IValueListFactory<TImplementation>(constructor);
+        }
+        
+        public ValueListCollection(Account account, IValueListFactory<TImplementation> factory)
+        {
+            _account = account;
+            _factory = factory;
         }
 
         public IReadOnlyList<TInterface> Values
@@ -85,7 +91,7 @@ namespace Effanville.FinancialStructures.FinanceStructures
             _collectionLock.EnterWriteLock();
             try
             {
-                TImplementation newObject = _constructor(accountType, name);
+                TImplementation newObject = _factory.Create(accountType, name);
                 if (newObject == null)
                 {
                     reportLogger?.Error(ReportLocation.AddingData.ToString(), $"{accountType}-{name} Could not create.");
