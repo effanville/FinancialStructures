@@ -5,8 +5,8 @@ using System.Linq;
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.MathLibrary.Finance;
 using Effanville.FinancialStructures.Database.Extensions.Values;
-using Effanville.FinancialStructures.Database.Statistics.Implementation;
 using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Statistics
@@ -97,7 +97,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
             return portfolio.CalculateValue(
                accountType,
                names,
-               DrawDownCalculators.DefaultCalculator(earlierTime, laterTime),
+               valueList => valueList.DrawDown(earlierTime, laterTime),
                defaultValue: double.NaN);
         }
     }

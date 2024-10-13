@@ -1,6 +1,7 @@
 ﻿using System;
 using Effanville.FinancialStructures.Database.Extensions.Statistics;
 using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
@@ -17,9 +18,7 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         {
             DateTime firstDate = valueList.FirstValue()?.Day ?? DateTime.MaxValue;
             DateTime lastDate = valueList.LatestValue()?.Day ?? DateTime.MinValue;
-            Value = valueList.CalculateValue(
-                DrawDownCalculators.DefaultCalculator(firstDate, lastDate),
-                defaultValue: double.NaN);
+            Value = valueList.DrawDown(firstDate, lastDate);
         }
 
         /// <inheritdoc/>

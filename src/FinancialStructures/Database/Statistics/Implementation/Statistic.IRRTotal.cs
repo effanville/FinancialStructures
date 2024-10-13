@@ -2,8 +2,8 @@
 
 using Effanville.FinancialStructures.Database.Extensions.Rates;
 using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
@@ -17,23 +17,8 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, IValueList valueList, DateTime date)
         {
-            Value = 100 * valueList.CalculateValue(
-                IRRCalculators.DefaultCalculator(),
-                IRRCalculators.Calculators(portfolio));
-            if (!valueList.Any())
-            {
-                return;
-            }
-
-            if (valueList is ISecurity security)
-            {
-                ICurrency currency = portfolio.Currency(security);
-                double v2Value = 100 * security.IRR(currency);
-                return;
-            }
-            double vValue = 100 * valueList.CAR(
-                valueList.FirstValue().Day, 
-                valueList.LatestValue().Day);
+            ICurrency currency = portfolio.Currency(valueList);
+            Value = 100 * valueList.IRR(currency);
         }
 
         /// <inheritdoc/>

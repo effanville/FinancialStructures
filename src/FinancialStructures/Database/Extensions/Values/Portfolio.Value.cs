@@ -1,7 +1,7 @@
 ﻿using System;
-
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Values
 {
@@ -29,8 +29,11 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
             => portfolio.CalculateValue(
                 account,
                 name,
-                ValueCalculator.DefaultCalculator(date),
-                ValueCalculator.Calculators(portfolio, date),
-                defaultValue: ValueCalculator.DefaultValue(account));
+                vl =>
+                {
+                    ICurrency currency = portfolio.Currency(vl);
+                    return vl.Value(currency, date);
+                },
+                defaultValue: account.DefaultValue());
     }
 }

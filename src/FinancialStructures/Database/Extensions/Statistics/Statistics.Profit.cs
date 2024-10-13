@@ -1,5 +1,6 @@
-﻿using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.ValueCalculators;
+﻿using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
+using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Statistics
 {
@@ -18,8 +19,11 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
                 names,
                 0.0m,
                 (value, currentTotal) => value + currentTotal,
-                ProfitCalculators.DefaultCalculator,
-                ProfitCalculators.Calculators(portfolio));
+                vl =>
+                {
+                    ICurrency currency = portfolio.Currency(vl);
+                    return vl.Profit(currency);
+                });
         }
 
         /// <summary>
@@ -30,8 +34,11 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
             return portfolio.CalculateValue(
                 account,
                 name,
-                ProfitCalculators.DefaultCalculator,
-                ProfitCalculators.Calculators(portfolio));
+                vl =>
+                {
+                    ICurrency currency = portfolio.Currency(vl);
+                    return vl.Profit(currency);
+                });
         }
     }
 }

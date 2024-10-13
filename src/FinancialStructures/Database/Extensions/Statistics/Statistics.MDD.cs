@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using Effanville.Common.Structure.MathLibrary.Finance;
 using Effanville.FinancialStructures.Database.Extensions.Values;
-using Effanville.FinancialStructures.Database.Statistics.Implementation;
 using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Statistics
 {
@@ -62,7 +61,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
             return portfolio.CalculateValue(
                 account,
                 names,
-                MDDCalculators.DefaultCalculator(earlierTime, laterTime),
+                valueList => valueList.MaximumDrawDown(earlierTime, laterTime),
                 defaultValue: double.NaN);
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System;
-
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Values
 {
@@ -29,13 +29,16 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
         /// <returns>The total value held.</returns>
         public static decimal TotalValue(this IPortfolio portfolio, Totals totals, DateTime date, TwoName names = null)
         {
-            return portfolio.CalculateAggregateValue(
+            return portfolio.CalculateAggregateValue<decimal>(
                 totals,
                 names,
                 0,
                 (a, b) => a + b,
-                ValueCalculator.DefaultCalculator(date),
-                ValueCalculator.Calculators(portfolio, date));
+                vl =>
+                {
+                    ICurrency currency = portfolio.Currency(vl);
+                    return vl.Value(currency, date);
+                });
         }
     }
 }

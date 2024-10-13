@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-
 using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Extensions
@@ -19,8 +18,7 @@ namespace Effanville.FinancialStructures.Database.Extensions
         /// <param name="name">The name of the account.</param>
         /// <param name="preCalculationCheck">A check to perform before calculating the statistic. True if the statistic
         /// should be calculated.</param>
-        /// <param name="calculatorMapping">The mapping of account type to the calculator to use.</param>
-        /// <param name="defaultCalculator">The optional default calculator to use.</param>
+        /// <param name="calculator">The optional default calculator to use.</param>
         /// <param name="defaultValue">The optional default value to use.</param>
         /// <typeparam name="TValue">The type of the statistic to return.</typeparam>
         /// <returns>The value of the desired statistic.</returns>
@@ -29,8 +27,7 @@ namespace Effanville.FinancialStructures.Database.Extensions
             Account account,
             TwoName name,
             Func<Account, TwoName, bool> preCalculationCheck,
-            Func<IValueList, TValue> defaultCalculator,
-            IDictionary<Account, Func<IValueList, TValue>> calculatorMapping = null,
+            Func<IValueList, TValue> calculator,
             TValue defaultValue = default)
         {
             if (!preCalculationCheck(account, name))
@@ -41,8 +38,7 @@ namespace Effanville.FinancialStructures.Database.Extensions
             return portfolio.CalculateValue(
                 account, 
                 name, 
-                defaultCalculator,
-                calculatorMapping,
+                calculator,
                 defaultValue);
         }
         
@@ -52,8 +48,7 @@ namespace Effanville.FinancialStructures.Database.Extensions
         /// <param name="portfolio">The portfolio to find the account.</param>
         /// <param name="account">The account type.</param>
         /// <param name="name">The name of the account.</param>
-        /// <param name="calculatorMapping">The mapping of account type to the calculator to use.</param>
-        /// <param name="defaultCalculator">The optional default calculator to use.</param>
+        /// <param name="calculator">The optional default calculator to use.</param>
         /// <param name="defaultValue">The optional default value to use.</param>
         /// <typeparam name="TValue">The type of the statistic to return.</typeparam>
         /// <returns>The statistic value</returns>
@@ -61,11 +56,10 @@ namespace Effanville.FinancialStructures.Database.Extensions
             this IPortfolio portfolio,
             Account account,
             TwoName name,
-            Func<IValueList, TValue> defaultCalculator,
-            IDictionary<Account, Func<IValueList, TValue>> calculatorMapping = null,
+            Func<IValueList, TValue> calculator,
             TValue defaultValue = default) 
             => portfolio.TryGetAccount(account, name, out IValueList valueList) 
-                ? valueList.CalculateValue(defaultCalculator, calculatorMapping, defaultValue)
+                ? valueList.CalculateValue(calculator, defaultValue)
                 : defaultValue;
     }
 }

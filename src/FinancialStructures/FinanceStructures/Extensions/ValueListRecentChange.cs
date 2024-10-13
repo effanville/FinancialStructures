@@ -1,6 +1,6 @@
 ﻿using Effanville.Common.Structure.DataStructures;
 
-namespace Effanville.FinancialStructures.FinanceStructures.Statistics
+namespace Effanville.FinancialStructures.FinanceStructures.Extensions
 {
     /// <summary>
     /// Contains extension methods for statistics of <see cref="IValueList"/>s.
@@ -10,11 +10,16 @@ namespace Effanville.FinancialStructures.FinanceStructures.Statistics
         /// <summary>
         /// Calculates the difference between the last two values of a <see cref="IValueList"/>.
         /// </summary>
-        public static decimal RecentChange(this IValueList valueList)
+        public static decimal RecentChange(this IValueList valueList, ICurrency currency = null)
         {
             if (!valueList.Any())
             {
-                return 0m;
+                return 0.0m;
+            }
+
+            if (valueList is IExchangeableValueList exchangeableValueList)
+            {
+                return exchangeableValueList.RecentChange(currency);
             }
 
             DailyValuation needed = valueList.LatestValue();
@@ -39,8 +44,8 @@ namespace Effanville.FinancialStructures.FinanceStructures.Statistics
             DailyValuation needed = valueList.LatestValue(currency);
             if (needed.Value > 0)
             {
-                var previousValue = valueList.ValueBefore(needed.Day, currency);
-                return needed.Value - (previousValue != null ? previousValue.Value : 0.0m);
+                DailyValuation previousValue = valueList.ValueBefore(needed.Day, currency);
+                return needed.Value - (previousValue?.Value ?? 0.0m);
             }
 
             return 0.0m;

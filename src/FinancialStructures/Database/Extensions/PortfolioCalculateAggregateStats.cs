@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Extensions
@@ -19,8 +20,7 @@ namespace Effanville.FinancialStructures.Database.Extensions
             Func<Totals, TwoName, bool> preCalculationCheck,
             TValue initialStatisticValue,
             Func<TValue, TValue, TValue> statisticAggregator,
-            Func<IValueList, TValue> defaultCalculator,
-            IDictionary<Account, Func<IValueList, TValue>> calculatorMapping = null,
+            Func<IValueList, TValue> calculator,
             TValue defaultValue = default)
         {
             if (!preCalculationCheck(total, name))
@@ -33,8 +33,7 @@ namespace Effanville.FinancialStructures.Database.Extensions
                 name, 
                 initialStatisticValue,
                 statisticAggregator,
-                defaultCalculator,
-                calculatorMapping,
+                calculator,
                 defaultValue);
         }
 
@@ -47,8 +46,7 @@ namespace Effanville.FinancialStructures.Database.Extensions
         /// <param name="name">The name for the total type.</param>
         /// <param name="initialStatisticValue">The initial (default) value for the statistic.</param>
         /// <param name="statisticAggregator">The aggregation method to determine which statistic is preferable.</param>
-        /// <param name="calculatorMapping">The mapping of account type to the calculator to use.</param>
-        /// <param name="defaultCalculator">The optional default calculator to use.</param>
+        /// <param name="calculator">The optional default calculator to use.</param>
         /// <param name="defaultValue">The optional default value to use.</param>
          /// <returns>The statistic.</returns>
         public static TValue CalculateAggregateValue<TValue>(
@@ -57,11 +55,10 @@ namespace Effanville.FinancialStructures.Database.Extensions
             TwoName name,
             TValue initialStatisticValue,
             Func<TValue, TValue, TValue> statisticAggregator,
-            Func<IValueList, TValue> defaultCalculator,
-            IDictionary<Account, Func<IValueList, TValue>> calculatorMapping = null,
+            Func<IValueList, TValue> calculator,
             TValue defaultValue = default)
         {
-            var valueLists = portfolio.Accounts(total, name);
+            IReadOnlyList<IValueList> valueLists = portfolio.Accounts(total, name);
 
             if (!valueLists.Any())
             {
@@ -71,7 +68,7 @@ namespace Effanville.FinancialStructures.Database.Extensions
             TValue finalStatistic = initialStatisticValue;
             foreach (IValueList valueList in valueLists)
             {
-                var statistic = valueList.CalculateValue(defaultCalculator, calculatorMapping, defaultValue);
+                TValue statistic = valueList.CalculateValue(calculator, defaultValue);
                 finalStatistic = statisticAggregator(statistic, finalStatistic);
             }
 

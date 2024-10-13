@@ -1,6 +1,6 @@
 ﻿using System;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Values
 {
@@ -27,7 +27,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
                             || tot == Totals.All,
                 DateTime.MinValue,
                 (date, otherDate) => otherDate > date ? otherDate : date,
-                LastPurchaseCalculators.DefaultCalculator);
+                vl => vl.LastPurchaseDate());
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
             return portfolio.CalculateValue(
                 elementType,
                 name,
-                LastPurchaseCalculators.DefaultCalculator);
+                vl => vl.LastPurchaseDate());
         }
     }
 }

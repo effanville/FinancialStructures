@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Statistics
 {
@@ -19,9 +18,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
                 company,
                 new Dictionary<DateTime, int>(),
                 (a, b) => MergeDictionaries(a, b),
-                EntryDistributionCalculator.DefaultCalculator(),
-                EntryDistributionCalculator.Calculators(portfolio, DateTime.Today),
-                new Dictionary<DateTime, int>());
+                vl => vl.EntryDistribution());
         }
 
         private static Dictionary<DateTime, int> MergeDictionaries(Dictionary<DateTime, int> first, Dictionary<DateTime, int> second)

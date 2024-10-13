@@ -5,10 +5,9 @@ using System.Linq;
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.MathLibrary.Finance;
 using Effanville.FinancialStructures.Database.Extensions.Values;
-using Effanville.FinancialStructures.Database.Statistics.Implementation;
 using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Rates
 {
@@ -158,9 +157,12 @@ namespace Effanville.FinancialStructures.Database.Extensions.Rates
         {
             return portfolio.CalculateValue(accountType,
                 names, 
-                IRRCalculators.DefaultCalculator(),
-                IRRCalculators.Calculators(portfolio),
-                double.NaN);
+                vl =>
+                {
+                    ICurrency currency = portfolio.Currency(vl);
+                    return vl.IRR(currency);
+                },
+                defaultValue: double.NaN);
         }
 
         /// <summary>
@@ -170,9 +172,12 @@ namespace Effanville.FinancialStructures.Database.Extensions.Rates
         {
             return portfolio.CalculateValue(accountType,
                 names,
-                IRRCalculators.DefaultCalculator(earlierTime, laterTime),
-                IRRCalculators.Calculators(portfolio, earlierTime, laterTime),
-                double.NaN);
+                vl =>
+                {
+                    ICurrency currency = portfolio.Currency(vl);
+                    return vl.IRR(currency, earlierTime, laterTime);
+                },
+                defaultValue: double.NaN);
         }
     }
 }

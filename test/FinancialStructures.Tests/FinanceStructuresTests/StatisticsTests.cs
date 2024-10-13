@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using Effanville.Common.Structure.DataStructures;
 using Effanville.FinancialStructures.DataStructures;
 using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.FinanceStructures.Implementation;
-using Effanville.FinancialStructures.FinanceStructures.Statistics;
 using Effanville.FinancialStructures.NamingStructures;
 using Effanville.FinancialStructures.Tests.TestDatabaseConstructor;
 

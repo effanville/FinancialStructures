@@ -2,8 +2,8 @@
 
 using Effanville.FinancialStructures.Database.Extensions.Statistics;
 using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
@@ -18,9 +18,8 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         public override void Calculate(IPortfolio portfolio, IValueList valueList, DateTime date)
         {
             fCurrency = portfolio.BaseCurrency;
-            Value = (double)valueList.CalculateValue(
-                RecentChangeCalculators.DefaultCalculator,
-                RecentChangeCalculators.Calculators(portfolio));
+            ICurrency currency = portfolio.Currency(valueList);
+            Value = (double)valueList.RecentChange(currency);
         }
 
         /// <inheritdoc/>
