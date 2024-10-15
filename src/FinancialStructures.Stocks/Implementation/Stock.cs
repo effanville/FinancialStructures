@@ -42,7 +42,7 @@ namespace Effanville.FinancialStructures.Stocks.Implementation
         public Stock(string ticker, string company, string name, string currency, string url)
             : this()
         {
-            Name = new NameData(company.Trim(), name.Trim(), currency, url.Trim())
+            Name = new NameData(company?.Trim(), name?.Trim(), currency, url?.Trim())
             {
                 Ticker = ticker
             };

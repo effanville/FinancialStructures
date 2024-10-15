@@ -1,67 +1,45 @@
-﻿using Effanville.FinancialStructures.Stocks.Statistics.Implementation;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Effanville.FinancialStructures.Stocks.Statistics
 {
     /// <summary>
     /// Generator for various statistic calculators for a stock.
     /// </summary>
-    public static class StockStatisticFactory
+    public class StockStatisticFactory
     {
-        /// <summary>
-        /// Generates a statistic calculator of the type specified.
-        /// </summary>
-        public static IStockStatistic Create(StockStatisticType stockStatistic)
+        private List<Type> _admissibleStockStatistics;
+
+        private List<Type> AdmissibleStockStatistics
         {
-            switch (stockStatistic)
+            get
             {
-                case StockStatisticType.TodayOpen:
-                    return new PreviousNDayValue(0, StockDataStream.Open, stockStatistic);
-                case StockStatisticType.PrevTwoOpen:
-                    return new PreviousNDayValue(2, StockDataStream.Open, stockStatistic);
-                case StockStatisticType.PrevThreeOpen:
-                    return new PreviousNDayValue(3, StockDataStream.Open, stockStatistic);
-                case StockStatisticType.PrevFourOpen:
-                    return new PreviousNDayValue(4, StockDataStream.Open, stockStatistic);
-                case StockStatisticType.PrevFiveOpen:
-                    return new PreviousNDayValue(5, StockDataStream.Open, stockStatistic);
-                case StockStatisticType.TodayClose:
-                    return new PreviousNDayValue(0, StockDataStream.Close, stockStatistic);
-                case StockStatisticType.PrevDayClose:
-                    return new PreviousNDayValue(1, StockDataStream.Close, stockStatistic);
-                case StockStatisticType.PrevTwoClose:
-                    return new PreviousNDayValue(2, StockDataStream.Close, stockStatistic);
-                case StockStatisticType.PrevThreeClose:
-                    return new PreviousNDayValue(3, StockDataStream.Close, stockStatistic);
-                case StockStatisticType.PrevFourClose:
-                    return new PreviousNDayValue(4, StockDataStream.Close, stockStatistic);
-                case StockStatisticType.PrevFiveClose:
-                    return new PreviousNDayValue(5, StockDataStream.Close, stockStatistic);
-                case StockStatisticType.PrevDayHigh:
-                    return new PreviousNDayValue(1, StockDataStream.High, stockStatistic);
-                case StockStatisticType.PrevDayLow:
-                    return new PreviousNDayValue(1, StockDataStream.Low, stockStatistic);
-                case StockStatisticType.MovingAverageWeek:
-                    return new MovingAverage(5, StockDataStream.Open, stockStatistic);
-                case StockStatisticType.MovingAverageMonth:
-                    return new MovingAverage(20, StockDataStream.Open, stockStatistic);
-                case StockStatisticType.MovingAverageHalfYear:
-                    return new MovingAverage(50, StockDataStream.Open, stockStatistic);
-                case StockStatisticType.RelativeMovingAverageWeekMonth:
-                    return new RelativeMovingAverage(5, 20, StockDataStream.Open, stockStatistic);
-                case StockStatisticType.RelativeMovingAverageMonthHalfYear:
-                    return new RelativeMovingAverage(20, 50, StockDataStream.Open, stockStatistic);
-                case StockStatisticType.RelativeMovingAverageWeekHalfYear:
-                    return new RelativeMovingAverage(5, 50, StockDataStream.Open, stockStatistic);
-                case StockStatisticType.ADXStatTwoWeek:
-                    return new ADXStat(14, stockStatistic);
-                case StockStatisticType.StochasticTwoWeek:
-                    return new StochasticStat(14, stockStatistic);
-                case StockStatisticType.StochasticFourWeek:
-                    return new StochasticStat(28, stockStatistic);
-                case StockStatisticType.PrevDayOpen:
-                default:
-                    return new PreviousDayOpen();
+                if (_admissibleStockStatistics == null)
+                {
+                    Type type = typeof(IStockStatistic);
+                    _admissibleStockStatistics = AppDomain.CurrentDomain.GetAssemblies()
+                        .SelectMany(s => s.GetTypes())
+                        .Where(p => type.IsAssignableFrom(p) && !p.IsInterface && !p.IsAbstract)
+                        .ToList();
+                }
+
+                return _admissibleStockStatistics;
             }
+        }
+        
+        public IStockStatistic Create(StockStatisticSettings settings)
+        {
+            Type stockType = AdmissibleStockStatistics.FirstOrDefault(x => x.Name == settings.StatType);
+            ConstructorInfo ctor = stockType.GetConstructor(new[] { typeof(StockStatisticSettings) });
+            if (ctor == null)
+            {
+                return null;
+            }
+
+            object instance = ctor.Invoke(new object[] { settings });
+            return instance as IStockStatistic;
         }
     }
 }

@@ -7,41 +7,52 @@ namespace Effanville.FinancialStructures.Stocks.Statistics.Implementation
 {
     internal class RelativeMovingAverage : IStockStatistic
     {
-        private readonly int fFirstLength;
-        private readonly int fSecondLength;
+        private readonly int _firstLength;
+        private readonly int _secondLength;
+        private readonly bool _fraction;
 
         /// <inheritdoc/>
-        public int BurnInTime
-        {
-            get;
-        }
+        public bool IsNormalised => false;
+        
+        /// <inheritdoc/>
+        public int BurnInTime { get; }
 
         /// <inheritdoc/>
-        public StockStatisticType TypeOfStatistic
-        {
-            get;
-        }
+        public StockDataStream DataType { get; }
 
-        /// <inheritdoc/>
-        public StockDataStream DataType
-        {
-            get;
-        }
-
-        public RelativeMovingAverage(int numberDaysOne, int numberDaysTwo, StockDataStream dataStream, StockStatisticType statisticType)
+        public RelativeMovingAverage(int numberDaysOne, int numberDaysTwo, StockDataStream dataStream)
         {
             BurnInTime = Math.Max(numberDaysOne, numberDaysTwo);
-            fFirstLength = numberDaysOne;
-            fSecondLength = numberDaysTwo;
-            TypeOfStatistic = statisticType;
+            _firstLength = numberDaysOne;
+            _secondLength = numberDaysTwo;
             DataType = dataStream;
+        }
+
+        public RelativeMovingAverage(StockStatisticSettings settings)
+        {
+            DataType = settings.PriceType;
+            BurnInTime = settings.Lag;
+            
+            if (settings is MovingAverageSettings derivedSettings)
+            {
+                _firstLength = derivedSettings.NumberAverageDays;
+                _secondLength = derivedSettings.NumberAverageDaysTwo;
+                _fraction = derivedSettings.Fraction;
+            }
         }
 
         /// <inheritdoc/>
         public double Calculate(DateTime date, IStock stock)
         {
             List<decimal> values = stock.Values(date, BurnInTime, 0, DataType);
-            return Convert.ToDouble(DecimalVector.Mean(values, fFirstLength) - DecimalVector.Mean(values, fSecondLength));
+            decimal firstAverage = DecimalVector.Mean(values, _firstLength);
+            decimal secondAverage = DecimalVector.Mean(values, _secondLength);
+            if (!_fraction)
+            {
+                return Convert.ToDouble(firstAverage - secondAverage);
+            }
+
+            return Convert.ToDouble(firstAverage / secondAverage);
         }
     }
 }

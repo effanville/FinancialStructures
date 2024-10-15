@@ -41,8 +41,15 @@ namespace Effanville.FinancialStructures.Stocks.Implementation
         public List<decimal> Values(DateTime date, int numberValuesBefore, int numberValuesAfter = 0, StockDataStream data = StockDataStream.Close)
         {
             _ = GetDataAndSetAccessor(date);
+            int startIndex = _lastValueIndex - numberValuesBefore;
+            int endIndex = _lastValueIndex + numberValuesAfter + 1;
+            if (startIndex < 0 || endIndex > Valuations.Count)
+            {
+                return null;
+            }
+
             List<decimal> desiredValues = new List<decimal>();
-            for (int valuationIndex = _lastValueIndex - numberValuesBefore + 1; valuationIndex < _lastValueIndex + numberValuesAfter + 1; valuationIndex++)
+            for (int valuationIndex = startIndex; valuationIndex < endIndex; valuationIndex++)
             {
                 desiredValues.Add(Valuations[valuationIndex].Value(data));
             }
@@ -54,8 +61,15 @@ namespace Effanville.FinancialStructures.Stocks.Implementation
         /// Calculates the value of the stock at the index in the list of values.
         /// This does not set <see cref="_lastValueIndex"/>.
         /// </summary>
-        private decimal Value(int valuationIndex, StockDataStream data = StockDataStream.Close) 
-            => Valuations[valuationIndex].Value(data);
+        private decimal Value(int valuationIndex, StockDataStream data = StockDataStream.Close)
+        {
+            if (valuationIndex < 0 || valuationIndex > Valuations.Count)
+            {
+                return decimal.MinValue;
+            }
+
+            return Valuations[valuationIndex].Value(data);
+        }
 
         /// <summary>
         /// This retrieves the data at the time specified in <paramref name="date"/> as well
@@ -66,6 +80,11 @@ namespace Effanville.FinancialStructures.Stocks.Implementation
         private StockDay GetDataAndSetAccessor(DateTime date)
         {
             int numberValues = Valuations.Count;
+            if (numberValues == 0)
+            {
+                _lastValueIndex = -1;
+                return null;
+            }
             int dayIndex = 0;
             do
             {
@@ -76,11 +95,11 @@ namespace Effanville.FinancialStructures.Stocks.Implementation
             _lastValueIndex = dayIndex - 1;
             var value = Valuations[dayIndex - 1];
             var endTime = value.End;
-            if (date >= endTime)
+            if (date >= endTime && date < endTime.Date.AddDays(1))
             {
                 return value;
             }
-            if (date >= value.Start)
+            if (date >= value.Start && date < endTime.Date.AddDays(1) )
             {
                 return value.CopyAsOpenOnly();
             }

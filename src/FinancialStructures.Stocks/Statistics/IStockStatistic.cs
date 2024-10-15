@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Effanville.FinancialStructures.Stocks.Statistics
 {
@@ -13,28 +14,19 @@ namespace Effanville.FinancialStructures.Stocks.Statistics
     public interface IStockStatistic
     {
         /// <summary>
+        /// Details whether the statistic is normalised and a relative value, or absolute.
+        /// </summary>
+        bool IsNormalised { get; }
+        
+        /// <summary>
         /// The number of days prior to the date for which one requires data to calculate the statistic.
         /// </summary>
-        int BurnInTime
-        {
-            get;
-        }
-
-        /// <summary>
-        /// The statistic type this refers to.
-        /// </summary>
-        StockStatisticType TypeOfStatistic
-        {
-            get;
-        }
+        int BurnInTime { get; }
 
         /// <summary>
         /// The data of the stock this will calculate the statistic of.
         /// </summary>
-        StockDataStream DataType
-        {
-            get;
-        }
+        StockDataStream DataType { get; }
 
         /// <summary>
         /// The procedure to calutate the statistic

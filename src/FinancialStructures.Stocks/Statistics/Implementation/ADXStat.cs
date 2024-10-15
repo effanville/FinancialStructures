@@ -2,33 +2,42 @@
 
 namespace Effanville.FinancialStructures.Stocks.Statistics.Implementation
 {
-    internal class ADXStat : IStockStatistic
+    internal class AdxStat : IStockStatistic
     {
+        public int SmoothingPeriod { get; }
+        
         /// <inheritdoc/>
-        public int BurnInTime
-        {
-            get;
-        }
-
+        public bool IsNormalised => true;
+        
         /// <inheritdoc/>
-        public StockStatisticType TypeOfStatistic
-        {
-            get;
-        }
-
+        public int BurnInTime { get; }
+        
         /// <inheritdoc/>
         public StockDataStream DataType => StockDataStream.None;
 
-        public ADXStat(int numberDays, StockStatisticType statisticType)
+        public AdxStat(int numberDays)
         {
             BurnInTime = numberDays;
-            TypeOfStatistic = statisticType;
+        }
+
+        public AdxStat(StockStatisticSettings settings)
+        {
+            BurnInTime = settings.Lag;
+            if (settings is AdxStatisticSettings adxStatisticSettings)
+            {
+                SmoothingPeriod = adxStatisticSettings.SmoothingPeriod;
+            }
         }
 
         /// <inheritdoc/>
         public double Calculate(DateTime date, IStock stock)
         {
-            return Convert.ToDouble(stock.ADX(date, BurnInTime));
+            decimal? adx = stock?.ADX(date, BurnInTime, SmoothingPeriod);
+            if (!adx.HasValue)
+            {
+                return double.NaN;
+            }
+            return Convert.ToDouble(adx.Value);
         }
     }
 }

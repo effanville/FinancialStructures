@@ -73,13 +73,13 @@ namespace Effanville.FinancialStructures.Stocks
         decimal Min(DateTime day, int numberBefore, int numberAfter, StockDataStream data);
 
         /// <summary>
-        /// Calculate the stockastic statistic.
+        /// Calculate the stochastic statistic.
         /// </summary>
         decimal Stochastic(DateTime day, int length, int innerLength = 3);
 
         /// <summary>
         /// Need to have a moving average of this.
         /// </summary>
-        decimal ADX(DateTime day, int length = 14);
+        decimal? ADX(DateTime day, int lookBackWindow = 14, int smoothingPeriod = 14);
     }
 }

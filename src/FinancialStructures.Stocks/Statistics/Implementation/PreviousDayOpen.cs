@@ -1,23 +1,17 @@
-﻿using System;
-using System.Linq;
-
-namespace Effanville.FinancialStructures.Stocks.Statistics.Implementation
+﻿namespace Effanville.FinancialStructures.Stocks.Statistics.Implementation
 {
-    internal class PreviousDayOpen : IStockStatistic
+    internal class PreviousDayOpen : PreviousNDayRelativeValue
     {
-        /// <inheritdoc/>
-        public StockStatisticType TypeOfStatistic => StockStatisticType.PrevDayOpen;
-
-        /// <inheritdoc/>
-        public int BurnInTime => 1;
-
-        /// <inheritdoc/>
-        public StockDataStream DataType => StockDataStream.Open;
-
-        /// <inheritdoc/>
-        public double Calculate(DateTime date, IStock stock)
+        public PreviousDayOpen()
+            : base(1, StockDataStream.Open)
         {
-            return Convert.ToDouble(stock.Values(date, 1, 0, DataType).First());
+            NumberDaysPriorValue = 1;
+        }
+
+        public PreviousDayOpen(StockStatisticSettings settings)
+            : base(1, StockDataStream.Open)
+        {
+            NumberDaysPriorValue = 1;
         }
     }
 }
