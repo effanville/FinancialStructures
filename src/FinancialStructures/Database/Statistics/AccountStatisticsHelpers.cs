@@ -133,11 +133,11 @@ namespace Effanville.FinancialStructures.Database.Statistics
                 Statistic.IRRTotal,
                 Statistic.DrawDown,
                 Statistic.MDD,
-                Statistic.Sectors,
                 Statistic.FirstDate,
                 Statistic.LastInvestmentDate,
                 Statistic.LastPurchaseDate,
                 Statistic.LatestDate,
+                Statistic.Sectors,
                 Statistic.NumberEntries,
                 Statistic.EntryYearDensity,
                 Statistic.Notes
@@ -162,9 +162,9 @@ namespace Effanville.FinancialStructures.Database.Statistics
                 Statistic.IRR1Y,
                 Statistic.IRR5Y,
                 Statistic.IRRTotal,
-                Statistic.Sectors,
                 Statistic.FirstDate,
-                Statistic.LatestDate
+                Statistic.LatestDate,
+                Statistic.Sectors,
             };
         }
 
@@ -182,9 +182,9 @@ namespace Effanville.FinancialStructures.Database.Statistics
                 Statistic.RecentChange,
                 Statistic.FundFraction,
                 Statistic.FundCompanyFraction,
-                Statistic.Sectors,
                 Statistic.FirstDate,
                 Statistic.LatestDate,
+                Statistic.Sectors,
                 Statistic.NumberEntries,
                 Statistic.EntryYearDensity,
                 Statistic.Notes
@@ -240,6 +240,8 @@ namespace Effanville.FinancialStructures.Database.Statistics
                 Statistic.FirstDate,
                 Statistic.LatestDate,
                 Statistic.Sectors,
+                Statistic.NumberEntries,
+                Statistic.EntryYearDensity,
                 Statistic.Notes,
             };
         }

@@ -24,6 +24,9 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
                             || tot == Totals.SecurityCompany
                             || tot == Totals.Sector
                             || tot == Totals.SecuritySector
+                            || tot == Totals.Pension
+                            || tot == Totals.PensionCompany
+                            || tot == Totals.PensionSector
                             || tot == Totals.All,
                 DateTime.MinValue,
                 (date, otherDate) => otherDate > date ? otherDate : date,

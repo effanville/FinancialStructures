@@ -36,15 +36,11 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         {
             switch (valueList.AccountType)
             {
-                case Account.Security:
-                case Account.BankAccount:
-                case Account.Currency:
-                case Account.Asset:
+                default:
                 {
                     StringValue = valueList.Names.SectorsFlat;
                     return;
                 }
-                default:
                 case Account.All:
                 case Account.Benchmark:
                     return;

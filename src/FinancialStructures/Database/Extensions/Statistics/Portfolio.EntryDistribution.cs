@@ -18,7 +18,8 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
                 company,
                 new Dictionary<DateTime, int>(),
                 (a, b) => MergeDictionaries(a, b),
-                vl => vl.EntryDistribution());
+                vl => vl.EntryDistribution(),
+                new Dictionary<DateTime, int>());
         }
 
         private static Dictionary<DateTime, int> MergeDictionaries(Dictionary<DateTime, int> first, Dictionary<DateTime, int> second)

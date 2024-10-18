@@ -18,16 +18,16 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, IValueList valueList, DateTime date)
         {
-            Value = ((valueList.LatestValue()?.Day - valueList.FirstValue()?.Day)?.Days ?? 0) / ((double)365 * valueList.Count());
+            Value = ((double)365 * valueList.Count()) / ((valueList.LatestValue()?.Day - valueList.FirstValue()?.Day)?.Days ?? 0);
         }
 
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
-            Value = (portfolio.LatestDate(total, name) - portfolio.FirstValueDate(total, name)).Days / ((double)365 * portfolio.EntryDistribution(total, name).Count);
+            Value = ((double)365 * portfolio.EntryDistribution(total, name).Count) / (portfolio.LatestDate(total, name) - portfolio.FirstValueDate(total, name)).Days;
         }
 
         /// <inheritdoc/>
-        public override string ToString() => IsNumeric ? Value.TruncateToString(4) : StringValue;
+        public override string ToString() => Value.TruncateToString();
     }
 }
