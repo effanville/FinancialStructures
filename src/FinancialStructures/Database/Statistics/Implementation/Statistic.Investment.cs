@@ -29,8 +29,9 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
+            string identifier = total.GetIdentifier(name);
             decimal sum = 0.0m;
-            List<Labelled<TwoName, DailyValuation>> investments = portfolio.TotalInvestments(total, name);
+            List<Labelled<TwoName, DailyValuation>> investments = portfolio.TotalInvestments(total, identifier);
             if (investments != null && investments.Any())
             {
                 foreach (Labelled<TwoName, DailyValuation> investment in investments)

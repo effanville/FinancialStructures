@@ -9,11 +9,11 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// <summary>
         /// returns the total profit in the portfolio.
         /// </summary>
-        public static decimal RecentChange(this IPortfolio portfolio, Totals totals = Totals.Security, TwoName names = null)
+        public static decimal RecentChange(this IPortfolio portfolio, Totals totals = Totals.Security, string identifier = null)
         {
             return portfolio.CalculateAggregateValue(
                 totals,
-                names,
+                identifier,
                 (tot, n) => tot != Totals.Benchmark
                             || tot != Totals.Currency
                             || tot != Totals.CurrencySector

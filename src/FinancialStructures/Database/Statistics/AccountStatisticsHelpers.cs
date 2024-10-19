@@ -245,20 +245,27 @@ namespace Effanville.FinancialStructures.Database.Statistics
                 Statistic.Notes,
             };
         }
-
         /// <summary>
-        /// Generates statistic types for database info.
+        /// Returns those statistic types suitable for Assets.
         /// </summary>
-        public static Statistic[] DefaultDatabaseStatistics()
+        public static Statistic[] DefaultCurrencyStats()
         {
             return new Statistic[]
             {
                 Statistic.Company,
                 Statistic.Name,
+                Statistic.LatestValue,
+                Statistic.RecentChange,
+                Statistic.Investment,
+                Statistic.Profit,
+                Statistic.FundFraction,
+                Statistic.NumberOfAccounts,
                 Statistic.FirstDate,
                 Statistic.LatestDate,
+                Statistic.Sectors,
                 Statistic.NumberEntries,
-                Statistic.EntryYearDensity
+                Statistic.EntryYearDensity,
+                Statistic.Notes
             };
         }
     }

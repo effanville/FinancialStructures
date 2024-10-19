@@ -5,7 +5,6 @@ using System.Linq;
 using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.Database.Implementation;
 using Effanville.FinancialStructures.FinanceStructures;
-using Effanville.FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 
@@ -22,10 +21,10 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
             _ = generator.WithSecurity(secCompany, "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0m }, numberUnits: new[] { 12.0m });
             _ = generator.WithSecurity("otherCompany", "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0m }, numberUnits: new[] { 12.0m });
 
-            IReadOnlyList<IValueList> data = generator.Database.Accounts(Totals.SecurityCompany, new TwoName(secCompany));
+            IReadOnlyList<IValueList> data = generator.Database.Accounts(Totals.SecurityCompany, secCompany);
 
-            Assert.AreEqual(1, data.Count);
-            Assert.AreEqual("name1", data.Single().Names.Name);
+            Assert.That(data.Count, Is.EqualTo(1));
+            Assert.That(data.Single().Names.Name, Is.EqualTo("name1"));
         }
 
         [Test]
@@ -35,8 +34,8 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
             string secCompany = "company1";
             _ = generator.WithSecurity(secCompany, "name1", dates: new[] { new DateTime(2000, 1, 1) }, sharePrice: new[] { 101.0m }, numberUnits: new[] { 12.0m });
 
-            IReadOnlyList<IValueList> data = generator.Database.Accounts(Totals.SecurityCompany, new TwoName("other"));
-            Assert.AreEqual(0, data.Count);
+            IReadOnlyList<IValueList> data = generator.Database.Accounts(Totals.SecurityCompany, "other");
+            Assert.That(data.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -47,10 +46,10 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
             string bankCompany = "Bank";
             _ = generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0m });
 
-            IReadOnlyList<IValueList> data = generator.Database.Accounts(Totals.BankAccountCompany, new TwoName(bankCompany));
+            IReadOnlyList<IValueList> data = generator.Database.Accounts(Totals.BankAccountCompany, bankCompany);
 
-            Assert.AreEqual(1, data.Count);
-            Assert.AreEqual(bankCompany, data.Single().Names.Company);
+            Assert.That(data.Count, Is.EqualTo(1));
+            Assert.That(data.Single().Names.Company, Is.EqualTo(bankCompany));
         }
 
         [Test]
@@ -62,9 +61,9 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
             _ = generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0m });
             Portfolio database = generator.Database;
 
-            IReadOnlyList<IValueList> data = database.Accounts(Totals.BankAccountCompany, new TwoName("name"));
+            IReadOnlyList<IValueList> data = database.Accounts(Totals.BankAccountCompany, "name");
 
-            Assert.AreEqual(0, data.Count);
+            Assert.That(data.Count, Is.EqualTo(0));
         }
     }
 }

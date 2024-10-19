@@ -16,19 +16,19 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// <summary>
         /// Calculates the total IRR for the portfolio and the account type given over the time frame specified.
         /// </summary>
-        public static double TotalMDD(this IPortfolio portfolio, Totals total, TwoName name = null)
+        public static double TotalMDD(this IPortfolio portfolio, Totals total, string identifier = null)
         {
-            DateTime earlierTime = portfolio.FirstValueDate(total, name);
-            DateTime laterTime = portfolio.LatestDate(total, name);
-            return portfolio.TotalMDD(total, earlierTime, laterTime, name);
+            DateTime earlierTime = portfolio.FirstValueDate(total, identifier);
+            DateTime laterTime = portfolio.LatestDate(total, identifier);
+            return portfolio.TotalMDD(total, earlierTime, laterTime, identifier);
         }
 
         /// <summary>
         /// Calculates the total IRR for the portfolio and the account type given over the time frame specified.
         /// </summary>
-        public static double TotalMDD(this IPortfolio portfolio, Totals accountType, DateTime earlierTime, DateTime laterTime, TwoName name = null)
+        public static double TotalMDD(this IPortfolio portfolio, Totals accountType, DateTime earlierTime, DateTime laterTime, string identifier = null)
         {
-            return TotalMDDOf(portfolio.Accounts(accountType, name), earlierTime, laterTime);
+            return TotalMDDOf(portfolio.Accounts(accountType, identifier), earlierTime, laterTime);
         }
 
         private static double TotalMDDOf(IReadOnlyList<IValueList> securities, DateTime earlierTime, DateTime laterTime)

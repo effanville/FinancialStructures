@@ -24,7 +24,8 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
-            Value = portfolio.TotalDrawdown(total, name);
+            string identifier = total.GetIdentifier(name);
+            Value = portfolio.TotalDrawdown(total, identifier);
         }
     }
 }

@@ -19,26 +19,26 @@ namespace Effanville.FinancialStructures.Database.Extensions.Rates
         /// <summary>
         /// Calculates the total IRR for the portfolio and the account type given over the time frame specified.
         /// </summary>
-        public static double TotalIRR(this IPortfolio portfolio, Totals total, TwoName name = null)
+        public static double TotalIRR(this IPortfolio portfolio, Totals total, string identifier = null)
         {
-            DateTime earlierTime = portfolio.FirstValueDate(total, name);
-            DateTime laterTime = portfolio.LatestDate(total, name);
-            return portfolio.TotalIRR(total, earlierTime, laterTime, name);
+            DateTime earlierTime = portfolio.FirstValueDate(total, identifier);
+            DateTime laterTime = portfolio.LatestDate(total, identifier);
+            return portfolio.TotalIRR(total, earlierTime, laterTime, identifier);
         }
 
         /// <summary>
         /// Calculates the total IRR for the portfolio and the account type given over the time frame specified.
         /// </summary>
-        public static double TotalIRR(this IPortfolio portfolio, Totals accountType, DateTime earlierTime, DateTime laterTime, TwoName name = null, int numIterations = 10)
+        public static double TotalIRR(this IPortfolio portfolio, Totals accountType, DateTime earlierTime, DateTime laterTime, string identifier = null, int numIterations = 10)
         {
-            var accounts = portfolio.Accounts(accountType, name);
-            DateTime earliestTime = portfolio.FirstValueDate(accountType, name);
+            IReadOnlyList<IValueList> accounts = portfolio.Accounts(accountType, identifier);
+            DateTime earliestTime = portfolio.FirstValueDate(accountType, identifier);
             if (earlierTime < earliestTime)
             {
                 earlierTime = earliestTime;
             }
 
-            DateTime latestTime = portfolio.LatestDate(accountType, name);
+            DateTime latestTime = portfolio.LatestDate(accountType, identifier);
             if (laterTime > latestTime)
             {
                 laterTime = latestTime;

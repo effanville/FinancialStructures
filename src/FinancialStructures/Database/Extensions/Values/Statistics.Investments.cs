@@ -18,12 +18,12 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
         /// </summary>
         /// <param name="portfolio"></param>
         /// <param name="totals"></param>
-        /// <param name="name"></param>
-        public static List<Labelled<TwoName, DailyValuation>> TotalInvestments(this IPortfolio portfolio, Totals totals, TwoName name = null)
+        /// <param name="identifier"></param>
+        public static List<Labelled<TwoName, DailyValuation>> TotalInvestments(this IPortfolio portfolio, Totals totals, string identifier = null)
         {
-            var values = portfolio.CalculateAggregateValue(
+            List<Labelled<TwoName, DailyValuation>> values = portfolio.CalculateAggregateValue(
               totals,
-              name,
+              identifier,
               (tot, _) => tot == Totals.Security
                   || tot == Totals.SecurityCompany
                   || tot == Totals.Sector
@@ -44,7 +44,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
         /// <param name="portfolio">The database to query.</param>
         /// <param name="account">The type of account to look for.</param>
         /// <param name="name">The name of the account.</param>
-        public static List<Labelled<TwoName, DailyValuation>> Investments(this IPortfolio portfolio, Account account, TwoName name)
+        public static IList<Labelled<TwoName, DailyValuation>> Investments(this IPortfolio portfolio, Account account, TwoName name)
         {
             return portfolio.CalculateValue(
                 account,
@@ -52,7 +52,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Values
                 s => Calculate(portfolio, s));
         }            
         
-        static List<Labelled<TwoName, DailyValuation>> Calculate(IPortfolio portfolio, IValueList valueList)
+        private static List<Labelled<TwoName, DailyValuation>> Calculate(IPortfolio portfolio, IValueList valueList)
         {
             if (valueList is not ISecurity sec)
             {

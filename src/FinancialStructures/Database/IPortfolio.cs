@@ -93,7 +93,7 @@ namespace Effanville.FinancialStructures.Database
         /// <summary>
         /// Returns a copy of all accounts related to the total.
         /// </summary>
-        IReadOnlyList<IValueList> Accounts(Totals totals, TwoName name = null);
+        IReadOnlyList<IValueList> Accounts(Totals totals, string identifier = null);
 
         /// <summary>
         /// Number of type in the database.

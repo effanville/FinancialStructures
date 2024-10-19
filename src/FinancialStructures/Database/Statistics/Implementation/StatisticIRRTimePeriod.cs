@@ -32,7 +32,8 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
-            Value = 100 * portfolio.TotalIRR(total, date.AddMonths(_lookbackWindowInMonths), date, name);
+            string identifier = total.GetIdentifier(name);
+            Value = 100 * portfolio.TotalIRR(total, date.AddMonths(_lookbackWindowInMonths), date, identifier);
         }
     }
 }

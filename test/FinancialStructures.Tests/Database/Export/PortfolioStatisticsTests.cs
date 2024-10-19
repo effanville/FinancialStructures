@@ -102,6 +102,14 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 <tbody>
 </tbody>
 </table>
+<h2>Analysis By Currency</h2>
+<table>
+<thead><tr>
+<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>RecentChange</th><th>Investment</th><th>Profit</th><th>FundFraction</th><th>NumberOfAccounts</th><th>FirstDate</th><th>LatestDate</th><th>Sectors</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
+</tr></thead>
+<tbody>
+</tbody>
+</table>
 <h2>Portfolio Notes</h2>
 ";
 
@@ -194,6 +202,14 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 <tbody>
 </tbody>
 </table>
+<h2>Analysis By Currency</h2>
+<table>
+<thead><tr>
+<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>RecentChange</th><th>Investment</th><th>Profit</th><th>FundFraction</th><th>NumberOfAccounts</th><th>FirstDate</th><th>LatestDate</th><th>Sectors</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
+</tr></thead>
+<tbody>
+</tbody>
+</table>
 <h2>Portfolio Notes</h2>
 ";
 
@@ -212,7 +228,9 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
                 includeSectors: true,
                 sectorDisplayFields: AccountStatisticsHelpers.DefaultSectorStats().ToList(),
                 includeAssets: false,
-                assetDisplayFields: AccountStatisticsHelpers.DefaultAssetStats().ToList());
+                assetDisplayFields: AccountStatisticsHelpers.DefaultAssetStats().ToList(),
+                includeCurrency: true,
+                currencyDisplayFields: AccountStatisticsHelpers.DefaultCurrencyStats().ToList());
             settings.DateToCalculate = new DateTime(2021, 12, 19);
             PortfolioStatistics portfolioStatistics = new PortfolioStatistics(portfolio, settings, new MockFileSystem());
             PortfolioStatisticsExportSettings exportSettings = new PortfolioStatisticsExportSettings(
@@ -236,15 +254,19 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
                 includeBankAccounts: true,
                 Statistic.Company,
                 SortDirection.Descending,
-                AccountStatisticsHelpers.DefaultBankAccountStats().ToList(),
+                AccountStatisticsHelpers.DefaultBankAccountStats(),
                 includeSectors: true,
                 Statistic.Company,
                 SortDirection.Descending,
-                AccountStatisticsHelpers.DefaultSectorStats().ToList(),
+                AccountStatisticsHelpers.DefaultSectorStats(),
                 includeAssets: false,
                 Statistic.Company,
                 SortDirection.Descending,
-                AccountStatisticsHelpers.DefaultAssetStats().ToList());
+                AccountStatisticsHelpers.DefaultAssetStats(),
+                includeCurrencies: true,
+                Statistic.Company,
+                SortDirection.Descending,
+                AccountStatisticsHelpers.DefaultCurrencyStats());
             ReportBuilder statsString = portfolioStatistics.ExportString(includeHtmlHeaders: false, DocumentType.Html, exportSettings);
             string actual = statsString.ToString();
             Assert.That(actual, Is.EqualTo(FilteredOutput));
@@ -302,6 +324,14 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr>
 </tbody>
 </table>
+<h2>Analysis By Currency</h2>
+<table>
+<thead><tr>
+<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>RecentChange</th><th>Investment</th><th>Profit</th><th>FundFraction</th><th>NumberOfAccounts</th><th>FirstDate</th><th>LatestDate</th><th>Sectors</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
+</tr></thead>
+<tbody>
+</tbody>
+</table>
 <h2>Portfolio Notes</h2>
 ");
             yield return new TestCaseData(Statistic.Company, SortDirection.Descending, @"<table>
@@ -352,6 +382,14 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 <tr>
 <th scope=""row"">Totals</th><td>Pension</td><td></td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>£0.00</td><td>0</td><td>0</td><td>£0.00</td><td>£0.00</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>9999-12-31</td><td>0001-01-01</td><td>0001-01-01</td><td>0001-01-01</td><td></td><td>0</td><td>-0</td><td></td>
 </tr>
+</tbody>
+</table>
+<h2>Analysis By Currency</h2>
+<table>
+<thead><tr>
+<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>RecentChange</th><th>Investment</th><th>Profit</th><th>FundFraction</th><th>NumberOfAccounts</th><th>FirstDate</th><th>LatestDate</th><th>Sectors</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
+</tr></thead>
+<tbody>
 </tbody>
 </table>
 <h2>Portfolio Notes</h2>
@@ -406,6 +444,14 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr>
 </tbody>
 </table>
+<h2>Analysis By Currency</h2>
+<table>
+<thead><tr>
+<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>RecentChange</th><th>Investment</th><th>Profit</th><th>FundFraction</th><th>NumberOfAccounts</th><th>FirstDate</th><th>LatestDate</th><th>Sectors</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
+</tr></thead>
+<tbody>
+</tbody>
+</table>
 <h2>Portfolio Notes</h2>
 ");
             yield return new TestCaseData(Statistic.LatestValue, SortDirection.Descending, @"<table>
@@ -458,6 +504,14 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
 </tr>
 </tbody>
 </table>
+<h2>Analysis By Currency</h2>
+<table>
+<thead><tr>
+<th scope=""col"">Company</th><th>Name</th><th>LatestValue</th><th>RecentChange</th><th>Investment</th><th>Profit</th><th>FundFraction</th><th>NumberOfAccounts</th><th>FirstDate</th><th>LatestDate</th><th>Sectors</th><th>NumberEntries</th><th>EntryYearDensity</th><th>Notes</th>
+</tr></thead>
+<tbody>
+</tbody>
+</table>
 <h2>Portfolio Notes</h2>
 ");
         }
@@ -471,13 +525,15 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
                 displayValueFunds: true,
                 generateBenchmarks: true,
                 includeSecurities: true,
-                securityDisplayFields: AccountStatisticsHelpers.DefaultSecurityStats().ToList(),
+                securityDisplayFields: AccountStatisticsHelpers.DefaultSecurityStats(),
                 includeBankAccounts: false,
-                bankAccDisplayFields: AccountStatisticsHelpers.DefaultBankAccountStats().ToList(),
+                bankAccDisplayFields: AccountStatisticsHelpers.DefaultBankAccountStats(),
                 includeSectors: false,
-                sectorDisplayFields: AccountStatisticsHelpers.DefaultSectorStats().ToList(),
+                sectorDisplayFields: AccountStatisticsHelpers.DefaultSectorStats(),
                 includeAssets: false,
-                assetDisplayFields: AccountStatisticsHelpers.DefaultAssetStats().ToList());
+                assetDisplayFields: AccountStatisticsHelpers.DefaultAssetStats(),
+                includeCurrency: true,
+                currencyDisplayFields: AccountStatisticsHelpers.DefaultCurrencyStats());
             PortfolioStatistics portfolioStatistics = new PortfolioStatistics(portfolio, settings, new MockFileSystem());
             PortfolioStatisticsExportSettings exportSettings = new PortfolioStatisticsExportSettings(
                 spacing: false,
@@ -485,19 +541,23 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
                 includeSecurities: true,
                 securitySortField: securitySortField,
                 securitySortDirection: securitySortDirection,
-                securityDisplayFields: AccountStatisticsHelpers.DefaultSecurityStats().ToList(),
+                securityDisplayFields: AccountStatisticsHelpers.DefaultSecurityStats(),
                 includeBankAccounts: false,
                 Statistic.NumberOfAccounts,
                 SortDirection.Ascending,
-                bankAccDisplayFields: AccountStatisticsHelpers.DefaultBankAccountStats().ToList(),
+                bankAccDisplayFields: AccountStatisticsHelpers.DefaultBankAccountStats(),
                 includeSectors: false,
                 Statistic.NumberOfAccounts,
                 SortDirection.Ascending,
-                sectorDisplayFields: AccountStatisticsHelpers.DefaultSectorStats().ToList(),
+                sectorDisplayFields: AccountStatisticsHelpers.DefaultSectorStats(),
                 includeAssets: false,
                 Statistic.NumberOfAccounts,
                 SortDirection.Ascending,
-                assetDisplayFields: AccountStatisticsHelpers.DefaultAssetStats().ToList());
+                assetDisplayFields: AccountStatisticsHelpers.DefaultAssetStats(),
+                includeCurrencies: true,
+                Statistic.NumberOfAccounts,
+                SortDirection.Ascending,
+                currencyDisplayFields: AccountStatisticsHelpers.DefaultCurrencyStats());
             ReportBuilder statsString = portfolioStatistics.ExportString(false, DocumentType.Html, exportSettings);
 
             string actualOutput = statsString.ToString();

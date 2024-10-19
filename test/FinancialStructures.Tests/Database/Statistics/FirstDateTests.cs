@@ -2,7 +2,6 @@
 
 using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.Database.Extensions.Values;
-using Effanville.FinancialStructures.NamingStructures;
 using Effanville.FinancialStructures.Tests.TestDatabaseConstructor;
 
 using NUnit.Framework;
@@ -19,7 +18,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Statistics
         public void FirstValueDateTests(TestDatabaseName databaseName, Totals totals, string companyName, DateTime expectedDate)
         {
             IPortfolio portfolio = TestDatabase.Databases[databaseName];
-            Assert.AreEqual(expectedDate, portfolio.FirstValueDate(totals, new TwoName(companyName)));
+            Assert.That(portfolio.FirstValueDate(totals, companyName), Is.EqualTo(expectedDate));
         }
     }
 }

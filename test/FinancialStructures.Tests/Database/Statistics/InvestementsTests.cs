@@ -79,7 +79,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Statistics
         public void InvestmentTests(TestDatabaseName databaseName, Account account, TwoName name, List<Labelled<TwoName, DailyValuation>> expected)
         {
             IPortfolio portfolio = TestDatabase.Databases[databaseName];
-            List<Labelled<TwoName, DailyValuation>> investments = portfolio.Investments(account, name);
+            IList<Labelled<TwoName, DailyValuation>> investments = portfolio.Investments(account, name);
             CollectionAssert.AreEqual(expected, investments);
         }
     }

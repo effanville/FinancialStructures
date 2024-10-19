@@ -19,7 +19,7 @@ namespace Effanville.FinancialStructures.Database.Export.Investments
         /// <summary>
         /// Any name associated to the totals type.
         /// </summary>
-        public TwoName Name
+        public string Name
         {
             get;
             set;
@@ -28,10 +28,10 @@ namespace Effanville.FinancialStructures.Database.Export.Investments
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public PortfolioInvestmentSettings(Totals totalsType = Totals.Security, TwoName name = null)
+        public PortfolioInvestmentSettings(Totals totalsType = Totals.Security, string identifier = null)
         {
             TotalsType = totalsType;
-            Name = name;
+            Name = identifier;
         }
     }
 }

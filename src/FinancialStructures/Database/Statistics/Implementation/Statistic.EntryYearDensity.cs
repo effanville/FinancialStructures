@@ -24,7 +24,8 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
-            Value = ((double)365 * portfolio.EntryDistribution(total, name).Count) / (portfolio.LatestDate(total, name) - portfolio.FirstValueDate(total, name)).Days;
+            string identifier = total.GetIdentifier(name);
+            Value = ((double)365 * portfolio.EntryDistribution(total, identifier).Count) / (portfolio.LatestDate(total, identifier) - portfolio.FirstValueDate(total, identifier)).Days;
         }
 
         /// <inheritdoc/>

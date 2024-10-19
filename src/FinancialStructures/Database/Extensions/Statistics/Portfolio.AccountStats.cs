@@ -215,7 +215,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
             List<AccountStatistics> stats = new List<AccountStatistics>();
             foreach (string company in values)
             {
-                decimal latest = portfolio.TotalValue(totals, new TwoName(company));
+                decimal latest = portfolio.TotalValue(totals, company);
                 if ((displayValueFunds && latest > 0) || !displayValueFunds)
                 {
                     stats.Add(new AccountStatistics(portfolio, dateToCalculate, totals, new NameData(company, "Totals"), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats()));
@@ -254,7 +254,6 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
                 case Totals.Security:
                 case Totals.Pension:
                 case Totals.BankAccount:
-                case Totals.Currency:
                     return new TwoName("Totals", total.ToString());
                 case Totals.BankAccountCompany:
                 case Totals.BankAccountSector:
@@ -264,6 +263,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
                 case Totals.PensionSector:
                 case Totals.PensionCompany:
                 case Totals.Sector:
+                case Totals.Currency:
                 case Totals.Benchmark:
                 case Totals.CurrencySector:
                 case Totals.SecurityCurrency:
@@ -290,12 +290,12 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
                 case Totals.PensionCurrency:
                     return AccountStatisticsHelpers.DefaultSecurityStats();
                 case Totals.BankAccount:
-                case Totals.Currency:
                 case Totals.BankAccountCompany:
                 case Totals.BankAccountSector:
                 case Totals.BankAccountCurrency:
                     return AccountStatisticsHelpers.DefaultBankAccountStats();
                 case Totals.Sector:
+                case Totals.Currency:
                 case Totals.Benchmark:
                     return AccountStatisticsHelpers.DefaultSectorStats();
                 case Totals.Asset:

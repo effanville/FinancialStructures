@@ -24,7 +24,8 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
-            Dictionary<DateTime, int> distribution = portfolio.EntryDistribution(total, name);
+            string identifier = total.GetIdentifier(name);
+            Dictionary<DateTime, int> distribution = portfolio.EntryDistribution(total, identifier);
             Value = distribution.Count();
         }
     }

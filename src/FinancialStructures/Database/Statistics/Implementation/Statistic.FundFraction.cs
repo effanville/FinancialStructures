@@ -27,7 +27,6 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         {
         }
 
-
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, IValueList valueList, DateTime date)
         {
@@ -37,7 +36,8 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
-            Value = portfolio.TotalFraction(total, name, date);
+            string identifier = total.GetIdentifier(name);
+            Value = portfolio.TotalFraction(total, identifier, date);
         }
     }
 }

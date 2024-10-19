@@ -31,7 +31,7 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         public bool IsNumeric => false;
 
         /// <inheritdoc/>
-        public object ValueAsObject => IsNumeric ? Value : StringValue;
+        public object ValueAsObject => StringValue;
 
         /// <inheritdoc/>
         public void Calculate(IPortfolio portfolio, IValueList valueList, DateTime date)
@@ -42,7 +42,8 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
-            StringValue = portfolio.LastPurchaseDate(total, name).ToIsoDateString();
+            string identifier = total.GetIdentifier(name);
+            StringValue = portfolio.LastPurchaseDate(total, identifier).ToIsoDateString();
         }
 
         /// <inheritdoc/>

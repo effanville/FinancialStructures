@@ -9,6 +9,7 @@ using Effanville.Common.Structure.ReportWriting;
 using Effanville.FinancialStructures.Database.Extensions.Statistics;
 using Effanville.FinancialStructures.Database.Statistics;
 using Effanville.FinancialStructures.DataStructures;
+using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Export.Statistics
@@ -18,7 +19,7 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
     /// </summary>
     public class PortfolioStatistics
     {
-        private readonly string fDatabaseName;
+        private readonly string _databaseName;
 
         /// <summary>
         /// Totals of different types held in portfolio.
@@ -147,6 +148,15 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
         }
 
         /// <summary>
+        /// Value held in each pension.
+        /// </summary>
+        internal List<AccountStatistics> CurrencyStats
+        {
+            get;
+            private set;
+        }
+        
+        /// <summary>
         /// Any notes for the portfolio.
         /// </summary>
         private List<Note> PortfolioNotes
@@ -167,7 +177,7 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
         /// </summary>
         public PortfolioStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings, IFileSystem fileSystem)
         {
-            fDatabaseName = portfolio.Name;
+            _databaseName = portfolio.Name;
             GenerateStatistics(portfolio, settings);
         }
 
@@ -187,6 +197,7 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
             GenerateAssetStatistics(portfolio, settings);
             GenerateSectorStatistics(portfolio, settings);
             GeneratePensionStatistics(portfolio, settings);
+            GenerateCurrencyStatistics(portfolio, settings);
             PortfolioNotes = portfolio.Notes.ToList();
         }
 
@@ -253,6 +264,22 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
                 }
             }
         }
+        
+        private void GenerateCurrencyStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings)
+        {
+            if (!settings.CurrencyGenerateOptions.ShouldGenerate)
+            {
+                return;
+            }
+            
+            CurrencyStats = new List<AccountStatistics>();
+            Statistic[] currencyStats = settings.CurrencyGenerateOptions.GenerateFields.ToArray();
+            IReadOnlyList<ICurrency> sectorNames = portfolio.Currencies;
+            foreach (ICurrency sectorName in sectorNames)
+            {
+                CurrencyStats.AddRange(portfolio.GetStats(settings.DateToCalculate, Totals.Currency, new TwoName("Totals", sectorName.BaseCurrency), currencyStats));
+            }
+        }
 
         /// <summary>
         /// Exports the statistics to a file.
@@ -292,7 +319,7 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
             if (includeHtmlHeaders && exportType == DocumentType.Html)
             {
                 _ = reportBuilder.WriteHeader($"Statement for funds as of {DateTime.Now:yyyy-MM-dd}")
-                    .WriteTitle($"{fDatabaseName} - Statement at {DateTime.Now:yyyy-MM-ddTHH:mm:ss}", DocumentElement.h1);
+                    .WriteTitle($"{_databaseName} - Statement at {DateTime.Now:yyyy-MM-ddTHH:mm:ss}", DocumentElement.h1);
             }
 
             List<string> totalFieldNames = PortfolioTotals.Select(data => data.Statistics).First().Select(stat => stat.StatType.ToString()).ToList();
@@ -310,6 +337,8 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
             WriteSection(reportBuilder, "Asset Data", settings.Spacing, settings.AssetDisplayOptions, AssetStats, AssetCompanyStats, AssetTotalStats);
 
             WriteSection(reportBuilder, "Analysis By Sector", settings.Spacing, settings.SectorDisplayOptions, SectorStats, null, null);
+
+            WriteSection(reportBuilder, "Analysis By Currency", settings.Spacing, settings.CurrencyDisplayOptions, CurrencyStats, null, null);
 
             _ = reportBuilder.WriteTitle("Portfolio Notes", DocumentElement.h2)
                 .WriteTable(PortfolioNotes, headerFirstColumn: false);

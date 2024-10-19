@@ -12,11 +12,11 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// <summary>
         /// returns the total profit in the portfolio.
         /// </summary>
-        public static decimal TotalProfit(this IPortfolio portfolio, Totals totals, TwoName names = null)
+        public static decimal TotalProfit(this IPortfolio portfolio, Totals totals, string identifier = null)
         {
             return portfolio.CalculateAggregateValue(
                 totals,
-                names,
+                identifier,
                 0.0m,
                 (value, currentTotal) => value + currentTotal,
                 vl =>

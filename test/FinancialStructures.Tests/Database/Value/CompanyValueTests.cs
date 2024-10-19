@@ -22,7 +22,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Value
         {
             Account accountType = totalsType.ToAccount();
             IPortfolio portfolio = TestDatabase.Databases[databaseName];
-            Assert.AreEqual(expectedValue, portfolio.TotalValue(totalsType, DateTime.Today, TestDatabase.Name(accountType, NameOrder.Default)));
+            Assert.That(portfolio.TotalValue(totalsType, DateTime.Today, TestDatabase.Name(accountType, NameOrder.Default).Company), Is.EqualTo(expectedValue));
         }
 
         [TestCase(Totals.SecurityCompany, 5556.04999999999995)]
@@ -43,7 +43,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Value
                     numberUnits: new decimal[] { 100 },
                     investment: new decimal[] { 0 });
             Portfolio portfolio = constructor.Database;
-            Assert.AreEqual(expectedValue, portfolio.TotalValue(totalsType, DateTime.Today, defaultName));
+            Assert.That(portfolio.TotalValue(totalsType, DateTime.Today, defaultName.Company), Is.EqualTo(expectedValue));
         }
     }
 }

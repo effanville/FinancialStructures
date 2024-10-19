@@ -18,7 +18,7 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// <summary>
         /// Is the sector listed in this <see cref="IValueList"/>
         /// </summary>
-        /// <param name="sectorName">The sector to check.</param>
-        bool IsSectorLinked(TwoName sectorName);
+        /// <param name="identifier">The sector to check.</param>
+        bool IsSectorLinked(string identifier);
     }
 }

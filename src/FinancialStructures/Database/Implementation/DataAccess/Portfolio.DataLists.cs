@@ -79,25 +79,25 @@ namespace Effanville.FinancialStructures.Database.Implementation
         }
 
         /// <inheritdoc/>
-        public IReadOnlyList<IValueList> Accounts(Totals account, TwoName name)
+        public IReadOnlyList<IValueList> Accounts(Totals account, string identifier)
         {
             switch (account)
             {
                 case Totals.SecurityCompany:
                 {
-                    return Enumerable.Where<ISecurity>(Funds, fund => fund.Names.Company == name.Company).ToList();
+                    return Funds.Where(fund => fund.Names.Company == identifier).ToList();
                 }
                 case Totals.BankAccountCompany:
                 {
-                    return Enumerable.Where<IExchangeableValueList>(BankAccounts, fund => fund.Names.Company == name.Company).ToList();
+                    return BankAccounts.Where(fund => fund.Names.Company == identifier).ToList();
                 }
                 case Totals.AssetCompany:
                 {
-                    return Enumerable.Where<IAmortisableAsset>(Assets, asset => asset.Names.Company == name.Company).ToList();
+                    return Assets.Where(asset => asset.Names.Company == identifier).ToList();
                 }
                 case Totals.PensionCompany:
                 {
-                    return Enumerable.Where<ISecurity>(Pensions, pension => pension.Names.Company == name.Company).ToList();
+                    return Pensions.Where(pension => pension.Names.Company == identifier).ToList();
                 }
                 case Totals.Security:
                 {
@@ -121,66 +121,71 @@ namespace Effanville.FinancialStructures.Database.Implementation
                 }
                 case Totals.All:
                 {
-                    return Enumerable.Union(Funds, Enumerable
-                        .Union<IExchangeableValueList>(BankAccounts, Assets))
+                    return Funds.Union(BankAccounts
+                        .Union(Assets))
                         .Union(Pensions)
                         .ToList();
                 }
                 case Totals.SecuritySector:
                 {
-                    return Enumerable.Where<ISecurity>(Funds, fund => fund.IsSectorLinked(name)).ToList();
+                    return Funds.Where(fund => fund.IsSectorLinked(identifier)).ToList();
                 }
                 case Totals.BankAccountSector:
                 {
-                    return Enumerable.Where<IExchangeableValueList>(BankAccounts, fund => fund.IsSectorLinked(name)).ToList();
+                    return BankAccounts.Where(fund => fund.IsSectorLinked(identifier)).ToList();
                 }
                 case Totals.AssetSector:
                 {
-                    return Enumerable.Where<IAmortisableAsset>(Assets, fund => fund.IsSectorLinked(name)).ToList();
+                    return Assets.Where(fund => fund.IsSectorLinked(identifier)).ToList();
                 }
                 case Totals.PensionSector:
                 {
-                    return Enumerable.Where<ISecurity>(Pensions, fund => fund.IsSectorLinked(name)).ToList();
+                    return Pensions.Where(fund => fund.IsSectorLinked(identifier)).ToList();
                 }
                 case Totals.Sector:
                 {
-                    return Accounts(Totals.SecuritySector, name)
-                        .Union(Accounts(Totals.AssetSector, name))
-                        .Union(Accounts(Totals.BankAccountSector, name))
-                        .Union(Accounts(Totals.PensionSector, name))
+                    return Accounts(Totals.SecuritySector, identifier)
+                        .Union(Accounts(Totals.AssetSector, identifier))
+                        .Union(Accounts(Totals.BankAccountSector, identifier))
+                        .Union(Accounts(Totals.PensionSector, identifier))
                         .ToList();
                 }
                 case Totals.Company:
                 {
-                    return Accounts(Totals.SecurityCompany, name)
-                        .Union(Accounts(Totals.AssetCompany, name))
-                        .Union(Accounts(Totals.BankAccountCompany, name))
-                        .Union(Accounts(Totals.PensionCompany, name))
+                    return Accounts(Totals.SecurityCompany, identifier)
+                        .Union(Accounts(Totals.AssetCompany, identifier))
+                        .Union(Accounts(Totals.BankAccountCompany, identifier))
+                        .Union(Accounts(Totals.PensionCompany, identifier))
                         .ToList();
                 }
                 case Totals.Currency:
                 {
-                    return Accounts(Totals.SecurityCurrency, name)
-                        .Union(Accounts(Totals.AssetCurrency, name))
-                        .Union(Accounts(Totals.BankAccountCurrency, name))
-                        .Union(Accounts(Totals.PensionCurrency, name))
+                    return Accounts(Totals.SecurityCurrency, identifier)
+                        .Union(Accounts(Totals.AssetCurrency, identifier))
+                        .Union(Accounts(Totals.BankAccountCurrency, identifier))
+                        .Union(Accounts(Totals.PensionCurrency, identifier))
                         .ToList();
                 }
                 case Totals.SecurityCurrency:
                 {
-                    return Enumerable.Where<ISecurity>(Funds, fund => fund.Names.Currency == name.Company).ToList();
+                    bool isBase = string.Equals(identifier, BaseCurrency);
+                    return Funds.Where(fund => isBase ?( fund.Names.Currency == identifier || fund.Names.Currency == null ) : fund.Names.Currency == identifier).ToList();
                 }
                 case Totals.BankAccountCurrency:
                 {
-                    return Enumerable.Where<IExchangeableValueList>(BankAccounts, fund => fund.Names.Currency == name.Company).ToList();
+                    bool isBase = string.Equals(identifier, BaseCurrency);
+                    return BankAccounts.Where(fund => isBase ?( fund.Names.Currency == identifier || fund.Names.Currency == null ) : fund.Names.Currency == identifier).ToList();
                 }
                 case Totals.AssetCurrency:
                 {
-                    return Enumerable.Where<IAmortisableAsset>(Assets, fund => fund.Names.Currency == name.Company).ToList();
+                    bool isBase = string.Equals(identifier, BaseCurrency);
+                    return Assets.Where(fund
+                        => isBase ?( fund.Names.Currency == identifier || fund.Names.Currency == null ) : fund.Names.Currency == identifier ).ToList();
                 }
                 case Totals.PensionCurrency:
                 {
-                    return Enumerable.Where<ISecurity>(Pensions, fund => fund.Names.Currency == name.Company).ToList();
+                    bool isBase = string.Equals(identifier, BaseCurrency);
+                    return Pensions.Where(fund => isBase ?( fund.Names.Currency == identifier || fund.Names.Currency == null ) : fund.Names.Currency == identifier).ToList();
                 }
                 case Totals.CurrencySector:
                 default:

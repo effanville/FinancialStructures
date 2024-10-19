@@ -24,7 +24,8 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
-            Value = 100 * portfolio.TotalIRR(total, name);
+            string identifier = total.GetIdentifier(name);
+            Value = 100 * portfolio.TotalIRR(total, identifier);
         }
     }
 }
