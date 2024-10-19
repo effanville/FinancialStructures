@@ -99,19 +99,19 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
                 colours: false,
                 includeSecurities: true,
                 Statistic.Company,
-                SortDirection.Descending,
+                SortDirection.Ascending,
                 AccountStatisticsHelpers.DefaultSecurityStats().ToList(),
                 includeBankAccounts: true,
                 Statistic.Company,
-                SortDirection.Descending,
+                SortDirection.Ascending,
                 AccountStatisticsHelpers.DefaultBankAccountStats().ToList(),
                 includeSectors: true,
                 Statistic.Company,
-                SortDirection.Descending,
+                SortDirection.Ascending,
                 AccountStatisticsHelpers.DefaultSectorStats().ToList(),
                 includeAssets: true,
                 Statistic.Company,
-                SortDirection.Descending,
+                SortDirection.Ascending,
                 AccountStatisticsHelpers.DefaultAssetStats().ToList());
     }
 }

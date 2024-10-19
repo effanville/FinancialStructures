@@ -292,7 +292,7 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
             if (includeHtmlHeaders && exportType == DocumentType.Html)
             {
                 _ = reportBuilder.WriteHeader($"Statement for funds as of {DateTime.Today:yyyy-MM-dd}")
-                    .WriteTitle($"{fDatabaseName} - Statement on {DateTime.Today:yyyy-MM-dd}", DocumentElement.h1);
+                    .WriteTitle($"{fDatabaseName} - Statement at {DateTime.Today:yyyy-MM-ddTHH:mm:ss}", DocumentElement.h1);
             }
 
             List<string> totalFieldNames = PortfolioTotals.Select(data => data.Statistics).First().Select(stat => stat.StatType.ToString()).ToList();
