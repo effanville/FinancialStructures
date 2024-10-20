@@ -47,7 +47,7 @@ namespace Effanville.FinancialStructures.Database.Statistics
         /// <summary>
         /// Default constructor for statistics for a <see cref="Account"/> object.
         /// </summary>
-        public AccountStatistics(IPortfolio portfolio, DateTime dateToCalculate, IValueList valueList, Statistic[] statsToGenerate)
+        public AccountStatistics(IPortfolio portfolio, DateTime dateToCalculate, IValueList valueList, IReadOnlyList<Statistic> statsToGenerate)
         {
             NameData = valueList.Names;
             List<IStatistic> statistics = new List<IStatistic>();
@@ -63,7 +63,7 @@ namespace Effanville.FinancialStructures.Database.Statistics
         /// <summary>
         /// Default constructor for statistics for a <see cref="Totals"/>
         /// </summary>
-        public AccountStatistics(IPortfolio portfolio, DateTime dateToCalculate, Totals total, TwoName name, Statistic[] statsToGenerate)
+        public AccountStatistics(IPortfolio portfolio, DateTime dateToCalculate, Totals total, TwoName name, IReadOnlyList<Statistic> statsToGenerate)
         {
             NameData = name;
             List<IStatistic> statistics = new List<IStatistic>();

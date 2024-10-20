@@ -24,7 +24,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// <param name="displayValueFunds">Whether funds with 0 latest value should be displayed only, or all funds displayed.</param>
         /// <param name="displayTotals">Whether totals values should be calculated</param>
         /// <param name="statisticsToDisplay">The array of statistics to be displayed</param>
-        public static List<AccountStatistics> GetStats(this IPortfolio portfolio, DateTime dateToCalculate, Account account, bool displayValueFunds, bool displayTotals = true, Statistic[] statisticsToDisplay = null)
+        public static List<AccountStatistics> GetStats(this IPortfolio portfolio, DateTime dateToCalculate, Account account, bool displayValueFunds, bool displayTotals = true, IReadOnlyList<Statistic> statisticsToDisplay = null)
         {
             switch (account)
             {
@@ -67,7 +67,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
             }
         }
 
-        private static List<AccountStatistics> GenerateFromList(IReadOnlyList<IValueList> values, IPortfolio portfolio, DateTime dateToCalculate, Account account, bool displayValueFunds, bool displayTotals, Statistic[] statisticsToDisplay)
+        private static List<AccountStatistics> GenerateFromList(IReadOnlyList<IValueList> values, IPortfolio portfolio, DateTime dateToCalculate, Account account, bool displayValueFunds, bool displayTotals, IReadOnlyList<Statistic> statisticsToDisplay)
         {
             List<AccountStatistics> stats = new List<AccountStatistics>();
             foreach (IValueList security in values)
@@ -210,7 +210,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
             }
         }
 
-        private static List<AccountStatistics> GenerateFromList(IReadOnlyList<string> values, IPortfolio portfolio, DateTime dateToCalculate, Totals totals, bool displayValueFunds, Statistic[] statisticsToDisplay)
+        private static List<AccountStatistics> GenerateFromList(IReadOnlyList<string> values, IPortfolio portfolio, DateTime dateToCalculate, Totals totals, bool displayValueFunds, IReadOnlyList<Statistic> statisticsToDisplay)
         {
             List<AccountStatistics> stats = new List<AccountStatistics>();
             foreach (string company in values)
@@ -233,7 +233,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// <param name="total">The type of account data to display.</param>
         /// <param name="name">The name of the account to query for.</param>
         /// <param name="statisticsToDisplay">The array of statistics to be displayed.</param>
-        public static List<AccountStatistics> GetStats(this IPortfolio portfolio, DateTime dateToCalculate, Totals total, TwoName name, Statistic[] statisticsToDisplay = null)
+        public static List<AccountStatistics> GetStats(this IPortfolio portfolio, DateTime dateToCalculate, Totals total, TwoName name, IReadOnlyList<Statistic> statisticsToDisplay = null)
         {
             if (portfolio != null)
             {
@@ -272,7 +272,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
             }
         }
 
-        private static Statistic[] DefaultStatistics(Totals total)
+        private static IReadOnlyList<Statistic> DefaultStatistics(Totals total)
         {
             switch (total)
             {

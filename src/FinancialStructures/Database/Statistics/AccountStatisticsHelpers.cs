@@ -11,6 +11,14 @@ namespace Effanville.FinancialStructures.Database.Statistics
     /// </summary>
     public static class AccountStatisticsHelpers
     {
+        private static Statistic[] _defaultSecurityCompanyStats;
+        private static Statistic[] _defaultBankAccountStats;
+        private static Statistic[] _defaultSecurityStats;
+        private static Statistic[] _defaultSectorStats;
+        private static Statistic[] _defaultAssetStats;
+        private static Statistic[] _defaultCurrencyStats;
+        private static Statistic[] _allStatistics;
+
         /// <summary>
         /// Provides a sorter for the statistics.
         /// </summary>
@@ -82,16 +90,16 @@ namespace Effanville.FinancialStructures.Database.Statistics
                 return stats;
             }
 
-            var currentStats = stats[0].StatisticNames;
-            var firstNotSecond = currentStats.Except(restrictedStatistics).ToList();
-            var secondNotFirst = restrictedStatistics.Except(currentStats).ToList();
+            IReadOnlyList<Statistic> currentStats = stats[0].StatisticNames;
+            List<Statistic> firstNotSecond = currentStats.Except(restrictedStatistics).ToList();
+            List<Statistic> secondNotFirst = restrictedStatistics.Except(currentStats).ToList();
             if (!firstNotSecond.Any() || !secondNotFirst.Any())
             {
                 return stats;
             }
 
-            var newList = new List<AccountStatistics>();
-            foreach (var stat in stats)
+            List<AccountStatistics> newList = new List<AccountStatistics>();
+            foreach (AccountStatistics stat in stats)
             {
                 newList.Add(stat.Restricted(restrictedStatistics));
             }
@@ -102,17 +110,14 @@ namespace Effanville.FinancialStructures.Database.Statistics
         /// <summary>
         /// Returns all statistic types currently possible.
         /// </summary>
-        public static Statistic[] AllStatistics()
-        {
-            return Enum.GetValues(typeof(Statistic)).Cast<Statistic>().ToArray();
-        }
+        public static IReadOnlyList<Statistic> AllStatistics() 
+            => _allStatistics ??= Enum.GetValues(typeof(Statistic)).Cast<Statistic>().ToArray();
 
         /// <summary>
         /// Returns those statistic types suitable for securities.
         /// </summary>
-        public static Statistic[] DefaultSecurityStats()
-        {
-            return new Statistic[]
+        public static IReadOnlyList<Statistic> DefaultSecurityStats()
+            => _defaultSecurityStats ??= new[]
             {
                 Statistic.Company,
                 Statistic.Name,
@@ -142,20 +147,18 @@ namespace Effanville.FinancialStructures.Database.Statistics
                 Statistic.EntryYearDensity,
                 Statistic.Notes
             };
-        }
 
         /// <summary>
         /// Returns those statistic types suitable for securities.
         /// </summary>
-        public static Statistic[] DefaultSecurityCompanyStats()
-        {
-            return new Statistic[]
+        public static IReadOnlyList<Statistic> DefaultSecurityCompanyStats() 
+            => _defaultSecurityCompanyStats ??= new[]
             {
                 Statistic.Company,
                 Statistic.LatestValue,
                 Statistic.RecentChange,
                 Statistic.FundFraction,
-                Statistic.Investment,
+                Statistic.Investment, 
                 Statistic.Profit,
                 Statistic.IRR3M,
                 Statistic.IRR6M,
@@ -166,14 +169,12 @@ namespace Effanville.FinancialStructures.Database.Statistics
                 Statistic.LatestDate,
                 Statistic.Sectors,
             };
-        }
 
         /// <summary>
         /// Returns those statistic types suitable for Bank Accounts.
         /// </summary>
-        public static Statistic[] DefaultBankAccountStats()
-        {
-            return new Statistic[]
+        public static IReadOnlyList<Statistic> DefaultBankAccountStats() 
+            => _defaultBankAccountStats ??= new[]
             {
                 Statistic.Company,
                 Statistic.Name,
@@ -189,14 +190,12 @@ namespace Effanville.FinancialStructures.Database.Statistics
                 Statistic.EntryYearDensity,
                 Statistic.Notes
             };
-        }
 
         /// <summary>
         /// Returns those statistic types suitable for Sectors.
         /// </summary>
-        public static Statistic[] DefaultSectorStats()
-        {
-            return new Statistic[]
+        public static IReadOnlyList<Statistic> DefaultSectorStats() 
+            => _defaultSectorStats ??= new[]
             {
                 Statistic.Company,
                 Statistic.Name,
@@ -215,15 +214,13 @@ namespace Effanville.FinancialStructures.Database.Statistics
                 Statistic.EntryYearDensity,
                 Statistic.Notes
             };
-        }
 
 
         /// <summary>
         /// Returns those statistic types suitable for Assets.
         /// </summary>
-        public static Statistic[] DefaultAssetStats()
-        {
-            return new Statistic[]
+        public static Statistic[] DefaultAssetStats() 
+            => _defaultAssetStats ??= new[]
             {
                 Statistic.Company,
                 Statistic.Name,
@@ -244,13 +241,12 @@ namespace Effanville.FinancialStructures.Database.Statistics
                 Statistic.EntryYearDensity,
                 Statistic.Notes,
             };
-        }
+
         /// <summary>
         /// Returns those statistic types suitable for Assets.
         /// </summary>
-        public static Statistic[] DefaultCurrencyStats()
-        {
-            return new Statistic[]
+        public static Statistic[] DefaultCurrencyStats() 
+            => _defaultCurrencyStats ??= new[]
             {
                 Statistic.Company,
                 Statistic.Name,
@@ -267,6 +263,5 @@ namespace Effanville.FinancialStructures.Database.Statistics
                 Statistic.EntryYearDensity,
                 Statistic.Notes
             };
-        }
     }
 }
