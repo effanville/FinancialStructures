@@ -111,7 +111,39 @@ namespace Effanville.FinancialStructures.Database.Statistics
         /// Returns all statistic types currently possible.
         /// </summary>
         public static IReadOnlyList<Statistic> AllStatistics() 
-            => _allStatistics ??= Enum.GetValues(typeof(Statistic)).Cast<Statistic>().ToArray();
+            => _allStatistics ??= new []
+            {
+                Statistic.AccountType,
+                Statistic.Company,
+                Statistic.Name,
+                Statistic.Currency,
+                Statistic.LatestValue,
+                Statistic.UnitPrice,
+                Statistic.NumberUnits,
+                Statistic.MeanSharePrice,
+                Statistic.RecentChange,
+                Statistic.FundFraction,
+                Statistic.FundCompanyFraction,
+                Statistic.Investment,
+                Statistic.Profit,
+                Statistic.Debt,
+                Statistic.IRR3M,
+                Statistic.IRR6M,
+                Statistic.IRR1Y,
+                Statistic.IRR5Y,
+                Statistic.IRRTotal,
+                Statistic.DrawDown,
+                Statistic.MDD,
+                Statistic.Sectors,
+                Statistic.NumberOfAccounts,
+                Statistic.FirstDate,
+                Statistic.LastInvestmentDate,
+                Statistic.LastPurchaseDate,
+                Statistic.LatestDate,
+                Statistic.NumberEntries,
+                Statistic.EntryYearDensity,
+                Statistic.Notes,
+            };
 
         /// <summary>
         /// Returns those statistic types suitable for securities.
