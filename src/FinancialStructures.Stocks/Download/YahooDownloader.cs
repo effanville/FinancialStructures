@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Globalization;
 using System.Threading.Tasks;
-
 using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.Download.Implementation;
 using Effanville.FinancialStructures.Stocks.Download.Yahoo;
@@ -36,15 +35,19 @@ namespace Effanville.FinancialStructures.Stocks.Download
             decimal? close = GetValue(stockWebsite, financialCode);
             decimal? open = FindAndGetSingleValue(stockWebsite, "data-test=\"OPEN-value\"", true);
             Tuple<decimal, decimal> range = FindAndGetDoubleValues(stockWebsite, "data-test=\"DAYS_RANGE-value\"");
-            decimal? volume = FindAndGetSingleValue(stockWebsite, $"data-test=\"TD_VOLUME-value\"><fin-streamer data-symbol=\"{financialCode}\" data-field=\"regularMarketVolume\" data-trend=\"none\" data-pricehint=\"2\" data-dfield=\"longFmt\"", true);
+            decimal? volume = FindAndGetSingleValue(stockWebsite,
+                $"data-test=\"TD_VOLUME-value\"><fin-streamer data-symbol=\"{financialCode}\" data-field=\"regularMarketVolume\" data-trend=\"none\" data-pricehint=\"2\" data-dfield=\"longFmt\"",
+                true);
 
-            DateTime date = DateTime.Now.TimeOfDay > new DateTime(2010, 1, 1, 16, 30, 0).TimeOfDay ? DateTime.Today : DateTime.Today.AddDays(-1);
+            DateTime date = DateTime.Now.TimeOfDay > new DateTime(2010, 1, 1, 16, 30, 0).TimeOfDay
+                ? DateTime.Today
+                : DateTime.Today.AddDays(-1);
             retrieveValueAction(new StockDay(
-                date, 
-                open ?? 0, 
-                range.Item2, 
+                date,
+                open ?? 0,
+                range.Item2,
                 range.Item1,
-                close ?? 0, 
+                close ?? 0,
                 volume ?? 0.0m));
             return true;
         }
@@ -62,7 +65,8 @@ namespace Effanville.FinancialStructures.Stocks.Download
             while (string.IsNullOrWhiteSpace(stockWebsite) && firstDate < lastDate)
             {
                 UriBuilder build = new UriBuilder($"https://query1.finance.yahoo.com/v8/finance/chart/{financialCode}");
-                build.Query = $"events=capitalGain%7Cdiv%7Csplit&formatted=true&includeAdjustedClose=true&interval=1d&period1={DateToYahooInt(firstDate)}&period2={DateToYahooInt(lastDate)}&symbol={financialCode}&userYfid=true&lang=en-US&region=US";
+                build.Query =
+                    $"events=capitalGain%7Cdiv%7Csplit&formatted=true&includeAdjustedClose=true&interval=1d&period1={DateToYahooInt(firstDate)}&period2={DateToYahooInt(lastDate)}&symbol={financialCode}&userYfid=true&lang=en-US&region=US";
                 stockWebsite = await DownloadHelper.GetWebData(build.ToString(), addCookie: false, reportLogger);
                 firstDate = firstDate.AddMonths(1);
                 await Task.Delay(100);
@@ -70,17 +74,22 @@ namespace Effanville.FinancialStructures.Stocks.Download
 
             if (string.IsNullOrWhiteSpace(stockWebsite))
             {
+                reportLogger?.Error(
+                    $"{nameof(YahooDownloader)}.{nameof(TryGetFullPriceHistory)}",
+                    $"Could not retrieve website data for '{financialCode}'");
                 return false;
             }
+
             Stock stock = new Stock();
 
             // stockWebsite here is a csv file or json file
             string newLineSeparator = stockWebsite.Contains("\r\n") ? "\r\n" : "\n";
             string[] lines = stockWebsite.Split(newLineSeparator);
-
+            
             if (lines.Length == 1 && lines[0].StartsWith("{"))
             {
-                YahooStockHistoryData obj = System.Text.Json.JsonSerializer.Deserialize<YahooStockHistoryData>(lines[0]);
+                YahooStockHistoryData obj =
+                    System.Text.Json.JsonSerializer.Deserialize<YahooStockHistoryData>(lines[0]);
                 if (obj != null)
                 {
                     if (obj.chart.result == null && obj.chart.error != null)
@@ -89,41 +98,50 @@ namespace Effanville.FinancialStructures.Stocks.Download
                     }
 
                     int[] timestamps = obj.chart.result[0].timestamp;
-
-                    Quote values = obj.chart.result[0].indicators.quote[0];
-                    for (int index = 0; index < timestamps.Length; index++)
+                    if (timestamps != null)
                     {
-                        DateTime timestamp = YahooIntToDate(timestamps[index]);
-                        try
+                        Quote values = obj.chart.result[0].indicators.quote[0];
+                        for (int index = 0; index < timestamps.Length; index++)
                         {
-
-                            stock.AddValue(
-                                timestamp, 
-                                Convert.ToDecimal(values.open[index]), 
-                                Convert.ToDecimal(values.high[index]),
-                                Convert.ToDecimal(values.low[index]),
-                                Convert.ToDecimal(values.close[index]),
-                                Convert.ToDecimal(values.volume[index]));
-                        }
-                        catch (Exception e)
-                        {
-                            var msg = e.Message;
+                            DateTime timestamp = YahooIntToDate(timestamps[index]);
+                            try
+                            {
+                                stock.AddValue(
+                                    timestamp,
+                                    Convert.ToDecimal(values.open[index]),
+                                    Convert.ToDecimal(values.high[index]),
+                                    Convert.ToDecimal(values.low[index]),
+                                    Convert.ToDecimal(values.close[index]),
+                                    Convert.ToDecimal(values.volume[index]));
+                            }
+                            catch (Exception e)
+                            {
+                                string msg = e.Message;
+                                reportLogger?.Error(
+                                    $"{nameof(YahooDownloader)}.{nameof(TryGetFullPriceHistory)}",
+                                    $"Exception when converting stock data '{financialCode}', Error={msg}");
+                            }
                         }
                     }
 
                     reportLogger?.Log(
                         ReportType.Information,
-                        "Downloading", 
-                        $"Could not convert stock '{stock.Name}'");
+                        $"{nameof(YahooDownloader)}.{nameof(TryGetFullPriceHistory)}",
+                        $"Converted stock data for '{financialCode}', added {stock.Valuations.Count} entries");
                 }
             }
 
             if (lines.Length <= 1)
             {
+                reportLogger?.Log(
+                    ReportType.Information,
+                    $"{nameof(YahooDownloader)}.{nameof(TryGetFullPriceHistory)}",
+                    $"Single line of data found for '{financialCode}'");
+                stock.Sort();
                 getHistory(stock);
                 return false;
             }
-
+            
             for (int lineIndex = 1; lineIndex < lines.Length; lineIndex++)
             {
                 string[] entries = lines[lineIndex].Split(DefaultCommaSeparator);
@@ -131,7 +149,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
                 try
                 {
                     DateTime date = DateTime.Parse(dateString, CultureInfo.InvariantCulture);
-                    var utcDate = DateTime.SpecifyKind(date, DateTimeKind.Utc);
+                    DateTime utcDate = DateTime.SpecifyKind(date, DateTimeKind.Utc);
                     decimal open = decimal.Parse(entries[1]);
                     decimal high = decimal.Parse(entries[2]);
                     decimal low = decimal.Parse(entries[3]);
@@ -142,15 +160,15 @@ namespace Effanville.FinancialStructures.Stocks.Download
                 catch (Exception ex)
                 {
                     reportLogger?.Error(
-                        "Downloading", 
+                        $"{nameof(YahooDownloader)}.{nameof(TryGetFullPriceHistory)}",
                         $"Could not convert stock {stock.Name} data- {lines[lineIndex]}. Error {ex.Message}");
                 }
             }
 
             reportLogger?.Log(
-                ReportSeverity.Critical, 
-                ReportType.Information, 
-                "Downloading", 
+                ReportSeverity.Critical,
+                ReportType.Information,
+                $"{nameof(YahooDownloader)}.{nameof(TryGetFullPriceHistory)}",
                 $"Added {lines.Length - 1} to stock {stock.Name}");
 
             stock.Sort();
@@ -158,13 +176,13 @@ namespace Effanville.FinancialStructures.Stocks.Download
             return true;
         }
 
-        private static string BuildQueryUrl(string url, string identifier) 
+        private static string BuildQueryUrl(string url, string identifier)
             => $"{url}/quote/{identifier}";
 
-        private static int DateToYahooInt(DateTime date) 
+        private static int DateToYahooInt(DateTime date)
             => int.Parse((date - new DateTime(1970, 1, 1)).TotalSeconds.ToString(CultureInfo.InvariantCulture));
-        
-        private static DateTime YahooIntToDate(int yahooInt) 
+
+        private static DateTime YahooIntToDate(int yahooInt)
             => new DateTime(1970, 1, 1).AddSeconds(yahooInt);
 
         /// <summary>
@@ -181,8 +199,9 @@ namespace Effanville.FinancialStructures.Stocks.Download
             {
                 endIndex = url.Length;
             }
+
             string code = url.Substring(
-                startIndex + urlSearchString.Length, 
+                startIndex + urlSearchString.Length,
                 endIndex - startIndex - urlSearchString.Length);
             code = code.Replace("%5E", "^").Replace("%3D", "=").ToUpper();
 
@@ -190,18 +209,18 @@ namespace Effanville.FinancialStructures.Stocks.Download
         }
 
         private static decimal? FindAndGetSingleValue(
-            string searchString, 
-            string findString, 
+            string searchString,
+            string findString,
             bool includeComma,
             int containedWithin = 50)
         {
             int index = searchString.IndexOf(findString, StringComparison.InvariantCulture);
             int lengthToSearch = Math.Min(containedWithin, searchString.Length - index - findString.Length);
             return DownloadHelper.ParseDataIntoNumber(
-                searchString, 
+                searchString,
                 index,
-                findString.Length, 
-                lengthToSearch, 
+                findString.Length,
+                lengthToSearch,
                 includeComma);
         }
 
@@ -213,10 +232,10 @@ namespace Effanville.FinancialStructures.Stocks.Download
             int index = searchString.IndexOf(findString, StringComparison.InvariantCulture);
             int lengthToSearch = Math.Min(containedWithin, searchString.Length - index - findString.Length);
             decimal? firstValue = DownloadHelper.ParseDataIntoNumber(
-                searchString, 
-                index, 
-                findString.Length, 
-                lengthToSearch, 
+                searchString,
+                index,
+                findString.Length,
+                lengthToSearch,
                 true);
 
             if (!firstValue.HasValue)
@@ -229,8 +248,8 @@ namespace Effanville.FinancialStructures.Stocks.Download
             decimal? value2 = DownloadHelper.ParseDataIntoNumber(
                 value,
                 separator,
-                0, 
-                lengthToSearch, 
+                0,
+                lengthToSearch,
                 true);
             if (!value2.HasValue)
             {
@@ -247,11 +266,11 @@ namespace Effanville.FinancialStructures.Stocks.Download
             string searchString;
             do
             {
-                searchString = $"data-symbol=\"{financialCode}\" data-test=\"qsp-price\" data-field=\"regularMarketPrice\" data-trend=\"none\" data-pricehint=\"{number}\"";
+                searchString =
+                    $"data-symbol=\"{financialCode}\" data-test=\"qsp-price\" data-field=\"regularMarketPrice\" data-trend=\"none\" data-pricehint=\"{number}\"";
                 poundsIndex = webData.IndexOf(searchString, StringComparison.InvariantCulture);
                 number++;
-            }
-            while (poundsIndex == -1 && number < 100);
+            } while (poundsIndex == -1 && number < 100);
 
             decimal? value = DownloadHelper.ParseDataIntoNumber(webData, poundsIndex, searchString.Length, 20, true);
             if (value.HasValue)
