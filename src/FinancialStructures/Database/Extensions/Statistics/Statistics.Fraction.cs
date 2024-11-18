@@ -12,7 +12,8 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// </summary>
         public static double Fraction(this IPortfolio portfolio, Totals totals, Account account, TwoName names, DateTime date)
         {
-            decimal totalValue = portfolio.TotalValue(totals, date, names);
+            string identifier = account == Account.Benchmark ? names.Name : names.Company;
+            decimal totalValue = portfolio.TotalValue(totals, date, identifier);
             if (totalValue == 0)
             {
                 return double.NaN;
@@ -29,7 +30,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// <summary>
         /// Returns the fraction of investments in the Totals out of the value in the portfolio.
         /// </summary>
-        public static double TotalFraction(this IPortfolio portfolio, Totals totals, TwoName names, DateTime date)
+        public static double TotalFraction(this IPortfolio portfolio, Totals totals, string identifier, DateTime date)
         {
             decimal totalValue = portfolio.TotalValue(Totals.All, date);
             if (totalValue == 0)
@@ -37,7 +38,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
                 return double.NaN;
             }
 
-            return (double)(portfolio.TotalValue(totals, date, names) / totalValue);
+            return (double)(portfolio.TotalValue(totals, date, identifier) / totalValue);
         }
     }
 }

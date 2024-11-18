@@ -5,8 +5,8 @@ using System.Linq;
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.MathLibrary.Finance;
 using Effanville.FinancialStructures.Database.Extensions.Values;
-using Effanville.FinancialStructures.Database.Statistics.Implementation;
 using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Statistics
@@ -16,19 +16,19 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// <summary>
         /// Calculates the total IRR for the portfolio and the account type given over the time frame specified.
         /// </summary>
-        public static double TotalDrawdown(this IPortfolio portfolio, Totals total, TwoName name = null)
+        public static double TotalDrawdown(this IPortfolio portfolio, Totals total, string identifier = null)
         {
-            DateTime earlierTime = portfolio.FirstValueDate(total, name);
-            DateTime laterTime = portfolio.LatestDate(total, name);
-            return portfolio.TotalDrawdown(total, earlierTime, laterTime, name);
+            DateTime earlierTime = portfolio.FirstValueDate(total, identifier);
+            DateTime laterTime = portfolio.LatestDate(total, identifier);
+            return portfolio.TotalDrawdown(total, earlierTime, laterTime, identifier);
         }
 
         /// <summary>
         /// Calculates the total IRR for the portfolio and the account type given over the time frame specified.
         /// </summary>
-        public static double TotalDrawdown(this IPortfolio portfolio, Totals total, DateTime earlierTime, DateTime laterTime, TwoName name = null)
+        public static double TotalDrawdown(this IPortfolio portfolio, Totals total, DateTime earlierTime, DateTime laterTime, string identifier = null)
         {
-            return TotalDrawdownOf(portfolio.Accounts(total, name), earlierTime, laterTime);
+            return TotalDrawdownOf(portfolio.Accounts(total, identifier), earlierTime, laterTime);
         }
 
         private static List<DailyValuation> CalculateValuesOf(IReadOnlyList<IValueList> accounts, DateTime earlierTime, DateTime laterTime)
@@ -97,7 +97,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
             return portfolio.CalculateValue(
                accountType,
                names,
-               DrawDownCalculators.DefaultCalculator(earlierTime, laterTime),
+               valueList => valueList.DrawDown(earlierTime, laterTime),
                defaultValue: double.NaN);
         }
     }

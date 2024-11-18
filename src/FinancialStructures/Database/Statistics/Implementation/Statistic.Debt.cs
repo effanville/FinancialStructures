@@ -2,8 +2,8 @@
 
 using Effanville.FinancialStructures.Database.Extensions;
 using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
@@ -18,23 +18,27 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         public override void Calculate(IPortfolio portfolio, IValueList valueList, DateTime date)
         {
             fCurrency = portfolio.BaseCurrency;
+            ICurrency currency = portfolio.Currency(valueList);
             Value = (double)valueList.CalculateValue(
-                DebtCalculators.DefaultCalculator(date),
-                DebtCalculators.Calculators(portfolio, date));
+                vl => vl.Debt(currency, date));
         }
 
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
+            string identifier = total.GetIdentifier(name);
             fCurrency = portfolio.BaseCurrency;
             Value = (double)portfolio.CalculateAggregateValue(
                 total,
-                name,
-                (acc, n) => acc.ToAccount() == Account.Asset,
+                identifier,
+                (acc, _) => acc.ToAccount() == Account.Asset,
                 0.0m,
                 (a,b) => a + b,
-                DebtCalculators.DefaultCalculator(date),
-                DebtCalculators.Calculators(portfolio, date));
+                vl =>
+                {
+                    ICurrency currency = portfolio.Currency(vl);
+                    return vl.Debt(currency, date);
+                });
         }
     }
 }

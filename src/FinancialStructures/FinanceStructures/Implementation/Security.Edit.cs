@@ -36,8 +36,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             }
         }
 
-        /// <inheritdoc/>
-        public bool AddOrEditData(DateTime oldDate, DateTime newDate, decimal unitPrice, decimal shares, decimal investment = 0, SecurityTrade trade = null, IReportLogger reportLogger = null)
+        internal bool AddOrEditData(DateTime oldDate, DateTime newDate, decimal unitPrice, decimal shares, decimal investment = 0, SecurityTrade trade = null, IReportLogger reportLogger = null)
         {
             bool editUnitPrice = AddOrEditData(UnitPrice, oldDate, newDate, unitPrice, reportLogger);
             bool editShares = AddOrEditData(Shares, oldDate, newDate, shares, reportLogger);

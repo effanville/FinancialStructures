@@ -280,9 +280,9 @@ namespace Effanville.FinancialStructures.Database.Export.History
             var companies = portfolio.Companies(Account.All);
             foreach (string company in companies)
             {
-                decimal value = portfolio.TotalValue(Totals.Company, date, new TwoName(company));
-                DateTime firstCompanyDate = portfolio.FirstValueDate(Totals.Company, new TwoName(company));
-                double totalIRR = date < firstCompanyDate ? 0.0 : portfolio.TotalIRR(Totals.Company, firstCompanyDate, date, new TwoName(company), settings.MaxIRRIterations);
+                decimal value = portfolio.TotalValue(Totals.Company, date, company);
+                DateTime firstCompanyDate = portfolio.FirstValueDate(Totals.Company, company);
+                double totalIRR = date < firstCompanyDate ? 0.0 : portfolio.TotalIRR(Totals.Company, firstCompanyDate, date, company, settings.MaxIRRIterations);
                 CompanyTotalIRR.Add(company, totalIRR);
                 CompanyValues.Add(company, value);
             }
@@ -318,15 +318,15 @@ namespace Effanville.FinancialStructures.Database.Export.History
             {
                 if (includeValues)
                 {
-                    SecurityValues.Add(companyName, portfolio.TotalValue(Totals.SecurityCompany, date, new TwoName(companyName)));
+                    SecurityValues.Add(companyName, portfolio.TotalValue(Totals.SecurityCompany, date, companyName));
                 }
 
                 if (generateRates)
                 {
-                    Security1YrCar.Add(companyName, portfolio.TotalIRR(Totals.SecurityCompany, date.AddDays(-365), date, new TwoName(companyName)));
+                    Security1YrCar.Add(companyName, portfolio.TotalIRR(Totals.SecurityCompany, date.AddDays(-365), date, companyName));
 
-                    DateTime firstCompanyDate = portfolio.FirstValueDate(Totals.SecurityCompany, new TwoName(companyName));
-                    double totalIRR = date < firstCompanyDate ? 0.0 : portfolio.TotalIRR(Totals.SecurityCompany, firstCompanyDate, date, new TwoName(companyName), numIterations);
+                    DateTime firstCompanyDate = portfolio.FirstValueDate(Totals.SecurityCompany, companyName);
+                    double totalIRR = date < firstCompanyDate ? 0.0 : portfolio.TotalIRR(Totals.SecurityCompany, firstCompanyDate, date, companyName, numIterations);
                     SecurityTotalCar.Add(companyName, totalIRR);
                 }
             }
@@ -349,15 +349,15 @@ namespace Effanville.FinancialStructures.Database.Export.History
             {
                 if (includeValues)
                 {
-                    PensionValues.Add(companyName, portfolio.TotalValue(Totals.PensionCompany, date, new TwoName(companyName)));
+                    PensionValues.Add(companyName, portfolio.TotalValue(Totals.PensionCompany, date, companyName));
                 }
 
                 if (generateRates)
                 {
-                    Pension1YrCar.Add(companyName, portfolio.TotalIRR(Totals.PensionCompany, date.AddDays(-365), date, new TwoName(companyName)));
+                    Pension1YrCar.Add(companyName, portfolio.TotalIRR(Totals.PensionCompany, date.AddDays(-365), date, companyName));
 
-                    DateTime firstCompanyDate = portfolio.FirstValueDate(Totals.PensionCompany, new TwoName(companyName));
-                    double totalIRR = date < firstCompanyDate ? 0.0 : portfolio.TotalIRR(Totals.PensionCompany, firstCompanyDate, date, new TwoName(companyName), numIterations);
+                    DateTime firstCompanyDate = portfolio.FirstValueDate(Totals.PensionCompany, companyName);
+                    double totalIRR = date < firstCompanyDate ? 0.0 : portfolio.TotalIRR(Totals.PensionCompany, firstCompanyDate, date, companyName, numIterations);
                     PensionTotalCar.Add(companyName, totalIRR);
                 }
             }
@@ -374,7 +374,7 @@ namespace Effanville.FinancialStructures.Database.Export.History
             companyBankNames.Sort();
             foreach (string companyName in companyBankNames)
             {
-                BankAccValues.Add(companyName, portfolio.TotalValue(Totals.BankAccountCompany, date, new TwoName(companyName)));
+                BankAccValues.Add(companyName, portfolio.TotalValue(Totals.BankAccountCompany, date, companyName));
             }
         }
 
@@ -390,13 +390,13 @@ namespace Effanville.FinancialStructures.Database.Export.History
             {
                 if (includeValues)
                 {
-                    SectorValues.Add(sectorName, portfolio.TotalValue(Totals.Sector, date, new TwoName(null, sectorName)));
+                    SectorValues.Add(sectorName, portfolio.TotalValue(Totals.Sector, date, sectorName));
                 }
 
                 if (generateRates)
                 {
-                    DateTime firstDate = portfolio.FirstValueDate(Totals.Sector, new TwoName(null, sectorName));
-                    double sectorCAR = date < firstDate ? 0.0 : portfolio.TotalIRR(Totals.Sector, firstDate, date, new TwoName(null, sectorName), numIterations);
+                    DateTime firstDate = portfolio.FirstValueDate(Totals.Sector, sectorName);
+                    double sectorCAR = date < firstDate ? 0.0 : portfolio.TotalIRR(Totals.Sector, firstDate, date, sectorName, numIterations);
                     CurrentSectorTotalCar.Add(sectorName, sectorCAR);
                 }
             }

@@ -1,11 +1,14 @@
-﻿using Effanville.FinancialStructures.DataStructures;
+﻿using System;
+using System.Linq;
+using Effanville.FinancialStructures.DataStructures;
 
-namespace Effanville.FinancialStructures.FinanceStructures.Statistics
+namespace Effanville.FinancialStructures.FinanceStructures.Extensions
 {
     /// <summary>
     /// Contains extension methods for calculating statistics for securities.
     /// </summary>
-    public static partial class SecurityStatistics
+    // ReSharper disable once InconsistentNaming
+    public static class ISecurityExtensions
     {
         /// <summary>
         /// Calculates the mean share price for the security.
@@ -21,7 +24,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Statistics
 
             decimal sum = 0.0m;
             decimal numShares = 0.0m;
-            foreach (var trade in security.Trades)
+            foreach (SecurityTrade trade in security.Trades)
             {
                 if (trade.TradeType == tradeType)
                 {
@@ -37,5 +40,11 @@ namespace Effanville.FinancialStructures.FinanceStructures.Statistics
 
             return sum / numShares;
         }
+
+        public static DateTime LastPurchaseDate(this ISecurity security) 
+            => security.Trades.LastOrDefault(trade => trade.TradeType.Equals(TradeType.Buy))?.Day ?? default(DateTime);
+
+        public static DateTime LastInvestmentDate(this ISecurity security) 
+            => security.LastInvestment()?.Day ?? DateTime.MinValue;
     }
 }

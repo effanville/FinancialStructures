@@ -61,16 +61,5 @@ namespace Effanville.FinancialStructures.Database.Implementation
 
             return removed;
         }
-
-        /// <inheritdoc/>
-        public void RemoveNote(int noteIndex)
-        {
-            lock (NotesLock)
-            {
-                NotesInternal.RemoveAt(noteIndex);
-            }
-
-            OnPortfolioChanged(Notes, new PortfolioEventArgs());
-        }
     }
 }

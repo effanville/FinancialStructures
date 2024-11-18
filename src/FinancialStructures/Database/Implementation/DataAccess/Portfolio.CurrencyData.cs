@@ -11,7 +11,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
         /// </summary>
         public ICurrency Currency(IValueList valueList)
         {
-            if (valueList is IExchangableValueList)
+            if (valueList is IExchangeableValueList)
             {
                 string currencyName = valueList.Names.Currency;
                 return Currency(currencyName);

@@ -1,9 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading;
-
-using Effanville.Common.Structure.Reporting;
-using Effanville.FinancialStructures.FinanceStructures.Implementation;
-using Effanville.FinancialStructures.FinanceStructures.Implementation.Asset;
+﻿using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Implementation
@@ -30,8 +25,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
             {
                 case Account.Security:
                 {
-                    AddAccount(accountType, new Security(Account.Security, name), _fundsDictionary, _fundsLock);
-                    break;
+                    return _funds.TryAdd(accountType, name, reportLogger);
                 }
                 case Account.Currency:
                 {
@@ -40,50 +34,29 @@ namespace Effanville.FinancialStructures.Database.Implementation
                         name.Company = "GBP";
                     }
 
-                    AddAccount(accountType, new Currency(name), _currenciesDictionary, _currenciesLock);
-                    break;
+                    return _currencies.TryAdd(accountType, name, reportLogger);
                 }
                 case Account.BankAccount:
                 {
-                    AddAccount(accountType, new CashAccount(name), _bankAccountsDictionary, _bankAccountsLock);
-                    break;
+                    return _bankAccounts.TryAdd(accountType, name, reportLogger);
                 }
                 case Account.Benchmark:
                 {
-                    AddAccount(accountType, new Sector(name), _benchMarksDictionary, _benchmarksLock);
-                    break;
+                    return _benchmarks.TryAdd(accountType, name, reportLogger);
                 }
                 case Account.Asset:
                 {
-                    AddAccount(accountType, new AmortisableAsset(name), _assetsDictionary, _assetsLock);
-                    break;
+                    return _assets.TryAdd(accountType, name, reportLogger);
                 }
                 case Account.Pension:
                 {
-                    AddAccount(accountType, new Security(Account.Pension, name), _pensionsDictionary, _pensionsLock);
-                    break;
+                    return _pensions.TryAdd(accountType, name, reportLogger);
                 }
+                case Account.Unknown:
+                case Account.All:
                 default:
                     reportLogger?.Log(ReportType.Error, ReportLocation.AddingData.ToString(), $"Adding an Unknown type to portfolio.");
                     return false;
-            }
-
-            reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.AddingData.ToString(), $"{accountType}-{name} added to database.");
-            return true;
-            void AddAccount<T>(Account account, T newObject, Dictionary<TwoName, T> currentItems, ReaderWriterLockSlim lockObject)
-                where T : ValueList
-            {
-                lockObject.EnterWriteLock();
-                try
-                {
-                    if (currentItems.TryAdd(newObject.Names.ToTwoName(), newObject))
-                    {
-                        newObject.DataEdit += OnPortfolioChanged;
-                    }
-                }
-                finally{lockObject.ExitWriteLock();}
-
-                OnPortfolioChanged(newObject, new PortfolioEventArgs(account));
             }
         }
     }

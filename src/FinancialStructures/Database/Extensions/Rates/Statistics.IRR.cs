@@ -5,10 +5,9 @@ using System.Linq;
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.MathLibrary.Finance;
 using Effanville.FinancialStructures.Database.Extensions.Values;
-using Effanville.FinancialStructures.Database.Statistics.Implementation;
 using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Rates
 {
@@ -20,26 +19,26 @@ namespace Effanville.FinancialStructures.Database.Extensions.Rates
         /// <summary>
         /// Calculates the total IRR for the portfolio and the account type given over the time frame specified.
         /// </summary>
-        public static double TotalIRR(this IPortfolio portfolio, Totals total, TwoName name = null)
+        public static double TotalIRR(this IPortfolio portfolio, Totals total, string identifier = null)
         {
-            DateTime earlierTime = portfolio.FirstValueDate(total, name);
-            DateTime laterTime = portfolio.LatestDate(total, name);
-            return portfolio.TotalIRR(total, earlierTime, laterTime, name);
+            DateTime earlierTime = portfolio.FirstValueDate(total, identifier);
+            DateTime laterTime = portfolio.LatestDate(total, identifier);
+            return portfolio.TotalIRR(total, earlierTime, laterTime, identifier);
         }
 
         /// <summary>
         /// Calculates the total IRR for the portfolio and the account type given over the time frame specified.
         /// </summary>
-        public static double TotalIRR(this IPortfolio portfolio, Totals accountType, DateTime earlierTime, DateTime laterTime, TwoName name = null, int numIterations = 10)
+        public static double TotalIRR(this IPortfolio portfolio, Totals accountType, DateTime earlierTime, DateTime laterTime, string identifier = null, int numIterations = 10)
         {
-            var accounts = portfolio.Accounts(accountType, name);
-            DateTime earliestTime = portfolio.FirstValueDate(accountType, name);
+            IReadOnlyList<IValueList> accounts = portfolio.Accounts(accountType, identifier);
+            DateTime earliestTime = portfolio.FirstValueDate(accountType, identifier);
             if (earlierTime < earliestTime)
             {
                 earlierTime = earliestTime;
             }
 
-            DateTime latestTime = portfolio.LatestDate(accountType, name);
+            DateTime latestTime = portfolio.LatestDate(accountType, identifier);
             if (laterTime > latestTime)
             {
                 laterTime = latestTime;
@@ -99,7 +98,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Rates
                     earlierValue += security.Value(earlierTime, currency, 0.0m);
                     laterValue += security.Value(laterTime, currency, 0.0m);
                 }
-                else if (valueList is IExchangableValueList exchangableValueList && exchangableValueList.Any())
+                else if (valueList is IExchangeableValueList exchangableValueList && exchangableValueList.Any())
                 {
                     ICurrency currency = portfolio.Currency(exchangableValueList.Names.Currency);
                     earlierValue += exchangableValueList.Value(earlierTime, currency, 0.0m);
@@ -135,7 +134,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Rates
                     laterValue += security.Value(laterTime, currency, 0.0m);
                     investments.AddRange(security.InvestmentsBetween(earlierTime, laterTime, currency));
                 }
-                else if (valueList is IExchangableValueList exchangableValueList && exchangableValueList.Any())
+                else if (valueList is IExchangeableValueList exchangableValueList && exchangableValueList.Any())
                 {
                     ICurrency currency = portfolio.Currency(exchangableValueList.Names.Currency);
                     earlierValue += exchangableValueList.Value(earlierTime, currency, 0.0m);
@@ -158,9 +157,12 @@ namespace Effanville.FinancialStructures.Database.Extensions.Rates
         {
             return portfolio.CalculateValue(accountType,
                 names, 
-                IRRCalculators.DefaultCalculator(),
-                IRRCalculators.Calculators(portfolio),
-                double.NaN);
+                vl =>
+                {
+                    ICurrency currency = portfolio.Currency(vl);
+                    return vl.IRR(currency);
+                },
+                defaultValue: double.NaN);
         }
 
         /// <summary>
@@ -170,9 +172,12 @@ namespace Effanville.FinancialStructures.Database.Extensions.Rates
         {
             return portfolio.CalculateValue(accountType,
                 names,
-                IRRCalculators.DefaultCalculator(earlierTime, laterTime),
-                IRRCalculators.Calculators(portfolio, earlierTime, laterTime),
-                double.NaN);
+                vl =>
+                {
+                    ICurrency currency = portfolio.Currency(vl);
+                    return vl.IRR(currency, earlierTime, laterTime);
+                },
+                defaultValue: double.NaN);
         }
     }
 }

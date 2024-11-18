@@ -1,6 +1,4 @@
 ﻿using System;
-
-using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.Reporting;
 
 namespace Effanville.FinancialStructures.FinanceStructures
@@ -10,18 +8,8 @@ namespace Effanville.FinancialStructures.FinanceStructures
     /// For example it can be used to model a house (where the value of the house is stored in the value)
     /// and where an amount of debt is held against the house.
     /// </summary>
-    public interface IAmortisableAsset : IExchangableValueList
+    public interface IAmortisableAsset : IReadOnlyAmortisableAsset, IExchangeableValueList
     {
-        /// <summary>
-        /// The value of the debt at any given time.
-        /// </summary>
-        TimeList Debt { get; }
-
-        /// <summary>
-        /// The list of payments towards this debt.
-        /// </summary>
-        TimeList Payments { get; }
-
         /// <summary>
         /// Tries to add a debt value for the date specified if it doesnt exist, or edits data if it exists.
         /// If cannot add any value that one wants to, then doesn't add all the values chosen.
@@ -77,37 +65,5 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// <param name="reportLogger">An optional logger to log progress.</param>
         /// <returns>Whether data was deleted or not.</returns>
         bool TryDeletePayment(DateTime date, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// The total cost of the debt. This is the sum of all payments.
-        /// </summary>
-        decimal TotalCost(ICurrency currency = null);
-
-        /// <summary>
-        /// The total cost of the asset up to the time. This is the sum of all payments
-        /// made before the time.
-        /// </summary>
-        decimal TotalCost(DateTime date, ICurrency currency = null);
-
-        /// <summary>
-        /// The total cost of the debt over the time period. This is the sum of all payments
-        /// made in the time period specified.
-        /// </summary>
-        decimal TotalCost(DateTime earlierDate, DateTime laterDate, ICurrency currency = null);
-
-        /// <summary>
-        /// Returns the Internal rate of return of the <see cref="IAmortisableAsset"/>.
-        /// </summary>
-        /// <param name="earlierDate">The earlier date to calculate from.</param>
-        /// <param name="laterDate">The later date to calculate to.</param>
-        /// <param name="currency">An optional currency to exchange with.</param>
-        double IRR(DateTime earlierDate, DateTime laterDate, ICurrency currency = null);
-
-        /// <summary>
-        /// Returns the Internal rate of return of the <see cref="IAmortisableAsset"/> over the entire
-        /// period the <see cref="IAmortisableAsset"/> has values for.
-        /// </summary>
-        /// <param name="currency">An optional currency to exchange with.</param>
-        double IRR(ICurrency currency = null);
     }
 }

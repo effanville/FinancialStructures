@@ -1,5 +1,5 @@
 ﻿using System.IO.Abstractions.TestingHelpers;
-
+using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.Database.Export.Investments;
 
 using NUnit.Framework;
@@ -12,8 +12,8 @@ namespace Effanville.FinancialStructures.Tests.StatsMakers
         [Test]
         public void CanGenerate()
         {
-            var portfolio = TestDatabase.Databases[TestDatabaseName.OneSecOneBank];
-            var investments = new PortfolioInvestments(portfolio, new PortfolioInvestmentSettings());
+            IPortfolio portfolio = TestDatabase.Databases[TestDatabaseName.OneSecOneBank];
+            PortfolioInvestments investments = new PortfolioInvestments(portfolio, new PortfolioInvestmentSettings());
             MockFileSystem tempFileSystem = new MockFileSystem();
             string savePath = "c:/temp/saved.csv";
 

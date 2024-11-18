@@ -18,7 +18,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.ValueListT
             yield return new TestCaseData(new ValueList(), false)
                 .SetName($"{nameof(AnyTests)}-NoEntry");
 
-            var values = new TimeList();
+            TimeList values = new TimeList();
             values.SetData(new DateTime(2010, 1, 1), 4.2m);
 
             yield return new TestCaseData(
@@ -50,7 +50,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.ValueListT
             yield return new TestCaseData(new ValueList(), 0)
                 .SetName($"{nameof(CountTests)}-NoEntry");
 
-            var values = new TimeList();
+            TimeList values = new TimeList();
             values.SetData(new DateTime(2010, 1, 1), 4.2m);
 
             yield return new TestCaseData(

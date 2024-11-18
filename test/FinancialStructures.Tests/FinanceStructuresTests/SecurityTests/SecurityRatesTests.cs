@@ -55,7 +55,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
         public void CarTests(ISecurity valueList, DateTime start, DateTime end, double expectedCar)
         {
             double actualCar = valueList.CAR(start, end);
-            Assert.AreEqual(expectedCar, actualCar);
+            Assert.That(actualCar, Is.EqualTo(expectedCar));
         }
 
         private static IEnumerable<TestCaseData> IRRData()
@@ -101,7 +101,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
         public void IRRTests(ISecurity valueList, DateTime start, DateTime end, double expectedCar)
         {
             double actualCar = valueList.IRR(start, end);
-            Assert.AreEqual(expectedCar, actualCar);
+            Assert.That(actualCar, Is.EqualTo(expectedCar));
         }
 
         private static IEnumerable<TestCaseData> IRRAllTimeData()
@@ -127,7 +127,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
         public void IRRAllTimeTests(ISecurity valueList, double expectedCar)
         {
             double actualCar = valueList.IRR();
-            Assert.AreEqual(expectedCar, actualCar);
+            Assert.That(actualCar, Is.EqualTo(expectedCar));
         }
 
         private static IEnumerable<TestCaseData> TotalInvestmentsData()
@@ -153,7 +153,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
         public void TotalInvestmentsTests(ISecurity valueList, decimal expectedCar)
         {
             decimal actualCar = valueList.TotalInvestment();
-            Assert.AreEqual(expectedCar, actualCar);
+            Assert.That(actualCar, Is.EqualTo(expectedCar));
         }
 
         private static IEnumerable<TestCaseData> LatestValueData()
@@ -183,8 +183,8 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
             {
                 if (actualValue != null)
                 {
-                    Assert.AreEqual(expectedValue.Day, actualValue.Day);
-                    Assert.AreEqual(expectedValue.Value, actualValue.Value);
+                    Assert.That(actualValue.Day, Is.EqualTo(expectedValue.Day));
+                    Assert.That(actualValue.Value, Is.EqualTo(expectedValue.Value));
                 }
                 else
                 {
@@ -217,8 +217,8 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
             {
                 if (actualValue != null)
                 {
-                    Assert.AreEqual(expectedValue.Day, actualValue.Day);
-                    Assert.AreEqual(expectedValue.Value, actualValue.Value);
+                    Assert.That(actualValue.Day, Is.EqualTo(expectedValue.Day));
+                    Assert.That(actualValue.Value, Is.EqualTo(expectedValue.Value));
                 }
                 else
                 {
@@ -278,8 +278,8 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
             {
                 if (actualValue != null)
                 {
-                    Assert.AreEqual(expectedValue.Day, actualValue.Day);
-                    Assert.AreEqual(expectedValue.Value, actualValue.Value);
+                    Assert.That(actualValue.Day, Is.EqualTo(expectedValue.Day));
+                    Assert.That(actualValue.Value, Is.EqualTo(expectedValue.Value));
                 }
                 else
                 {
@@ -339,8 +339,8 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
             {
                 if (actualValue != null)
                 {
-                    Assert.AreEqual(expectedValue.Day, actualValue.Day);
-                    Assert.AreEqual(expectedValue.Value, actualValue.Value);
+                    Assert.That(actualValue.Day, Is.EqualTo(expectedValue.Day));
+                    Assert.That(actualValue.Value, Is.EqualTo(expectedValue.Value));
                 }
                 else
                 {
@@ -400,8 +400,8 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
             {
                 if (actualValue != null)
                 {
-                    Assert.AreEqual(expectedValue.Day, actualValue.Day);
-                    Assert.AreEqual(expectedValue.Value, actualValue.Value);
+                    Assert.That(actualValue.Day, Is.EqualTo(expectedValue.Day));
+                    Assert.That(actualValue.Value, Is.EqualTo(expectedValue.Value));
                 }
                 else
                 {

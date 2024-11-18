@@ -90,7 +90,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// <inheritdoc/>
         public bool TryRemoveSector(TwoName sectorName)
         {
-            if (IsSectorLinked(sectorName))
+            if (IsSectorLinked(sectorName.Name))
             {
                 _ = Names.Sectors.Remove(sectorName.Name);
                 OnDataEdit(this, new EventArgs());
@@ -101,13 +101,13 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public bool IsSectorLinked(TwoName sectorName)
+        public bool IsSectorLinked(string identifier)
         {
             if (Names.Sectors != null && Names.Sectors.Any())
             {
                 foreach (string name in Names.Sectors)
                 {
-                    if (name == sectorName.Name)
+                    if (name == identifier)
                     {
                         return true;
                     }

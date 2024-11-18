@@ -8,7 +8,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
     /// <summary>
     /// An implementation of an asset that can have a debt against it.
     /// </summary>
-    public sealed partial class AmortisableAsset : ValueList, IAmortisableAsset
+    public sealed partial class AmortisableAsset
     {
         /// <inheritdoc/>
         public override DailyValuation Value(DateTime date)
@@ -17,7 +17,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
         }
 
         /// <inheritdoc/>
-        public DailyValuation Value(DateTime date, ICurrency currency = null)
+        public DailyValuation Value(DateTime date, IReadOnlyCurrency currency)
         {
             if (!Any())
             {
@@ -37,7 +37,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
         }
 
         /// <inheritdoc/>
-        public DailyValuation LatestValue(ICurrency currency)
+        public DailyValuation LatestValue(IReadOnlyCurrency currency)
         {
             DailyValuation latestDate = Values.LatestValuation();
             DailyValuation latestDebt = Debt.LatestValuation();
@@ -60,7 +60,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
         }
 
         /// <inheritdoc/>
-        public DailyValuation ValueBefore(DateTime date, ICurrency currency)
+        public DailyValuation ValueBefore(DateTime date, IReadOnlyCurrency currency)
         {
             if (!Any())
             {
@@ -86,7 +86,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
         }
 
         /// <inheritdoc/>
-        public DailyValuation FirstValue(ICurrency currency)
+        public DailyValuation FirstValue(IReadOnlyCurrency currency)
         {
             DailyValuation firstDate = Values.FirstValuation();
             DailyValuation firstDebt = Debt.FirstValuation();
@@ -109,7 +109,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
         }
 
         /// <inheritdoc/>
-        public DailyValuation ValueOnOrBefore(DateTime date, ICurrency currency = null)
+        public DailyValuation ValueOnOrBefore(DateTime date, IReadOnlyCurrency currency = null)
         {
             DailyValuation value = Values.ValueOnOrBefore(date);
             decimal currentDebt = Debt.ValueOnOrBefore(date)?.Value ?? 0.0m;
@@ -141,7 +141,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
             return thing;
         }
 
-        private static decimal GetCurrencyValue(DateTime date, ICurrency currency)
+        private static decimal GetCurrencyValue(DateTime date, IReadOnlyCurrency currency)
         {
             return currency == null ? 1.0m : currency.Value(date)?.Value ?? 1.0m;
         }

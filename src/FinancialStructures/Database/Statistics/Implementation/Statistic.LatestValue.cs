@@ -1,8 +1,8 @@
 ﻿using System;
 using Effanville.FinancialStructures.Database.Extensions.Values;
 using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
@@ -17,16 +17,17 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         public override void Calculate(IPortfolio portfolio, IValueList valueList, DateTime date)
         {
             fCurrency = portfolio.BaseCurrency;
+            ICurrency currency = portfolio.Currency(valueList);
             Value = (double)valueList.CalculateValue(
-                ValueCalculator.DefaultCalculator(date),
-                ValueCalculator.Calculators(portfolio, date),
-                defaultValue: ValueCalculator.DefaultValue(valueList.AccountType));
+                vl => vl.Value(currency, date),
+                defaultValue: valueList.AccountType.DefaultValue());
         }
 
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
-            Value = (double)portfolio.TotalValue(total, DateTime.Today, name);
+            string identifier = total.GetIdentifier(name);
+            Value = (double)portfolio.TotalValue(total, DateTime.Today, identifier);
             fCurrency = portfolio.BaseCurrency;
         }
     }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.ValueCalculators;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 
 namespace Effanville.FinancialStructures.Database.Extensions.Statistics
 {
@@ -12,15 +10,14 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// Returns a dictionary with the distribution over time of values for the
         /// account type.
         /// </summary>
-        public static Dictionary<DateTime, int> EntryDistribution(this IPortfolio portfolio, Totals totals = Totals.Security, TwoName company = null)
+        public static Dictionary<DateTime, int> EntryDistribution(this IPortfolio portfolio, Totals totals = Totals.Security, string identifier = null)
         {
             return portfolio.CalculateAggregateValue(
                 totals,
-                company,
+                identifier,
                 new Dictionary<DateTime, int>(),
                 (a, b) => MergeDictionaries(a, b),
-                EntryDistributionCalculator.DefaultCalculator(),
-                EntryDistributionCalculator.Calculators(portfolio, DateTime.Today),
+                vl => vl.EntryDistribution(),
                 new Dictionary<DateTime, int>());
         }
 

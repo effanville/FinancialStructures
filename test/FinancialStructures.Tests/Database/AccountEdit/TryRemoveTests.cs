@@ -12,8 +12,8 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
     [TestFixture]
     public sealed class TryRemoveTests
     {
-        private readonly string BaseCompanyName = "someCompany";
-        private readonly string BaseName = "someName";
+        private const string BaseCompanyName = "someCompany";
+        private const string BaseName = "someName";
 
         [Test]
         public void CanRemoveSecurity()
@@ -25,7 +25,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
 
             _ = database.TryRemove(Account.Security, new TwoName(BaseCompanyName, BaseName));
 
-            Assert.AreEqual(0, database.Funds.Count);
+            Assert.That(database.Funds.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -38,7 +38,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
 
             _ = database.TryRemove(Account.Benchmark, new NameData(BaseCompanyName, BaseName));
 
-            Assert.AreEqual(0, database.BenchMarks.Count);
+            Assert.That(database.BenchMarks.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -51,7 +51,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
 
             _ = database.TryRemove(Account.BankAccount, new NameData(BaseCompanyName, BaseName));
 
-            Assert.AreEqual(0, database.BankAccounts.Count);
+            Assert.That(database.BankAccounts.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
 
             _ = database.TryRemove(Account.Currency, new NameData(BaseCompanyName, BaseName));
 
-            Assert.AreEqual(0, database.Currencies.Count);
+            Assert.That(database.Currencies.Count, Is.EqualTo(0));
         }
 
         [Test]
@@ -78,13 +78,13 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = database.TryRemove(Account.Security, new TwoName(BaseCompanyName, BaseName), logging);
 
             ErrorReports reports = logging.Reports;
-            Assert.AreEqual(1, reports.Count());
+            Assert.That(reports.Count(), Is.EqualTo(1));
 
             ErrorReport report = reports.First();
-            Assert.AreEqual(ReportType.Information, report.ErrorType);
-            Assert.AreEqual("DeletingData", report.ErrorLocation);
-            Assert.AreEqual(ReportSeverity.Detailed, report.ErrorSeverity);
-            Assert.AreEqual($"Security-{BaseCompanyName}-{BaseName} removed from the database.", report.Message);
+            Assert.That(report.ErrorType, Is.EqualTo(ReportType.Information));
+            Assert.That(report.ErrorLocation, Is.EqualTo("DeletingData"));
+            Assert.That(report.ErrorSeverity, Is.EqualTo(ReportSeverity.Detailed));
+            Assert.That(report.Message, Is.EqualTo($"Security-{BaseCompanyName}-{BaseName} removed from the database."));
         }
 
         [Test]
@@ -96,13 +96,13 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = database.TryRemove(Account.Security, new NameData(BaseCompanyName, BaseName), logging);
 
             ErrorReports reports = logging.Reports;
-            Assert.AreEqual(1, reports.Count());
+            Assert.That(reports.Count(), Is.EqualTo(1));
 
             ErrorReport report = reports.First();
-            Assert.AreEqual(ReportType.Error, report.ErrorType);
-            Assert.AreEqual("DeletingData", report.ErrorLocation);
-            Assert.AreEqual(ReportSeverity.Useful, report.ErrorSeverity);
-            Assert.AreEqual($"Security - {BaseCompanyName}-{BaseName} could not be found in the database.", report.Message);
+            Assert.That(report.ErrorType, Is.EqualTo(ReportType.Error));
+            Assert.That(report.ErrorLocation, Is.EqualTo("DeletingData"));
+            Assert.That(report.ErrorSeverity, Is.EqualTo(ReportSeverity.Useful));
+            Assert.That(report.Message, Is.EqualTo($"Security-{BaseCompanyName}-{BaseName} could not be found in the database."));
         }
 
         [Test]
@@ -116,13 +116,13 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = database.TryRemove(Account.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
 
             ErrorReports reports = logging.Reports;
-            Assert.AreEqual(1, reports.Count());
+            Assert.That(reports.Count(), Is.EqualTo(1));
 
             ErrorReport report = reports.First();
-            Assert.AreEqual(ReportType.Information, report.ErrorType);
-            Assert.AreEqual("DeletingData", report.ErrorLocation);
-            Assert.AreEqual(ReportSeverity.Detailed, report.ErrorSeverity);
-            Assert.AreEqual($"Benchmark-{BaseCompanyName}-{BaseName} removed from the database.", report.Message);
+            Assert.That(report.ErrorType, Is.EqualTo(ReportType.Information));
+            Assert.That(report.ErrorLocation, Is.EqualTo("DeletingData"));
+            Assert.That(report.ErrorSeverity, Is.EqualTo(ReportSeverity.Detailed));
+            Assert.That(report.Message, Is.EqualTo($"Benchmark-{BaseCompanyName}-{BaseName} removed from the database."));
         }
 
         [Test]
@@ -134,13 +134,13 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = database.TryRemove(Account.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
 
             ErrorReports reports = logging.Reports;
-            Assert.AreEqual(1, reports.Count());
+            Assert.That(reports.Count(), Is.EqualTo(1));
 
             ErrorReport report = reports.First();
-            Assert.AreEqual(ReportType.Error, report.ErrorType);
-            Assert.AreEqual("DeletingData", report.ErrorLocation);
-            Assert.AreEqual(ReportSeverity.Useful, report.ErrorSeverity);
-            Assert.AreEqual($"Benchmark - {BaseCompanyName}-{BaseName} could not be found in the database.", report.Message);
+            Assert.That(report.ErrorType, Is.EqualTo(ReportType.Error));
+            Assert.That(report.ErrorLocation, Is.EqualTo("DeletingData"));
+            Assert.That(report.ErrorSeverity, Is.EqualTo(ReportSeverity.Useful));
+            Assert.That(report.Message, Is.EqualTo($"Benchmark-{BaseCompanyName}-{BaseName} could not be found in the database."));
         }
     }
 }

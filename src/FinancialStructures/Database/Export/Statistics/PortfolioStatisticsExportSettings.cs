@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
 using Effanville.FinancialStructures.Database.Statistics;
 
@@ -57,6 +56,14 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
         {
             get;
         }
+        
+        /// <summary>
+        /// Options on displaying currencies.
+        /// </summary>
+        public TableOptions<Statistic> CurrencyDisplayOptions
+        {
+            get;
+        }
 
         /// <summary>
         /// Default constructor.
@@ -67,19 +74,23 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
             bool includeSecurities,
             Statistic securitySortField,
             SortDirection securitySortDirection,
-            List<Statistic> securityDisplayFields,
+            IReadOnlyList<Statistic> securityDisplayFields,
             bool includeBankAccounts,
             Statistic bankAccSortField,
             SortDirection bankAccSortDirection,
-            List<Statistic> bankAccDisplayFields,
+            IReadOnlyList<Statistic> bankAccDisplayFields,
             bool includeSectors,
             Statistic sectorSortField,
             SortDirection sectorSortDirection,
-            List<Statistic> sectorDisplayFields,
+            IReadOnlyList<Statistic> sectorDisplayFields,
             bool includeAssets,
             Statistic assetSortField,
             SortDirection assetSortDirection,
-            List<Statistic> assetDisplayFields)
+            IReadOnlyList<Statistic> assetDisplayFields,
+            bool includeCurrencies,
+            Statistic currencySortField,
+            SortDirection currencySortDirection,
+            IReadOnlyList<Statistic> currencyDisplayFields)
         {
             Spacing = spacing;
             Colours = colours;
@@ -87,6 +98,7 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
             BankAccountDisplayOptions = new TableOptions<Statistic>(includeBankAccounts, bankAccSortField, bankAccSortDirection, bankAccDisplayFields);
             SectorDisplayOptions = new TableOptions<Statistic>(includeSectors, sectorSortField, sectorSortDirection, sectorDisplayFields);
             AssetDisplayOptions = new TableOptions<Statistic>(includeAssets, assetSortField, assetSortDirection, assetDisplayFields);
+            CurrencyDisplayOptions = new TableOptions<Statistic>(includeCurrencies, currencySortField, currencySortDirection, currencyDisplayFields);
         }
 
         /// <summary>
@@ -99,19 +111,23 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
                 colours: false,
                 includeSecurities: true,
                 Statistic.Company,
-                SortDirection.Descending,
-                AccountStatisticsHelpers.DefaultSecurityStats().ToList(),
+                SortDirection.Ascending,
+                AccountStatisticsHelpers.DefaultSecurityStats(),
                 includeBankAccounts: true,
                 Statistic.Company,
-                SortDirection.Descending,
-                AccountStatisticsHelpers.DefaultBankAccountStats().ToList(),
+                SortDirection.Ascending,
+                AccountStatisticsHelpers.DefaultBankAccountStats(),
                 includeSectors: true,
                 Statistic.Company,
-                SortDirection.Descending,
-                AccountStatisticsHelpers.DefaultSectorStats().ToList(),
+                SortDirection.Ascending,
+                AccountStatisticsHelpers.DefaultSectorStats(),
                 includeAssets: true,
                 Statistic.Company,
-                SortDirection.Descending,
-                AccountStatisticsHelpers.DefaultAssetStats().ToList());
+                SortDirection.Ascending,
+                AccountStatisticsHelpers.DefaultAssetStats(),
+                includeCurrencies: true,
+                Statistic.Company,
+                SortDirection.Ascending,
+                AccountStatisticsHelpers.DefaultCurrencyStats());
     }
 }

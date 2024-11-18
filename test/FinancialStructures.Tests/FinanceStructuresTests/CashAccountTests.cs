@@ -124,7 +124,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests
         }
 
         [TestCaseSource(nameof(EditDataValues))]
-        public void TryEditDataTests(IExchangableValueList sut, (DateTime Date, decimal Value) dataToAdd, (DateTime Date, decimal Value)[] expectedValues)
+        public void TryEditDataTests(IExchangeableValueList sut, (DateTime Date, decimal Value) dataToAdd, (DateTime Date, decimal Value)[] expectedValues)
         {
             _ = sut.TryEditData(dataToAdd.Date, dataToAdd.Date, dataToAdd.Value, reportLogger: null);
 

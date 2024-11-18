@@ -6,130 +6,43 @@ namespace Effanville.FinancialStructures.Database.Implementation
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public bool TryGetAccount(Account accountType, TwoName names, out IValueList valueList)
+        public bool TryGetAccount<TNamedFinancialObject>(
+            Account accountType,
+            TwoName names,
+            out TNamedFinancialObject valueList)
+            where TNamedFinancialObject : IReadOnlyNamedFinancialObject
         {
-            valueList = null;
+            valueList = default;
             switch (accountType)
             {
                 case Account.Security:
                 {
-                    _fundsLock.EnterReadLock();
-                    try
-                    {
-                        var searchName = new TwoName(names.Company, names.Name);
-                        if (!_fundsDictionary.TryGetValue(searchName, out var security))
-                        {
-                            return false;
-                        }
-
-                        valueList = security;
-                        return true;
-                    }
-                    finally
-                    {
-                        _fundsLock.ExitReadLock();
-                    }
+                    return _funds.TryGetAndCast(names, out valueList);
                 }
                 case Account.BankAccount:
                 {
-                    _bankAccountsLock.EnterReadLock();
-                    try
-                    {
-                        var searchName = new TwoName(names.Company, names.Name);
-                        if (!_bankAccountsDictionary.TryGetValue(searchName, out var bankAccount))
-                        {
-                            return false;
-                        }
-
-                        valueList = bankAccount;
-                        return true;
-                    }
-                    finally
-                    {
-                        _bankAccountsLock.ExitReadLock();
-                    }
+                    return _bankAccounts.TryGetAndCast(names, out valueList);
                 }
                 case Account.Currency:
                 {
-                    _currenciesLock.EnterReadLock();
-                    try
-                    {
-                        var searchName = new TwoName(names.Company, names.Name);
-                        if (!_currenciesDictionary.TryGetValue(searchName, out var bankAccount))
-                        {
-                            return false;
-                        }
-
-                        valueList = bankAccount;
-                        return true;
-                    }
-                    finally
-                    {
-                        _currenciesLock.ExitReadLock();
-                    }
+                    return _currencies.TryGetAndCast(names, out valueList);
                 }
                 case Account.Benchmark:
                 {
-                    _benchmarksLock.EnterReadLock();
-                    try
-                    {
-                        var searchName = new TwoName(names.Company, names.Name);
-                        if (!_benchMarksDictionary.TryGetValue(searchName, out var bankAccount))
-                        {
-                            return false;
-                        }
-
-                        valueList = bankAccount;
-                        return true;
-                    }
-                    finally
-                    {
-                        _benchmarksLock.ExitReadLock();
-                    }
+                    return _benchmarks.TryGetAndCast(names, out valueList);
                 }
                 case Account.Asset:
                 {
-                    _assetsLock.EnterReadLock();
-                    try
-                    {
-                        var searchName = new TwoName(names.Company, names.Name);
-                        if (!_assetsDictionary.TryGetValue(searchName, out var bankAccount))
-                        {
-                            return false;
-                        }
-
-                        valueList = bankAccount;
-                        return true;
-                    }
-                    finally
-                    {
-                        _assetsLock.ExitReadLock();
-                    }
+                    return _assets.TryGetAndCast(names, out valueList);
                 }
                 case Account.Pension:
                 {
-                    _pensionsLock.EnterReadLock();
-                    try
-                    {
-                        var searchName = new TwoName(names.Company, names.Name);
-                        if (!_pensionsDictionary.TryGetValue(searchName, out var bankAccount))
-                        {
-                            return false;
-                        }
-
-                        valueList = bankAccount;
-                        return true;
-                    }
-                    finally
-                    {
-                        _pensionsLock.ExitReadLock();
-                    }
+                    return _pensions.TryGetAndCast(names, out valueList);
                 }
                 default:
                 case Account.All:
                 case Account.Unknown:
                 {
-                    valueList = null;
                     return false;
                 }
             }

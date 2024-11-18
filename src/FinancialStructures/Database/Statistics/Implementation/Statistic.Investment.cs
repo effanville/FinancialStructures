@@ -6,8 +6,8 @@ using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.NamingStructures;
 using Effanville.FinancialStructures.Database.Extensions.Values;
 using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
@@ -22,16 +22,16 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         public override void Calculate(IPortfolio portfolio, IValueList valueList, DateTime date)
         {
             fCurrency = portfolio.BaseCurrency;
-            Value = (double)valueList.CalculateValue(
-                InvestmentCalculators.DefaultCalculator,
-                InvestmentCalculators.Calculators(portfolio, date));
+            ICurrency currency = portfolio.Currency(valueList);
+            Value = (double)valueList.TotalInvestment(currency, date);
         }
 
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
+            string identifier = total.GetIdentifier(name);
             decimal sum = 0.0m;
-            List<Labelled<TwoName, DailyValuation>> investments = portfolio.TotalInvestments(total, name);
+            List<Labelled<TwoName, DailyValuation>> investments = portfolio.TotalInvestments(total, identifier);
             if (investments != null && investments.Any())
             {
                 foreach (Labelled<TwoName, DailyValuation> investment in investments)

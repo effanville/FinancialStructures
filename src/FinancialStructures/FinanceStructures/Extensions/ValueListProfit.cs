@@ -1,4 +1,4 @@
-﻿namespace Effanville.FinancialStructures.FinanceStructures.Statistics
+﻿namespace Effanville.FinancialStructures.FinanceStructures.Extensions
 {
     /// <summary>
     /// Contains extension methods for statistics of <see cref="IValueList"/>s.
@@ -8,20 +8,25 @@
         /// <summary>
         /// Calculates the difference between the first and last values of a <see cref="IValueList"/>.
         /// </summary>
-        public static decimal Profit(this IValueList valueList)
+        public static decimal Profit(this IValueList valueList, ICurrency currency = null)
         {
             if (!valueList.Any())
             {
                 return 0.0m;
             }
 
+            if (valueList is IExchangeableValueList exchangeableValueList)
+            {
+                return exchangeableValueList.Profit(currency);
+            }
+
             return valueList.LatestValue().Value - valueList.FirstValue().Value;
         }
 
         /// <summary>
-        /// Calculates the difference between the last and investment of a <see cref="IExchangableValueList"/>.
+        /// Calculates the difference between the last and investment of a <see cref="IExchangeableValueList"/>.
         /// </summary>
-        public static decimal Profit(this IExchangableValueList valueList, ICurrency currency)
+        public static decimal Profit(this IExchangeableValueList valueList, ICurrency currency)
         {
             if (valueList is ISecurity security)
             {
@@ -38,12 +43,11 @@
             }
 
             return valueList.LatestValue(currency).Value - valueList.FirstValue(currency).Value;
-
         }
 
 
         /// <summary>
-        /// Calculates the difference between the last two values of a <see cref="IExchangableValueList"/>.
+        /// Calculates the difference between the last two values of a <see cref="IExchangeableValueList"/>.
         /// </summary>
         public static decimal Profit(this ISecurity valueList, ICurrency currency)
         {

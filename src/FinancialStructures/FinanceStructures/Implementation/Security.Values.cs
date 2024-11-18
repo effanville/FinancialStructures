@@ -112,7 +112,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             return output;
         }
 
-        private static decimal GetCurrencyValue(DateTime date, ICurrency currency)
+        private static decimal GetCurrencyValue(DateTime date, IReadOnlyCurrency currency)
         {
             return currency == null ? 1.0m : currency.Value(date)?.Value ?? 1.0m;
         }

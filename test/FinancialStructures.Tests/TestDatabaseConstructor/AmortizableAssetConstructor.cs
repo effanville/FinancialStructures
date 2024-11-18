@@ -42,10 +42,7 @@ namespace Effanville.FinancialStructures.Tests.TestDatabaseConstructor
             Item.Debt.SetData(debtDate, debtValue);
         }
 
-        public AmortisableAsset GetItem()
-        {
-            return Item;
-        }
+        public AmortisableAsset GetItem() => Item;
 
         public AmortizableAssetConstructor Clear()
         {
@@ -53,25 +50,19 @@ namespace Effanville.FinancialStructures.Tests.TestDatabaseConstructor
             Item = new AmortisableAsset();
             return this;
         }
-        public static AmortisableAsset Empty()
-        {
-            return new AmortizableAssetConstructor(DefaultCompany, DefaultName).Item;
-        }
+        public static AmortisableAsset Empty() => new AmortizableAssetConstructor(DefaultCompany, DefaultName).Item;
 
-        public static AmortisableAsset Default()
-        {
-            return FromNameAndData(
+        public static AmortisableAsset Default() =>
+            FromNameAndData(
                 DefaultCompany,
                 DefaultName,
                 valueDates: DefaultValueDates,
                 value: DefaultValues,
                 debtDates: DefaultDebtDates,
                 debt: DefaultDebt).Item;
-        }
 
-        public static AmortisableAsset Secondary()
-        {
-            return FromNameAndData(
+        public static AmortisableAsset Secondary() =>
+            FromNameAndData(
                 SecondaryCompany,
                 SecondaryName,
                 currency: CurrencyConstructor.DefaultCompany,
@@ -79,7 +70,6 @@ namespace Effanville.FinancialStructures.Tests.TestDatabaseConstructor
                 value: SecondaryValues,
                 debtDates: SecondaryDebtDates,
                 debt: SecondaryDebt).Item;
-        }
 
         public static AmortizableAssetConstructor FromNameAndData(
             string company,

@@ -1,8 +1,8 @@
 ﻿using System;
 using Effanville.FinancialStructures.Database.Extensions.Statistics;
 using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
@@ -18,14 +18,14 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         {
             DateTime firstDate = valueList.FirstDate();
             DateTime lastDate = valueList.LatestDate();
-            Value = valueList.CalculateValue(
-                MDDCalculators.DefaultCalculator(firstDate, lastDate));
+            Value = valueList.MaximumDrawDown(firstDate, lastDate);
         }
 
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
-            Value = portfolio.TotalMDD(total, name);
+            string identifier = total.GetIdentifier(name);
+            Value = portfolio.TotalMDD(total, identifier);
         }
     }
 }

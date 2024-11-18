@@ -25,7 +25,7 @@ namespace Effanville.FinancialStructures.Tests
 
         public DatabaseConstructor LoadDatabaseFromFilepath(IFileSystem fileSystem, string filepath)
         {
-            var xmlPersistence = new XmlPortfolioPersistence();
+            XmlPortfolioPersistence xmlPersistence = new XmlPortfolioPersistence();
             Database = xmlPersistence.Load(new XmlFilePersistenceOptions(filepath, fileSystem), null) as Portfolio;
             return this;
         }

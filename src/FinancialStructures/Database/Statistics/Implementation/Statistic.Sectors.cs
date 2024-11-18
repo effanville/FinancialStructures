@@ -36,15 +36,11 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         {
             switch (valueList.AccountType)
             {
-                case Account.Security:
-                case Account.BankAccount:
-                case Account.Currency:
-                case Account.Asset:
+                default:
                 {
                     StringValue = valueList.Names.SectorsFlat;
                     return;
                 }
-                default:
                 case Account.All:
                 case Account.Benchmark:
                     return;
@@ -54,7 +50,8 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
-            IReadOnlyList<IValueList> accounts = portfolio.Accounts(total, name);
+            string identifier = total.GetIdentifier(name);
+            IReadOnlyList<IValueList> accounts = portfolio.Accounts(total, identifier);
             HashSet<string> sectors = new HashSet<string>();
 
             foreach (IValueList account in accounts)

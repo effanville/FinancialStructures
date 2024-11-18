@@ -7,7 +7,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
     /// <summary>
     /// An implementation of an asset that can have a debt against it.
     /// </summary>
-    public sealed partial class AmortisableAsset : ValueList, IAmortisableAsset
+    public sealed partial class AmortisableAsset
     {
         /// <inheritdoc/>
         public void SetDebt(DateTime date, decimal value, IReportLogger reportLogger = null)

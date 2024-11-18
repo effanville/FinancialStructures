@@ -24,7 +24,7 @@ namespace Effanville.FinancialStructures.Tests.DataStructuresTests
         [TestCaseSource(nameof(TotalCostData))]
         public void TradeTotalCostTests(TradeType tradeType, decimal unitPrice, decimal numUnits, decimal tradeCosts, decimal expectedCost)
         {
-            var trade = new SecurityTrade(tradeType, null, DateTime.Today, numUnits, unitPrice, tradeCosts);
+            SecurityTrade trade = new SecurityTrade(tradeType, null, DateTime.Today, numUnits, unitPrice, tradeCosts);
             decimal totalCost = trade.TotalCost;
             Assert.AreEqual(expectedCost, totalCost);
         }

@@ -31,7 +31,19 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         /// <inheritdoc/>
         public void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
-            StringValue = string.Empty;
+            if (total == Totals.Currency
+                || total == Totals.AssetCurrency
+                || total == Totals.BankAccountCurrency
+                || total == Totals.SecurityCurrency
+                || total == Totals.PensionCurrency
+                || total == Totals.CurrencySector)
+            {
+                StringValue = name.Name;
+            }
+            else
+            {
+                StringValue = string.Empty;
+            }
         }
 
         /// <inheritdoc/>

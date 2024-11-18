@@ -4,8 +4,8 @@ using System.Collections.Generic;
 using Effanville.Common.Structure.DataStructures;
 using Effanville.FinancialStructures.DataStructures;
 using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.FinanceStructures.Implementation;
-using Effanville.FinancialStructures.FinanceStructures.Statistics;
 using Effanville.FinancialStructures.NamingStructures;
 using Effanville.FinancialStructures.Tests.TestDatabaseConstructor;
 
@@ -102,7 +102,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests
         }
 
         [TestCaseSource(nameof(SecurityProfitAsIExchData))]
-        public void SecurityProfitAsIExchTests(IExchangableValueList valueList, decimal expectedValue)
+        public void SecurityProfitAsIExchTests(IExchangeableValueList valueList, decimal expectedValue)
         {
             decimal actualValue = valueList.Profit(null);
 
@@ -116,7 +116,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests
         {
             yield return new TestCaseData(new ValueList(), 0m)
                 .SetName($"{nameof(ValueListProfitTests)}-NoEntry");
-            var values = new TimeList();
+            TimeList values = new TimeList();
             values.SetData(new DateTime(2010, 1, 1), 4.2m);
             yield return new TestCaseData(
                 new ValueList(
@@ -145,7 +145,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests
         {
             yield return new TestCaseData(new ValueList(), 0m)
                 .SetName($"{nameof(ValueListRecentChangeTests)}-NoEntry");
-            var values = new TimeList();
+            TimeList values = new TimeList();
             values.SetData(new DateTime(2010, 1, 1), 4.2m);
             yield return new TestCaseData(
                 new ValueList(
@@ -218,7 +218,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests
         }
 
         [TestCaseSource(nameof(BankAccRecentChangeData))]
-        public void BankAccRecentChangeTests(IExchangableValueList valueList, decimal expectedValue)
+        public void BankAccRecentChangeTests(IExchangeableValueList valueList, decimal expectedValue)
         {
             decimal actualValue = valueList.RecentChange(null);
 

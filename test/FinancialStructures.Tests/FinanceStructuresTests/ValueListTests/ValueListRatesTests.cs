@@ -21,7 +21,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.ValueListT
                 new DateTime(2020, 1, 1),
                 double.NaN).SetName($"{nameof(CarTests)}-NoEntry");
 
-            var values = new TimeList();
+            TimeList values = new TimeList();
             values.SetData(new DateTime(2010, 1, 1), 4.2m);
 
             yield return new TestCaseData(

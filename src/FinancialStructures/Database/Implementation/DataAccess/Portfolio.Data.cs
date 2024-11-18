@@ -12,26 +12,6 @@ namespace Effanville.FinancialStructures.Database.Implementation
     public partial class Portfolio
     {
         /// <inheritdoc/>
-        public IReadOnlyList<SecurityDayData> SecurityData(TwoName name, IReportLogger reportLogger = null)
-        {
-            return this.CalculateValue(
-                Account.Security,
-                name, 
-                Calculate,
-                defaultValue: new List<SecurityDayData>());
-
-            IReadOnlyList<SecurityDayData> Calculate(IValueList valueList)
-            {
-                if (valueList is ISecurity security)
-                {
-                    return security.GetDataForDisplay();
-                }
-
-                return new List<SecurityDayData>();
-            }
-        }
-
-        /// <inheritdoc/>
         public IReadOnlyList<DailyValuation> NumberData(Account elementType, TwoName name, IReportLogger reportLogger = null)
         {
             return this.CalculateValue(elementType,

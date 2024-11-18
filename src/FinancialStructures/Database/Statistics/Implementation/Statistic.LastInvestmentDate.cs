@@ -2,8 +2,8 @@
 using Effanville.Common.Structure.Extensions;
 using Effanville.FinancialStructures.Database.Extensions.Values;
 using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Extensions;
 using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.ValueCalculators;
 
 namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
@@ -22,18 +22,19 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         public bool IsNumeric => false;
 
         /// <inheritdoc/>
-        public object ValueAsObject => IsNumeric ? Value : StringValue;
+        public object ValueAsObject => StringValue;
 
         /// <inheritdoc/>
         public void Calculate(IPortfolio portfolio, IValueList valueList, DateTime date)
         {
-            StringValue = valueList.CalculateValue(LastInvestmentDateCalculators.DefaultCalculator).ToIsoDateString();
+            StringValue = valueList.LastInvestmentDate().ToIsoDateString();
         }
 
         /// <inheritdoc/>
         public void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
-            StringValue = portfolio.LastInvestmentDate(total, name).ToIsoDateString();
+            string identifier = total.GetIdentifier(name);
+            StringValue = portfolio.LastInvestmentDate(total, identifier).ToIsoDateString();
         }
 
         /// <inheritdoc/>

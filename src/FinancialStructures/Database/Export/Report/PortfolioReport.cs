@@ -146,7 +146,7 @@ namespace Effanville.FinancialStructures.Database.Export.Report
             _ = reportBuilder.WriteTitle("Company Statistics", DocumentElement.h2);
             foreach (string company in companies)
             {
-                if (fSettings.DisplayValueFunds && fPortfolio.TotalValue(Totals.Company, new TwoName(company)) > 0m || !fSettings.DisplayValueFunds)
+                if (fSettings.DisplayValueFunds && fPortfolio.TotalValue(Totals.Company, company) > 0m || !fSettings.DisplayValueFunds)
                 {
                     _ = reportBuilder.WriteTitle(company, DocumentElement.h3);
 
@@ -156,7 +156,7 @@ namespace Effanville.FinancialStructures.Database.Export.Report
                         stats[0].Statistics,
                         headerFirstColumn: true);
 
-                    var companyAccounts = fPortfolio.Accounts(Totals.Company, new TwoName(company));
+                    var companyAccounts = fPortfolio.Accounts(Totals.Company, company);
                     if (companyAccounts != null && companyAccounts.Count > 1)
                     {
                         _ = reportBuilder.WritePieChart(

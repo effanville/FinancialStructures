@@ -42,42 +42,42 @@ namespace Effanville.FinancialStructures.Tests.Database.Statistics
         {
             IPortfolio portfolio = TestDatabase.Databases[databaseName];
             double actual = portfolio.Fraction(totals, account, TestDatabase.Name(account, order), date);
-            Assert.AreEqual(expectedValue, actual);
+            Assert.That(actual, Is.EqualTo(expectedValue));
         }
 
         private static IEnumerable<TestCaseData> TotalFractionTestCases()
         {
-            yield return new TestCaseData(TestDatabaseName.OneBank, Totals.All, new TwoName(), new DateTime(2015, 5, 4), 1.0);
+            yield return new TestCaseData(TestDatabaseName.OneBank, Totals.All, null, new DateTime(2015, 5, 4), 1.0);
 
-            yield return new TestCaseData(TestDatabaseName.OneBank, Totals.Security, new TwoName(), new DateTime(2015, 5, 4), 0.0);
+            yield return new TestCaseData(TestDatabaseName.OneBank, Totals.Security, null, new DateTime(2015, 5, 4), 0.0);
 
-            yield return new TestCaseData(TestDatabaseName.OneBank, Totals.BankAccount, new TwoName(), new DateTime(2015, 5, 4), 1.0);
+            yield return new TestCaseData(TestDatabaseName.OneBank, Totals.BankAccount, null, new DateTime(2015, 5, 4), 1.0);
 
-            yield return new TestCaseData(TestDatabaseName.TwoSecTwoBank, Totals.All, new TwoName(), new DateTime(2015, 5, 4), 1.0);
+            yield return new TestCaseData(TestDatabaseName.TwoSecTwoBank, Totals.All, null, new DateTime(2015, 5, 4), 1.0);
 
-            yield return new TestCaseData(TestDatabaseName.TwoSecTwoBank, Totals.Security, new TwoName(), new DateTime(2015, 5, 4), 0.95198685008548201);
+            yield return new TestCaseData(TestDatabaseName.TwoSecTwoBank, Totals.Security, null, new DateTime(2015, 5, 4), 0.95198685008548201);
 
-            yield return new TestCaseData(TestDatabaseName.TwoSecTwoBank, Totals.SecurityCompany, TestDatabase.Name(Account.Security, NameOrder.Secondary), new DateTime(2015, 5, 4), 0.93450103581658372);
+            yield return new TestCaseData(TestDatabaseName.TwoSecTwoBank, Totals.SecurityCompany, TestDatabase.Name(Account.Security, NameOrder.Secondary).Company, new DateTime(2015, 5, 4), 0.93450103581658372);
 
-            yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.Security, new TwoName(), new DateTime(2015, 5, 4), 1.0);
+            yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.Security, null, new DateTime(2015, 5, 4), 1.0);
 
-            yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.BankAccount, new TwoName(), new DateTime(2015, 5, 4), 0.0);
+            yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.BankAccount, null, new DateTime(2015, 5, 4), 0.0);
 
-            yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.SecurityCompany, TestDatabase.Name(Account.Security, NameOrder.Default), new DateTime(2015, 5, 4), 0.018367705675060721);
+            yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.SecurityCompany, TestDatabase.Name(Account.Security, NameOrder.Default).Company, new DateTime(2015, 5, 4), 0.018367705675060721);
 
-            yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.SecurityCompany, TestDatabase.Name(Account.Security, NameOrder.Secondary), new DateTime(2015, 5, 4), 0.98163229432493937);
+            yield return new TestCaseData(TestDatabaseName.TwoSec, Totals.SecurityCompany, TestDatabase.Name(Account.Security, NameOrder.Secondary).Company, new DateTime(2015, 5, 4), 0.98163229432493937);
 
-            yield return new TestCaseData(TestDatabaseName.TwoSecCur, Totals.SecurityCompany, TestDatabase.Name(Account.Security, NameOrder.Secondary), new DateTime(2015, 5, 4), 0.82144808158649374);
+            yield return new TestCaseData(TestDatabaseName.TwoSecCur, Totals.SecurityCompany, TestDatabase.Name(Account.Security, NameOrder.Secondary).Company, new DateTime(2015, 5, 4), 0.82144808158649374);
 
-            yield return new TestCaseData(TestDatabaseName.TwoSecCur, Totals.Security, new TwoName(), new DateTime(2015, 5, 4), 1.0);
+            yield return new TestCaseData(TestDatabaseName.TwoSecCur, Totals.Security, null, new DateTime(2015, 5, 4), 1.0);
         }
 
         [TestCaseSource(nameof(TotalFractionTestCases))]
-        public void TotalFractionTest(TestDatabaseName databaseName, Totals totals, TwoName names, DateTime date, double expectedValue)
+        public void TotalFractionTest(TestDatabaseName databaseName, Totals totals, string identifier, DateTime date, double expectedValue)
         {
             IPortfolio portfolio = TestDatabase.Databases[databaseName];
-            double actual = portfolio.TotalFraction(totals, names, date);
-            Assert.AreEqual(expectedValue, actual);
+            double actual = portfolio.TotalFraction(totals, identifier, date);
+            Assert.That(actual, Is.EqualTo(expectedValue));
         }
     }
 }

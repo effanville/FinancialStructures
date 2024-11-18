@@ -71,6 +71,14 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
         }
 
         /// <summary>
+        /// Options on displaying sectors.
+        /// </summary>
+        public GenerateOptions<Statistic> CurrencyGenerateOptions
+        {
+            get;
+        }
+        
+        /// <summary>
         /// Constructor setting all values.
         /// </summary>
         public PortfolioStatisticsSettings(
@@ -84,7 +92,9 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
             bool includeSectors,
             IReadOnlyList<Statistic> sectorDisplayFields,
             bool includeAssets,
-            IReadOnlyList<Statistic> assetDisplayFields)
+            IReadOnlyList<Statistic> assetDisplayFields,
+            bool includeCurrency, 
+            IReadOnlyList<Statistic> currencyDisplayFields)
         {
             DateToCalculate = dateToCalculate;
             DisplayValueFunds = displayValueFunds;
@@ -93,6 +103,7 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
             BankAccountGenerateOptions = new GenerateOptions<Statistic>(includeBankAccounts, bankAccDisplayFields);
             SectorGenerateOptions = new GenerateOptions<Statistic>(includeSectors, sectorDisplayFields);
             AssetGenerateOptions = new GenerateOptions<Statistic>(includeAssets, assetDisplayFields);
+            CurrencyGenerateOptions = new GenerateOptions<Statistic>(includeCurrency, currencyDisplayFields);
         }
 
         /// <summary>
@@ -111,7 +122,9 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
                 includeSectors: true,
                 sectorDisplayFields: AccountStatisticsHelpers.DefaultSectorStats().ToList(),
                 includeAssets: true,
-                assetDisplayFields: AccountStatisticsHelpers.DefaultAssetStats().ToList());
+                assetDisplayFields: AccountStatisticsHelpers.DefaultAssetStats().ToList(),
+                includeCurrency: true,
+                currencyDisplayFields: AccountStatisticsHelpers.DefaultCurrencyStats().ToList());
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// <param name="displayValueFunds">Whether funds with 0 latest value should be displayed only, or all funds displayed.</param>
         /// <param name="displayTotals">Whether totals values should be calculated</param>
         /// <param name="statisticsToDisplay">The array of statistics to be displayed</param>
-        public static List<AccountStatistics> GetStats(this IPortfolio portfolio, DateTime dateToCalculate, Account account, bool displayValueFunds, bool displayTotals = true, Statistic[] statisticsToDisplay = null)
+        public static List<AccountStatistics> GetStats(this IPortfolio portfolio, DateTime dateToCalculate, Account account, bool displayValueFunds, bool displayTotals = true, IReadOnlyList<Statistic> statisticsToDisplay = null)
         {
             switch (account)
             {
@@ -67,7 +67,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
             }
         }
 
-        private static List<AccountStatistics> GenerateFromList(IReadOnlyList<IValueList> values, IPortfolio portfolio, DateTime dateToCalculate, Account account, bool displayValueFunds, bool displayTotals, Statistic[] statisticsToDisplay)
+        private static List<AccountStatistics> GenerateFromList(IReadOnlyList<IValueList> values, IPortfolio portfolio, DateTime dateToCalculate, Account account, bool displayValueFunds, bool displayTotals, IReadOnlyList<Statistic> statisticsToDisplay)
         {
             List<AccountStatistics> stats = new List<AccountStatistics>();
             foreach (IValueList security in values)
@@ -210,12 +210,12 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
             }
         }
 
-        private static List<AccountStatistics> GenerateFromList(IReadOnlyList<string> values, IPortfolio portfolio, DateTime dateToCalculate, Totals totals, bool displayValueFunds, Statistic[] statisticsToDisplay)
+        private static List<AccountStatistics> GenerateFromList(IReadOnlyList<string> values, IPortfolio portfolio, DateTime dateToCalculate, Totals totals, bool displayValueFunds, IReadOnlyList<Statistic> statisticsToDisplay)
         {
             List<AccountStatistics> stats = new List<AccountStatistics>();
             foreach (string company in values)
             {
-                decimal latest = portfolio.TotalValue(totals, new TwoName(company));
+                decimal latest = portfolio.TotalValue(totals, company);
                 if ((displayValueFunds && latest > 0) || !displayValueFunds)
                 {
                     stats.Add(new AccountStatistics(portfolio, dateToCalculate, totals, new NameData(company, "Totals"), statisticsToDisplay ?? AccountStatisticsHelpers.DefaultSecurityStats()));
@@ -233,7 +233,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
         /// <param name="total">The type of account data to display.</param>
         /// <param name="name">The name of the account to query for.</param>
         /// <param name="statisticsToDisplay">The array of statistics to be displayed.</param>
-        public static List<AccountStatistics> GetStats(this IPortfolio portfolio, DateTime dateToCalculate, Totals total, TwoName name, Statistic[] statisticsToDisplay = null)
+        public static List<AccountStatistics> GetStats(this IPortfolio portfolio, DateTime dateToCalculate, Totals total, TwoName name, IReadOnlyList<Statistic> statisticsToDisplay = null)
         {
             if (portfolio != null)
             {
@@ -254,7 +254,6 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
                 case Totals.Security:
                 case Totals.Pension:
                 case Totals.BankAccount:
-                case Totals.Currency:
                     return new TwoName("Totals", total.ToString());
                 case Totals.BankAccountCompany:
                 case Totals.BankAccountSector:
@@ -264,6 +263,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
                 case Totals.PensionSector:
                 case Totals.PensionCompany:
                 case Totals.Sector:
+                case Totals.Currency:
                 case Totals.Benchmark:
                 case Totals.CurrencySector:
                 case Totals.SecurityCurrency:
@@ -272,7 +272,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
             }
         }
 
-        private static Statistic[] DefaultStatistics(Totals total)
+        private static IReadOnlyList<Statistic> DefaultStatistics(Totals total)
         {
             switch (total)
             {
@@ -290,12 +290,12 @@ namespace Effanville.FinancialStructures.Database.Extensions.Statistics
                 case Totals.PensionCurrency:
                     return AccountStatisticsHelpers.DefaultSecurityStats();
                 case Totals.BankAccount:
-                case Totals.Currency:
                 case Totals.BankAccountCompany:
                 case Totals.BankAccountSector:
                 case Totals.BankAccountCurrency:
                     return AccountStatisticsHelpers.DefaultBankAccountStats();
                 case Totals.Sector:
+                case Totals.Currency:
                 case Totals.Benchmark:
                     return AccountStatisticsHelpers.DefaultSectorStats();
                 case Totals.Asset:

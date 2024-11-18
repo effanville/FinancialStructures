@@ -50,7 +50,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public DailyValuation LatestValue(ICurrency currency)
+        public DailyValuation LatestValue(IReadOnlyCurrency currency)
         {
             DailyValuation latestDate = UnitPrice.LatestValuation();
             if (latestDate == null)
@@ -77,7 +77,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public DailyValuation FirstValue(ICurrency currency)
+        public DailyValuation FirstValue(IReadOnlyCurrency currency)
         {
             DailyValuation sharesFirstDate = Shares.FirstValuation();
             if (sharesFirstDate == null)
@@ -97,7 +97,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public DailyValuation Value(DateTime date, ICurrency currency)
+        public DailyValuation Value(DateTime date, IReadOnlyCurrency currency)
         {
             // if we have never held the security, have no value.
             if (!Shares.Any())
@@ -117,7 +117,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public DailyValuation ValueBefore(DateTime date, ICurrency currency)
+        public DailyValuation ValueBefore(DateTime date, IReadOnlyCurrency currency)
         {
             // if we have never held the security, have no value.
             if (!Shares.Any())
@@ -142,7 +142,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public DailyValuation ValueOnOrBefore(DateTime date, ICurrency currency)
+        public DailyValuation ValueOnOrBefore(DateTime date, IReadOnlyCurrency currency)
         {
             // if we have never held the security, have no value.
             if (!Shares.Any())

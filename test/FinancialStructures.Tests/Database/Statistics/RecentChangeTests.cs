@@ -23,7 +23,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Statistics
         public void TotalRecentChangeTests(TestDatabaseName databaseName, Totals totals, decimal expectedValue)
         {
             IPortfolio portfolio = TestDatabase.Databases[databaseName];
-            Assert.AreEqual(expectedValue, portfolio.RecentChange(totals));
+            Assert.That(portfolio.RecentChange(totals), Is.EqualTo(expectedValue));
         }
 
         [TestCase(TestDatabaseName.OneBank, Account.All, NameOrder.Default, 0)]
@@ -36,7 +36,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Statistics
         public void RecentChangeTests(TestDatabaseName databaseName, Account totals, NameOrder order, decimal expectedValue)
         {
             IPortfolio portfolio = TestDatabase.Databases[databaseName];
-            Assert.AreEqual(expectedValue, portfolio.RecentChange(totals, TestDatabase.Name(totals, order)));
+            Assert.That(portfolio.RecentChange(totals, TestDatabase.Name(totals, order)), Is.EqualTo(expectedValue));
         }
     }
 }

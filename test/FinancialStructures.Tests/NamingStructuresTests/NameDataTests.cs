@@ -20,8 +20,8 @@ namespace Effanville.FinancialStructures.Tests.NamingStructuresTests
                 SectorsFlat = inputSectors
             };
 
-            Assert.AreEqual(expectedNumber, data.Sectors.Count);
-            Assert.AreEqual(expected, data.SectorsFlat);
+            Assert.That(data.Sectors.Count, Is.EqualTo(expectedNumber));
+            Assert.That(data.SectorsFlat, Is.EqualTo(expected));
         }
 
         [Test]
@@ -32,12 +32,12 @@ namespace Effanville.FinancialStructures.Tests.NamingStructuresTests
                 SectorsFlat = "dog man, cat ,human"
             };
 
-            Assert.AreEqual(3, data.Sectors.Count);
+            Assert.That(data.Sectors.Count, Is.EqualTo(3));
             string[] expected = new string[] { "dog man", "cat", "human" };
             string[] listing = data.Sectors.ToArray();
             for (int sectorIndex = 0; sectorIndex < expected.Length; sectorIndex++)
             {
-                Assert.AreEqual(expected[sectorIndex], listing[sectorIndex]);
+                Assert.That(listing[sectorIndex], Is.EqualTo(expected[sectorIndex]));
             }
         }
 
@@ -77,7 +77,7 @@ namespace Effanville.FinancialStructures.Tests.NamingStructuresTests
                 SectorsFlat = otherSectorsFlat
             };
 
-            Assert.AreEqual(areEqual, firstName.Equals(secondName));
+            Assert.That(firstName.Equals(secondName), Is.EqualTo(areEqual));
         }
     }
 }
