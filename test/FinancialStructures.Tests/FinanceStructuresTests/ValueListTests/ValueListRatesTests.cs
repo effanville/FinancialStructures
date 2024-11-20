@@ -95,7 +95,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.ValueListT
         public void CarTests(IValueList valueList, DateTime start, DateTime end, double expectedCar)
         {
             double actualCar = valueList.CAR(start, end);
-            Assert.AreEqual(expectedCar, actualCar);
+            Assert.That(actualCar, Is.EqualTo(expectedCar));
         }
     }
 }

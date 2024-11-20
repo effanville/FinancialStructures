@@ -478,7 +478,7 @@ namespace Effanville.FinancialStructures.Tests.Saving
 
             string file = tempFileSystem.File.ReadAllText(savePath);
 
-            Assert.AreEqual(expectedXml, file);
+            Assert.That(file, Is.EqualTo(expectedXml));
         }
 
         private static IEnumerable<TestCaseData> ReadSerializationData(string testName)
@@ -521,7 +521,7 @@ namespace Effanville.FinancialStructures.Tests.Saving
 
             string file = tempFileSystem.File.ReadAllText(savePath);
 
-            Assert.AreEqual(expectedXml, file);
+            Assert.That(file, Is.EqualTo(expectedXml));
 
             IPortfolio loadedPortfolio = xmlPersistence.Load(new XmlFilePersistenceOptions(savePath, tempFileSystem), null);
 
@@ -532,10 +532,10 @@ namespace Effanville.FinancialStructures.Tests.Saving
         {
             if (expected == null | actual == null)
             {
-                Assert.IsTrue(expected == null && actual == null);
+                Assert.That(expected == null && actual == null, Is.True);
             }
 
-            Assert.AreEqual(expected.Name, actual.Name);
+            Assert.That(actual.Name, Is.EqualTo(expected.Name));
 
             if (expected.Funds.Count == actual.Funds.Count)
             {
@@ -543,12 +543,12 @@ namespace Effanville.FinancialStructures.Tests.Saving
                 {
                     ISecurity expectedSec = expected.Funds[i];
                     ISecurity actualSec = actual.Funds[i];
-                    Assert.AreEqual(expectedSec.Names, actualSec.Names);
+                    Assert.That(actualSec.Names, Is.EqualTo(expectedSec.Names));
                 }
             }
             else
             {
-                Assert.IsTrue(false, "Funds dont have the same number.");
+                Assert.That(actual.Funds, Has.Count.EqualTo(expected.Funds.Count), "Funds dont have the same number.");
             }
 
             if (expected.BankAccounts.Count == actual.BankAccounts.Count)
@@ -557,12 +557,12 @@ namespace Effanville.FinancialStructures.Tests.Saving
                 {
                     IExchangeableValueList expectedSec = expected.BankAccounts[i];
                     IExchangeableValueList actualSec = actual.BankAccounts[i];
-                    Assert.AreEqual(expectedSec.Names, actualSec.Names);
+                    Assert.That(actualSec.Names, Is.EqualTo(expectedSec.Names));
                 }
             }
             else
             {
-                Assert.IsTrue(false, "Funds dont have the same number.");
+                Assert.That(actual.BankAccounts, Has.Count.EqualTo(expected.BankAccounts.Count), "BankAccounts dont have the same number.");
             }
 
             if (expected.Currencies.Count == actual.Currencies.Count)
@@ -571,12 +571,12 @@ namespace Effanville.FinancialStructures.Tests.Saving
                 {
                     ICurrency expectedSec = expected.Currencies[i];
                     ICurrency actualSec = actual.Currencies[i];
-                    Assert.AreEqual(expectedSec.Names, actualSec.Names);
+                    Assert.That(actualSec.Names, Is.EqualTo(expectedSec.Names));
                 }
             }
             else
             {
-                Assert.IsTrue(false, "Funds dont have the same number.");
+                Assert.That(actual.Currencies.Count, Is.EqualTo(expected.Currencies.Count), "Currencies dont have the same number.");
             }
 
             if (expected.BenchMarks.Count == actual.BenchMarks.Count)
@@ -585,15 +585,15 @@ namespace Effanville.FinancialStructures.Tests.Saving
                 {
                     IValueList expectedBenchMark = expected.BenchMarks[i];
                     IValueList actualBenchMark = actual.BenchMarks[i];
-                    Assert.AreEqual(expectedBenchMark.Names, actualBenchMark.Names);
+                    Assert.That(actualBenchMark.Names, Is.EqualTo(expectedBenchMark.Names));
                 }
             }
             else
             {
-                Assert.IsTrue(false, "Funds dont have the same number.");
+                Assert.That(actual.BenchMarks.Count, Is.EqualTo(expected.BenchMarks.Count), "Funds dont have the same number.");
             }
 
-            CollectionAssert.AreEqual(expected.BaseCurrency, actual.BaseCurrency);
+            Assert.That(actual.BaseCurrency, Is.EqualTo(expected.BaseCurrency).AsCollection);
         }
     }
 }

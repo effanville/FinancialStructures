@@ -20,10 +20,10 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
 
             bool result = portfolio.TryGetAccount(Account.Security, new TwoName("Company", "name"), out IValueList desired);
 
-            Assert.AreEqual(true, result);
-            Assert.IsNotNull(desired);
-            Assert.AreEqual("Company", desired.Names.Company);
-            Assert.AreEqual("name", desired.Names.Name);
+            Assert.That(result, Is.EqualTo(true));
+            Assert.That(desired, Is.Not.Null);
+            Assert.That(desired.Names.Company, Is.EqualTo("Company"));
+            Assert.That(desired.Names.Name, Is.EqualTo("name"));
         }
 
         [Test]
@@ -36,8 +36,8 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
 
             bool result = portfolio.TryGetAccount(Account.Security, new TwoName("Company", "NewName"), out IValueList desired);
 
-            Assert.AreEqual(false, result);
-            Assert.IsNull(desired);
+            Assert.That(result, Is.EqualTo(false));
+            Assert.That(desired, Is.Null);
         }
 
         [Test]
@@ -50,10 +50,10 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
 
             bool result = portfolio.TryGetAccount(Account.Benchmark, new TwoName("Company", "name"), out IValueList desired);
 
-            Assert.AreEqual(true, result);
-            Assert.IsNotNull(desired);
-            Assert.AreEqual("Company", desired.Names.Company);
-            Assert.AreEqual("name", desired.Names.Name);
+            Assert.That(result, Is.EqualTo(true));
+            Assert.That(desired, Is.Not.Null);
+            Assert.That(desired.Names.Company, Is.EqualTo("Company"));
+            Assert.That(desired.Names.Name, Is.EqualTo("name"));
         }
 
         [Test]
@@ -66,8 +66,8 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
 
             bool result = portfolio.TryGetAccount(Account.Benchmark, new TwoName("NewCompany", "NewName"), out IValueList desired);
 
-            Assert.AreEqual(false, result);
-            Assert.IsNull(desired);
+            Assert.That(result, Is.EqualTo(false));
+            Assert.That(desired, Is.Null);
         }
     }
 }

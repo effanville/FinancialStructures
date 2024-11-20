@@ -38,7 +38,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Statistics
         public void IRRPortfolioTests(TestDatabaseName databaseName, Totals totals, DateTime earlier, DateTime later, double expected)
         {
             IPortfolio portfolio = TestDatabase.Databases[databaseName];
-            Assert.AreEqual(expected, portfolio.TotalIRR(totals, earlier, later, numIterations: 20));
+            Assert.That(portfolio.TotalIRR(totals, earlier, later, numIterations: 20), Is.EqualTo(expected));
         }
     }
 }

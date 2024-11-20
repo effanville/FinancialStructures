@@ -15,6 +15,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_build", "BuildProcess\source\_build.csproj", "{03BEDBA1-8BB2-4F05-AA0A-787E66201EB4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{1C2E5605-09C7-48B7-BA9A-2CE96ABA232D}"
+	ProjectSection(SolutionItems) = preProject
+		Common\Directory.Build.props = Common\Directory.Build.props
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.Console", "Common\src\Common.Console\Common.Console.csproj", "{8DEA4D0A-0ED4-41F8-A647-0168274B2A60}"
 EndProject

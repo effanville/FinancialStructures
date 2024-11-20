@@ -36,9 +36,9 @@ namespace Effanville.FinancialStructures.Stocks.Tests.HistoricalRepository
 
                 foreach (HistoricalStock instrument in exchange.Stocks)
                 {
-                    Assert.NotZero(instrument.Fundamentals.Count);
-                    Assert.NotZero(instrument.Name.Count);
-                    Assert.NotZero(instrument.Valuations.Count, $"Instrument {instrument.Name.Last().Value.Ric} has no valuations.");
+                    Assert.That(instrument.Fundamentals.Count, Is.Not.Zero);
+                    Assert.That(instrument.Name.Count, Is.Not.Zero);
+                    Assert.That(instrument.Valuations.Count, Is.Not.Zero, $"Instrument {instrument.Name.Last().Value.Ric} has no valuations.");
                 }
             }
         }
@@ -89,13 +89,13 @@ namespace Effanville.FinancialStructures.Stocks.Tests.HistoricalRepository
 
                 foreach (var instrument in exchange.Stocks)
                 {
-                    Assert.NotZero(instrument.Fundamentals.Count);
-                    Assert.NotZero(instrument.Name.Count);
-                    Assert.NotZero(instrument.Valuations.Count);
+                    Assert.That(instrument.Fundamentals.Count, Is.Not.Zero);
+                    Assert.That(instrument.Name.Count, Is.Not.Zero);
+                    Assert.That(instrument.Valuations.Count, Is.Not.Zero);
                     valuationRecords.TryGetValue(instrument.Name.Last().Value.Ric, out int previous);
-                    Assert.Greater(
+                    Assert.That(
                         instrument.Valuations.Count,
-                        previous,
+                        Is.GreaterThan(previous),
                         $"Instrument {instrument.Name.Last().Value.Ric} has not added data.");
                 }
             }

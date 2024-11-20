@@ -22,14 +22,14 @@ namespace Effanville.FinancialStructures.Tests.Database.Export
             _ = generator.WithBankAccount(bankCompany, "AccountName", dates: new[] { new DateTime(2000, 1, 1) }, values: new[] { 53.0m });
             PortfolioStatistics stats = new PortfolioStatistics(generator.Database, PortfolioStatisticsSettings.DefaultSettings(), new FileSystem());
 
-            Assert.AreEqual(1, stats.SecurityStats.Count);
-            Assert.AreEqual(secCompany, stats.SecurityStats.First().NameData.Company);
-            Assert.AreEqual(1, stats.SecurityCompanyStats.Count);
-            Assert.AreEqual(secCompany, stats.SecurityCompanyStats.First().NameData.Company);
-            Assert.AreEqual(1, stats.BankAccountStats.Count);
-            Assert.AreEqual(bankCompany, stats.BankAccountStats.First().NameData.Company);
-            Assert.AreEqual(1, stats.BankAccountCompanyStats.Count);
-            Assert.AreEqual(bankCompany, stats.BankAccountCompanyStats.First().NameData.Company);
+            Assert.That(stats.SecurityStats.Count, Is.EqualTo(1));
+            Assert.That(stats.SecurityStats.First().NameData.Company, Is.EqualTo(secCompany));
+            Assert.That(stats.SecurityCompanyStats.Count, Is.EqualTo(1));
+            Assert.That(stats.SecurityCompanyStats.First().NameData.Company, Is.EqualTo(secCompany));
+            Assert.That(stats.BankAccountStats.Count, Is.EqualTo(1));
+            Assert.That(stats.BankAccountStats.First().NameData.Company, Is.EqualTo(bankCompany));
+            Assert.That(stats.BankAccountCompanyStats.Count, Is.EqualTo(1));
+            Assert.That(stats.BankAccountCompanyStats.First().NameData.Company, Is.EqualTo(bankCompany));
         }
     }
 }

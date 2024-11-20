@@ -20,7 +20,7 @@ namespace Effanville.FinancialStructures.Tests.Database
 
             bool exists = portfolio.Exists(Account.Security, new TwoName(company, name));
 
-            Assert.AreEqual(true, exists);
+            Assert.That(exists, Is.EqualTo(true));
         }
 
         [Test]
@@ -35,7 +35,7 @@ namespace Effanville.FinancialStructures.Tests.Database
 
             bool exists = portfolio.Exists(Account.Security, new TwoName("Man", name));
 
-            Assert.AreEqual(false, exists);
+            Assert.That(exists, Is.EqualTo(false));
         }
 
         [Test]
@@ -50,7 +50,7 @@ namespace Effanville.FinancialStructures.Tests.Database
 
             bool exists = portfolio.Exists(Account.Benchmark, new TwoName(company, name));
 
-            Assert.AreEqual(true, exists);
+            Assert.That(exists, Is.EqualTo(true));
         }
 
         [Test]
@@ -65,7 +65,7 @@ namespace Effanville.FinancialStructures.Tests.Database
 
             bool exists = portfolio.Exists(Account.Benchmark, new TwoName("Man", name));
 
-            Assert.AreEqual(false, exists);
+            Assert.That(exists, Is.EqualTo(false));
         }
     }
 }

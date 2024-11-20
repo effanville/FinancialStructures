@@ -26,10 +26,10 @@ namespace Effanville.FinancialStructures.Tests.Database
             Portfolio database = constructor.Database;
             IReadOnlyList<string> sectings = database.Sectors(Account.Security);
 
-            Assert.AreEqual(sectors.Length, sectings.Count);
+            Assert.That(sectings.Count, Is.EqualTo(sectors.Length));
             for (int i = 0; i < sectors.Length; i++)
             {
-                Assert.AreEqual(sectors[i], sectings[i]);
+                Assert.That(sectings[i], Is.EqualTo(sectors[i]));
             }
         }
     }

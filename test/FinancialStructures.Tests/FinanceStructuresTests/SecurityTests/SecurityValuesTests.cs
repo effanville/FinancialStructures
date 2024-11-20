@@ -40,12 +40,12 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
             {
                 if (actualValue != null)
                 {
-                    Assert.AreEqual(expectedValue.Day, actualValue.Day);
-                    Assert.AreEqual(expectedValue.Value, actualValue.Value);
+                    Assert.That(actualValue.Day, Is.EqualTo(expectedValue.Day));
+                    Assert.That(actualValue.Value, Is.EqualTo(expectedValue.Value));
                 }
                 else
                 {
-                    Assert.IsNull(expectedValue);
+                    Assert.That(expectedValue, Is.Null);
                 }
             });
         }

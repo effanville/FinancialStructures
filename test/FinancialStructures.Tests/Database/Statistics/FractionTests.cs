@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.Database.Extensions.Statistics;
-using Effanville.FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
 

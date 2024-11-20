@@ -131,12 +131,12 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
 
             Assert.Multiple(() =>
             {
-                foreach ((DateTime Date, decimal UnitPrice, decimal ShareNo, decimal Investment) in expectedValues)
+                foreach ((DateTime date, decimal unitPrice, decimal shareNo, decimal investment) in expectedValues)
                 {
-                    SecurityDayData dayData = sut.DayData(Date);
-                    Assert.AreEqual(Investment, dayData.NewInvestment, $"{Date} Investment value wrong");
-                    Assert.AreEqual(ShareNo, dayData.ShareNo, $"{Date} Num Shares value wrong");
-                    Assert.AreEqual(UnitPrice, dayData.UnitPrice, $"{Date} Unit Price wrong");
+                    SecurityDayData dayData = sut.DayData(date);
+                    Assert.That(dayData.NewInvestment, Is.EqualTo(investment), $"{date} Investment value wrong");
+                    Assert.That(dayData.ShareNo, Is.EqualTo(shareNo), $"{date} Num Shares value wrong");
+                    Assert.That(dayData.UnitPrice, Is.EqualTo(unitPrice), $"{date} Unit Price wrong");
                 }
             });
         }
@@ -183,7 +183,6 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
             (TradeType TradeType, DateTime Date, decimal TradeShares, decimal TradePrice, decimal TradeCost) tradeEditData,
             (DateTime Date, decimal UnitPrice, decimal ShareNo, decimal Investment)[] expectedValues)
         {
-            SecurityTrade oldTrade = sut.SecurityTrades.First(trade => trade.Day.Equals(tradeEditData.Date));
             _ = sut.TryAddOrEditTradeData(
                 new SecurityTrade(tradeEditData.Date),
                 new SecurityTrade(
@@ -197,12 +196,12 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
 
             Assert.Multiple(() =>
             {
-                foreach ((DateTime Date, decimal UnitPrice, decimal ShareNo, decimal Investment) in expectedValues)
+                foreach ((DateTime date, decimal unitPrice, decimal shareNo, decimal investment) in expectedValues)
                 {
-                    SecurityDayData dayData = sut.DayData(Date);
-                    Assert.AreEqual(Investment, dayData.NewInvestment, $"{Date} Investment value wrong");
-                    Assert.AreEqual(ShareNo, dayData.ShareNo, $"{Date} Num Shares value wrong");
-                    Assert.AreEqual(UnitPrice, dayData.UnitPrice, $"{Date} Unit Price wrong");
+                    SecurityDayData dayData = sut.DayData(date);
+                    Assert.That(dayData.NewInvestment, Is.EqualTo(investment), $"{date} Investment value wrong");
+                    Assert.That(dayData.ShareNo, Is.EqualTo(shareNo), $"{date} Num Shares value wrong");
+                    Assert.That(dayData.UnitPrice, Is.EqualTo(unitPrice), $"{date} Unit Price wrong");
                 }
             });
         }
@@ -245,12 +244,12 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
 
             Assert.Multiple(() =>
             {
-                foreach ((DateTime Date, decimal UnitPrice, decimal ShareNo, decimal Investment) in expectedValues)
+                foreach ((DateTime date, decimal unitPrice, decimal shareNo, decimal investment) in expectedValues)
                 {
-                    SecurityDayData dayData = sut.DayData(Date);
-                    Assert.AreEqual(Investment, dayData.NewInvestment, $"{Date} Investment value wrong");
-                    Assert.AreEqual(ShareNo, dayData.ShareNo, $"{Date} Num Shares value wrong");
-                    Assert.AreEqual(UnitPrice, dayData.UnitPrice, $"{Date} Unit Price wrong");
+                    SecurityDayData dayData = sut.DayData(date);
+                    Assert.That(dayData.NewInvestment, Is.EqualTo(investment), $"{date} Investment value wrong");
+                    Assert.That(dayData.ShareNo, Is.EqualTo(shareNo), $"{date} Num Shares value wrong");
+                    Assert.That(dayData.UnitPrice, Is.EqualTo(unitPrice), $"{date} Unit Price wrong");
                 }
             });
         }

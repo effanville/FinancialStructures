@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
@@ -86,10 +86,10 @@ namespace Effanville.FinancialStructures.Stocks.Tests
         public const string ExampleDatabaseFolder = "ExampleDatabases";
 
         public static readonly string ExampleDatabaseLocation = $"{CurrentPath}\\{ExampleDatabaseFolder}";
-        
+
         [Test]
         public void CreateSqliteDbTest()
-        {           
+        {
             void reportAction(ReportSeverity severity, ReportType reportType, string location, string text)
             {
             }

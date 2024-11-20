@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace Effanville.FinancialStructures.Tests.StatsMakers
 {
     [TestFixture]
-    internal class CSVHIstoryWriterTests
+    internal class CsvHistoryWriterTests
     {
         [Test]
         public void CanGenerate()
@@ -20,7 +20,7 @@ namespace Effanville.FinancialStructures.Tests.StatsMakers
             history.ExportToFile(savePath, tempFileSystem);
             string file = tempFileSystem.File.ReadAllText(savePath);
 
-            Assert.IsNotEmpty(file);
+            Assert.That(file, Is.Not.Empty);
         }
     }
 }

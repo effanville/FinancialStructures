@@ -66,11 +66,11 @@ namespace Effanville.FinancialStructures.Tests.NamingStructuresTests
         [TestCase("comp", "name", null, "sectors", null, "comp", "name", "url", "sectors", null, false)]
         [TestCase("comp", "name", null, null, "currency", "comp", "name", "url", "sectors", null, false)]
         [TestCase(null, null, null, null, null, null, null, null, null, null, true)]
-        public void EqualityTests(string company, string name, string url, string SectorsFlat, string currency, string otherCompany, string otherName, string otherUrl, string otherSectorsFlat, string otherCurrency, bool areEqual)
+        public void EqualityTests(string company, string name, string url, string sectorsFlat, string currency, string otherCompany, string otherName, string otherUrl, string otherSectorsFlat, string otherCurrency, bool areEqual)
         {
             NameData firstName = new NameData(company, name, currency, url)
             {
-                SectorsFlat = SectorsFlat
+                SectorsFlat = sectorsFlat
             };
             NameData secondName = new NameData(otherCompany, otherName, otherCurrency, otherUrl)
             {

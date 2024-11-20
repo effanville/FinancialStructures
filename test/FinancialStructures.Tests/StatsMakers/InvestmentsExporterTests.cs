@@ -20,7 +20,7 @@ namespace Effanville.FinancialStructures.Tests.StatsMakers
             investments.ExportToFile(savePath, tempFileSystem);
             string file = tempFileSystem.File.ReadAllText(savePath);
 
-            Assert.IsNotEmpty(file);
+            Assert.That(file, Is.Not.Empty);
         }
     }
 }

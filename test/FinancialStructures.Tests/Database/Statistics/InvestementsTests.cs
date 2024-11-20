@@ -46,7 +46,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Statistics
         {
             IPortfolio portfolio = TestDatabase.Databases[databaseName];
             List<Labelled<TwoName, DailyValuation>> investments = portfolio.TotalInvestments(totals);
-            CollectionAssert.AreEqual(expected, investments);
+            Assert.That(investments, Is.EqualTo(expected).AsCollection);
         }
 
         private static IEnumerable<TestCaseData> InvestmentsCases()
@@ -80,7 +80,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Statistics
         {
             IPortfolio portfolio = TestDatabase.Databases[databaseName];
             IList<Labelled<TwoName, DailyValuation>> investments = portfolio.Investments(account, name);
-            CollectionAssert.AreEqual(expected, investments);
+            Assert.That(investments, Is.EqualTo(expected).AsCollection);
         }
     }
 }

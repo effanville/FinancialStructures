@@ -3,9 +3,7 @@
 using Effanville.FinancialStructures.Database.Download;
 using Effanville.FinancialStructures.Download;
 using Effanville.FinancialStructures.NamingStructures;
-using Nager.Date.Model;
 using NUnit.Framework;
-using OpenQA.Selenium.DevTools.V113.Memory;
 
 namespace Effanville.FinancialStructures.Tests.Database
 {

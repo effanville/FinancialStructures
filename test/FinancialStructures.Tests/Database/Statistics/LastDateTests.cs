@@ -21,7 +21,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Statistics
         public void LastDateTest(TestDatabaseName databaseName, Totals totals, DateTime expected)
         {
             IPortfolio portfolio = TestDatabase.Databases[databaseName];
-            Assert.AreEqual(expected, portfolio.LatestDate(totals));
+            Assert.That(portfolio.LatestDate(totals), Is.EqualTo(expected));
         }
     }
 }

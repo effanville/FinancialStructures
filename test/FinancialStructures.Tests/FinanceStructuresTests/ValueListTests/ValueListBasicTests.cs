@@ -42,7 +42,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.ValueListT
         public void AnyTests(IValueList valueList, bool expectedAny)
         {
             bool actualAny = valueList.Any();
-            Assert.AreEqual(expectedAny, actualAny);
+            Assert.That(actualAny, Is.EqualTo(expectedAny));
         }
 
         private static IEnumerable<TestCaseData> CountData()
@@ -72,7 +72,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.ValueListT
         public void CountTests(IValueList valueList, int expectedAny)
         {
             int actualAny = valueList.Count();
-            Assert.AreEqual(expectedAny, actualAny);
+            Assert.That(actualAny, Is.EqualTo(expectedAny));
         }
     }
 }

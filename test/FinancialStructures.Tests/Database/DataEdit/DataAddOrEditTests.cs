@@ -25,8 +25,8 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
             _ = portfolio.TryAddOrEditData(Account.Security, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 1), new DailyValuation(new DateTime(2010, 1, 1), 1));
             bool success = portfolio.TryAddOrEditTradeData(Account.Security, new TwoName("Company", "Name"), new SecurityTrade(new DateTime(2010, 1, 1)), new SecurityTrade(TradeType.Buy, new TwoName("Company", "Name"), new DateTime(2010, 1, 1), 1, 1, 0));
 
-            Assert.IsTrue(success);
-            Assert.AreEqual(1, portfolio.Funds.Single().Count());
+            Assert.That(success, Is.True);
+            Assert.That(portfolio.Funds.Single().Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -39,8 +39,8 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
             DailyValuation data = new DailyValuation(new DateTime(2010, 1, 1), 1);
             bool success = portfolio.TryAddOrEditData(Account.Benchmark, new TwoName("Company", "Name"), data, data);
 
-            Assert.IsTrue(success);
-            Assert.AreEqual(1, portfolio.BenchMarks.Single().Count());
+            Assert.That(success, Is.True);
+            Assert.That(portfolio.BenchMarks.Single().Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -54,8 +54,8 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
             _ = portfolio.TryAddOrEditData(Account.Security, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 1), new DailyValuation(new DateTime(2010, 1, 1), 1));
             bool success = portfolio.TryAddOrEditTradeData(Account.Security, new TwoName("Company", "Name"), new SecurityTrade(new DateTime(2010, 1, 1)), new SecurityTrade(TradeType.Buy, new TwoName("Company", "Name"), new DateTime(2010, 1, 1), 1, 1, 0));
 
-            Assert.IsTrue(success);
-            Assert.AreEqual(1, portfolio.Funds.Single().Count());
+            Assert.That(success, Is.True);
+            Assert.That(portfolio.Funds.Single().Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -67,11 +67,11 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
             Portfolio portfolio = constructor.Database;
             bool success = portfolio.TryAddOrEditData(Account.Benchmark, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 2), new DailyValuation(new DateTime(2010, 1, 1), 1));
 
-            Assert.IsTrue(success);
-            Assert.AreEqual(1, portfolio.BenchMarks.Single().Count());
+            Assert.That(success, Is.True);
+            Assert.That(portfolio.BenchMarks.Single().Count(), Is.EqualTo(1));
             DailyValuation values = portfolio.BenchMarks.Single().FirstValue();
-            Assert.AreEqual(1, values.Value);
-            Assert.AreEqual(new DateTime(2010, 1, 1), values.Day);
+            Assert.That(values.Value, Is.EqualTo(1));
+            Assert.That(values.Day, Is.EqualTo(new DateTime(2010, 1, 1)));
         }
 
         [Test]
@@ -85,8 +85,8 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
             _ = portfolio.TryAddOrEditData(Account.Security, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 1), new DailyValuation(new DateTime(2010, 1, 1), 1));
             bool success = portfolio.TryAddOrEditTradeData(Account.Security, new TwoName("Company", "Name"), new SecurityTrade(new DateTime(2010, 1, 1)), new SecurityTrade(TradeType.Buy, new TwoName("Company", "Name"), new DateTime(2010, 1, 1), 1, 1, 0));
 
-            Assert.IsTrue(success);
-            Assert.AreEqual(1, portfolio.Funds.Single().Count());
+            Assert.That(success, Is.True);
+            Assert.That(portfolio.Funds.Single().Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -99,8 +99,8 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
 
             bool success = portfolio.TryAddOrEditData(Account.Benchmark, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 1), new DailyValuation(new DateTime(2010, 1, 1), 1));
 
-            Assert.IsTrue(success);
-            Assert.AreEqual(1, portfolio.BenchMarks.Single().Count());
+            Assert.That(success, Is.True);
+            Assert.That(portfolio.BenchMarks.Single().Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -113,8 +113,8 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
             _ = portfolio.TryAddOrEditData(Account.Security, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 1), new DailyValuation(new DateTime(2010, 1, 1), 1));
             bool success = portfolio.TryAddOrEditTradeData(Account.Security, new TwoName("Company", "Name"), new SecurityTrade(new DateTime(2010, 1, 1)), new SecurityTrade(TradeType.Buy, new TwoName("Company", "Name"), new DateTime(2010, 1, 1), 1, 1, 0));
 
-            Assert.IsTrue(success);
-            Assert.AreEqual(1, portfolio.Funds.Single().Count());
+            Assert.That(success, Is.True);
+            Assert.That(portfolio.Funds.Single().Count(), Is.EqualTo(1));
         }
 
         [Test]
@@ -127,11 +127,11 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
 
             bool success = portfolio.TryAddOrEditData(Account.Benchmark, new TwoName("Company", "Name"), new DailyValuation(new DateTime(2010, 1, 1), 2.0m), new DailyValuation(new DateTime(2011, 1, 1), 1));
 
-            Assert.IsTrue(success);
-            Assert.AreEqual(1, portfolio.BenchMarks.Single().Count());
+            Assert.That(success, Is.True);
+            Assert.That(portfolio.BenchMarks.Single().Count(), Is.EqualTo(1));
             DailyValuation values = portfolio.BenchMarks.Single().FirstValue();
-            Assert.AreEqual(1, values.Value);
-            Assert.AreEqual(new DateTime(2011, 1, 1), values.Day);
+            Assert.That(values.Value, Is.EqualTo(1));
+            Assert.That(values.Day, Is.EqualTo(new DateTime(2011, 1, 1)));
         }
     }
 }

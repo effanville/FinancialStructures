@@ -45,20 +45,20 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
 
             otherDatabase.TryGetAccount(Account.Security, defaultSecurityName, out IValueList secList);
             DailyValuation value = secList.Value(new DateTime(2022, 5, 6));
-            Assert.AreEqual(22, value.Value);
+            Assert.That(value.Value, Is.EqualTo(22));
 
             otherDatabase.TryGetAccount(Account.BankAccount, defaultBankAccountName, out IValueList bankList);
             DailyValuation value2 = bankList.Value(new DateTime(2022, 5, 6));
-            Assert.AreEqual(4, value2.Value);
+            Assert.That(value2.Value, Is.EqualTo(4));
 
             otherDatabase.TryGetAccount(Account.Currency, defaultCurrencyName, out IValueList currencyList);
             DailyValuation value3 = currencyList.Value(new DateTime(2022, 5, 6));
-            Assert.AreEqual(11.2m, value3.Value);
+            Assert.That(value3.Value, Is.EqualTo(11.2m));
 
 
             otherDatabase.TryGetAccount(Account.Asset, defaultAssetName, out IValueList assetList);
             DailyValuation value4 = assetList.Value(new DateTime(2022, 5, 6));
-            Assert.AreEqual(-19988.80m, value4.Value);
+            Assert.That(value4.Value, Is.EqualTo(-19988.80m));
         }
     }
 }

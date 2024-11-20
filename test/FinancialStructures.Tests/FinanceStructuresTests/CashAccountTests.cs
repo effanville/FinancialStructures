@@ -130,11 +130,11 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests
 
             Assert.Multiple(() =>
             {
-                foreach ((DateTime Date, decimal value) in expectedValues)
+                foreach ((DateTime date, decimal value) in expectedValues)
                 {
-                    DailyValuation dayData = sut.Value(Date, null);
+                    DailyValuation dayData = sut.Value(date, null);
 
-                    Assert.That(dayData.Value, Is.EqualTo(value).Within(1e-12m), $"{Date} Vsalue wrong");
+                    Assert.That(dayData.Value, Is.EqualTo(value).Within(1e-12m), $"{date} Value wrong");
                 }
             });
         }

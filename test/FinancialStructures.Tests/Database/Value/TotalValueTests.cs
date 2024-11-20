@@ -21,7 +21,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Value
         {
             IPortfolio portfolio = TestDatabase.Databases[databaseName];
             Assert.That(portfolio.TotalValue(totals), Is.EqualTo(expectedValue).Within(1e-12m));
-            Assert.AreEqual(expectedValue, portfolio.TotalValue(totals));
+            Assert.That(portfolio.TotalValue(totals), Is.EqualTo(expectedValue));
         }
 
         [TestCase(TestDatabaseName.TwoSec, Totals.Security, "2009/1/2", 0.0)]

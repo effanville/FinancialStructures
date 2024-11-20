@@ -1,5 +1,4 @@
 using System.IO.Abstractions;
-using System.Threading.Tasks;
 
 using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.Stocks.Persistence.Database;
@@ -12,7 +11,7 @@ namespace Effanville.FinancialStructures.Stocks.Tests
     public class Setup
     {
         [Test]
-        public async Task SetupDBFromWeb()
+        public void SetupDBFromWeb()
         {
             var logger = new LogReporter(null, true);
             var fileSystem = new FileSystem();

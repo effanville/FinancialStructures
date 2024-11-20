@@ -9,7 +9,7 @@ using NUnit.Framework;
 namespace Effanville.FinancialStructures.Tests.DataStructuresTests
 {
     [TestFixture]
-    public class DayValue_NamedTests
+    public class DayValueNamedTests
     {
         [TestCase("name", "company", "name", "company", 0)]
         [TestCase("name", "company", "name", "ompany", -1)]
@@ -20,7 +20,7 @@ namespace Effanville.FinancialStructures.Tests.DataStructuresTests
         {
             Labelled<TwoName, DailyValuation> one = new Labelled<TwoName, DailyValuation>(new TwoName(company1, name1), new DailyValuation(new DateTime(), 0));
             Labelled<TwoName, DailyValuation> two = new Labelled<TwoName, DailyValuation>(new TwoName(company2, name2), new DailyValuation(new DateTime(), 0));
-            Assert.AreEqual(expected, one.CompareTo(two));
+            Assert.That(one.CompareTo(two), Is.EqualTo(expected));
         }
 
         [TestCase("name", "company", "12/5/2019", 5, "company-name-05/12/2019, 5")]
@@ -31,7 +31,7 @@ namespace Effanville.FinancialStructures.Tests.DataStructuresTests
         public void ToStringTests(string name1, string company1, DateTime date, decimal value, string expected)
         {
             Labelled<TwoName, DailyValuation> one = new Labelled<TwoName, DailyValuation>(new TwoName(company1, name1), new DailyValuation(date, value));
-            Assert.AreEqual(expected, one.ToString());
+            Assert.That(one.ToString(), Is.EqualTo(expected));
         }
     }
 }

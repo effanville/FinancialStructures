@@ -188,7 +188,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
                 }
                 else
                 {
-                    Assert.IsNull(expectedValue);
+                    Assert.That(expectedValue, Is.Null);
                 }
             });
         }
@@ -222,7 +222,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
                 }
                 else
                 {
-                    Assert.IsNull(expectedValue);
+                    Assert.That(expectedValue, Is.Null);
                 }
             });
         }
@@ -283,7 +283,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
                 }
                 else
                 {
-                    Assert.IsNull(expectedValue);
+                    Assert.That(expectedValue, Is.Null);
                 }
             });
         }
@@ -344,7 +344,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
                 }
                 else
                 {
-                    Assert.IsNull(expectedValue);
+                    Assert.That(expectedValue, Is.Null);
                 }
             });
         }
@@ -405,7 +405,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
                 }
                 else
                 {
-                    Assert.IsNull(expectedValue);
+                    Assert.That(expectedValue, Is.Null);
                 }
             });
         }

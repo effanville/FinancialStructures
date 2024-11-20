@@ -62,15 +62,15 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
             Portfolio database = constructor.Database;
 
             IReadOnlyList<NameData> names = database.NameDataForAccount(elementType);
-            Assert.AreEqual(3, names.Count);
+            Assert.That(names.Count, Is.EqualTo(3));
 
-            Assert.AreEqual(company1, names[0].Company);
-            Assert.AreEqual(company2, names[1].Company);
-            Assert.AreEqual(company3, names[2].Company);
+            Assert.That(names[0].Company, Is.EqualTo(company1));
+            Assert.That(names[1].Company, Is.EqualTo(company2));
+            Assert.That(names[2].Company, Is.EqualTo(company3));
 
-            Assert.AreEqual(name1, names[0].Name);
-            Assert.AreEqual(name2, names[1].Name);
-            Assert.AreEqual(name3, names[2].Name);
+            Assert.That(names[0].Name, Is.EqualTo(name1));
+            Assert.That(names[1].Name, Is.EqualTo(name2));
+            Assert.That(names[2].Name, Is.EqualTo(name3));
         }
 
         [TestCase(Account.Security, "company1", "name1", "company2", "name2", "company3", "name3")]
@@ -83,11 +83,11 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
             Portfolio database = constructor.Database;
 
             IReadOnlyList<string> names = database.Names(elementType);
-            Assert.AreEqual(3, names.Count);
+            Assert.That(names.Count, Is.EqualTo(3));
 
-            Assert.AreEqual(name1, names[0]);
-            Assert.AreEqual(name2, names[1]);
-            Assert.AreEqual(name3, names[2]);
+            Assert.That(names[0], Is.EqualTo(name1));
+            Assert.That(names[1], Is.EqualTo(name2));
+            Assert.That(names[2], Is.EqualTo(name3));
         }
 
         [TestCase(Account.Security, "company1", "name1", "company2", "name2", "company3", "name3")]
@@ -100,11 +100,11 @@ namespace Effanville.FinancialStructures.Tests.Database.DataAccess
             Portfolio database = constructor.Database;
 
             IReadOnlyList<string> names = database.Companies(elementType);
-            Assert.AreEqual(3, names.Count);
+            Assert.That(names.Count, Is.EqualTo(3));
 
-            Assert.AreEqual(company1, names[0]);
-            Assert.AreEqual(company2, names[1]);
-            Assert.AreEqual(company3, names[2]);
+            Assert.That(names[0], Is.EqualTo(company1));
+            Assert.That(names[1], Is.EqualTo(company2));
+            Assert.That(names[2], Is.EqualTo(company3));
         }
     }
 }

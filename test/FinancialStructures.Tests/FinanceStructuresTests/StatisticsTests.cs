@@ -50,7 +50,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(expectedValue, actualValue);
+                Assert.That(actualValue, Is.EqualTo(expectedValue));
             });
         }
 
@@ -79,7 +79,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(expectedValue, actualValue);
+                Assert.That(actualValue, Is.EqualTo(expectedValue));
             });
         }
 
@@ -108,7 +108,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(expectedValue, actualValue);
+                Assert.That(actualValue, Is.EqualTo(expectedValue));
             });
         }
 
@@ -138,7 +138,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests
         public void ValueListProfitTests(IValueList valueList, decimal expectedAny)
         {
             decimal actualAny = valueList.Profit();
-            Assert.AreEqual(expectedAny, actualAny);
+            Assert.That(actualAny, Is.EqualTo(expectedAny));
         }
 
         private static IEnumerable<TestCaseData> ValueListRecentChangeData()
@@ -167,7 +167,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests
         public void ValueListRecentChangeTests(IValueList valueList, decimal expectedAny)
         {
             decimal actualAny = valueList.RecentChange();
-            Assert.AreEqual(expectedAny, actualAny);
+            Assert.That(actualAny, Is.EqualTo(expectedAny));
         }
 
         private static IEnumerable<TestCaseData> SecurityRecentChangeData()
@@ -195,7 +195,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(expectedValue, actualValue);
+                Assert.That(actualValue, Is.EqualTo(expectedValue));
             });
         }
 
@@ -224,7 +224,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests
 
             Assert.Multiple(() =>
             {
-                Assert.AreEqual(expectedValue, actualValue);
+                Assert.That(actualValue, Is.EqualTo(expectedValue));
             });
         }
     }

@@ -13,11 +13,11 @@ namespace Effanville.FinancialStructures.Tests.StatsMakers
         {
             PortfolioStatisticsSettings options = PortfolioStatisticsSettings.DefaultSettings();
 
-            Assert.IsTrue(options.DisplayValueFunds);
-            Assert.IsTrue(options.SecurityGenerateOptions.ShouldGenerate);
-            Assert.IsTrue(options.SectorGenerateOptions.ShouldGenerate);
-            Assert.IsTrue(options.BankAccountGenerateOptions.ShouldGenerate);
-            Assert.IsTrue(options.AssetGenerateOptions.ShouldGenerate);
+            Assert.That(options.DisplayValueFunds, Is.True);
+            Assert.That(options.SecurityGenerateOptions.ShouldGenerate, Is.True);
+            Assert.That(options.SectorGenerateOptions.ShouldGenerate, Is.True);
+            Assert.That(options.BankAccountGenerateOptions.ShouldGenerate, Is.True);
+            Assert.That(options.AssetGenerateOptions.ShouldGenerate, Is.True);
         }
 
         [Test]
@@ -25,11 +25,11 @@ namespace Effanville.FinancialStructures.Tests.StatsMakers
         {
             PortfolioStatisticsExportSettings options = PortfolioStatisticsExportSettings.DefaultSettings();
 
-            Assert.IsFalse(options.Spacing);
-            Assert.IsFalse(options.Colours);
-            Assert.IsTrue(options.SecurityDisplayOptions.ShouldDisplay);
-            Assert.IsTrue(options.SectorDisplayOptions.ShouldDisplay);
-            Assert.IsTrue(options.BankAccountDisplayOptions.ShouldDisplay);
+            Assert.That(options.Spacing, Is.False);
+            Assert.That(options.Colours, Is.False);
+            Assert.That(options.SecurityDisplayOptions.ShouldDisplay, Is.True);
+            Assert.That(options.SectorDisplayOptions.ShouldDisplay, Is.True);
+            Assert.That(options.BankAccountDisplayOptions.ShouldDisplay, Is.True);
             Assert.That(options.SecurityDisplayOptions.SortingDirection, Is.EqualTo(SortDirection.Ascending));
             Assert.That(options.BankAccountDisplayOptions.SortingDirection, Is.EqualTo(SortDirection.Ascending));
             Assert.That(options.SectorDisplayOptions.SortingDirection, Is.EqualTo(SortDirection.Ascending));

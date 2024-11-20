@@ -22,10 +22,10 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
 
             bool success = portfolio.TryDeleteData(Account.Security, new TwoName("Company", "Name"), new DateTime(2010, 1, 1), null);
 
-            Assert.AreEqual(0, portfolio.Funds.Single().Count());
+            Assert.That(portfolio.Funds.Single().Count(), Is.EqualTo(0));
 
             // This is false as there is no investment value as value 0 is not stored
-            Assert.IsFalse(success);
+            Assert.That(success, Is.False);
         }
 
         [Test]
@@ -38,8 +38,8 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
 
             bool success = portfolio.TryDeleteData(Account.Benchmark, new NameData("Company", "Name"), new DateTime(2010, 1, 1), null);
 
-            Assert.IsTrue(success);
-            Assert.AreEqual(0, portfolio.BenchMarks.Single().Count());
+            Assert.That(success, Is.True);
+            Assert.That(portfolio.BenchMarks.Single().Count(), Is.EqualTo(0));
         }
     }
 }

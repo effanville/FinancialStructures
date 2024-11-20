@@ -24,7 +24,7 @@ namespace Effanville.FinancialStructures.Tests.DataStructuresTests
         public void SignTests(TradeType tradeType, decimal expectedSign)
         {
             decimal actualSign = tradeType.Sign();
-            Assert.AreEqual(expectedSign, actualSign);
+            Assert.That(actualSign, Is.EqualTo(expectedSign));
         }
 
         private static IEnumerable<TestCaseData> InvestmentTypeTestData()
@@ -42,7 +42,7 @@ namespace Effanville.FinancialStructures.Tests.DataStructuresTests
         public void InvestmentTypeTests(TradeType tradeType, bool expectedSign)
         {
             bool actualSign = tradeType.IsInvestmentTradeType();
-            Assert.AreEqual(expectedSign, actualSign);
+            Assert.That(actualSign, Is.EqualTo(expectedSign));
         }
 
         private static IEnumerable<TestCaseData> ShareAlteringTypeTestData()
@@ -60,7 +60,7 @@ namespace Effanville.FinancialStructures.Tests.DataStructuresTests
         public void ShareAlteringTypeTests(TradeType tradeType, bool expectedSign)
         {
             bool actualSign = tradeType.IsShareNumberAlteringTradeType();
-            Assert.AreEqual(expectedSign, actualSign);
+            Assert.That(actualSign, Is.EqualTo(expectedSign));
         }
     }
 }

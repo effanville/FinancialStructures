@@ -26,7 +26,7 @@ namespace Effanville.FinancialStructures.Tests.DataStructuresTests
         {
             SecurityTrade trade = new SecurityTrade(tradeType, null, DateTime.Today, numUnits, unitPrice, tradeCosts);
             decimal totalCost = trade.TotalCost;
-            Assert.AreEqual(expectedCost, totalCost);
+            Assert.That(totalCost, Is.EqualTo(expectedCost));
         }
     }
 }

@@ -16,7 +16,7 @@ namespace Effanville.FinancialStructures.Tests.DataStructuresTests
         {
             SecurityDayData one = new SecurityDayData(first, 0, 0, 0);
             SecurityDayData two = new SecurityDayData(second, 0, 0, 0);
-            Assert.AreEqual(expected, one.CompareTo(two));
+            Assert.That(one.CompareTo(two), Is.EqualTo(expected));
         }
 
         [TestCase("1/1/2019", 1, 1, 1, "01/01/2019, 1, 1, 1")]
@@ -24,7 +24,7 @@ namespace Effanville.FinancialStructures.Tests.DataStructuresTests
         public void ToStringTests(DateTime first, decimal unit, decimal share, decimal inv, string expected)
         {
             SecurityDayData one = new SecurityDayData(first, unit, share, inv);
-            Assert.AreEqual(expected, one.ToString());
+            Assert.That(one.ToString(), Is.EqualTo(expected));
         }
     }
 }

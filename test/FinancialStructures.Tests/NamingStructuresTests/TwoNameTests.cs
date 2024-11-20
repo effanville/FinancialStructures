@@ -15,14 +15,14 @@ namespace Effanville.FinancialStructures.Tests.NamingStructuresTests
 
             TwoName name = new TwoName(surname, forename);
 
-            Assert.AreEqual(forename, name.Name);
-            Assert.AreEqual(surname, name.Company);
+            Assert.That(name.Name, Is.EqualTo(forename));
+            Assert.That(name.Company, Is.EqualTo(surname));
         }
 
         [TestCase("Bloggs", "Joe", "Bloggs", "Joe", true)]
         [TestCase("Bloggs", "Joe", "Bloggs", "Mark", false)]
         [TestCase("Bloggs", "Joe", "Simon", "Joe", false)]
-        [TestCase("Bloggs", "Joe", "Simth", "Alan", false)]
+        [TestCase("Bloggs", "Joe", "Smith", "Alan", false)]
         [TestCase("Bloggs", "Joe", "Bloggs", null, false)]
         [TestCase("Bloggs", "Joe", null, "Joe", false)]
         [TestCase("Bloggs", "Joe", null, null, false)]
@@ -35,7 +35,7 @@ namespace Effanville.FinancialStructures.Tests.NamingStructuresTests
         public void EqualityCorrect(string surname, string forename, string testingSurname, string testingForename, bool expected)
         {
             TwoName player = new TwoName(surname, forename);
-            Assert.AreEqual(expected, player.Equals(new TwoName(testingSurname, testingForename)));
+            Assert.That(player.Equals(new TwoName(testingSurname, testingForename)), Is.EqualTo(expected));
         }
 
         [TestCase("Bloggs", "Joe", "Bloggs-Joe")]
@@ -46,9 +46,9 @@ namespace Effanville.FinancialStructures.Tests.NamingStructuresTests
         {
             TwoName name = new TwoName(surname, forename);
 
-            Assert.AreEqual(forename, name.Name);
-            Assert.AreEqual(surname, name.Company);
-            Assert.AreEqual(expected, name.ToString());
+            Assert.That(name.Name, Is.EqualTo(forename));
+            Assert.That(name.Company, Is.EqualTo(surname));
+            Assert.That(name.ToString(), Is.EqualTo(expected));
         }
     }
 }
