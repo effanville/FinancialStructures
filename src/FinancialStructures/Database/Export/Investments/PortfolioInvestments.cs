@@ -63,7 +63,7 @@ namespace Effanville.FinancialStructures.Database.Export.Investments
                 ReportBuilder reportBuilder = new ReportBuilder(writerSettings, tableWriter, textWriter, chartWriter);
                 _ = reportBuilder.WriteTableFromEnumerable(new List<string> { "Date", "Company", "Name", "Investment Amount" }, valuesToWrite, false);
 
-                using (Stream stream = fileSystem.FileStream.Create(filePath, FileMode.Create))
+                using (Stream stream = fileSystem.FileStream.New(filePath, FileMode.Create))
                 using (StreamWriter fileWriter = new StreamWriter(stream))
                 {
                     fileWriter.WriteLine(reportBuilder.ToString());

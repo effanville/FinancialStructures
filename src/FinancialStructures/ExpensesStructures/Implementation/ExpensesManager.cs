@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.IO.Abstractions;
 using System.Xml;
@@ -47,7 +47,7 @@ namespace Effanville.FinancialStructures.ExpensesStructures.Implementation
                     IgnoreWhitespace = true
                 };
 
-                using (Stream stream = fileSystem.FileStream.Create(filepath, FileMode.Open))
+                using (Stream stream = fileSystem.FileStream.New(filepath, FileMode.Open))
                 using (XmlReader reader = XmlReader.Create(stream, xmlReaderSettings))
                 {
                     History.ReadXml(reader);
@@ -76,7 +76,7 @@ namespace Effanville.FinancialStructures.ExpensesStructures.Implementation
                     Indent = true
                 };
 
-                using (Stream stream = fileSystem.FileStream.Create(filepath, FileMode.Create))
+                using (Stream stream = fileSystem.FileStream.New(filepath, FileMode.Create))
                 using (XmlWriter writer = XmlWriter.Create(stream, xmlWriterSettings))
                 {
                     History.WriteXml(writer);

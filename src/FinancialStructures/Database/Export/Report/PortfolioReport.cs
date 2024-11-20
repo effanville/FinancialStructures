@@ -61,7 +61,7 @@ namespace Effanville.FinancialStructures.Database.Export.Report
 
             try
             {
-                using (Stream stream = fileSystem.FileStream.Create(filePath, FileMode.Create))
+                using (Stream stream = fileSystem.FileStream.New(filePath, FileMode.Create))
                 using (StreamWriter fileWriter = new StreamWriter(stream))
                 {
                     fileWriter.Write(reportBuilder.ToString());

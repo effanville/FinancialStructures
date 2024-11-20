@@ -296,7 +296,7 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
             {
                 ReportBuilder sb = ExportString(true, exportType, settings);
 
-                using (Stream stream = fileSystem.FileStream.Create(filePath, FileMode.Create))
+                using (Stream stream = fileSystem.FileStream.New(filePath, FileMode.Create))
                 using (StreamWriter fileWriter = new StreamWriter(stream))
                 {
                     fileWriter.WriteLine(sb.ToString());

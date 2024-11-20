@@ -173,7 +173,7 @@ namespace Effanville.FinancialStructures.Database.Export.History
                 ReportBuilder reportBuilder = new ReportBuilder(writerSettings, tableWriter, textWriter, chartWriter);
                 _ = reportBuilder.WriteTableFromEnumerable(Snapshots[0].ExportHeaders(), valuesToWrite, false);
 
-                using (Stream stream = fileSystem.FileStream.Create(filePath, FileMode.Create))
+                using (Stream stream = fileSystem.FileStream.New(filePath, FileMode.Create))
                 using (StreamWriter fileWriter = new StreamWriter(stream))
                 {
                     fileWriter.Write(reportBuilder.ToString());

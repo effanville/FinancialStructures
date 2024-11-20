@@ -13,7 +13,7 @@ using Effanville.FinancialStructures.Persistence.Xml;
 
 namespace Effanville.FinancialStructures.Persistence
 {
-    public sealed class BinaryFilePortfolioPersistence: IPersistence<IPortfolio>
+    public sealed class BinaryFilePortfolioPersistence : IPersistence<IPortfolio>
     {
         public IPortfolio Load(PersistenceOptions options, IReportLogger reportLogger = null)
         {
@@ -50,14 +50,14 @@ namespace Effanville.FinancialStructures.Persistence
             }
 
             string output;
-            using (Stream file = fileSystem.FileStream.Create(filePath, FileMode.Open, FileAccess.Read))
-            using(StreamReader streamReader = new StreamReader(file))
+            using (Stream file = fileSystem.FileStream.New(filePath, FileMode.Open, FileAccess.Read))
+            using (StreamReader streamReader = new StreamReader(file))
             {
                 output = streamReader.ReadToEnd();
             }
 
             byte[] byteInput = Convert.FromBase64String(output);
-            
+
             MemoryStream stream = new MemoryStream(byteInput);
             AllData database = XmlFileAccess.ReadFromStream<AllData>(stream, out string error);
             if (database != null)
@@ -126,8 +126,8 @@ namespace Effanville.FinancialStructures.Persistence
 
             byte[] bytes = stream.ToArray();
             string base64 = Convert.ToBase64String(bytes);
-            using (Stream file = fileSystem.FileStream.Create(filePath, FileMode.Create, FileAccess.Write)) 
-            using (var streamWriter = new StreamWriter(file))
+            using (Stream file = fileSystem.FileStream.New(filePath, FileMode.Create, FileAccess.Write)) 
+            using (StreamWriter streamWriter = new StreamWriter(file))
             {
                 streamWriter.Write(base64);
             }

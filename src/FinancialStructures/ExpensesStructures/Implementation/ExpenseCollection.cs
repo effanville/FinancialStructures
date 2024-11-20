@@ -226,7 +226,7 @@ namespace Effanville.FinancialStructures.ExpensesStructures.Implementation
                     .WriteParagraph(new string[] { $"Total Expenses {Total()}" })
                     .WriteFooter();
 
-                using (Stream stream = fileSystem.FileStream.Create(filepath, FileMode.Create))
+                using (Stream stream = fileSystem.FileStream.New(filepath, FileMode.Create))
                 using (StreamWriter sw = new StreamWriter(stream))
                 {
                     sw.Write(sb);
