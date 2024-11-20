@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
-
+using Effanville.Common.ReportWriting;
+using Effanville.Common.ReportWriting.Documents;
+using Effanville.Common.ReportWriting.Writers;
 using Effanville.Common.Structure.Extensions;
 using Effanville.Common.Structure.Reporting;
-using Effanville.Common.Structure.ReportWriting;
 using Effanville.FinancialStructures.Database.Export.History;
 using Effanville.FinancialStructures.Database.Extensions.Statistics;
 using Effanville.FinancialStructures.Database.Extensions.Values;
@@ -80,9 +81,12 @@ namespace Effanville.FinancialStructures.Database.Export.Report
         /// </summary>
         public ReportBuilder ExportString(ExportSettings settings)
         {
-            var exportType = settings.ReportExportType;
-
-            ReportBuilder reportBuilder = new ReportBuilder(settings.ReportExportType, new ReportSettings(true, false, true));
+            DocumentType exportType = settings.ReportExportType;
+            DocumentWriterSettings writerSettings = new DocumentWriterSettings(true, false, true);
+            ITableWriter tableWriter = new TableWriterFactory().Create(exportType);
+            ITextWriter textWriter = new TextWriterFactory().Create(exportType, writerSettings);
+            IChartWriter chartWriter = new ChartWriterFactory().Create(exportType);
+            ReportBuilder reportBuilder = new ReportBuilder(writerSettings, tableWriter, textWriter, chartWriter);
 
             string title = $"Portfolio Report for {fPortfolio.Name} - Statement on {DateTime.Today.ToShortDateString()}";
             _ = reportBuilder.WriteHeader(title)

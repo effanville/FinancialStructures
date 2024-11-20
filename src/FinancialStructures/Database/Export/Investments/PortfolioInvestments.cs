@@ -1,12 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
-
+using Effanville.Common.ReportWriting;
+using Effanville.Common.ReportWriting.Documents;
+using Effanville.Common.ReportWriting.Writers;
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.NamingStructures;
 using Effanville.Common.Structure.Reporting;
-using Effanville.Common.Structure.ReportWriting;
 using Effanville.FinancialStructures.Database.Extensions.Values;
 using Effanville.FinancialStructures.NamingStructures;
 
@@ -55,7 +56,11 @@ namespace Effanville.FinancialStructures.Database.Export.Investments
                     valuesToWrite.Add(new List<string> { stats.Instance.Day.ToShortDateString(), stats.Label.Company, stats.Label.Name, stats.Instance.Value.ToString() });
                 }
 
-                ReportBuilder reportBuilder = new ReportBuilder(DocumentType.Csv, new ReportSettings(true, false, false));
+                DocumentWriterSettings writerSettings = new DocumentWriterSettings(true, false, false);
+                ITableWriter tableWriter = new TableWriterFactory().Create(DocumentType.Csv);
+                ITextWriter textWriter = new TextWriterFactory().Create(DocumentType.Csv, writerSettings);
+                IChartWriter chartWriter = new ChartWriterFactory().Create(DocumentType.Csv);
+                ReportBuilder reportBuilder = new ReportBuilder(writerSettings, tableWriter, textWriter, chartWriter);
                 _ = reportBuilder.WriteTableFromEnumerable(new List<string> { "Date", "Company", "Name", "Investment Amount" }, valuesToWrite, false);
 
                 using (Stream stream = fileSystem.FileStream.Create(filePath, FileMode.Create))

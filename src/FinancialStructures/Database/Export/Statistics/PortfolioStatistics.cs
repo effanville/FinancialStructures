@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
-
+using Effanville.Common.ReportWriting;
+using Effanville.Common.ReportWriting.Documents;
+using Effanville.Common.ReportWriting.Writers;
 using Effanville.Common.Structure.Reporting;
-using Effanville.Common.Structure.ReportWriting;
 using Effanville.FinancialStructures.Database.Extensions.Statistics;
 using Effanville.FinancialStructures.Database.Statistics;
 using Effanville.FinancialStructures.DataStructures;
@@ -155,7 +156,7 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
             get;
             private set;
         }
-        
+
         /// <summary>
         /// Any notes for the portfolio.
         /// </summary>
@@ -264,14 +265,14 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
                 }
             }
         }
-        
+
         private void GenerateCurrencyStatistics(IPortfolio portfolio, PortfolioStatisticsSettings settings)
         {
             if (!settings.CurrencyGenerateOptions.ShouldGenerate)
             {
                 return;
             }
-            
+
             CurrencyStats = new List<AccountStatistics>();
             Statistic[] currencyStats = settings.CurrencyGenerateOptions.GenerateFields.ToArray();
             IReadOnlyList<ICurrency> sectorNames = portfolio.Currencies;
@@ -315,7 +316,11 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
         /// </summary>
         public ReportBuilder ExportString(bool includeHtmlHeaders, DocumentType exportType, PortfolioStatisticsExportSettings settings)
         {
-            ReportBuilder reportBuilder = new ReportBuilder(exportType, new ReportSettings(settings.Colours, false, false));
+            DocumentWriterSettings writerSettings = new DocumentWriterSettings(settings.Colours, false, false);
+            ITableWriter tableWriter = new TableWriterFactory().Create(exportType);
+            ITextWriter textWriter = new TextWriterFactory().Create(exportType, writerSettings);
+            IChartWriter chartWriter = new ChartWriterFactory().Create(exportType);
+            ReportBuilder reportBuilder = new ReportBuilder(writerSettings, tableWriter, textWriter, chartWriter);
             if (includeHtmlHeaders && exportType == DocumentType.Html)
             {
                 _ = reportBuilder.WriteHeader($"Statement for funds as of {DateTime.Now:yyyy-MM-dd}")

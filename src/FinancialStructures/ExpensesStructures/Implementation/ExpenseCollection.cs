@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -7,8 +7,9 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
-
-using Effanville.Common.Structure.ReportWriting;
+using Effanville.Common.ReportWriting;
+using Effanville.Common.ReportWriting.Documents;
+using Effanville.Common.ReportWriting.Writers;
 using Effanville.FinancialStructures.ExpensesStructures.Models;
 
 namespace Effanville.FinancialStructures.ExpensesStructures.Implementation
@@ -214,7 +215,11 @@ namespace Effanville.FinancialStructures.ExpensesStructures.Implementation
             error = null;
             try
             {
-                ReportBuilder sb = new ReportBuilder(exportType, new ReportSettings(useColours: true, useDefaultStyle: false, useScripts: false));
+                DocumentWriterSettings writerSettings = new DocumentWriterSettings(useColours: true, useDefaultStyle: false, useScripts: false);
+                ITableWriter tableWriter = new TableWriterFactory().Create(exportType);
+                ITextWriter textWriter = new TextWriterFactory().Create(exportType, writerSettings);
+                IChartWriter chartWriter = new ChartWriterFactory().Create(exportType);
+                ReportBuilder sb = new ReportBuilder(writerSettings, tableWriter, textWriter, chartWriter);
                 _ = sb.WriteHeader(title)
                     .WriteTitle(title, DocumentElement.h1)
                     .WriteTable(Expenses, false)

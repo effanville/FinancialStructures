@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
-
-using Effanville.Common.Structure.ReportWriting;
+using Effanville.Common.ReportWriting;
+using Effanville.Common.ReportWriting.Documents;
 using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.Database.Export.Statistics;
 using Effanville.FinancialStructures.Database.Statistics;
