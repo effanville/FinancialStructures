@@ -1,76 +1,66 @@
-﻿using Effanville.FinancialStructures.Download.Implementation;
+using Effanville.FinancialStructures.Download.Implementation;
 
-namespace Effanville.FinancialStructures.Download
+namespace Effanville.FinancialStructures.Download;
+
+public sealed class PriceDownloaderFactory : IPriceDownloaderFactory
 {
-    /// <summary>
-    /// Provides factory methods for creating price downloaders.
-    /// </summary>
-    public static class PriceDownloaderFactory
+    private static readonly MorningstarDownloader _morningstarDownloader = new MorningstarDownloader();
+    private static readonly YahooDownloader _yahooDownloader = new YahooDownloader();
+    private static readonly FtDownloader _ftDownloader = new FtDownloader();
+    private static readonly BloombergDownloader _bloombergDownloader = new BloombergDownloader();
+
+    public IPriceDownloader Retrieve(string url)
     {
-        private static readonly MorningstarDownloader _morningstarDownloader = new MorningstarDownloader();
-        private static readonly YahooDownloader _yahooDownloader = new YahooDownloader();
-        private static readonly FtDownloader _ftDownloader = new FtDownloader();
-        private static readonly BloombergDownloader _bloombergDownloader = new BloombergDownloader();
-
-        /// <summary>
-        /// Retrieve the relevant price downloader.
-        /// </summary>
-        public static IPriceDownloader Retrieve(string url)
+        if (string.IsNullOrEmpty(url))
         {
-            if (string.IsNullOrEmpty(url))
-            {
-                return null;
-            }
-
-            if (url.Contains("morningstar"))
-            {
-                return _morningstarDownloader;
-            }
-            if (url.Contains("yahoo"))
-            {
-                return _yahooDownloader;
-            }
-            if (url.Contains("markets.ft"))
-            {
-                return _ftDownloader;
-            }
-            if (url.Contains("bloomberg"))
-            {
-                return _bloombergDownloader;
-            }
-            
             return null;
         }
 
-        /// <summary>
-        /// Returns the code part from the url.
-        /// </summary>
-        public static string RetrieveCodeFromUrl(string url)
+        if (url.Contains("morningstar"))
         {
-            if (string.IsNullOrEmpty(url))
-            {
-                return null;
-            }
+            return _morningstarDownloader;
+        }
+        if (url.Contains("yahoo"))
+        {
+            return _yahooDownloader;
+        }
+        if (url.Contains("markets.ft"))
+        {
+            return _ftDownloader;
+        }
+        if (url.Contains("bloomberg"))
+        {
+            return _bloombergDownloader;
+        }
 
-            if (url.Contains("morningstar"))
-            {
-                return _morningstarDownloader.GetFinancialCode(url);
-            }
-            if (url.Contains("yahoo"))
-            {
-                return _yahooDownloader.GetFinancialCode(url);
-            }
-            if (url.Contains("markets.ft"))
-            {
-                return _ftDownloader.GetFinancialCode(url);
-            }
+        return null;
+    }
 
-            if (url.Contains("bloomberg"))
-            {
-                return _bloombergDownloader.GetFinancialCode(url);
-            }
-
+    public string RetrieveCodeFromUrl(string url)
+    {
+        if (string.IsNullOrEmpty(url))
+        {
             return null;
         }
+
+        if (url.Contains("morningstar"))
+        {
+            return _morningstarDownloader.GetFinancialCode(url);
+        }
+        if (url.Contains("yahoo"))
+        {
+            return _yahooDownloader.GetFinancialCode(url);
+        }
+        if (url.Contains("markets.ft"))
+        {
+            return _ftDownloader.GetFinancialCode(url);
+        }
+
+        if (url.Contains("bloomberg"))
+        {
+            return _bloombergDownloader.GetFinancialCode(url);
+        }
+
+        return null;
     }
 }
