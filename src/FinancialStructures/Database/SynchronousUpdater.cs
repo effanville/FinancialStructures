@@ -5,9 +5,9 @@ using Effanville.Common.Structure.DataEdit;
 namespace Effanville.FinancialStructures.Database
 {
     /// <summary>
-    /// Implementation of a <see cref="IUpdater{IPortfolio}"/> that performs the action syncronously.
+    /// Implementation of a <see cref="IDataStoreUpdater{IPortfolio}"/> that performs the action syncronously.
     /// </summary>
-    public sealed class SynchronousUpdater<T> : IUpdater<T> where T : class
+    public sealed class SynchronousUpdater<T> : IDataStoreUpdater<T> where T : class
     {
         /// <inheritdoc/>
         public T Database

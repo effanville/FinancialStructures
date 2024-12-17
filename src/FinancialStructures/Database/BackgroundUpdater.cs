@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Effanville.Common.Structure.DataEdit;
 using Effanville.Common.Structure.DataStructures;
@@ -6,9 +6,9 @@ using Effanville.Common.Structure.DataStructures;
 namespace Effanville.FinancialStructures.Database
 {
     /// <summary>
-    /// Implementation of a <see cref="IUpdater{T}"/> that performs the action asyncronously.
+    /// Implementation of a <see cref="IDataStoreUpdater{T}"/> that performs the action asyncronously.
     /// </summary>
-    public sealed class BackgroundUpdater<T> : IUpdater<T> where T : class
+    public sealed class BackgroundUpdater<T> : IDataStoreUpdater<T> where T : class
     {
         private readonly TaskQueue _taskQueue = new TaskQueue();
 
