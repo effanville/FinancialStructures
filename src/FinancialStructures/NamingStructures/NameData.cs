@@ -96,7 +96,6 @@ namespace Effanville.FinancialStructures.NamingStructures
         /// Empty constructor.
         /// </summary>
         public NameData()
-            : base()
         {
             Sectors = new HashSet<string>();
         }
@@ -116,7 +115,7 @@ namespace Effanville.FinancialStructures.NamingStructures
         /// <summary>
         /// Takes a copy of the data.
         /// </summary>
-        public NameData Copy() => new NameData(Company, Name, Currency, Url, Sectors, Notes);
+        public NameData Copy() => new NameData(Company, Name, Currency, Url, Sectors, Notes){Ticker = Ticker, Exchange = Exchange, Isin = Isin, Ric = Ric};
 
         /// <inheritdoc/>
         public override bool Equals(object obj)
