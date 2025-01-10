@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Linq;
 
 using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.Database.Implementation;
+using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
 using NUnit.Framework;
@@ -46,15 +47,18 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(newComp, newName, newCurrency, newUrl, newSectors));
 
             NameData accountNames = database.Funds[0].Names;
-            Assert.That(accountNames.Name, Is.EqualTo(newName));
-            Assert.That(accountNames.Company, Is.EqualTo(newComp));
-            Assert.That(accountNames.Url, Is.EqualTo(newUrl));
-            Assert.That(accountNames.Currency, Is.EqualTo(newCurrency));
+            Assert.Multiple(() =>
+            {
+                Assert.That(accountNames.Name, Is.EqualTo(newName));
+                Assert.That(accountNames.Company, Is.EqualTo(newComp));
+                Assert.That(accountNames.Url, Is.EqualTo(newUrl));
+                Assert.That(accountNames.Currency, Is.EqualTo(newCurrency));
+            });
             List<string> actualSectors = accountNames.Sectors.ToList();
             if (newSectors != null)
             {
                 List<string> expectedSectors = newSectors.ToList();
-                Assert.That(actualSectors.Count, Is.EqualTo(newSectors.Count));
+                Assert.That(actualSectors, Has.Count.EqualTo(newSectors.Count));
                 for (int sectorIndex = 0; sectorIndex < newSectors.Count; sectorIndex++)
                 {
                     Assert.That(actualSectors[sectorIndex], Is.EqualTo(expectedSectors[sectorIndex]));
@@ -62,7 +66,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             }
             else
             {
-                Assert.That(actualSectors.Count, Is.EqualTo(0));
+                Assert.That(actualSectors, Is.Empty);
             }
         }
 
@@ -75,9 +79,14 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
                 .GetInstance();
             _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
-            NameData accountNames = database.BenchMarks.First().Names;
-            Assert.That(accountNames.Name, Is.EqualTo(NewName));
-            Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
+            NameData accountNames = database.BenchMarks[0].Names;
+            Assert.Multiple(() =>
+            {
+                Assert.That(accountNames.Name, Is.EqualTo(NewName));
+                Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
+            });
+
+            Assert.That(database.TryGetAccount(Account.Benchmark, new NameData(NewCompanyName, NewName), out IValueList _), Is.True);
         }
 
         [Test]
@@ -89,9 +98,14 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
                 .GetInstance();
             _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
-            NameData accountNames = database.BankAccounts.First().Names;
-            Assert.That(accountNames.Name, Is.EqualTo(NewName));
-            Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
+            NameData accountNames = database.BankAccounts[0].Names;
+            Assert.Multiple(() =>
+            {
+                Assert.That(accountNames.Name, Is.EqualTo(NewName));
+                Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
+            });
+
+            Assert.That(database.TryGetAccount(Account.BankAccount, new NameData(NewCompanyName, NewName), out IValueList _), Is.True);
         }
 
         [Test]
@@ -104,10 +118,13 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             string newUrl = "http://www.amazon.com";
             _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, url: newUrl));
 
-            NameData accountNames = database.BankAccounts.First().Names;
-            Assert.That(accountNames.Name, Is.EqualTo(BaseName));
-            Assert.That(accountNames.Company, Is.EqualTo(BaseCompanyName));
-            Assert.That(accountNames.Url, Is.EqualTo(newUrl));
+            NameData accountNames = database.BankAccounts[0].Names;
+            Assert.Multiple(() =>
+            {
+                Assert.That(accountNames.Name, Is.EqualTo(BaseName));
+                Assert.That(accountNames.Company, Is.EqualTo(BaseCompanyName));
+                Assert.That(accountNames.Url, Is.EqualTo(newUrl));
+            });
         }
 
         [Test]
@@ -120,10 +137,13 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             string newCurrency = "Dollars";
             _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(BaseCompanyName, BaseName, currency: newCurrency));
 
-            NameData accountNames = database.BankAccounts.First().Names;
-            Assert.That(accountNames.Name, Is.EqualTo(BaseName));
-            Assert.That(accountNames.Company, Is.EqualTo(BaseCompanyName));
-            Assert.That(accountNames.Currency, Is.EqualTo(newCurrency));
+            NameData accountNames = database.BankAccounts[0].Names;
+            Assert.Multiple(() =>
+            {
+                Assert.That(accountNames.Name, Is.EqualTo(BaseName));
+                Assert.That(accountNames.Company, Is.EqualTo(BaseCompanyName));
+                Assert.That(accountNames.Currency, Is.EqualTo(newCurrency));
+            });
         }
 
         [Test]
@@ -136,13 +156,16 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             HashSet<string> sectorValues = new HashSet<string>() { "Cats", "Dogs" };
             _ = database.TryEditName(Account.BankAccount, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName, sectors: sectorValues));
 
-            NameData accountNames = database.BankAccounts.First().Names;
-            Assert.That(accountNames.Name, Is.EqualTo(NewName));
-            Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
+            NameData accountNames = database.BankAccounts[0].Names;
+            Assert.Multiple(() =>
+            {
+                Assert.That(accountNames.Name, Is.EqualTo(NewName));
+                Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
+            });
 
             List<string> actualSectors = accountNames.Sectors.ToList();
             List<string> expectedSectors = sectorValues.ToList();
-            Assert.That(actualSectors.Count, Is.EqualTo(sectorValues.Count));
+            Assert.That(actualSectors, Has.Count.EqualTo(sectorValues.Count));
             for (int sectorIndex = 0; sectorIndex < sectorValues.Count; sectorIndex++)
             {
                 Assert.That(actualSectors[sectorIndex], Is.EqualTo(expectedSectors[sectorIndex]));
@@ -158,9 +181,14 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
                 .GetInstance();
             _ = database.TryEditName(Account.Currency, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
-            NameData accountNames = database.Currencies.First().Names;
-            Assert.That(accountNames.Name, Is.EqualTo(NewName));
-            Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
+            NameData accountNames = database.Currencies[0].Names;
+            Assert.Multiple(() =>
+            {
+                Assert.That(accountNames.Name, Is.EqualTo(NewName));
+                Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
+
+                Assert.That(database.TryGetAccount(Account.Currency, new NameData(NewCompanyName, NewName), out IValueList _), Is.True);
+            });
         }
 
         [Test]
@@ -173,11 +201,14 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             IReportLogger logging = new LogReporter(null, saveInternally: true);
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
-            NameData accountNames = database.Funds.First().Names;
-            Assert.That(accountNames.Name, Is.EqualTo(NewName));
-            Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
+            NameData accountNames = database.Funds[0].Names;
+            Assert.Multiple(() =>
+            {
+                Assert.That(accountNames.Name, Is.EqualTo(NewName));
+                Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
 
-            Assert.That(logging.Reports.Count(), Is.EqualTo(0));
+                Assert.That(logging.Reports.Count(), Is.EqualTo(0));
+            });
         }
 
         [Test]
@@ -191,10 +222,13 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             Assert.That(reports.Count(), Is.EqualTo(1));
 
             ErrorReport report = reports.First();
-            Assert.That(report.ErrorType, Is.EqualTo(ReportType.Error));
-            Assert.That(report.ErrorLocation, Is.EqualTo("EditingData"));
-            Assert.That(report.ErrorSeverity, Is.EqualTo(ReportSeverity.Critical));
-            Assert.That(report.Message, Is.EqualTo($"Could not find Security - {BaseCompanyName}-{BaseName}."));
+            Assert.Multiple(() =>
+            {
+                Assert.That(report.ErrorType, Is.EqualTo(ReportType.Error));
+                Assert.That(report.ErrorLocation, Is.EqualTo("EditingData"));
+                Assert.That(report.ErrorSeverity, Is.EqualTo(ReportSeverity.Critical));
+                Assert.That(report.Message, Is.EqualTo($"Could not find Security - {BaseCompanyName}-{BaseName}."));
+            });
         }
 
         [Test]
@@ -207,10 +241,13 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             IReportLogger logging = new LogReporter(null, saveInternally: true);
             _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
 
-            NameData accountNames = database.BenchMarks.First().Names;
-            Assert.That(accountNames.Name, Is.EqualTo(NewName));
-            Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
-            Assert.That(logging.Reports.Count(), Is.EqualTo(0));
+            NameData accountNames = database.BenchMarks[0].Names;
+            Assert.Multiple(() =>
+            {
+                Assert.That(accountNames.Name, Is.EqualTo(NewName));
+                Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
+                Assert.That(logging.Reports.Count(), Is.EqualTo(0));
+            });
         }
 
         [Test]
@@ -224,10 +261,13 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             Assert.That(reports.Count(), Is.EqualTo(1));
 
             ErrorReport report = reports.First();
-            Assert.That(report.ErrorType, Is.EqualTo(ReportType.Error));
-            Assert.That(report.ErrorLocation, Is.EqualTo("EditingData"));
-            Assert.That(report.ErrorSeverity, Is.EqualTo(ReportSeverity.Critical));
-            Assert.That(report.Message, Is.EqualTo($"Could not find Benchmark - {BaseCompanyName}-{BaseName}."));
+            Assert.Multiple(() =>
+            {
+                Assert.That(report.ErrorType, Is.EqualTo(ReportType.Error));
+                Assert.That(report.ErrorLocation, Is.EqualTo("EditingData"));
+                Assert.That(report.ErrorSeverity, Is.EqualTo(ReportSeverity.Critical));
+                Assert.That(report.Message, Is.EqualTo($"Could not find Benchmark - {BaseCompanyName}-{BaseName}."));
+            });
         }
     }
 }

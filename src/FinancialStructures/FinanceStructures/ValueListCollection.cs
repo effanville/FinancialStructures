@@ -28,7 +28,7 @@ namespace Effanville.FinancialStructures.FinanceStructures
             _account = account;
             _factory = new IValueListFactory<TImplementation>(constructor);
         }
-        
+
         public ValueListCollection(Account account, IValueListFactory<TImplementation> factory)
         {
             _account = account;
@@ -102,7 +102,7 @@ namespace Effanville.FinancialStructures.FinanceStructures
                 {
                     result = true;
                     newObject.DataEdit += OnCollectionItemChanged;
-                    reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, 
+                    reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information,
                         ReportLocation.AddingData.ToString(), $"{accountType}-{name} added to database.");
                 }
             }
@@ -116,6 +116,33 @@ namespace Effanville.FinancialStructures.FinanceStructures
                 OnCollectionChanged(this, new PortfolioEventArgs(_account));
             }
             return result;
+        }
+
+        public bool TryUpdateKey(TwoName oldKey, TwoName newKey)
+        {
+            if (oldKey.IsEqualTo(newKey))
+            {
+                return false;
+            }
+
+            _collectionLock.EnterWriteLock();
+            try
+            {
+                TwoName oldKeyValue = oldKey.ToTwoName();
+                if (!_collectionDictionary.TryGetValue(oldKeyValue, out TImplementation valueList))
+                {
+                    return false;
+                }
+
+                _ = _collectionDictionary.Remove(oldKeyValue);
+                _collectionDictionary.Add(newKey.ToTwoName(), valueList);
+            }
+            finally
+            {
+                _collectionLock.ExitWriteLock();
+            }
+
+            return true;
         }
 
         internal void AddValueList(TImplementation security)
@@ -178,8 +205,8 @@ namespace Effanville.FinancialStructures.FinanceStructures
         {
             _collectionLock.EnterWriteLock();
             try
-            {            
-                foreach (KeyValuePair<TwoName, TImplementation> security in values._collectionDictionary) 
+            {
+                foreach (KeyValuePair<TwoName, TImplementation> security in values._collectionDictionary)
                 {
                     _collectionDictionary.Add(security.Key, (TImplementation)security.Value.Copy());
                 }
@@ -189,7 +216,7 @@ namespace Effanville.FinancialStructures.FinanceStructures
                 _collectionLock.ExitWriteLock();
             }
         }
-        
+
         public void ReplaceDictionary(ValueListCollection<TInterface, TImplementation> values)
         {
             _collectionLock.EnterWriteLock();
@@ -225,7 +252,7 @@ namespace Effanville.FinancialStructures.FinanceStructures
             EventHandler<PortfolioEventArgs> handler = CollectionChanged;
             handler?.Invoke(obj, e);
         }
-        
+
         private void OnCollectionItemChanged(object obj, PortfolioEventArgs e)
         {
             EventHandler<PortfolioEventArgs> handler = CollectionItemChanged;

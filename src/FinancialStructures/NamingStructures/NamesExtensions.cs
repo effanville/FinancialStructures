@@ -1,4 +1,4 @@
-﻿namespace Effanville.FinancialStructures.NamingStructures
+namespace Effanville.FinancialStructures.NamingStructures
 {
     /// <summary>
     /// Static extension methods for <see cref="NameData"/>.
@@ -6,8 +6,8 @@
     public static class NamesExtensions
     {
         /// <summary>
-        /// Static extension method to convert a <see cref="NameData"/> into a <see cref="TwoName"/>
+        /// Takes a copy of a <see cref="TwoName"/> and produces a new <see cref="TwoName"/>
         /// </summary>
-        public static TwoName ToTwoName(this NameData names) => new TwoName(names.Company, names.Name);
+        public static TwoName ToTwoName(this TwoName names) => new TwoName(names.Company, names.Name);
     }
 }

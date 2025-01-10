@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Effanville.FinancialStructures.NamingStructures
 {
@@ -29,10 +29,7 @@ namespace Effanville.FinancialStructures.NamingStructures
         /// <summary>
         /// Allows for construction with just one name.
         /// </summary>
-        public TwoName(string primaryName)
-        {
-            Company = primaryName;
-        }
+        public TwoName(string primaryName) => Company = primaryName;
 
         /// <summary>
         /// Parameterless constructor.
