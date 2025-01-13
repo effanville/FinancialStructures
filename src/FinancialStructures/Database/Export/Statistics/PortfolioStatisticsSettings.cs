@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -77,7 +77,30 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
         {
             get;
         }
-        
+
+        /// <summary>
+        /// Constructor setting all values.
+        /// </summary>
+        public PortfolioStatisticsSettings(
+            DateTime dateToCalculate,
+            bool displayValueFunds,
+            bool generateBenchmarks,
+            GenerateOptions<Statistic> securityOptions,
+            GenerateOptions<Statistic> bankAccountOptions,
+            GenerateOptions<Statistic> sectorOptions,
+            GenerateOptions<Statistic> assetOptions,
+            GenerateOptions<Statistic> currencyOptions)
+        {
+            DateToCalculate = dateToCalculate;
+            DisplayValueFunds = displayValueFunds;
+            GenerateBenchmarks = generateBenchmarks;
+            SecurityGenerateOptions = securityOptions;
+            BankAccountGenerateOptions = bankAccountOptions;
+            SectorGenerateOptions = sectorOptions;
+            AssetGenerateOptions = assetOptions;
+            CurrencyGenerateOptions = currencyOptions;
+        }
+
         /// <summary>
         /// Constructor setting all values.
         /// </summary>

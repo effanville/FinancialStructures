@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 
 using Effanville.FinancialStructures.Database.Statistics;
 
@@ -99,6 +99,24 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
             SectorDisplayOptions = new TableOptions<Statistic>(includeSectors, sectorSortField, sectorSortDirection, sectorDisplayFields);
             AssetDisplayOptions = new TableOptions<Statistic>(includeAssets, assetSortField, assetSortDirection, assetDisplayFields);
             CurrencyDisplayOptions = new TableOptions<Statistic>(includeCurrencies, currencySortField, currencySortDirection, currencyDisplayFields);
+        }
+
+        public PortfolioStatisticsExportSettings(
+            bool spacing,
+            bool colours,
+            TableOptions<Statistic> securityOptions,
+            TableOptions<Statistic> bankAccountOptions,
+            TableOptions<Statistic> sectorOptions,
+            TableOptions<Statistic> assetOptions,
+            TableOptions<Statistic> currencyOptions)
+        {
+            Spacing = spacing;
+            Colours = colours;
+            SecurityDisplayOptions = securityOptions;
+            BankAccountDisplayOptions = bankAccountOptions;
+            SectorDisplayOptions = sectorOptions;
+            AssetDisplayOptions = assetOptions;
+            CurrencyDisplayOptions = currencyOptions;
         }
 
         /// <summary>
