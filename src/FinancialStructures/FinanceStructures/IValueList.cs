@@ -1,6 +1,5 @@
 ﻿using System;
 using Effanville.Common.Structure.FileAccess;
-using Effanville.Common.Structure.Reporting;
 
 namespace Effanville.FinancialStructures.FinanceStructures
 {
@@ -16,9 +15,8 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// <param name="oldDate">The existing date held.</param>
         /// <param name="date">The date to add data to.</param>
         /// <param name="value">The value data to add.</param>
-        /// <param name="reportLogger">An optional logger to log progress.</param>
         /// <returns>Was adding or editing successful.</returns>
-        bool TryEditData(DateTime oldDate, DateTime date, decimal value, IReportLogger reportLogger = null);
+        bool TryEditData(DateTime oldDate, DateTime date, decimal value);
 
         /// <summary>
         /// Sets data on the date specified to the value given. This overwrites the existing
@@ -26,15 +24,13 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// </summary>
         /// <param name="date">The date to add data to.</param>
         /// <param name="value">The value data to add.</param>
-        /// <param name="reportLogger">An optional logger to log progress.</param>
-        void SetData(DateTime date, decimal value, IReportLogger reportLogger = null);
+        void SetData(DateTime date, decimal value);
 
         /// <summary>
         /// Attempts to delete data on the date specified.
         /// </summary>
         /// <param name="date">The date to delete data on.</param>
-        /// <param name="reportLogger">An optional logger to log progress.</param>
         /// <returns>Whether data was deleted or not.</returns>
-        bool TryDeleteData(DateTime date, IReportLogger reportLogger = null);
+        bool TryDeleteData(DateTime date);
     }
 }

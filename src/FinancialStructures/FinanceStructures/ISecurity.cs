@@ -1,5 +1,4 @@
 ﻿using System;
-using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.DataStructures;
 
 namespace Effanville.FinancialStructures.FinanceStructures
@@ -15,17 +14,15 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// </summary>
         /// <param name="oldTrade">The existing trade held.</param>
         /// <param name="newTrade">The new trade to overwrite the old with.</param>
-        /// <param name="reportLogger">An optional logger to log progress.</param>
         /// <returns>Was adding or editing successful.</returns>
-        bool TryAddOrEditTradeData(SecurityTrade oldTrade, SecurityTrade newTrade, IReportLogger reportLogger = null);
+        bool TryAddOrEditTradeData(SecurityTrade oldTrade, SecurityTrade newTrade);
 
         /// <summary>
         /// Attempts to delete trade data on the date given.
         /// </summary>
         /// <param name="date">The date to delete data on</param>
-        /// <param name="reportLogger">An optional logger to log progress.</param>
         /// <returns>True if has deleted, false if failed to delete.</returns>
-        bool TryDeleteTradeData(DateTime date, IReportLogger reportLogger = null);
+        bool TryDeleteTradeData(DateTime date);
 
         /// <summary>
         /// Removes unnecessary investment and Share number values to reduce size.

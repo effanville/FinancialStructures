@@ -28,21 +28,21 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public virtual bool TryEditData(DateTime oldDate, DateTime date, decimal value, IReportLogger reportLogger = null)
+        public virtual bool TryEditData(DateTime oldDate, DateTime date, decimal value)
         {
             if (Values.ValueExists(oldDate, out _))
             {
-                return Values.TryEditData(oldDate, date, value, reportLogger);
+                return Values.TryEditData(oldDate, date, value);
             }
 
-            Values.SetData(date, value, reportLogger);
+            Values.SetData(date, value);
             return true;
         }
 
         /// <inheritdoc/>
-        public virtual void SetData(DateTime date, decimal value, IReportLogger logger = null)
+        public virtual void SetData(DateTime date, decimal value)
         {
-            Values.SetData(date, value, logger);
+            Values.SetData(date, value);
         }
 
         /// <summary>
@@ -72,8 +72,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// Writes the data held in the account to a csv file.
         /// </summary>
         /// <param name="writer">The writer holding the location of where to write.</param>
-        /// <param name="reportLogger">A logger to record outcomes.</param>
-        public virtual void WriteDataToCsv(TextWriter writer, IReportLogger reportLogger = null)
+        public virtual void WriteDataToCsv(TextWriter writer)
         {
             foreach (DailyValuation value in ListOfValues())
             {
@@ -82,10 +81,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public virtual bool TryDeleteData(DateTime date, IReportLogger reportLogger = null)
-        {
-            return Values.TryDeleteValue(date, reportLogger);
-        }
+        public virtual bool TryDeleteData(DateTime date) => Values.TryDeleteValue(date);
 
         /// <inheritdoc/>
         public bool TryRemoveSector(TwoName sectorName)

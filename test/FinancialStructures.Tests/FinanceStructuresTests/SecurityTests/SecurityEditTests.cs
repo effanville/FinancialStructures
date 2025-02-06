@@ -191,8 +191,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
                     tradeEditData.Date,
                     tradeEditData.TradeShares,
                     tradeEditData.TradePrice,
-                    tradeEditData.TradeCost),
-                reportLogger: null);
+                    tradeEditData.TradeCost));
 
             Assert.Multiple(() =>
             {

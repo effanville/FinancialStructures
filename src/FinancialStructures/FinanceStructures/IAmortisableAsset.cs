@@ -1,5 +1,4 @@
 ﻿using System;
-using Effanville.Common.Structure.Reporting;
 
 namespace Effanville.FinancialStructures.FinanceStructures
 {
@@ -17,9 +16,8 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// <param name="oldDate">The existing date held.</param>
         /// <param name="date">The date to add data to.</param>
         /// <param name="value">The value of debt to add.</param>
-        /// <param name="reportLogger">An optional logger to log progress.</param>
         /// <returns>Was adding or editing successful.</returns>
-        bool TryEditDebt(DateTime oldDate, DateTime date, decimal value, IReportLogger reportLogger = null);
+        bool TryEditDebt(DateTime oldDate, DateTime date, decimal value);
 
         /// <summary>
         /// Sets a debt value on the date specified to the value given. This overwrites the existing
@@ -27,16 +25,14 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// </summary>
         /// <param name="date">The date to add data to.</param>
         /// <param name="value">The value of debt to add.</param>
-        /// <param name="reportLogger">An optional logger to log progress.</param>
-        void SetDebt(DateTime date, decimal value, IReportLogger reportLogger = null);
+        void SetDebt(DateTime date, decimal value);
 
         /// <summary>
         /// Attempts to delete a debt value on the date specified.
         /// </summary>
         /// <param name="date">The date to delete data on.</param>
-        /// <param name="reportLogger">An optional logger to log progress.</param>
         /// <returns>Whether data was deleted or not.</returns>
-        bool TryDeleteDebt(DateTime date, IReportLogger reportLogger = null);
+        bool TryDeleteDebt(DateTime date);
 
         /// <summary>
         /// Tries to add a payment for the date specified if it doesnt exist, or edits data if it exists.
@@ -45,9 +41,8 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// <param name="oldDate">The existing date held.</param>
         /// <param name="date">The date to add data to.</param>
         /// <param name="value">The value of the payment to add.</param>
-        /// <param name="reportLogger">An optional logger to log progress.</param>
         /// <returns>Was adding or editing successful.</returns>
-        bool TryEditPayment(DateTime oldDate, DateTime date, decimal value, IReportLogger reportLogger = null);
+        bool TryEditPayment(DateTime oldDate, DateTime date, decimal value);
 
         /// <summary>
         /// Sets a payment on the date specified to the value given. This overwrites the existing
@@ -55,15 +50,13 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// </summary>
         /// <param name="date">The date to add data to.</param>
         /// <param name="value">The value of the payment to add.</param>
-        /// <param name="reportLogger">An optional logger to log progress.</param>
-        void SetPayment(DateTime date, decimal value, IReportLogger reportLogger = null);
+        void SetPayment(DateTime date, decimal value);
 
         /// <summary>
         /// Attempts to delete a payment on the date specified.
         /// </summary>
         /// <param name="date">The date to delete data on.</param>
-        /// <param name="reportLogger">An optional logger to log progress.</param>
         /// <returns>Whether data was deleted or not.</returns>
-        bool TryDeletePayment(DateTime date, IReportLogger reportLogger = null);
+        bool TryDeletePayment(DateTime date);
     }
 }

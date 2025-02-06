@@ -26,7 +26,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.DataEdit
                account,
                name,
                (acc, n) => acc == Account.Security || acc == Account.Pension,
-               security => security.TryDeleteTradeData(date, reportLogger),
+               security => security.TryDeleteTradeData(date),
                ReportLocation.DeletingData,
                reportLogger);
         }
@@ -46,7 +46,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.DataEdit
                account,
                name,
                (acc, n) => acc == Account.Asset,
-               asset => asset.TryDeleteDebt(date, reportLogger),
+               asset => asset.TryDeleteDebt(date),
                ReportLocation.DeletingData,
                reportLogger);
         }
@@ -66,7 +66,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.DataEdit
                account,
                name,
                (acc, n) => acc == Account.Asset,
-               asset => asset.TryDeletePayment(date, reportLogger),
+               asset => asset.TryDeletePayment(date),
                ReportLocation.DeletingData,
                reportLogger);
         }
@@ -85,7 +85,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.DataEdit
             return portfolio.TryPerformEdit(
                account,
                name,
-               account => account.TryDeleteData(date, reportLogger),
+               account => account.TryDeleteData(date),
                ReportLocation.DeletingData,
                reportLogger);
         }

@@ -20,7 +20,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.DataEdit
                 account,
                 name,
                 (acc, n) => acc == Account.Asset,
-                asset => asset.TryEditDebt(oldData.Day, newData.Day, newData.Value, reportLogger),
+                asset => asset.TryEditDebt(oldData.Day, newData.Day, newData.Value),
                 ReportLocation.AddingData,
                 reportLogger);
         }
@@ -34,7 +34,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.DataEdit
                 account,
                 name,
                 (acc, n) => acc == Account.Asset,
-                asset => asset.TryEditPayment(oldData.Day, newData.Day, newData.Value, reportLogger),
+                asset => asset.TryEditPayment(oldData.Day, newData.Day, newData.Value),
                 ReportLocation.AddingData,
                 reportLogger);
         }
@@ -48,7 +48,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.DataEdit
                 account,
                 name,
                 (acc, n) => acc == Account.Security || acc == Account.Pension,
-                security => security.TryAddOrEditTradeData(oldTrade, newTrade, reportLogger),
+                security => security.TryAddOrEditTradeData(oldTrade, newTrade),
                 ReportLocation.AddingData,
                 reportLogger);
         }
@@ -69,7 +69,7 @@ namespace Effanville.FinancialStructures.Database.Extensions.DataEdit
             return portfolio.TryPerformEdit(
                 account,
                 name,
-                valueList => valueList.TryEditData(oldData.Day, data.Day, data.Value, reportLogger),
+                valueList => valueList.TryEditData(oldData.Day, data.Day, data.Value),
                 ReportLocation.AddingData,
                 reportLogger);
         }

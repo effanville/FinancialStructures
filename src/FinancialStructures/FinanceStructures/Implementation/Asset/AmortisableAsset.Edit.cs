@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Effanville.Common.Structure.Reporting;
-
 namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
 {
     /// <summary>
@@ -10,50 +8,50 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
     public sealed partial class AmortisableAsset
     {
         /// <inheritdoc/>
-        public void SetDebt(DateTime date, decimal value, IReportLogger reportLogger = null)
+        public void SetDebt(DateTime date, decimal value)
         {
-            Debt.SetData(date, value, reportLogger);
+            Debt.SetData(date, value);
         }
 
         /// <inheritdoc/>
-        public bool TryDeleteDebt(DateTime date, IReportLogger reportLogger = null)
+        public bool TryDeleteDebt(DateTime date)
         {
-            return Debt.TryDeleteValue(date, reportLogger);
+            return Debt.TryDeleteValue(date);
         }
 
         /// <inheritdoc/>
-        public bool TryEditDebt(DateTime oldDate, DateTime date, decimal value, IReportLogger reportLogger = null)
+        public bool TryEditDebt(DateTime oldDate, DateTime date, decimal value)
         {
             if (Debt.ValueExists(oldDate, out _))
             {
-                return Debt.TryEditData(oldDate, date, value, reportLogger);
+                return Debt.TryEditData(oldDate, date, value);
             }
 
-            Debt.SetData(date, value, reportLogger);
+            Debt.SetData(date, value);
             return true;
         }
 
         /// <inheritdoc/>
-        public void SetPayment(DateTime date, decimal value, IReportLogger reportLogger = null)
+        public void SetPayment(DateTime date, decimal value)
         {
-            Payments.SetData(date, value, reportLogger);
+            Payments.SetData(date, value);
         }
 
         /// <inheritdoc/>
-        public bool TryDeletePayment(DateTime date, IReportLogger reportLogger = null)
+        public bool TryDeletePayment(DateTime date)
         {
-            return Payments.TryDeleteValue(date, reportLogger);
+            return Payments.TryDeleteValue(date);
         }
 
         /// <inheritdoc/>
-        public bool TryEditPayment(DateTime oldDate, DateTime date, decimal value, IReportLogger reportLogger = null)
+        public bool TryEditPayment(DateTime oldDate, DateTime date, decimal value)
         {
             if (Payments.ValueExists(oldDate, out _))
             {
-                return Payments.TryEditData(oldDate, date, value, reportLogger);
+                return Payments.TryEditData(oldDate, date, value);
             }
 
-            Payments.SetData(date, value, reportLogger);
+            Payments.SetData(date, value);
             return true;
         }
     }

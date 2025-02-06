@@ -11,7 +11,7 @@ internal static class ValueListValidationExtensions
     internal static void UpdateAndCheck(this IValueList valueList, decimal valueToUpdate, IReportLogger logger, List<DownloadResult> results)
     {
         decimal latestValue = valueList.LatestValue()?.Value ?? 0.0m;
-        valueList.SetData(DateTime.Today, valueToUpdate, logger);
+        valueList.SetData(DateTime.Today, valueToUpdate);
 
         DownloadResult result = results.FirstOrDefault(x => x.Name.IsEqualTo(valueList.Names));
         if (result != null)

@@ -16,31 +16,31 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
     public partial class Security
     {
         /// <inheritdoc/>
-        public override bool TryEditData(DateTime oldDate, DateTime newDate, decimal value, IReportLogger logger = null)
+        public override bool TryEditData(DateTime oldDate, DateTime newDate, decimal value)
         {
-            bool edited = AddOrEditData(UnitPrice, oldDate, newDate, value, logger);
+            bool edited = AddOrEditData(UnitPrice, oldDate, newDate, value);
             if(edited)
             {
-                EnsureDataConsistency(logger);
+                EnsureDataConsistency();
             }
 
             return edited;
         }
 
         /// <inheritdoc/>
-        public override void SetData(DateTime date, decimal value, IReportLogger logger = null)
+        public override void SetData(DateTime date, decimal value)
         {
-            if (AddOrEditData(UnitPrice, date, date, value, logger))
+            if (AddOrEditData(UnitPrice, date, date, value))
             {
-                EnsureDataConsistency(logger);
+                EnsureDataConsistency();
             }
         }
 
         internal bool AddOrEditData(DateTime oldDate, DateTime newDate, decimal unitPrice, decimal shares, decimal investment = 0, SecurityTrade trade = null, IReportLogger reportLogger = null)
         {
-            bool editUnitPrice = AddOrEditData(UnitPrice, oldDate, newDate, unitPrice, reportLogger);
-            bool editShares = AddOrEditData(Shares, oldDate, newDate, shares, reportLogger);
-            bool editInvestments = AddOrEditData(Investments, oldDate, newDate, investment, reportLogger);
+            bool editUnitPrice = AddOrEditData(UnitPrice, oldDate, newDate, unitPrice);
+            bool editShares = AddOrEditData(Shares, oldDate, newDate, shares);
+            bool editInvestments = AddOrEditData(Investments, oldDate, newDate, investment);
             if (trade != null)
             {
                 AddOrEditTrade(oldDate, trade);
@@ -48,19 +48,19 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
 
             if(editUnitPrice | editShares | editInvestments)
             {
-                EnsureDataConsistency(reportLogger);
+                EnsureDataConsistency();
             }
 
             return editUnitPrice & editShares & editInvestments;
         }
 
         /// <inheritdoc/>
-        public bool TryAddOrEditTradeData(SecurityTrade oldTrade, SecurityTrade newTrade, IReportLogger reportLogger = null)
+        public bool TryAddOrEditTradeData(SecurityTrade oldTrade, SecurityTrade newTrade)
         {
             if(AddOrEditTrade(oldTrade.Day, newTrade))
             {
-                EnsureDataConsistency(reportLogger);
-                OnDataEdit(this, new EventArgs());
+                EnsureDataConsistency();
+                OnDataEdit(this, EventArgs.Empty);
                 return true;
             }
 
@@ -103,14 +103,14 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             return edited;
         }
 
-        private static bool AddOrEditData(TimeList list, DateTime oldDate, DateTime date, decimal value, IReportLogger reportLogger = null)
+        private static bool AddOrEditData(TimeList list, DateTime oldDate, DateTime date, decimal value)
         {
             if (list.ValueExists(oldDate, out _))
             {
-                return list.TryEditData(oldDate, date, value, reportLogger);
+                return list.TryEditData(oldDate, date, value);
             }
 
-            list.SetData(date, value, reportLogger);
+            list.SetData(date, value);
             return true;
         }
 
@@ -138,7 +138,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public override void WriteDataToCsv(TextWriter writer, IReportLogger reportLogger)
+        public override void WriteDataToCsv(TextWriter writer)
         {
             foreach (SecurityDayData value in GetDataForDisplay())
             {
@@ -149,17 +149,17 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Tries to delete the data. If it can, it deletes all data specified, then returns true only if all data has been successfully deleted.
         /// </summary>
-        public override bool TryDeleteData(DateTime date, IReportLogger reportLogger = null)
+        public override bool TryDeleteData(DateTime date)
         {
-            bool unitDel = UnitPrice.TryDeleteValue(date, reportLogger);
-            bool sharesDel = Shares.TryDeleteValue(date, reportLogger);
-            bool invDel = Investments.TryDeleteValue(date, reportLogger);
-            EnsureDataConsistency(reportLogger);
+            bool unitDel = UnitPrice.TryDeleteValue(date);
+            bool sharesDel = Shares.TryDeleteValue(date);
+            bool invDel = Investments.TryDeleteValue(date);
+            EnsureDataConsistency();
             return unitDel & sharesDel & invDel;
         }
 
         /// <inheritdoc/>
-        public bool TryDeleteTradeData(DateTime date, IReportLogger reportLogger = null)
+        public bool TryDeleteTradeData(DateTime date)
         {
             bool edited;
             lock (TradesLock)
@@ -167,10 +167,10 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
                 edited = SecurityTrades.RemoveAll(trade => trade.Day.Equals(date)) != 0;
             }
                 
-            EnsureDataConsistency(reportLogger);
+            EnsureDataConsistency();
             if (edited)
             {
-                OnDataEdit(SecurityTrades, new EventArgs());
+                OnDataEdit(SecurityTrades, EventArgs.Empty);
             }
 
             return edited;
@@ -206,7 +206,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Upon a new/edit/Delete trade, one needs to recompute the values of the investments for that trade.
         /// </summary>
-        internal void EnsureDataConsistency(IReportLogger reportLogger = null)
+        internal void EnsureDataConsistency()
         {
             RemoveEventListening();
             CleanData();
@@ -223,7 +223,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
                 DailyValuation shareValue = Shares[index];
                 if (!trades.Any(trade => trade.Day.Equals(shareValue.Day)))
                 {
-                    if (Shares.TryDeleteValue(shareValue.Day, reportLogger))
+                    if (Shares.TryDeleteValue(shareValue.Day))
                     {
                         index--;
                     }
@@ -251,7 +251,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
                     }
                     else
                     {
-                        _ = Shares.TryDeleteValue(trade.Day, reportLogger);
+                        _ = Shares.TryDeleteValue(trade.Day);
                     }
 
                     // if trade should have investment value, then set the value, if it
@@ -259,11 +259,11 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
                     if (trade.TradeType.IsInvestmentTradeType())
                     {
                         decimal sign = trade.TradeType.Sign();
-                        Investments.SetData(trade.Day, sign * trade.TotalCost, reportLogger);
+                        Investments.SetData(trade.Day, sign * trade.TotalCost);
                     }
                     else
                     {
-                        _ = Investments.TryDeleteValue(trade.Day, reportLogger);
+                        _ = Investments.TryDeleteValue(trade.Day);
                     }
                 }
             }
@@ -274,7 +274,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
                 DailyValuation investmentValue = Investments[index];
                 if (!trades.Any(trade => trade.Day.Equals(investmentValue.Day)))
                 {
-                    if (Investments.TryDeleteValue(investmentValue.Day, reportLogger))
+                    if (Investments.TryDeleteValue(investmentValue.Day))
                     {
                         index--;
                     }
@@ -290,7 +290,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// This though causes a problem if a value is deleted.
         /// One adds new trades here if trades do not exist to deal with migrating from an old xml form.
         /// </summary>
-        internal void EnsureOnLoadDataConsistency(IReportLogger reportLogger = null)
+        internal void EnsureOnLoadDataConsistency()
         {
             RemoveEventListening();
             CleanData();
@@ -321,7 +321,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
                 if (trade.TradeType.IsInvestmentTradeType())
                 {
                     decimal sign = trade.TradeType.Sign();
-                    Investments.SetData(trade.Day, sign * trade.TotalCost, reportLogger);
+                    Investments.SetData(trade.Day, sign * trade.TotalCost);
                 }
             }
 
@@ -339,7 +339,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
                             decimal numShares = sharesCurrentValue.Value - sharesPreviousValue.Value;
                             decimal unitPrice = UnitPrice.ValueOnOrBefore(investmentValue.Day)?.Value ?? 0.0m;
                             decimal value = numShares * unitPrice;
-                            Investments.SetData(investmentValue.Day, value, reportLogger);
+                            Investments.SetData(investmentValue.Day, value);
                             TradeType trade = value > 0 ? TradeType.Buy : TradeType.Sell;
                             SecurityTrades.Add(new SecurityTrade(trade, Names, investmentValue.Day, Math.Abs(numShares), unitPrice, 0.0m));
                         }
@@ -347,7 +347,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
                 }
                 if (investmentValue.Value == 0)
                 {
-                    if (Investments.TryDeleteValue(investmentValue.Day, reportLogger))
+                    if (Investments.TryDeleteValue(investmentValue.Day))
                     {
                         index--;
                     }

@@ -17,7 +17,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
                 {
                     foreach (DailyValuation unitPrice in sec.UnitPrice.Values())
                     {
-                        security.SetData(unitPrice.Day, unitPrice.Value, reportLogger);
+                        security.SetData(unitPrice.Day, unitPrice.Value);
                     }
                 }
             }
@@ -29,7 +29,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
                 {
                     foreach (var value in sec.Values.Values())
                     {
-                        bankAccount.SetData(value.Day, value.Value, reportLogger);
+                        bankAccount.SetData(value.Day, value.Value);
                     }
                 }
             }
@@ -41,7 +41,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
                 {
                     foreach (var value in sec.Values.Values())
                     {
-                        sector.SetData(value.Day, value.Value, reportLogger);
+                        sector.SetData(value.Day, value.Value);
                     }
                 }
             }
@@ -53,7 +53,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
                 {
                     foreach (var value in sec.Values.Values())
                     {
-                        currency.SetData(value.Day, value.Value, reportLogger);
+                        currency.SetData(value.Day, value.Value);
                     }
                 }
             }
@@ -65,7 +65,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
                 {
                     foreach (var value in sec.Values.Values())
                     {
-                        asset.SetData(value.Day, value.Value, reportLogger);
+                        asset.SetData(value.Day, value.Value);
                     }
                 }
             }
@@ -77,7 +77,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
                 {
                     foreach (var unitPrice in sec.UnitPrice.Values())
                     {
-                        pension.SetData(unitPrice.Day, unitPrice.Value, reportLogger);
+                        pension.SetData(unitPrice.Day, unitPrice.Value);
                     }
                 }
             }
