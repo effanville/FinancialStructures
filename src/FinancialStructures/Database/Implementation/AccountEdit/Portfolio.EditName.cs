@@ -1,5 +1,6 @@
-using Effanville.Common.Structure.Reporting;
+using Effanville.Common.Structure.ChangeLogging;
 using Effanville.FinancialStructures.Database.Extensions;
+using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Implementation;
@@ -7,26 +8,35 @@ namespace Effanville.FinancialStructures.Database.Implementation;
 public partial class Portfolio
 {
     /// <inheritdoc/>
-    public bool TryEditName(Account elementType, NameData oldName, NameData newName, IReportLogger reportLogger = null)
+    public UpdateResult<(Account, NameData)> TryEditName(Account elementType, NameData oldName, NameData newName)
     {
         TwoName oldTwoName = oldName.ToTwoName();
-        bool outcome = this.TryPerformEdit(elementType,
+        UpdateResult<NameData> outcome = this.TryPerformEdit<IValueList, NameData>(
+            elementType,
             oldTwoName,
-            valueList => valueList.EditNameData(newName),
-            ReportLocation.EditingData,
-            reportLogger);
+            valueList => valueList.EditNameData(newName));
 
         TwoName newTwoName = newName.ToTwoName();
-        return outcome
-           && elementType switch
-           {
-               Account.Security => _funds.TryUpdateKey(oldTwoName, newTwoName),
-               Account.Benchmark => _benchmarks.TryUpdateKey(oldTwoName, newTwoName),
-               Account.BankAccount => _bankAccounts.TryUpdateKey(oldTwoName, newTwoName),
-               Account.Currency => _currencies.TryUpdateKey(oldTwoName, newTwoName),
-               Account.Asset => _assets.TryUpdateKey(oldTwoName, newTwoName),
-               Account.Pension => _pensions.TryUpdateKey(oldTwoName, newTwoName),
-               _ => false
-           };
+
+        bool keyUpdate = elementType switch
+        {
+            Account.Security => _funds.TryUpdateKey(oldTwoName, newTwoName),
+            Account.Benchmark => _benchmarks.TryUpdateKey(oldTwoName, newTwoName),
+            Account.BankAccount => _bankAccounts.TryUpdateKey(oldTwoName, newTwoName),
+            Account.Currency => _currencies.TryUpdateKey(oldTwoName, newTwoName),
+            Account.Asset => _assets.TryUpdateKey(oldTwoName, newTwoName),
+            Account.Pension => _pensions.TryUpdateKey(oldTwoName, newTwoName),
+            _ => false
+        };
+
+        return new UpdateResult<(Account, NameData)>
+        {
+            Success = outcome.Success && keyUpdate,
+            IsAdd = outcome.IsAdd,
+            IsChange = outcome.IsChange,
+            IsDelete = outcome.IsDelete,
+            OldValue = (elementType, outcome.OldValue),
+            NewValue = (elementType, outcome.NewValue),
+        };
     }
 }

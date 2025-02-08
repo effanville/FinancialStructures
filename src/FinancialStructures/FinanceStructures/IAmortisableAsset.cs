@@ -1,4 +1,6 @@
-﻿using System;
+using System;
+using Effanville.Common.Structure.ChangeLogging;
+using Effanville.Common.Structure.DataStructures;
 
 namespace Effanville.FinancialStructures.FinanceStructures
 {
@@ -17,7 +19,7 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// <param name="date">The date to add data to.</param>
         /// <param name="value">The value of debt to add.</param>
         /// <returns>Was adding or editing successful.</returns>
-        bool TryEditDebt(DateTime oldDate, DateTime date, decimal value);
+        UpdateResult<DailyValuation> TryEditDebt(DateTime oldDate, DateTime date, decimal value);
 
         /// <summary>
         /// Sets a debt value on the date specified to the value given. This overwrites the existing
@@ -25,14 +27,14 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// </summary>
         /// <param name="date">The date to add data to.</param>
         /// <param name="value">The value of debt to add.</param>
-        void SetDebt(DateTime date, decimal value);
+        UpdateResult<DailyValuation> SetDebt(DateTime date, decimal value);
 
         /// <summary>
         /// Attempts to delete a debt value on the date specified.
         /// </summary>
         /// <param name="date">The date to delete data on.</param>
         /// <returns>Whether data was deleted or not.</returns>
-        bool TryDeleteDebt(DateTime date);
+        UpdateResult<DailyValuation> TryDeleteDebt(DateTime date);
 
         /// <summary>
         /// Tries to add a payment for the date specified if it doesnt exist, or edits data if it exists.
@@ -42,7 +44,7 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// <param name="date">The date to add data to.</param>
         /// <param name="value">The value of the payment to add.</param>
         /// <returns>Was adding or editing successful.</returns>
-        bool TryEditPayment(DateTime oldDate, DateTime date, decimal value);
+        UpdateResult<DailyValuation> TryEditPayment(DateTime oldDate, DateTime date, decimal value);
 
         /// <summary>
         /// Sets a payment on the date specified to the value given. This overwrites the existing
@@ -50,13 +52,13 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// </summary>
         /// <param name="date">The date to add data to.</param>
         /// <param name="value">The value of the payment to add.</param>
-        void SetPayment(DateTime date, decimal value);
+        UpdateResult<DailyValuation> SetPayment(DateTime date, decimal value);
 
         /// <summary>
         /// Attempts to delete a payment on the date specified.
         /// </summary>
         /// <param name="date">The date to delete data on.</param>
         /// <returns>Whether data was deleted or not.</returns>
-        bool TryDeletePayment(DateTime date);
+        UpdateResult<DailyValuation> TryDeletePayment(DateTime date);
     }
 }

@@ -1,6 +1,5 @@
-﻿using System;
-
-using Effanville.Common.Structure.Reporting;
+using System;
+using Effanville.Common.Structure.ChangeLogging;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
@@ -11,34 +10,6 @@ namespace Effanville.FinancialStructures.Database.Extensions
     /// </summary>
     public static class PortfolioPerformAction
     {
-        /// <summary>
-        /// Performs an edit on the account specified if the preEditCheck succeeds and the account exists.
-        /// </summary>
-        /// <param name="portfolio">The portfolio which holds the account.</param>
-        /// <param name="account">The type of data to remove from.</param>
-        /// <param name="name">The name to remove from.</param>
-        /// <param name="preEditCheck">A check to peform prior to attempting the edit.</param>
-        /// <param name="performEdit">The function to perform on the value list.</param>
-        /// <param name="location">The location for any errors</param>
-        /// <param name="reportLogger">Report callback.</param>
-        /// <returns>Success or failure.</returns>
-        public static bool TryPerformEdit(
-            this IPortfolio portfolio,
-            Account account,
-            TwoName name,
-            Func<Account, TwoName, bool> preEditCheck,
-            Func<IValueList, bool> performEdit,
-            ReportLocation location,
-            IReportLogger reportLogger = null)
-        {
-            if (!preEditCheck(account, name))
-            {
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, location, $"Cannot perform edit for account and name {account} - {name}.");
-                return false;
-            }
-
-            return TryPerformEdit(portfolio, account, name, performEdit, location, reportLogger);
-        }
 
         /// <summary>
         /// Performs an edit on the account specified if the preEditCheck succeeds and the account exists.
@@ -48,54 +19,21 @@ namespace Effanville.FinancialStructures.Database.Extensions
         /// <param name="name">The name to remove from.</param>
         /// <param name="preEditCheck">A check to peform prior to attempting the edit.</param>
         /// <param name="performEdit">The function to perform on the value list.</param>
-        /// <param name="location">The location for any errors</param>
-        /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
-        public static bool TryPerformEdit<T>(
+        public static UpdateResult<TUpdate> TryPerformEdit<T, TUpdate>(
             this IPortfolio portfolio,
             Account account,
             TwoName name,
             Func<Account, TwoName, bool> preEditCheck,
-            Func<T, bool> performEdit,
-            ReportLocation location,
-            IReportLogger reportLogger = null)
+            Func<T, UpdateResult<TUpdate>> performEdit)
             where T : IValueList
         {
             if (!preEditCheck(account, name))
             {
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, location, $"Cannot perform edit for account and name {account} - {name}.");
-                return false;
+                return UpdateResult.Fail(default(TUpdate), $"Cannot perform edit for account and name {account} - {name}.");
             }
 
-            return TryPerformEdit(portfolio, account, name, performEdit, location, reportLogger);
-        }
-
-        /// <summary>
-        /// Performs an edit on the account specified if it exists. This only performs a
-        /// function upon an <see cref="IValueList"/>
-        /// </summary>
-        /// <param name="portfolio">The portfolio which holds the account.</param>
-        /// <param name="account">The type of data to remove from.</param>
-        /// <param name="name">The name to remove from.</param>
-        /// <param name="performEdit">The function to perform on the value list.</param>
-        /// <param name="location">The location for any errors</param>
-        /// <param name="reportLogger">Report callback.</param>
-        /// <returns>Success or failure.</returns>
-        public static bool TryPerformEdit(
-            this IPortfolio portfolio,
-            Account account,
-            TwoName name,
-            Func<IValueList, bool> performEdit,
-            ReportLocation location,
-            IReportLogger reportLogger = null)
-        {
-            if (!portfolio.TryGetAccount(account, name, out IValueList valueList))
-            {
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, location, $"Could not find {account} - {name}.");
-                return false;
-            }
-
-            return performEdit(valueList);
+            return TryPerformEdit(portfolio, account, name, performEdit);
         }
 
         /// <summary>
@@ -106,27 +44,21 @@ namespace Effanville.FinancialStructures.Database.Extensions
         /// <param name="account">The type of data to remove from.</param>
         /// <param name="name">The name to remove from.</param>
         /// <param name="performEdit">The function to perform on the value list.</param>
-        /// <param name="location">The location for any errors</param>
-        /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
-        public static bool TryPerformEdit<T>(
+        public static UpdateResult<TUpdate> TryPerformEdit<T, TUpdate>(
             this IPortfolio portfolio,
             Account account,
             TwoName name,
-            Func<T, bool> performEdit,
-            ReportLocation location,
-            IReportLogger reportLogger = null) where T : IValueList
+            Func<T, UpdateResult<TUpdate>> performEdit) where T : IValueList
         {
             if (!portfolio.TryGetAccount(account, name, out IValueList valueList))
             {
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, location, $"Could not find {account} - {name}.");
-                return false;
+                return UpdateResult.Fail(default(TUpdate), $"Could not find {account} - {name}.");
             }
 
             if (valueList is not T specialValueList)
             {
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, location, $"Could not convert {account} - {name} into account of type {typeof(T)}.");
-                return false;
+                return UpdateResult.Fail(default(TUpdate), $"Could not convert {account} - {name} into account of type {typeof(T)}.");
             }
 
             return performEdit(specialValueList);

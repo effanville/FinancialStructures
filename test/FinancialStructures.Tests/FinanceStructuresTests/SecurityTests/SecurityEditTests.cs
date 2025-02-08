@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -127,7 +127,7 @@ namespace Effanville.FinancialStructures.Tests.FinanceStructuresTests.SecurityTe
         [TestCaseSource(nameof(TradeData))]
         public void SecurityTradeTests(Security sut, (DateTime Date, decimal UP, decimal Shares, decimal Inv, decimal TradeShares, decimal TradePrice, decimal TradeCost) dataToAdd, (DateTime Date, decimal UnitPrice, decimal ShareNo, decimal Investment)[] expectedValues)
         {
-            _ = sut.AddOrEditData(dataToAdd.Date, dataToAdd.Date, dataToAdd.UP, dataToAdd.Shares, dataToAdd.Inv, trade: new SecurityTrade(TradeType.Buy, sut.Names.ToTwoName(), dataToAdd.Date, dataToAdd.TradeShares, dataToAdd.TradePrice, dataToAdd.TradeCost), reportLogger: null);
+            _ = sut.AddOrEditData(dataToAdd.Date, dataToAdd.Date, dataToAdd.UP, dataToAdd.Shares, dataToAdd.Inv, trade: new SecurityTrade(TradeType.Buy, sut.Names.ToTwoName(), dataToAdd.Date, dataToAdd.TradeShares, dataToAdd.TradePrice, dataToAdd.TradeCost));
 
             Assert.Multiple(() =>
             {

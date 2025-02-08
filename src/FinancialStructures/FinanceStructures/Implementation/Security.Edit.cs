@@ -1,9 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-
+using Effanville.Common.Structure.ChangeLogging;
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.DataStructures;
@@ -16,37 +16,40 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
     public partial class Security
     {
         /// <inheritdoc/>
-        public override bool TryEditData(DateTime oldDate, DateTime newDate, decimal value)
+        public override UpdateResult<DailyValuation> TryEditData(DateTime oldDate, DateTime newDate, decimal value)
         {
-            bool edited = AddOrEditData(UnitPrice, oldDate, newDate, value);
-            if(edited)
+            UpdateResult<DailyValuation> result = AddOrEditData(UnitPrice, oldDate, newDate, value);
+            if (result.Success)
             {
                 EnsureDataConsistency();
             }
 
-            return edited;
+            return result;
         }
 
         /// <inheritdoc/>
-        public override void SetData(DateTime date, decimal value)
+        public override UpdateResult<DailyValuation> SetData(DateTime date, decimal value)
         {
-            if (AddOrEditData(UnitPrice, date, date, value))
+            UpdateResult<DailyValuation> result = AddOrEditData(UnitPrice, date, date, value);
+            if (result.Success)
             {
                 EnsureDataConsistency();
             }
+
+            return result;
         }
 
-        internal bool AddOrEditData(DateTime oldDate, DateTime newDate, decimal unitPrice, decimal shares, decimal investment = 0, SecurityTrade trade = null, IReportLogger reportLogger = null)
+        internal bool AddOrEditData(DateTime oldDate, DateTime newDate, decimal unitPrice, decimal shares, decimal investment = 0, SecurityTrade trade = null)
         {
-            bool editUnitPrice = AddOrEditData(UnitPrice, oldDate, newDate, unitPrice);
-            bool editShares = AddOrEditData(Shares, oldDate, newDate, shares);
-            bool editInvestments = AddOrEditData(Investments, oldDate, newDate, investment);
+            bool editUnitPrice = AddOrEditData(UnitPrice, oldDate, newDate, unitPrice).Success;
+            bool editShares = AddOrEditData(Shares, oldDate, newDate, shares).Success;
+            bool editInvestments = AddOrEditData(Investments, oldDate, newDate, investment).Success;
             if (trade != null)
             {
                 AddOrEditTrade(oldDate, trade);
             }
 
-            if(editUnitPrice | editShares | editInvestments)
+            if (editUnitPrice | editShares | editInvestments)
             {
                 EnsureDataConsistency();
             }
@@ -55,63 +58,62 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public bool TryAddOrEditTradeData(SecurityTrade oldTrade, SecurityTrade newTrade)
+        public UpdateResult<SecurityTrade> TryAddOrEditTradeData(SecurityTrade oldTrade, SecurityTrade newTrade)
         {
-            if(AddOrEditTrade(oldTrade.Day, newTrade))
+            UpdateResult<SecurityTrade> result = AddOrEditTrade(oldTrade.Day, newTrade);
+            if (result.Success)
             {
                 EnsureDataConsistency();
-                OnDataEdit(this, EventArgs.Empty);
-                return true;
             }
 
-            return false;
+            return result;
         }
 
-        private bool AddOrEditTrade(DateTime oldDate, SecurityTrade trade)
+        private UpdateResult<SecurityTrade> AddOrEditTrade(DateTime oldDate, SecurityTrade trade)
         {
-            bool edited = false;
-            lock (TradesLock)
+            try
             {
-                if (!SecurityTrades.Any(existingTrade => existingTrade.Day.Equals(oldDate)))
+                lock (TradesLock)
                 {
-                    SecurityTrades.Add(trade);
-                    edited = true;
-                }
-                else
-                {
-                    foreach (var tradeVal in SecurityTrades)
+                    if (!SecurityTrades.Any(existingTrade => existingTrade.Day.Equals(oldDate)))
+                    {
+                        SecurityTrades.Add(trade);
+                        return UpdateResult.Add(trade.Copy());
+                    }
+
+                    foreach (SecurityTrade tradeVal in SecurityTrades)
                     {
                         if (tradeVal.Day.Equals(oldDate))
                         {
+                            SecurityTrade oldValue = tradeVal.Copy();
                             tradeVal.Day = trade.Day;
                             tradeVal.NumberShares = trade.NumberShares;
                             tradeVal.UnitPrice = trade.UnitPrice;
                             tradeVal.TradeCosts = trade.TradeCosts;
                             tradeVal.TradeType = trade.TradeType;
-                            edited = true;
+
+                            return UpdateResult.Change(oldValue, tradeVal.Copy());
                         }
                     }
+
+                    return UpdateResult.Fail(trade, isAdd: true, isChange: true);
                 }
-                SecurityTrades.Sort();
             }
-            
-            if(edited)
+            finally
             {
+                SecurityTrades.Sort();
                 OnDataEdit(SecurityTrades, new EventArgs());
             }
-
-            return edited;
         }
 
-        private static bool AddOrEditData(TimeList list, DateTime oldDate, DateTime date, decimal value)
+        private static UpdateResult<DailyValuation> AddOrEditData(TimeList list, DateTime oldDate, DateTime date, decimal value)
         {
             if (list.ValueExists(oldDate, out _))
             {
                 return list.TryEditData(oldDate, date, value);
             }
 
-            list.SetData(date, value);
-            return true;
+            return list.SetData(date, value);
         }
 
         /// <inheritdoc/>
@@ -149,31 +151,40 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// Tries to delete the data. If it can, it deletes all data specified, then returns true only if all data has been successfully deleted.
         /// </summary>
-        public override bool TryDeleteData(DateTime date)
+        public override UpdateResult<DailyValuation> TryDeleteData(DateTime date)
         {
-            bool unitDel = UnitPrice.TryDeleteValue(date);
-            bool sharesDel = Shares.TryDeleteValue(date);
-            bool invDel = Investments.TryDeleteValue(date);
+            UpdateResult<DailyValuation> unitDel = UnitPrice.TryDeleteValue(date);
+            UpdateResult<DailyValuation> sharesDel = Shares.TryDeleteValue(date);
+            UpdateResult<DailyValuation> invDel = Investments.TryDeleteValue(date);
             EnsureDataConsistency();
-            return unitDel & sharesDel & invDel;
+            return UpdateResult.All(new[] { unitDel, sharesDel, invDel });
         }
 
         /// <inheritdoc/>
-        public bool TryDeleteTradeData(DateTime date)
+        public UpdateResult<SecurityTrade> TryDeleteTradeData(DateTime date)
         {
-            bool edited;
-            lock (TradesLock)
+            try
             {
-                edited = SecurityTrades.RemoveAll(trade => trade.Day.Equals(date)) != 0;
+                lock (TradesLock)
+                {
+                    for (int i = 0; i < SecurityTrades.Count; i++)
+                    {
+                        if (SecurityTrades[i].Day == date)
+                        {
+                            SecurityTrade value = SecurityTrades[i].Copy();
+                            SecurityTrades.RemoveAt(i);
+                            return UpdateResult.Delete(value);
+                        }
+                    }
+
+                    return UpdateResult.Fail(new SecurityTrade(date), isDelete: true);
+                }
             }
-                
-            EnsureDataConsistency();
-            if (edited)
+            finally
             {
+                EnsureDataConsistency();
                 OnDataEdit(SecurityTrades, EventArgs.Empty);
             }
-
-            return edited;
         }
 
         /// <inheritdoc/>
@@ -223,7 +234,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
                 DailyValuation shareValue = Shares[index];
                 if (!trades.Any(trade => trade.Day.Equals(shareValue.Day)))
                 {
-                    if (Shares.TryDeleteValue(shareValue.Day))
+                    if (Shares.TryDeleteValue(shareValue.Day).Success)
                     {
                         index--;
                     }
@@ -274,7 +285,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
                 DailyValuation investmentValue = Investments[index];
                 if (!trades.Any(trade => trade.Day.Equals(investmentValue.Day)))
                 {
-                    if (Investments.TryDeleteValue(investmentValue.Day))
+                    if (Investments.TryDeleteValue(investmentValue.Day).Success)
                     {
                         index--;
                     }
@@ -347,7 +358,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
                 }
                 if (investmentValue.Value == 0)
                 {
-                    if (Investments.TryDeleteValue(investmentValue.Day))
+                    if (Investments.TryDeleteValue(investmentValue.Day).Success)
                     {
                         index--;
                     }

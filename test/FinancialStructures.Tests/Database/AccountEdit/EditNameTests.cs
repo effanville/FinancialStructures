@@ -199,7 +199,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
                 .WithSecurity(BaseCompanyName, BaseName)
                 .GetInstance();
             IReportLogger logging = new LogReporter(null, saveInternally: true);
-            _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
+            _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
             NameData accountNames = database.Funds[0].Names;
             Assert.Multiple(() =>
@@ -216,7 +216,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         {
             Portfolio database = new DatabaseConstructor().GetInstance();
             IReportLogger logging = new LogReporter(null, saveInternally: true);
-            _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
+            _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
             ErrorReports reports = logging.Reports;
             Assert.That(reports.Count(), Is.EqualTo(1));
@@ -239,7 +239,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
                 .WithSectorFromName(BaseCompanyName, BaseName)
                 .GetInstance();
             IReportLogger logging = new LogReporter(null, saveInternally: true);
-            _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
+            _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
             NameData accountNames = database.BenchMarks[0].Names;
             Assert.Multiple(() =>
@@ -255,7 +255,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         {
             Portfolio database = new DatabaseConstructor().GetInstance();
             IReportLogger logging = new LogReporter(null, saveInternally: true);
-            _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName), logging);
+            _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
             ErrorReports reports = logging.Reports;
             Assert.That(reports.Count(), Is.EqualTo(1));

@@ -1,6 +1,6 @@
-﻿using System;
-
-using Effanville.Common.Structure.Reporting;
+using System;
+using Effanville.Common.Structure.DataStructures;
+using Effanville.FinancialStructures.DataStructures;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
@@ -18,17 +18,14 @@ namespace Effanville.FinancialStructures.Database.Extensions.DataEdit
         /// <param name="account">The type of data to remove from.</param>
         /// <param name="name">The name to remove from.</param>
         /// <param name="date">The date on which to remove data.</param>
-        /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
-        public static bool TryDeleteTradeData(this IPortfolio portfolio, Account account, TwoName name, DateTime date, IReportLogger reportLogger = null)
+        public static bool TryDeleteTradeData(this IPortfolio portfolio, Account account, TwoName name, DateTime date)
         {
-            return portfolio.TryPerformEdit<ISecurity>(
+            return portfolio.TryPerformEdit<ISecurity, SecurityTrade>(
                account,
                name,
                (acc, n) => acc == Account.Security || acc == Account.Pension,
-               security => security.TryDeleteTradeData(date),
-               ReportLocation.DeletingData,
-               reportLogger);
+               security => security.TryDeleteTradeData(date)).Success;
         }
 
         /// <summary>
@@ -38,17 +35,14 @@ namespace Effanville.FinancialStructures.Database.Extensions.DataEdit
         /// <param name="account">The type of data to remove from.</param>
         /// <param name="name">The name to remove from.</param>
         /// <param name="date">The date on which to remove data.</param>
-        /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
-        public static bool TryDeleteAssetDebt(this IPortfolio portfolio, Account account, TwoName name, DateTime date, IReportLogger reportLogger = null)
+        public static bool TryDeleteAssetDebt(this IPortfolio portfolio, Account account, TwoName name, DateTime date)
         {
-            return portfolio.TryPerformEdit<IAmortisableAsset>(
+            return portfolio.TryPerformEdit<IAmortisableAsset, DailyValuation>(
                account,
                name,
                (acc, n) => acc == Account.Asset,
-               asset => asset.TryDeleteDebt(date),
-               ReportLocation.DeletingData,
-               reportLogger);
+               asset => asset.TryDeleteDebt(date)).Success;
         }
 
         /// <summary>
@@ -58,17 +52,14 @@ namespace Effanville.FinancialStructures.Database.Extensions.DataEdit
         /// <param name="account">The type of data to remove from.</param>
         /// <param name="name">The name to remove from.</param>
         /// <param name="date">The date on which to remove data.</param>
-        /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
-        public static bool TryDeleteAssetPayment(this IPortfolio portfolio, Account account, TwoName name, DateTime date, IReportLogger reportLogger = null)
+        public static bool TryDeleteAssetPayment(this IPortfolio portfolio, Account account, TwoName name, DateTime date)
         {
-            return portfolio.TryPerformEdit<IAmortisableAsset>(
+            return portfolio.TryPerformEdit<IAmortisableAsset, DailyValuation>(
                account,
                name,
                (acc, n) => acc == Account.Asset,
-               asset => asset.TryDeletePayment(date),
-               ReportLocation.DeletingData,
-               reportLogger);
+               asset => asset.TryDeletePayment(date)).Success;
         }
 
         /// <summary>
@@ -78,16 +69,13 @@ namespace Effanville.FinancialStructures.Database.Extensions.DataEdit
         /// <param name="account">The type of data to remove from.</param>
         /// <param name="name">The name to remove from.</param>
         /// <param name="date">The date on which to remove data.</param>
-        /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure.</returns>
-        public static bool TryDeleteData(this IPortfolio portfolio, Account account, TwoName name, DateTime date, IReportLogger reportLogger = null)
+        public static bool TryDeleteData(this IPortfolio portfolio, Account account, TwoName name, DateTime date)
         {
-            return portfolio.TryPerformEdit(
+            return portfolio.TryPerformEdit<IValueList, DailyValuation>(
                account,
                name,
-               account => account.TryDeleteData(date),
-               ReportLocation.DeletingData,
-               reportLogger);
+               account => account.TryDeleteData(date)).Success;
         }
     }
 }

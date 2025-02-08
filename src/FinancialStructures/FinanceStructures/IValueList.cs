@@ -1,4 +1,6 @@
-﻿using System;
+using System;
+using Effanville.Common.Structure.ChangeLogging;
+using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.FileAccess;
 
 namespace Effanville.FinancialStructures.FinanceStructures
@@ -15,8 +17,8 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// <param name="oldDate">The existing date held.</param>
         /// <param name="date">The date to add data to.</param>
         /// <param name="value">The value data to add.</param>
-        /// <returns>Was adding or editing successful.</returns>
-        bool TryEditData(DateTime oldDate, DateTime date, decimal value);
+        /// <returns>An update detailing whether the add or edit was successful.</returns>
+        UpdateResult<DailyValuation> TryEditData(DateTime oldDate, DateTime date, decimal value);
 
         /// <summary>
         /// Sets data on the date specified to the value given. This overwrites the existing
@@ -24,13 +26,14 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// </summary>
         /// <param name="date">The date to add data to.</param>
         /// <param name="value">The value data to add.</param>
-        void SetData(DateTime date, decimal value);
+        /// <returns>An update detailing what data was set.</returns>
+        UpdateResult<DailyValuation> SetData(DateTime date, decimal value);
 
         /// <summary>
         /// Attempts to delete data on the date specified.
         /// </summary>
         /// <param name="date">The date to delete data on.</param>
-        /// <returns>Whether data was deleted or not.</returns>
-        bool TryDeleteData(DateTime date);
+        /// <returns>An update detailing whether data was deleted or not and the value deleted.</returns>
+        UpdateResult<DailyValuation> TryDeleteData(DateTime date);
     }
 }

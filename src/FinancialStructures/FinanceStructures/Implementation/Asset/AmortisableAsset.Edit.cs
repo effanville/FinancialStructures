@@ -1,4 +1,6 @@
-﻿using System;
+using System;
+using Effanville.Common.Structure.ChangeLogging;
+using Effanville.Common.Structure.DataStructures;
 
 namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
 {
@@ -8,51 +10,41 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
     public sealed partial class AmortisableAsset
     {
         /// <inheritdoc/>
-        public void SetDebt(DateTime date, decimal value)
-        {
-            Debt.SetData(date, value);
-        }
+        public UpdateResult<DailyValuation> SetDebt(DateTime date, decimal value)
+            => Debt.SetData(date, value);
 
         /// <inheritdoc/>
-        public bool TryDeleteDebt(DateTime date)
-        {
-            return Debt.TryDeleteValue(date);
-        }
+        public UpdateResult<DailyValuation> TryDeleteDebt(DateTime date)
+            => Debt.TryDeleteValue(date);
 
         /// <inheritdoc/>
-        public bool TryEditDebt(DateTime oldDate, DateTime date, decimal value)
+        public UpdateResult<DailyValuation> TryEditDebt(DateTime oldDate, DateTime date, decimal value)
         {
             if (Debt.ValueExists(oldDate, out _))
             {
                 return Debt.TryEditData(oldDate, date, value);
             }
 
-            Debt.SetData(date, value);
-            return true;
+            return Debt.SetData(date, value);
         }
 
         /// <inheritdoc/>
-        public void SetPayment(DateTime date, decimal value)
-        {
-            Payments.SetData(date, value);
-        }
+        public UpdateResult<DailyValuation> SetPayment(DateTime date, decimal value)
+            => Payments.SetData(date, value);
 
         /// <inheritdoc/>
-        public bool TryDeletePayment(DateTime date)
-        {
-            return Payments.TryDeleteValue(date);
-        }
+        public UpdateResult<DailyValuation> TryDeletePayment(DateTime date)
+            => Payments.TryDeleteValue(date);
 
         /// <inheritdoc/>
-        public bool TryEditPayment(DateTime oldDate, DateTime date, decimal value)
+        public UpdateResult<DailyValuation> TryEditPayment(DateTime oldDate, DateTime date, decimal value)
         {
             if (Payments.ValueExists(oldDate, out _))
             {
                 return Payments.TryEditData(oldDate, date, value);
             }
 
-            Payments.SetData(date, value);
-            return true;
+            return Payments.SetData(date, value);
         }
     }
 }

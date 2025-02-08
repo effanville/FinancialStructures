@@ -1,51 +1,48 @@
-﻿using Effanville.Common.Structure.Reporting;
+using Effanville.Common.Structure.ChangeLogging;
 using Effanville.FinancialStructures.NamingStructures;
 
-namespace Effanville.FinancialStructures.Database.Implementation
-{
-    public partial class Portfolio
-    {
-        /// <inheritdoc/>
-        public bool TryRemove(Account elementType, TwoName name, IReportLogger reportLogger = null)
-        {
-            if (string.IsNullOrEmpty(name.Name) && string.IsNullOrEmpty(name.Company))
-            {
-                reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.DeletingData.ToString(), $"Adding {elementType}: Company `{name.Company}' or name `{name.Name}' cannot both be empty.");
-                return false;
-            }
+namespace Effanville.FinancialStructures.Database.Implementation;
 
-            switch (elementType)
+public partial class Portfolio
+{
+    /// <inheritdoc/>
+    public UpdateResult<(Account, NameData)> TryRemove(Account accountType, TwoName name)
+    {
+        if (string.IsNullOrEmpty(name.Name) && string.IsNullOrEmpty(name.Company))
+        {
+            return UpdateResult.Fail((accountType, name.ToNameData()), $"Company `{name.Company}' and name `{name.Name}' cannot both be empty", isDelete: true);
+        }
+
+        switch (accountType)
+        {
+            case Account.Security:
             {
-                case Account.Security:
-                {
-                    return _funds.Remove(name, reportLogger);
-                }
-                case Account.Currency:
-                {
-                    return _currencies.Remove(name, reportLogger);
-                }
-                case Account.BankAccount:
-                {
-                    return _bankAccounts.Remove(name, reportLogger);
-                }
-                case Account.Benchmark:
-                {
-                    return _benchmarks.Remove(name, reportLogger);
-                }
-                case Account.Asset:
-                {
-                    return _assets.Remove(name, reportLogger);
-                }
-                case Account.Pension:
-                {
-                    return _pensions.Remove(name, reportLogger);
-                }
-                case Account.Unknown:
-                case Account.All:
-                default:
-                    reportLogger?.Log(ReportType.Error, ReportLocation.DeletingData.ToString(), $"Editing an Unknown type.");
-                    return false;
+                return _funds.Remove(name);
             }
+            case Account.Currency:
+            {
+                return _currencies.Remove(name);
+            }
+            case Account.BankAccount:
+            {
+                return _bankAccounts.Remove(name);
+            }
+            case Account.Benchmark:
+            {
+                return _benchmarks.Remove(name);
+            }
+            case Account.Asset:
+            {
+                return _assets.Remove(name);
+            }
+            case Account.Pension:
+            {
+                return _pensions.Remove(name);
+            }
+            case Account.Unknown:
+            case Account.All:
+            default:
+                return UpdateResult.Fail((accountType, name.ToNameData()), "Editing an Unknown type.", isDelete: true);
         }
     }
 }

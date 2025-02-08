@@ -1,3 +1,4 @@
+using Effanville.Common.Structure.ChangeLogging;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.FinanceStructures
@@ -9,6 +10,6 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// </summary>
         /// <param name="newNames">The updated name to set.</param>
         /// <returns>Was updating name successful.</returns>
-        bool EditNameData(NameData newNames);
+        UpdateResult<NameData> EditNameData(NameData newNames);
     }
 }

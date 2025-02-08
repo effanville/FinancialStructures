@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using Effanville.Common.Structure.ChangeLogging;
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.NamingStructures;
@@ -15,35 +15,34 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
     public partial class ValueList
     {
         /// <inheritdoc/>
-        public virtual bool EditNameData(NameData newNames)
+        public virtual UpdateResult<NameData> EditNameData(NameData newNames)
         {
             if (!Names.Equals(newNames))
             {
+                NameData oldName = Names.Copy();
+
                 Names = newNames;
                 OnDataEdit(this, new EventArgs());
-                return true;
+                return UpdateResult.Change(oldName, Names.Copy());
             }
 
-            return false;
+            return UpdateResult.Fail(Names, isChange: true);
         }
 
         /// <inheritdoc/>
-        public virtual bool TryEditData(DateTime oldDate, DateTime date, decimal value)
+        public virtual UpdateResult<DailyValuation> TryEditData(DateTime oldDate, DateTime date, decimal value)
         {
             if (Values.ValueExists(oldDate, out _))
             {
                 return Values.TryEditData(oldDate, date, value);
             }
 
-            Values.SetData(date, value);
-            return true;
+            return Values.SetData(date, value);
         }
 
         /// <inheritdoc/>
-        public virtual void SetData(DateTime date, decimal value)
-        {
-            Values.SetData(date, value);
-        }
+        public virtual UpdateResult<DailyValuation> SetData(DateTime date, decimal value)
+            => Values.SetData(date, value);
 
         /// <summary>
         /// Adds data input already read from a csv file to the
@@ -81,7 +80,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public virtual bool TryDeleteData(DateTime date) => Values.TryDeleteValue(date);
+        public virtual UpdateResult<DailyValuation> TryDeleteData(DateTime date) => Values.TryDeleteValue(date);
 
         /// <inheritdoc/>
         public bool TryRemoveSector(TwoName sectorName)
@@ -114,9 +113,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         }
 
         /// <inheritdoc/>
-        public int NumberSectors()
-        {
-            return Names.Sectors.Count;
-        }
+        public int NumberSectors() => Names.Sectors.Count;
     }
 }

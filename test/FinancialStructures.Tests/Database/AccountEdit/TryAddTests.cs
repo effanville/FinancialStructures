@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 
 using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.Database;
@@ -68,7 +68,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         {
             Portfolio database = new DatabaseConstructor().GetInstance();
             IReportLogger logging = new LogReporter(null, saveInternally: true);
-            _ = database.TryAdd(Account.Security, new NameData(BaseCompanyName, BaseName), logging);
+            _ = database.TryAdd(Account.Security, new NameData(BaseCompanyName, BaseName));
 
             ErrorReports reports = logging.Reports;
             Assert.That(reports.Count(), Is.EqualTo(1));
@@ -87,7 +87,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
                 .WithSecurity(BaseCompanyName, BaseName)
                 .GetInstance();
             IReportLogger logging = new LogReporter(null, saveInternally: true);
-            _ = database.TryAdd(Account.Security, new NameData(BaseCompanyName, BaseName), logging);
+            _ = database.TryAdd(Account.Security, new NameData(BaseCompanyName, BaseName));
 
             ErrorReports reports = logging.Reports;
             Assert.That(reports.Count(), Is.EqualTo(1));
@@ -103,7 +103,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         {
             Portfolio database = new DatabaseConstructor().GetInstance();
             IReportLogger logging = new LogReporter(null, saveInternally: true);
-            _ = database.TryAdd(Account.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
+            _ = database.TryAdd(Account.Benchmark, new NameData(BaseCompanyName, BaseName));
 
             ErrorReports reports = logging.Reports;
             Assert.That(reports.Count(), Is.EqualTo(1));
@@ -122,7 +122,7 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
                 .WithSectorFromName(BaseCompanyName, BaseName)
                 .GetInstance();
             IReportLogger logging = new LogReporter(null, saveInternally: true);
-            _ = database.TryAdd(Account.Benchmark, new NameData(BaseCompanyName, BaseName), logging);
+            _ = database.TryAdd(Account.Benchmark, new NameData(BaseCompanyName, BaseName));
 
             ErrorReports reports = logging.Reports;
             Assert.That(reports.Count(), Is.EqualTo(1));

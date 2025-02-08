@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 
 using Effanville.FinancialStructures.Database;
@@ -20,7 +20,7 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
 
             Portfolio portfolio = constructor.Database;
 
-            bool success = portfolio.TryDeleteData(Account.Security, new TwoName("Company", "Name"), new DateTime(2010, 1, 1), null);
+            bool success = portfolio.TryDeleteData(Account.Security, new TwoName("Company", "Name"), new DateTime(2010, 1, 1));
 
             Assert.That(portfolio.Funds.Single().Count(), Is.EqualTo(0));
 
@@ -36,7 +36,7 @@ namespace Effanville.FinancialStructures.Tests.Database.DataEdit
 
             Portfolio portfolio = constructor.Database;
 
-            bool success = portfolio.TryDeleteData(Account.Benchmark, new NameData("Company", "Name"), new DateTime(2010, 1, 1), null);
+            bool success = portfolio.TryDeleteData(Account.Benchmark, new NameData("Company", "Name"), new DateTime(2010, 1, 1));
 
             Assert.That(success, Is.True);
             Assert.That(portfolio.BenchMarks.Single().Count(), Is.EqualTo(0));

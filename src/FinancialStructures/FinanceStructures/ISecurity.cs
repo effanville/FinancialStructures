@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using Effanville.Common.Structure.ChangeLogging;
 using Effanville.FinancialStructures.DataStructures;
 
 namespace Effanville.FinancialStructures.FinanceStructures
@@ -15,14 +16,14 @@ namespace Effanville.FinancialStructures.FinanceStructures
         /// <param name="oldTrade">The existing trade held.</param>
         /// <param name="newTrade">The new trade to overwrite the old with.</param>
         /// <returns>Was adding or editing successful.</returns>
-        bool TryAddOrEditTradeData(SecurityTrade oldTrade, SecurityTrade newTrade);
+        UpdateResult<SecurityTrade> TryAddOrEditTradeData(SecurityTrade oldTrade, SecurityTrade newTrade);
 
         /// <summary>
         /// Attempts to delete trade data on the date given.
         /// </summary>
         /// <param name="date">The date to delete data on</param>
         /// <returns>True if has deleted, false if failed to delete.</returns>
-        bool TryDeleteTradeData(DateTime date);
+        UpdateResult<SecurityTrade> TryDeleteTradeData(DateTime date);
 
         /// <summary>
         /// Removes unnecessary investment and Share number values to reduce size.

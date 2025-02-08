@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
+using Effanville.Common.Structure.ChangeLogging;
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.DataStructures;
@@ -111,7 +112,7 @@ namespace Effanville.FinancialStructures.Database
         /// Handler for the event that data stored in the portfolio has changed.
         /// </summary>
         event EventHandler<PortfolioEventArgs> PortfolioChanged;
-        
+
         /// <summary>
         /// Handler for the event that data stored in the portfolio has changed.
         /// </summary>
@@ -120,30 +121,27 @@ namespace Effanville.FinancialStructures.Database
         /// <summary>
         /// Edits the name of the data currently held.
         /// </summary>
-        /// <param name="elementType">The type of data to edit.</param>
+        /// <param name="accountType">The type of data to edit.</param>
         /// <param name="oldName">The existing name of the data.</param>
         /// <param name="newName">The new name of the data.</param>
-        /// <param name="reportLogger">Report callback.</param>
         /// <returns>Success or failure of editing.</returns>
-        bool TryEditName(Account elementType, NameData oldName, NameData newName, IReportLogger reportLogger = null);
+        UpdateResult<(Account, NameData)> TryEditName(Account accountType, NameData oldName, NameData newName);
 
         /// <summary>
         /// Adds data to the portfolio, unless data already exists.
         /// </summary>
-        /// <param name="elementType">The type of data to add.</param>
+        /// <param name="accountType">The type of data to add.</param>
         /// <param name="name">The name data to add.</param>
-        /// <param name="reportLogger">Report callback action.</param>
         /// <returns>Success or failure of adding.</returns>
-        bool TryAdd(Account elementType, NameData name, IReportLogger reportLogger = null);
+        UpdateResult<(Account, NameData)> TryAdd(Account accountType, NameData name);
 
         /// <summary>
         /// Removes the account from the database if it can.
         /// </summary>
-        /// <param name="elementType">The type of account to remove.</param>
+        /// <param name="accountType">The type of account to remove.</param>
         /// <param name="name">The name of the account to remove.</param>
-        /// <param name="reportLogger">(optional) A report callback.</param>
         /// <returns>Success or failure.</returns>
-        bool TryRemove(Account elementType, TwoName name, IReportLogger reportLogger = null);
+        UpdateResult<(Account, NameData)> TryRemove(Account accountType, TwoName name);
 
         /// <summary>
         /// Queries whether database contains item.
