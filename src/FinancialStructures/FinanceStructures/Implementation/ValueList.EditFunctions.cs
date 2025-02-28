@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Effanville.Common.Structure.ChangeLogging;
+using Effanville.Common.Structure.DataEdit;
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.NamingStructures;

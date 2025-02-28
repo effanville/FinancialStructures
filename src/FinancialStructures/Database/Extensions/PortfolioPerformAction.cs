@@ -1,5 +1,5 @@
 using System;
-using Effanville.Common.Structure.ChangeLogging;
+using Effanville.Common.Structure.DataEdit;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
@@ -10,7 +10,6 @@ namespace Effanville.FinancialStructures.Database.Extensions
     /// </summary>
     public static class PortfolioPerformAction
     {
-
         /// <summary>
         /// Performs an edit on the account specified if the preEditCheck succeeds and the account exists.
         /// </summary>

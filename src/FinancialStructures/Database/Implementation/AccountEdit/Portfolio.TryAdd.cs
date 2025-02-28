@@ -1,4 +1,4 @@
-using Effanville.Common.Structure.ChangeLogging;
+using Effanville.Common.Structure.DataEdit;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Database.Implementation;

@@ -1,5 +1,5 @@
 using System;
-using Effanville.Common.Structure.ChangeLogging;
+using Effanville.Common.Structure.DataEdit;
 using Effanville.FinancialStructures.DataStructures;
 
 namespace Effanville.FinancialStructures.FinanceStructures

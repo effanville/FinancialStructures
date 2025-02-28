@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Effanville.Common.Structure.DataStructures;
 using Effanville.FinancialStructures.Database;

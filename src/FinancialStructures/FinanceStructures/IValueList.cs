@@ -1,5 +1,5 @@
 using System;
-using Effanville.Common.Structure.ChangeLogging;
+using Effanville.Common.Structure.DataEdit;
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.FileAccess;
 
