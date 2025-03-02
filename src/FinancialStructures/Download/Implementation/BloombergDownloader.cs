@@ -26,18 +26,16 @@ namespace Effanville.FinancialStructures.Download.Implementation
                 return false;
             }
 
-            reportLogger?.Log(ReportType.Information, ReportLocation.Downloading.ToString(), $"Retrieved data length {webData.Length} from url '{url}'");
-            decimal? value = Process(webData,200, reportLogger);
+            decimal? value = Process(webData, 200, reportLogger);
             if (!value.HasValue)
             {
                 return false;
             }
 
-            reportLogger?.Log(ReportType.Information, ReportLocation.Downloading.ToString(), $"Retrieved value {value.Value} from url '{url}'");
             retrieveValueAction(value.Value);
             return true;
         }
-        
+
         /// <summary>
         /// Enables retrieval of the financial code specifier for the url.
         /// </summary>
@@ -57,7 +55,7 @@ namespace Effanville.FinancialStructures.Download.Implementation
 
             return code;
         }
-        
+
         private static decimal? Process(string data, int searchLength, IReportLogger reportLogger)
         {
             string searchString =
@@ -69,8 +67,6 @@ namespace Effanville.FinancialStructures.Download.Implementation
                 return penceResult.Value;
             }
 
-            
-            reportLogger?.Log(ReportType.Information, ReportLocation.Downloading.ToString(), $"SearchIndex={penceValueIndex}, data={data}");
             return null;
         }
     }

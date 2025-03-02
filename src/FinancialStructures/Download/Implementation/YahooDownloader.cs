@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 using Effanville.Common.Structure.Reporting;
@@ -11,7 +12,7 @@ namespace Effanville.FinancialStructures.Download.Implementation
     internal sealed class YahooDownloader : IPriceDownloader
     {
         /// <inheritdoc/>
-        public string BaseUrl => "https://uk.finance.yahoo.com/";
+        public string BaseUrl => "https://query1.finance.yahoo.com/";
 
         internal YahooDownloader()
         {
@@ -21,42 +22,58 @@ namespace Effanville.FinancialStructures.Download.Implementation
         public async Task<bool> TryGetLatestPriceFromUrl(
             string url,
             string currency,
-            Action<decimal> retrieveValueAction, 
+            Action<decimal> retrieveValueAction,
             IReportLogger reportLogger = null)
         {
             string financialCode = GetFinancialCode(url);
-            return await TryGetPriceInternal(url, financialCode, retrieveValueAction, reportLogger);
+            url = BuildQueryUrl(BaseUrl, financialCode);
+            return await TryGetPriceInternal(
+                url,
+                currency,
+                retrieveValueAction,
+                reportLogger);
         }
 
-        public async Task<bool> TryGetLatestPrice(string financialCode, Action<decimal> retrieveValueAction, IReportLogger reportLogger = null)
+        private static async Task<bool> TryGetPriceInternal(string url,
+            string currency,
+            Action<decimal> retrieveValueAction, IReportLogger reportLogger = null)
         {
-            string url = BuildQueryUrl(BaseUrl, financialCode);
-            return await TryGetPriceInternal(url, financialCode, retrieveValueAction, reportLogger);
-        }
-
-        private static async Task<bool> TryGetPriceInternal(string url, string financialCode, Action<decimal> retrieveValueAction, IReportLogger reportLogger = null)
-        {
-            string webData = await DownloadHelper.GetWebData(url, addCookie: true, reportLogger);
+            string webData = await DownloadHelper.GetWebData(url, addCookie: false, reportLogger);
             if (string.IsNullOrEmpty(webData))
             {
                 reportLogger?.Error("Downloading", $"Could not download data from {url}");
                 return false;
             }
 
-            decimal? value = GetValue(webData, financialCode);
-            if (!value.HasValue)
+            // stockWebsite here is a csv file or json file
+            string newLineSeparator = webData.Contains("\r\n") ? "\r\n" : "\n";
+            string[] lines = webData.Split(newLineSeparator);
+            if (lines.Length == 1 && lines[0].StartsWith("{"))
             {
-                return false;
+                YahooStockData obj = JsonSerializer.Deserialize<YahooStockData>(lines[0]);
+                if (obj != null)
+                {
+                    if (obj.spark.result == null && obj.spark.error != null)
+                    {
+                        return false;
+                    }
+
+                    string valueCurrency = obj.spark.result[0].response[0].meta.Currency;
+                    double val = obj.spark.result[0].response[0].meta.RegularMarketPrice;
+                    if (string.Equals(currency, "GBP") && string.Equals("GBp", valueCurrency))
+                    {
+                        val /= 100.0;
+                    }
+                    retrieveValueAction(Convert.ToDecimal(val));
+                    return true;
+                }
             }
 
-            retrieveValueAction(value.Value);
-            return true;
+            return false;
         }
 
         private static string BuildQueryUrl(string url, string identifier)
-        {
-            return $"{url}/quote/{identifier}";
-        }
+            => $"{url}v7/finance/spark?symbols={identifier}";
 
         /// <summary>
         /// Enables retrieval of the financial code specifier for the url.
@@ -76,34 +93,6 @@ namespace Effanville.FinancialStructures.Download.Implementation
             code = code.Replace("%5E", "^").Replace("%3D", "=").ToUpper();
 
             return code;
-        }
-
-        private static decimal? GetValue(string webData, string financialCode)
-        {
-            int number = 2;
-            int poundsIndex;
-            string searchString;
-            do
-            {
-                searchString = $"data-symbol=\"{financialCode}\" data-testid=\"qsp-price\" data-field=\"regularMarketPrice\" data-trend=\"none\" data-pricehint=\"{number}\"";
-                poundsIndex = webData.IndexOf(searchString);
-                number++;
-            }
-            while (poundsIndex == -1 && number < 100);
-
-            decimal? value = DownloadHelper.ParseDataIntoNumber(webData, poundsIndex, searchString.Length, 20, true);
-            if (value.HasValue)
-            {
-                int ind = webData.IndexOf("Delayed Quote</span>");
-                if (webData.Contains("Currency in GBp") || (ind > 0 && webData.Substring(ind, 200).Contains("GBp")))
-                {
-                    return value.Value / 100.0m;
-                }
-
-                return value.Value;
-            }
-
-            return null;
         }
     }
 }

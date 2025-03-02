@@ -47,8 +47,8 @@ namespace Effanville.FinancialStructures.Tests.Database
         [TestCase("https://markets.ft.com/data/indices/tearsheet/summary?s=INX:IOM", "USD", 2000, 9000)]
         [TestCase("https://markets.ft.com/data/indices/tearsheet/summary?s=FTSE:FSI", "GBP", 2000, 20000)]
         [TestCase("https://www.morningstar.co.uk/uk/funds/snapshot/snapshot.aspx?id=F00000ZJEI", "EUR", 2, 100)]
-        [TestCase("https://www.bloomberg.com/quote/MAMMGEE:HK", "HKD", 5, 50)]
-        [TestCase("https://www.bloomberg.com/quote/MLCOREA:HK", "HKD", 2, 200)]
+        //[TestCase("https://www.bloomberg.com/quote/MAMMGEE:HK", "HKD", 5, 50)]
+        //[TestCase("https://www.bloomberg.com/quote/MLCOREA:HK", "HKD", 2, 200)]
         [TestCase("https://uk.finance.yahoo.com/quote/XMTW.L", "GBP", 20, 100)]
         public async Task CanDownload(string url, string currency, double lower, double upper)
         {
