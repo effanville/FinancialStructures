@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-
-using Effanville.Common.Structure.Reporting;
+using Effanville.Common.Structure.DataEdit;
 using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.Database.Implementation;
 using Effanville.FinancialStructures.FinanceStructures;
@@ -198,7 +197,6 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
                 new DatabaseConstructor()
                 .WithSecurity(BaseCompanyName, BaseName)
                 .GetInstance();
-            IReportLogger logging = new LogReporter(null, saveInternally: true);
             _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
             NameData accountNames = database.Funds[0].Names;
@@ -206,8 +204,6 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             {
                 Assert.That(accountNames.Name, Is.EqualTo(NewName));
                 Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
-
-                Assert.That(logging.Reports.Count(), Is.EqualTo(0));
             });
         }
 
@@ -215,19 +211,13 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         public void EditingSecurityFailReports()
         {
             Portfolio database = new DatabaseConstructor().GetInstance();
-            IReportLogger logging = new LogReporter(null, saveInternally: true);
-            _ = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
+            UpdateResult<(Account, NameData)> result = database.TryEditName(Account.Security, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
-            ErrorReports reports = logging.Reports;
-            Assert.That(reports.Count(), Is.EqualTo(1));
-
-            ErrorReport report = reports.First();
             Assert.Multiple(() =>
             {
-                Assert.That(report.ErrorType, Is.EqualTo(ReportType.Error));
-                Assert.That(report.ErrorLocation, Is.EqualTo("EditingData"));
-                Assert.That(report.ErrorSeverity, Is.EqualTo(ReportSeverity.Critical));
-                Assert.That(report.Message, Is.EqualTo($"Could not find Security - {BaseCompanyName}-{BaseName}."));
+                Assert.That(result.Success, Is.False);
+                Assert.That(result.IsChange, Is.False);
+                Assert.That(result.Message, Is.EqualTo($"Could not find Security - {BaseCompanyName}-{BaseName}."));
             });
         }
 
@@ -238,7 +228,6 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
                 new DatabaseConstructor()
                 .WithSectorFromName(BaseCompanyName, BaseName)
                 .GetInstance();
-            IReportLogger logging = new LogReporter(null, saveInternally: true);
             _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
             NameData accountNames = database.BenchMarks[0].Names;
@@ -246,7 +235,6 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
             {
                 Assert.That(accountNames.Name, Is.EqualTo(NewName));
                 Assert.That(accountNames.Company, Is.EqualTo(NewCompanyName));
-                Assert.That(logging.Reports.Count(), Is.EqualTo(0));
             });
         }
 
@@ -254,19 +242,13 @@ namespace Effanville.FinancialStructures.Tests.Database.AccountEdit
         public void EditingSectorFailReports()
         {
             Portfolio database = new DatabaseConstructor().GetInstance();
-            IReportLogger logging = new LogReporter(null, saveInternally: true);
-            _ = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
+            UpdateResult<(Account, NameData)> result = database.TryEditName(Account.Benchmark, new NameData(BaseCompanyName, BaseName), new NameData(NewCompanyName, NewName));
 
-            ErrorReports reports = logging.Reports;
-            Assert.That(reports.Count(), Is.EqualTo(1));
-
-            ErrorReport report = reports.First();
             Assert.Multiple(() =>
             {
-                Assert.That(report.ErrorType, Is.EqualTo(ReportType.Error));
-                Assert.That(report.ErrorLocation, Is.EqualTo("EditingData"));
-                Assert.That(report.ErrorSeverity, Is.EqualTo(ReportSeverity.Critical));
-                Assert.That(report.Message, Is.EqualTo($"Could not find Benchmark - {BaseCompanyName}-{BaseName}."));
+                Assert.That(result.Success, Is.False);
+                Assert.That(result.IsChange, Is.False);
+                Assert.That(result.Message, Is.EqualTo($"Could not find Benchmark - {BaseCompanyName}-{BaseName}."));
             });
         }
     }

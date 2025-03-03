@@ -37,6 +37,7 @@ public partial class Portfolio
             IsDelete = outcome.IsDelete,
             OldValue = (elementType, outcome.OldValue),
             NewValue = (elementType, outcome.NewValue),
+            Message = outcome.Message,
         };
     }
 }
