@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using Effanville.Common.Structure.NamingStructures;
 
 namespace Effanville.FinancialStructures.Download.Implementation
 {

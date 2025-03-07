@@ -50,7 +50,7 @@ namespace Effanville.FinancialStructures.Download.Implementation
             string[] lines = webData.Split(newLineSeparator);
             if (lines.Length == 1 && lines[0].StartsWith("{"))
             {
-                YahooStockData obj = JsonSerializer.Deserialize<YahooStockData>(lines[0]);
+                YahooStockData obj = JsonSerializer.Deserialize(lines[0], YahooStockDataSourceGenerationContext.Default.YahooStockData);
                 if (obj != null)
                 {
                     if (obj.spark.result == null && obj.spark.error != null)
