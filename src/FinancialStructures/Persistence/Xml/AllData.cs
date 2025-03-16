@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-
+using System.Collections.Generic;
+using System.Xml.Serialization;
 using Effanville.FinancialStructures.Database.Implementation;
 using Effanville.FinancialStructures.FinanceStructures.Implementation;
 
@@ -10,6 +10,9 @@ namespace Effanville.FinancialStructures.Persistence.Xml
     /// </summary>
     public class AllData
     {
+        [XmlElement(ElementName = "Version")]
+        public string Version { get; set; }
+
         /// <summary>
         /// The portfolio data.
         /// </summary>
@@ -32,6 +35,7 @@ namespace Effanville.FinancialStructures.Persistence.Xml
         /// </summary>
         public AllData(Portfolio portfolio, List<Sector> fSectors)
         {
+            Version = "1.0.0.0";
             MyFunds.SetFrom(portfolio);
             if (fSectors != null)
             {
