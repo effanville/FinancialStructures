@@ -76,6 +76,10 @@ namespace Effanville.FinancialStructures.Persistence
             {
                 sec.EnsureOnLoadDataConsistency();
             }
+            foreach (Security sec in portfolio.Pensions)
+            {
+                sec.EnsureOnLoadDataConsistency();
+            }
 
             portfolioImpl.OnNewPortfolio(this, new PortfolioEventArgs( true));
             return true;
