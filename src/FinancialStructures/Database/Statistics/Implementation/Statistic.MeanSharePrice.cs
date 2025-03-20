@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Effanville.FinancialStructures.DataStructures;
 using Effanville.FinancialStructures.FinanceStructures;
@@ -19,7 +19,7 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         {
             if (valueList is ISecurity security)
             {
-                fCurrency = portfolio.BaseCurrency;
+                fCurrency = security.Names.Currency;
                 Value = (double)security.MeanSharePrice(TradeType.Buy);
             }
         }
