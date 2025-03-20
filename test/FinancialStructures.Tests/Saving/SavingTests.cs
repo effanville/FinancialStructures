@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO.Abstractions.TestingHelpers;
 
@@ -128,6 +128,7 @@ namespace Effanville.FinancialStructures.Tests.Saving
                 new DatabaseConstructor().SetName("saved").GetInstance(),
             @"<?xml version=""1.0"" encoding=""utf-8""?>
 <AllData xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <Version>1.0.0.0</Version>
   <MyFunds Name=""saved"">
     <Funds />
     <BankAccounts />
@@ -147,6 +148,7 @@ namespace Effanville.FinancialStructures.Tests.Saving
                 portfolio,
    @"<?xml version=""1.0"" encoding=""utf-8""?>
 <AllData xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <Version>1.0.0.0</Version>
   <MyFunds Name=""saved"">
     <Funds>
       <Security>
@@ -218,6 +220,7 @@ namespace Effanville.FinancialStructures.Tests.Saving
             yield return ("AccountsWithData", portfolioWithData,
    @"<?xml version=""1.0"" encoding=""utf-8""?>
 <AllData xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <Version>1.0.0.0</Version>
   <MyFunds Name=""saved"">
     <Funds>
       <Security>
@@ -298,6 +301,7 @@ namespace Effanville.FinancialStructures.Tests.Saving
             yield return (TestDatabaseName.OneBank.ToString(), testDatabases[TestDatabaseName.OneBank],
 @"<?xml version=""1.0"" encoding=""utf-8""?>
 <AllData xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <Version>1.0.0.0</Version>
   <MyFunds Name=""saved"">
     <BaseCurrency>GBP</BaseCurrency>
     <Funds />
@@ -330,6 +334,7 @@ namespace Effanville.FinancialStructures.Tests.Saving
             yield return (TestDatabaseName.OneSec.ToString(), testDatabases[TestDatabaseName.OneSec],
 @"<?xml version=""1.0"" encoding=""utf-8""?>
 <AllData xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <Version>1.0.0.0</Version>
   <MyFunds Name=""saved"">
     <BaseCurrency>GBP</BaseCurrency>
     <Funds>
@@ -385,6 +390,7 @@ namespace Effanville.FinancialStructures.Tests.Saving
             yield return (TestDatabaseName.OneSecOneBank.ToString(), testDatabases[TestDatabaseName.OneSecOneBank],
 @"<?xml version=""1.0"" encoding=""utf-8""?>
 <AllData xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <Version>1.0.0.0</Version>
   <MyFunds Name=""saved"">
     <BaseCurrency>GBP</BaseCurrency>
     <Funds>
