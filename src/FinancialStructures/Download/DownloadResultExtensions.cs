@@ -18,7 +18,7 @@ internal static class DownloadResultExtensions
         int numberSuccess = results.Count(x => x.Success);
         int numberFailure = results.Count(x => !x.Success && x.Value >= 0.0m);
         int numberNoUrl = results.Count(x => string.IsNullOrWhiteSpace(x.Name.Url));
-        logger?.Log(ReportType.Information, nameof(PortfolioDataDownloader),
+        logger?.Info(nameof(PortfolioDataDownloader),
             $"DownloadResults. Total={results.Count} Success={numberSuccess}, Failure={numberFailure}, NoUrl={numberNoUrl}");
     }
 }

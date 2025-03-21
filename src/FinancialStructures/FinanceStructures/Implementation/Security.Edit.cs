@@ -124,7 +124,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             {
                 if (dayValuation.Length != 4)
                 {
-                    _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, "Line in Csv file has incomplete data.");
+                    reportLogger?.Error(nameof(Security), "Line in Csv file has incomplete data.");
                     break;
                 }
 

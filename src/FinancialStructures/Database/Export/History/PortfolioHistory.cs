@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
-using System.Reflection.Metadata;
 using System.Threading.Tasks;
 using Effanville.Common.ReportWriting;
 using Effanville.Common.ReportWriting.Documents;
@@ -21,11 +20,7 @@ namespace Effanville.FinancialStructures.Database.Export.History
         /// <summary>
         /// Records of the history.
         /// </summary>
-        public List<PortfolioDaySnapshot> Snapshots
-        {
-            get;
-            set;
-        }
+        public List<PortfolioDaySnapshot> Snapshots { get; set; }
 
         /// <summary>
         /// Creates the portfolio history.
@@ -154,7 +149,7 @@ namespace Effanville.FinancialStructures.Database.Export.History
         {
             if (!Snapshots.Any())
             {
-                reportLogger?.Log(ReportType.Error, ReportLocation.StatisticsPage.ToString(), "Not enough history points to export.");
+                reportLogger?.Error(nameof(PortfolioHistory), "Not enough history points to export.");
                 return;
             }
 
@@ -179,11 +174,11 @@ namespace Effanville.FinancialStructures.Database.Export.History
                     fileWriter.Write(reportBuilder.ToString());
                 }
 
-                reportLogger?.Log(ReportType.Information, ReportLocation.StatisticsPage.ToString(), $"Successfully exported history to {filePath}.");
+                reportLogger?.Info(nameof(PortfolioHistory), $"Successfully exported history to {filePath}.");
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                reportLogger?.Log(ReportType.Error, ReportLocation.StatisticsPage.ToString(), exception.Message);
+                reportLogger?.Exception(nameof(PortfolioHistory), ex);
             }
         }
     }

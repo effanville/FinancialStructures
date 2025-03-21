@@ -30,8 +30,7 @@ namespace Effanville.FinancialStructures.Persistence
         {
             if (options is not BinaryFilePersistenceOptions binaryFileOptions)
             {
-                reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(),
-                    "Options for loading from Binary file not of correct type.");
+                reportLogger?.Info(nameof(BinaryFilePortfolioPersistence), "Options for loading from Binary file not of correct type.");
                 return false;
             }
 
@@ -39,8 +38,7 @@ namespace Effanville.FinancialStructures.Persistence
             string filePath = binaryFileOptions.FilePath;
             if (!fileSystem.File.Exists(filePath))
             {
-                reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(),
-                    "Loaded Empty New Portfolio.");
+                reportLogger?.Info(nameof(BinaryFilePortfolioPersistence), "Loaded Empty New Portfolio.");
                 return false;
             }
 
@@ -76,16 +74,20 @@ namespace Effanville.FinancialStructures.Persistence
                 portfolioImpl.WireDataChangedEvents();
                 portfolioImpl.Name = fileSystem.Path.GetFileNameWithoutExtension(filePath);
                 portfolioImpl.Saving();
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Loading,
-                    $"Loaded new database from {filePath}");
+                reportLogger?.Info(nameof(BinaryFilePortfolioPersistence), $"Loaded new database from {filePath}");
             }
             else
             {
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading,
-                    $" Failed to load new database from {filePath}. {error}.");
+                reportLogger?.Error(nameof(BinaryFilePortfolioPersistence), $" Failed to load new database from {filePath}. {error}.");
             }
 
             foreach (ISecurity security in portfolio.Funds)
+            {
+                var sec = (Security)security;
+                sec.EnsureOnLoadDataConsistency();
+            }
+
+            foreach (ISecurity security in portfolio.Pensions)
             {
                 var sec = (Security)security;
                 sec.EnsureOnLoadDataConsistency();
@@ -99,8 +101,7 @@ namespace Effanville.FinancialStructures.Persistence
         {
             if (options is not BinaryFilePersistenceOptions binaryFileOptions)
             {
-                reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(),
-                    "Options for loading from Xml file not of correct type.");
+                reportLogger?.Info(nameof(BinaryFilePortfolioPersistence), "Options for loading from Xml file not of correct type.");
                 return false;
             }
 
@@ -108,8 +109,7 @@ namespace Effanville.FinancialStructures.Persistence
             string filePath = binaryFileOptions.FilePath;
             if (portfolio is not Portfolio portfolioImpl)
             {
-                reportLogger?.Log(ReportType.Error, ReportLocation.Saving.ToString(),
-                    "Attempted to save a StockExchange that was not of the correct type.");
+                reportLogger?.Error(nameof(BinaryFilePortfolioPersistence), "Attempted to save a StockExchange that was not of the correct type.");
                 return false;
             }
 
@@ -119,8 +119,7 @@ namespace Effanville.FinancialStructures.Persistence
             XmlFileAccess.WriteToStream(stream, toSave, out string error);
             if (error != null)
             {
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Saving,
-                    $"Failed to save database: {error}");
+                reportLogger?.Error(nameof(BinaryFilePortfolioPersistence), $"Failed to save database: {error}");
                 return false;
             }
 
@@ -133,8 +132,7 @@ namespace Effanville.FinancialStructures.Persistence
             }
 
             portfolioImpl.Saving();
-            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Saving,
-                $"Saved Database at {filePath}");
+            reportLogger?.Info(nameof(BinaryFilePortfolioPersistence), $"Saved Database at {filePath}");
             return true;
         }
     }

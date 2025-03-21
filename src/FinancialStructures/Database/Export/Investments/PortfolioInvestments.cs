@@ -21,11 +21,7 @@ namespace Effanville.FinancialStructures.Database.Export.Investments
         /// <summary>
         /// A list of the name invested in, together with the date and value of the investment.
         /// </summary>
-        public List<Labelled<TwoName, DailyValuation>> Investments
-        {
-            get;
-            set;
-        }
+        public List<Labelled<TwoName, DailyValuation>> Investments { get; set; }
 
         /// <summary>
         /// Default constructor.
@@ -69,11 +65,11 @@ namespace Effanville.FinancialStructures.Database.Export.Investments
                     fileWriter.WriteLine(reportBuilder.ToString());
                 }
 
-                reportLogger?.Log(ReportType.Information, ReportLocation.StatisticsPage.ToString(), $"Successfully exported history to {filePath}.");
+                reportLogger?.Info(nameof(PortfolioInvestments), $"Successfully exported history to {filePath}.");
             }
-            catch (Exception exception)
+            catch (Exception ex)
             {
-                reportLogger?.Log(ReportType.Error, ReportLocation.StatisticsPage.ToString(), exception.Message);
+                reportLogger?.Exception(nameof(PortfolioInvestments), ex);
             }
         }
     }

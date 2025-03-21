@@ -25,146 +25,82 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
         /// <summary>
         /// Totals of different types held in portfolio.
         /// </summary>
-        internal List<AccountStatistics> PortfolioTotals
-        {
-            get;
-            private set;
-        }
+        internal List<AccountStatistics> PortfolioTotals { get; private set; }
 
         /// <summary>
         /// A list of all securities and their statistics.
         /// </summary>
-        internal List<AccountStatistics> SecurityStats
-        {
-            get;
-            private set;
-        }
+        internal List<AccountStatistics> SecurityStats { get; private set; }
 
         /// <summary>
         /// List of statistics of each company performance
         /// </summary>
-        internal List<AccountStatistics> SecurityCompanyStats
-        {
-            get;
-            private set;
-        }
+        internal List<AccountStatistics> SecurityCompanyStats { get; private set; }
 
         /// <summary>
         /// List of statistics of each company performance
         /// </summary>
-        public List<AccountStatistics> SecurityTotalStats
-        {
-            get;
-            private set;
-        }
+        public List<AccountStatistics> SecurityTotalStats { get; private set; }
 
         /// <summary>
         /// Each specified sectors performance.
         /// </summary>
-        public List<AccountStatistics> SectorStats
-        {
-            get;
-            private set;
-        }
+        public List<AccountStatistics> SectorStats { get; private set; }
 
         /// <summary>
         /// Value held in each bank account.
         /// </summary>
-        internal List<AccountStatistics> BankAccountStats
-        {
-            get;
-            private set;
-        }
+        internal List<AccountStatistics> BankAccountStats { get; private set; }
 
         /// <summary>
         /// Statistics for each company holding bank accounts.
         /// </summary>
-        internal List<AccountStatistics> BankAccountCompanyStats
-        {
-            get;
-            private set;
-        }
+        internal List<AccountStatistics> BankAccountCompanyStats { get; private set; }
 
         /// <summary>
         /// Total statistics for each BankAccount.
         /// </summary>
-        internal List<AccountStatistics> BankAccountTotalStats
-        {
-            get;
-            private set;
-        }
+        internal List<AccountStatistics> BankAccountTotalStats { get; private set; }
 
         /// <summary>
         /// Value held in each asset.
         /// </summary>
-        internal List<AccountStatistics> AssetStats
-        {
-            get;
-            private set;
-        }
+        internal List<AccountStatistics> AssetStats { get; private set; }
 
         /// <summary>
         /// Statistics for each company holding asset.
         /// </summary>
-        internal List<AccountStatistics> AssetCompanyStats
-        {
-            get;
-            private set;
-        }
+        internal List<AccountStatistics> AssetCompanyStats { get; private set; }
 
         /// <summary>
         /// Total statistics for each asset.
         /// </summary>
-        internal List<AccountStatistics> AssetTotalStats
-        {
-            get;
-            private set;
-        }
+        internal List<AccountStatistics> AssetTotalStats { get; private set; }
 
         /// <summary>
         /// Value held in each pension.
         /// </summary>
-        internal List<AccountStatistics> PensionStats
-        {
-            get;
-            private set;
-        }
+        internal List<AccountStatistics> PensionStats { get; private set; }
 
         /// <summary>
         /// Statistics for each company holding pension.
         /// </summary>
-        internal List<AccountStatistics> PensionCompanyStats
-        {
-            get;
-            private set;
-        }
+        internal List<AccountStatistics> PensionCompanyStats { get; private set; }
 
         /// <summary>
         /// Total statistics for each pension.
         /// </summary>
-        internal List<AccountStatistics> PensionTotalStats
-        {
-            get;
-            private set;
-        }
+        internal List<AccountStatistics> PensionTotalStats { get; private set; }
 
         /// <summary>
         /// Value held in each pension.
         /// </summary>
-        internal List<AccountStatistics> CurrencyStats
-        {
-            get;
-            private set;
-        }
+        internal List<AccountStatistics> CurrencyStats { get; private set; }
 
         /// <summary>
         /// Any notes for the portfolio.
         /// </summary>
-        private List<Note> PortfolioNotes
-        {
-            get;
-            set;
-        }
+        private List<Note> PortfolioNotes { get; set; }
 
         /// <summary>
         /// Default empty constructor.
@@ -304,11 +240,11 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
             }
             catch (IOException exception)
             {
-                _ = LogReporter.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.StatisticsPage, $"Error in exporting statistics page: {exception.Message}.");
+                LogReporter.Exception(nameof(PortfolioStatistics), exception);
                 return;
             }
 
-            _ = LogReporter.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.StatisticsPage, "Successfully exported statistics page.");
+            LogReporter.Info(nameof(PortfolioStatistics), "Successfully exported statistics page.");
         }
 
         /// <summary>

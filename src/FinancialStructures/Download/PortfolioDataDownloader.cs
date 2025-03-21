@@ -26,7 +26,6 @@ public sealed class PortfolioDataDownloader : IPortfolioDataDownloader
         await Task.WhenAll(downloadTasks);
 
         results.ReportResults(reportLogger);
-        reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, nameof(PortfolioDataDownloader), "Downloader Completed");
     }
 
     public async Task Download(IValueList valueList, IReportLogger reportLogger)
@@ -37,7 +36,7 @@ public sealed class PortfolioDataDownloader : IPortfolioDataDownloader
             value => valueList.UpdateAndCheck(value, reportLogger, results),
             reportLogger);
         results.ReportResults(reportLogger);
-        reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, nameof(PortfolioDataDownloader), "Downloader Completed");
+        reportLogger?.Info(nameof(PortfolioDataDownloader), "Downloader Completed");
     }
 
     /// <summary>

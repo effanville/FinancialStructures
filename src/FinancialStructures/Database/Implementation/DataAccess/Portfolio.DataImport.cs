@@ -1,4 +1,4 @@
-﻿using Effanville.Common.Structure.DataStructures;
+using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
@@ -82,7 +82,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
                 }
             }
 
-            reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, "DataImport", "Data imported from other database.");
+            reportLogger?.Info(nameof(Portfolio), "Data imported from other database.");
         }
     }
 }

@@ -69,11 +69,11 @@ namespace Effanville.FinancialStructures.Database.Export.Report
             }
             catch (IOException exception)
             {
-                _ = logger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.StatisticsPage, $"Error in exporting statistics page: {exception.Message}.");
+                logger.Exception(nameof(PortfolioReport), "Error in exporting statistics page", exception);
                 return;
             }
 
-            _ = logger.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.StatisticsPage, "Successfully exported statistics page.");
+            logger.Info(nameof(PortfolioReport), "Successfully exported statistics page.");
         }
 
         /// <summary>

@@ -28,10 +28,7 @@ internal static class ValueListValidationExtensions
         decimal scaleFactor = latestValue / newLatestValue;
         if (scaleFactor > 50 || scaleFactor < 0.02m)
         {
-            _ = logger.Log(
-                ReportSeverity.Critical,
-                ReportType.Warning,
-                ReportLocation.Downloading,
+            logger.Warn(nameof(ValueListValidationExtensions),
                 $"Account {valueList.Names} has large change in value from {latestValue} to {newLatestValue}.");
         }
     }

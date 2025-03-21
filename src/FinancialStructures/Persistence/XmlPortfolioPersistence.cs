@@ -27,8 +27,7 @@ namespace Effanville.FinancialStructures.Persistence
         {
             if (options is not XmlFilePersistenceOptions xmlOptions)
             {
-                reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(),
-                    "Options for loading from Xml file not of correct type.");
+                reportLogger?.Info(nameof(XmlPortfolioPersistence), "Options for loading from Xml file not of correct type.");
                 return false;
             }
 
@@ -36,8 +35,7 @@ namespace Effanville.FinancialStructures.Persistence
             string filePath = xmlOptions.FilePath;
             if (!fileSystem.File.Exists(filePath))
             {
-                reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(),
-                    "Loaded Empty New StockExchange.");
+                reportLogger?.Info(nameof(XmlPortfolioPersistence), "Loaded Empty New StockExchange.");
                 return false;
             }
 
@@ -63,13 +61,11 @@ namespace Effanville.FinancialStructures.Persistence
                 portfolioImpl.WireDataChangedEvents();
                 portfolioImpl.Name = fileSystem.Path.GetFileNameWithoutExtension(filePath);
                 portfolioImpl.Saving();
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Loading,
-                    $"Loaded new database from {filePath}");
+                reportLogger?.Info(nameof(XmlPortfolioPersistence), $"Loaded new database from {filePath}");
             }
             else
             {
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading,
-                    $" Failed to load new database from {filePath}. {error}.");
+                reportLogger?.Error(nameof(XmlPortfolioPersistence), $" Failed to load new database from {filePath}. {error}.");
             }
 
             foreach (Security sec in portfolio.Funds)
@@ -81,7 +77,7 @@ namespace Effanville.FinancialStructures.Persistence
                 sec.EnsureOnLoadDataConsistency();
             }
 
-            portfolioImpl.OnNewPortfolio(this, new PortfolioEventArgs( true));
+            portfolioImpl.OnNewPortfolio(this, new PortfolioEventArgs(true));
             return true;
         }
 
@@ -89,8 +85,7 @@ namespace Effanville.FinancialStructures.Persistence
         {
             if (options is not XmlFilePersistenceOptions xmlOptions)
             {
-                reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(),
-                    "Options for loading from Xml file not of correct type.");
+                reportLogger?.Info(nameof(XmlPortfolioPersistence), "Options for loading from Xml file not of correct type.");
                 return false;
             }
 
@@ -98,8 +93,7 @@ namespace Effanville.FinancialStructures.Persistence
             string filePath = xmlOptions.FilePath;
             if (portfolio is not Portfolio portfolioImpl)
             {
-                reportLogger?.Log(ReportType.Error, ReportLocation.Saving.ToString(),
-                    "Attempted to save a StockExchange that was not of the correct type.");
+                reportLogger?.Error(nameof(XmlPortfolioPersistence), "Attempted to save a StockExchange that was not of the correct type.");
                 return false;
             }
 
@@ -108,14 +102,12 @@ namespace Effanville.FinancialStructures.Persistence
             XmlFileAccess.WriteToXmlFile(fileSystem, filePath, toSave, out string error);
             if (error != null)
             {
-                _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Saving,
-                    $"Failed to save database: {error}");
+                reportLogger?.Info(nameof(XmlPortfolioPersistence), $"Failed to save database: {error}");
                 return false;
             }
 
             portfolioImpl.Saving();
-            _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Saving,
-                $"Saved Database at {filePath}");
+            reportLogger?.Info(nameof(XmlPortfolioPersistence), $"Saved Database at {filePath}");
             return true;
         }
     }
