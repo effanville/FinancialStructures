@@ -1,5 +1,4 @@
-﻿using System;
-
+using System;
 using Effanville.FinancialStructures.Database.Extensions.Statistics;
 using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.FinanceStructures.Extensions;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Effanville.FinancialStructures.Database.Statistics.Implementation;
 using Effanville.FinancialStructures.FinanceStructures;
@@ -32,6 +32,8 @@ namespace Effanville.FinancialStructures.Database.Statistics
                     return new StatisticLatestValue();
                 case Statistic.RecentChange:
                     return new StatisticRecentChange();
+                case Statistic.WeeklyChange:
+                    return new StatisticWeeklyChange();
                 case Statistic.FundFraction:
                     return new StatisticFundFraction();
                 case Statistic.FundCompanyFraction:

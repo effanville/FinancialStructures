@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -110,40 +110,8 @@ namespace Effanville.FinancialStructures.Database.Statistics
         /// <summary>
         /// Returns all statistic types currently possible.
         /// </summary>
-        public static IReadOnlyList<Statistic> AllStatistics() 
-            => _allStatistics ??= new []
-            {
-                Statistic.AccountType,
-                Statistic.Company,
-                Statistic.Name,
-                Statistic.Currency,
-                Statistic.LatestValue,
-                Statistic.UnitPrice,
-                Statistic.NumberUnits,
-                Statistic.MeanSharePrice,
-                Statistic.RecentChange,
-                Statistic.FundFraction,
-                Statistic.FundCompanyFraction,
-                Statistic.Investment,
-                Statistic.Profit,
-                Statistic.Debt,
-                Statistic.IRR3M,
-                Statistic.IRR6M,
-                Statistic.IRR1Y,
-                Statistic.IRR5Y,
-                Statistic.IRRTotal,
-                Statistic.DrawDown,
-                Statistic.MDD,
-                Statistic.Sectors,
-                Statistic.NumberOfAccounts,
-                Statistic.FirstDate,
-                Statistic.LastInvestmentDate,
-                Statistic.LastPurchaseDate,
-                Statistic.LatestDate,
-                Statistic.NumberEntries,
-                Statistic.EntryYearDensity,
-                Statistic.Notes,
-            };
+        public static IReadOnlyList<Statistic> AllStatistics()
+            => _allStatistics ??= Enum.GetValues<Statistic>();
 
         /// <summary>
         /// Returns those statistic types suitable for securities.
@@ -159,6 +127,7 @@ namespace Effanville.FinancialStructures.Database.Statistics
                 Statistic.NumberUnits,
                 Statistic.MeanSharePrice,
                 Statistic.RecentChange,
+                Statistic.WeeklyChange,
                 Statistic.FundFraction,
                 Statistic.FundCompanyFraction,
                 Statistic.Investment,
@@ -183,14 +152,15 @@ namespace Effanville.FinancialStructures.Database.Statistics
         /// <summary>
         /// Returns those statistic types suitable for securities.
         /// </summary>
-        public static IReadOnlyList<Statistic> DefaultSecurityCompanyStats() 
+        public static IReadOnlyList<Statistic> DefaultSecurityCompanyStats()
             => _defaultSecurityCompanyStats ??= new[]
             {
                 Statistic.Company,
                 Statistic.LatestValue,
                 Statistic.RecentChange,
+                Statistic.WeeklyChange,
                 Statistic.FundFraction,
-                Statistic.Investment, 
+                Statistic.Investment,
                 Statistic.Profit,
                 Statistic.IRR3M,
                 Statistic.IRR6M,
@@ -205,7 +175,7 @@ namespace Effanville.FinancialStructures.Database.Statistics
         /// <summary>
         /// Returns those statistic types suitable for Bank Accounts.
         /// </summary>
-        public static IReadOnlyList<Statistic> DefaultBankAccountStats() 
+        public static IReadOnlyList<Statistic> DefaultBankAccountStats()
             => _defaultBankAccountStats ??= new[]
             {
                 Statistic.Company,
@@ -213,6 +183,7 @@ namespace Effanville.FinancialStructures.Database.Statistics
                 Statistic.Currency,
                 Statistic.LatestValue,
                 Statistic.RecentChange,
+                Statistic.WeeklyChange,
                 Statistic.FundFraction,
                 Statistic.FundCompanyFraction,
                 Statistic.FirstDate,
@@ -226,13 +197,14 @@ namespace Effanville.FinancialStructures.Database.Statistics
         /// <summary>
         /// Returns those statistic types suitable for Sectors.
         /// </summary>
-        public static IReadOnlyList<Statistic> DefaultSectorStats() 
+        public static IReadOnlyList<Statistic> DefaultSectorStats()
             => _defaultSectorStats ??= new[]
             {
                 Statistic.Company,
                 Statistic.Name,
                 Statistic.LatestValue,
                 Statistic.RecentChange,
+                Statistic.WeeklyChange,
                 Statistic.Profit,
                 Statistic.IRR3M,
                 Statistic.IRR6M,
@@ -251,13 +223,14 @@ namespace Effanville.FinancialStructures.Database.Statistics
         /// <summary>
         /// Returns those statistic types suitable for Assets.
         /// </summary>
-        public static Statistic[] DefaultAssetStats() 
+        public static Statistic[] DefaultAssetStats()
             => _defaultAssetStats ??= new[]
             {
                 Statistic.Company,
                 Statistic.Name,
                 Statistic.LatestValue,
                 Statistic.RecentChange,
+                Statistic.WeeklyChange,
                 Statistic.Investment,
                 Statistic.Profit,
                 Statistic.Debt,
@@ -277,13 +250,14 @@ namespace Effanville.FinancialStructures.Database.Statistics
         /// <summary>
         /// Returns those statistic types suitable for Assets.
         /// </summary>
-        public static Statistic[] DefaultCurrencyStats() 
+        public static Statistic[] DefaultCurrencyStats()
             => _defaultCurrencyStats ??= new[]
             {
                 Statistic.Company,
                 Statistic.Name,
                 Statistic.LatestValue,
                 Statistic.RecentChange,
+                Statistic.WeeklyChange,
                 Statistic.Investment,
                 Statistic.Profit,
                 Statistic.FundFraction,

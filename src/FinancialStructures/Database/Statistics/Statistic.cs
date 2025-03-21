@@ -1,4 +1,4 @@
-﻿namespace Effanville.FinancialStructures.Database.Statistics
+namespace Effanville.FinancialStructures.Database.Statistics
 {
     /// <summary>
     /// Contains all admissible statistics.
@@ -49,6 +49,11 @@
         /// The recent change.
         /// </summary>
         RecentChange,
+
+        /// <summary>
+        /// The change that has happened over the last week
+        /// </summary>
+        WeeklyChange,
 
         /// <summary>
         /// The fraction out of all securities.
