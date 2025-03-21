@@ -26,16 +26,18 @@ public sealed class PortfolioDataDownloader : IPortfolioDataDownloader
         await Task.WhenAll(downloadTasks);
 
         results.ReportResults(reportLogger);
-        _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Downloading, "Downloader Completed");
+        reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, nameof(PortfolioDataDownloader), "Downloader Completed");
     }
 
     public async Task Download(IValueList valueList, IReportLogger reportLogger)
     {
         List<DownloadResult> results = new List<DownloadResult>();
-        await DownloadLatestValue(valueList.Names, value => valueList.UpdateAndCheck(value, reportLogger, results),
+        await DownloadLatestValue(
+            valueList.Names,
+            value => valueList.UpdateAndCheck(value, reportLogger, results),
             reportLogger);
         results.ReportResults(reportLogger);
-        _ = reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, ReportLocation.Downloading, "Downloader Completed");
+        reportLogger?.Log(ReportSeverity.Critical, ReportType.Information, nameof(PortfolioDataDownloader), "Downloader Completed");
     }
 
     /// <summary>
@@ -46,13 +48,13 @@ public sealed class PortfolioDataDownloader : IPortfolioDataDownloader
         IPriceDownloader downloader = _priceDownloaderFactory.Retrieve(names.Url);
         if (downloader == null)
         {
-            reportLogger?.Error(ReportLocation.Downloading.ToString(), $"{names.Company}-{names.Name}: Url='{names.Url}' not of supported type");
+            reportLogger?.Error(nameof(PortfolioDataDownloader), $"{names.Company}-{names.Name}: Url='{names.Url}' not of supported type");
             return;
         }
 
         if (!await downloader.TryGetLatestPriceFromUrl(names.Url, names.Currency, updateValue, reportLogger))
         {
-            reportLogger?.Error(ReportLocation.Downloading.ToString(), $"{names.Company}-{names.Name}: Couldnt get price data from {names.Url}");
+            reportLogger?.Error(nameof(PortfolioDataDownloader), $"{names.Company}-{names.Name}: Couldnt get price data from {names.Url}");
         }
     }
 
@@ -73,12 +75,15 @@ public sealed class PortfolioDataDownloader : IPortfolioDataDownloader
                     nameData.Currency = portfolio.BaseCurrency ?? "GBP";
                 }
                 results.Add(new DownloadResult() { Name = nameData });
-                downloadTasks.Add(DownloadLatestValue(nameData, value => acc.UpdateAndCheck(value, reportLogger, results), reportLogger));
+                downloadTasks.Add(DownloadLatestValue(
+                    nameData,
+                    value => acc.UpdateAndCheck(value, reportLogger, results),
+                    reportLogger));
             }
             else
             {
                 results.Add(new DownloadResult() { Name = acc.Names, Value = -1m });
-                _ = reportLogger?.Log(ReportSeverity.Detailed, ReportType.Information, ReportLocation.Downloading, $"No Url set for {acc.Names}");
+                reportLogger?.Debug(nameof(PortfolioDataDownloader), $"No Url set for {acc.Names}");
             }
         }
     }

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading.Tasks;
 
 using Effanville.Common.Structure.Reporting;
@@ -33,7 +33,7 @@ namespace Effanville.FinancialStructures.Download.Implementation
                 return false;
             }
 
-            reportLogger?.Log(ReportType.Information, ReportLocation.Downloading.ToString(), $"Retrieved value {value.Value} from url '{url}'");
+            reportLogger?.Debug(nameof(FtDownloader), $"Retrieved value {value.Value} from url '{url}'");
             retrieveValueAction(value.Value);
             return true;
         }
