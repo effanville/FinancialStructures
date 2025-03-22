@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 
 using Effanville.Common.Structure.Reporting;
+using Effanville.Common.Structure.WebAccess;
 
 namespace Effanville.FinancialStructures.Download.Implementation
 {
@@ -11,37 +12,41 @@ namespace Effanville.FinancialStructures.Download.Implementation
     /// </summary>
     internal sealed class YahooDownloader : IPriceDownloader
     {
+        private readonly IReportLogger _logger;
+        private readonly WebDownloader _webDownloader;
+
         /// <inheritdoc/>
         public string BaseUrl => "https://query1.finance.yahoo.com/";
 
-        internal YahooDownloader()
+        public YahooDownloader(IReportLogger logger, WebDownloader webDownloader)
         {
+            _logger = logger;
+            _webDownloader = webDownloader;
         }
 
         /// <inheritdoc/>
         public async Task<bool> TryGetLatestPriceFromUrl(
             string url,
             string currency,
-            Action<decimal> retrieveValueAction,
-            IReportLogger reportLogger = null)
+            Action<decimal> retrieveValueAction)
         {
             string financialCode = GetFinancialCode(url);
             url = BuildQueryUrl(BaseUrl, financialCode);
             return await TryGetPriceInternal(
                 url,
                 currency,
-                retrieveValueAction,
-                reportLogger);
+                retrieveValueAction);
         }
 
-        private static async Task<bool> TryGetPriceInternal(string url,
+        private async Task<bool> TryGetPriceInternal(
+            string url,
             string currency,
-            Action<decimal> retrieveValueAction, IReportLogger reportLogger = null)
+            Action<decimal> retrieveValueAction)
         {
-            string webData = await DownloadHelper.GetWebData(url, addCookie: false, reportLogger);
+            string webData = await _webDownloader.GetWebData(url, addCookie: false);
             if (string.IsNullOrEmpty(webData))
             {
-                reportLogger?.Error("Downloading", $"Could not download data from {url}");
+                _logger?.Error("Downloading", $"Could not download data from {url}");
                 return false;
             }
 

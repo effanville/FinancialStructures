@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Effanville.Common.Structure.WebAccess;
 using Effanville.FinancialStructures.Download;
 using Effanville.FinancialStructures.NamingStructures;
 using NUnit.Framework;
@@ -53,7 +54,8 @@ namespace Effanville.FinancialStructures.Tests.Database
         public async Task CanDownload(string url, string currency, double lower, double upper)
         {
             decimal value = 0;
-            var priceDownloader = new PriceDownloaderFactory();
+            var webDownloader = new WebDownloader(null);
+            var priceDownloader = new PriceDownloaderFactory(null, webDownloader);
             await new PortfolioDataDownloader(priceDownloader).DownloadLatestValue(new NameData("company", "name", url: url, currency: currency), GetValue);
 
             Assert.That(value, Is.Not.EqualTo(0m));
@@ -76,7 +78,8 @@ namespace Effanville.FinancialStructures.Tests.Database
         [TestCase("https://www.bloomberg.com/quote/MAMMGEE:HK", "MAMMGEE:HK")]
         public void CanGetCode(string url, string expectedCode)
         {
-            string code = new PriceDownloaderFactory().RetrieveCodeFromUrl(url);
+            var webDownloader = new WebDownloader(null);
+            string code = new PriceDownloaderFactory(null, webDownloader).RetrieveCodeFromUrl(url);
             Assert.That(code, Is.EqualTo(expectedCode));
         }
     }

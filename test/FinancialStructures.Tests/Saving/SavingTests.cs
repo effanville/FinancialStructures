@@ -478,9 +478,9 @@ namespace Effanville.FinancialStructures.Tests.Saving
             MockFileSystem tempFileSystem = new MockFileSystem();
             string savePath = "c:/temp/saved.xml";
 
-            XmlPortfolioPersistence xmlPersistence = new XmlPortfolioPersistence();
+            XmlPortfolioPersistence xmlPersistence = new XmlPortfolioPersistence(null);
             XmlFilePersistenceOptions options = new XmlFilePersistenceOptions(savePath, tempFileSystem);
-            xmlPersistence.Save(times, options, null);
+            xmlPersistence.Save(times, options);
 
             string file = tempFileSystem.File.ReadAllText(savePath);
 
@@ -508,8 +508,8 @@ namespace Effanville.FinancialStructures.Tests.Saving
             MockFileSystem tempFileSystem = new MockFileSystem();
             string savePath = "c:/temp/saved.xml";
             tempFileSystem.AddFile(savePath, new MockFileData(expectedXml));
-            XmlPortfolioPersistence xmlPersistence = new XmlPortfolioPersistence();
-            IPortfolio loadedPortfolio = xmlPersistence.Load(new XmlFilePersistenceOptions(savePath, tempFileSystem), null);
+            XmlPortfolioPersistence xmlPersistence = new XmlPortfolioPersistence(null);
+            IPortfolio loadedPortfolio = xmlPersistence.Load(new XmlFilePersistenceOptions(savePath, tempFileSystem));
 
             AreEqual(times, loadedPortfolio);
         }
@@ -521,15 +521,15 @@ namespace Effanville.FinancialStructures.Tests.Saving
             MockFileSystem tempFileSystem = new MockFileSystem();
             string savePath = "c:/temp/saved.xml";
 
-            XmlPortfolioPersistence xmlPersistence = new XmlPortfolioPersistence();
+            XmlPortfolioPersistence xmlPersistence = new XmlPortfolioPersistence(null);
             XmlFilePersistenceOptions options = new XmlFilePersistenceOptions(savePath, tempFileSystem);
-            xmlPersistence.Save(database, options, null);
+            xmlPersistence.Save(database, options);
 
             string file = tempFileSystem.File.ReadAllText(savePath);
 
             Assert.That(file, Is.EqualTo(expectedXml));
 
-            IPortfolio loadedPortfolio = xmlPersistence.Load(new XmlFilePersistenceOptions(savePath, tempFileSystem), null);
+            IPortfolio loadedPortfolio = xmlPersistence.Load(new XmlFilePersistenceOptions(savePath, tempFileSystem));
 
             AreEqual(database, loadedPortfolio);
         }

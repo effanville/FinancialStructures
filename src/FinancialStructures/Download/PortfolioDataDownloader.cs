@@ -51,7 +51,7 @@ public sealed class PortfolioDataDownloader : IPortfolioDataDownloader
             return;
         }
 
-        if (!await downloader.TryGetLatestPriceFromUrl(names.Url, names.Currency, updateValue, reportLogger))
+        if (!await downloader.TryGetLatestPriceFromUrl(names.Url, names.Currency, updateValue))
         {
             reportLogger?.Error(nameof(PortfolioDataDownloader), $"{names.Company}-{names.Name}: Couldnt get price data from {names.Url}");
         }

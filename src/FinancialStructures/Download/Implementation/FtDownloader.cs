@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 
 using Effanville.Common.Structure.Reporting;
+using Effanville.Common.Structure.WebAccess;
 
 namespace Effanville.FinancialStructures.Download.Implementation
 {
@@ -10,20 +11,28 @@ namespace Effanville.FinancialStructures.Download.Implementation
     /// </summary>
     internal sealed class FtDownloader : IPriceDownloader
     {
+        private readonly IReportLogger _logger;
+        private readonly WebDownloader _webDownloader;
+
         /// <inheritdoc/>
         public string BaseUrl => "https://markets.ft.com/";
+
+        public FtDownloader(IReportLogger logger, WebDownloader webDownloader)
+        {
+            _logger = logger;
+            _webDownloader = webDownloader;
+        }
 
         /// <inheritdoc/>
         public async Task<bool> TryGetLatestPriceFromUrl(
             string url,
             string currency,
-            Action<decimal> retrieveValueAction,
-            IReportLogger reportLogger = null)
+            Action<decimal> retrieveValueAction)
         {
-            string webData = await DownloadHelper.GetWebData(url, addCookie: false, reportLogger);
+            string webData = await _webDownloader.GetWebData(url, addCookie: false);
             if (string.IsNullOrEmpty(webData))
             {
-                reportLogger?.Error(ReportLocation.Downloading.ToString(), $"Could not download data from {url}");
+                _logger?.Error(nameof(FtDownloader), $"Could not download data from {url}");
                 return false;
             }
 
@@ -33,7 +42,7 @@ namespace Effanville.FinancialStructures.Download.Implementation
                 return false;
             }
 
-            reportLogger?.Debug(nameof(FtDownloader), $"Retrieved value {value.Value} from url '{url}'");
+            _logger?.Debug(nameof(FtDownloader), $"Retrieved value {value.Value} from url '{url}'");
             retrieveValueAction(value.Value);
             return true;
         }
@@ -57,7 +66,7 @@ namespace Effanville.FinancialStructures.Download.Implementation
 
             return code;
         }
-        
+
         private static decimal? Process(string data, string poundsSearchString, string penceSearchString, int searchLength)
         {
             int penceValueIndex = data.IndexOf(penceSearchString);

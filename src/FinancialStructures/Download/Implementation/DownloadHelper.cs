@@ -1,56 +1,42 @@
-﻿using System;
+using System;
 using System.Linq;
-using System.Threading.Tasks;
 
-using Effanville.Common.Structure.Reporting;
-using Effanville.Common.Structure.WebAccess;
+namespace Effanville.FinancialStructures.Download.Implementation;
 
-namespace Effanville.FinancialStructures.Download.Implementation
+/// <summary>
+/// Helper methods for downloading financial data.
+/// </summary>
+public static class DownloadHelper
 {
-    /// <summary>
-    /// Helper methods for downloading financial data.
-    /// </summary>
-    public static class DownloadHelper
+    public static readonly string PenceName = "GBX";
+    public static readonly string PoundsName = "GBP";
+
+    public static decimal? ParseDataIntoNumber(string data, int startIndex, int offset, int searchLength, bool includeComma)
     {
-        public static readonly string PenceName = "GBX";
-        public static readonly string PoundsName = "GBP";
-        private static string PrepareUrlString(string url)
+        if (startIndex == -1)
         {
-            return url.Replace("^", "%5E");
+            return null;
+        }
+        int length = Math.Min(searchLength, data.Length - startIndex - offset);
+        string shortenedDataString = data.Substring(startIndex + offset, length);
+        char[] digits = shortenedDataString.SkipWhile(c => !char.IsDigit(c)).TakeWhile(c => IsNumericValue(c, includeComma)).ToArray();
+
+        string str = new string(digits);
+        if (string.IsNullOrEmpty(str))
+        {
+            return null;
         }
 
-        public static async Task<string> GetWebData(string url, bool addCookie = false, IReportLogger reportLogger = null)
+        return decimal.Parse(str);
+    }
+
+    private static bool IsNumericValue(char c, bool includeComma)
+    {
+        if (char.IsDigit(c) || c == '.' || (includeComma && c == ','))
         {
-            return await WebDownloader.DownloadFromURLasync(PrepareUrlString(url), addCookie, reportLogger).ConfigureAwait(false);
+            return true;
         }
 
-        public static decimal? ParseDataIntoNumber(string data, int startIndex, int offset, int searchLength, bool includeComma)
-        {
-            if (startIndex == -1)
-            {
-                return null;
-            }
-            int length = Math.Min(searchLength, data.Length - startIndex - offset);
-            string shortenedDataString = data.Substring(startIndex + offset, length);
-            char[] digits = shortenedDataString.SkipWhile(c => !char.IsDigit(c)).TakeWhile(c => IsNumericValue(c, includeComma)).ToArray();
-
-            string str = new string(digits);
-            if (string.IsNullOrEmpty(str))
-            {
-                return null;
-            }
-
-            return decimal.Parse(str);
-        }
-
-        private static bool IsNumericValue(char c, bool includeComma)
-        {
-            if (char.IsDigit(c) || c == '.' || (includeComma && c == ','))
-            {
-                return true;
-            }
-
-            return false;
-        }
+        return false;
     }
 }

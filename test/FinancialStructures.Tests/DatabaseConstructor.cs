@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO.Abstractions;
 
 using Effanville.FinancialStructures.Database;
@@ -25,8 +25,8 @@ namespace Effanville.FinancialStructures.Tests
 
         public DatabaseConstructor LoadDatabaseFromFilepath(IFileSystem fileSystem, string filepath)
         {
-            XmlPortfolioPersistence xmlPersistence = new XmlPortfolioPersistence();
-            Database = xmlPersistence.Load(new XmlFilePersistenceOptions(filepath, fileSystem), null) as Portfolio;
+            XmlPortfolioPersistence xmlPersistence = new XmlPortfolioPersistence(null);
+            Database = xmlPersistence.Load(new XmlFilePersistenceOptions(filepath, fileSystem)) as Portfolio;
             return this;
         }
 

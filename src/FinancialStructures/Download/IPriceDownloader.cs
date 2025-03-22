@@ -1,8 +1,6 @@
 using System;
 using System.Threading.Tasks;
 
-using Effanville.Common.Structure.Reporting;
-
 namespace Effanville.FinancialStructures.Download;
 
 /// <summary>
@@ -13,10 +11,7 @@ public interface IPriceDownloader
     /// <summary>
     /// The base url for the downloader.
     /// </summary>
-    string BaseUrl
-    {
-        get;
-    }
+    string BaseUrl { get; }
 
     /// <summary>
     /// Try to get the latest price of the financial object from the
@@ -25,6 +20,5 @@ public interface IPriceDownloader
     Task<bool> TryGetLatestPriceFromUrl(
         string url,
         string currency,
-        Action<decimal> retrieveValueAction,
-        IReportLogger reportLogger = null);
+        Action<decimal> retrieveValueAction);
 }

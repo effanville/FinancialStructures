@@ -15,10 +15,14 @@ namespace Effanville.FinancialStructures.Persistence
 {
     public sealed class BinaryFilePortfolioPersistence : IPersistence<IPortfolio>
     {
-        public IPortfolio Load(PersistenceOptions options, IReportLogger reportLogger = null)
+        private readonly IReportLogger _logger;
+
+        public BinaryFilePortfolioPersistence(IReportLogger logger) => _logger = logger;
+
+        public IPortfolio Load(PersistenceOptions options)
         {
             Portfolio portfolio = new Portfolio();
-            if (!Load(portfolio, options, reportLogger))
+            if (!Load(portfolio, options))
             {
                 return null;
             }
@@ -26,11 +30,11 @@ namespace Effanville.FinancialStructures.Persistence
             return portfolio;
         }
 
-        public bool Load(IPortfolio portfolio, PersistenceOptions options, IReportLogger reportLogger = null)
+        public bool Load(IPortfolio portfolio, PersistenceOptions options)
         {
             if (options is not BinaryFilePersistenceOptions binaryFileOptions)
             {
-                reportLogger?.Info(nameof(BinaryFilePortfolioPersistence), "Options for loading from Binary file not of correct type.");
+                _logger?.Info(nameof(BinaryFilePortfolioPersistence), "Options for loading from Binary file not of correct type.");
                 return false;
             }
 
@@ -38,7 +42,7 @@ namespace Effanville.FinancialStructures.Persistence
             string filePath = binaryFileOptions.FilePath;
             if (!fileSystem.File.Exists(filePath))
             {
-                reportLogger?.Info(nameof(BinaryFilePortfolioPersistence), "Loaded Empty New Portfolio.");
+                _logger?.Info(nameof(BinaryFilePortfolioPersistence), "Loaded Empty New Portfolio.");
                 return false;
             }
 
@@ -74,11 +78,11 @@ namespace Effanville.FinancialStructures.Persistence
                 portfolioImpl.WireDataChangedEvents();
                 portfolioImpl.Name = fileSystem.Path.GetFileNameWithoutExtension(filePath);
                 portfolioImpl.Saving();
-                reportLogger?.Info(nameof(BinaryFilePortfolioPersistence), $"Loaded new database from {filePath}");
+                _logger?.Info(nameof(BinaryFilePortfolioPersistence), $"Loaded new database from {filePath}");
             }
             else
             {
-                reportLogger?.Error(nameof(BinaryFilePortfolioPersistence), $" Failed to load new database from {filePath}. {error}.");
+                _logger?.Error(nameof(BinaryFilePortfolioPersistence), $" Failed to load new database from {filePath}. {error}.");
             }
 
             foreach (ISecurity security in portfolio.Funds)
@@ -97,11 +101,11 @@ namespace Effanville.FinancialStructures.Persistence
             return true;
         }
 
-        public bool Save(IPortfolio portfolio, PersistenceOptions options, IReportLogger reportLogger = null)
+        public bool Save(IPortfolio portfolio, PersistenceOptions options)
         {
             if (options is not BinaryFilePersistenceOptions binaryFileOptions)
             {
-                reportLogger?.Info(nameof(BinaryFilePortfolioPersistence), "Options for loading from Xml file not of correct type.");
+                _logger?.Info(nameof(BinaryFilePortfolioPersistence), "Options for loading from Xml file not of correct type.");
                 return false;
             }
 
@@ -109,7 +113,7 @@ namespace Effanville.FinancialStructures.Persistence
             string filePath = binaryFileOptions.FilePath;
             if (portfolio is not Portfolio portfolioImpl)
             {
-                reportLogger?.Error(nameof(BinaryFilePortfolioPersistence), "Attempted to save a StockExchange that was not of the correct type.");
+                _logger?.Error(nameof(BinaryFilePortfolioPersistence), "Attempted to save a StockExchange that was not of the correct type.");
                 return false;
             }
 
@@ -119,20 +123,20 @@ namespace Effanville.FinancialStructures.Persistence
             XmlFileAccess.WriteToStream(stream, toSave, out string error);
             if (error != null)
             {
-                reportLogger?.Error(nameof(BinaryFilePortfolioPersistence), $"Failed to save database: {error}");
+                _logger?.Error(nameof(BinaryFilePortfolioPersistence), $"Failed to save database: {error}");
                 return false;
             }
 
             byte[] bytes = stream.ToArray();
             string base64 = Convert.ToBase64String(bytes);
-            using (Stream file = fileSystem.FileStream.New(filePath, FileMode.Create, FileAccess.Write)) 
+            using (Stream file = fileSystem.FileStream.New(filePath, FileMode.Create, FileAccess.Write))
             using (StreamWriter streamWriter = new StreamWriter(file))
             {
                 streamWriter.Write(base64);
             }
 
             portfolioImpl.Saving();
-            reportLogger?.Info(nameof(BinaryFilePortfolioPersistence), $"Saved Database at {filePath}");
+            _logger?.Info(nameof(BinaryFilePortfolioPersistence), $"Saved Database at {filePath}");
             return true;
         }
     }
