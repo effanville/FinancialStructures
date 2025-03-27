@@ -12,58 +12,63 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
         /// <summary>
         /// Display with spacing in tables.
         /// </summary>
-        public bool Spacing
-        {
-            get;
-        }
+        public bool Spacing { get; }
 
         /// <summary>
         /// Display with colours.
         /// </summary>
-        public bool Colours
-        {
-            get;
-        }
+        public bool Colours { get; }
 
         /// <summary>
         /// Options on displaying Securities.
         /// </summary>
-        public TableOptions<Statistic> SecurityDisplayOptions
-        {
-            get;
-        }
+        public TableOptions<Statistic> SecurityDisplayOptions { get; }
 
         /// <summary>
         /// Options on displaying bank accounts.
         /// </summary>
-        public TableOptions<Statistic> BankAccountDisplayOptions
-        {
-            get;
-        }
+        public TableOptions<Statistic> BankAccountDisplayOptions { get; }
 
         /// <summary>
         /// Options on displaying sectors.
         /// </summary>
-        public TableOptions<Statistic> SectorDisplayOptions
-        {
-            get;
-        }
+        public TableOptions<Statistic> SectorDisplayOptions { get; }
 
         /// <summary>
         /// Options on displaying assets.
         /// </summary>
-        public TableOptions<Statistic> AssetDisplayOptions
-        {
-            get;
-        }
-        
+        public TableOptions<Statistic> AssetDisplayOptions { get; }
+
         /// <summary>
         /// Options on displaying currencies.
         /// </summary>
-        public TableOptions<Statistic> CurrencyDisplayOptions
-        {
-            get;
-        }
+        public TableOptions<Statistic> CurrencyDisplayOptions { get; }
+
+        public PortfolioStatisticsExportSettings()
+            : this(
+                spacing: false,
+                colours: false,
+                includeSecurities: true,
+                Statistic.Company,
+                SortDirection.Ascending,
+                AccountStatisticsHelpers.DefaultSecurityStats(),
+                includeBankAccounts: true,
+                Statistic.Company,
+                SortDirection.Ascending,
+                AccountStatisticsHelpers.DefaultBankAccountStats(),
+                includeSectors: true,
+                Statistic.Company,
+                SortDirection.Ascending,
+                AccountStatisticsHelpers.DefaultSectorStats(),
+                includeAssets: true,
+                Statistic.Company,
+                SortDirection.Ascending,
+                AccountStatisticsHelpers.DefaultAssetStats(),
+                includeCurrencies: true,
+                Statistic.Company,
+                SortDirection.Ascending,
+                AccountStatisticsHelpers.DefaultCurrencyStats())
+        { }
 
         /// <summary>
         /// Default constructor.
@@ -123,7 +128,7 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
         /// Creates default settings.
         /// </summary>
         /// <returns></returns>
-        public static PortfolioStatisticsExportSettings DefaultSettings() 
+        public static PortfolioStatisticsExportSettings DefaultSettings()
             => new(
                 spacing: false,
                 colours: false,

@@ -93,7 +93,7 @@ namespace Effanville.FinancialStructures.Database.Statistics
             IReadOnlyList<Statistic> currentStats = stats[0].StatisticNames;
             List<Statistic> firstNotSecond = currentStats.Except(restrictedStatistics).ToList();
             List<Statistic> secondNotFirst = restrictedStatistics.Except(currentStats).ToList();
-            if (!firstNotSecond.Any() || !secondNotFirst.Any())
+            if (!firstNotSecond.Any() && !secondNotFirst.Any())
             {
                 return stats;
             }
@@ -223,7 +223,7 @@ namespace Effanville.FinancialStructures.Database.Statistics
         /// <summary>
         /// Returns those statistic types suitable for Assets.
         /// </summary>
-        public static Statistic[] DefaultAssetStats()
+        public static IReadOnlyList<Statistic> DefaultAssetStats()
             => _defaultAssetStats ??= new[]
             {
                 Statistic.Company,
@@ -250,7 +250,7 @@ namespace Effanville.FinancialStructures.Database.Statistics
         /// <summary>
         /// Returns those statistic types suitable for Assets.
         /// </summary>
-        public static Statistic[] DefaultCurrencyStats()
+        public static IReadOnlyList<Statistic> DefaultCurrencyStats()
             => _defaultCurrencyStats ??= new[]
             {
                 Statistic.Company,

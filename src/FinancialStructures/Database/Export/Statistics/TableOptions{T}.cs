@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using Effanville.FinancialStructures.Database.Statistics;
@@ -15,34 +15,22 @@ namespace Effanville.FinancialStructures.Database.Export.Statistics
         /// <summary>
         /// Should this table be displayed.
         /// </summary>
-        public bool ShouldDisplay
-        {
-            get;
-        }
+        public bool ShouldDisplay { get; }
 
         /// <summary>
         /// What field to sor the table by.
         /// </summary>
-        public T SortingField
-        {
-            get;
-        }
+        public T SortingField { get; }
 
         /// <summary>
         /// In which direction to sort the table.
         /// </summary>
-        public SortDirection SortingDirection
-        {
-            get;
-        }
+        public SortDirection SortingDirection { get; }
 
         /// <summary>
         /// What fields to display in the table.
         /// </summary>
-        public IReadOnlyList<T> DisplayFields
-        {
-            get;
-        }
+        public IReadOnlyList<T> DisplayFields { get; }
 
         /// <summary>
         /// Default constructor.
