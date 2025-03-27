@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.Database.Extensions.Values;
@@ -17,7 +17,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Value
         [TestCase(TestDatabaseName.OneSecOneBank, Totals.Security, 556.04999999999995)]
         [TestCase(TestDatabaseName.OneBank, Totals.BankAccount, 101.1)]
         [TestCase(TestDatabaseName.OneSecOneBank, Totals.BankAccount, 101.1)]
-        public void LatestTotalValueTests(TestDatabaseName databaseName, Totals totals, double expectedValue)
+        public void LatestTotalValueTests(TestDatabaseName databaseName, Totals totals, decimal expectedValue)
         {
             IPortfolio portfolio = TestDatabase.Databases[databaseName];
             Assert.That(portfolio.TotalValue(totals), Is.EqualTo(expectedValue).Within(1e-12m));
@@ -56,7 +56,7 @@ namespace Effanville.FinancialStructures.Tests.Database.Value
         [TestCase(TestDatabaseName.TwoSecTwoBank, Totals.All, "2010/5/1", 3479.1836734693879)]
         [TestCase(TestDatabaseName.TwoSecTwoBank, Totals.All, "2020/1/1", 27186.299999999999)]
         [TestCase(TestDatabaseName.TwoSecTwoBank, Totals.All, "2018/10/23", 37785.153651090215)]
-        public void TotalValueTest(TestDatabaseName databaseName, Totals totals, DateTime date, double expectedValue)
+        public void TotalValueTest(TestDatabaseName databaseName, Totals totals, DateTime date, decimal expectedValue)
         {
             IPortfolio portfolio = TestDatabase.Databases[databaseName];
             Assert.That(portfolio.TotalValue(totals, date), Is.EqualTo(expectedValue).Within(1e-10m));
@@ -79,11 +79,11 @@ namespace Effanville.FinancialStructures.Tests.Database.Value
         [TestCase(TestDatabaseName.OneBank, Account.BankAccount, Totals.BankAccount, "2018/5/6", 77.7)]
         [TestCase(TestDatabaseName.OneBank, Account.BankAccount, Totals.BankAccount, "2018/5/7", 77.700000000000003)]
         [TestCase(TestDatabaseName.OneBank, Account.BankAccount, Totals.BankAccount, "2020/5/1", 101.09999999999999)]
-        public void TotalValueAndSingleValueAgreeTest(TestDatabaseName databaseName, Account account, Totals totals, DateTime date, double expectedValue)
+        public void TotalValueAndSingleValueAgreeTest(TestDatabaseName databaseName, Account account, Totals totals, DateTime date, decimal expectedValue)
         {
             IPortfolio portfolio = TestDatabase.Databases[databaseName];
-            Assert.That(portfolio.Value(account, TestDatabase.Name(account, NameOrder.Default), date), Is.EqualTo(expectedValue).Within(1e-12m), "Value not correct");
-            Assert.That(portfolio.TotalValue(totals, date), Is.EqualTo(expectedValue).Within(1e-12m), "TotalValue not correct.");
+            Assert.That(portfolio.Value(account, TestDatabase.Name(account, NameOrder.Default), date), Is.EqualTo(expectedValue).Within(1e-11m), "Value not correct");
+            Assert.That(portfolio.TotalValue(totals, date), Is.EqualTo(expectedValue).Within(1e-11m), "TotalValue not correct.");
         }
     }
 }

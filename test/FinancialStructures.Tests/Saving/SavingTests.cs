@@ -599,7 +599,7 @@ namespace Effanville.FinancialStructures.Tests.Saving
                 Assert.That(actual.BenchMarks.Count, Is.EqualTo(expected.BenchMarks.Count), "Funds dont have the same number.");
             }
 
-            Assert.That(actual.BaseCurrency, Is.EqualTo(expected.BaseCurrency).AsCollection);
+            Assert.That(actual.BaseCurrency, Is.EqualTo(expected.BaseCurrency));
         }
     }
 }
