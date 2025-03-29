@@ -8,10 +8,10 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
 {
     internal class StatisticWeeklyChange : StatisticBase
     {
-        internal StatisticWeeklyChange()
+        private int _changeWindowDays;
+        internal StatisticWeeklyChange(int changeWindowDays = -7)
             : base(Statistic.WeeklyChange)
-        {
-        }
+            => _changeWindowDays = changeWindowDays;
 
         /// <inheritdoc/>
         public override void Calculate(IPortfolio portfolio, IValueList valueList, DateTime date)
@@ -20,20 +20,21 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
             if (valueList is IExchangeableValueList exchangeableValueList)
             {
                 ICurrency currency = portfolio.Currency(exchangeableValueList);
-                DailyValuation needed = exchangeableValueList.LatestValue(currency);
+                DailyValuation needed = exchangeableValueList.Value(date, currency);
                 if (needed?.Value > 0)
                 {
-                    DailyValuation previousValue = exchangeableValueList.Value(date.AddDays(-7), currency);
+                    DailyValuation previousValue = exchangeableValueList.Value(date.AddDays(_changeWindowDays), currency);
                     Value = (double)(needed.Value - (previousValue?.Value ?? 0.0m));
                     return;
                 }
 
                 return;
             }
-            var latestValue = valueList.LatestValue();
+
+            DailyValuation latestValue = valueList.Value(date);
             if (latestValue?.Value > 0)
             {
-                DailyValuation weekAgoValue = valueList.Value(date.AddDays(-7));
+                DailyValuation weekAgoValue = valueList.Value(date.AddDays(_changeWindowDays));
                 Value = (double)(latestValue.Value - weekAgoValue?.Value ?? 0.0m);
             }
         }
@@ -42,8 +43,8 @@ namespace Effanville.FinancialStructures.Database.Statistics.Implementation
         public override void Calculate(IPortfolio portfolio, DateTime date, Totals total, TwoName name)
         {
             string identifier = total.GetIdentifier(name);
-            var latestValue = portfolio.TotalValue(total, identifier);
-            var weekAgoValue = portfolio.TotalValue(total, date.AddDays(-1), identifier);
+            decimal latestValue = portfolio.TotalValue(total, date, identifier);
+            decimal weekAgoValue = portfolio.TotalValue(total, date.AddDays(_changeWindowDays), identifier);
             Value = (double)(latestValue - weekAgoValue);
             fCurrency = portfolio.BaseCurrency;
         }
