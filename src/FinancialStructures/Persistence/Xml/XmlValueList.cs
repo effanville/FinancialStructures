@@ -7,7 +7,7 @@ namespace Effanville.FinancialStructures.Persistence.Xml
     {
         public NameData Names { get; set; }
         public TimeList Values { get; set; }
-        
+
         public XmlValueList() { }
 
         public XmlValueList(NameData names, TimeList values)

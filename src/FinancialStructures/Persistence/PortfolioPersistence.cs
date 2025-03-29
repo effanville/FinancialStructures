@@ -8,6 +8,8 @@ namespace Effanville.FinancialStructures.Persistence
 {
     public sealed class PortfolioPersistence : IPersistence<IPortfolio>
     {
+        public const string ReadVersion = "1.0.0.0";
+        public const string LatestWriteVersion = "2.0.0.0";
         private readonly XmlPortfolioPersistence _xmlPortfolioPersistence;
         private readonly BinaryFilePortfolioPersistence _binaryFilePortfolioPersistence;
 
@@ -44,14 +46,14 @@ namespace Effanville.FinancialStructures.Persistence
                 _ => false
             };
 
-        public static PersistenceOptions CreateOptions(string filePath, IFileSystem fileSystem)
+        public static PersistenceOptions CreateOptions(string filePath, IFileSystem fileSystem, string version = ReadVersion)
         {
             string extension = fileSystem.Path.GetExtension(filePath);
             return extension switch
             {
-                ".db" => new SqlitePersistenceOptions(filePath, fileSystem),
-                ".bin" => new BinaryFilePersistenceOptions(filePath, fileSystem),
-                _ => new XmlFilePersistenceOptions(filePath, fileSystem)
+                ".db" => new SqlitePersistenceOptions(filePath, fileSystem, version),
+                ".bin" => new BinaryFilePersistenceOptions(filePath, fileSystem, version),
+                _ => new XmlFilePersistenceOptions(filePath, fileSystem, version)
             };
         }
     }

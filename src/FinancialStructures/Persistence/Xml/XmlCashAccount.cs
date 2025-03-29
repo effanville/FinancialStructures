@@ -5,7 +5,7 @@ using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Persistence.Xml
 {
-    [XmlType(TypeName="CashAccount")]
+    [XmlType(TypeName = "CashAccount")]
     public class XmlCashAccount : XmlValueList
     {
         public XmlCashAccount() { }

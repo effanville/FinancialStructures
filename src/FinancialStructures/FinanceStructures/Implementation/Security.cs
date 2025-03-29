@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -51,7 +51,17 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             : base(account, names)
         {
         }
-        
+
+        /// <summary>
+        /// Constructor to make a new security from known data, where the data is assumed to be consistent.
+        /// </summary>
+        internal Security(Account account, NameData names, TimeList unitPrices, List<SecurityTrade> trades)
+            : base(account, names.Copy())
+        {
+            UnitPrice = unitPrices;
+            SecurityTrades = trades;
+        }
+
         /// <summary>
         /// Constructor to make a new security from known data, where the data is assumed to be consistent.
         /// </summary>

@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.Xml.Schema;
+using System.Xml;
 using System.Xml.Serialization;
 
 using Effanville.Common.Structure.DataStructures;

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Xml.Serialization;
 
 using Effanville.Common.Structure.Extensions;
@@ -9,17 +9,16 @@ namespace Effanville.FinancialStructures.DataStructures
     /// <summary>
     /// Contains all information about a Stock trade.
     /// </summary>
-    public class SecurityTrade : IComparable, IComparable<SecurityTrade>, IEquatable<SecurityTrade>
+    public class SecurityTrade :
+        IComparable,
+        IComparable<SecurityTrade>,
+        IEquatable<SecurityTrade>
     {
         /// <summary>
         /// The type of this trade.
         /// </summary>
         [XmlAttribute]
-        public TradeType TradeType
-        {
-            get;
-            set;
-        }
+        public TradeType TradeType { get; set; }
 
         /// <summary>
         /// The company name associated to this trade.
@@ -45,21 +44,13 @@ namespace Effanville.FinancialStructures.DataStructures
         /// The names associated to this trade.
         /// </summary>
         [XmlIgnore]
-        public TwoName Names
-        {
-            get;
-            set;
-        }
+        public TwoName Names { get; set; }
 
         /// <summary>
         /// The day this trade took place on.
         /// </summary>
         [XmlAttribute]
-        public DateTime Day
-        {
-            get;
-            set;
-        }
+        public DateTime Day { get; set; }
 
         /// <summary>
         /// The total cost of this trade.
@@ -80,32 +71,20 @@ namespace Effanville.FinancialStructures.DataStructures
         /// For Buy or sell this is a positive value. A dividend value is signed.
         /// </summary>
         [XmlAttribute]
-        public decimal NumberShares
-        {
-            get;
-            set;
-        }
+        public decimal NumberShares { get; set; }
 
         /// <summary>
         /// The price of the underlying that this trade was enacted at.
         /// </summary>
         [XmlAttribute]
-        public decimal UnitPrice
-        {
-            get;
-            set;
-        }
+        public decimal UnitPrice { get; set; }
 
         /// <summary>
         /// The cost of performing this trade. Encompasses all fixed costs and
         /// percentage costs.
         /// </summary>
         [XmlAttribute]
-        public decimal TradeCosts
-        {
-            get;
-            set;
-        }
+        public decimal TradeCosts { get; set; }
 
         /// <summary>
         /// Empty constructor.
@@ -129,7 +108,7 @@ namespace Effanville.FinancialStructures.DataStructures
         public SecurityTrade(TradeType type, TwoName names, DateTime day, decimal numShares, decimal price, decimal costs)
         {
             TradeType = type;
-            Names = names;
+            Names = names ?? new TwoName();
             Day = day;
             NumberShares = numShares;
             UnitPrice = price;

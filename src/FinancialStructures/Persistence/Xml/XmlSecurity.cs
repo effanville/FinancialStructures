@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Xml.Serialization;
 
@@ -7,7 +8,7 @@ using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Persistence.Xml
 {
-    [XmlType(TypeName="Security")]
+    [XmlType(TypeName = "Security")]
     public class XmlSecurity
     {
         public NameData Names { get; set; }
@@ -15,7 +16,7 @@ namespace Effanville.FinancialStructures.Persistence.Xml
         public TimeList UnitPrice { get; set; } = new TimeList();
         public TimeList Investments { get; set; } = new TimeList();
         public List<SecurityTrade> SecurityTrades { get; set; } = new List<SecurityTrade>();
-        
+
         public XmlSecurity() { }
 
         public XmlSecurity(NameData names, TimeList unitPrice, TimeList shares, TimeList investments, List<SecurityTrade> securityTrades)
@@ -25,6 +26,7 @@ namespace Effanville.FinancialStructures.Persistence.Xml
             Shares = shares;
             Investments = investments;
             SecurityTrades = securityTrades;
+            SecurityTrades.ForEach(x => x.Day = DateTime.SpecifyKind(x.Day, DateTimeKind.Utc));
         }
     }
 }

@@ -5,7 +5,7 @@ using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Persistence.Xml
 {
-    [XmlType(TypeName="Sector")]
+    [XmlType(TypeName = "Sector")]
     public class XmlSector : XmlValueList
     {
         public XmlSector() { }
