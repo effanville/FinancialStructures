@@ -18,19 +18,8 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="9.0.0" />
   </ItemGroup>
-  <Choose>
-    <When Condition="Exists('..\..\..\FinancePortfolioDatabase.sln')">
-      <ItemGroup>
-        <ProjectReference Include="..\..\..\Common\src\Common.Structure\Common.Structure.csproj" />
-      </ItemGroup>
-    </When>
-    <Otherwise>
-      <ItemGroup>
-        <ProjectReference Include="..\..\Common\src\Common.Structure\Common.Structure.csproj" />
-      </ItemGroup>
-    </Otherwise>
-  </Choose>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\src\Common.Structure\Common.Structure.csproj" />
     <ProjectReference Include="..\FinancialStructures\FinancialStructures.csproj" />
   </ItemGroup>
 </Project>

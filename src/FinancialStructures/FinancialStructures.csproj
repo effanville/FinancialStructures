@@ -2,20 +2,10 @@
   <PropertyGroup>
     <Version>24.02.00</Version>
   </PropertyGroup>
-  <Choose>
-    <When Condition="Exists('..\..\..\FinancePortfolioDatabase.sln')">
-      <ItemGroup>
-        <ProjectReference Include="..\..\..\Common\src\Common.Structure\Common.Structure.csproj" />
-    <ProjectReference Include="..\..\..\Common\src\Common.ReportWriting\Common.ReportWriting.csproj" />
-      </ItemGroup>
-    </When>
-    <Otherwise>
-      <ItemGroup>
-        <ProjectReference Include="..\..\Common\src\Common.Structure\Common.Structure.csproj" />
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common\src\Common.Structure\Common.Structure.csproj" />
     <ProjectReference Include="..\..\Common\src\Common.ReportWriting\Common.ReportWriting.csproj" />
-      </ItemGroup>
-    </Otherwise>
-  </Choose>
+  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Nager.Date" Version="[1.33.1]" />
     <PackageReference Include="System.Collections.Concurrent" Version="4.3.0" />
