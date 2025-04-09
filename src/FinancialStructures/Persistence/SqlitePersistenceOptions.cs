@@ -6,15 +6,13 @@ namespace Effanville.FinancialStructures.Persistence
     {
         public bool InMemory { get; }
 
-        public SqlitePersistenceOptions(string filePath, IFileSystem fileSystem)           
-            : this(inMemory: false, filePath, fileSystem)
+        public SqlitePersistenceOptions(string filePath, IFileSystem fileSystem, string version)
+            : this(inMemory: false, filePath, fileSystem, version)
         {
         }
-        
-        public SqlitePersistenceOptions(bool inMemory, string filePath, IFileSystem fileSystem)           
-            : base(filePath, fileSystem)
-        {
-            InMemory = inMemory;
-        }
+
+        public SqlitePersistenceOptions(bool inMemory, string filePath, IFileSystem fileSystem, string version)
+            : base(filePath, fileSystem, version)
+            => InMemory = inMemory;
     }
 }

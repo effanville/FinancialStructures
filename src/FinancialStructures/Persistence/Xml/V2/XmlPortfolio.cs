@@ -1,0 +1,136 @@
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml.Serialization;
+
+using Effanville.FinancialStructures.Database;
+using Effanville.FinancialStructures.Database.Implementation;
+using Effanville.FinancialStructures.DataStructures;
+using Effanville.FinancialStructures.FinanceStructures;
+using Effanville.FinancialStructures.FinanceStructures.Implementation;
+using Effanville.FinancialStructures.FinanceStructures.Implementation.Asset;
+
+namespace Effanville.FinancialStructures.Persistence.Xml.V2;
+
+[XmlType(TypeName = "Portfolio")]
+public class XmlPortfolio
+{
+    [XmlAttribute(AttributeName = "Name")]
+    public string Name { get; set; }
+
+    [XmlElement(ElementName = "BaseCurrency")]
+    public string BaseCurrency { get; set; }
+
+    [XmlArray(ElementName = "Funds")]
+    [XmlArrayItem(ElementName = "Security")]
+    public List<XmlSecurity> Funds { get; private set; } = new List<XmlSecurity>();
+
+    [XmlArray(ElementName = "BankAccounts")]
+    [XmlArrayItem(ElementName = "CashAccount")]
+    public List<XmlCashAccount> BankAccounts { get; set; } = new List<XmlCashAccount>();
+
+    [XmlArray(ElementName = "Currencies")]
+    [XmlArrayItem(ElementName = "Currency")]
+    public List<XmlCurrency> Currencies { get; private set; } = new List<XmlCurrency>();
+
+    [XmlArray(ElementName = "BenchMarks")]
+    [XmlArrayItem(ElementName = "Sector")]
+    public List<XmlSector> BenchMarks { get; set; } = new List<XmlSector>();
+
+    [XmlArray(ElementName = "Assets")]
+    [XmlArrayItem(ElementName = "AmortisableAsset")]
+    public List<XmlAmortisableAsset> Assets { get; set; } = new List<XmlAmortisableAsset>();
+
+    [XmlArray(ElementName = "Pensions")]
+    [XmlArrayItem(ElementName = "Pension")]
+    public List<XmlSecurity> Pensions { get; private set; } = new List<XmlSecurity>();
+
+    [XmlArray(ElementName = "Notes")]
+    public List<Note> NotesInternal { get; set; } = new List<Note>();
+
+    public void SetFrom(Portfolio portfolio)
+    {
+        BaseCurrency = portfolio.BaseCurrency;
+        Name = portfolio.Name;
+        foreach (ISecurity security in portfolio.Funds)
+        {
+            Funds.Add(new XmlSecurity(security.Names, security.UnitPrice, security.Shares,
+                security.Investments, security.Trades.Select(x => new XmlTrade(x)).ToList()));
+        }
+
+        foreach (IExchangeableValueList bankAcc in portfolio.BankAccounts)
+        {
+            BankAccounts.Add(new XmlCashAccount(bankAcc.Names, bankAcc.Values));
+        }
+
+        foreach (ICurrency currency in portfolio.Currencies)
+        {
+            Currencies.Add(new XmlCurrency(currency.Names, currency.Values));
+        }
+
+        foreach (IValueList sector in portfolio.BenchMarks)
+        {
+            BenchMarks.Add(new XmlSector(sector.Names, sector.Values));
+        }
+
+        foreach (IAmortisableAsset asset in portfolio.Assets)
+        {
+            Assets.Add(new XmlAmortisableAsset(asset.Names, asset.Values, asset.Debt, asset.Payments));
+        }
+
+        foreach (ISecurity pension in portfolio.Pensions)
+        {
+            Pensions.Add(new XmlSecurity(pension.Names, pension.UnitPrice, pension.Shares, pension.Investments, pension.Trades.Select(x => new XmlTrade(x)).ToList()));
+        }
+
+        NotesInternal = portfolio.NotesInternal;
+    }
+
+    public void Set(Portfolio portfolio)
+    {
+        portfolio.BaseCurrency = BaseCurrency;
+        portfolio.Name = Name;
+        portfolio.NotesInternal = NotesInternal;
+
+        foreach (XmlCashAccount bankAcc in BankAccounts)
+        {
+            portfolio.AddBankAccount(new CashAccount(bankAcc.Names, bankAcc.Values));
+        }
+
+        foreach (XmlSecurity security in Funds)
+        {
+            portfolio.AddFund(new Security(
+                Account.Security,
+                security.Names,
+                security.UnitPrice,
+                security.Shares,
+                security.Investments,
+                 security.SecurityTrades.Select(x => x.ToTrade()).ToList()));
+        }
+
+        foreach (XmlCurrency currency in Currencies)
+        {
+            portfolio.AddCurrency(new Currency(currency.Names, currency.Values));
+        }
+
+        foreach (XmlSector sector in BenchMarks)
+        {
+            portfolio.AddBenchMark(new Sector(sector.Names, sector.Values));
+        }
+
+        foreach (XmlAmortisableAsset asset in Assets)
+        {
+            portfolio.AddAsset(new AmortisableAsset(asset.Names, asset.Values, asset.Debt, asset.Payments));
+        }
+
+        foreach (XmlSecurity security in Pensions)
+        {
+            portfolio.AddPension(new Security(
+                Account.Pension,
+                security.Names,
+                 security.UnitPrice,
+                security.Shares,
+                security.Investments,
+                security.SecurityTrades.Select(x => x.ToTrade()).ToList()));
+        }
+    }
+}

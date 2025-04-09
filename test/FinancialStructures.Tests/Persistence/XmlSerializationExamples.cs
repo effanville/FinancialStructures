@@ -1,24 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.IO.Abstractions.TestingHelpers;
 
 using Effanville.Common.Structure.DataStructures;
 using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.Database.Extensions.DataEdit;
 using Effanville.FinancialStructures.Database.Implementation;
 using Effanville.FinancialStructures.DataStructures;
-using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.Persistence;
 
-using NUnit.Framework;
-
-namespace Effanville.FinancialStructures.Tests.Saving
+namespace Effanville.FinancialStructures.Tests.Persistence
 {
-    [TestFixture]
-    public sealed class SavingTests
+    internal static class XmlSerializationExamples
     {
-        private static IEnumerable<(string name, IPortfolio testPortfolio, string XmlString)> OldStyleTestLists()
+        public static IEnumerable<(string name, IPortfolio testPortfolio, string XmlString)> OldStyleTestLists()
         {
             yield return ("empty", new DatabaseConstructor().SetName("saved").GetInstance(),
    @"<?xml version=""1.0"" encoding=""utf-8""?>
@@ -122,7 +116,7 @@ namespace Effanville.FinancialStructures.Tests.Saving
             yield return (TestDatabaseName.OneSecOneBank.ToString(), testDatabases[TestDatabaseName.OneSecOneBank], "<?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<AllData xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <MyFunds>\r\n    <FilePath>c:/temp/saved.xml</FilePath>\r\n    <BaseCurrency>GBP</BaseCurrency>\r\n    <Funds>\r\n      <Security>\r\n        <Names>\r\n          <Company>BlackRock</Company>\r\n          <Name>UK Stock</Name>\r\n          <Sectors />\r\n        </Names>\r\n        <Values>\r\n          <Values />\r\n        </Values>\r\n        <Shares>\r\n          <Values>\r\n            <DailyValuation>\r\n              <Day>2010-01-01T00:00:00</Day>\r\n              <Value>2</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2011-01-01T00:00:00</Day>\r\n              <Value>1.5</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2012-05-01T00:00:00</Day>\r\n              <Value>17.3</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2015-04-03T00:00:00</Day>\r\n              <Value>4</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2018-05-06T00:00:00</Day>\r\n              <Value>5.7</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2020-01-01T00:00:00</Day>\r\n              <Value>5.5</Value>\r\n            </DailyValuation>\r\n          </Values>\r\n        </Shares>\r\n        <UnitPrice>\r\n          <Values>\r\n            <DailyValuation>\r\n              <Day>2010-01-01T00:00:00</Day>\r\n              <Value>100</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2011-01-01T00:00:00</Day>\r\n              <Value>100</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2012-05-01T00:00:00</Day>\r\n              <Value>125.2</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2015-04-03T00:00:00</Day>\r\n              <Value>90.6</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2018-05-06T00:00:00</Day>\r\n              <Value>77.7</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2020-01-01T00:00:00</Day>\r\n              <Value>101.1</Value>\r\n            </DailyValuation>\r\n          </Values>\r\n        </UnitPrice>\r\n        <Investments>\r\n          <Values>\r\n            <DailyValuation>\r\n              <Day>2010-01-01T00:00:00</Day>\r\n              <Value>100</Value>\r\n            </DailyValuation>\r\n          </Values>\r\n        </Investments>\r\n      </Security>\r\n    </Funds>\r\n    <BankAccounts>\r\n      <CashAccount>\r\n        <Names>\r\n          <Company>Santander</Company>\r\n          <Name>Current</Name>\r\n          <Sectors />\r\n        </Names>\r\n        <Values>\r\n          <Values>\r\n            <DailyValuation>\r\n              <Day>2010-01-01T00:00:00</Day>\r\n              <Value>100</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2011-01-01T00:00:00</Day>\r\n              <Value>100</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2012-05-01T00:00:00</Day>\r\n              <Value>125.2</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2015-04-03T00:00:00</Day>\r\n              <Value>90.6</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2018-05-06T00:00:00</Day>\r\n              <Value>77.7</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2020-01-01T00:00:00</Day>\r\n              <Value>101.1</Value>\r\n            </DailyValuation>\r\n          </Values>\r\n        </Values>\r\n        <Amounts>\r\n          <Values>\r\n            <DailyValuation>\r\n              <Day>2010-01-01T00:00:00</Day>\r\n              <Value>100</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2011-01-01T00:00:00</Day>\r\n              <Value>100</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2012-05-01T00:00:00</Day>\r\n              <Value>125.2</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2015-04-03T00:00:00</Day>\r\n              <Value>90.6</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2018-05-06T00:00:00</Day>\r\n              <Value>77.7</Value>\r\n            </DailyValuation>\r\n            <DailyValuation>\r\n              <Day>2020-01-01T00:00:00</Day>\r\n              <Value>101.1</Value>\r\n            </DailyValuation>\r\n          </Values>\r\n        </Amounts>\r\n      </CashAccount>\r\n    </BankAccounts>\r\n    <Currencies />\r\n    <BenchMarks />\r\n  </MyFunds>\r\n</AllData>");
         }
 
-        private static IEnumerable<(string name, IPortfolio testPortfolio, string XmlString)> NewStyleTestLists()
+        public static IEnumerable<(string name, IPortfolio testPortfolio, string XmlString)> NewStyleTestLists()
         {
             yield return ("empty",
                 new DatabaseConstructor().SetName("saved").GetInstance(),
@@ -463,143 +457,5 @@ namespace Effanville.FinancialStructures.Tests.Saving
 </AllData>");
         }
 
-        private static IEnumerable<TestCaseData> WriteSerializationData(string testName)
-        {
-            IEnumerable<(string name, IPortfolio testPortfolio, string XmlString)> tests = NewStyleTestLists();
-            foreach ((string name, IPortfolio testPortfolio, string XmlString) test in tests)
-            {
-                yield return new TestCaseData(test.XmlString, test.testPortfolio).SetName($"{testName}-{test.name}");
-            }
-        }
-
-        [TestCaseSource(nameof(WriteSerializationData), new object[] { nameof(WriteXmlTests) })]
-        public void WriteXmlTests(string expectedXml, IPortfolio times)
-        {
-            MockFileSystem tempFileSystem = new MockFileSystem();
-            string savePath = "c:/temp/saved.xml";
-
-            XmlPortfolioPersistence xmlPersistence = new XmlPortfolioPersistence(null);
-            XmlFilePersistenceOptions options = new XmlFilePersistenceOptions(savePath, tempFileSystem);
-            xmlPersistence.Save(times, options);
-
-            string file = tempFileSystem.File.ReadAllText(savePath);
-
-            Assert.That(file, Is.EqualTo(expectedXml));
-        }
-
-        private static IEnumerable<TestCaseData> ReadSerializationData(string testName)
-        {
-            IEnumerable<(string name, IPortfolio testPortfolio, string XmlString)> oldTests = OldStyleTestLists();
-            foreach ((string name, IPortfolio testPortfolio, string XmlString) test in oldTests)
-            {
-                yield return new TestCaseData(test.XmlString, test.testPortfolio).SetName($"{testName}old-{test.name}");
-            }
-
-            IEnumerable<(string name, IPortfolio testPortfolio, string XmlString)> newTests = NewStyleTestLists();
-            foreach ((string name, IPortfolio testPortfolio, string XmlString) test in newTests)
-            {
-                yield return new TestCaseData(test.XmlString, test.testPortfolio).SetName($"{testName}-{test.name}");
-            }
-        }
-
-        [TestCaseSource(nameof(ReadSerializationData), new object[] { nameof(ReadXmlTests) })]
-        public void ReadXmlTests(string expectedXml, IPortfolio times)
-        {
-            MockFileSystem tempFileSystem = new MockFileSystem();
-            string savePath = "c:/temp/saved.xml";
-            tempFileSystem.AddFile(savePath, new MockFileData(expectedXml));
-            XmlPortfolioPersistence xmlPersistence = new XmlPortfolioPersistence(null);
-            IPortfolio loadedPortfolio = xmlPersistence.Load(new XmlFilePersistenceOptions(savePath, tempFileSystem));
-
-            AreEqual(times, loadedPortfolio);
-        }
-
-
-        [TestCaseSource(nameof(WriteSerializationData), new object[] { nameof(RoundTripSaveTests) })]
-        public void RoundTripSaveTests(string expectedXml, IPortfolio database)
-        {
-            MockFileSystem tempFileSystem = new MockFileSystem();
-            string savePath = "c:/temp/saved.xml";
-
-            XmlPortfolioPersistence xmlPersistence = new XmlPortfolioPersistence(null);
-            XmlFilePersistenceOptions options = new XmlFilePersistenceOptions(savePath, tempFileSystem);
-            xmlPersistence.Save(database, options);
-
-            string file = tempFileSystem.File.ReadAllText(savePath);
-
-            Assert.That(file, Is.EqualTo(expectedXml));
-
-            IPortfolio loadedPortfolio = xmlPersistence.Load(new XmlFilePersistenceOptions(savePath, tempFileSystem));
-
-            AreEqual(database, loadedPortfolio);
-        }
-
-        private void AreEqual(IPortfolio expected, IPortfolio actual)
-        {
-            if (expected == null | actual == null)
-            {
-                Assert.That(expected == null && actual == null, Is.True);
-            }
-
-            Assert.That(actual.Name, Is.EqualTo(expected.Name));
-
-            if (expected.Funds.Count == actual.Funds.Count)
-            {
-                for (int i = 0; i < expected.Funds.Count; i++)
-                {
-                    ISecurity expectedSec = expected.Funds[i];
-                    ISecurity actualSec = actual.Funds[i];
-                    Assert.That(actualSec.Names, Is.EqualTo(expectedSec.Names));
-                }
-            }
-            else
-            {
-                Assert.That(actual.Funds, Has.Count.EqualTo(expected.Funds.Count), "Funds dont have the same number.");
-            }
-
-            if (expected.BankAccounts.Count == actual.BankAccounts.Count)
-            {
-                for (int i = 0; i < expected.BankAccounts.Count; i++)
-                {
-                    IExchangeableValueList expectedSec = expected.BankAccounts[i];
-                    IExchangeableValueList actualSec = actual.BankAccounts[i];
-                    Assert.That(actualSec.Names, Is.EqualTo(expectedSec.Names));
-                }
-            }
-            else
-            {
-                Assert.That(actual.BankAccounts, Has.Count.EqualTo(expected.BankAccounts.Count), "BankAccounts dont have the same number.");
-            }
-
-            if (expected.Currencies.Count == actual.Currencies.Count)
-            {
-                for (int i = 0; i < expected.Currencies.Count; i++)
-                {
-                    ICurrency expectedSec = expected.Currencies[i];
-                    ICurrency actualSec = actual.Currencies[i];
-                    Assert.That(actualSec.Names, Is.EqualTo(expectedSec.Names));
-                }
-            }
-            else
-            {
-                Assert.That(actual.Currencies.Count, Is.EqualTo(expected.Currencies.Count), "Currencies dont have the same number.");
-            }
-
-            if (expected.BenchMarks.Count == actual.BenchMarks.Count)
-            {
-                for (int i = 0; i < expected.BenchMarks.Count; i++)
-                {
-                    IValueList expectedBenchMark = expected.BenchMarks[i];
-                    IValueList actualBenchMark = actual.BenchMarks[i];
-                    Assert.That(actualBenchMark.Names, Is.EqualTo(expectedBenchMark.Names));
-                }
-            }
-            else
-            {
-                Assert.That(actual.BenchMarks.Count, Is.EqualTo(expected.BenchMarks.Count), "Funds dont have the same number.");
-            }
-
-            Assert.That(actual.BaseCurrency, Is.EqualTo(expected.BaseCurrency));
-        }
     }
 }

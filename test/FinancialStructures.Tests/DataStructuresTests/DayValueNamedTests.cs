@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Effanville.Common.Structure.DataStructures;
 using Effanville.Common.Structure.NamingStructures;
@@ -23,11 +23,11 @@ namespace Effanville.FinancialStructures.Tests.DataStructuresTests
             Assert.That(one.CompareTo(two), Is.EqualTo(expected));
         }
 
-        [TestCase("name", "company", "12/5/2019", 5, "company-name-05/12/2019, 5")]
-        [TestCase(null, "company", "12/5/2019", 5, "company-05/12/2019, 5")]
-        [TestCase("name", null, "12/5/2019", 5, "name-05/12/2019, 5")]
-        [TestCase("name", "company", "12/5/2019", 0, "company-name-05/12/2019, 0")]
-        [TestCase("", "company", "12/5/2019", 5, "company-05/12/2019, 5")]
+        [TestCase("name", "company", "12/5/2019", 5, "company-name-2019-12-05T00:00:00, 5")]
+        [TestCase(null, "company", "12/5/2019", 5, "company-2019-12-05T00:00:00, 5")]
+        [TestCase("name", null, "12/5/2019", 5, "name-2019-12-05T00:00:00, 5")]
+        [TestCase("name", "company", "12/5/2019", 0, "company-name-2019-12-05T00:00:00, 0")]
+        [TestCase("", "company", "12/5/2019", 5, "company-2019-12-05T00:00:00, 5")]
         public void ToStringTests(string name1, string company1, DateTime date, decimal value, string expected)
         {
             Labelled<TwoName, DailyValuation> one = new Labelled<TwoName, DailyValuation>(new TwoName(company1, name1), new DailyValuation(date, value));

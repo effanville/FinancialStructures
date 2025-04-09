@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Xml.Serialization;
 
 using Effanville.Common.Structure.Extensions;
@@ -119,6 +119,7 @@ namespace Effanville.FinancialStructures.DataStructures
         /// Construct an instance with only a <see cref="TradeType"/>
         /// </summary>
         public SecurityTrade(TradeType type)
+            : this()
         {
             TradeType = type;
         }
@@ -129,7 +130,7 @@ namespace Effanville.FinancialStructures.DataStructures
         public SecurityTrade(TradeType type, TwoName names, DateTime day, decimal numShares, decimal price, decimal costs)
         {
             TradeType = type;
-            Names = names;
+            Names = names ?? new TwoName();
             Day = day;
             NumberShares = numShares;
             UnitPrice = price;

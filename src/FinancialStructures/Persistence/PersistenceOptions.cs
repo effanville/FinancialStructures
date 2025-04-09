@@ -6,11 +6,13 @@ namespace Effanville.FinancialStructures.Persistence
     {
         public string FilePath { get; }
         public IFileSystem FileSystem { get; }
-        
-        protected PersistenceOptions(string filePath, IFileSystem fileSystem)
+        public string Version { get; }
+
+        protected PersistenceOptions(string filePath, IFileSystem fileSystem, string version)
         {
             FilePath = filePath;
             FileSystem = fileSystem;
+            Version = version;
         }
     }
 }
