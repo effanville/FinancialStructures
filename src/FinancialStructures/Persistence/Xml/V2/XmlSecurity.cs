@@ -43,16 +43,26 @@ public class XmlSecurity : IXmlSerializable
     {
         bool isEmpty = reader.IsEmptyElement;
 
+        bool isInnerEmpty = false;
         reader.ReadStartElement();
 
         XmlSerializer serializer = new XmlSerializer(typeof(NameData), new XmlRootAttribute(nameof(Names)));
         Names = (NameData)serializer.Deserialize(reader);
 
+        Shares.ReadXml(reader);
         UnitPrice.ReadXml(reader);
+        Investments.ReadXml(reader);
+        // if the timelist is part of a larger class, then the data is stored in an
+        // extra node.
+        bool partOfClass = reader.AttributeCount > 0 || reader.LocalName == XmlTradeBaseName;
 
         if (reader.LocalName == XmlTradeBaseName)
         {
-            reader.ReadStartElement(XmlTradeBaseName);
+            if (partOfClass)
+            {
+                isInnerEmpty = reader.IsEmptyElement;
+                reader.ReadStartElement(XmlTradeBaseName);
+            }
             if (!isEmpty)
             {
                 while (reader.NodeType != XmlNodeType.EndElement && reader.NodeType != XmlNodeType.None)
@@ -64,11 +74,13 @@ public class XmlSecurity : IXmlSerializable
                 }
                 if (reader.NodeType != XmlNodeType.None)
                 {
+                    if (partOfClass && !isInnerEmpty)
+                    {
+                        reader.ReadEndElement();
+                    }
                     reader.ReadEndElement();
                 }
             }
-
-            reader.ReadEndElement();
         }
         else
         {
@@ -82,8 +94,15 @@ public class XmlSecurity : IXmlSerializable
         XmlSerializer serializer = new XmlSerializer(typeof(NameData), new XmlRootAttribute(nameof(Names)));
         serializer.Serialize(writer, Names);
 
+        writer.WriteStartElement("Shares");
+        Shares.WriteXml(writer);
+        writer.WriteEndElement();
         writer.WriteStartElement("UnitPrice");
         UnitPrice.WriteXml(writer);
+        writer.WriteEndElement();
+
+        writer.WriteStartElement("Investments");
+        Investments.WriteXml(writer);
         writer.WriteEndElement();
         writer.WriteStartElement(XmlTradeBaseName);
         foreach (XmlTrade value in SecurityTrades)
