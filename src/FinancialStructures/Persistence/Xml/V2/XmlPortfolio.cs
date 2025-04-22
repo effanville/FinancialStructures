@@ -54,7 +54,7 @@ public class XmlPortfolio
         foreach (ISecurity security in portfolio.Funds)
         {
             Funds.Add(new XmlSecurity(security.Names, security.UnitPrice, security.Shares,
-                security.Investments, security.Trades.Select(x => new XmlTrade(x)).ToList()));
+                security.Investments, security.Trades.ToList()));
         }
 
         foreach (IExchangeableValueList bankAcc in portfolio.BankAccounts)
@@ -79,7 +79,7 @@ public class XmlPortfolio
 
         foreach (ISecurity pension in portfolio.Pensions)
         {
-            Pensions.Add(new XmlSecurity(pension.Names, pension.UnitPrice, pension.Shares, pension.Investments, pension.Trades.Select(x => new XmlTrade(x)).ToList()));
+            Pensions.Add(new XmlSecurity(pension.Names, pension.UnitPrice, pension.Shares, pension.Investments, pension.Trades.ToList()));
         }
 
         NotesInternal = portfolio.NotesInternal;
@@ -104,7 +104,7 @@ public class XmlPortfolio
                 security.UnitPrice,
                 security.Shares,
                 security.Investments,
-                 security.SecurityTrades.Select(x => x.ToTrade()).ToList()));
+                 security.SecurityTrades.ToList()));
         }
 
         foreach (XmlCurrency currency in Currencies)
@@ -130,7 +130,7 @@ public class XmlPortfolio
                  security.UnitPrice,
                 security.Shares,
                 security.Investments,
-                security.SecurityTrades.Select(x => x.ToTrade()).ToList()));
+                security.SecurityTrades.ToList()));
         }
     }
 }

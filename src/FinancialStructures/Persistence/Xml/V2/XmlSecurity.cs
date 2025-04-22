@@ -3,6 +3,7 @@ using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using Effanville.Common.Structure.DataStructures;
+using Effanville.FinancialStructures.DataStructures;
 using Effanville.FinancialStructures.NamingStructures;
 
 namespace Effanville.FinancialStructures.Persistence.Xml.V2;
@@ -13,7 +14,7 @@ public class XmlSecurity : IXmlSerializable
     public TimeList Shares { get; set; }
     public TimeList UnitPrice { get; set; }
     public TimeList Investments { get; set; }
-    public List<XmlTrade> SecurityTrades { get; set; }
+    public List<SecurityTrade> SecurityTrades { get; set; }
 
     public XmlSecurity()
     {
@@ -21,10 +22,10 @@ public class XmlSecurity : IXmlSerializable
         Shares = new TimeList();
         Investments = new TimeList();
         UnitPrice = new TimeList();
-        SecurityTrades = new List<XmlTrade>();
+        SecurityTrades = new List<SecurityTrade>();
     }
 
-    public XmlSecurity(NameData names, TimeList unitPrice, TimeList shares, TimeList investments, List<XmlTrade> securityTrades)
+    public XmlSecurity(NameData names, TimeList unitPrice, TimeList shares, TimeList investments, List<SecurityTrade> securityTrades)
     {
         Names = names;
         UnitPrice = unitPrice;
@@ -67,7 +68,7 @@ public class XmlSecurity : IXmlSerializable
             {
                 while (reader.NodeType != XmlNodeType.EndElement && reader.NodeType != XmlNodeType.None)
                 {
-                    XmlTrade valuation = new XmlTrade();
+                    SecurityTrade valuation = new SecurityTrade();
                     valuation.ReadXml(reader);
                     SecurityTrades.Add(valuation);
                     _ = reader.MoveToContent();
@@ -105,7 +106,7 @@ public class XmlSecurity : IXmlSerializable
         Investments.WriteXml(writer);
         writer.WriteEndElement();
         writer.WriteStartElement(XmlTradeBaseName);
-        foreach (XmlTrade value in SecurityTrades)
+        foreach (SecurityTrade value in SecurityTrades)
         {
             value.WriteXml(writer);
         }

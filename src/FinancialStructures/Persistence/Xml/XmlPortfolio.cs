@@ -5,9 +5,10 @@ using System.Xml.Serialization;
 using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.Database.Implementation;
 using Effanville.FinancialStructures.DataStructures;
+using Effanville.FinancialStructures.FinanceStructures;
 using Effanville.FinancialStructures.FinanceStructures.Implementation;
 using Effanville.FinancialStructures.FinanceStructures.Implementation.Asset;
-using Effanville.FinancialStructures.NamingStructures;
+using Effanville.FinancialStructures.Persistence.Xml.V1;
 
 namespace Effanville.FinancialStructures.Persistence.Xml
 {
@@ -102,37 +103,38 @@ namespace Effanville.FinancialStructures.Persistence.Xml
         {
             BaseCurrency = portfolio.BaseCurrency;
             Name = portfolio.Name;
-            foreach (var security in portfolio.Funds)
+            foreach (ISecurity security in portfolio.Funds)
             {
                 Funds.Add(new XmlSecurity(security.Names, security.UnitPrice, security.Shares,
-                    security.Investments, security.Trades.ToList()));
+                    security.Investments, security.Trades
+                    .Select(x => new V1.XmlTrade(x)).ToList()));
             }
 
-            foreach (var bankAcc in portfolio.BankAccounts)
+            foreach (IExchangeableValueList bankAcc in portfolio.BankAccounts)
             {
                 BankAccounts.Add(new XmlCashAccount(bankAcc.Names, bankAcc.Values));
             }
 
-            foreach (var currency in portfolio.Currencies)
+            foreach (ICurrency currency in portfolio.Currencies)
             {
                 Currencies.Add(new XmlCurrency(currency.Names, currency.Values));
             }
 
-            foreach (var sector in portfolio.BenchMarks)
+            foreach (IValueList sector in portfolio.BenchMarks)
             {
                 BenchMarks.Add(new XmlSector(sector.Names, sector.Values));
             }
 
-            foreach (var asset in portfolio.Assets)
+            foreach (IAmortisableAsset asset in portfolio.Assets)
             {
                 Assets.Add(new XmlAmortisableAsset(asset.Names, asset.Values, asset.Debt, asset.Payments));
             }
-            
-            foreach (var pension in portfolio.Pensions)
+
+            foreach (ISecurity pension in portfolio.Pensions)
             {
-                Pensions.Add(new XmlSecurity(pension.Names, pension.UnitPrice, pension.Shares, pension.Investments, pension.Trades.ToList()));
+                Pensions.Add(new XmlSecurity(pension.Names, pension.UnitPrice, pension.Shares, pension.Investments, pension.Trades.Select(x => new XmlTrade(x)).ToList()));
             }
-            
+
             NotesInternal = portfolio.NotesInternal;
         }
 
@@ -142,12 +144,12 @@ namespace Effanville.FinancialStructures.Persistence.Xml
             portfolio.Name = Name;
             portfolio.NotesInternal = NotesInternal;
 
-            foreach (var bankAcc in BankAccounts)
+            foreach (XmlCashAccount bankAcc in BankAccounts)
             {
                 portfolio.AddBankAccount(new CashAccount(bankAcc.Names, bankAcc.Values));
             }
 
-            foreach (var security in Funds)
+            foreach (XmlSecurity security in Funds)
             {
                 portfolio.AddFund(new Security(
                     Account.Security,
@@ -155,25 +157,25 @@ namespace Effanville.FinancialStructures.Persistence.Xml
                     security.UnitPrice,
                     security.Shares,
                     security.Investments,
-                     security.SecurityTrades));
+                     security.SecurityTrades.Select(x => x.ToTrade()).ToList()));
             }
 
-            foreach (var currency in Currencies)
+            foreach (XmlCurrency currency in Currencies)
             {
                 portfolio.AddCurrency(new Currency(currency.Names, currency.Values));
             }
 
-            foreach (var sector in BenchMarks)
+            foreach (XmlSector sector in BenchMarks)
             {
                 portfolio.AddBenchMark(new Sector(sector.Names, sector.Values));
             }
 
-            foreach (var asset in Assets)
+            foreach (XmlAmortisableAsset asset in Assets)
             {
                 portfolio.AddAsset(new AmortisableAsset(asset.Names, asset.Values, asset.Debt, asset.Payments));
             }
 
-            foreach (var security in Pensions)
+            foreach (XmlSecurity security in Pensions)
             {
                 portfolio.AddPension(new Security(
                     Account.Pension,
@@ -181,7 +183,7 @@ namespace Effanville.FinancialStructures.Persistence.Xml
                      security.UnitPrice,
                     security.Shares,
                     security.Investments,
-                    security.SecurityTrades));
+                    security.SecurityTrades.Select(x => x.ToTrade()).ToList()));
             }
         }
     }
