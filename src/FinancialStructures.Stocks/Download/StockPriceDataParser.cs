@@ -8,25 +8,29 @@ using Effanville.FinancialStructures.Stocks.Implementation;
 
 namespace Effanville.FinancialStructures.Stocks.Download
 {
-    public static class StockPriceDataParser
+    public class StockPriceDataParser
     {
-        public async static Task<int> Populate(HistoricalMarkets context, DateTime startDate, DateTime endDate,
+        private IStockDownloaderFactory _stockDownloaderFactory;
+
+        public StockPriceDataParser(IStockDownloaderFactory stockDownloaderFactory) => _stockDownloaderFactory = stockDownloaderFactory;
+
+        public async Task<int> Populate(HistoricalMarkets context, DateTime startDate, DateTime endDate,
             IReportLogger logger = null)
         {
             int numberChanges = 0;
-            foreach (var exchange in context.Exchanges)
+            foreach (HistoricalExchange exchange in context.Exchanges)
             {
                 foreach (HistoricalStock historicalStock in exchange.Stocks)
                 {
                     string url = historicalStock.Name.Last().Value.Url;
-                    var downloader = StockPriceDownloaderFactory.Retrieve(url);
+                    IStockDownloader downloader = _stockDownloaderFactory.Retrieve(url);
                     IStock tempDataHolder = null;
                     string code = downloader.GetFinancialCode(url);
                     int numRetries = 0;
                     while ((tempDataHolder == null || tempDataHolder.Valuations.Count == 0) && numRetries < 10)
                     {
                         if (await downloader.TryGetFullPriceHistory(code, startDate, endDate, TimeSpan.FromDays(1),
-                                value => tempDataHolder = value, logger))
+                                value => tempDataHolder = value))
                         {
                             break;
                         }
@@ -38,16 +42,16 @@ namespace Effanville.FinancialStructures.Stocks.Download
                     {
                         continue;
                     }
-                    
-                    if(tempDataHolder== null)
+
+                    if (tempDataHolder == null)
                     {
                         continue;
                     }
 
-                    foreach (var valuation in tempDataHolder.Valuations)
+                    foreach (StockDay valuation in tempDataHolder.Valuations)
                     {
-                        var start = valuation.Start.Add(exchange.ExchangeOpen.ToTimeSpan());
-                        var end = valuation.Start.Add(exchange.ExchangeClose.ToTimeSpan());
+                        DateTime start = valuation.Start.Add(exchange.ExchangeOpen.ToTimeSpan());
+                        DateTime end = valuation.Start.Add(exchange.ExchangeClose.ToTimeSpan());
                         if (historicalStock.Valuations
                             .Any(x => x.Start == start
                                       && x.End == end))

@@ -8,10 +8,18 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
 {
     public sealed class ExchangePersistence : IPersistence<IStockExchange>
     {
-        public IStockExchange Load(PersistenceOptions options, IReportLogger reportLogger = null)
+        private readonly XmlExchangePersistence _xmlExchangePersistence;
+        private readonly SqliteExchangePersistence _sqliteExchangePersistence;
+
+        public ExchangePersistence(IReportLogger logger)
+        {
+            _xmlExchangePersistence = new XmlExchangePersistence(logger);
+            _sqliteExchangePersistence = new SqliteExchangePersistence(logger);
+        }
+        public IStockExchange Load(PersistenceOptions options)
         {
             StockExchange stockExchange = new StockExchange();
-            if (!Load(stockExchange, options, reportLogger))
+            if (!Load(stockExchange, options))
             {
                 return null;
             }
@@ -19,23 +27,20 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
             return stockExchange;
         }
 
-        public bool Load(IStockExchange stockExchange, PersistenceOptions options, IReportLogger reportLogger = null)
+        public bool Load(IStockExchange stockExchange, PersistenceOptions options)
             => options switch
             {
-                XmlFilePersistenceOptions xmlOptions => new XmlExchangePersistence().Load(stockExchange, xmlOptions,
-                    reportLogger),
-                SqlitePersistenceOptions sqliteOptions => new SqliteExchangePersistence().Load(stockExchange,
-                    sqliteOptions, reportLogger),
+                XmlFilePersistenceOptions xmlOptions => _xmlExchangePersistence.Load(stockExchange, xmlOptions),
+                SqlitePersistenceOptions sqliteOptions => _sqliteExchangePersistence.Load(stockExchange,
+                    sqliteOptions),
                 _ => false
             };
 
-        public bool Save(IStockExchange stockExchange, PersistenceOptions options, IReportLogger reportLogger = null)
+        public bool Save(IStockExchange stockExchange, PersistenceOptions options)
             => options switch
             {
-                XmlFilePersistenceOptions xmlOptions => new XmlExchangePersistence().Save(stockExchange, xmlOptions,
-                    reportLogger),
-                SqlitePersistenceOptions binaryOptions =>
-                    new SqliteExchangePersistence().Save(stockExchange, binaryOptions, reportLogger),
+                XmlFilePersistenceOptions xmlOptions => _xmlExchangePersistence.Save(stockExchange, xmlOptions),
+                SqlitePersistenceOptions binaryOptions => _sqliteExchangePersistence.Save(stockExchange, binaryOptions),
                 _ => false
             };
 
@@ -44,9 +49,9 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
             string extension = fileSystem.Path.GetExtension(filePath);
             return extension switch
             {
-                ".db" => new SqlitePersistenceOptions(filePath, fileSystem),
-                ".bin" => new BinaryFilePersistenceOptions(filePath, fileSystem),
-                _ => new XmlFilePersistenceOptions(filePath, fileSystem)
+                ".db" => new SqlitePersistenceOptions(filePath, fileSystem, "1.0.0.0"),
+                ".bin" => new BinaryFilePersistenceOptions(filePath, fileSystem, "1.0.0.0"),
+                _ => new XmlFilePersistenceOptions(filePath, fileSystem, "1.0.0.0")
             };
         }
     }

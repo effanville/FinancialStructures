@@ -50,10 +50,10 @@ namespace Effanville.FinancialStructures.Stocks.Tests
 
             var startDate = new DateTime(2010, 1, 1);
             var endDate = new DateTime(2023, 1, 1);
-            var persistence = new XmlExchangePersistence();
-            var exchange = persistence.Load(new XmlFilePersistenceOptions(filePath, fileSystem), logger);
+            var persistence = new XmlExchangePersistence(logger);
+            var exchange = persistence.Load(new XmlFilePersistenceOptions(filePath, fileSystem, "1.0.0.0"));
             exchange.Download(startDate, endDate, logger).Wait();
-            persistence.Save(exchange, new XmlFilePersistenceOptions("c:/temp/example2.xml", fileSystem), logger);
+            persistence.Save(exchange, new XmlFilePersistenceOptions("c:/temp/example2.xml", fileSystem, "1.0.0.0"));
         }
 
         [Test]
@@ -74,11 +74,11 @@ namespace Effanville.FinancialStructures.Stocks.Tests
 
             var startDate = new DateTime(2010, 1, 1);
             var endDate = new DateTime(2020, 1, 1);
-            var persistence = new XmlExchangePersistence();
-            IStockExchange exchange = persistence.Load(new XmlFilePersistenceOptions(filePath, fileSystem), logger);
+            var persistence = new XmlExchangePersistence(logger);
+            IStockExchange exchange = persistence.Load(new XmlFilePersistenceOptions(filePath, fileSystem, "1.0.0.0"));
             var stock = exchange.Stocks.First();
             stock.AddValue(new DateTime(2022, 1, 1), 12, 12, 12, 12, 1444);
-            persistence.Save(exchange, new XmlFilePersistenceOptions("c:/temp/example2.xml", fileSystem), logger);
+            persistence.Save(exchange, new XmlFilePersistenceOptions("c:/temp/example2.xml", fileSystem, "1.0.0.0"));
         }
 
         public static readonly string CurrentPath = AppDomain.CurrentDomain.SetupInformation.ApplicationBase;
@@ -109,8 +109,8 @@ namespace Effanville.FinancialStructures.Stocks.Tests
             stock.Name = new NameData() { Ric = "BARC.L", Company = "Barclays", Exchange = "LSE" };
             stock.Valuations.Add(new StockDay(new DateTime(2023, 1, 1, 9, 0, 0), 23, 24, 22, 23.5m, 100000));
             exchange.Stocks.Add(stock);
-            var sqlitePersistence = new SqliteExchangePersistence();
-            sqlitePersistence.Save(exchange, new SqlitePersistenceOptions(true, testDbPath, new FileSystem()), logger);
+            var sqlitePersistence = new SqliteExchangePersistence(logger);
+            sqlitePersistence.Save(exchange, new SqlitePersistenceOptions(testDbPath, new FileSystem(), "1.0.0.0"));
         }
     }
 }

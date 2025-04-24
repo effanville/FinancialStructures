@@ -13,24 +13,28 @@ using Nager.Date;
 namespace Effanville.FinancialStructures.Stocks.Persistence
 {
     public sealed class XmlExchangePersistence : IPersistence<IStockExchange>
-    {        
-        public IStockExchange Load(PersistenceOptions options, IReportLogger reportLogger = null)
+    {
+        private readonly IReportLogger _logger;
+
+        public XmlExchangePersistence(IReportLogger logger) => _logger = logger;
+
+        public IStockExchange Load(PersistenceOptions options)
         {
             StockExchange stockExchange = new StockExchange();
-            if (!Load(stockExchange, options, reportLogger))
+            if (!Load(stockExchange, options))
             {
                 return null;
             }
 
             return stockExchange;
         }
-        public bool Load(IStockExchange stockExchange, PersistenceOptions options, IReportLogger reportLogger = null)
+        public bool Load(IStockExchange stockExchange, PersistenceOptions options)
         {
             if (options is not XmlFilePersistenceOptions xmlOptions)
             {
-                reportLogger?.Log(
+                _logger?.Log(
                     ReportType.Information,
-                    ReportLocation.Loading.ToString(), 
+                    ReportLocation.Loading.ToString(),
                     "Options for loading from Xml file not of correct type.");
                 return false;
             }
@@ -39,8 +43,7 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
             string filePath = xmlOptions.FilePath;
             if (!fileSystem.File.Exists(filePath))
             {
-                reportLogger?.Log(ReportType.Information, ReportLocation.Loading.ToString(), 
-                    "Loaded Empty New StockExchange.");
+                _logger?.Info(nameof(XmlExchangePersistence), "Loaded Empty New StockExchange.");
                 return false;
             }
 
@@ -50,17 +53,14 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
             }
 
             XmlStockExchange database = XmlFileAccess.ReadFromXmlFile<XmlStockExchange>(
-                fileSystem, 
-                filePath, 
+                fileSystem,
+                filePath,
                 out _);
             if (database != null)
             {
-                reportLogger?.Log(
-                    ReportType.Information, 
-                    ReportLocation.Loading.ToString(), 
-                    $"Loaded StockExchange from {filePath}.");
+                _logger?.Info(nameof(XmlExchangePersistence), $"Loaded StockExchange from {filePath}.");
                 exchange.Name = database.Name;
-                if (Enum.TryParse<CountryCode>(database.CountryCode, out var code))
+                if (Enum.TryParse<CountryCode>(database.CountryCode, out CountryCode code))
                 {
                     exchange.CountryDateCode = code;
                 }
@@ -73,13 +73,13 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                 if (database.Stocks != null)
                 {
                     exchange.Stocks = new List<Stock>();
-                    foreach (var xmlStock in database.Stocks)
+                    foreach (XmlStock xmlStock in database.Stocks)
                     {
-                        var stock = new Stock { Name = xmlStock.Name };
+                        Stock stock = new Stock { Name = xmlStock.Name };
 
-                        foreach (var valuation in xmlStock.Valuations)
+                        foreach (XmlStockCandle valuation in xmlStock.Valuations)
                         {
-                            var stockDay = new StockDay
+                            StockDay stockDay = new StockDay
                             {
                                 Start = valuation.Start,
                                 Duration = valuation.Duration,
@@ -102,14 +102,11 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
             return false;
         }
 
-        public bool Save(IStockExchange exchange, PersistenceOptions options, IReportLogger reportLogger = null)
+        public bool Save(IStockExchange exchange, PersistenceOptions options)
         {
             if (options is not XmlFilePersistenceOptions xmlOptions)
             {
-                reportLogger?.Log(
-                    ReportType.Information,
-                    ReportLocation.Loading.ToString(), 
-                    "Options for loading from Xml file not of correct type.");
+                _logger?.Info(nameof(XmlExchangePersistence), "Options for loading from Xml file not of correct type.");
                 return false;
             }
 
@@ -117,14 +114,11 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
             string filePath = xmlOptions.FilePath;
             if (exchange is not StockExchange stockExchange)
             {
-                reportLogger?.Log(
-                    ReportType.Error, 
-                    ReportLocation.Saving.ToString(), 
-                    "Attempted to save a StockExchange that was not of the correct type.");
+                _logger?.Error(nameof(XmlExchangePersistence), "Attempted to save a StockExchange that was not of the correct type.");
                 return false;
             }
 
-            var xmlStockExchange = new XmlStockExchange
+            XmlStockExchange xmlStockExchange = new XmlStockExchange
             {
                 Name = stockExchange.Name,
                 CountryCode = stockExchange.CountryDateCode.ToString(),
@@ -136,12 +130,12 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                 xmlStockExchange.Stocks = new List<XmlStock>();
             }
 
-            foreach (var stock in stockExchange.Stocks)
+            foreach (Stock stock in stockExchange.Stocks)
             {
-                var xmlStock = new XmlStock { Name = stock.Name, Valuations = new List<XmlStockCandle>() };
-                foreach (var valuation in stock.Valuations)
+                XmlStock xmlStock = new XmlStock { Name = stock.Name, Valuations = new List<XmlStockCandle>() };
+                foreach (StockDay valuation in stock.Valuations)
                 {
-                    var xmlStockCandle = new XmlStockCandle()
+                    XmlStockCandle xmlStockCandle = new XmlStockCandle()
                     {
                         Start = valuation.Start,
                         Duration = valuation.Duration,
@@ -160,13 +154,10 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
             XmlFileAccess.WriteToXmlFile(fileSystem, filePath, xmlStockExchange, out string error);
             if (error != null)
             {
-                reportLogger?.Log(ReportType.Error, ReportLocation.Saving.ToString(), error);
+                _logger?.Error(nameof(XmlExchangePersistence), error);
             }
 
-            reportLogger?.Log(
-                ReportType.Information,
-                ReportLocation.Saving.ToString(), 
-                $"Saved StockExchange at {filePath}");
+            _logger?.Info(nameof(XmlExchangePersistence), $"Saved StockExchange at {filePath}");
             return true;
         }
     }

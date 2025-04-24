@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Effanville.Common.Structure.WebAccess;
 using Effanville.FinancialStructures.Stocks.Download;
 using Effanville.FinancialStructures.Stocks.Implementation;
 
@@ -19,13 +19,10 @@ public sealed class DownloadTests
     public async Task CanDownloadAllDayData(string url)
     {
         StockDay value = null;
-        void getValue(StockDay v)
-        {
-            value = v;
-        }
-        var downloader = StockPriceDownloaderFactory.Retrieve(url);
+        void getValue(StockDay v) => value = v;
+        IStockDownloader downloader = new StockPriceDownloaderFactory(null, new WebDownloader(null)).Retrieve(url);
         string code = downloader.GetFinancialCode(url);
-        _ = await downloader.TryGetLatestPriceData(code, getValue, null);
+        _ = await downloader.TryGetLatestPriceData(code, getValue);
 
         Assert.That(value, Is.Not.Null);
     }
@@ -38,20 +35,16 @@ public sealed class DownloadTests
     public async Task CanDownloadHistoryData(string url, int numberEntries, decimal? open = null, decimal? close = null)
     {
         IStock value = null;
-        void getValue(IStock v)
-        {
-            value = v;
-        }
+        void getValue(IStock v) => value = v;
 
-        var downloader = StockPriceDownloaderFactory.Retrieve(url);
+        IStockDownloader downloader = new StockPriceDownloaderFactory(null, new WebDownloader(null)).Retrieve(url);
         string code = downloader.GetFinancialCode(url);
         _ = await downloader.TryGetFullPriceHistory(
             code,
             new DateTime(2022, 1, 1),
             new DateTime(2022, 2, 2),
             TimeSpan.FromDays(1),
-            getValue,
-            null);
+            getValue);
 
         Assert.That(value, Is.Not.Null);
         Assert.That(value.Valuations.Count, Is.EqualTo(numberEntries));

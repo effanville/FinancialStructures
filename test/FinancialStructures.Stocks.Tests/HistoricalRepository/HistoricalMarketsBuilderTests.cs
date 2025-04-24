@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using Effanville.Common.Structure.Reporting;
+using Effanville.Common.Structure.WebAccess;
+using Effanville.FinancialStructures.Stocks.Download;
 using Effanville.FinancialStructures.Stocks.HistoricalRepository;
 
 using NUnit.Framework;
@@ -19,7 +21,8 @@ namespace Effanville.FinancialStructures.Stocks.Tests.HistoricalRepository
         {
             var logger = new LogReporter(null, true);
             var fileSystem = new FileSystem();
-            var historicalMarketsBuilder = new HistoricalMarketsBuilder()
+            StockPriceDownloaderFactory priceDownloaderFactory = new StockPriceDownloaderFactory(null, new WebDownloader(null));
+            var historicalMarketsBuilder = new HistoricalMarketsBuilder(priceDownloaderFactory)
                 .WithExchangesFromFile("ExampleConfigFiles/Exchanges.csv", fileSystem, logger);
             _ = await historicalMarketsBuilder.WithIndexInstruments("FTSE-100", logger);
             _ = await historicalMarketsBuilder.WithInstrumentPriceData(
@@ -49,7 +52,8 @@ namespace Effanville.FinancialStructures.Stocks.Tests.HistoricalRepository
             // setup db with test data
             var logger = new LogReporter(null, true);
             var fileSystem = new FileSystem();
-            var historicalMarketsBuilder = new HistoricalMarketsBuilder()
+            IStockDownloaderFactory priceDownloaderFactory = new StockPriceDownloaderFactory(null, new WebDownloader(null));
+            var historicalMarketsBuilder = new HistoricalMarketsBuilder(priceDownloaderFactory)
                 .WithExchangesFromFile("ExampleConfigFiles/Exchanges.csv", fileSystem, logger);
             _ = await historicalMarketsBuilder.WithIndexInstruments("FTSE-100", logger);
             _ = await historicalMarketsBuilder.WithInstrumentPriceData(

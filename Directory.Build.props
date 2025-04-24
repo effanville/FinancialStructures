@@ -16,12 +16,11 @@
     <GenerateAssemblyInfo>true</GenerateAssemblyInfo>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="..\.editorconfig" Link=".editorconfig" />
-  </ItemGroup>
+  <PropertyGroup>
+    <Version>25.04.01</Version>
+  </PropertyGroup>
 
-
-  <ItemGroup Condition="$(MSBuildProjectFile.Contains('.Tests'))">
+    <ItemGroup Condition="$(MSBuildProjectFile.Contains('.Tests'))">
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0"/>
     <PackageReference Include="NUnit" Version="4.3.2"/>
     <PackageReference Include="NUnit3TestAdapter" Version="5.0.0">

@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Threading.Tasks;
 
 using Effanville.Common.Structure.Reporting;
+using Effanville.Common.Structure.WebAccess;
 using Effanville.FinancialStructures.NamingStructures;
 using Effanville.FinancialStructures.Stocks.Download;
 
@@ -169,11 +170,11 @@ namespace Effanville.FinancialStructures.Stocks.Implementation
         {
             foreach (Stock stock in Stocks)
             {
-                var downloader = new YahooDownloader();
+                var downloader = new YahooDownloader(reportLogger, new WebDownloader(reportLogger));
                 IStock tempDataHolder = null;
                 string code = downloader.GetFinancialCode(stock.Name.Url);
                 if (await downloader.TryGetFullPriceHistory(code, startDate, endDate, TimeSpan.FromDays(1),
-                        value => tempDataHolder = value, reportLogger))
+                        value => tempDataHolder = value))
                 {
                     stock.Valuations = tempDataHolder.Valuations;
                 }
@@ -183,12 +184,12 @@ namespace Effanville.FinancialStructures.Stocks.Implementation
         /// <inheritdoc/>
         public async Task Download(IReportLogger reportLogger = null)
         {
+            var downloader = new YahooDownloader(reportLogger, new WebDownloader(reportLogger));
             foreach (Stock stock in Stocks)
             {
-                var downloader = new YahooDownloader();
                 StockDay stockDay = null;
                 string code = downloader.GetFinancialCode(stock.Name.Url);
-                if (await downloader.TryGetLatestPriceData(code, value => stockDay = value, reportLogger))
+                if (await downloader.TryGetLatestPriceData(code, value => stockDay = value))
                 {
                     stock.AddValue(stockDay.Start, stockDay.Open, stockDay.High, stockDay.Low, stockDay.Close,
                         stockDay.Volume);
@@ -198,7 +199,7 @@ namespace Effanville.FinancialStructures.Stocks.Implementation
         }
 
         /// <inheritdoc/>
-        public void Configure(string stockFilePath, IReportLogger logger = null) 
+        public void Configure(string stockFilePath, IReportLogger logger = null)
             => Configure(stockFilePath, new FileSystem(), logger);
 
         /// <inheritdoc/>

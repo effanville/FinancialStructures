@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 
-using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.Stocks.Implementation;
 
 namespace Effanville.FinancialStructures.Stocks.Download
@@ -11,10 +10,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
         /// <summary>
         /// The base url for the downloader.
         /// </summary>
-        string BaseUrl
-        {
-            get;
-        }
+        string BaseUrl { get; }
 
         string GetFinancialCode(string url);
 
@@ -29,16 +25,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
         /// </summary>
         Task<bool> TryGetLatestPriceData(
             string financialCode,
-            Action<StockDay> retrieveValueAction,
-            IReportLogger reportLogger = null);
-
-        /*Task<bool> TryGetPriceHistory(
-            string financialCode,
-            DateTime firstDate,
-            DateTime lastDate,
-            TimeSpan recordInterval,
-            Action<TimeList> getHistory,
-            IReportLogger reportLogger = null);*/
+            Action<StockDay> retrieveValueAction);
 
         /// <summary>
         /// Try to get the complete price history for the financial object
@@ -49,7 +36,6 @@ namespace Effanville.FinancialStructures.Stocks.Download
             DateTime firstDate,
             DateTime lastDate,
             TimeSpan recordInterval,
-            Action<IStock> getHistory,
-            IReportLogger reportLogger = null);
+            Action<IStock> getHistory);
     }
 }

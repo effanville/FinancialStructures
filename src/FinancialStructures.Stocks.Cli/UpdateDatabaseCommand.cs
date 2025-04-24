@@ -22,6 +22,9 @@ namespace Effanville.FinancialStructures.Stocks.Cli
         private readonly IFileSystem _fileSystem;
         private readonly ILogger _logger;
         private readonly IReportLogger _reportLogger;
+        private readonly IConfiguration _config;
+        private readonly HistoricalMarketsBuilder _builder;
+        private readonly IHistoricalMarketsPersistence _persistence;
         private readonly CommandOption<string> _dbFilePathOption;
         private readonly CommandOption<string> _indexNameOption;
         private readonly CommandOption<DateTime> _startDateOption;
@@ -45,11 +48,18 @@ namespace Effanville.FinancialStructures.Stocks.Cli
         /// <summary>
         /// Default Constructor.
         /// </summary>
-        public UpdateDatabaseCommand(IFileSystem fileSystem, ILogger<UpdateDatabaseCommand> logger, IReportLogger reportLogger)
+        public UpdateDatabaseCommand(
+            IFileSystem fileSystem,
+            ILogger<UpdateDatabaseCommand> logger,
+            IReportLogger reportLogger,
+            IConfiguration config,
+            HistoricalMarketsBuilder builder,
+            IHistoricalMarketsPersistence persistence)
         {
             _fileSystem = fileSystem;
             _logger = logger;
             _reportLogger = reportLogger;
+            _config = config;
             _dbFilePathOption = new CommandOption<string>(
                 "filePath",
                 "FilePath to the stock database to add data to.",
@@ -77,10 +87,10 @@ namespace Effanville.FinancialStructures.Stocks.Cli
 
         /// <inheritdoc/>
         public void WriteHelp()
-            => this.WriteHelp( _logger);
+            => this.WriteHelp(_logger);
 
         /// <inheritdoc/>
-        public int Execute( IConfiguration config)
+        public int Execute()
         {
             if (!_fileSystem.File.Exists(_dbFilePathOption.Value))
             {
@@ -94,25 +104,23 @@ namespace Effanville.FinancialStructures.Stocks.Cli
                 return -1;
             }
 
-            IHistoricalMarketsPersistence persistence = new SqliteHistoricalMarketsPersistence();
-            SqlitePersistenceOptions options = new SqlitePersistenceOptions(inMemory: false, _dbFilePathOption.Value, _fileSystem);
-            HistoricalMarkets database = persistence.Load(options, _reportLogger);
-            
+            SqlitePersistenceOptions options = new SqlitePersistenceOptions(inMemory: false, _dbFilePathOption.Value, _fileSystem, "1.0.0.0");
+            HistoricalMarkets database = _persistence.Load(options);
+
             _logger.Log(LogLevel.Information, $"Loaded database from file {_dbFilePathOption.Value}");
-            HistoricalMarketsBuilder historicalMarketsBuilder = new HistoricalMarketsBuilder()
-                .WithBaseInstance(database);
+            _builder.WithBaseInstance(database);
             _logger.Log(LogLevel.Information, $"Updating index instruments from {_indexNameOption.Value}");
-            historicalMarketsBuilder.UpdateIndexInstruments(_indexNameOption.Value, _reportLogger).Wait();
+            _builder.UpdateIndexInstruments(_indexNameOption.Value, _reportLogger).Wait();
             _logger.Log(LogLevel.Information, $"Updated index instruments.");
-            
+
             _logger.Log(LogLevel.Information, $"Downloading prices from {_startDateOption.Value} to {_endDateOption.Value}");
-            historicalMarketsBuilder.WithInstrumentPriceData(
+            _builder.WithInstrumentPriceData(
                 _startDateOption.Value,
                 _endDateOption.Value,
                 _reportLogger).Wait();
 
             _logger.Log(LogLevel.Information, $"Completed update, saving file");
-            if(persistence.Save(historicalMarketsBuilder.GetInstance(), options, _reportLogger))
+            if (_persistence.Save(_builder.GetInstance(), options))
             {
                 return 0;
             }
@@ -121,7 +129,7 @@ namespace Effanville.FinancialStructures.Stocks.Cli
         }
 
         /// <inheritdoc/>
-        public bool Validate(IConfiguration config) 
-            => this.Validate(config, _logger);
+        public bool Validate()
+            => this.Validate(_config, _logger);
     }
 }

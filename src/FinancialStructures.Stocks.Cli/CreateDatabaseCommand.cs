@@ -22,11 +22,14 @@ namespace Effanville.FinancialStructures.Stocks.Cli
         private readonly IFileSystem _fileSystem;
         private readonly ILogger _logger;
         private readonly IReportLogger _reportLogger;
+        private readonly IConfiguration _config;
+        private readonly HistoricalMarketsBuilder _builder;
+        private readonly IHistoricalMarketsPersistence _persistence;
         private readonly CommandOption<string> _dbFilePathOption;
         private readonly CommandOption<string> _indexNameOption;
         private readonly CommandOption<DateTime> _startDateOption;
         private readonly CommandOption<DateTime> _endDateOption;
-        
+
         /// <inheritdoc/>
         public string Name => "create";
 
@@ -45,14 +48,23 @@ namespace Effanville.FinancialStructures.Stocks.Cli
         /// <summary>
         /// Default Constructor.
         /// </summary>
-        public CreateDatabaseCommand(IFileSystem fileSystem, ILogger<CreateDatabaseCommand> logger, IReportLogger reportLogger)
+        public CreateDatabaseCommand(
+            IFileSystem fileSystem,
+            ILogger<CreateDatabaseCommand> logger,
+            IReportLogger reportLogger,
+            IConfiguration config,
+            HistoricalMarketsBuilder builder,
+            IHistoricalMarketsPersistence persistence)
         {
             _fileSystem = fileSystem;
             _logger = logger;
             _reportLogger = reportLogger;
+            _config = config;
+            _builder = builder;
+            _persistence = persistence;
             _dbFilePathOption = new CommandOption<string>(
-                "filePath", 
-                "FilePath to the exchange information to create db for.", 
+                "filePath",
+                "FilePath to the exchange information to create db for.",
                 required: true,
                 inputString => !string.IsNullOrWhiteSpace(inputString));
             Options.Add(_dbFilePathOption);
@@ -64,12 +76,12 @@ namespace Effanville.FinancialStructures.Stocks.Cli
                 );
             Options.Add(_indexNameOption);
             _startDateOption = new CommandOption<DateTime>(
-                "end", 
+                "end",
                 "The start date to add data from.",
-                new DateTime(2020,1,1));
+                new DateTime(2020, 1, 1));
             Options.Add(_startDateOption);
             _endDateOption = new CommandOption<DateTime>(
-                "end", 
+                "end",
                 "The end date to add data to.",
                 DateTime.Today);
             Options.Add(_endDateOption);
@@ -79,7 +91,7 @@ namespace Effanville.FinancialStructures.Stocks.Cli
         public void WriteHelp()
             => this.WriteHelp(_logger);
 
-        public int Execute(IConfiguration config)
+        public int Execute()
         {
             string fullPath = _fileSystem.Path.GetFullPath(_dbFilePathOption.Value);
             if (!_fileSystem.File.Exists(fullPath))
@@ -94,21 +106,19 @@ namespace Effanville.FinancialStructures.Stocks.Cli
                 return -1;
             }
 
-            HistoricalMarketsBuilder historicalMarketsBuilder = new HistoricalMarketsBuilder()
-                .WithExchangesFromFile(fullPath, _fileSystem, _reportLogger);
-             historicalMarketsBuilder.WithIndexInstruments(_indexNameOption.Value, _reportLogger).Wait();
-             historicalMarketsBuilder.WithInstrumentPriceData(
-                _startDateOption.Value,
-                _endDateOption.Value,
-                _reportLogger).Wait();
-            HistoricalMarkets historicalMarkets = historicalMarketsBuilder.GetInstance();
+            _builder.WithExchangesFromFile(fullPath, _fileSystem, _reportLogger);
+            _builder.WithIndexInstruments(_indexNameOption.Value, _reportLogger).Wait();
+            _builder.WithInstrumentPriceData(
+               _startDateOption.Value,
+               _endDateOption.Value,
+               _reportLogger).Wait();
+            HistoricalMarkets historicalMarkets = _builder.GetInstance();
 
             string outputDbFilePath = _fileSystem.Path.Combine(
                 _fileSystem.Path.GetDirectoryName(fullPath),
                 _fileSystem.Path.GetFileNameWithoutExtension(fullPath) + ".db");
-            IHistoricalMarketsPersistence persistence = new SqliteHistoricalMarketsPersistence();
-            SqlitePersistenceOptions options = new SqlitePersistenceOptions(inMemory: false, outputDbFilePath, _fileSystem);
-            if (persistence.Save(historicalMarkets, options, _reportLogger))
+            SqlitePersistenceOptions options = new SqlitePersistenceOptions(inMemory: false, outputDbFilePath, _fileSystem, "1.0.0.0");
+            if (_persistence.Save(historicalMarkets, options))
             {
                 return 0;
             }
@@ -117,7 +127,7 @@ namespace Effanville.FinancialStructures.Stocks.Cli
         }
 
         /// <inheritdoc/>
-        public bool Validate(IConfiguration config) 
-            => this.Validate(config, _logger);
+        public bool Validate()
+            => this.Validate(_config, _logger);
     }
 }

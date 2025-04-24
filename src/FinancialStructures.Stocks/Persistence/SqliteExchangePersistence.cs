@@ -16,26 +16,27 @@ using Nager.Date;
 namespace Effanville.FinancialStructures.Stocks.Persistence
 {
     public sealed class SqliteExchangePersistence : IPersistence<IStockExchange>
-    {        
-        public IStockExchange Load(PersistenceOptions options, IReportLogger reportLogger = null)
+    {
+        private readonly IReportLogger _logger;
+
+        public SqliteExchangePersistence(IReportLogger logger) => _logger = logger;
+
+        public IStockExchange Load(PersistenceOptions options)
         {
             StockExchange stockExchange = new StockExchange();
-            if (!Load(stockExchange, options, reportLogger))
+            if (!Load(stockExchange, options))
             {
                 return null;
             }
 
             return stockExchange;
         }
-        
-        public bool Load(IStockExchange stockExchange, PersistenceOptions options, IReportLogger reportLogger = null)
+
+        public bool Load(IStockExchange stockExchange, PersistenceOptions options)
         {
             if (options is not SqlitePersistenceOptions sqliteOptions)
             {
-                reportLogger?.Log(
-                    ReportType.Information,
-                    ReportLocation.Loading.ToString(),
-                    "Options for loading from Xml file not of correct type.");
+                _logger?.Info(nameof(SqliteExchangePersistence), "Options for loading from Xml file not of correct type.");
                 return false;
             }
 
@@ -44,27 +45,27 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                 return false;
             }
 
-            var dbContext = new DatabaseFactory().Create(sqliteOptions.FileSystem, sqliteOptions.FilePath);
+            StockExchangeDbContext dbContext = new DatabaseFactory().Create(sqliteOptions.FileSystem, sqliteOptions.FilePath);
 
             if (dbContext == null)
             {
                 return false;
             }
 
-            var exchange = dbContext.Exchanges.First();
+            Exchange exchange = dbContext.Exchanges.First();
             stockExchangeImpl.ExchangeIdentifier = exchange.ExchangeIdentifier;
             stockExchangeImpl.Name = exchange.Name;
             stockExchangeImpl.TimeZone = TimeZoneInfo.FindSystemTimeZoneById(exchange.TimeZone);
-            if (Enum.TryParse<CountryCode>(exchange.CountryCode, out var code))
+            if (Enum.TryParse<CountryCode>(exchange.CountryCode, out CountryCode code))
             {
                 stockExchangeImpl.CountryDateCode = code;
             }
 
             stockExchangeImpl.Stocks = new List<Stock>();
-            foreach (var dbStock in dbContext.Instruments.Include(x => x.Exchange))
+            foreach (Instrument dbStock in dbContext.Instruments.Include(x => x.Exchange))
             {
-                var stock = new Stock();
-                var name = new NameData()
+                Stock stock = new Stock();
+                NameData name = new NameData()
                 {
                     Company = dbStock.Company,
                     Name = dbStock.Name,
@@ -77,10 +78,10 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                 };
                 stock.Name = name;
 
-                var prices = dbContext.InstrumentPrices.Where(price => price.InstrumentId == dbStock.Id);
-                foreach (var price in prices)
+                IQueryable<InstrumentPriceData> prices = dbContext.InstrumentPrices.Where(price => price.InstrumentId == dbStock.Id);
+                foreach (InstrumentPriceData price in prices)
                 {
-                    var stockDay = new StockDay
+                    StockDay stockDay = new StockDay
                     {
                         Start = price.StartTime,
                         Duration = price.EndTime - price.StartTime,
@@ -99,25 +100,22 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
             return true;
         }
 
-        public bool Save(IStockExchange exchange, PersistenceOptions options, IReportLogger reportLogger = null)
+        public bool Save(IStockExchange exchange, PersistenceOptions options)
         {
             if (options is not SqlitePersistenceOptions sqliteOptions)
             {
-                reportLogger?.Log(
-                    ReportType.Information,
-                    ReportLocation.Loading.ToString(),
-                    "Options for loading from Xml file not of correct type.");
+                _logger?.Error(nameof(SqliteExchangePersistence), "Options for loading from Xml file not of correct type.");
                 return false;
             }
 
             string directory = sqliteOptions.FileSystem.Path.GetDirectoryName(sqliteOptions.FilePath);
             sqliteOptions.FileSystem.Directory.CreateDirectory(directory);
-            var dbBuilder = new DatabaseFactory()
+            Database.Setup.DatabaseBuilder dbBuilder = new DatabaseFactory()
                 .GetDbBuilder(sqliteOptions.FileSystem, sqliteOptions.FilePath)
                 .EnsureCreated();
 
             dbBuilder.WithDataSources();
-            var exchangeData = new Exchange()
+            Exchange exchangeData = new Exchange()
             {
                 ExchangeIdentifier = exchange.ExchangeIdentifier,
                 Name = exchange.Name,
@@ -126,16 +124,16 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                 ExchangeOpen = TimeOnly.FromTimeSpan(exchange.ExchangeOpenInUtc(DateTime.Today).TimeOfDay),
                 ExchangeClose = TimeOnly.FromTimeSpan(exchange.ExchangeCloseInUtc(DateTime.Today).TimeOfDay)
             };
-            dbBuilder.WithExchanges(new List<Exchange> { exchangeData }, reportLogger);
+            dbBuilder.WithExchanges(new List<Exchange> { exchangeData }, _logger);
             int exchangeId = exchangeData.Id;
-            var instance = dbBuilder.GetInstance();
-            foreach (var stock in exchange.Stocks)
+            StockExchangeDbContext instance = dbBuilder.GetInstance();
+            foreach (Stock stock in exchange.Stocks)
             {
                 int coreInstrumentId = 0;
-                var lastName = stock.Name;
-                var existingInstrumentValues = instance.Instruments.Where(x =>
+                NameData lastName = stock.Name;
+                IQueryable<Instrument> existingInstrumentValues = instance.Instruments.Where(x =>
                     x.Ric == lastName.Ric);
-                var existingInstrument = existingInstrumentValues.ToList().MaxBy(x => x.ValidFrom);
+                Instrument existingInstrument = existingInstrumentValues.ToList().MaxBy(x => x.ValidFrom);
                 if (existingInstrument != null)
                 {
                     coreInstrumentId = existingInstrument.CoreInstrumentId;
@@ -146,7 +144,7 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                         ? instance.Instruments.Max(x => x.CoreInstrumentId) + 1
                         : 1;
                 }
-                var instrument = new Instrument()
+                Instrument instrument = new Instrument()
                 {
                     Company = stock.Name.Company,
                     Name = stock.Name.Name,
@@ -159,8 +157,8 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                     Ric = stock.Name.Ric
                 };
 
-                var nameValue = stock.Fundamentals;
-                var instrumentData = new InstrumentData()
+                StockFundamentalData nameValue = stock.Fundamentals;
+                InstrumentData instrumentData = new InstrumentData()
                 {
                     ValidFrom = DateTime.Now,
                     InstrumentId = coreInstrumentId,
@@ -174,10 +172,10 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                     MarketCap = nameValue.MarketCap
                 };
 
-                var priceData = new List<InstrumentPriceData>();
-                foreach (var valuation in stock.Valuations)
+                List<InstrumentPriceData> priceData = new List<InstrumentPriceData>();
+                foreach (StockDay valuation in stock.Valuations)
                 {
-                    var data = new InstrumentPriceData()
+                    InstrumentPriceData data = new InstrumentPriceData()
                     {
                         DataSourceId = 1,
                         InstrumentId = coreInstrumentId,
@@ -192,7 +190,7 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                     priceData.Add(data);
                 }
 
-                dbBuilder.WithInstrument(instrument, instrumentData, priceData, reportLogger);
+                dbBuilder.WithInstrument(instrument, instrumentData, priceData, _logger);
             }
 
             return true;

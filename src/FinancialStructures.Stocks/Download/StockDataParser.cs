@@ -164,7 +164,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
                                 newMarketCap *= multiplier;
                                 if (Math.Abs(marketCap - newMarketCap) > 1e-8)
                                 {
-                                    logger?.Warning("dataLoader",
+                                    logger?.Warn("dataLoader",
                                         $"Instrument {inst.Name.Last().Value.Ric}. Received {marketCap} and {newMarketCap} for market cap.");
                                 }
                             }
@@ -279,7 +279,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
                 {
                     dict["Market cap"] = marketCapValue * 1000000;
                 }
-                
+
                 if (values.TryGetValue("PE ratio (TTM)", out string val))
                 {
                     if (double.TryParse(val, out double peRatio))
@@ -327,7 +327,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
                         newMarketCap *= multiplier;
                         if (Math.Abs(dict["Market cap"] - newMarketCap) > 1e-8)
                         {
-                            logger?.Warning(
+                            logger?.Warn(
                                 "dataLoader",
                                 $"Instrument {inst.Name.Last().Value.Ric}. Received {dict["Market cap"]} and {newMarketCap} for market cap.");
                         }

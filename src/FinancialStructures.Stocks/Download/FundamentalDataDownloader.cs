@@ -46,27 +46,27 @@ namespace Effanville.FinancialStructures.Stocks.Download
 
         public static async Task<Dictionary<string, string>> GetExtraData(string instrumentUrl, IReportLogger logger = null)
         {
-            string urlData = await WebDownloader.DownloadFromURLasync(instrumentUrl, addCookie: true, logger);
+            string urlData = await new WebDownloader(logger).DownloadFromURLasync(instrumentUrl, addCookie: true);
 
             HtmlDocument htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(urlData);
             HtmlNode quoteSummaryElement = GetDescendentFromTag(htmlDocument.DocumentNode, "data-testid", "quote-statistics");
             if (quoteSummaryElement == null)
             {
-                logger?.Warning(nameof(GetExtraData), $"No quote summary found for {instrumentUrl}");
+                logger?.Warn(nameof(GetExtraData), $"No quote summary found for {instrumentUrl}");
                 return null;
             }
 
             HtmlNode summaryColumn1 = quoteSummaryElement.ChildNodes.First();
             if (summaryColumn1 == null)
             {
-                logger?.Warning(nameof(GetExtraData), $"No quote summary inner element found for {instrumentUrl}");
+                logger?.Warn(nameof(GetExtraData), $"No quote summary inner element found for {instrumentUrl}");
                 return null;
             }
 
             if (!summaryColumn1.HasChildNodes)
             {
-                logger?.Warning(nameof(GetExtraData), $"No quote summary child nodes found for {instrumentUrl}");
+                logger?.Warn(nameof(GetExtraData), $"No quote summary child nodes found for {instrumentUrl}");
                 return null;
             }
 

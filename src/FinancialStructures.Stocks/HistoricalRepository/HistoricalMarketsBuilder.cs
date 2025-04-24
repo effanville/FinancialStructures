@@ -11,6 +11,10 @@ namespace Effanville.FinancialStructures.Stocks.HistoricalRepository
     public class HistoricalMarketsBuilder
     {
         private HistoricalMarkets _instance;
+        private StockPriceDataParser _priceDataParser;
+
+        public HistoricalMarketsBuilder(IStockDownloaderFactory stockDownloaderFactory)
+            => _priceDataParser = new StockPriceDataParser(stockDownloaderFactory);
 
         public HistoricalMarkets GetInstance() => _instance;
 
@@ -47,7 +51,7 @@ namespace Effanville.FinancialStructures.Stocks.HistoricalRepository
             DateTime endDate,
             IReportLogger logger = null)
         {
-            _ = await StockPriceDataParser.Populate(_instance, startDate, endDate, logger);
+            _ = await _priceDataParser.Populate(_instance, startDate, endDate, logger);
             return this;
         }
 
@@ -56,15 +60,14 @@ namespace Effanville.FinancialStructures.Stocks.HistoricalRepository
             IReportLogger logger = null)
         {
             string[] instruments = InstrumentDownloader.GetIndexInstruments(indexName, logger);
-            logger?.Log(ReportSeverity.Useful, ReportType.Information, "Downloading",
-                $"Retrieved index instruments: {string.Join(Environment.NewLine, instruments)}");
+            logger?.Info("Downloading", $"Retrieved index instruments: {string.Join(Environment.NewLine, instruments)}");
             _ = StockDataParser.ConfigureInstruments(
                 _instance,
                 indexName,
                 instruments,
                 out var removedInstruments,
                 logger);
-            logger?.Log(ReportSeverity.Useful, ReportType.Information, "Downloading",
+            logger?.Info("Downloading",
                 $"Configured instruments. Removed are {string.Join(Environment.NewLine, removedInstruments.Select(x => x.Name.LastOrDefault().Value.Ric))}");
 
             _ = await StockDataParser.UpdateInstrumentData(_instance, indexName, instruments, removedInstruments,

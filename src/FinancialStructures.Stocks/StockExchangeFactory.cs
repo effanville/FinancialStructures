@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO.Abstractions;
 using System.Linq;
 
@@ -24,11 +24,11 @@ namespace Effanville.FinancialStructures.Stocks
         /// </summary>
         public static IStockExchange Create(string filePath, IFileSystem fileSystem, IReportLogger logger)
         {
-            IPersistence<IStockExchange> persistence = new ExchangePersistence();
-            IStockExchange exchange = persistence.Load(ExchangePersistence.CreateOptions(filePath, fileSystem), logger);
+            IPersistence<IStockExchange> persistence = new ExchangePersistence(logger);
+            IStockExchange exchange = persistence.Load(ExchangePersistence.CreateOptions(filePath, fileSystem));
             if (!exchange.CheckValidity())
             {
-                _ = logger.Log(ReportSeverity.Critical, ReportType.Error, ReportLocation.Loading, "Stock input data not suitable.");
+                logger.Error(nameof(StockExchangeFactory), "Stock input data not suitable.");
                 return null;
             }
 
