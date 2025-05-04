@@ -56,7 +56,7 @@ namespace Effanville.FinancialStructures.Tests.Database
             decimal value = 0;
             var webDownloader = new WebDownloader(null);
             var priceDownloader = new PriceDownloaderFactory(null, webDownloader);
-            await new PortfolioDataDownloader(priceDownloader).DownloadLatestValue(new NameData("company", "name", url: url, currency: currency), GetValue);
+            await new PortfolioDataDownloader(priceDownloader, null).DownloadLatestValue(new NameData("company", "name", url: url, currency: currency), GetValue);
 
             Assert.That(value, Is.Not.EqualTo(0m));
             Assert.That(value, Is.InRange(lower, upper));

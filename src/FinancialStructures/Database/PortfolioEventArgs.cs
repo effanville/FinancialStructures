@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 namespace Effanville.FinancialStructures.Database
 {
@@ -64,7 +64,7 @@ namespace Effanville.FinancialStructures.Database
         /// Constructor taking an account type.
         /// </summary>
         public PortfolioEventArgs(bool changedPortfolio)
-            : base()
+            : this()
         {
             ChangedPortfolio = changedPortfolio;
         }

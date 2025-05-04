@@ -11,32 +11,36 @@ namespace Effanville.FinancialStructures.Download;
 public sealed class PortfolioDataDownloader : IPortfolioDataDownloader
 {
     private readonly IPriceDownloaderFactory _priceDownloaderFactory;
+    private readonly IReportLogger _logger;
 
-    public PortfolioDataDownloader(IPriceDownloaderFactory priceDownloaderFactory)
-        => _priceDownloaderFactory = priceDownloaderFactory;
+    public PortfolioDataDownloader(IPriceDownloaderFactory priceDownloaderFactory, IReportLogger reportLogger)
+    {
+        _priceDownloaderFactory = priceDownloaderFactory;
+        _logger = reportLogger;
+    }
 
-    public async Task Download(IPortfolio portfolio, IReportLogger reportLogger = null)
+    public async Task Download(IPortfolio portfolio)
     {
         List<DownloadResult> results = new List<DownloadResult>();
         List<Task> downloadTasks = new List<Task>();
-        Add(downloadTasks, results, portfolio.Accounts(Account.All), portfolio, reportLogger);
-        Add(downloadTasks, results, portfolio.Currencies, portfolio, reportLogger);
-        Add(downloadTasks, results, portfolio.BenchMarks, portfolio, reportLogger);
+        Add(downloadTasks, results, portfolio.Accounts(Account.All), portfolio, _logger);
+        Add(downloadTasks, results, portfolio.Currencies, portfolio, _logger);
+        Add(downloadTasks, results, portfolio.BenchMarks, portfolio, _logger);
 
         await Task.WhenAll(downloadTasks);
 
-        results.ReportResults(reportLogger);
+        results.ReportResults(_logger);
     }
 
-    public async Task Download(IValueList valueList, IReportLogger reportLogger)
+    public async Task Download(IValueList valueList)
     {
         List<DownloadResult> results = new List<DownloadResult>();
         await DownloadLatestValue(
             valueList.Names,
-            value => valueList.UpdateAndCheck(value, reportLogger, results),
-            reportLogger);
-        results.ReportResults(reportLogger);
-        reportLogger?.Info(nameof(PortfolioDataDownloader), "Downloader Completed");
+            value => valueList.UpdateAndCheck(value, _logger, results),
+            _logger);
+        results.ReportResults(_logger);
+        _logger?.Info(nameof(PortfolioDataDownloader), "Downloader Completed");
     }
 
     /// <summary>

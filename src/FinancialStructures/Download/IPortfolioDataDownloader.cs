@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.FinanceStructures;
 
@@ -14,13 +13,11 @@ public interface IPortfolioDataDownloader
     /// Updates the given portfolio.
     /// </summary>
     /// <param name="portfolio">The database storing the object</param>
-    /// <param name="reportLogger">An optional update logger.</param>
-    Task Download(IPortfolio portfolio, IReportLogger reportLogger = null);
+    Task Download(IPortfolio portfolio);
 
     /// <summary>
     /// Updates the given valuelist.
     /// </summary>
     /// <param name="valueList">The database storing the object</param>
-    /// <param name="reportLogger">An optional update logger.</param>
-    Task Download(IValueList valueList, IReportLogger reportLogger);
+    Task Download(IValueList valueList);
 }
