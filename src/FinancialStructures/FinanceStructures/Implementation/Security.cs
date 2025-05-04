@@ -1,4 +1,3 @@
-﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -41,7 +40,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
                 }
             }
         }
-        
+
         internal Security(Account account)
             : this(account, new NameData())
         {
@@ -51,7 +50,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             : base(account, names)
         {
         }
-        
+
         /// <summary>
         /// Constructor to make a new security from known data, where the data is assumed to be consistent.
         /// </summary>
@@ -64,44 +63,8 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             SecurityTrades = trades;
         }
 
-        /// <summary>
-        /// Disposes of objects, and unsubscribes from events.
-        /// </summary>
-        protected override void Dispose(bool disposing)
-        {
-            base.Dispose(disposing);
-
-            if (disposing)
-            {
-                UnitPrice.DataEdit -= OnDataEdit;
-                Shares.DataEdit -= OnDataEdit;
-                Investments.DataEdit -= OnDataEdit;
-            }
-        }
-
         /// <inheritdoc/>
-        protected override void OnDataEdit(object edited, EventArgs e) 
-            => base.OnDataEdit(edited, new PortfolioEventArgs(Account.Security));
-
-        /// <summary>
-        /// Ensures that events for data edit are subscribed to.
-        /// </summary>
-        public override void SetupEventListening()
-        {
-            UnitPrice.DataEdit += OnDataEdit;
-            Shares.DataEdit += OnDataEdit;
-            Investments.DataEdit += OnDataEdit;
-        }
-
-        private void RemoveEventListening()
-        {
-            UnitPrice.DataEdit -= OnDataEdit;
-            Shares.DataEdit -= OnDataEdit;
-            Investments.DataEdit -= OnDataEdit;
-        }
-
-        /// <inheritdoc/>
-        public override IValueList Copy() 
+        public override IValueList Copy()
             => new Security(AccountType, Names, UnitPrice, Shares, Investments, Trades.ToList());
 
         /// <inheritdoc/>

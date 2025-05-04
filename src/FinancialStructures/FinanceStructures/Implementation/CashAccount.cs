@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 
 using Effanville.Common.Structure.DataStructures;
 using Effanville.FinancialStructures.Database;
@@ -11,10 +11,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
     /// </summary>
     public class CashAccount : ValueList, IExchangeableValueList
     {
-        /// <inheritdoc/>
-        protected override void OnDataEdit(object edited, EventArgs e) 
-            => base.OnDataEdit(edited, new PortfolioEventArgs(Account.BankAccount));
-
         /// <inheritdoc/>
         public override IValueList Copy() => new CashAccount(Names.Copy(), Values);
 
@@ -105,7 +101,7 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             return value;
         }
 
-        private static decimal GetCurrencyValue(DateTime date, IReadOnlyCurrency currency) 
+        private static decimal GetCurrencyValue(DateTime date, IReadOnlyCurrency currency)
             => currency == null ? 1.0m : currency.Value(date)?.Value ?? 1.0m;
     }
 }

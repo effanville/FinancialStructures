@@ -1,5 +1,3 @@
-﻿using System;
-
 using Effanville.Common.Structure.DataStructures;
 using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.NamingStructures;
@@ -11,10 +9,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
     /// </summary>
     public class Currency : ValueList, ICurrency
     {
-        /// <inheritdoc/>
-        protected override void OnDataEdit(object edited, EventArgs e) 
-            => base.OnDataEdit(edited, new PortfolioEventArgs(Account.Currency));
-
         /// <inheritdoc/>
         public string BaseCurrency => Names.Company;
 

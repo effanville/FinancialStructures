@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 
 using Effanville.FinancialStructures.FinanceStructures;
@@ -12,30 +12,30 @@ namespace Effanville.FinancialStructures.Database.Implementation
     /// </summary>
     public partial class Portfolio : IPortfolio
     {
-        private readonly ValueListCollection<ISecurity, Security> _funds = new (
+        private readonly ValueListCollection<ISecurity, Security> _funds = new(
             Account.Security,
             new IValueListFactory<Security>());
-        
-        private readonly ValueListCollection<IExchangeableValueList, CashAccount> _bankAccounts = new (
+
+        private readonly ValueListCollection<IExchangeableValueList, CashAccount> _bankAccounts = new(
             Account.BankAccount,
             new IValueListFactory<CashAccount>());
-        
-        private readonly ValueListCollection<ICurrency, Currency> _currencies = new (
+
+        private readonly ValueListCollection<ICurrency, Currency> _currencies = new(
             Account.Currency,
             new IValueListFactory<Currency>());
-        
-        private readonly ValueListCollection<IValueList, Sector> _benchmarks = new (
+
+        private readonly ValueListCollection<IValueList, Sector> _benchmarks = new(
             Account.Benchmark,
             new IValueListFactory<Sector>());
-        
-        private readonly ValueListCollection<IAmortisableAsset, AmortisableAsset> _assets = new (
+
+        private readonly ValueListCollection<IAmortisableAsset, AmortisableAsset> _assets = new(
             Account.Asset,
             new IValueListFactory<AmortisableAsset>());
 
-        private readonly ValueListCollection<ISecurity, Security> _pensions = new (
+        private readonly ValueListCollection<ISecurity, Security> _pensions = new(
             Account.Pension,
             new IValueListFactory<Security>());
-        
+
         /// <summary>
         /// Flag to state when the user has altered values in the portfolio
         /// after the last save.
@@ -138,7 +138,7 @@ namespace Effanville.FinancialStructures.Database.Implementation
                 IsAlteredSinceSave = false;
             }
         }
-        
+
         public event EventHandler<PortfolioEventArgs> NewPortfolio;
 
         public void OnNewPortfolio(object obj, PortfolioEventArgs e)
@@ -178,15 +178,6 @@ namespace Effanville.FinancialStructures.Database.Implementation
             {
                 security.CleanData();
             }
-        }
-
-        public void WireDataChangedEvents()
-        {
-            _funds.SetupCollectionChangedEvents();
-            _bankAccounts.SetupCollectionChangedEvents();
-            _benchmarks.SetupCollectionChangedEvents();
-            _assets.SetupCollectionChangedEvents();
-            _pensions.SetupCollectionChangedEvents();
         }
     }
 }

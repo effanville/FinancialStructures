@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Xml.Serialization;
 
 using Effanville.Common.Structure.DataStructures;
@@ -10,11 +10,11 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
     /// <summary>
     /// A named list containing values.
     /// </summary>
-    public partial class ValueList : IValueList, IDisposable
+    public partial class ValueList : IValueList
     {
         /// <inheritdoc/>
         public Account AccountType { get; private set; }
-        
+
         /// <inheritdoc/>
         public NameData Names { get; set; }
 
@@ -64,17 +64,17 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// <summary>
         /// default constructor.
         /// </summary>
-        public ValueList() 
+        public ValueList()
             : this(Account.Unknown)
         { }
-        
+
         /// <summary>
         /// default constructor.
         /// </summary>
-        public ValueList(Account account) 
-            : this(account, new NameData()) 
+        public ValueList(Account account)
+            : this(account, new NameData())
         { }
-        
+
         /// <summary>
         /// default constructor.
         /// </summary>
@@ -89,57 +89,15 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             AccountType = Account.Unknown;
             Names = names;
             Values = values;
-            SetupEventListening();
         }
         /// <summary>
         /// default constructor.
         /// </summary>
-        public ValueList(Account account,NameData names, TimeList values)
+        public ValueList(Account account, NameData names, TimeList values)
         {
             AccountType = account;
             Names = names;
             Values = values;
-            SetupEventListening();
-        }
-
-        /// <inheritdoc/>
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        /// <summary>
-        /// Disposes of objects, and unsubscribes from events.
-        /// </summary>
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                Values.DataEdit -= OnDataEdit;
-            }
-        }
-
-        /// <summary>
-        /// Event that controls when data is edited.
-        /// </summary>
-        public event EventHandler<PortfolioEventArgs> DataEdit;
-
-        /// <summary>
-        /// Raises the <see cref="DataEdit"/> event.
-        /// </summary>
-        protected virtual void OnDataEdit(object edited, EventArgs e)
-        {
-            PortfolioEventArgs args = e is PortfolioEventArgs pe ? pe : new PortfolioEventArgs();
-            DataEdit?.Invoke(edited, args);
-        }
-
-        /// <summary>
-        /// Ensures that events for data edit are subscribed to.
-        /// </summary>
-        public virtual void SetupEventListening()
-        {
-            Values.DataEdit += OnDataEdit;
         }
 
         /// <inheritdoc />

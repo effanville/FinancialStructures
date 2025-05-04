@@ -78,7 +78,6 @@ namespace Effanville.FinancialStructures.Persistence
                 portfolioImpl.Clear();
                 database.MyFunds.Set(portfolioImpl);
 
-                portfolioImpl.WireDataChangedEvents();
                 portfolioImpl.Name = fileSystem.Path.GetFileNameWithoutExtension(filePath);
                 portfolioImpl.Saving();
                 _logger?.Info(nameof(BinaryFilePortfolioPersistence), $"Loaded new database from {filePath}");
@@ -129,7 +128,6 @@ namespace Effanville.FinancialStructures.Persistence
                     }
                 }
 
-                portfolioImpl.WireDataChangedEvents();
                 portfolioImpl.Name = fileSystem.Path.GetFileNameWithoutExtension(filePath);
                 portfolioImpl.Saving();
                 _logger?.Info(nameof(BinaryFilePortfolioPersistence), $"Loaded new database from {filePath}");

@@ -1,5 +1,3 @@
-﻿using System;
-
 using Effanville.Common.Structure.DataStructures;
 using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.NamingStructures;
@@ -38,21 +36,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation.Asset
         {
             Debt = debt;
             Payments = payments;
-        }
-
-        /// <inheritdoc/>
-        protected override void OnDataEdit(object edited, EventArgs e)
-        {
-            base.OnDataEdit(edited, new PortfolioEventArgs(Account.Asset));
-        }
-
-        /// <summary>
-        /// Ensures that events for data edit are subscribed to.
-        /// </summary>
-        public override void SetupEventListening()
-        {
-            base.SetupEventListening();
-            Debt.DataEdit += OnDataEdit;
         }
 
         /// <inheritdoc/>

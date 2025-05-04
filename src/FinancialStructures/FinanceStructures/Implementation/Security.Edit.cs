@@ -102,7 +102,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             finally
             {
                 SecurityTrades.Sort();
-                OnDataEdit(SecurityTrades, new EventArgs());
             }
         }
 
@@ -183,7 +182,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             finally
             {
                 EnsureDataConsistency();
-                OnDataEdit(SecurityTrades, EventArgs.Empty);
             }
         }
 
@@ -210,8 +208,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
 
                 EnsureDataConsistency();
             }
-
-            OnDataEdit(SecurityTrades, new EventArgs());
         }
 
         /// <summary>
@@ -219,7 +215,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// </summary>
         internal void EnsureDataConsistency()
         {
-            RemoveEventListening();
             CleanData();
 
             var trades = Trades.ToList();
@@ -291,8 +286,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
                     }
                 }
             }
-
-            SetupEventListening();
         }
 
         /// <summary>
@@ -303,7 +296,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
         /// </summary>
         internal void EnsureOnLoadDataConsistency()
         {
-            RemoveEventListening();
             CleanData();
             SecurityTrades.Sort();
             for (int index = 0; index < SecurityTrades.Count; index++)
@@ -375,8 +367,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
                     SecurityTrades.Add(new SecurityTrade(TradeType.ShareReset, Names, shareValue.Day, numberShares, UnitPrice.ValueOnOrBefore(shareValue.Day).Value, 0.0m));
                 }
             }
-
-            SetupEventListening();
         }
     }
 }

@@ -102,7 +102,6 @@ public class ValueListCollection<TInterface, TImplementation>
             if (_collectionDictionary.TryAdd(newObject.Names.ToTwoName(), newObject))
             {
                 result = true;
-                newObject.DataEdit += OnCollectionItemChanged;
             }
         }
         finally
@@ -166,14 +165,10 @@ public class ValueListCollection<TInterface, TImplementation>
             TwoName nameToRemove = new TwoName(name.Company, name.Name);
             if (_collectionDictionary.TryGetValue(nameToRemove, out TImplementation list))
             {
-                list.DataEdit -= OnCollectionItemChanged;
             }
 
             if (_collectionDictionary.Remove(nameToRemove))
-
             {
-
-
                 OnCollectionChanged(this, new PortfolioEventArgs(_account));
                 return UpdateResult.Delete((_account, name.ToNameData()));
             }
@@ -221,23 +216,6 @@ public class ValueListCollection<TInterface, TImplementation>
         try
         {
             _collectionDictionary = values._collectionDictionary;
-        }
-        finally
-        {
-            _collectionLock.ExitWriteLock();
-        }
-    }
-
-    public void SetupCollectionChangedEvents()
-    {
-        _collectionLock.EnterWriteLock();
-        try
-        {
-            foreach (TImplementation security in _collectionDictionary.Values)
-            {
-                security.DataEdit += OnCollectionItemChanged;
-                security.SetupEventListening();
-            }
         }
         finally
         {

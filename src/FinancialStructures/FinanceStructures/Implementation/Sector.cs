@@ -1,5 +1,3 @@
-using System;
-
 using Effanville.Common.Structure.DataStructures;
 using Effanville.FinancialStructures.Database;
 using Effanville.FinancialStructures.NamingStructures;
@@ -17,10 +15,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
     /// </remarks>
     public class Sector : ValueList, IValueList
     {
-        /// <inheritdoc/>
-        protected override void OnDataEdit(object edited, EventArgs e) 
-            => base.OnDataEdit(edited, new PortfolioEventArgs(Account.Benchmark));
-
         /// <summary>
         /// Empty constructor.
         /// </summary>

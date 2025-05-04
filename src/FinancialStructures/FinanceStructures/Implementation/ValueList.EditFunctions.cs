@@ -22,7 +22,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
                 NameData oldName = Names.Copy();
 
                 Names = newNames;
-                OnDataEdit(this, new EventArgs());
                 return UpdateResult.Change(oldName, Names.Copy());
             }
 
@@ -88,7 +87,6 @@ namespace Effanville.FinancialStructures.FinanceStructures.Implementation
             if (IsSectorLinked(sectorName.Name))
             {
                 _ = Names.Sectors.Remove(sectorName.Name);
-                OnDataEdit(this, new EventArgs());
                 return true;
             }
 
