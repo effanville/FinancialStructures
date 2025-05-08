@@ -29,9 +29,10 @@ public partial class Portfolio
             _ => false
         };
 
+        bool needsNewKey = newTwoName.IsEqualTo(oldTwoName);
         return new UpdateResult<(Account, NameData)>
         {
-            Success = outcome.Success && keyUpdate,
+            Success = outcome.Success && (needsNewKey ? true : keyUpdate),
             IsAdd = outcome.IsAdd,
             IsChange = outcome.IsChange,
             IsDelete = outcome.IsDelete,
