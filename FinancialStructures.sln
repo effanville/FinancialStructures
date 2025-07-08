@@ -10,10 +10,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{8989B308-837A-402C-BE70-82764592AC9C}"
 	ProjectSection(SolutionItems) = preProject
+		build.config = build.config
 		Directory.Build.props = Directory.Build.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_build", "BuildProcess\source\_build.csproj", "{03BEDBA1-8BB2-4F05-AA0A-787E66201EB4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "_build", "BuildProcess\src\_build.csproj", "{03BEDBA1-8BB2-4F05-AA0A-787E66201EB4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{1C2E5605-09C7-48B7-BA9A-2CE96ABA232D}"
 	ProjectSection(SolutionItems) = preProject
@@ -52,9 +53,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{03BEDBA1-8BB2-4F05-AA0A-787E66201EB4}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{03BEDBA1-8BB2-4F05-AA0A-787E66201EB4}.Debug|x64.Build.0 = Debug|Any CPU
 		{03BEDBA1-8BB2-4F05-AA0A-787E66201EB4}.Release|x64.ActiveCfg = Release|Any CPU
-		{03BEDBA1-8BB2-4F05-AA0A-787E66201EB4}.Release|x64.Build.0 = Release|Any CPU
 		{8DEA4D0A-0ED4-41F8-A647-0168274B2A60}.Debug|x64.ActiveCfg = Debug|x64
 		{8DEA4D0A-0ED4-41F8-A647-0168274B2A60}.Debug|x64.Build.0 = Debug|x64
 		{8DEA4D0A-0ED4-41F8-A647-0168274B2A60}.Release|x64.ActiveCfg = Release|x64
