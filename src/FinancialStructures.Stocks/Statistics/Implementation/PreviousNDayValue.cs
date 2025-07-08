@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Effanville.FinancialStructures.Stocks.Statistics.Implementation
 {
@@ -33,7 +34,8 @@ namespace Effanville.FinancialStructures.Stocks.Statistics.Implementation
         /// <inheritdoc/>
         public double Calculate(DateTime date, IStock stock)
         {
-            return Convert.ToDouble(stock.Values(date, BurnInTime, 0, DataType).First());
+            List<decimal> values = stock.Values(date, BurnInTime, 0, DataType);
+            return Convert.ToDouble(values.First() / values.Last());
         }
     }
 }
