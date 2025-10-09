@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO.Abstractions;
+using System.Linq;
 using System.Threading.Tasks;
 
 using Effanville.Common.Structure.Reporting;
@@ -11,6 +12,15 @@ using Nager.Date;
 
 namespace Effanville.FinancialStructures.Stocks
 {
+    public static class StockExchangeExtensions
+    {
+        public static DateTime StartDate(this IStockExchange exchange)
+            => exchange.Stocks.Min(x => x.Valuations.FirstOrDefault().Start);
+
+        public static int NumberValuations(this IStockExchange exchange)
+            => exchange.Stocks.Min(x => x.Valuations.Count);
+    }
+
     /// <summary>
     /// Contains the contract for a Stock exchange.
     /// </summary>
@@ -20,7 +30,7 @@ namespace Effanville.FinancialStructures.Stocks
         /// The stock exchange name, eg London stock exchange.
         /// </summary>
         string ExchangeIdentifier { get; }
-        
+
         /// <summary>
         /// The stock exchange name, eg London stock exchange.
         /// </summary>
@@ -40,8 +50,8 @@ namespace Effanville.FinancialStructures.Stocks
         /// The stocks that are part of this exchange.
         /// </summary>
         List<Stock> Stocks { get; }
-        
-        TimeOnly ExchangeOpen { get; set; } 
+
+        TimeOnly ExchangeOpen { get; set; }
         TimeOnly ExchangeClose { get; set; }
         DateTime ExchangeOpenInUtc(DateTime date);
 

@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 
 namespace Effanville.FinancialStructures.Stocks.Implementation
 {
+    public interface ICandle { }
     /// <summary>
     /// Class containing all data pertaining to a stock.
     /// </summary>
-    public class StockDay : IComparable<StockDay>
+    public class StockDay : IComparable<StockDay>, ICandle
     {
         /// <summary>
         /// The start time of the interval this data is about.
