@@ -1,11 +1,13 @@
 using System;
 using System.Globalization;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Effanville.Common.Structure.Reporting;
 using Effanville.Common.Structure.WebAccess;
 using Effanville.FinancialStructures.Download.Implementation;
 using Effanville.FinancialStructures.Stocks.Download.Yahoo;
 using Effanville.FinancialStructures.Stocks.Implementation;
+using Microsoft.EntityFrameworkCore;
 
 namespace Effanville.FinancialStructures.Stocks.Download
 {
@@ -96,8 +98,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
 
             if (lines.Length == 1 && lines[0].StartsWith("{"))
             {
-                YahooStockHistoryData obj =
-                    System.Text.Json.JsonSerializer.Deserialize<YahooStockHistoryData>(lines[0]);
+                YahooStockHistoryData obj = JsonSerializer.Deserialize(lines[0], YahooStockHistoryDataContext.Default.YahooStockHistoryData);
                 if (obj != null)
                 {
                     if (obj.chart.result == null && obj.chart.error != null)
