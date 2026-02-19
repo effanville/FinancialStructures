@@ -78,7 +78,7 @@ namespace Effanville.FinancialStructures.Stocks.Cli
             _startDateOption = new CommandOption<DateTime>(
                 "end",
                 "The start date to add data from.",
-                DateTime.Today.AddDays(-30));
+                DateTime.Today.AddDays(-90));
             Options.Add(_startDateOption);
             _endDateOption = new CommandOption<DateTime>(
                 "end",

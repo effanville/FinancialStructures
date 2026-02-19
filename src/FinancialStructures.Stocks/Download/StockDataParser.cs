@@ -23,7 +23,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
             foreach (var exchange in context.Exchanges)
             {
                 var historicalStocks = exchange.Stocks
-                    .Where(st => string.Equals(indexName, st.Fundamentals.Last().Value.Index));
+                    .Where(st => string.Equals(indexName, st.Fundamentals.LastOrDefault().Value?.Index));
                 currentIndexInstruments.AddRange(historicalStocks);
             }
 
@@ -34,8 +34,8 @@ namespace Effanville.FinancialStructures.Stocks.Download
                 string[] inputs = line.Split(',');
                 if (inputs.Length == 7)
                 {
-                    HistoricalExchange exchange = context.Exchanges.Single(ex => ex.ExchangeIdentifier == inputs[4]);
-                    if (exchange.TryGetStock(inputs[0], inputs[2], out HistoricalStock inst))
+                    HistoricalExchange exchange = context.Exchanges.SingleOrDefault(ex => ex.ExchangeIdentifier == inputs[4]);
+                    if (exchange?.TryGetStock(inputs[0], inputs[2], out HistoricalStock inst) ?? false)
                     {
                         inst.UpdateName(validFrom, line, ',');
                         _ = removedInstruments.Remove(inst);
@@ -263,7 +263,9 @@ namespace Effanville.FinancialStructures.Stocks.Download
                         logger);
                 }
 
-                var data = inst.Fundamentals.Last().Value;
+                var data = inst.Fundamentals.LastOrDefault().Value;
+                if (data.Index != indexName)
+                    data.Index = indexName;
 
                 var values = await FundamentalDataDownloader.GetExtraData(
                     inst.Name.Last().Value.Url,
@@ -361,13 +363,13 @@ namespace Effanville.FinancialStructures.Stocks.Download
                     }
                 }
 
-                if (!data.Differs(dict))
+                if (!data?.Differs(dict) ?? false)
                 {
                     continue;
                 }
 
                 {
-                    var newData = new StockFundamentalData(data);
+                    var newData = data != null ? new StockFundamentalData(data) : new StockFundamentalData();
                     if (dict.TryGetValue("Market cap", out double marketCap))
                     {
                         newData.MarketCap = marketCap;
