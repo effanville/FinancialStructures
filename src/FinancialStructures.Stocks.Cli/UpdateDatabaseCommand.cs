@@ -60,6 +60,8 @@ namespace Effanville.FinancialStructures.Stocks.Cli
             _logger = logger;
             _reportLogger = reportLogger;
             _config = config;
+            _persistence = persistence;
+            _builder = builder;
             _dbFilePathOption = new CommandOption<string>(
                 "filePath",
                 "FilePath to the stock database to add data to.",

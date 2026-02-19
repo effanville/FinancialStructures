@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 using Effanville.Common.Console.DependencyInjection;
 using Effanville.Common.Structure.WebAccess;
+using Effanville.FinancialStructures.Stocks.Download;
 using Effanville.FinancialStructures.Stocks.HistoricalRepository;
 using Effanville.FinancialStructures.Stocks.Persistence;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,7 @@ internal static class Program
     {
         HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
         builder.Services.AddScoped<WebDownloader>()
+            .AddScoped<IStockDownloaderFactory, StockPriceDownloaderFactory>()
             .AddScoped<HistoricalMarketsBuilder>()
             .AddScoped<IHistoricalMarketsPersistence, SqliteHistoricalMarketsPersistence>();
         IHost host = builder.SetupConsole(
