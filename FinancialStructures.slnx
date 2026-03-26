@@ -1,0 +1,27 @@
+<Solution>
+  <Folder Name="/Build/">
+    <File Path="build.config" />
+    <File Path="Directory.Build.props" />
+    <Project Path="BuildProcess/src/_build.csproj">
+      <Build Project="false" />
+    </Project>
+  </Folder>
+  <Folder Name="/Common/">
+    <File Path="Common/Directory.Build.props" />
+    <Project Path="Common/src/Common.Console/Common.Console.csproj" />
+    <Project Path="Common/src/Common.ReportWriting/Common.ReportWriting.csproj" />
+    <Project Path="Common/src/Common.Structure/Common.Structure.csproj" />
+    <Project Path="Common/test/Common.Console.Tests/Common.Console.Tests.csproj" />
+    <Project Path="Common/test/Common.ReportWriting.Unit.Tests/Common.ReportWriting.Unit.Tests.csproj" />
+    <Project Path="Common/test/Common.Structure.Tests/Common.Structure.Tests.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="global.json" />
+  </Folder>
+  <Project Path="src/FinancialStructures.Stocks.Cli/FinancialStructures.Stocks.Cli.csproj" />
+  <Project Path="src/FinancialStructures.Stocks/FinancialStructures.Stocks.csproj" />
+  <Project Path="src/FinancialStructures/FinancialStructures.csproj" />
+  <Project Path="test/FinancialStructures.Stocks.Tests/FinancialStructures.Stocks.Tests.csproj" />
+  <Project Path="test/FinancialStructures.Tests/FinancialStructures.Tests.csproj" />
+</Solution>
