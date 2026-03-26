@@ -25,7 +25,7 @@ namespace Effanville.FinancialStructures.Tests.Database
         [TestCase("https://uk.finance.yahoo.com/quote/drx.L", "GBP", 2, 10)]
         [TestCase("https://uk.finance.yahoo.com/quote/hwdn.L", "GBP", 1, 15)]
         [TestCase("https://uk.finance.yahoo.com/quote/JXN?p=JXN&.tsrc=fin-srch", "GBP", 30, 300)]
-        [TestCase("https://uk.finance.yahoo.com/quote/hgen.L", "GBP", 0.1, 10)]
+        [TestCase("https://uk.finance.yahoo.com/quote/hgen.L", "GBP", 0.01, 1)]
         [TestCase("https://markets.ft.com/data/funds/tearsheet/summary?s=gb00b4khn986:gbx", "GBP", 1, 10)]
         [TestCase("https://uk.finance.yahoo.com/quote/^FVX", "GBP", 1, 10)]
         [TestCase("https://uk.finance.yahoo.com/quote/USDGBP=X", "GBP", 0.2, 10)]
