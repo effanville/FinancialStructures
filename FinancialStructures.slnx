@@ -1,6 +1,7 @@
 <Solution>
   <Folder Name="/Build/">
     <File Path="build.config" />
+    <File Path="Directory.Packages.props" />
     <File Path="Directory.Build.props" />
     <Project Path="BuildProcess/src/_build.csproj">
       <Build Project="false" />
@@ -8,6 +9,7 @@
   </Folder>
   <Folder Name="/Common/">
     <File Path="Common/Directory.Build.props" />
+    <File Path="Common/Directory.Packages.props" />
     <Project Path="Common/src/Common.Console/Common.Console.csproj" />
     <Project Path="Common/src/Common.ReportWriting/Common.ReportWriting.csproj" />
     <Project Path="Common/src/Common.Structure/Common.Structure.csproj" />
