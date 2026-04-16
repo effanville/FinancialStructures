@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO.Abstractions;
 using System.Threading.Tasks;
 
 using Effanville.Common.Structure.Reporting;
@@ -196,53 +195,6 @@ namespace Effanville.FinancialStructures.Stocks.Implementation
                     stock.Sort();
                 }
             }
-        }
-
-        /// <inheritdoc/>
-        public void Configure(string stockFilePath, IReportLogger logger = null)
-            => Configure(stockFilePath, new FileSystem(), logger);
-
-        /// <inheritdoc/>
-        public void Configure(string stockFilePath, IFileSystem fileSystem, IReportLogger logger = null)
-        {
-            string[] fileContents = Array.Empty<string>();
-            try
-            {
-                fileContents = fileSystem.File.ReadAllLines(stockFilePath);
-            }
-            catch (Exception ex)
-            {
-                logger?.Error(ReportLocation.AddingData.ToString(),
-                    $"Failed to read from file located at {stockFilePath}: {ex.Message}.");
-            }
-
-            if (fileContents.Length == 0)
-            {
-                logger?.Error(ReportLocation.AddingData.ToString(),
-                    "Nothing in file selected, but expected stock company, name, url data.");
-                return;
-            }
-
-            foreach (string line in fileContents)
-            {
-                string[] inputs = line.Split(',');
-                AddStock(inputs, logger);
-            }
-
-            logger?.Log(ReportType.Information, ReportLocation.AddingData.ToString(),
-                $"Configured StockExchange from file {stockFilePath}.");
-        }
-
-        private void AddStock(string[] parameters, IReportLogger logger = null)
-        {
-            if (parameters.Length != 5)
-            {
-                logger?.Error(ReportLocation.AddingData.ToString(), "Insufficient Data in line to add Stock");
-                return;
-            }
-
-            Stock stock = new Stock(parameters[0], parameters[1], parameters[2], parameters[3], parameters[4]);
-            Stocks.Add(stock);
         }
     }
 }

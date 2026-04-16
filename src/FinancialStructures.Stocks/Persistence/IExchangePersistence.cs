@@ -1,8 +1,8 @@
 using System.IO.Abstractions;
 
-using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.Persistence;
 using Effanville.FinancialStructures.Stocks.Implementation;
+using Microsoft.Extensions.Logging;
 
 namespace Effanville.FinancialStructures.Stocks.Persistence
 {
@@ -11,10 +11,10 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
         private readonly XmlExchangePersistence _xmlExchangePersistence;
         private readonly SqliteExchangePersistence _sqliteExchangePersistence;
 
-        public ExchangePersistence(IReportLogger logger)
+        public ExchangePersistence(ILoggerFactory loggerFactory)
         {
-            _xmlExchangePersistence = new XmlExchangePersistence(logger);
-            _sqliteExchangePersistence = new SqliteExchangePersistence(logger);
+            _xmlExchangePersistence = new XmlExchangePersistence(loggerFactory.CreateLogger<XmlExchangePersistence>());
+            _sqliteExchangePersistence = new SqliteExchangePersistence(loggerFactory.CreateLogger<SqliteExchangePersistence>(), loggerFactory);
         }
         public IStockExchange Load(PersistenceOptions options)
         {

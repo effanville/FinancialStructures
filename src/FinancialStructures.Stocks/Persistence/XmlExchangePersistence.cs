@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using System.IO.Abstractions;
 
 using Effanville.Common.Structure.FileAccess;
-using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.Persistence;
 using Effanville.FinancialStructures.Stocks.Implementation;
 using Effanville.FinancialStructures.Stocks.Persistence.Xml;
-
+using Microsoft.Extensions.Logging;
 using Nager.Date;
 
 namespace Effanville.FinancialStructures.Stocks.Persistence
 {
     public sealed class XmlExchangePersistence : IPersistence<IStockExchange>
     {
-        private readonly IReportLogger _logger;
+        private readonly ILogger<XmlExchangePersistence> _logger;
 
-        public XmlExchangePersistence(IReportLogger logger) => _logger = logger;
+        public XmlExchangePersistence(ILogger<XmlExchangePersistence> logger) => _logger = logger;
 
         public IStockExchange Load(PersistenceOptions options)
         {
@@ -32,10 +31,7 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
         {
             if (options is not XmlFilePersistenceOptions xmlOptions)
             {
-                _logger?.Log(
-                    ReportType.Information,
-                    ReportLocation.Loading.ToString(),
-                    "Options for loading from Xml file not of correct type.");
+                _logger.LogInformation("Options for loading from Xml file not of correct type.");
                 return false;
             }
 
@@ -43,7 +39,7 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
             string filePath = xmlOptions.FilePath;
             if (!fileSystem.File.Exists(filePath))
             {
-                _logger?.Info(nameof(XmlExchangePersistence), "Loaded Empty New StockExchange.");
+                _logger.LogInformation("Loaded Empty New StockExchange.");
                 return false;
             }
 
@@ -58,7 +54,7 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                 out _);
             if (database != null)
             {
-                _logger?.Info(nameof(XmlExchangePersistence), $"Loaded StockExchange from {filePath}.");
+                _logger.LogInformation($"Loaded StockExchange from {filePath}.");
                 exchange.Name = database.Name;
                 if (Enum.TryParse<CountryCode>(database.CountryCode, out CountryCode code))
                 {
@@ -106,7 +102,7 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
         {
             if (options is not XmlFilePersistenceOptions xmlOptions)
             {
-                _logger?.Info(nameof(XmlExchangePersistence), "Options for loading from Xml file not of correct type.");
+                _logger.LogInformation("Options for loading from Xml file not of correct type.");
                 return false;
             }
 
@@ -114,7 +110,7 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
             string filePath = xmlOptions.FilePath;
             if (exchange is not StockExchange stockExchange)
             {
-                _logger?.Error(nameof(XmlExchangePersistence), "Attempted to save a StockExchange that was not of the correct type.");
+                _logger.LogInformation("Attempted to save a StockExchange that was not of the correct type.");
                 return false;
             }
 
@@ -154,10 +150,10 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
             XmlFileAccess.WriteToXmlFile(fileSystem, filePath, xmlStockExchange, out string error);
             if (error != null)
             {
-                _logger?.Error(nameof(XmlExchangePersistence), error);
+                _logger.LogError(error);
             }
 
-            _logger?.Info(nameof(XmlExchangePersistence), $"Saved StockExchange at {filePath}");
+            _logger.LogInformation($"Saved StockExchange at {filePath}");
             return true;
         }
     }

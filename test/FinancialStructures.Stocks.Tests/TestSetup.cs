@@ -1,8 +1,7 @@
 using System.IO.Abstractions;
 
-using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.Stocks.Persistence.Database;
-
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 
 namespace Effanville.FinancialStructures.Stocks.Tests
@@ -13,12 +12,11 @@ namespace Effanville.FinancialStructures.Stocks.Tests
         [Test]
         public void SetupDBFromWeb()
         {
-            var logger = new LogReporter(null, true);
             var fileSystem = new FileSystem();
-            var dbContext = new DatabaseFactory()
+            var dbContext = new DatabaseFactory(new LoggerFactory())
                 .GetDbBuilder(fileSystem, "C:\\dev\\SampleDB2.db")
                 .EnsureCreated()
-                .WithDataSources(logger);
+                .WithDataSources();
         }
     }
 }

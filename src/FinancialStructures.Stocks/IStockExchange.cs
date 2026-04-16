@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.IO.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -91,20 +90,6 @@ namespace Effanville.FinancialStructures.Stocks
         /// Ensures that the data in the StockExchange is valid.
         /// </summary>
         bool CheckValidity();
-
-        /// <summary>
-        /// Instantiates a <see cref="StockExchange"/> from a file
-        /// where each line is
-        /// Ticker, Company,Name,Url
-        /// </summary>
-        void Configure(string stockFilePath, IReportLogger logger = null);
-
-        /// <summary>
-        /// Instantiates a <see cref="StockExchange"/> from a file
-        /// where each line is
-        /// Ticker, Company,Name,Url
-        /// </summary>
-        void Configure(string stockFilePath, IFileSystem fileSystem, IReportLogger logger = null);
 
         /// <summary>
         /// Downloads data for the stock exchange between the dates provided.

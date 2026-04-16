@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.NamingStructures;
 using Effanville.FinancialStructures.Persistence;
 using Effanville.FinancialStructures.Stocks.HistoricalRepository;
@@ -11,7 +9,7 @@ using Effanville.FinancialStructures.Stocks.Persistence.Database;
 using Effanville.FinancialStructures.Stocks.Persistence.Database.Models;
 
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Logging;
 using Nager.Date;
 
 namespace Effanville.FinancialStructures.Stocks.Persistence
@@ -19,21 +17,24 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
     public class SqliteHistoricalMarketsPersistence : IHistoricalMarketsPersistence
     {
 
-        private readonly IReportLogger _logger;
-        public SqliteHistoricalMarketsPersistence(IReportLogger logger)
+        private readonly ILogger<SqliteHistoricalMarketsPersistence> _logger;
+        private readonly ILoggerFactory _loggerFactory;
+
+        public SqliteHistoricalMarketsPersistence(ILogger<SqliteHistoricalMarketsPersistence> logger, ILoggerFactory loggerFactory)
         {
             _logger = logger;
+            _loggerFactory = loggerFactory;
         }
 
         public HistoricalMarkets Load(PersistenceOptions options)
         {
             if (options is not SqlitePersistenceOptions sqliteOptions)
             {
-                _logger?.Info(nameof(SqliteHistoricalMarketsPersistence), "Options for loading from file not of correct type.");
+                _logger?.LogInformation("Options for loading from file not of correct type.");
                 return null;
             }
 
-            var dbContext = new DatabaseFactory().Create(sqliteOptions.FileSystem, sqliteOptions.FilePath);
+            var dbContext = new DatabaseFactory(_loggerFactory).Create(sqliteOptions.FileSystem, sqliteOptions.FilePath);
 
             if (dbContext == null)
             {
@@ -47,7 +48,7 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
             {
                 if (!Enum.TryParse<CountryCode>(exchange.CountryCode, out var code))
                 {
-                    _logger?.Error(nameof(SqliteHistoricalMarketsPersistence), "Country code not of correct format.");
+                    _logger.LogError("Country code not of correct format.");
                     continue;
                 }
 
@@ -76,9 +77,7 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                         x.ExchangeIdentifier == exchange.ExchangeIdentifier);
                 if (historicalExchange == null)
                 {
-                    _logger?.Error(
-                        $"{nameof(SqliteHistoricalMarketsPersistence)}.{nameof(Load)}",
-                        $"Could not find exchange for stock {instrument.Ric}.");
+                    _logger.LogError($"Could not find exchange for stock {instrument.Ric}.");
                     continue;
                 }
 
@@ -140,16 +139,13 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
         {
             if (options is not SqlitePersistenceOptions sqliteOptions)
             {
-                _logger?.Log(
-                    ReportType.Information,
-                    ReportLocation.Loading.ToString(),
-                    "Options for loading from Xml file not of correct type.");
+                _logger?.LogInformation("Options for loading from Xml file not of correct type.");
                 return false;
             }
 
             string directory = sqliteOptions.FileSystem.Path.GetDirectoryName(sqliteOptions.FilePath);
             sqliteOptions.FileSystem.Directory.CreateDirectory(directory);
-            var dbBuilder = new DatabaseFactory()
+            var dbBuilder = new DatabaseFactory(_loggerFactory)
                 .GetDbBuilder(sqliteOptions.FileSystem, sqliteOptions.FilePath)
                 .EnsureCreated();
 
@@ -171,7 +167,7 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                 exchanges.Add(exchangeData);
             }
 
-            dbBuilder.WithExchanges(exchanges, _logger);
+            dbBuilder.WithExchanges(exchanges);
 
             // Now add all the instrument data.
             foreach (HistoricalExchange exchange in historicalMarkets.Exchanges)
@@ -256,8 +252,7 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
 
                     dbBuilder.WithInstrumentHistory(instrumentNameData,
                         instrumentData,
-                        priceData,
-                        _logger);
+                        priceData);
                 }
             }
 

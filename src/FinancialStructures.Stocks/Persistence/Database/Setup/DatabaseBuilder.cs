@@ -1,18 +1,20 @@
 using System.Collections.Generic;
 using System.IO.Abstractions;
 
-using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.Stocks.Persistence.Database.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Effanville.FinancialStructures.Stocks.Persistence.Database.Setup
 {
     public sealed class DatabaseBuilder
     {
+        private readonly ILogger<DatabaseBuilder> _logger;
         private readonly StockExchangeDbContext _context;
 
-        public DatabaseBuilder(StockExchangeDbContext context)
+        public DatabaseBuilder(ILogger<DatabaseBuilder> logger, StockExchangeDbContext context)
         {
             _context = context;
+            _logger = logger;
         }
 
         public StockExchangeDbContext GetInstance()
@@ -24,20 +26,21 @@ namespace Effanville.FinancialStructures.Stocks.Persistence.Database.Setup
             return this;
         }
 
-        public DatabaseBuilder WithDataSources(IReportLogger logger = null)
+        public DatabaseBuilder WithDataSources()
         {
-            DataSourceData.Configure(_context, logger);
+            int numberChanges = DataSourceData.Configure(_context);
+
+            _logger?.LogInformation($"Added {numberChanges} into database.");
             return this;
         }
 
-        public DatabaseBuilder WithExchangesFromFile(string filePath, IFileSystem fileSystem,
-            IReportLogger logger = null)
+        public DatabaseBuilder WithExchangesFromFile(string filePath, IFileSystem fileSystem)
         {
-            ExchangeData.Configure(_context, filePath, fileSystem, logger);
+            ExchangeData.Configure(_context, filePath, fileSystem, _logger);
             return this;
         }
 
-        public DatabaseBuilder WithExchanges(IEnumerable<Exchange> exchanges, IReportLogger logger = null)
+        public DatabaseBuilder WithExchanges(IEnumerable<Exchange> exchanges)
         {
             foreach (var exchange in exchanges)
             {
@@ -53,8 +56,7 @@ namespace Effanville.FinancialStructures.Stocks.Persistence.Database.Setup
         public DatabaseBuilder WithInstrument(
             Instrument instrument,
             InstrumentData fundamentalData,
-            IEnumerable<InstrumentPriceData> priceData,
-            IReportLogger logger = null)
+            IEnumerable<InstrumentPriceData> priceData)
         {
             if (instrument != null)
             {
@@ -94,8 +96,7 @@ namespace Effanville.FinancialStructures.Stocks.Persistence.Database.Setup
         public DatabaseBuilder WithInstrumentHistory(
             IEnumerable<Instrument> instruments,
             IEnumerable<InstrumentData> fundamentalData,
-            IEnumerable<InstrumentPriceData> priceData,
-            IReportLogger logger = null)
+            IEnumerable<InstrumentPriceData> priceData)
         {
             if (instruments != null)
             {

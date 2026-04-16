@@ -2,13 +2,14 @@ using System;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
-
+using Castle.Core.Logging;
 using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.NamingStructures;
 using Effanville.FinancialStructures.Persistence;
 using Effanville.FinancialStructures.Stocks.Implementation;
 using Effanville.FinancialStructures.Stocks.Persistence;
-
+using Microsoft.Extensions.Logging;
+using NSubstitute;
 using NUnit.Framework;
 
 namespace Effanville.FinancialStructures.Stocks.Tests
@@ -44,14 +45,15 @@ namespace Effanville.FinancialStructures.Stocks.Tests
             }
 
             var logger = new LogReporter(reportAction);
+            var mockLogger = Substitute.For<ILogger<XmlExchangePersistence>>();
             var fileSystem = new MockFileSystem();
 
             fileSystem.AddFile(filePath, db);
 
             var startDate = new DateTime(2010, 1, 1);
             var endDate = new DateTime(2023, 1, 1);
-            var persistence = new XmlExchangePersistence(logger);
-            var exchange = persistence.Load(new XmlFilePersistenceOptions(filePath, fileSystem, "1.0.0.0"));
+            var persistence = new XmlExchangePersistence(mockLogger);
+            IStockExchange exchange = persistence.Load(new XmlFilePersistenceOptions(filePath, fileSystem, "1.0.0.0"));
             exchange.Download(startDate, endDate, logger).Wait();
             persistence.Save(exchange, new XmlFilePersistenceOptions("c:/temp/example2.xml", fileSystem, "1.0.0.0"));
         }
@@ -68,13 +70,14 @@ namespace Effanville.FinancialStructures.Stocks.Tests
             }
 
             var logger = new LogReporter(reportAction);
+            var mockLogger = Substitute.For<ILogger<XmlExchangePersistence>>();
             var fileSystem = new MockFileSystem();
 
             fileSystem.AddFile(filePath, db);
 
             var startDate = new DateTime(2010, 1, 1);
             var endDate = new DateTime(2020, 1, 1);
-            var persistence = new XmlExchangePersistence(logger);
+            var persistence = new XmlExchangePersistence(mockLogger);
             IStockExchange exchange = persistence.Load(new XmlFilePersistenceOptions(filePath, fileSystem, "1.0.0.0"));
             var stock = exchange.Stocks.First();
             stock.AddValue(new DateTime(2022, 1, 1), 12, 12, 12, 12, 1444);
@@ -101,6 +104,7 @@ namespace Effanville.FinancialStructures.Stocks.Tests
             }
 
             var logger = new LogReporter(reportAction, saveInternally: true);
+            var mockLogger = Substitute.For<ILogger<SqliteExchangePersistence>>();
             var testDbPath = fileSystem.Path.Combine(ExampleDatabaseLocation, "test.db");
             var exchange = new StockExchange();
             exchange.ExchangeIdentifier = "LSE";
@@ -109,7 +113,7 @@ namespace Effanville.FinancialStructures.Stocks.Tests
             stock.Name = new NameData() { Ric = "BARC.L", Company = "Barclays", Exchange = "LSE" };
             stock.Valuations.Add(new StockDay(new DateTime(2023, 1, 1, 9, 0, 0), 23, 24, 22, 23.5m, 100000));
             exchange.Stocks.Add(stock);
-            var sqlitePersistence = new SqliteExchangePersistence(logger);
+            var sqlitePersistence = new SqliteExchangePersistence(mockLogger, new LoggerFactory());
             sqlitePersistence.Save(exchange, new SqlitePersistenceOptions(testDbPath, new FileSystem(), "1.0.0.0"));
         }
     }

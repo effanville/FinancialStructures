@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.NamingStructures;
 using Effanville.FinancialStructures.Persistence;
 using Effanville.FinancialStructures.Stocks.Implementation;
@@ -10,16 +9,21 @@ using Effanville.FinancialStructures.Stocks.Persistence.Database;
 using Effanville.FinancialStructures.Stocks.Persistence.Database.Models;
 
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Logging;
 using Nager.Date;
 
 namespace Effanville.FinancialStructures.Stocks.Persistence
 {
     public sealed class SqliteExchangePersistence : IPersistence<IStockExchange>
     {
-        private readonly IReportLogger _logger;
+        private readonly ILogger<SqliteExchangePersistence> _logger;
+        private readonly ILoggerFactory _loggerFactory;
 
-        public SqliteExchangePersistence(IReportLogger logger) => _logger = logger;
+        public SqliteExchangePersistence(ILogger<SqliteExchangePersistence> logger, ILoggerFactory loggerFactory)
+        {
+            _logger = logger;
+            _loggerFactory = loggerFactory;
+        }
 
         public IStockExchange Load(PersistenceOptions options)
         {
@@ -36,7 +40,7 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
         {
             if (options is not SqlitePersistenceOptions sqliteOptions)
             {
-                _logger?.Info(nameof(SqliteExchangePersistence), "Options for loading from Xml file not of correct type.");
+                _logger.LogInformation("Options for loading from Xml file not of correct type.");
                 return false;
             }
 
@@ -45,7 +49,7 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                 return false;
             }
 
-            StockExchangeDbContext dbContext = new DatabaseFactory().Create(sqliteOptions.FileSystem, sqliteOptions.FilePath);
+            StockExchangeDbContext dbContext = new DatabaseFactory(_loggerFactory).Create(sqliteOptions.FileSystem, sqliteOptions.FilePath);
 
             if (dbContext == null)
             {
@@ -104,13 +108,13 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
         {
             if (options is not SqlitePersistenceOptions sqliteOptions)
             {
-                _logger?.Error(nameof(SqliteExchangePersistence), "Options for loading from Xml file not of correct type.");
+                _logger.LogError("Options for loading from Xml file not of correct type.");
                 return false;
             }
 
             string directory = sqliteOptions.FileSystem.Path.GetDirectoryName(sqliteOptions.FilePath);
             sqliteOptions.FileSystem.Directory.CreateDirectory(directory);
-            Database.Setup.DatabaseBuilder dbBuilder = new DatabaseFactory()
+            Database.Setup.DatabaseBuilder dbBuilder = new DatabaseFactory(_loggerFactory)
                 .GetDbBuilder(sqliteOptions.FileSystem, sqliteOptions.FilePath)
                 .EnsureCreated();
 
@@ -124,7 +128,7 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                 ExchangeOpen = TimeOnly.FromTimeSpan(exchange.ExchangeOpenInUtc(DateTime.Today).TimeOfDay),
                 ExchangeClose = TimeOnly.FromTimeSpan(exchange.ExchangeCloseInUtc(DateTime.Today).TimeOfDay)
             };
-            dbBuilder.WithExchanges(new List<Exchange> { exchangeData }, _logger);
+            dbBuilder.WithExchanges(new List<Exchange> { exchangeData });
             int exchangeId = exchangeData.Id;
             StockExchangeDbContext instance = dbBuilder.GetInstance();
             foreach (Stock stock in exchange.Stocks)
@@ -190,7 +194,7 @@ namespace Effanville.FinancialStructures.Stocks.Persistence
                     priceData.Add(data);
                 }
 
-                dbBuilder.WithInstrument(instrument, instrumentData, priceData, _logger);
+                dbBuilder.WithInstrument(instrument, instrumentData, priceData);
             }
 
             return true;
