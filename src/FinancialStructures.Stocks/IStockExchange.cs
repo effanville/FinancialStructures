@@ -90,15 +90,5 @@ namespace Effanville.FinancialStructures.Stocks
         /// Ensures that the data in the StockExchange is valid.
         /// </summary>
         bool CheckValidity();
-
-        /// <summary>
-        /// Downloads data for the stock exchange between the dates provided.
-        /// </summary>
-        Task Download(DateTime startDate, DateTime endDate, IReportLogger reportLogger = null);
-
-        /// <summary>
-        /// Downloads data for the stock exchange on the latest date possible.
-        /// </summary>
-        Task Download(IReportLogger reportLogger = null);
     }
 }

@@ -1,11 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
-using Effanville.Common.Structure.Reporting;
-using Effanville.Common.Structure.WebAccess;
 using Effanville.FinancialStructures.NamingStructures;
-using Effanville.FinancialStructures.Stocks.Download;
 
 using Nager.Date;
 
@@ -162,39 +158,6 @@ namespace Effanville.FinancialStructures.Stocks.Implementation
             }
 
             return true;
-        }
-
-        /// <inheritdoc/>
-        public async Task Download(DateTime startDate, DateTime endDate, IReportLogger reportLogger = null)
-        {
-            foreach (Stock stock in Stocks)
-            {
-                var downloader = new YahooDownloader(reportLogger, new WebDownloader(reportLogger));
-                IStock tempDataHolder = null;
-                string code = downloader.GetFinancialCode(stock.Name.Url);
-                if (await downloader.TryGetFullPriceHistory(code, startDate, endDate, TimeSpan.FromDays(1),
-                        value => tempDataHolder = value))
-                {
-                    stock.Valuations = tempDataHolder.Valuations;
-                }
-            }
-        }
-
-        /// <inheritdoc/>
-        public async Task Download(IReportLogger reportLogger = null)
-        {
-            var downloader = new YahooDownloader(reportLogger, new WebDownloader(reportLogger));
-            foreach (Stock stock in Stocks)
-            {
-                StockDay stockDay = null;
-                string code = downloader.GetFinancialCode(stock.Name.Url);
-                if (await downloader.TryGetLatestPriceData(code, value => stockDay = value))
-                {
-                    stock.AddValue(stockDay.Start, stockDay.Open, stockDay.High, stockDay.Low, stockDay.Close,
-                        stockDay.Volume);
-                    stock.Sort();
-                }
-            }
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using Effanville.Common.Structure.WebAccess;
+using Effanville.FinancialStructures.NamingStructures;
 using Effanville.FinancialStructures.Stocks.Download;
 using Effanville.FinancialStructures.Stocks.Implementation;
 
@@ -18,13 +19,11 @@ public sealed class DownloadTests
     [TestCase("https://uk.finance.yahoo.com/quote/VWRL.L/history?p=VWRL.L")]
     public async Task CanDownloadAllDayData(string url)
     {
-        StockDay value = null;
-        void getValue(StockDay v) => value = v;
+        IStock value = new Stock() { Name = new NameData() { Url = url } };
         IStockDownloader downloader = new StockPriceDownloaderFactory(null, new WebDownloader(null)).Retrieve(url);
-        string code = downloader.GetFinancialCode(url);
-        _ = await downloader.TryGetLatestPriceData(code, getValue);
+        _ = await downloader.TryGetLatestPriceData(value);
 
-        Assert.That(value, Is.Not.Null);
+        Assert.That(value.Valuations, Is.Not.Empty);
     }
 
     [TestCase("https://uk.finance.yahoo.com/quote/GRP.L", 21, 1.11000001430511, 1.12999999523163)]
@@ -34,17 +33,13 @@ public sealed class DownloadTests
     [TestCase("https://uk.finance.yahoo.com/quote/VWRL.L/history?p=VWRL.L", 21, 92.5400009155274, 91.870002746582)]
     public async Task CanDownloadHistoryData(string url, int numberEntries, decimal? open = null, decimal? close = null)
     {
-        IStock value = null;
-        void getValue(IStock v) => value = v;
+        IStock value = new Stock() { Name = new NameData() { Url = url } };
 
         IStockDownloader downloader = new StockPriceDownloaderFactory(null, new WebDownloader(null)).Retrieve(url);
-        string code = downloader.GetFinancialCode(url);
         _ = await downloader.TryGetFullPriceHistory(
-            code,
+            value,
             new DateTime(2022, 1, 1),
-            new DateTime(2022, 2, 2),
-            TimeSpan.FromDays(1),
-            getValue);
+            new DateTime(2022, 2, 2));
 
         Assert.That(value, Is.Not.Null);
         Assert.That(value.Valuations.Count, Is.EqualTo(numberEntries));

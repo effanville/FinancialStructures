@@ -3,20 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.Stocks.HistoricalRepository;
 using Effanville.FinancialStructures.Stocks.Implementation;
+using Microsoft.Extensions.Logging;
 
 namespace Effanville.FinancialStructures.Stocks.Download
 {
-    public static class StockDataParser
+    public class StockDataParser
     {
-        public static int ConfigureInstruments(
+        private readonly ILogger<StockDataParser> _logger;
+        private readonly FundamentalDataDownloader _fundamentalDataDownloader;
+
+        public StockDataParser(FundamentalDataDownloader fundamentalDataDownloader, ILogger<StockDataParser> logger)
+        {
+            _fundamentalDataDownloader = fundamentalDataDownloader;
+            _logger = logger;
+        }
+
+        public int ConfigureInstruments(
             HistoricalMarkets context,
             string indexName,
             IEnumerable<string> instrumentData,
-            out List<HistoricalStock> removedInstruments,
-            IReportLogger logger = null)
+            out List<HistoricalStock> removedInstruments)
         {
             DateTime validFrom = DateTime.Now;
             List<HistoricalStock> currentIndexInstruments = new();
@@ -88,16 +96,14 @@ namespace Effanville.FinancialStructures.Stocks.Download
                 }
             }
 
-            logger?.Log(ReportType.Information, ReportLocation.AddingData.ToString(),
-                $"Made {numberAlterations} alterations.");
+            _logger?.LogInformation($"Made {numberAlterations} alterations.");
             return numberAlterations;
         }
 
-        public static async Task<int> InsertInstrumentData(
+        public async Task<int> InsertInstrumentData(
             HistoricalMarkets context,
             string indexName,
-            IList<string> instrumentData,
-            IReportLogger logger = null)
+            IList<string> instrumentData)
         {
             var validFrom = DateTime.Now;
 
@@ -118,7 +124,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
                         continue;
                     }
 
-                    var values = await FundamentalDataDownloader.GetExtraData(inst.Name.Last().Value.Url, logger);
+                    var values = await _fundamentalDataDownloader.GetExtraData(inst.Name.Last().Value.Url);
 
                     string marketCapString = instValues[^4];
                     double marketCap = double.Parse(marketCapString) * 1000000;
@@ -164,7 +170,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
                                 newMarketCap *= multiplier;
                                 if (Math.Abs(marketCap - newMarketCap) > 1e-8)
                                 {
-                                    logger?.Warn("dataLoader",
+                                    _logger?.LogWarning(
                                         $"Instrument {inst.Name.Last().Value.Ric}. Received {marketCap} and {newMarketCap} for market cap.");
                                 }
                             }
@@ -210,28 +216,11 @@ namespace Effanville.FinancialStructures.Stocks.Download
             return numberAdditions;
         }
 
-        private static bool TryGetDoubleValue(this Dictionary<string, string> map, string key, out double value,
-            double defaultValue = double.NaN)
-        {
-            if (map.TryGetValue(key, out string val))
-            {
-                if (double.TryParse(val, out double eps))
-                {
-                    value = eps;
-                    return true;
-                }
-            }
-
-            value = defaultValue;
-            return false;
-        }
-
-        public static async Task<int> UpdateInstrumentData(
+        public async Task<int> UpdateInstrumentData(
             HistoricalMarkets context,
             string indexName,
             IList<string> instrumentData,
-            IList<HistoricalStock> indexRemovedInstruments,
-            IReportLogger logger = null)
+            IList<HistoricalStock> indexRemovedInstruments)
         {
             var validFrom = DateTime.Now;
             int numberChanges = 0;
@@ -259,17 +248,14 @@ namespace Effanville.FinancialStructures.Stocks.Download
                     numberChanges += await InsertInstrumentData(
                         context,
                         indexName,
-                        new[] { instrumentStrings },
-                        logger);
+                        new[] { instrumentStrings });
                 }
 
                 var data = inst.Fundamentals.LastOrDefault().Value;
                 if (data.Index != indexName)
                     data.Index = indexName;
 
-                var values = await FundamentalDataDownloader.GetExtraData(
-                    inst.Name.Last().Value.Url,
-                    logger);
+                var values = await _fundamentalDataDownloader.GetExtraData(inst.Name.Last().Value.Url);
                 if (values == null)
                 {
                     continue;
@@ -329,9 +315,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
                         newMarketCap *= multiplier;
                         if (Math.Abs(dict["Market cap"] - newMarketCap) > 1e-8)
                         {
-                            logger?.Warn(
-                                "dataLoader",
-                                $"Instrument {inst.Name.Last().Value.Ric}. Received {dict["Market cap"]} and {newMarketCap} for market cap.");
+                            _logger?.LogWarning($"Instrument {inst.Name.Last().Value.Ric}. Received {dict["Market cap"]} and {newMarketCap} for market cap.");
                         }
                     }
                 }
@@ -423,10 +407,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
                 numberChanges++;
             }
 
-            logger?.Log(
-                ReportType.Information,
-                ReportLocation.AddingData.ToString(),
-                $"Added {numberChanges} into database.");
+            _logger?.LogInformation($"Added {numberChanges} into database.");
             return numberChanges;
         }
     }

@@ -2,12 +2,10 @@ using System;
 using System.Globalization;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Effanville.Common.Structure.Reporting;
 using Effanville.Common.Structure.WebAccess;
 using Effanville.FinancialStructures.Download.Implementation;
 using Effanville.FinancialStructures.Stocks.Download.Yahoo;
-using Effanville.FinancialStructures.Stocks.Implementation;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Effanville.FinancialStructures.Stocks.Download
 {
@@ -16,7 +14,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
     /// </summary>
     internal sealed class YahooDownloader : IStockDownloader
     {
-        private readonly IReportLogger _logger;
+        private readonly ILogger<YahooDownloader> _logger;
 
 
         private readonly WebDownloader _webDownloader;
@@ -26,53 +24,53 @@ namespace Effanville.FinancialStructures.Stocks.Download
         /// <inheritdoc/>
         public string BaseUrl => "https://uk.finance.yahoo.com/";
 
-        public YahooDownloader(IReportLogger logger, WebDownloader webDownloader)
+        public YahooDownloader(ILogger<YahooDownloader> logger, WebDownloader webDownloader)
         {
             _logger = logger;
             _webDownloader = webDownloader;
         }
 
         /// <inheritdoc/>
-        public async Task<bool> TryGetLatestPriceData(
-            string financialCode,
-            Action<StockDay> retrieveValueAction)
+        public async Task<bool> TryGetLatestPriceData(IStock stock)
         {
-            string url = BuildQueryUrl(BaseUrl, financialCode);
+            string code = GetFinancialCode(stock.Name.Url);
+            string url = BuildQueryUrl(BaseUrl, code);
             string stockWebsite = await _webDownloader.GetWebData(url, addCookie: false);
             if (string.IsNullOrEmpty(stockWebsite))
             {
-                _logger?.Error("Downloading", $"Could not download data from {url}");
+                _logger?.LogError($"Could not download data from {url}");
                 return false;
             }
 
-            decimal? close = GetValue(stockWebsite, financialCode);
+            decimal? close = GetValue(stockWebsite, code);
             decimal? open = FindAndGetSingleValue(stockWebsite, "data-test=\"OPEN-value\"", true);
             Tuple<decimal, decimal> range = FindAndGetDoubleValues(stockWebsite, "data-test=\"DAYS_RANGE-value\"");
             decimal? volume = FindAndGetSingleValue(stockWebsite,
-                $"data-test=\"TD_VOLUME-value\"><fin-streamer data-symbol=\"{financialCode}\" data-field=\"regularMarketVolume\" data-trend=\"none\" data-pricehint=\"2\" data-dfield=\"longFmt\"",
+                $"data-test=\"TD_VOLUME-value\"><fin-streamer data-symbol=\"{code}\" data-field=\"regularMarketVolume\" data-trend=\"none\" data-pricehint=\"2\" data-dfield=\"longFmt\"",
                 true);
 
             DateTime date = DateTime.Now.TimeOfDay > new DateTime(2010, 1, 1, 16, 30, 0).TimeOfDay
                 ? DateTime.Today
                 : DateTime.Today.AddDays(-1);
-            retrieveValueAction(new StockDay(
+
+            stock.AddValue(
                 date,
                 open ?? 0,
                 range.Item2,
                 range.Item1,
                 close ?? 0,
-                volume ?? 0.0m));
+                volume ?? 0.0m);
+            stock.Sort();
             return true;
         }
 
         /// <inheritdoc/>
         public async Task<bool> TryGetFullPriceHistory(
-            string financialCode,
+            IStock stock,
             DateTime firstDate,
-            DateTime lastDate,
-            TimeSpan recordInterval,
-            Action<IStock> getHistory)
+            DateTime lastDate)
         {
+            string financialCode = GetFinancialCode(stock.Name.Url);
             string stockWebsite = "";
             while (string.IsNullOrWhiteSpace(stockWebsite) && firstDate < lastDate)
             {
@@ -86,11 +84,9 @@ namespace Effanville.FinancialStructures.Stocks.Download
 
             if (string.IsNullOrWhiteSpace(stockWebsite))
             {
-                _logger?.Error(nameof(YahooDownloader), $"Could not retrieve website data for '{financialCode}'");
+                _logger.LogError($"Could not retrieve website data for '{financialCode}'");
                 return false;
             }
-
-            Stock stock = new Stock();
 
             // stockWebsite here is a csv file or json file
             string newLineSeparator = stockWebsite.Contains("\r\n") ? "\r\n" : "\n";
@@ -126,20 +122,19 @@ namespace Effanville.FinancialStructures.Stocks.Download
                             catch (Exception e)
                             {
                                 string msg = e.Message;
-                                _logger?.Error(nameof(YahooDownloader), $"Exception when converting stock data '{financialCode}', Error={msg}");
+                                _logger?.LogError($"Exception when converting stock data '{financialCode}', Error={msg}");
                             }
                         }
                     }
 
-                    _logger?.Info(nameof(YahooDownloader), $"Converted stock data for '{financialCode}', added {stock.Valuations.Count} entries");
+                    _logger?.LogInformation($"Converted stock data for '{financialCode}', added {stock.Valuations.Count} entries");
                 }
             }
 
             if (lines.Length <= 1)
             {
-                _logger?.Info(nameof(YahooDownloader), $"Single line of data found for '{financialCode}'");
+                _logger?.LogInformation($"Single line of data found for '{financialCode}'");
                 stock.Sort();
-                getHistory(stock);
                 return false;
             }
 
@@ -160,14 +155,13 @@ namespace Effanville.FinancialStructures.Stocks.Download
                 }
                 catch (Exception ex)
                 {
-                    _logger?.Error(nameof(YahooDownloader), $"Could not convert stock {stock.Name} data- {lines[lineIndex]}. Error {ex.Message}");
+                    _logger?.LogError($"Could not convert stock {stock.Name} data- {lines[lineIndex]}. Error {ex.Message}");
                 }
             }
 
-            _logger?.Info(nameof(YahooDownloader), $"Added {lines.Length - 1} to stock {stock.Name}");
+            _logger?.LogInformation($"Added {lines.Length - 1} to stock {stock.Name}");
 
             stock.Sort();
-            getHistory(stock);
             return true;
         }
 

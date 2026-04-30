@@ -2,10 +2,12 @@ using System;
 using System.IO.Abstractions;
 using System.IO.Abstractions.TestingHelpers;
 using System.Linq;
-using Castle.Core.Logging;
+using System.Threading.Tasks;
 using Effanville.Common.Structure.Reporting;
+using Effanville.Common.Structure.WebAccess;
 using Effanville.FinancialStructures.NamingStructures;
 using Effanville.FinancialStructures.Persistence;
+using Effanville.FinancialStructures.Stocks.Download;
 using Effanville.FinancialStructures.Stocks.Implementation;
 using Effanville.FinancialStructures.Stocks.Persistence;
 using Microsoft.Extensions.Logging;
@@ -34,7 +36,7 @@ namespace Effanville.FinancialStructures.Stocks.Tests
 </StockExchange>";
 
         [Test]
-        public void Test()
+        public async Task Test()
         {
             string filePath = "c:/temp/example.xml";
             var reports = new ErrorReports();
@@ -54,7 +56,12 @@ namespace Effanville.FinancialStructures.Stocks.Tests
             var endDate = new DateTime(2023, 1, 1);
             var persistence = new XmlExchangePersistence(mockLogger);
             IStockExchange exchange = persistence.Load(new XmlFilePersistenceOptions(filePath, fileSystem, "1.0.0.0"));
-            exchange.Download(startDate, endDate, logger).Wait();
+            var stockDownloader = new YahooDownloader(Substitute.For<ILogger<YahooDownloader>>(),
+                new Common.Structure.WebAccess.WebDownloader(Substitute.For<ILogger<WebDownloader>>()));
+            foreach (Stock stock in exchange.Stocks)
+            {
+                await stockDownloader.TryGetFullPriceHistory(stock, startDate, endDate);
+            }
             persistence.Save(exchange, new XmlFilePersistenceOptions("c:/temp/example2.xml", fileSystem, "1.0.0.0"));
         }
 

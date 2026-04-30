@@ -3,26 +3,39 @@ using System.Collections.Generic;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
-using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.Stocks.Download;
+using Microsoft.Extensions.Logging;
 
 namespace Effanville.FinancialStructures.Stocks.HistoricalRepository
 {
     public class HistoricalMarketsBuilder
     {
         private HistoricalMarkets _instance;
-        private StockPriceDataParser _priceDataParser;
 
-        public HistoricalMarketsBuilder(IStockDownloaderFactory stockDownloaderFactory)
-            => _priceDataParser = new StockPriceDataParser(stockDownloaderFactory);
+        private readonly ILogger<HistoricalMarketsBuilder> _logger;
+        private readonly StockPriceDataParser _priceDataParser;
+        private readonly StockDataParser _stockDataParser;
+        private readonly InstrumentDownloader _instrumentDownloader;
+
+        public HistoricalMarketsBuilder(
+            IStockDownloaderFactory stockDownloaderFactory,
+            StockDataParser stockDataParser,
+            InstrumentDownloader instrumentDownloader,
+            ILogger<HistoricalMarketsBuilder> logger,
+            ILoggerFactory loggerFactory)
+        {
+            _priceDataParser = new StockPriceDataParser(stockDownloaderFactory, loggerFactory.CreateLogger<StockPriceDataParser>());
+            _stockDataParser = stockDataParser;
+            _instrumentDownloader = instrumentDownloader;
+            _logger = logger;
+        }
 
         public HistoricalMarkets GetInstance() => _instance;
 
         public HistoricalMarketsBuilder WithExchangesFromFile(string filePath,
-            IFileSystem fileSystem,
-            IReportLogger logger = null)
+            IFileSystem fileSystem)
         {
-            _instance = HistoricalMarkets.Create(filePath, fileSystem, logger);
+            _instance = HistoricalMarkets.Create(filePath, fileSystem);
             return this;
         }
 
@@ -32,46 +45,41 @@ namespace Effanville.FinancialStructures.Stocks.HistoricalRepository
             return this;
         }
 
-        public HistoricalMarketsBuilder WithExchanges(IList<HistoricalExchange> exchanges, IReportLogger logger = null)
+        public HistoricalMarketsBuilder WithExchanges(IList<HistoricalExchange> exchanges)
         {
             _instance.Exchanges.AddRange(exchanges);
             return this;
         }
 
-        public async Task<HistoricalMarketsBuilder> WithIndexInstruments(string indexName, IReportLogger logger = null)
+        public async Task<HistoricalMarketsBuilder> WithIndexInstruments(string indexName)
         {
-            string[] instruments = InstrumentDownloader.GetIndexInstruments(indexName, logger);
-            _ = StockDataParser.ConfigureInstruments(_instance, indexName, instruments, out _, logger);
-            await StockDataParser.InsertInstrumentData(_instance, indexName, instruments, logger);
+            string[] instruments = _instrumentDownloader.GetIndexInstruments(indexName);
+            _ = _stockDataParser.ConfigureInstruments(_instance, indexName, instruments, out _);
+            await _stockDataParser.InsertInstrumentData(_instance, indexName, instruments);
             return this;
         }
 
         public async Task<HistoricalMarketsBuilder> WithInstrumentPriceData(
             DateTime startDate,
-            DateTime endDate,
-            IReportLogger logger = null)
+            DateTime endDate)
         {
-            _ = await _priceDataParser.Populate(_instance, startDate, endDate, logger);
+            _ = await _priceDataParser.Populate(_instance, startDate, endDate);
             return this;
         }
 
         public async Task<HistoricalMarketsBuilder> UpdateIndexInstruments(
-            string indexName,
-            IReportLogger logger = null)
+            string indexName)
         {
-            string[] instruments = InstrumentDownloader.GetIndexInstruments(indexName, logger);
-            logger?.Info("Downloading", $"Retrieved index instruments: {string.Join(Environment.NewLine, instruments)}");
-            _ = StockDataParser.ConfigureInstruments(
+            string[] instruments = _instrumentDownloader.GetIndexInstruments(indexName);
+            _logger?.LogInformation($"Retrieved index instruments: {string.Join(Environment.NewLine, instruments)}");
+            _ = _stockDataParser.ConfigureInstruments(
                 _instance,
                 indexName,
                 instruments,
-                out var removedInstruments,
-                logger);
-            logger?.Info("Downloading",
-                $"Configured instruments. Removed are {string.Join(Environment.NewLine, removedInstruments.Select(x => x.Name.LastOrDefault().Value.Ric))}");
+                out var removedInstruments);
+            _logger?.LogInformation($"Configured instruments. Removed are {string.Join(Environment.NewLine, removedInstruments.Select(x => x.Name.LastOrDefault().Value.Ric))}");
 
-            _ = await StockDataParser.UpdateInstrumentData(_instance, indexName, instruments, removedInstruments,
-                logger);
+            _ = await _stockDataParser.UpdateInstrumentData(_instance, indexName, instruments, removedInstruments);
 
             return this;
         }

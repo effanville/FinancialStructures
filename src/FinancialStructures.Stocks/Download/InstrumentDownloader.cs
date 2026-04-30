@@ -1,19 +1,22 @@
 using System;
 using System.Linq;
 using System.Text;
-
-using Effanville.Common.Structure.Reporting;
 using Effanville.Common.Structure.WebAccess;
+using Microsoft.Extensions.Logging;
 
 namespace Effanville.FinancialStructures.Stocks.Download
 {
-    public static class InstrumentDownloader
+    public class InstrumentDownloader
     {
+        private readonly ILogger<InstrumentDownloader> _logger;
+
+        public InstrumentDownloader(ILogger<InstrumentDownloader> logger) => _logger = logger;
+
         /// <summary>
         /// Get instruments from an index
         /// </summary>
         /// <param name="indexName">FTSE-100,FTSE-250,FTSE-350 etc</param>
-        public static string[] GetIndexInstruments(string indexName, IReportLogger logger = null)
+        public string[] GetIndexInstruments(string indexName)
         {
             try
             {
@@ -30,7 +33,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
                     while (string.IsNullOrEmpty(text) && numberTries < 20)
                     {
                         text = WebDownloader.GetElementText(driver, url, "ftse-index-table", 1000 + 1000 * numberTries,
-                            logger);
+                            _logger);
                         numberTries++;
                     }
 
@@ -62,7 +65,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
             }
             catch (Exception e)
             {
-                logger?.Error(ReportLocation.Downloading.ToString(), e.ToString());
+                _logger?.LogError(e, nameof(GetIndexInstruments));
                 return null;
             }
         }

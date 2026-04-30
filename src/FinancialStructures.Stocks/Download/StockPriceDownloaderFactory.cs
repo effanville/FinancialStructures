@@ -1,5 +1,5 @@
-using Effanville.Common.Structure.Reporting;
 using Effanville.Common.Structure.WebAccess;
+using Microsoft.Extensions.Logging;
 
 namespace Effanville.FinancialStructures.Stocks.Download
 {
@@ -7,8 +7,8 @@ namespace Effanville.FinancialStructures.Stocks.Download
     {
         private readonly YahooDownloader YahooDownloader;
 
-        public StockPriceDownloaderFactory(IReportLogger logger, WebDownloader webDownloader)
-            => YahooDownloader = new YahooDownloader(logger, webDownloader);
+        public StockPriceDownloaderFactory(ILoggerFactory loggerFactory, WebDownloader webDownloader)
+            => YahooDownloader = new YahooDownloader(loggerFactory.CreateLogger<YahooDownloader>(), webDownloader);
 
         public IStockDownloader Retrieve(string url)
         {

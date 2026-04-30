@@ -1,8 +1,6 @@
 using System;
 using System.Threading.Tasks;
 
-using Effanville.FinancialStructures.Stocks.Implementation;
-
 namespace Effanville.FinancialStructures.Stocks.Download
 {
     public interface IStockDownloader
@@ -14,28 +12,18 @@ namespace Effanville.FinancialStructures.Stocks.Download
 
         string GetFinancialCode(string url);
 
-        /*Task<bool> TryGetPrice(
-            string financialCode,
-            DateTime date,
-            Action<decimal> retrieveValueAction,
-            IReportLogger reportLogger = null);*/
-
         /// <summary>
         /// Try to get the financial data for the last day.
         /// </summary>
-        Task<bool> TryGetLatestPriceData(
-            string financialCode,
-            Action<StockDay> retrieveValueAction);
+        Task<bool> TryGetLatestPriceData(IStock stock);
 
         /// <summary>
         /// Try to get the complete price history for the financial object
         /// between the dates specified.
         /// </summary>
         Task<bool> TryGetFullPriceHistory(
-            string financialCode,
+            IStock stock,
             DateTime firstDate,
-            DateTime lastDate,
-            TimeSpan recordInterval,
-            Action<IStock> getHistory);
+            DateTime lastDate);
     }
 }

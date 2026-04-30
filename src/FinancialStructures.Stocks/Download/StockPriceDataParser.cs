@@ -2,20 +2,24 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Effanville.Common.Structure.Reporting;
 using Effanville.FinancialStructures.Stocks.HistoricalRepository;
 using Effanville.FinancialStructures.Stocks.Implementation;
+using Microsoft.Extensions.Logging;
 
 namespace Effanville.FinancialStructures.Stocks.Download
 {
     public class StockPriceDataParser
     {
-        private IStockDownloaderFactory _stockDownloaderFactory;
+        private readonly ILogger<StockPriceDataParser> _logger;
+        private readonly IStockDownloaderFactory _stockDownloaderFactory;
 
-        public StockPriceDataParser(IStockDownloaderFactory stockDownloaderFactory) => _stockDownloaderFactory = stockDownloaderFactory;
+        public StockPriceDataParser(IStockDownloaderFactory stockDownloaderFactory, ILogger<StockPriceDataParser> logger)
+        {
+            _stockDownloaderFactory = stockDownloaderFactory;
+            _logger = logger;
+        }
 
-        public async Task<int> Populate(HistoricalMarkets context, DateTime startDate, DateTime endDate,
-            IReportLogger logger = null)
+        public async Task<int> Populate(HistoricalMarkets context, DateTime startDate, DateTime endDate)
         {
             int numberChanges = 0;
             foreach (HistoricalExchange exchange in context.Exchanges)
@@ -24,13 +28,11 @@ namespace Effanville.FinancialStructures.Stocks.Download
                 {
                     string url = historicalStock.Name.Last().Value.Url;
                     IStockDownloader downloader = _stockDownloaderFactory.Retrieve(url);
-                    IStock tempDataHolder = null;
-                    string code = downloader.GetFinancialCode(url);
+                    IStock tempDataHolder = new Stock() { Name = new NamingStructures.NameData { Url = url } };
                     int numRetries = 0;
                     while ((tempDataHolder == null || tempDataHolder.Valuations.Count == 0) && numRetries < 10)
                     {
-                        if (await downloader.TryGetFullPriceHistory(code, startDate, endDate, TimeSpan.FromDays(1),
-                                value => tempDataHolder = value))
+                        if (await downloader.TryGetFullPriceHistory(tempDataHolder, startDate, endDate))
                         {
                             break;
                         }
@@ -74,8 +76,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
                 }
             }
 
-            logger?.Log(ReportType.Information, ReportLocation.AddingData.ToString(),
-                $"Added {numberChanges} into database.");
+            _logger?.LogInformation($"Added {numberChanges} into database.");
             return numberChanges;
         }
     }

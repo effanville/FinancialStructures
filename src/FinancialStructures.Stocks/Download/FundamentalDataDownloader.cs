@@ -2,15 +2,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Effanville.Common.Structure.Reporting;
 using Effanville.Common.Structure.WebAccess;
 
 using HtmlAgilityPack;
+using Microsoft.Extensions.Logging;
 
 namespace Effanville.FinancialStructures.Stocks.Download
 {
-    public static class FundamentalDataDownloader
+    public class FundamentalDataDownloader
     {
+        private readonly ILoggerFactory _loggerFactory;
+
+        private readonly ILogger<FundamentalDataDownloader> _logger;
+
+        public FundamentalDataDownloader(ILoggerFactory loggerFactory, ILogger<FundamentalDataDownloader> logger)
+        {
+            _loggerFactory = loggerFactory;
+            _logger = logger;
+        }
+
         private static HtmlNode GetDescendentFromTag(HtmlNode node, string tagName, string tagValue)
         {
             if (node == null)
@@ -44,29 +54,29 @@ namespace Effanville.FinancialStructures.Stocks.Download
             return null;
         }
 
-        public static async Task<Dictionary<string, string>> GetExtraData(string instrumentUrl, IReportLogger logger = null)
+        public async Task<Dictionary<string, string>> GetExtraData(string instrumentUrl)
         {
-            string urlData = await new WebDownloader(logger).DownloadFromURLasync(instrumentUrl, addCookie: true);
+            string urlData = await new WebDownloader(_loggerFactory.CreateLogger<WebDownloader>()).DownloadFromURLasync(instrumentUrl, addCookie: true);
 
             HtmlDocument htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(urlData);
             HtmlNode quoteSummaryElement = GetDescendentFromTag(htmlDocument.DocumentNode, "data-testid", "quote-statistics");
             if (quoteSummaryElement == null)
             {
-                logger?.Warn(nameof(GetExtraData), $"No quote summary found for {instrumentUrl}");
+                _logger?.LogWarning($"No quote summary found for {instrumentUrl}");
                 return null;
             }
 
             HtmlNode summaryColumn1 = quoteSummaryElement.ChildNodes.First();
             if (summaryColumn1 == null)
             {
-                logger?.Warn(nameof(GetExtraData), $"No quote summary inner element found for {instrumentUrl}");
+                _logger?.LogWarning($"No quote summary inner element found for {instrumentUrl}");
                 return null;
             }
 
             if (!summaryColumn1.HasChildNodes)
             {
-                logger?.Warn(nameof(GetExtraData), $"No quote summary child nodes found for {instrumentUrl}");
+                _logger?.LogWarning($"No quote summary child nodes found for {instrumentUrl}");
                 return null;
             }
 
@@ -81,7 +91,7 @@ namespace Effanville.FinancialStructures.Stocks.Download
                 }
             }
 
-            logger?.Log(ReportType.Information, nameof(GetExtraData), $"Quote summary retrieved for {instrumentUrl} with {dict.Count} entries");
+            _logger?.LogInformation($"Quote summary retrieved for {instrumentUrl} with {dict.Count} entries");
             return dict;
         }
     }
