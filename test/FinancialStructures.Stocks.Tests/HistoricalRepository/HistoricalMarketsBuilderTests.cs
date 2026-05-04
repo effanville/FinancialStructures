@@ -23,7 +23,7 @@ namespace Effanville.FinancialStructures.Stocks.Tests.HistoricalRepository
             var fileSystem = new FileSystem();
             var loggerFactory = new LoggerFactory();
             var fundamentalDownloader = new FundamentalDataDownloader(loggerFactory, Substitute.For<ILogger<FundamentalDataDownloader>>());
-            IStockDownloaderFactory priceDownloaderFactory = new StockPriceDownloaderFactory(null, new WebDownloader(null));
+            IStockDownloaderFactory priceDownloaderFactory = new StockPriceDownloaderFactory(loggerFactory, new WebDownloader(null));
             var historicalMarketsBuilder = new HistoricalMarketsBuilder(
                 priceDownloaderFactory,
                 new StockDataParser(fundamentalDownloader, Substitute.For<ILogger<StockDataParser>>()),
@@ -33,7 +33,7 @@ namespace Effanville.FinancialStructures.Stocks.Tests.HistoricalRepository
                 .WithExchangesFromFile("ExampleConfigFiles/Exchanges.csv", fileSystem);
             _ = await historicalMarketsBuilder.WithIndexInstruments("FTSE-100");
             _ = await historicalMarketsBuilder.WithInstrumentPriceData(
-                new DateTime(2020, 1, 1),
+                new DateTime(2025, 1, 1),
                 DateTime.Today);
             var markets = historicalMarketsBuilder.GetInstance();
             foreach (HistoricalExchange exchange in markets.Exchanges)

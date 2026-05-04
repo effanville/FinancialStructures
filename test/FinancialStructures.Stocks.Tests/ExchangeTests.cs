@@ -39,14 +39,6 @@ namespace Effanville.FinancialStructures.Stocks.Tests
         public async Task Test()
         {
             string filePath = "c:/temp/example.xml";
-            var reports = new ErrorReports();
-
-            void reportAction(ReportSeverity severity, ReportType reportType, string location, string text)
-            {
-                reports.AddErrorReport(severity, reportType, location, text);
-            }
-
-            var logger = new LogReporter(reportAction);
             var mockLogger = Substitute.For<ILogger<XmlExchangePersistence>>();
             var fileSystem = new MockFileSystem();
 
@@ -56,10 +48,11 @@ namespace Effanville.FinancialStructures.Stocks.Tests
             var endDate = new DateTime(2023, 1, 1);
             var persistence = new XmlExchangePersistence(mockLogger);
             IStockExchange exchange = persistence.Load(new XmlFilePersistenceOptions(filePath, fileSystem, "1.0.0.0"));
-            var stockDownloader = new YahooDownloader(Substitute.For<ILogger<YahooDownloader>>(),
-                new Common.Structure.WebAccess.WebDownloader(Substitute.For<ILogger<WebDownloader>>()));
+
+            var downloaderFactory = new StockPriceDownloaderFactory(new LoggerFactory(), new WebDownloader(null));
             foreach (Stock stock in exchange.Stocks)
             {
+                IStockDownloader stockDownloader = downloaderFactory.Retrieve(stock.Name.Url);
                 await stockDownloader.TryGetFullPriceHistory(stock, startDate, endDate);
             }
             persistence.Save(exchange, new XmlFilePersistenceOptions("c:/temp/example2.xml", fileSystem, "1.0.0.0"));
@@ -69,14 +62,7 @@ namespace Effanville.FinancialStructures.Stocks.Tests
         public void AddValueTest()
         {
             string filePath = "c:/temp/example.xml";
-            var reports = new ErrorReports();
 
-            void reportAction(ReportSeverity severity, ReportType reportType, string location, string text)
-            {
-                reports.AddErrorReport(severity, reportType, location, text);
-            }
-
-            var logger = new LogReporter(reportAction);
             var mockLogger = Substitute.For<ILogger<XmlExchangePersistence>>();
             var fileSystem = new MockFileSystem();
 

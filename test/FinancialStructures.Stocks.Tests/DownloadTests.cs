@@ -5,7 +5,7 @@ using Effanville.Common.Structure.WebAccess;
 using Effanville.FinancialStructures.NamingStructures;
 using Effanville.FinancialStructures.Stocks.Download;
 using Effanville.FinancialStructures.Stocks.Implementation;
-
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 
 namespace Effanville.FinancialStructures.Stocks.Tests;
@@ -20,7 +20,7 @@ public sealed class DownloadTests
     public async Task CanDownloadAllDayData(string url)
     {
         IStock value = new Stock() { Name = new NameData() { Url = url } };
-        IStockDownloader downloader = new StockPriceDownloaderFactory(null, new WebDownloader(null)).Retrieve(url);
+        IStockDownloader downloader = new StockPriceDownloaderFactory(new LoggerFactory(), new WebDownloader(null)).Retrieve(url);
         _ = await downloader.TryGetLatestPriceData(value);
 
         Assert.That(value.Valuations, Is.Not.Empty);
@@ -35,7 +35,7 @@ public sealed class DownloadTests
     {
         IStock value = new Stock() { Name = new NameData() { Url = url } };
 
-        IStockDownloader downloader = new StockPriceDownloaderFactory(null, new WebDownloader(null)).Retrieve(url);
+        IStockDownloader downloader = new StockPriceDownloaderFactory(new LoggerFactory(), new WebDownloader(null)).Retrieve(url);
         _ = await downloader.TryGetFullPriceHistory(
             value,
             new DateTime(2022, 1, 1),
